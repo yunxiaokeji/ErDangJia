@@ -81,14 +81,18 @@ namespace CloudSalesBusiness
         {
             DataTable dt = AgentsDAL.BaseProvider.GetAgentActionReport(keyword,startDate,endDate);
             List<Report_AgentAction_Day> list = new List<Report_AgentAction_Day>();
-            Report_AgentAction_Day model = new Report_AgentAction_Day();
+            Report_AgentAction_Day model =null;
 
-            if (dt.Rows.Count == 1)
+            if (dt.Rows.Count>0)
             {
-                DataRow row = dt.Rows[0];
-                model.FillData(row);
+                foreach (DataRow dr in dt.Rows) 
+                {
+                    model = new Report_AgentAction_Day();
+                    model.FillData(dr);
 
-                list.Add(model);
+                    list.Add(model);
+                }
+                
             }
 
             return list;

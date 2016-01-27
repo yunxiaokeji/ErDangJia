@@ -10,6 +10,7 @@
 *_i.c
 *_p.c
 *.ncb
+*.config
 *.suo
 *.tlb
 *.tlh

@@ -11,6 +11,8 @@ namespace CloudSalesEntity
 
         public int CustomerCount { get; set; }
 
+        public int OrdersCount { get; set; }
+
         public int ActivityCount { get; set; }
 
         public int ProductCount { get; set; }
@@ -25,8 +27,14 @@ namespace CloudSalesEntity
 
         public int WarehousingCount { get; set; }
 
+        public int ActionType { get; set; }
+
+        public string CompanyName { get; set; }
+
+        [Property("Lower")] 
         public string AgentID { get; set; }
 
+        [Property("Lower")] 
         public string ClientID { get; set; }
 
         public void FillData(System.Data.DataRow dr)

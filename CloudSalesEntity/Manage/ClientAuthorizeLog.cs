@@ -49,21 +49,21 @@ namespace CloudSalesEntity.Manage
 		/// <summary>
 		/// 
 		/// </summary>
+        [Property("Lower")]
         public string ClientID
 		{
             set { _clientID = value; }
             get { return _clientID; }
 		}
 
+        [Property("Lower")]
         public string AgentID
         {
             set;
             get;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
+        [Property("Lower")]
         public string OrderID
 		{
             set { _orderID = value; }

@@ -2,6 +2,7 @@
 
 *.obj
 *.exe
+*.config
 *.pdb
 *.user
 *.aps

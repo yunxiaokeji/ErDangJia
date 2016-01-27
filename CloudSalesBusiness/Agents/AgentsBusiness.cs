@@ -64,7 +64,8 @@ namespace CloudSalesBusiness
                     DataRow row = dt.Rows[0];
                     model.FillData(row);
 
-                    Agents.Add(model.AgentID,model);
+                    if (!Agents.ContainsKey(model.AgentID))
+                        Agents.Add(model.AgentID,model);
 
                     return Agents[agentID];
                 }
@@ -89,7 +90,6 @@ namespace CloudSalesBusiness
                 {
                     model = new Report_AgentAction_Day();
                     model.FillData(dr);
-
                     list.Add(model);
                 }
                 

@@ -393,8 +393,20 @@ namespace YXERP.Controllers
             JsonDictionary.Add("Items", products);
             JsonDictionary.Add("TotalMoney", way.TotalMoney);
             JsonDictionary.Add("TotalQuantity", way.TotalQuantity);
-            if (type==3 && !string.IsNullOrEmpty(CurrentUser.MDUserID))
-                discount = 0.88F;
+            if (!string.IsNullOrEmpty(CurrentUser.MDUserID)){
+                if (type == 1 || type == 2){
+                    discount = 0.5F;
+                }
+                else{
+                    discount = 0.88F;
+                }
+                
+            }
+            else {
+                if (type == 1 || type == 2){
+                    discount = 0.66F;
+                }
+            }
             JsonDictionary.Add("Discount", discount);
 
             //购买人数
@@ -441,9 +453,24 @@ namespace YXERP.Controllers
             model.Type = type;
             model.Years = years;
             model.Amount=way.TotalMoney;
-            decimal discount = 0.66M;
-            if(!string.IsNullOrEmpty(CurrentUser.MDUserID))
-                discount = 0.5M;
+            decimal discount = 1M;
+            if (!string.IsNullOrEmpty(CurrentUser.MDUserID))
+            {
+                if (type == 1 || type == 2){
+                    discount = 0.50M;
+                }
+                else{
+                    discount = 0.88M;
+                }
+
+            }
+            else
+            {
+                if (type == 1 || type == 2){
+                    discount = 0.66M;
+                }
+            }
+
             model.RealAmount = way.TotalMoney * discount;
 
             //购买人数

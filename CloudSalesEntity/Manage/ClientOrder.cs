@@ -9,6 +9,7 @@ namespace CloudSalesEntity.Manage
     {
         public int AutoID { get; set; }
 
+        [Property("Lower")]
         public string OrderID { get; set; }
 
         public int UserQuantity { get; set; }
@@ -27,16 +28,18 @@ namespace CloudSalesEntity.Manage
 
         public int Status { get; set; }
 
+        [Property("Lower")]
         public string AgentID { get; set; }
 
+        [Property("Lower")]
         public string ClientID { get; set; }
 
-        public DateTime CreateTime { get; set; }
-
+        [Property("Lower")]
         public string CreateUserID { get; set; }
 
         public Users CreateUser { get; set; }
 
+        public DateTime CreateTime { get; set; }
         public List<ClientOrderDetail> Details { get; set; }
         /// <summary>
         /// 填充数据

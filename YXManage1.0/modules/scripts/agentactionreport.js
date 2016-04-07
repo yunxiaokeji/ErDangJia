@@ -27,19 +27,17 @@ define(function (require, exports, module) {
         require.async("search", function () {
             $(".searth-module").searchKeys(function (keyWords) {
                 AgentActionReport.Params.pageIndex = 1;
-                AgentActionReport.Params.keyWords = keyWords;
+                AgentActionReport.Params.keyword = keyWords;
                 AgentActionReport.bindData();
             });
         });
     };
 
     $("#SearchList").click(function () {
-        if ($("#BeginTime").val() != '' || $("#EndTime").val() != '') {
-            AgentActionReport.Params.pageIndex = 1;
-            AgentActionReport.Params.beginDate = $("#BeginTime").val();
-            AgentActionReport.Params.endDate = $("#EndTime").val();
-            AgentActionReport.bindData();
-        }
+        AgentActionReport.Params.pageIndex = 1;
+        AgentActionReport.Params.startDate = $("#BeginTime").val();
+        AgentActionReport.Params.endDate = $("#EndTime").val();
+        AgentActionReport.bindData();
     });
     //绑定数据
     AgentActionReport.bindData = function () {

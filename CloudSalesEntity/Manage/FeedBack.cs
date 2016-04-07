@@ -25,6 +25,7 @@ namespace CloudSalesEntity.Manage
 
         public DateTime CreateTime { get; set; }
 
+        [Property("Lower")]
         public string CreateUserID { get; set; }
 
         /// <summary>

@@ -314,7 +314,7 @@ namespace YXERP.Controllers
                         if (order != null && !string.IsNullOrEmpty(order.OrderID) )
                         {
                             decimal total_fee = decimal.Parse(Request.Form["total_fee"]);
-                            if (order.RealAmount == total_fee || total_fee == decimal.Parse("0.01")) 
+                            if (order.RealAmount == total_fee) 
                             {
                                 //订单支付及后台客户授权
                                 bool flag= ClientOrderBusiness.PayOrderAndAuthorizeClient(order.OrderID);

@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using CloudSalesEntity;
 namespace YXManage.Controllers
 {
+    [YXManage.Common.UserAuthorize]
     public class ReportController :BaseController
     {
         //

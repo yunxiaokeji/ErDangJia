@@ -9,8 +9,10 @@ namespace CloudSalesEntity.Manage
     {
         public int AutoID { get; set; }
 
+        [Property("Lower")]
         public string OrderID { get; set; }
 
+        [Property("Lower")]
         public string ProductID { get; set; }
 
         public decimal Price { get; set; }
@@ -21,6 +23,7 @@ namespace CloudSalesEntity.Manage
 
         public DateTime CreateTime { get; set; }
 
+        [Property("Lower")]
         public string CreateUserID { get; set; }
 
         /// <summary>

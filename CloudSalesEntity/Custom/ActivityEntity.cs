@@ -32,6 +32,7 @@ namespace CloudSalesEntity
         public string OwnerID { get; set; }
         public Users Owner { get; set; }
 
+        [Property("Lower")]
         public string MemberID { get; set; }
         public List<Users> Members { get; set; }
 

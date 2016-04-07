@@ -582,7 +582,7 @@ namespace CloudSalesBusiness
                 }
 
                 //日志
-                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.User, EnumLogType.Create, "", operateid, agentid, clientid);
+                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.User, EnumLogType.Create, "", operateid, user.AgentID, user.ClientID);
             }
             return user;
         }

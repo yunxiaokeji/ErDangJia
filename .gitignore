@@ -27,9 +27,8 @@ obj/
 _ReSharper*/
 tempFiles
 tempfile
-upload
+umeditor
 UploadFiles
 *.dbmdl
-
 [Ww]eb.config
 *.sql

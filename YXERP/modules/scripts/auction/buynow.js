@@ -57,6 +57,8 @@
         {
             _self.getList();
         }
+
+        ObjectJS.Discount;
     }
 
     //绑定事件
@@ -281,6 +283,7 @@
                 }
                 RealAmount = parseFloat(RealAmount * data.Discount).toFixed(2);
                 $("#Price").html(RealAmount);
+                ObjectJS.Discount = data.Discount;
 
             });
     }
@@ -299,7 +302,7 @@
             yearCount = parseInt($arr.eq(i).data("year"));
         }
         $("#UserCount").val(userCount);
-        $("#Price").html(totalPrice);
+        $("#Price").html(totalPrice * ObjectJS.Discount);
     }
 
     //进入确认订单页

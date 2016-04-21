@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Script.Serialization;
 using System.Web;
 using System.Web.Mvc;
 
 using CloudSalesBusiness;
+
+using CloudSalesEntity.Manage;
+using CloudSalesBusiness.Manage;
 
 namespace YXERP.Controllers
 {
@@ -87,6 +91,22 @@ namespace YXERP.Controllers
             JsonDictionary.Add("model", model);
 
             return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        //意见反馈
+        public JsonResult SaveFeedBack(string entity)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            FeedBack model = serializer.Deserialize<FeedBack>(entity);
+            model.CreateUserID = CurrentUser.UserID;
+
+            bool flag = FeedBackBusiness.InsertFeedBack(model);
+            JsonDictionary.Add("Result", flag ? 1 : 0);
+            return new JsonResult
             {
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet

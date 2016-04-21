@@ -41,19 +41,6 @@ define(function (require, exports, module) {
             }
         });
 
-        $(".controller-item").click(function () {
-            var _this = $(this).parent();
-            if (!_this.hasClass("select")) {
-                _self.setRotateR(_this.find(".open"), 0, 90);
-                _this.addClass("select");
-                _this.find(".action-box").slideDown(200);
-            } else {
-                _self.setRotateL(_this.find(".open"), 90, 0);
-                _this.removeClass("select");
-                _this.find(".action-box").slideUp(200);
-            }
-        });
-
         //登录信息展开
         $("#currentUser").click(function () {
             $(".dropdown-userinfo").fadeIn("1000");
@@ -134,9 +121,9 @@ define(function (require, exports, module) {
                                 FilePath: $("#feedback-filepath").val(),
                                 Remark: $("#feedback-remark").val()
                             };
-                            Global.post("/FeedBack/InsertFeedBack", { entity: JSON.stringify(entity) }, function (data) {
+                            Global.post("/Default/SaveFeedBack", { entity: JSON.stringify(entity) }, function (data) {
                                 if (data.Result == 1) {
-                                    alert("谢谢反馈");
+                                    alert("反馈提交成功，谢谢反馈");
                                 }
                             });
                         },

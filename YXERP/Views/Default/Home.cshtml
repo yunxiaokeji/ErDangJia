@@ -1,25 +1,19 @@
 ﻿@{
-    
-    Layout = "/Views/Shared/_LayoutNoLeft.cshtml";
-    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
-    ViewBag.Title = "首页";
+    ViewBag.Title = "主页";
 }
 
 @section css{
-<link href="/modules/css/home/home.css" rel="stylesheet" />
-<style type="text/css">
-    .main-content { margin-left:0px; }
-</style>
+    <link href="/modules/css/home/home.css" rel="stylesheet" />
 }
-
 
 @section scripts{
-<script type="text/javascript">
-    seajs.use(["scripts/home"], function (layout) {
-        layout.initHome();
-    });
-</script>
+    <script type="text/javascript">
+        seajs.use(["scripts/default/home"], function (layout) {
+            layout.init();
+        });
+    </script>
 }
+
 <div class="home-body">
    <div class="report-box">
        <div class="report-item">
@@ -138,8 +132,4 @@
        </div>
    </div>
 </div>
-
-
-
-
 

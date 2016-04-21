@@ -133,8 +133,10 @@ namespace CloudSalesBusiness
                     user.LogGUID = model.LogGUID;
                 }
 
-                model.Client = Manage.ClientBusiness.GetClientDetail(model.ClientID);
+                model.Agents = AgentsBusiness.GetAgentDetail(model.AgentID);
 
+                model.Client = Manage.ClientBusiness.GetClientDetail(model.ClientID);
+                
                 //权限
                 if (model.Role != null && model.Role.IsDefault == 1)
                 {
@@ -203,7 +205,10 @@ namespace CloudSalesBusiness
 
                 model.Department = GetDepartmentByID(model.DepartID, model.AgentID);
                 model.Role = GetRoleByIDCache(model.RoleID, model.AgentID);
+
+                model.Agents = AgentsBusiness.GetAgentDetail(model.AgentID);
                 model.Client = Manage.ClientBusiness.GetClientDetail(model.ClientID);
+
                 //处理缓存
                 if (!Users.ContainsKey(model.AgentID))
                 {

@@ -120,6 +120,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CustomerRPTController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\FeedBackController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -149,6 +150,9 @@
     <Content Include="Content\homeico\login.png" />
     <Content Include="Content\homeico\oppor.png" />
     <Content Include="Content\homeico\order.png" />
+    <Content Include="Content\menuico\activity.png" />
+    <Content Include="Content\menuico\customer.png" />
+    <Content Include="Content\menuico\default-menu.png" />
     <Content Include="DLL\JsonObject.dll" />
     <Content Include="modules\css\opportunitys.css" />
     <Content Include="modules\css\stock\stock.css" />
@@ -164,6 +168,8 @@
     <Content Include="modules\images\ico-help-hover.png" />
     <Content Include="modules\images\ico-loading.jpg" />
     <Content Include="modules\images\ico-mobilecode.png" />
+    <Content Include="modules\images\ico-operate-open-hover.png" />
+    <Content Include="modules\images\ico-operate-open.png" />
     <Content Include="modules\images\ico-surepwd.png" />
     <Content Include="modules\images\ico-username.png" />
     <Content Include="modules\images\loginBackground.png" />
@@ -235,12 +241,12 @@
     <Content Include="Content\menuico\customhover.png" />
     <Content Include="Content\menuico\custom.png" />
     <Content Include="DLL\Net.Sourceforge.Pinyin4j.dll" />
-    <Content Include="modules\css\default\detail.css" />
-    <Content Include="modules\css\default\list.css" />
+    <Content Include="modules\css\detail.css" />
+    <Content Include="modules\css\list.css" />
     <Content Include="modules\css\auction\buynow.css" />
     <Content Include="modules\css\customer\activity.css" />
     <Content Include="modules\css\customer\customer.css" />
-    <Content Include="modules\css\home\home.css" />
+    <Content Include="modules\css\default\home.css" />
     <Content Include="modules\css\myaccount\myaccount.css" />
     <Content Include="modules\css\myaccount\cropbox.css" />
     <Content Include="modules\css\shoppingcart\confirmcart.css" />
@@ -516,6 +522,7 @@
     <Content Include="modules\scripts\finance\orderbills.js" />
     <Content Include="modules\scripts\finance\orderdetail.js" />
     <Content Include="modules\scripts\finance\accountbills.js" />
+    <Content Include="modules\scripts\home\login.js" />
     <Content Include="modules\scripts\home\register.js" />
     <Content Include="modules\scripts\home\findpassword.js" />
     <Content Include="modules\scripts\myaccount\cropbox.js" />
@@ -570,7 +577,7 @@
     <Content Include="modules\template\common\logs.html" />
     <Content Include="modules\template\customer\contacts.html" />
     <Content Include="modules\template\customer\contact-detail.html" />
-    <Content Include="modules\template\feedback\feedback_add.html" />
+    <Content Include="modules\template\default\feedback-add.html" />
     <Content Include="modules\template\finance\payable-detail.html" />
     <Content Include="modules\template\finance\payablebills.html" />
     <Content Include="modules\template\finance\storagebillingpays.html" />
@@ -642,7 +649,6 @@
     <Content Include="Views\CustomerRPT\Index.cshtml" />
     <Content Include="Views\Purchase\DocDetail.cshtml" />
     <Content Include="Views\Purchase\AuditDetail.cshtml" />
-    <Content Include="Views\Home\InfoPage.cshtml" />
     <Content Include="Views\Organization\RolePermission.cshtml" />
     <Content Include="Views\Organization\Structure.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
@@ -727,6 +733,9 @@
     <Content Include="Views\MyAccount\Account.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Web.config" />
+    <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Views\Default\Home.cshtml" />
+    <Content Include="Views\Default\LeftMenu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -736,7 +745,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="modules\css\layout.css" />
+    <Content Include="modules\css\index.css" />
     <Content Include="modules\css\home\login.css" />
     <Content Include="modules\css\system\organization.css" />
     <Content Include="modules\css\stock\category.css" />
@@ -863,7 +872,7 @@
     <Content Include="modules\plug\shoppingcart\shoppingcart.js" />
     <Content Include="modules\plug\shoppingcart\style.css" />
     <Content Include="modules\scripts\global.js" />
-    <Content Include="modules\scripts\home.js" />
+    <Content Include="modules\scripts\default\home.js" />
     <Content Include="modules\scripts\layout.js" />
     <Content Include="modules\scripts\organization\department.js" />
     <Content Include="modules\scripts\products\attr.js" />
@@ -906,9 +915,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Login.cshtml" />

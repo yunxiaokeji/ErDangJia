@@ -51,20 +51,5 @@ namespace YXERP.Controllers
         /// </summary>
         protected Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
 
-        /// <summary>
-        /// 待办列表
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult GetClientUpcomings()
-        {
-            var list = LogBusiness.BaseBusiness.GetClientUpcomings(CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("items", list);
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
     }
 }

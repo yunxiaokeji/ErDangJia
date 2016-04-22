@@ -9,10 +9,8 @@
         <ul class="action-items">
             @foreach (CloudSalesEntity.Menu view in ExpandClass.GetChildMenuByCode(HttpContext.Current, model.MenuCode))
             {
-                <li data-url="/@(view.Controller + "/" + view.View)" data-code="@(view.MenuCode)">
-                    <span class="name">
-                        @(view.Name)
-                    </span>
+                <li data-url="/@(view.Controller + "/" + view.View)" data-name="@(view.Name)" data-code="@(view.MenuCode)">
+                    <span class="name">@(view.Name)</span>
                 </li>
             }
         </ul>

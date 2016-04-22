@@ -153,8 +153,11 @@
     <Content Include="Content\menuico\customer.png" />
     <Content Include="Content\menuico\default-menu.png" />
     <Content Include="DLL\JsonObject.dll" />
+    <Content Include="modules\css\iconfont\iconfont.css" />
+    <Content Include="modules\css\iconfont\iconfont.svg" />
     <Content Include="modules\css\opportunitys.css" />
     <Content Include="modules\css\stock\stock.css" />
+    <Content Include="modules\css\layout.css" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
     <Content Include="modules\images\ico-company.png" />
@@ -211,6 +214,9 @@
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\xi_zang_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\yun_nan_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\zhe_jiang_geo.json" />
+    <Content Include="modules\css\iconfont\iconfont.eot" />
+    <Content Include="modules\css\iconfont\iconfont.ttf" />
+    <Content Include="modules\css\iconfont\iconfont.woff" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -240,8 +246,6 @@
     <Content Include="Content\menuico\customhover.png" />
     <Content Include="Content\menuico\custom.png" />
     <Content Include="DLL\Net.Sourceforge.Pinyin4j.dll" />
-    <Content Include="modules\css\detail.css" />
-    <Content Include="modules\css\list.css" />
     <Content Include="modules\css\auction\buynow.css" />
     <Content Include="modules\css\customer\activity.css" />
     <Content Include="modules\css\customer\customer.css" />

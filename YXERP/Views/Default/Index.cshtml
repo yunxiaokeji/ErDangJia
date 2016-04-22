@@ -10,7 +10,9 @@
     <meta name="robots" content="noindex,nofollow">
 
     <link href="/modules/css/base.css" rel="stylesheet" />
+    <link href="/modules/css/layout.css" rel="stylesheet" />
     <link href="/modules/css/index.css" rel="stylesheet" />
+    <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
 
     <link rel="shortcut icon" href="/modules/images/logo_login.png">
 
@@ -57,8 +59,16 @@
         
     </nav>
     <div class="main-content">
-
-     </div>
+        <div class="window-box">
+            <ul id="windowItems" class="window-items">
+                <li class="hover" data-id="Home"><i class="iconfont">&#xe62a;</i> 主页</li>
+                
+            </ul>
+        </div>
+        <div id="iframeBox" class="iframe-box">
+            <iframe id="iframeHome" class="iframe-window" src="/Default/Home"></iframe>
+        </div>
+    </div>
 
     @*<div class="feedback">意见反馈</div>*@
     <input id="feedback-filepath" type="hidden" />

@@ -13,21 +13,21 @@ define(function (require, exports, module) {
         
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
-        LayoutObject.getAgentInfo();
+        LayoutObject.getAgentAuthorizes();
         LayoutObject.bindUpcomings();
     }
 
     //绑定元素定位和样式
     LayoutObject.bindStyle = function () {
-
-
+        var height = document.documentElement.clientHeight;
+        $(".iframe-window").css("height", height - 100);
     }
     //绑定事件
     LayoutObject.bindEvent = function () {
         var _self = this;
         //调整浏览器窗体
         $(window).resize(function () {
-            LayoutObject.bindStyle();
+            _self.bindStyle();
         });
 
         $(document).click(function (e) {
@@ -72,14 +72,54 @@ define(function (require, exports, module) {
                 _this.siblings().find("img").each(function () {
                     $(this).attr("src", $(this).data("ico"));
                 });
-
-                $.get("/Default/LeftMenu", { id: _this.data("code") }, function (html) {
-                    $("#leftNav").empty();
-                    $("#leftNav").append(html);
-
-                    _self.bindUpcomings();
-                });
+                _self.getChildMenu(_this.data("code"));
             }
+        });
+
+        //打开窗口
+        $("nav").delegate(".action-items li", "click", function () {
+            var _this = $(this),
+                nav = $("#windowItems li[data-id='" + _this.data("code") + "']");
+
+            $(".action-items li").removeClass("hover");
+            _this.addClass("hover");
+
+            $("#windowItems li").removeClass("hover");
+            $(".iframe-window").hide();
+            if (nav.length == 1) {
+                nav.addClass("hover");
+                $("#iframe" + _this.data("code")).show();
+            } else {
+                $("#windowItems").append('<li data-id="' + _this.data("code") + '" class="hover" title="' + _this.data("name") + '">'
+                                              + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'
+                                       + '</li>');
+                $("#iframeBox").append('<iframe id="iframe' + _this.data("code") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
+                _self.bindStyle();
+            }
+        });
+
+        //切换窗口
+        $("#windowItems").delegate("li", "click", function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+
+                $(".iframe-window").hide();
+                $("#iframe" + _this.data("id")).show();
+            }
+        });
+
+        //关闭窗口
+        $("#windowItems").delegate(".close", "click", function () {
+            var _this = $(this).parent();
+            if (_this.hasClass("hover")) {
+                _this.prev().addClass("hover");
+                $("#iframe" + _this.prev().data("id")).show();
+            }
+            _this.remove();
+            $("#iframe" + _this.data("id")).remove();
+            return false;
         });
 
         //意见反馈浮层
@@ -155,7 +195,22 @@ define(function (require, exports, module) {
             });
 
         });
+
+        $("#modulesMenu li").first().click();
     }
+
+    //下级菜单
+    LayoutObject.getChildMenu = function (code) {
+        var _self = this;
+
+        $.get("/Default/LeftMenu", { id: code }, function (html) {
+            $("#leftNav").empty();
+            $("#leftNav").append(html);
+
+            _self.bindUpcomings();
+        });
+    }
+
     //旋转按钮（顺时针）
     LayoutObject.setRotateR = function (obj, i, v) {
         var _self = this;
@@ -295,7 +350,7 @@ define(function (require, exports, module) {
     }
 
     //获取代理商授权信息
-    LayoutObject.getAgentInfo = function () {
+    LayoutObject.getAgentAuthorizes = function () {
         Global.post("/Default/GetAgentAuthorizes", null, function (data) {
             $("#remainderDays").html(data.remainderDays);
 

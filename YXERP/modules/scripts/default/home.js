@@ -14,7 +14,7 @@ define(function (require, exports, module) {
         ObjectJS.bindStyle();
         ObjectJS.bindEvent();
 
-        Global.post('/Home/GetAgentActions', {}, function (data) {
+        Global.post('/Default/GetAgentActions', {}, function (data) {
             for (var i = 0; i < data.model.Actions.length; i++) {
                 var model = data.model.Actions[i];
                 if (model.ObjectType == 0) {

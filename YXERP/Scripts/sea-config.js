@@ -8,13 +8,17 @@ seajs.config({
     },
     alias: {
         "jquery": "/Scripts/jquery-1.11.1.js",
+        //全局JS
         "global": "scripts/global.js",
         //HTML模板引擎
         "dot": "plug/doT.js",
         //分页控件
         "pager": "plug/datapager/paginate.js",
         //报表底层
-        'zrender': 'plug/echarts/zrender/zrender.js'
+        'zrender': 'plug/echarts/zrender/zrender.js',
+        //日期控件
+        'moment': 'plug/daterangepicker/moment.js',
+        'daterangepicker': 'plug/daterangepicker/daterangepicker.js'
     }
 });
 

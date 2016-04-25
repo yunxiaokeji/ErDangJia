@@ -177,6 +177,9 @@
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />
     <Content Include="modules\plug\chooseproduct\productin.html" />
+    <Content Include="modules\plug\daterangepicker\daterangepicker.css" />
+    <Content Include="modules\plug\daterangepicker\daterangepicker.js" />
+    <Content Include="modules\plug\daterangepicker\moment.js" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\an_hui_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\ao_men_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\bei_jing_geo.json" />
@@ -569,6 +572,7 @@
     <Content Include="modules\scripts\system\teams.js" />
     <Content Include="modules\scripts\system\client.js" />
     <Content Include="modules\scripts\system\opportunitystage.js" />
+    <Content Include="modules\scripts\layout.js" />
     <Content Include="modules\template\activity\activity_list.html" />
     <Content Include="modules\template\activity\activity_card_list.html" />
     <Content Include="modules\template\activity\activity_reply_list.html" />
@@ -876,7 +880,7 @@
     <Content Include="modules\plug\shoppingcart\style.css" />
     <Content Include="modules\scripts\global.js" />
     <Content Include="modules\scripts\default\home.js" />
-    <Content Include="modules\scripts\layout.js" />
+    <Content Include="modules\scripts\index.js" />
     <Content Include="modules\scripts\organization\department.js" />
     <Content Include="modules\scripts\products\attr.js" />
     <Content Include="modules\scripts\products\brand.js" />

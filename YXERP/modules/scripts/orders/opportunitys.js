@@ -190,7 +190,7 @@
         var _self = this;
         $("#checkAll").addClass("ico-check").removeClass("ico-checked");
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='11'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='11'><div class='data-loading' ><div></td></tr>");
 
         Global.post("/Opportunitys/GetOpportunitys", { filter: JSON.stringify(Params) }, function (data)
         {
@@ -242,7 +242,7 @@
         }
         else
         {
-            $(".tr-header").after("<tr><td colspan='11'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+            $(".tr-header").after("<tr><td colspan='11'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
 
         $("#pager").paginate({

@@ -17,8 +17,5 @@
     <td class="center">{%=item.ReplyTimes%}</td>
     <td class='center'>{%=(item.Owner ? item.Owner.Name:"--")%}</td>
     <td class='center'>{%=item.CreateTime.toDate("yyyy-MM-dd")%}</td>
-    <td class="center dropdown" data-id="{%=item.CustomerID%}" data-userid="{%=item.OwnerID%}">
-        <span class="ico-dropdown"></span>
-    </td>
 </tr>
 {% } %}

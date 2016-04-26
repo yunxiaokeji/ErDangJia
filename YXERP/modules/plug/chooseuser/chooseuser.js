@@ -82,7 +82,7 @@ define(function (require, exports, module) {
         var _self = this;
         //搜索
         require.async("search", function () {
-            $("#chooseuserSearch").searchKeys(function (keyWords) {
+            $("#searchKeyWords").searchKeys(function (keyWords) {
                 _self.keywords = keyWords;
                 if (_self.keywords) {
                     $(".userlist-items li").hide();
@@ -141,6 +141,7 @@ define(function (require, exports, module) {
             $("#userlistChoose").empty();
         });
     }
+
     exports.create = function (options) {
         return new PlugJS(options);
     }

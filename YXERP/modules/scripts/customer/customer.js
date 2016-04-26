@@ -14,6 +14,7 @@
         StageID: "",
         Status: 1,
         Mark: -1,
+        OrderBy: "cus.CreateTime desc",
         UserID: "",
         AgentID: "",
         TeamID: "",
@@ -36,16 +37,10 @@
     ObjectJS.bindEvent = function (type) {
         var _self = this;
         $(document).click(function (e) {
-            //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
-                $(".dropdown-ul").hide();
-            }
-        });
-        $("#btnSearch").click(function () {
-            
+
         });
 
-        //切换阶段
+        //客户阶段
         $(".search-stages li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
@@ -56,7 +51,8 @@
                 _self.getList();
             }
         });
-        //切换状态
+
+        //客户状态
         $(".search-status li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
@@ -67,6 +63,19 @@
                 _self.getList();
             }
         });
+
+        //客户类型
+        $("#customerType li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.Type = _this.data("id");
+                _self.getList();
+            }
+        });
+
         //关键字搜索
         require.async("search", function () {
             $(".searth-module").searchKeys(function (keyWords) {
@@ -76,38 +85,17 @@
             });
         });
         //客户来源
-        Global.post("/Customer/GetCustomerSources", { }, function (data) {
-            require.async("dropdown", function () {
-                $("#customerSource").dropdown({
-                    prevText: "来源-",
-                    defaultText: "全部",
-                    defaultValue: "",
-                    data: data.items,
-                    dataValue: "SourceID",
-                    dataText: "SourceName",
-                    width: "140",
-                    onChange: function (data) {
-                        Params.PageIndex = 1;
-                        Params.SourceID = data.value;
-                        _self.getList();
-                    }
-                });
-            });
-        });
-        //客户类型
-        require.async("dropdown", function () {
-            var items = [{ ID: 1, Name: "企业客户" }, { ID: 0, Name: "个人客户" }];
-            $("#customerType").dropdown({
-                prevText: "类型-",
-                defaultText: "全部",
-                defaultValue: "-1",
-                data: items,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "120",
-                onChange: function (data) {
+        Global.post("/Customer/GetCustomerSources", {}, function (data) {
+            for (var i = 0; i < data.items.length; i++) {
+                $("#customerSource").append('<li data-id="' + data.items[i].SourceID + '">' + data.items[i].SourceName + '</li>')
+            }
+            $("#customerSource li").click(function () {
+                var _this = $(this);
+                if (!_this.hasClass("hover")) {
+                    _this.siblings().removeClass("hover");
+                    _this.addClass("hover");
                     Params.PageIndex = 1;
-                    Params.Type = data.value;
+                    Params.SourceID = _this.data("id");
                     _self.getList();
                 }
             });
@@ -159,24 +147,7 @@
                 $(".table-list .check").addClass("ico-check").removeClass("ico-checked");
             }
         });
-        //转移拥有者
-        $("#changeOwner").click(function () {
-            var _this = $(this);
-            ChooseUser.create({
-                title: "更换拥有者",
-                type: 1,
-                single: true,
-                callback: function (items) {
-                    if (items.length > 0) {
-                        if (_this.data("userid") != items[0].id) {
-                            _self.ChangeOwner(_this.data("id"), items[0].id);
-                        } else {
-                            alert("请选择不同人员进行转移!");
-                        }
-                    }
-                }
-            });
-        });
+
         //批量转移
         $("#batchChangeOwner").click(function () {
             var checks = $(".table-list .ico-checked");
@@ -257,13 +228,35 @@
             _self.getList();
         });
 
+        //排序
+        $(".sort-item").click(function () {
+            var _this = $(this);
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    _this.find(".asc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " desc ";
+                } else {
+                    _this.find(".desc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " asc ";
+                }
+            } else {
+                _this.addClass("hover").siblings().removeClass("hover");
+                _this.siblings().find(".hover").removeClass("hover");
+                _this.find(".desc").addClass("hover");
+                Params.OrderBy = _this.data("column") + " desc ";
+            }
+            _self.getList();
+        });
+
     }
     //获取列表
     ObjectJS.getList = function () {
         var _self = this;
         $("#checkAll").addClass("ico-check").removeClass("ico-checked");
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='12'><div class='dataLoading' ><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
 
         Global.post("/Customer/GetCustomers", { filter: JSON.stringify(Params) }, function (data) {
             _self.bindList(data);
@@ -279,16 +272,6 @@
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 
-                //下拉事件
-                innerhtml.find(".dropdown").click(function () {
-                    var _this = $(this);
-                    var position = _this.find(".ico-dropdown").position();
-                    $(".dropdown-ul li").data("id", _this.data("id")).data("userid", _this.data("userid"));
-                    $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 80 }).show().mouseleave(function () {
-                        $(this).hide();
-                    });
-                    return false;
-                });
                 innerhtml.find(".check").click(function () {
                     var _this = $(this);
                     if (!_this.hasClass("ico-checked")) {
@@ -323,7 +306,7 @@
         }
         else
         {
-            $(".tr-header").after("<tr><td colspan='12'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+            $(".tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
 
         $("#pager").paginate({

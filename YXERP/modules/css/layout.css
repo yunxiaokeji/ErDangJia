@@ -1,20 +1,12 @@
 ﻿
-/*Title样式*/
+/*header样式*/
 .header-box { border-bottom:solid 1px #e6e6e6; padding:15px 20px 5px 20px; overflow:auto; }
 .header-box .header-title { height:30px; line-height:30px; color:#666; font-size:16px;}
 .header-box .ico-back { margin:6px 0 0 20px; }
 
-/*内容页样式*/
-.content-body{ padding:20px 10px 80px; overflow:auto; background-color:#fff; border-radius:2px; min-height:400px; }
-.search-body { height:35px; }
+/*search样式*/
+.search-header { overflow:auto; margin:20px; }
 
-
-
-/*搜索条件*/
-.search-box { margin-top:15px; }
-
-/*search-tab*/
-.search-header { height:35px; overflow:auto;}
 .search-header .search-tab { height:35px; float:left; }
 .search-header .search-tab li{ padding:0 10px; cursor:pointer; min-width:70px; text-align:center; margin-right:5px;height:30px; line-height:30px; color:#fff;
                                float:left; background-color:#B5C2CA; border-radius:2px; }
@@ -25,6 +17,39 @@
 .search-header .search-tab-status li{ float:left; margin-left:5px; padding:0 15px; cursor:pointer; text-align:center; color:#666; border-radius:13px;}
 .search-header .search-tab-status li:hover{ background-color:#ccc; color:#fff;}
 .search-header .search-tab-status li.hover{ background-color:#4a98e7; color:#fff;}
+
+
+.search-body { border:solid 1px #ddd; margin:0 20px; background-color:#f9f9f9;  position:relative;}
+.search-body .search-item { clear:both; border-top:dashed 1px #ddd; overflow:auto;}
+.search-body .search-item:first-child{  border-top:none; }
+.search-body .search-item .name { float:left; width:100px; color:#999; line-height:45px; text-indent:10px;}
+.search-body .search-item ul { margin-left:100px; background-color:#fff; overflow:auto;}
+.search-body .search-item li{ float:left; height:25px; line-height:25px;  color:#333; margin:10px; padding:0 10px; cursor:pointer; border:solid 1px #fff;}
+.search-body .search-item li:hover{ color:#4A99E8; }
+.search-body .search-item li.hover{ border:solid 1px #4A99E8; color:#4A99E8; }
+
+.search-body .close-filter { position:absolute; bottom:-25px; text-align:center; width:100%; height:25px; }
+.search-body .close-filter span{ display:inline-block; background:url('/modules/images/icon-close-filter.png') no-repeat 4px 4px; background-color:#4A99E8; 
+                                 text-indent:8px; color:#fff; width:60px; height:20px; line-height:20px; cursor:pointer;}
+.search-body .close-filter span:hover{ background-color:#2F73B8; }
+
+/*排序*/
+.search-sort { background-color:#f5f5f5; border:solid 1px #e8e8e8; height:45px; margin:20px 20px; }
+.search-sort li{ float:left; padding:0 20px; line-height:45px; color:#666; }
+.search-sort .sort-item { position:relative; cursor:pointer; }
+
+.search-sort .sort-item:hover { color:#4a98e7; }
+.search-sort .sort-item.hover { color:#4a98e7; }
+
+.search-sort .sort-item .asc { position:absolute; top:16px; right:5px;  border-bottom:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
+.search-sort .sort-item .desc { position:absolute; top:23px; right:5px;  border-top:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
+
+.search-sort .sort-item .asc.hover {  border-bottom:solid 5px #4a98e7;}
+.search-sort .sort-item .desc.hover { border-top:solid 5px #4a98e7;}
+
+
+/*content样式*/
+.content-body{ padding:20px ; overflow:auto; background-color:#fff; min-height:400px; }
 
 
 /*表格样式*/
@@ -107,26 +132,27 @@
 
 
 /*按钮和图标*/
-.btn {  padding:5px 10px; background-color:#4a98e7; color:#fff; border:none; cursor:pointer; display:inline-block; border-radius:2px; line-height:18px;
-        -moz-transition:all 0.3s;
-        -webkit-transition:all 0.3s;
-        -o-transition:all 0.3s;
-}
+.btn { padding: 5px 10px; background-color: #4a98e7; color: #fff; border: none; cursor: pointer; display: inline-block; border-radius: 2px; line-height: 18px; 
+       -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
 .btn:hover { background-color:#2F73B8; }
-
-.btn-add{ background:url(../images/ico-btnadd.png) no-repeat 7px 7px; line-height:18px; padding:5px 10px; border-radius:2px;
-          display:inline-block; cursor:pointer; padding-left:23px; color:#fff; background-color:#4a98e7;
-          -moz-transition:all 0.3s;
-          -webkit-transition:all 0.3s;
-          -o-transition:all 0.3s;
-}
-.btn-add:hover{ background-color:#2F73B8;}
 
 .btnccc {  padding:5px 10px; background-color:#ccc; color:#333; border:none; cursor:pointer; display:inline-block; border-radius:2px; line-height:18px; }
 .btnccc:hover { background-color:#999; color:#fff; }
 
 .btn999 {  padding:5px 10px; background-color:#999; color:#fff; border:none; cursor:pointer; display:inline-block; border-radius:2px; line-height:18px; }
 .btn999:hover { background-color:#666; color:#fff; }
+
+.btn-add { background: url(/modules/images/ico-btnadd.png) no-repeat 6px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
+           -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
+.btn-add:hover{ background-color:#2F73B8;}
+
+/*筛选*/
+.btn-filter { background: url(/modules/images/iconfilter.png) no-repeat 5px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
+           -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
+.btn-filter:hover{ background-color:#2F73B8;}
+
+/*日期*/
+.ipt-date{ background:url(../images/icondate.png) no-repeat 4px 4px; height:25px;line-height:25px; text-indent:20px; width:180px;}
 
 /*添加*/
 .ico-add{ background:url(../images/ico-add.png) no-repeat; height:24px; min-width:24px; line-height:24px; 

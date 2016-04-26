@@ -23,8 +23,15 @@ define(function (require, exports, module) {
     //绑定事件
     LayoutObject.bindEvent = function () {
         var _self = this;
-        //调整浏览器窗体
-       
+
+        //展开筛选
+        $(".btn-filter").click(function () {
+            $(".search-body").show("fast");
+        });
+        //折叠筛选
+        $(".close-filter span").click(function () {
+            $(".search-body").hide("fast");
+        });
     }
 
     module.exports = LayoutObject;

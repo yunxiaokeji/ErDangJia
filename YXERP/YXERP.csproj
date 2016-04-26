@@ -494,7 +494,6 @@
     <Content Include="modules\plug\laydate\skins\molv\icon.png" />
     <Content Include="modules\plug\laydate\skins\molv\laydate.css" />
     <Content Include="modules\plug\mark\ico-ball.png" />
-    <Content Include="modules\plug\seach_keys\demo.html" />
     <Content Include="modules\plug\sharemingdao\demo.html" />
     <Content Include="modules\plug\sharemingdao\images\Ico_Eye.gif" />
     <Content Include="modules\plug\sharemingdao\sharemingdao.js" />
@@ -793,8 +792,8 @@
     <Content Include="modules\plug\doT.js" />
     <Content Include="modules\plug\easydialog\easydialog.css" />
     <Content Include="modules\plug\easydialog\easydialog.js" />
-    <Content Include="modules\plug\seach_keys\seach_keys.js" />
-    <Content Include="modules\plug\seach_keys\style.css" />
+    <Content Include="modules\plug\seachkeys\seachkeys.js" />
+    <Content Include="modules\plug\seachkeys\style.css" />
     <Content Include="modules\plug\shoppingcart\shoppingcart.html" />
     <Content Include="modules\plug\switch\style.css" />
     <Content Include="modules\plug\switch\switch.js" />

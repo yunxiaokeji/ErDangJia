@@ -38,7 +38,7 @@ seajs.config({
         //弹出层插件
         "easydialog": "plug/easydialog/easydialog.js",
         //搜索插件
-        "search": "plug/seach_keys/seach_keys.js",
+        "search": "plug/seachkeys/seachkeys.js",
         //购物车
         "cart": "plug/shoppingcart/shoppingcart.js",
         //选择员工

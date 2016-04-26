@@ -39,7 +39,11 @@
         $(document).click(function (e) {
 
         });
-
+        //$(document).scroll(function () {
+        //    if ($(document).scrollTop() > $(".tr-header").offset().top) {
+        //        $(".tr-header").css({ position: "fixed", top: "0px" });
+        //    }
+        //});
         //客户阶段
         $(".search-stages li").click(function () {
             var _this = $(this);

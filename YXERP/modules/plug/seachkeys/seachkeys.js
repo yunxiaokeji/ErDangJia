@@ -7,7 +7,7 @@
 */
 
 define(function (require, exports, module) {
-    require("plug/seach_keys/style.css");
+    require("plug/seachkeys/style.css");
     (function ($) {
         $.fn.searchKeys = function (callback) {
             return this.each(function () {

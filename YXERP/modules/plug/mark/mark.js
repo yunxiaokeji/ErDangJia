@@ -36,7 +36,7 @@ define(function (require, exports, module) {
             } else {
                 obj.addClass("mark-color-all");
             }
-            var width = colors.length * 13;
+            var width = 0;
             obj.click(function () {
                 $(".mark-color-list").hide();
                 var _this = $(this);
@@ -83,10 +83,10 @@ define(function (require, exports, module) {
                         }
                         _colorBody.hide();
                     });
-                    _colorBody.css({ "top": position.top + 20, "left": position.left - width + 10 }).show();
+                    _colorBody.css({ "top": position.top + 20, "left": position.left - 9 }).show();
                     $("body").append(_colorBody);
                 } else {
-                    $("#" + _this.data("itemid")).css({ "top": position.top + 20, "left": position.left - colors.length * 13 + 10 }).show();
+                    $("#" + _this.data("itemid")).css({ "top": position.top + 20, "left": position.left - 9 }).show();
                 }
                 return false;
             });

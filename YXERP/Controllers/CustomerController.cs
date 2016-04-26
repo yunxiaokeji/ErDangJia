@@ -29,6 +29,7 @@ namespace YXERP.Controllers
             ViewBag.Stages = SystemBusiness.BaseBusiness.GetCustomStages(CurrentUser.AgentID, CurrentUser.ClientID);
             return View("Customers");
         }
+
         public ActionResult BranchCustomer()
         {
             ViewBag.Title = "下属客户";
@@ -36,6 +37,7 @@ namespace YXERP.Controllers
             ViewBag.Stages = SystemBusiness.BaseBusiness.GetCustomStages(CurrentUser.AgentID, CurrentUser.ClientID);
             return View("Customers");
         }
+
         public ActionResult Customers()
         {
             ViewBag.Title = "所有客户";
@@ -69,7 +71,6 @@ namespace YXERP.Controllers
         }
 
         #region Ajax
-
 
         public JsonResult GetCustomerSources()
         {
@@ -255,6 +256,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         public JsonResult CloseCustomer(string ids)
         {
             bool bl = false;
@@ -273,6 +275,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         public JsonResult RecoveryCustomer(string ids)
         {
             bool bl = false;
@@ -291,7 +294,6 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
 
         public JsonResult GetCustomerLogs(string customerid, int pageindex)
         {

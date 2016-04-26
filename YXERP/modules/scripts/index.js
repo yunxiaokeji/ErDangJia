@@ -22,6 +22,7 @@ define(function (require, exports, module) {
         var height = document.documentElement.clientHeight;
         $(".iframe-window").css("height", height - 100);
     }
+
     //绑定事件
     LayoutObject.bindEvent = function () {
         var _self = this;
@@ -222,6 +223,7 @@ define(function (require, exports, module) {
             }, 5)
         }
     }
+
     //旋转按钮(逆时针)
     LayoutObject.setRotateL = function (obj, i, v) {
         var _self = this;

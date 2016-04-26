@@ -14,7 +14,7 @@
     </script>
 }
 <div class="header-box">
-    <a href="Create" id="createCustomer" class="btn-add left @(ExpandClass.IsLimits(HttpContext.Current,"101019001"))">新建客户</a>
+    <div data-url="/Customer/Create" data-id="101019001" data-name="新建客户" class="btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current,"101019001"))">新建客户</div>
 </div>
 <div class="search-header">
     <div class="left mRight20" id="chooseBranch"></div>

@@ -242,6 +242,8 @@
         //日期插件
         $("#iptCreateTime").daterangepicker({
             showDropdowns: true,
+            empty: true,
+            opens: "right",
             ranges: {
                 '今天': [moment(), moment()],
                 '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -250,8 +252,8 @@
             }
         }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = start.format("YYYY-MM-DD");
-            Params.EndTime = end.format("YYYY-MM-DD");
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 

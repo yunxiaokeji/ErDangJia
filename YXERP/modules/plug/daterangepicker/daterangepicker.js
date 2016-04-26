@@ -37,7 +37,7 @@ define(function (require, exports, module) {
     }(this || {}, function (root, daterangepicker, moment, $) { // 'this' doesn't exist on a server
 
         var DateRangePicker = function (element, options, cb) {
-
+            
             //default settings for options
             this.parentEl = 'body';
             this.element = $(element);
@@ -45,6 +45,7 @@ define(function (require, exports, module) {
             this.endDate = moment().endOf('day');
             this.minDate = false;
             this.maxDate = false;
+            this.empty = options.empty;
             this.dateLimit = false;
             this.autoApply = false;
             this.singleDatePicker = false;
@@ -74,7 +75,7 @@ define(function (require, exports, module) {
 
             this.locale = {
                 format: 'YYYY-MM-DD',
-                separator: ' - ',
+                separator: ' 至 ',
                 applyLabel: '确认',
                 cancelLabel: '取消',
                 weekLabel: 'W',
@@ -85,7 +86,7 @@ define(function (require, exports, module) {
             };
 
             this.callback = function () { };
-
+            
             //some state information
             this.isShowing = false;
             this.leftCalendar = {};
@@ -97,6 +98,7 @@ define(function (require, exports, module) {
 
             //allow setting options with data attributes
             //data-api options will be overwritten with custom javascript options
+
             options = $.extend(this.element.data(), options);
 
             //html template for the picker UI
@@ -126,8 +128,9 @@ define(function (require, exports, module) {
                     '</div>' +
                     '<div class="ranges">' +
                         '<div class="range_inputs">' +
-                            '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
-                            '<button class="cancelBtn" type="button"></button>' +
+                            '<div class="left applyBtn" disabled="disabled"></div> ' +
+                            '<div class="left mLeft10 cancelBtn"></div>' +
+                            '<div class="btnccc left mLeft10 clearBtn">清除</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -170,11 +173,13 @@ define(function (require, exports, module) {
 
             }
 
-            if (typeof options.startDate === 'string')
+            if (options.startDate && typeof options.startDate === 'string') {
                 this.startDate = moment(options.startDate, this.locale.format);
+            } 
 
-            if (typeof options.endDate === 'string')
+            if (options.endDate && typeof options.endDate === 'string') {
                 this.endDate = moment(options.endDate, this.locale.format);
+            } 
 
             if (typeof options.minDate === 'string')
                 this.minDate = moment(options.minDate, this.locale.format);
@@ -275,7 +280,7 @@ define(function (require, exports, module) {
             }
 
             var start, end, range;
-
+            
             //if no start/end dates set, check if an input element contains initial values
             if (typeof options.startDate === 'undefined' && typeof options.endDate === 'undefined') {
                 if ($(this.element).is('input[type=text]')) {
@@ -418,8 +423,9 @@ define(function (require, exports, module) {
                 .on('change.daterangepicker', '.daterangepicker_input input', $.proxy(this.formInputsChanged, this));
 
             this.container.find('.ranges')
-                .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
-                .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
+                .on('click.daterangepicker', 'div.applyBtn', $.proxy(this.clickApply, this))
+                .on('click.daterangepicker', 'div.cancelBtn', $.proxy(this.clickCancel, this))
+                .on('click.daterangepicker', 'div.clearBtn', $.proxy(this.clickClear, this))
                 .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this))
                 .on('mouseenter.daterangepicker', 'li', $.proxy(this.hoverRange, this))
                 .on('mouseleave.daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
@@ -434,19 +440,21 @@ define(function (require, exports, module) {
             } else {
                 this.element.on('click.daterangepicker', $.proxy(this.toggle, this));
             }
+            
 
             //
             // if attached to a text input, set the initial value
             //
-
-            if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
+            if (this.element.is('input') && this.empty) {
+                this.element.val("");
+            } else if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
                 this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
                 this.element.trigger('change');
             } else if (this.element.is('input') && this.autoUpdateInput) {
                 this.element.val(this.startDate.format(this.locale.format));
                 this.element.trigger('change');
             }
-
+            
         };
 
         DateRangePicker.prototype = {
@@ -550,13 +558,13 @@ define(function (require, exports, module) {
                     if (!this.linkedCalendars && (this.endDate.month() != this.startDate.month() || this.endDate.year() != this.startDate.year())) {
                         this.rightCalendar.month = this.endDate.clone().date(2);
                     } else {
-                        this.rightCalendar.month = this.startDate.clone().date(2).add(1, 'month');
+                        this.rightCalendar.month = this.startDate.clone().date(2);//.add(1, 'month')
                     }
 
                 } else {
                     if (this.leftCalendar.month.format('YYYY-MM') != this.startDate.format('YYYY-MM') && this.rightCalendar.month.format('YYYY-MM') != this.startDate.format('YYYY-MM')) {
                         this.leftCalendar.month = this.startDate.clone().date(2);
-                        this.rightCalendar.month = this.startDate.clone().date(2).add(1, 'month');
+                        this.rightCalendar.month = this.startDate.clone().date(2);//.add(1, 'month')
                     }
                 }
             },
@@ -1090,7 +1098,7 @@ define(function (require, exports, module) {
                 this.isShowing = true;
             },
 
-            hide: function (e) {
+            hide: function () {
                 if (!this.isShowing) return;
 
                 //incomplete date selection, revert to last values
@@ -1100,11 +1108,12 @@ define(function (require, exports, module) {
                 }
 
                 //if a new date range was selected, invoke the user callback function
-                if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate))
-                    this.callback(this.startDate, this.endDate, this.chosenLabel);
+                //if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate)) {
+                //    this.callback(this.startDate, this.endDate, this.chosenLabel); 
+                //}
 
                 //if picker is attached to a text input, update it
-                this.updateElement();
+                //this.updateElement();
 
                 $(document).off('.daterangepicker');
                 $(window).off('.daterangepicker');
@@ -1367,6 +1376,8 @@ define(function (require, exports, module) {
 
             clickApply: function (e) {
                 this.hide();
+                this.callback(this.startDate, this.endDate, this.chosenLabel);
+                this.updateElement();
                 this.element.trigger('apply.daterangepicker', this);
             },
 
@@ -1376,7 +1387,11 @@ define(function (require, exports, module) {
                 this.hide();
                 this.element.trigger('cancel.daterangepicker', this);
             },
-
+            clickClear: function (e) {
+                this.hide();
+                this.callback("", "", this.chosenLabel);
+                this.element.val("");
+            },
             monthOrYearChanged: function (e) {
                 var isLeft = $(e.target).closest('.calendar').hasClass('left'),
                     leftOrRight = isLeft ? 'left' : 'right',

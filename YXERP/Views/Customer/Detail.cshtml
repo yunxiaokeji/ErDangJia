@@ -14,40 +14,67 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">客户详情</span>
+    <div id="lblType" class="customer-type"></div>
+    <div id="lblCustomerName" class="left header-title mLeft10"></div>
+    <div id="updateCustomer" class="left iconfont icon-edit mLeft30 mTop5">&#xe607;</div>
     <a href="/Opportunitys/Create/@ViewBag.ID" target="_blank" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"102029001"))">新建销售机会</a>
-    <a class="ico-back left" href="@(Url.RequestContext.HttpContext.Request.UrlReferrer == null ? "/Customer/MyCustomer" : "javascript:if(history.length>1){ history.go(-1);} else{ location.href='/Customer/MyCustomer'}")" >
-        返回
-    </a>
 </div>
-<div class="content-body mTop20">
+<div class="content-body">
     <div class="content-title">
-        <div id="lblType" class="left customer-type mTop2"></div>
-        <div id="spCustomerName" class="left titlename mLeft10"></div>
-        <div id="updateCustomer" class="left ico-edit mLeft50 mTop2"></div>
-
         <div class="left mLeft50"><img class="hand btn_shareMD" src="/modules/images/btn-share-mingdao.png" id="btn_shareMD"/></div>
 
-@*        <div class="btn999 right" id="loseCustomer">丢失</div>*@
-        <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" id="closeCustomer">关闭</div>
+@*      <div class="btn999 right" id="loseCustomer">丢失</div>*@
+        <div class="btn999 right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" id="closeCustomer">关闭</div>
         <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"101019005"))" id="recoveryCustomer">恢复</div>
         <span class="right lineHeight25 mRight20 blue mTop2" id="lblStatus"></span>
         <span class="right lineHeight25 mTop2">客户状态：</span>
     </div>
     <ul class="content-info">
-        <li><span>来源：</span><label id="lblSource"></label></li>
-        <li><span class="left">拥有者：</span> <label class="left" id="lblOwner"></label>
-            <span title="更换拥有者" class="ico-change left @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="changeOwner"></span>
+        <li>
+            <span class="column-title">来源：</span>
+            <label id="lblSource"></label>
         </li>
-        <li><span>联系电话：</span><label id="lblMobile"></label></li>
-        <li><span>Email：</span><label id="lblEmail"></label> </li>
-        <li class="companyinfo hide"><span>行业：</span><label id="lblIndustry"></label></li>
-        <li  class="companyinfo hide"><span>规模：</span><label id="lblExtent"></label></li>
-        <li><span>城市：</span><label id="lblCity"></label></li>
-        <li><span>详细地址：</span><label id="lblAddress"></label></li>
-        <li><span>创建时间：</span><label id="lblTime"></label></li>
-        <li><span>创建人：</span><label id="lblUser"></label></li>
-        <li style="width:100%;"><span>备注：</span> <label id="lblReamrk"></label></li>
+        <li>
+            <span class="column-title">拥有者：</span> 
+            <label class="left" id="lblOwner"></label>
+            <span title="更换拥有者" class="iconfont icon-change left mLeft5 @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="changeOwner">&#xe60b;</span>
+        </li>
+        <li>
+            <span class="column-title">联系电话：</span>
+            <label id="lblMobile"></label>
+        </li>
+        <li>
+            <span class="column-title">Email：</span>
+            <label id="lblEmail"></label> 
+        </li>
+        <li class="companyinfo hide">
+            <span class="column-title">行业：</span>
+            <label id="lblIndustry"></label>
+        </li>
+        <li class="companyinfo hide">
+            <span class="column-title">规模：</span>
+            <label id="lblExtent"></label>
+        </li>
+        <li>
+            <span class="column-title">城市：</span>
+            <label id="lblCity"></label>
+        </li>
+        <li>
+            <span class="column-title">详细地址：</span>
+            <label id="lblAddress"></label>
+        </li>
+        <li>
+            <span class="column-title">创建时间：</span>
+            <label id="lblTime"></label>
+        </li>
+        <li>
+            <span class="column-title">创建人：</span>
+            <label id="lblUser"></label>
+        </li>
+        <li style="width:100%;">
+            <span class="column-title">备注：</span> 
+            <label id="lblReamrk"></label>
+        </li>
     </ul>
     <div class="clear"></div>
     <ul class="stage-items mTop30">
@@ -65,7 +92,7 @@
     <ul class="stageitems mTop10" id="stageItems">
        
     </ul>
-    <div class="tab-nav mTop30">
+    <div class="tab-nav">
         <ul class="tab-nav-ul left">
             <li class="hover" data-id="navRemark">备忘</li>
             <li data-id="navContact">联系人</li>
@@ -73,7 +100,7 @@
             <li data-id="navOrder">订单</li>
             <li data-id="navLog">日志</li>
         </ul>
-        <div id="addContact" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"101019006"))">添加联系人</div>
+        <div id="addContact" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"101019006"))">添加联系人</div>
     </div>
     <table id="navContact" class="nav-partdiv table-list mTop20 hide">
         <tr class="tr-header">
@@ -137,6 +164,7 @@
         <div id="pagerOppors" class="mTop10"></div>
     </div>
 </div>
+
 <ul class="dropdown-ul hide" style="width:65px;">
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"101019006"))" id="editContact">编辑</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"101019007"))" id="deleteContact">删除</li>

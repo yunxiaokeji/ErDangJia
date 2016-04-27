@@ -39,11 +39,6 @@
         $(document).click(function (e) {
 
         });
-        //$(document).scroll(function () {
-        //    if ($(document).scrollTop() > $(".tr-header").offset().top) {
-        //        $(".tr-header").css({ position: "fixed", top: "0px" });
-        //    }
-        //});
         //客户阶段
         $(".search-stages li").click(function () {
             var _this = $(this);
@@ -285,15 +280,6 @@
                     }
                     return false;
                 });
-
-                //innerhtml.click(function () {
-                //    var _this = $(this).find(".check");
-                //    if (!_this.hasClass("ico-checked")) {
-                //        _this.addClass("ico-checked").removeClass("ico-check");
-                //    } else {
-                //        _this.addClass("ico-check").removeClass("ico-checked");
-                //    }
-                //});
 
                 innerhtml.find(".mark").markColor({
                     isAll: false,

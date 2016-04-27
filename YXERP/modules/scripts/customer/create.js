@@ -16,9 +16,14 @@
         var _self = this;
         //保存
         $("#btnSave").click(function () {
+            if (_self.isLoading) {
+                alert("数据处理中，请勿重复操作");
+                return false;
+            }
             if (!VerifyObject.isPass()) {
                 return false;
             }
+            _self.isLoading = true;
             _self.saveModel(activityid);
         });
 
@@ -28,7 +33,7 @@
 
             Global.post("/Customer/GetActivityBaseInfoByID", { activityid: activityid }, function (data) {
                 if (data.model.Name) {
-                    $("#activityName").text("活动：" + data.model.Name);
+                    $("#activityName").html("活动：" + data.model.Name);
                 }
             })
         }
@@ -80,15 +85,15 @@
         };
         Global.post("/Customer/SaveCustomer", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.CustomerID) {
-                confirm("客户保存成功,是否继续添加客户?", function () {
+                alert("客户创建成功", function () {
                     location.href = location.href;
-                }, function () {
-                    location.href = "/Customer/MyCustomer";
-                })
-                
+                    _self.isLoading = false;
+                });
             } else {
-                alert("网络异常,请稍后重试!");
+                alert("客户创建失败,请稍后重试!");
+                _self.isLoading = false;
             }
+            
         });
     }
 

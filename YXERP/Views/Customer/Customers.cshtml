@@ -92,18 +92,20 @@
             <td class="width100">创建时间</td>
         </tr>
     </table>
-    <ul class="left batch-operate mTop20">
-        <li class="width30 center">
-            <span data-value="-1" class="mTop5" id="batchMark"></span>
-        </li>
-        <li class="width100 mLeft10">
-            <span class="ico-check pLeft5 mTop5" id="checkAll">批量操作</span>
-        </li>
-        <li>
-            <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="batchChangeOwner">更换拥有者</a>
-        </li>
+    <div class="mTop20">
+        <ul class="left batch-operate">
+            <li class="width30 center">
+                <span data-value="-1" class="mTop5" id="batchMark"></span>
+            </li>
+            <li class="width100 mLeft10">
+                <span class="ico-check pLeft5 mTop5" id="checkAll">批量操作</span>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="batchChangeOwner">更换拥有者</a>
+            </li>
          
-    </ul>
-    <div id="pager" class="mTop20"></div>
+        </ul>
+        <div id="pager"></div>
+    </div>
 </div>
 

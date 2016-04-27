@@ -1,17 +1,8 @@
 ﻿
 
 /*客户详情页*/
-
-.content-title { height:35px; }
-.content-title .customer-type { background-color:#4a98e7; height:22px; width:22px; border-radius:11px; line-height:18px; text-align:center; font-size:14px; color:#fff;}
-.content-title .titlename { font-size:18px; color:#666; }
-
-.content-info{ width:80%; min-width:600px; float:left;}
-.content-info li{ width:50%; float:left; height:35px; line-height:35px; }
-.content-info li span{ width:100px; float:left; height:35px; line-height:35px; color:#999; }
-.content-info li label{ color:#666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  max-width:300px;}
-
-.content-info .ico-change { margin:6px 0 0 10px; }
+.header-box .customer-type { background-color:#4a98e7; float:left; height:22px; width:22px; border-radius:11px; line-height:18px; text-align:center; 
+                             font-size:14px; color:#fff; margin-top:5px;}
 
 /*阶段*/
 .stage-items { height:40px; width:80%; }
@@ -34,8 +25,6 @@
 /*阶段行为项*/
 .stageitems { width:100%; overflow:auto; }
 .stageitems li{ width:33%; height:25px; min-width:200px; line-height:25px; float:left; color:#666; text-indent:5px; }
-
-.nav-partdiv { margin-bottom:100px; }
 
 
 /*讨论备忘*/

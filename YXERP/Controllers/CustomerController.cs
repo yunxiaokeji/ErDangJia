@@ -48,15 +48,8 @@ namespace YXERP.Controllers
 
         public ActionResult Create(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                ViewBag.Sources = new SystemBusiness().GetCustomSources(CurrentUser.AgentID, CurrentUser.ClientID).Where(m => m.IsChoose == 1).ToList();
-            }
-            else
-            {
-                ViewBag.Sources = new SystemBusiness().GetCustomSources(CurrentUser.AgentID, CurrentUser.ClientID);
-            }
             ViewBag.ActivityID = id;
+            ViewBag.Sources = new SystemBusiness().GetCustomSources(CurrentUser.AgentID, CurrentUser.ClientID);
             ViewBag.Industrys = CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
             ViewBag.Extents = CustomBusiness.GetExtents();
             return View();

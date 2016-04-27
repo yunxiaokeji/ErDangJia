@@ -76,15 +76,16 @@ nav .action-items .point { width:6px; height:6px; border-radius:3px; background-
 
 /*内容页*/
 .main-content { position:fixed; top:50px; right:0; bottom:0; left:180px;}
-.main-content .window-box { padding-top:20px; border-bottom:solid 1px #fff; height:25px;  }
-.main-content .window-items { padding:0 20px; border-bottom:solid 1px #B5C2CA; height:24px;}
+.main-content .window-box { padding-top:17px; border-bottom:solid 1px #fff; height:28px;  }
+.main-content .window-items { padding:0 20px; border-bottom:solid 1px #B5C2CA; height:27px;}
 .main-content .window-items li{  position:relative;  float:left;  background-color:#B5C2CA; cursor:pointer; border:solid 1px #B5C2CA;
                                  border-radius:2px; border-bottom-left-radius:0; border-bottom-right-radius:0; 
-                                 padding:0 10px; margin-right:5px;  min-width:80px;  height:22px; line-height:22px; color:#fff; }
+                                 padding:0 10px; margin-right:5px;  width:100px; height:25px; line-height:26px; color:#fff;
+                                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .window-items li .iconfont{ color:#fff; }
 
-.window-items li:hover { background-color:#fff; color:#666; height:23px; }
-.window-items li.hover { background-color:#fff; color:#666; height:23px; border-bottom-color:#fff; }
+.window-items li:hover { background-color:#fff; color:#666; height:26px; }
+.window-items li.hover { background-color:#fff; color:#666; height:26px; border-bottom-color:#fff; }
 .window-items li:hover .iconfont,.window-items li.hover .iconfont{ color:#666; }
 
 .window-items li .close { position:absolute; height:10px; line-height:10px; right:2px; top:2px; font-size:10px; }

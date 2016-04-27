@@ -46,7 +46,7 @@
 
         var _self = this;
 
-        $("#spCustomerName").html(model.Name);
+        $("#lblCustomerName").html(model.Name);
         $("#lblMobile").text(model.MobilePhone || "--");
         $("#lblEmail").text(model.Email || "--");
         $("#lblIndustry").text(model.Industry ? model.Industry.Name : "--");
@@ -120,6 +120,7 @@
                     });
                 });
             });
+
             //关闭客户
             $("#closeCustomer").click(function () {
                 confirm("确认关闭此客户吗?", function () {
@@ -130,6 +131,7 @@
                     });
                 });
             });
+
             //切换阶段
             $(".stage-items li").click(function () {
                 var _this = $(this);
@@ -350,6 +352,7 @@
             });
         });
     }
+
     //获取订单
     ObjectJS.getOrders = function (customerid, page) {
         var _self = this;
@@ -510,6 +513,7 @@
             });
         });
     }
+
     ObjectJS.saveContact = function (model) {
         var _self = this;
 
@@ -521,6 +525,7 @@
             }
         });
     }
+
     //编辑信息
     ObjectJS.editCustomer = function (model) {
         var _self = this;
@@ -588,6 +593,7 @@
             });
         });
     }
+
     //保存实体
     ObjectJS.saveModel = function (model) {
         var _self = this;
@@ -601,6 +607,7 @@
             }
         });
     }
+
     //讨论备忘
     ObjectJS.initTalk = function (customerid) {
         var _self = this;
@@ -624,6 +631,7 @@
         _self.getReplys(customerid, 1);
 
     }
+
     //获取备忘
     ObjectJS.getReplys = function (customerid, page) {
         var _self = this;
@@ -694,6 +702,7 @@
             });
         });
     }
+
     ObjectJS.saveReply = function (model) {
         var _self = this;
 

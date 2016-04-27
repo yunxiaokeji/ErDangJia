@@ -33,7 +33,7 @@ define(function (require, exports, module) {
             $(".search-body").hide("fast");
         });
         //打开新窗口
-        $(".btn-open-window").click(function () {
+        $("body").delegate(".btn-open-window", "click", function () {
             var _this = $(this),
                 parent = $(window.parent.document),
                 nav = parent.find("#windowItems li[data-id='" + _this.data("id") + "']");
@@ -50,7 +50,6 @@ define(function (require, exports, module) {
                 parent.find("#iframeBox").append('<iframe id="iframe' + _this.data("id") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
 
                 var height = window.parent.document.documentElement.clientHeight;
-                console.log(height);
                 parent.find("#iframe" + _this.data("id")).css("height", height - 100);
             }
         });

@@ -11,9 +11,8 @@
 }
 <div class="header-box">
     <span class="header-title left">新建客户</span>
-    
 </div>
-<div class="content-body mTop20">
+<div class="content-body">
     <ul class="table-add">
         <li>
             <span class="column-title">客户名称：</span>
@@ -27,7 +26,7 @@
                 <option value="@(model.SourceID)" data-code="@(model.SourceCode)">@(model.SourceName)</option> 
             }
             </select>
-            <label class="mLeft20" id="activityName"></label>
+            <span class="mLeft20 mTop2" id="activityName"></span>
         </li>
         <li>
             <span class="column-title">客户类型：</span> 
@@ -81,13 +80,9 @@
             <span class="column-title">备注：</span>
             <textarea id="remark"></textarea>
         </li>
-
     </ul>
     <div class="mTop20">
         <div class="btn" id="btnSave">保存</div>
-        <a class="btn mLeft10" href="@(Url.RequestContext.HttpContext.Request.UrlReferrer == null ? "/Customer/MyCustomer" : "javascript:if(history.length>1){ history.go(-1);} else{ location.href='/Customer/MyCustomer'}")">
-            返回
-        </a>
     </div>
 </div>
 

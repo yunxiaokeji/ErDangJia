@@ -293,9 +293,7 @@
                 $(".tr-header").after(innerhtml);
 
             });
-        }
-        else
-        {
+        } else {
             $(".tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
 

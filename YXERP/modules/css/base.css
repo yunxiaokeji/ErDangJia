@@ -169,6 +169,11 @@ select option{ padding:2px; }
            -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
 .btn-filter:hover{ background-color:#2F73B8;}
 
+/*分享*/
+.btn-share { background: url(/modules/images/iconshare.png) no-repeat 5px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
+           -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
+.btn-share:hover{ background-color:#2F73B8;}
+
 /*日期*/
 .ipt-date{ background:url(/modules/images/icondate.png) no-repeat 4px 4px; height:25px;line-height:25px; text-indent:20px; width:180px;}
 
@@ -185,9 +190,10 @@ select option{ padding:2px; }
 .ico-edit:before{ content:"&#xe607;"; }
 
 /*添加*/
-.ico-add{ background:url(../images/ico-add.png) no-repeat; height:24px; min-width:24px; line-height:24px; 
-          display:inline-block; cursor:pointer; padding-left:28px; color:#666; font-size:13px; }
-.ico-add:hover{ background:url(../images/ico-addhover.png) no-repeat; color:#4a98e7; }
+.icon-add{ display:inline-block; cursor:pointer;  color:#4a98e7; font-size:24px !important; }
+.icon-add:hover { color: #2F73B8; }
+
+.ico-add:before{ content:"&#xe63c;"; }
 
 /*返回*/
 .ico-back{ background:url(../images/ico-back.png) no-repeat 0px -1px; height:24px; min-width:24px; line-height:24px; 
@@ -276,7 +282,7 @@ select option{ padding:2px; }
 
 
 /*content样式*/
-.content-body{ padding:20px ; overflow:auto; background-color:#fff; min-height:400px; }
+.content-body{ padding:20px 20px 100px 20px; overflow:auto; background-color:#fff; min-height:400px; }
 
 /*表格样式*/
 .table-list { width:100%; border-spacing:0px;}
@@ -358,10 +364,10 @@ select option{ padding:2px; }
 .alert .close:hover {  background-color:#999; color:#fff; }
 
 /*图片loading*/
-.data-loading { padding: 85px 0px; font-size: 16px; text-align: center; color: #666; background:url(/modules/images/ico-loading.jpg) no-repeat center center;}
+.data-loading { padding: 80px 0px; font-size: 16px; text-align: center; color: #666; background:url(/modules/images/ico-loading.jpg) no-repeat center center;}
 
 /*暂无数据*/
-.nodata-txt { padding: 95px 0px; font-size: 16px; text-align: center; color: #666; }
+.nodata-txt { padding: 50px 0px; font-size: 16px; text-align: center; color: #666; }
 
 /*数据验证错误*/
 .verify-fail-err { height:20px; line-height:20px; padding-left:10px; padding-top:2px;}

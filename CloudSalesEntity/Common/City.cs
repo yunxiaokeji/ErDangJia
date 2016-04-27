@@ -128,6 +128,8 @@ namespace CloudSalesEntity
 		}
 		#endregion Model
 
+        public string Description { get; set; }
+
         /// <summary>
         /// 填充数据
         /// </summary>

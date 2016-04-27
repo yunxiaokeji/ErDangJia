@@ -26,27 +26,32 @@
         });
 
         _self.initTalk(customerid);
-
-        $("#addContact").hide();
-        //$(window).resize(function () {
-        //    _self.bindStyle();
-        //});
     }
     //样式
     ObjectJS.bindStyle = function () {
+
+        //隐藏操作按钮
+        $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
+        $("#recoveryCustomer,#loseCustomer,#closeCustomer").hide();
 
         var stages = $(".stage-items"), width = stages.width();
 
         stages.find("li .leftbg").first().removeClass("leftbg");
         stages.find("li .rightbg").last().removeClass("rightbg");
         stages.find("li").width(width / stages.find("li").length - 20);
+
     }
     //基本信息
     ObjectJS.bindCustomerInfo = function (model) {
 
         var _self = this;
 
-        $("#lblCustomerName").html(model.Name);
+        if (model.Status == 2 || model.Status == 3) {
+            $("#lblCustomerName").html(model.Name + "(已关闭)").addClass("colorccc");
+        } else {
+            $("#lblCustomerName").html(model.Name);
+        }
+
         $("#lblMobile").text(model.MobilePhone || "--");
         $("#lblEmail").text(model.Email || "--");
         $("#lblIndustry").text(model.Industry ? model.Industry.Name : "--");
@@ -93,8 +98,12 @@
     ObjectJS.bindEvent = function (model) {
         var _self = this;
 
+        //$(window).resize(function () {
+        //    _self.bindStyle();
+        //});
+
+        //隐藏下拉
         $(document).click(function (e) {
-            //隐藏下拉
             if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
                 $(".dropdown-ul").hide();
             }
@@ -106,9 +115,8 @@
         });
 
         if (model.Status == 1) {
-            $("#lblStatus").text("正常").addClass("normal");
 
-            $("#recoveryCustomer").hide();
+            $("#closeCustomer").show();
 
             //丢失客户
             $("#loseCustomer").click(function () {
@@ -164,10 +172,8 @@
             });
 
         } else if (model.Status == 2 || model.Status == 3) {
-            $("#lblStatus").text(model.Status ? "已关闭" : "已丢失").addClass("red");
 
-            $("#loseCustomer").hide();
-            $("#closeCustomer").hide();
+            $("#recoveryCustomer").show();
             //恢复客户
             $("#recoveryCustomer").click(function () {
                 confirm("确认恢复此客户吗?", function () {
@@ -179,13 +185,17 @@
                 });
             });
 
-        } else if (model.Status == 9) {
-            $("#lblStatus").text("已删除");
-
-            $("#loseCustomer").hide();
-            $("#closeCustomer").hide();
-            $("#recoveryCustomer").hide();
         }
+
+        //个人客户
+        if (model.Type != 1) {
+            $(".tab-nav-ul li[data-id='navContact']").remove();
+        }
+        //添加联系人
+        $("#btnCreateContact").click(function () {
+            _self.addContact();
+        });
+
         //更换拥有者
         $("#changeOwner").click(function () {
             var _this = $(this);
@@ -213,15 +223,6 @@
             });
         });
 
-        //企业客户
-        if (model.Type == 1) {
-            $("#addContact").click(function () {
-                _self.addContact();
-            });
-        } else {
-            $(".tab-nav-ul li[data-id='navContact']").remove();
-        }
-
         //切换模块
         $(".tab-nav-ul li").click(function () {
             var _this = $(this);
@@ -230,27 +231,33 @@
             $(".nav-partdiv").hide();
             $("#" + _this.data("id")).show();
 
-            $("#addContact").hide();
+            $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
                 _self.getLogs(model.CustomerID, 1);
             } else if (_this.data("id") == "navContact") {
-                $("#addContact").show();
+                $("#btnCreateContact").show();
                 if ((!_this.data("first") || _this.data("first") == 0)) {
                     _this.data("first", "1");
                     _self.getContacts(model.CustomerID);
                 }
-            } else if (_this.data("id") == "navOrder" && (!_this.data("first") || _this.data("first") == 0)) {
-                _this.data("first", "1");
-                _self.getOrders(model.CustomerID, 1);
-            } else if (_this.data("id") == "navOppor" && (!_this.data("first") || _this.data("first") == 0)) {
-                _this.data("first", "1");
-                _self.getOpportunitys(model.CustomerID, 1);
+            } else if (_this.data("id") == "navOrder") {
+                $("#btnCreateOrder").show();
+                if (!_this.data("first") || _this.data("first") == 0) {
+                    _this.data("first", "1");
+                    _self.getOrders(model.CustomerID, 1);
+                }
+            } else if (_this.data("id") == "navOppor") {
+                $("#btnCreateOpportunity").show();
+                if (!_this.data("first") || _this.data("first") == 0) {
+                    _this.data("first", "1");
+                    _self.getOpportunitys(model.CustomerID, 1);
+                }
             }
         });
 
-
+        //编辑联系人
         $("#editContact").click(function () {
             var _this = $(this);
             Global.post("/Customer/GetContactByID", { id: _this.data("id") }, function (data) {
@@ -272,8 +279,9 @@
             });
         });
 
+        //分享到明道
         require.async("sharemingdao", function () {
-            $("#btn_shareMD").sharemingdao({
+            $("#btnShareMD").sharemingdao({
                 post_pars: {
                     content: model.Name,
                     groups: [],
@@ -320,16 +328,21 @@
     ObjectJS.getLogs = function (customerid, page) {
         var _self = this;
         $("#customerLog").empty();
+        $("#customerLog").append("<div class='data-loading'><div>");
         Global.post("/Customer/GetCustomerLogs", {
             customerid: customerid,
             pageindex: page
         }, function (data) {
-           
-            doT.exec("template/common/logs.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
-                $("#customerLog").append(innerhtml);
-            });
+            $("#customerLog").empty();
+            if (data.items.length > 0) {
+                doT.exec("template/common/logs.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
+                    $("#customerLog").append(innerhtml);
+                });
+            } else {
+                $("#customerLog").append("<div class='nodata-txt'>暂无日志<div>");
+            }
             $("#pagerLogs").paginate({
                 total_count: data.totalCount,
                 count: data.pageCount,
@@ -357,12 +370,14 @@
     ObjectJS.getOrders = function (customerid, page) {
         var _self = this;
         $("#navOrder .tr-header").nextAll().remove();
+        $("#navOrder .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
         Global.post("/Orders/GetOrdersByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page
         }, function (data) {
-
+            $("#navOrder .tr-header").nextAll().remove();
+            if (data.items.length > 0) {
             doT.exec("template/orders/cuatomerorders.html", function (template) {
                 var innerhtml = template(data.items);
                 console.log(innerhtml);
@@ -370,6 +385,9 @@
                 innerhtml = $(innerhtml);
                 $("#navOrder .tr-header").after(innerhtml);
             });
+            } else {
+                $("#navOrder .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            }
             $("#pagerOrders").paginate({
                 total_count: data.totalCount,
                 count: data.pageCount,
@@ -397,19 +415,24 @@
     ObjectJS.getOpportunitys = function (customerid, page) {
         var _self = this;
         $("#navOppor .tr-header").nextAll().remove();
+        $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
         Global.post("/Orders/GetOpportunityaByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page
         }, function (data) {
+            $("#navOppor .tr-header").nextAll().remove();
+            if (data.items.length > 0) {
+                doT.exec("template/orders/customeroppors.html", function (template) {
+                    var innerhtml = template(data.items);
+                    console.log(innerhtml);
 
-            doT.exec("template/orders/customeroppors.html", function (template) {
-                var innerhtml = template(data.items);
-                console.log(innerhtml);
-
-                innerhtml = $(innerhtml);
-                $("#navOppor .tr-header").after(innerhtml);
-            });
+                    innerhtml = $(innerhtml);
+                    $("#navOppor .tr-header").after(innerhtml);
+                });
+            } else {
+                $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            }
             $("#pagerOppors").paginate({
                 total_count: data.totalCount,
                 count: data.pageCount,
@@ -433,33 +456,42 @@
         });
     }
 
+    //获取联系人
     ObjectJS.getContacts = function (customerid) {
         var _self = this;
         $("#navContact .tr-header").nextAll().remove();
+        $("#navContact .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
         Global.post("/Customer/GetContacts", {
             customerid: customerid
         }, function (data) {
-            doT.exec("template/customer/contacts.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
+            $("#navContact .tr-header").nextAll().remove();
+            if (data.items.length > 0) {
+                doT.exec("template/customer/contacts.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
 
-                innerhtml.find(".dropdown").click(function () {
-                    var _this = $(this);
-                    var position = _this.find(".ico-dropdown").position();
-                    $(".dropdown-ul li").data("id", _this.data("id"));
-                    $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 40 }).show().mouseleave(function () {
-                        $(this).hide();
+                    innerhtml.find(".dropdown").click(function () {
+                        var _this = $(this);
+                        var position = _this.find(".ico-dropdown").position();
+                        $(".dropdown-ul li").data("id", _this.data("id"));
+                        $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 40 }).show().mouseleave(function () {
+                            $(this).hide();
+                        });
+                        return false;
                     });
-                    return false;
-                });
 
-                $("#navContact .tr-header").after(innerhtml);
-            });
+                    $("#navContact .tr-header").after(innerhtml);
+                });
+            } else {
+                $("#navContact .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            }
         });
     }
 
+    //添加编辑联系人
     ObjectJS.addContact = function (model) {
         var _self = this;
+        $("#show-model-detail").empty();
         doT.exec("template/customer/contact-detail.html", function (template) {
             var innerText = template();
             Easydialog.open({
@@ -514,9 +546,9 @@
         });
     }
 
+    //保存联系人
     ObjectJS.saveContact = function (model) {
         var _self = this;
-
         Global.post("/Customer/SaveContact", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.ContactID) {
                 _self.getContacts(model.CustomerID);
@@ -529,6 +561,7 @@
     //编辑信息
     ObjectJS.editCustomer = function (model) {
         var _self = this;
+        $("#show-contact-detail").empty();
         doT.exec("template/customer/customer-detail.html", function (template) {
             var innerText = template(model);
             Easydialog.open({
@@ -594,7 +627,7 @@
         });
     }
 
-    //保存实体
+    //保存客户
     ObjectJS.saveModel = function (model) {
         var _self = this;
 
@@ -636,49 +669,56 @@
     ObjectJS.getReplys = function (customerid, page) {
         var _self = this;
         $("#replyList").empty();
+        $("#replyList").append("<div class='data-loading'><div>");
         Global.post("/Customer/GetReplys", {
             guid: customerid,
             pageSize: 10,
             pageIndex: page
         }, function (data) {
-            doT.exec("template/customer/replys.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
+            $("#replyList").empty();
 
-                $("#replyList").append(innerhtml);
+            if (data.items.length > 0) {
+                doT.exec("template/customer/replys.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
 
-                innerhtml.find(".btn-reply").click(function () {
-                    var _this = $(this), reply = _this.nextAll(".reply-box");
-                    reply.slideDown(500);
-                    reply.find("textarea").focus();
-                    reply.find("textarea").blur(function () {
-                        if (!$(this).val().trim()) {
-                            reply.slideUp(200);
+                    $("#replyList").append(innerhtml);
+
+                    innerhtml.find(".btn-reply").click(function () {
+                        var _this = $(this), reply = _this.nextAll(".reply-box");
+                        reply.slideDown(500);
+                        reply.find("textarea").focus();
+                        reply.find("textarea").blur(function () {
+                            if (!$(this).val().trim()) {
+                                reply.slideUp(200);
+                            }
+                        });
+                    });
+                    innerhtml.find(".save-reply").click(function () {
+                        var _this = $(this);
+                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
+                            var entity = {
+                                GUID: _this.data("id"),
+                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
+                                FromReplyID: _this.data("replyid"),
+                                FromReplyUserID: _this.data("createuserid"),
+                                FromReplyAgentID: _this.data("agentid")
+                            };
+
+                            _self.saveReply(entity);
                         }
+
+                        $("#Msg_" + _this.data("replyid")).val('');
+                        $(this).parent().slideUp(100);
+                    });
+
+                    require.async("businesscard", function () {
+                        innerhtml.find("img").businessCard();
                     });
                 });
-                innerhtml.find(".save-reply").click(function () {
-                    var _this = $(this);
-                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                        var entity = {
-                            GUID: _this.data("id"),
-                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                            FromReplyID: _this.data("replyid"),
-                            FromReplyUserID: _this.data("createuserid"),
-                            FromReplyAgentID: _this.data("agentid")
-                        };
-
-                        _self.saveReply(entity);
-                    }
-
-                    $("#Msg_" + _this.data("replyid")).val('');
-                    $(this).parent().slideUp(100);
-                });
-
-                require.async("businesscard", function () {
-                    innerhtml.find("img").businessCard();
-                });
-            });
+            } else {
+                $("#replyList").append("<div class='nodata-txt'>暂无备忘<div>");
+            }
 
             $("#pagerReply").paginate({
                 total_count: data.totalCount,
@@ -707,6 +747,9 @@
         var _self = this;
 
         Global.post("/Customer/SavaReply", { entity: JSON.stringify(model) }, function (data) {
+
+            $("#replyList .nodata-txt").remove();
+
             doT.exec("template/customer/replys.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
@@ -745,5 +788,6 @@
             });
         });
     }
+
     module.exports = ObjectJS;
 });

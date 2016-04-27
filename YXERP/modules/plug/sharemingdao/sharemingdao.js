@@ -1,6 +1,9 @@
 ﻿
 define(function (require, exports, module) {
     require("plug/sharemingdao/style.css");
+    var doT = require("dot");
+    var Easydialog = require("easydialog");
+    var ChooseUser = require("chooseuser");
 
     (function ($) {
         var Defaults = {
@@ -40,15 +43,6 @@ define(function (require, exports, module) {
             }); 
         }
 
-        
-        //其他插件引用
-        var doT = require("dot");
-        var Easydialog = require("easydialog");
-        var ChooseUser = require("chooseuser");
-        //require("/modules/plug/laydate/need/laydate.css");
-        //require("/modules/plug/laydate/skins/default/laydate.css");
-        //require("/modules/plug/laydate/laydate.js");
-
         //分享明道
         var shareMingDao = function (obj) {
 
@@ -67,13 +61,13 @@ define(function (require, exports, module) {
 
                 var $selectShareType = $(".selectShareType");
                 var targetTop = (top + 35) + "px";
-                var targetLeft = (left - ($selectShareType.width() / 2 - width / 2) + 8) + "px"
+                var targetLeft = (left - ($selectShareType.width() / 2 - width / 2) + 15) + "px"
                 $selectShareType.css({ "left": targetLeft, "top": targetTop }).fadeIn();
             });
 
             $(document).click(function (e) {
                 //隐藏下拉
-                if (!$(e.target).parents().hasClass("selectShareType") && !$(e.target).parents().hasClass("btn_shareMD") && !$(e.target).hasClass("btn_shareMD")) {
+                if (!$(e.target).parents().hasClass("selectShareType") && !$(e.target).parents().hasClass("btn-share-md") && !$(e.target).hasClass("btn-share-md")) {
                     $(".selectShareType").remove();
                 }
             });
@@ -127,7 +121,7 @@ define(function (require, exports, module) {
 
         //分享明道动态
         var shareMingdaoPost = function () {
-            doT.exec("template/sharemingdao/share_mingdao_post.html", function (template) {
+            doT.exec("plug/sharemingdao/share_mingdao_post.html", function (template) {
                 var html = template([]);
                 //显示分享明道动态弹出层
                 Easydialog.open({
@@ -214,7 +208,7 @@ define(function (require, exports, module) {
         //分享明道任务
         var shareMingdaoTask = function () {
             
-            doT.exec("template/sharemingdao/share_mingdao_task.html", function (template) {
+            doT.exec("plug/sharemingdao/share_mingdao_task.html", function (template) {
                 var html = template([]);
                 //显示分享明道任务弹出层
                 Easydialog.open({
@@ -330,7 +324,7 @@ define(function (require, exports, module) {
 
         //分享明道日程
         var shareMingdaoSchedule = function () {
-            doT.exec("template/sharemingdao/share_mingdao_schedule.html", function (template) {
+            doT.exec("plug/sharemingdao/share_mingdao_schedule.html", function (template) {
                 var html = template([]);
                 //显示分享明道日程弹出层
                 Easydialog.open({

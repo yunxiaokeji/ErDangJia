@@ -11,6 +11,9 @@ define(function (require, exports, module) {
     //初始化数据
     LayoutObject.init = function () {
         
+        //if ($(window.parent.document).find("#windowItems").length == 0) {
+        //    location.href = "/Default/Index";
+        //}
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
 

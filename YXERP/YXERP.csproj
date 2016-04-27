@@ -162,7 +162,6 @@
     <Content Include="modules\images\ico-company.png" />
     <Content Include="modules\images\ico-contact.png" />
     <Content Include="modules\images\ico-feedback.png" />
-    <Content Include="modules\images\ico-filter.png" />
     <Content Include="modules\images\ico-goregister-hover.png" />
     <Content Include="modules\images\ico-goregister.png" />
     <Content Include="modules\images\ico-loading.jpg" />
@@ -172,6 +171,7 @@
     <Content Include="modules\images\ico-username.png" />
     <Content Include="modules\images\icondate.png" />
     <Content Include="modules\images\iconfilter.png" />
+    <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />
     <Content Include="modules\plug\chooseproduct\productin.html" />
@@ -608,8 +608,8 @@
     <Content Include="modules\template\report\usercustomers.html" />
     <Content Include="modules\template\report\teamorders.html" />
     <Content Include="modules\template\report\userorders.html" />
-    <Content Include="modules\template\sharemingdao\sharetype.html" />
-    <Content Include="modules\template\sharemingdao\share_mingdao_post.html" />
+    <Content Include="modules\plug\sharemingdao\sharetype.html" />
+    <Content Include="modules\plug\sharemingdao\share_mingdao_post.html" />
     <Content Include="modules\template\shoppingcart\product-detail.html" />
     <Content Include="modules\template\organization\departments.html" />
     <Content Include="modules\template\organization\department-detail.html" />
@@ -687,8 +687,8 @@
     <Content Include="Views\StorageOut\StorageOut.cshtml" />
     <Content Include="Views\StorageOut\Detail.cshtml" />
     <Content Include="Views\StorageOut\OrderOut.cshtml" />
-    <Content Include="modules\template\sharemingdao\share_mingdao_task.html" />
-    <Content Include="modules\template\sharemingdao\share_mingdao_schedule.html" />
+    <Content Include="modules\plug\sharemingdao\share_mingdao_task.html" />
+    <Content Include="modules\plug\sharemingdao\share_mingdao_schedule.html" />
     <Content Include="Views\Stock\Detail.cshtml" />
     <Content Include="Views\Stock\StorageDoc.cshtml" />
     <Content Include="Views\StorageOut\StorageSend.cshtml" />

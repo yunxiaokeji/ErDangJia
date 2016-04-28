@@ -5,9 +5,9 @@
 <li class="activityCardListLi">
     <div class="activityItem">
         <div class="activityImg">
-            <a href="/Activity/Detail/{%=item.ActivityID%}" target="_blank">
+            <div data-id="{%=item.ActivityID%}" class="btn-open-window" data-name="活动详情-{%=item.Name%}" data-url="/Activity/Detail/{%=item.ActivityID%}">
                 <img src="{%=item.Poster==''?'/modules/images/defaultactivity.jpg':item.Poster%}" onerror="javascript:this.src='/modules/images/defaultactivity.jpg';" />
-            </a>
+            </div>
         </div>
 
         <div style="margin:8px;">
@@ -15,7 +15,7 @@
                 <tr>
                     <td colspan="2">
                         <div class="cardActivityName" title="{%=item.Name%}">
-                            <a  style="color:#666;font-size:18px;" href="/Activity/Detail/{%=item.ActivityID%}" target="_blank">{%=item.Name%}</a>
+                            <div  style="color:#666;font-size:18px;" class="btn-open-window" data-id="{%=item.ActivityID%}" data-name="活动详情-{%=item.Name%}" data-url="/Activity/Detail/{%=item.ActivityID%}">{%=item.Name%}</div>
                         </div>
                     </td>
                     <td align="right">
@@ -38,7 +38,7 @@
 	                        var m = item.Members[l];
                         %}
 
-                        {%=m.Name%}
+                        {%=m?m.Name:"--"%}
 
                         {% } %}
                         </div>

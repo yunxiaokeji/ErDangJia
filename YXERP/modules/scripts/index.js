@@ -90,6 +90,7 @@ define(function (require, exports, module) {
             if (nav.length == 1) {
                 nav.addClass("hover");
                 $("#iframe" + _this.data("code")).show();
+                $("#iframe" + _this.data("code")).attr("src", _this.data("url"));
             } else {
                 $("#windowItems").append('<li data-id="' + _this.data("code") + '" class="hover" title="' + _this.data("name") + '">'
                                               + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'

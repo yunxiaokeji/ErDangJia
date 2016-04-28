@@ -1,0 +1,92 @@
+﻿
+
+/*客户详情页*/
+.header-box .customer-type { background-color:#4a98e7; float:left; height:22px; width:22px; border-radius:11px; line-height:18px; text-align:center; 
+                             font-size:14px; color:#fff; margin-top:5px;}
+
+.header-box .icon-edit { margin-top:7px; margin-left:30px; float:left; }
+
+/*阶段*/
+.stage-items { height:40px; width:80%; }
+.stage-items  li{ float:left; height:40px; position:relative; cursor:pointer;  margin-right:5px;}
+.stage-items  li { background-color:#4a98e7;}
+.stage-items  li:hover{ background-color:#2F73B8;}
+.stage-items  li.hover{ background-color:#174A7F;}
+.stage-items  li span{ float:left; display:inline-block;}
+
+.stage-items  li .bg { position:absolute;border-bottom:solid 20px transparent; border-top:solid 20px transparent; }
+.stage-items  li .leftbg{ left:0px; z-index:101; border-left:solid 15px #fff;}
+.stage-items  li .name{ height:40px; line-height:40px; text-align:center; color:#eee; width:100%;}
+.stage-items  li .rightbg{ right:-15px; z-index:102; border-left:solid 15px #4a98e7;}
+
+.stage-items  li:hover .name{ color:#fff; }
+.stage-items  li:hover .rightbg{ border-left:solid 15px #2F73B8; }
+.stage-items  li.hover .rightbg{ border-left:solid 15px #174A7F; }
+.stage-items  .hover .name{ color:#fff; }
+
+/*阶段行为项*/
+.stageitems { width:100%; overflow:auto; }
+.stageitems li{ width:33%; height:25px; min-width:200px; line-height:25px; float:left; color:#666; text-indent:5px; }
+
+
+/*讨论备忘*/
+.talk-body { }
+.talk-body .content-main { height:150px; position:relative; width:700px; }
+.talk-body .content-main .txt-content { height:148px; width:640px; background-color:#f7f7f7; border:solid 1px #eee; }
+.talk-body .content-main .txt-content:focus { border:solid 1px #318ae4;}
+.talk-body .content-main .btn-save { position:absolute; right:0; bottom:0px; }
+
+.talk-body .talk-title { border-bottom: solid 1px #4a98e7; height:40px; line-height:40px; width: 700px; color:#666; }
+.talk-body .content-list { width: 700px; }
+.talk-body .content-list td{ border-bottom:dashed 1px #ccc; }
+.talk-body .content-list .user-avatar { width:35px; padding-top:20px; vertical-align:top; }
+.talk-body .content-list .user-avatar img{ width:24px; height:24px; border-radius:12px;  vertical-align:top; }
+
+/*活动列表*/
+.activityListLi { margin:20px 0; }
+.activityListLi .activityTD { border: solid 1px #ccc; border-radius: 2px; padding: 10px; }
+.activityListLi .activityItem { padding: 10px; border: solid 1px #ccc; }
+.activityUnderline3 { height: 1px; margin: 0px 2px; border: solid 1px #ccc; border-top: none; }
+.activityUnderline4 { height: 1px; margin: 0px 2px; border: solid 1px #ccc; border-top: none; }
+.activityListLi .activityImg { width: 250px; height: 200px; }
+.activityListLi .activityMember { padding-top: 12px; }
+.activityListLi .activityInfo tr td { padding: 7px 0px; color: #999; }
+.activityListLi .activityDetailImg { width: 400px; height: 300px; }
+
+.activityCardList { margin:15px 0; }
+.activityCardListLi { width: 245px; float: left; margin-right: 40px; margin-bottom: 25px; }
+.activityCardListLi .activityItem { width: 245px; border: solid 1px #ccc; }
+.activityCardListLi .activityImg img { width: 245px; height: 123px; }
+.activityCardListLi .activityMember { margin: 10px; }
+.activityCardListLi .activityItem tr td { padding: 8px 0px; color: #999; }
+.activityUnderline1 { height: 1px; margin: 0px 5px; border: solid 1px #ccc; border-top: none; }
+.activityUnderline2 { height: 1px; margin: 0px 5px; border: solid 1px #ccc; border-top: none; }
+.cardActivityName { width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/*图片定位*/
+.absolute-img { position:absolute; top:100px; right:50px; width:200px; }
+.edui-container { min-width: 700px; width: 80%; float: left; }
+
+/*活动详情*/
+.activityDetailInfo tr td { padding: 12px 0px; color: #aaa; font-size: 14px; }
+.activityDetailInfo tr td span { color: #aaa; font-size: 14px; }
+
+.talk-body .activityOwnerImg { width: 24px; height: 24px; border-radius: 12px; }
+
+.member { padding-top: 3px; }
+
+.member img { width: 24px; height: 24px; border-radius: 12px; }
+
+#MemberList { list-style: none; width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #666; }
+
+#MemberList li { margin-right: 10px; float: left; color: #666; }
+
+#CardMemberList { width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+#CardMemberList li { float: left; color: #666; margin-right: 8px; }
+
+.cardActivityAddress { width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+
+
+

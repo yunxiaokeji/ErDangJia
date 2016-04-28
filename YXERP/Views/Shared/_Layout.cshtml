@@ -1,13 +1,11 @@
 ﻿@{
-    string controller =  Url.RequestContext.RouteData.Values["controller"].ToString().ToUpper();
-    string action = Url.RequestContext.RouteData.Values["action"].ToString().ToUpper();
-    CloudSalesEntity.Menu controllerMenu = ExpandClass.GetController(HttpContext.Current, controller);
+
 }
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title></title>
+    <title>@ViewBag.Title</title>
     <meta name="robots" content="noindex,nofollow">
     <link href="/modules/css/base.css" rel="stylesheet" />
     <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
@@ -18,14 +16,12 @@
 
     @RenderBody()
 
-
     <script type="text/javascript" src="/Scripts/sea.js"></script>
     <script type="text/javascript" src="/Scripts/sea-config.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/layout"], function (layout) {
             layout.init();
         });
-
     </script>
     @RenderSection("scripts", false)
 </body>

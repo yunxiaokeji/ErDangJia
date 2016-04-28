@@ -15,7 +15,7 @@
         _self.bindStyle();
 
         if (!MDToken) {
-            $("#btn_shareMD").hide();
+            $("#btnShareMD").hide();
         }
 
         Global.post("/Customer/GetCustomerByID", { customerid: customerid }, function (data) {
@@ -56,7 +56,7 @@
         $("#lblEmail").text(model.Email || "--");
         $("#lblIndustry").text(model.Industry ? model.Industry.Name : "--");
         $("#lblExtent").text(model.ExtentStr || "--");
-        $("#lblCity").text(model.City ? model.City.Province + " " + model.City.City + " " + model.City.Counties : "--");
+        $("#lblCity").text(model.City ? model.City.Description : "--");
         $("#lblAddress").text(model.Address || "--");
         $("#lblTime").text(model.CreateTime.toDate("yyyy-MM-dd hh:mm:ss"));
         $("#lblUser").text(model.CreateUser ? model.CreateUser.Name : "--");

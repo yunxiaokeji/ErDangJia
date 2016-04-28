@@ -56,7 +56,7 @@
 .common-attr-list a {text-decoration:underline;}
 .common-attr-list a:hover {color:red; }
 
-.category-attr-header .ico-add { color:#fff; background:url(/modules/images/ico-add-fff.png) no-repeat;}
+.category-attr-header .ico-add:before { color:#fff; content:"替换"}
 
 
 

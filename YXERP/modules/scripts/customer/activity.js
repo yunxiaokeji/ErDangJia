@@ -8,7 +8,9 @@ define(function (require, exports, module) {
         Verify = require("verify"), VerifyObject,
         Upload = require("upload"), PosterIco, editor,
         Easydialog = require("easydialog"),
-        ChooseUser = require("chooseuser");
+        ChooseUser = require("chooseuser"),
+        moment = require("moment");
+        require("daterangepicker");
         require("pager");
 
     var Model = {};
@@ -20,42 +22,43 @@ define(function (require, exports, module) {
         PageIndex:1,
         KeyWords: "",
         IsAll: 0,//0：我的活动；1：所有活动
-        Stage:2,
+        Stage:-1,
         BeginTime: "",
         EndTime: "",
         FilterType: 0,
         UserID:'',
-        DisplayType:1//1：列表；2：卡片
+        DisplayType: 1,//1：列表；2：卡片
+        OrderBy: "CreateTime desc"
     };
 
     ////初始化 列表
     ObjectJS.init = function (isAll) {
         var _self = this;
         _self.Params.IsAll = isAll;
-
-        _self.bindEvent();
-        
         _self.getList();
-
-        if (isAll==1)
-        {
-            $(".header-title").html("所有活动");
-            document.title = "所有活动";
-        }
+        _self.bindEvent();
     }
 
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-        
-        //时间段查询
-        $("#SearchActivity").click(function () {
-            if ($("#BeginTime").val() != "" || $("#EndTime").val() != "") {
-                ObjectJS.Params.PageIndex = 1;
-                ObjectJS.Params.BeginTime = $("#BeginTime").val();
-                ObjectJS.Params.EndTime = $("#EndTime").val();
-                ObjectJS.getList();
+
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
             }
+        }, function (start, end, label) {
+            ObjectJS.Params.PageIndex = 1;
+            ObjectJS.Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            ObjectJS.Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
+            _self.getList();
         });
 
         //关键字查询
@@ -66,40 +69,9 @@ define(function (require, exports, module) {
                 ObjectJS.getList();
             });
         });
- 
 
-        if (_self.Params.IsAll == 0) {
-            //搜索
-            require.async("dropdown", function () {
-                var Types = [
-                    {
-                        ID: "1",
-                        Name: "我负责的"
-                    },
-                    {
-                        ID: "2",
-                        Name: "我参与的"
-                    }
-                ];
-                $("#ActivityType").dropdown({
-                    prevText: "活动过滤-",
-                    defaultText: "所有",
-                    defaultValue: "-1",
-                    data: Types,
-                    dataValue: "ID",
-                    dataText: "Name",
-                    width: "120",
-                    onChange: function (data) {
-                        ObjectJS.Params.PageIndex = 1;
-                        ObjectJS.Params.FilterType = data.value;
-                        ObjectJS.getList();
-                    }
-                });
-
-            });
-        }
-        else
-        {
+        //加载下属
+        if (_self.Params.IsAll != 0) {
             require.async("choosebranch", function () {
                 $("#chooseBranch").chooseBranch({
                     prevText: "人员-",
@@ -109,50 +81,41 @@ define(function (require, exports, module) {
                     isTeam: false,
                     width: "180",
                     onChange: function (data) {
-
-
                         ObjectJS.Params.PageIndex = 1;
                         ObjectJS.Params.UserID = data.userid;
                         ObjectJS.getList();
-
-                        if (!$("#ActivityType").is(":visible")) {
-                            //搜索
-                            require.async("dropdown", function () {
-                                var Types = [
-                                    {
-                                        ID: "1",
-                                        Name: "我负责的"
-                                    },
-                                    {
-                                        ID: "2",
-                                        Name: "我参与的"
-                                    }
-                                ];
-                                $("#ActivityType").dropdown({
-                                    prevText: "活动过滤-",
-                                    defaultText: "所有",
-                                    defaultValue: "-1",
-                                    data: Types,
-                                    dataValue: "ID",
-                                    dataText: "Name",
-                                    width: "120",
-                                    onChange: function (data) {
-                                        ObjectJS.Params.PageIndex = 1;
-                                        ObjectJS.Params.FilterType = data.value;
-                                        ObjectJS.getList();
-                                    }
-                                });
-
-                                $("#ActivityType").addClass("mLeft20");
-
-                            });
-                        }
-
-
                     }
                 });
             });
         }
+        //参与类型
+        require.async("dropdown", function () {
+            var Types = [
+                {
+                    ID: "1",
+                    Name: "我负责的"
+                },
+                {
+                    ID: "2",
+                    Name: "我参与的"
+                }
+            ];
+            $("#ActivityType").dropdown({
+                prevText: "活动过滤-",
+                defaultText: "所有",
+                defaultValue: "-1",
+                data: Types,
+                dataValue: "ID",
+                dataText: "Name",
+                width: "120",
+                onChange: function (data) {
+                    ObjectJS.Params.PageIndex = 1;
+                    ObjectJS.Params.FilterType = data.value;
+                    ObjectJS.getList();
+                }
+            });
+
+        });
 
         //删除活动
         $("#deleteObject").click(function () {
@@ -179,12 +142,11 @@ define(function (require, exports, module) {
         });
 
         //显示模式切换
-        $(".displayTab").click(function () {
+        $(".display-tab").click(function () {
             var type = parseInt($(this).data("type"));
             ObjectJS.Params.DisplayType = type;
 
-            if (type == 1) 
-            {
+            if (type == 1) {
                 $(this).find("img").attr("src", "/modules/images/ico-list-blue.png");
                 $(this).next().find("img").attr("src", "/modules/images/ico-card-gray.png");
                 $(".activityList").html('');
@@ -192,8 +154,7 @@ define(function (require, exports, module) {
                 $(".activityList").show();
                 $(".activityCardList").hide();
             }
-            else
-            {
+            else {
                 $(this).find("img").attr("src", "/modules/images/ico-card-blue.png");
                 $(this).prev().find("img").attr("src", "/modules/images/ico-list-gray.png");
                 $(".activityCardList").html('');
@@ -218,15 +179,36 @@ define(function (require, exports, module) {
             }
         });
 
+        //排序
+        $(".sort-item").click(function () {
+            var _this = $(this);
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    _this.find(".asc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    ObjectJS.Params.OrderBy = _this.data("column") + " desc ";
+                } else {
+                    _this.find(".desc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    ObjectJS.Params.OrderBy = _this.data("column") + " asc ";
+                }
+            } else {
+                _this.addClass("hover").siblings().removeClass("hover");
+                _this.siblings().find(".hover").removeClass("hover");
+                _this.find(".desc").addClass("hover");
+                ObjectJS.Params.OrderBy = _this.data("column") + " desc ";
+            }
+            _self.getList();
+        });
+
         //隐藏下拉
         $(document).click(function (e) {
             //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown"))
-            {
+            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
                 $(".dropdown-ul").hide();
             }
         });
-}
+    }
 
     //获取列表
     ObjectJS.getList = function () {
@@ -238,7 +220,7 @@ define(function (require, exports, module) {
             $(".activityList").html("<tr><td><div class='data-loading' ><div></td></tr>");
         }
         else {
-            $(".activityCardList").html("<li ><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/></div></li>");
+            $(".activityCardList").html("<li ><div class='data-loading'></div></li>");
         }
 
         Global.post("/Activity/GetActivityList",
@@ -251,7 +233,8 @@ define(function (require, exports, module) {
                 endTime: ObjectJS.Params.EndTime,
                 stage: ObjectJS.Params.Stage,
                 filterType: ObjectJS.Params.FilterType,
-                userID: ObjectJS.Params.UserID
+                userID: ObjectJS.Params.UserID,
+                orderBy: ObjectJS.Params.OrderBy
             },
             function (data) {
                 _self.bindList(data.Items);
@@ -338,12 +321,10 @@ define(function (require, exports, module) {
             }
             else 
             {
-                $(".activityCardList").html("<li ><div class='nodata-txt'>暂无数据!</div></li>");
+                $(".activityCardList").html("<li><div class='nodata-txt'>暂无数据!</div></li>");
             }
         }
     }
-
-
 
     ////初始化操作 编辑、新增
     ObjectJS.initOperate = function (Editor, id) {
@@ -432,9 +413,9 @@ define(function (require, exports, module) {
             $("#MemberIDs .member").each(function () {
                 MemberID += $(this).data("id") + "|";
             });
-            if (OwnerID == '' || MemberID=='')
+            if (OwnerID == '')
             {
-                alert("请选择负责人和成员");
+                alert("请设置任务负责人");
                 return;
             }
 
@@ -497,7 +478,6 @@ define(function (require, exports, module) {
                     else
                     {
                         $("#Name").html(item.Name);
-                        $("#Name").attr("src", "/Activity/Detail/" + item.ActivityID);
                         if (item.Owner) {
                             $("#OwnerName").html(item.Owner.Name);
                             $("#OwnerName").data("id", item.Owner.UserID);
@@ -518,9 +498,7 @@ define(function (require, exports, module) {
                             }
                         }
 
-                        if ($("#MDUserID").val() != "")
-                        {
-                            $("#tr_shareMD").show();
+                        if ($("#MDUserID").val() != "") {
                             require.async("sharemingdao", function () {
                                 $("#btn_shareMD").sharemingdao({
                                     post_pars: {
@@ -563,6 +541,8 @@ define(function (require, exports, module) {
                                     }
                                 });
                             });
+                        } else {
+                            $("#btn_shareMD").show();
                         }
 
                     }
@@ -570,10 +550,9 @@ define(function (require, exports, module) {
                     $("#OwnerID").val(item.OwnerID);
                     $("#MemberID").val(item.MemberID);
 
-                    require.async("businesscard", function () {
-                        $(".member").businessCard();
-                    });
-
+                    //require.async("businesscard", function () {
+                    //    $(".member").businessCard();
+                    //});
 
                 }
             });
@@ -630,7 +609,7 @@ define(function (require, exports, module) {
         var _self = this;
         Global.post("/Activity/SavaActivity", { entity: JSON.stringify(model) }, function (data) {
             if (data.ID.length > 0) {
-                location.href = "/Activity/MyActivity"
+                location.href = "/Activity/Detail/" + data.ID;
             }
         })
     }

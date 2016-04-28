@@ -1,10 +1,10 @@
 ﻿@{
-    ViewBag.Title = "活动详情";
+    
 }
 
 @section css{
-<link href="/modules/plug/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
-<link href="/modules/css/customer/activity.css" rel="stylesheet" />
+    <link href="/modules/plug/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
+    <link href="/modules/css/customer.css" rel="stylesheet" />
 }
 
 @section scripts{
@@ -15,7 +15,7 @@
 
     <script type="text/javascript">
         $(function () {
-            seajs.use(["scripts/activity/activity"], function (ObjectJS) {
+            seajs.use(["scripts/customer/activity"], function (ObjectJS) {
                 var um = UM.getEditor('Remark');
                 ObjectJS.initOperate(um, '@ViewBag.ActivityID');
             });
@@ -51,10 +51,13 @@
 }
 
 <div class="header-box">
-    <span class="header-title left">添加活动</span>
+    <span class="header-title left">新建活动</span>
+    @if (!string.IsNullOrEmpty(ViewBag.ActivityID)) 
+    { 
+        <a href="javascript:history.go(-1);" class="btn-back right">返回</a>
+    }
 </div>
-
-<div class="content-body mTop20">
+<div class="content-body">
     <ul class="table-add">
         <li>
             <span class="width80">活动名称：</span><input type="text" id="Name" style="width:300px;" data-empty="* 必填" class="input verify" />
@@ -63,15 +66,15 @@
             <span class="width80">活动海报：</span><span id="Poster"></span>
         </li>
         <li>
-            <span class="column-name">负责人：</span>
+            <span class="width80 left">负责人：</span>
             <div id="OwnerIDs" class="left"></div>
-            <div class="left "><a id="addOwner" href="javascript:void();" class="ico-change mTop4">添加负责人</a></div>
+            <div id="addOwner"  class="left hand"><i class="iconfont icon-change left mTop3">&#xe60b;</i></div>
             <div class="clear"></div>
         </li>
         <li>
-            <span class="column-name">成员：</span>
+            <span class="width80 left">成员：</span>
             <div id="MemberIDs" class="left"></div>
-            <div class="left "><a id="addMember" href="javascript:void();" class="ico-add mTop4">添加成员</a></div>
+            <div class="left hand" id="addMember"><i class="iconfont icon-add left">&#xe63c;</i></div>
             <div class="clear"></div>
         </li>
         <li>
@@ -85,16 +88,15 @@
             <span class="width80">活动地址：</span><textarea id="Address"></textarea>
         </li>
         <li>
-            <span class="column-name">活动详情：</span><div id="Remark" style="max-width:800px;max-height:600px;"></div> 
+            <span class="width80 left">活动详情：</span><div id="Remark"  style="max-width:800px;max-height:600px;"></div> 
         </li>
     </ul>
     
     <div class="mTop20">
         <span  class="btn" id="btnSaveActivity" >保存</span>
-        <a href="javascript:void(0);" onclick="history.go(-1)"  class="btn mLeft10">返回</a>
     </div>
 
-    <img class="brand-img hide" id="PosterDisImg" alt="" />
+    <img class="absolute-img hide" id="PosterDisImg" alt="" />
     <input type="hidden" id="PosterImg" />
     <input type="hidden" id="ActivityID" value="@ViewBag.ActivityID" />
 </div>

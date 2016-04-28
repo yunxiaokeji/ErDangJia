@@ -46,6 +46,7 @@ define(function (require, exports, module) {
             if (nav.length == 1) {
                 nav.addClass("hover");
                 parent.find("#iframe" + _this.data("id")).show();
+                parent.find("#iframe" + _this.data("id")).attr("src", _this.data("url"));
             } else {
                 parent.find("#windowItems").append('<li data-id="' + _this.data("id") + '" class="hover" title="' + _this.data("name") + '">'
                                               + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'

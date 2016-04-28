@@ -169,6 +169,7 @@
     <Content Include="modules\images\ico-operate-open.png" />
     <Content Include="modules\images\ico-surepwd.png" />
     <Content Include="modules\images\ico-username.png" />
+    <Content Include="modules\images\iconback.png" />
     <Content Include="modules\images\icondate.png" />
     <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
@@ -248,8 +249,7 @@
     <Content Include="Content\menuico\custom.png" />
     <Content Include="DLL\Net.Sourceforge.Pinyin4j.dll" />
     <Content Include="modules\css\auction\buynow.css" />
-    <Content Include="modules\css\customer\activity.css" />
-    <Content Include="modules\css\customer\customer.css" />
+    <Content Include="modules\css\customer.css" />
     <Content Include="modules\css\default\home.css" />
     <Content Include="modules\css\myaccount\myaccount.css" />
     <Content Include="modules\css\myaccount\cropbox.css" />
@@ -263,14 +263,9 @@
     <Content Include="modules\images\auction\bg-select-product.png" />
     <Content Include="modules\images\auction\bg-sure-order-active.png" />
     <Content Include="modules\images\auction\bg-sure-order.png" />
-    <Content Include="modules\images\btn-share-mingdao.png" />
     <Content Include="modules\images\defaultactivity.jpg" />
     <Content Include="modules\images\defaultavatar.png" />
-    <Content Include="modules\images\ico-add-fff.png" />
-    <Content Include="modules\images\ico-addhover.png" />
     <Content Include="modules\images\ico-btnadd.png" />
-    <Content Include="modules\images\ico-change.png" />
-    <Content Include="modules\images\ico-changehover.png" />
     <Content Include="modules\images\ico-check.png" />
     <Content Include="modules\images\ico-checked.png" />
     <Content Include="modules\images\ico-dropdown-white.png" />
@@ -483,7 +478,6 @@
     <Content Include="modules\plug\echarts\zrender\tool\util.js" />
     <Content Include="modules\plug\echarts\zrender\tool\vector.js" />
     <Content Include="modules\plug\echarts\zrender\zrender.js" />
-    <Content Include="modules\plug\laydate\demo.html" />
     <Content Include="modules\plug\laydate\laydate.js" />
     <Content Include="modules\plug\laydate\need\laydate.css" />
     <Content Include="modules\plug\laydate\skins\dahong\icon.png" />
@@ -493,7 +487,6 @@
     <Content Include="modules\plug\laydate\skins\molv\icon.png" />
     <Content Include="modules\plug\laydate\skins\molv\laydate.css" />
     <Content Include="modules\plug\mark\ico-ball.png" />
-    <Content Include="modules\plug\sharemingdao\demo.html" />
     <Content Include="modules\plug\sharemingdao\images\Ico_Eye.gif" />
     <Content Include="modules\plug\sharemingdao\sharemingdao.js" />
     <Content Include="modules\plug\sharemingdao\style.css" />
@@ -512,7 +505,7 @@
     <Content Include="modules\plug\chooseproduct\style.css" />
     <Content Include="modules\plug\upload\jquery.form.js" />
     <Content Include="modules\plug\upload\upload.js" />
-    <Content Include="modules\scripts\activity\activity.js" />
+    <Content Include="modules\scripts\customer\activity.js" />
     <Content Include="modules\scripts\auction\buynow.js" />
     <Content Include="modules\scripts\customerrpt\customermaprpt.js" />
     <Content Include="modules\scripts\customerrpt\stagerpt.js" />
@@ -599,7 +592,6 @@
     <Content Include="modules\template\orders\order-detail.html" />
     <Content Include="modules\template\orders\orders.html" />
     <Content Include="modules\template\orders\cuatomerorders.html" />
-    <Content Include="modules\plug\sharemingdao\demo.js" />
     <Content Include="modules\template\orders\opportunitys.html" />
     <Content Include="modules\template\orders\customeroppors.html" />
     <Content Include="modules\template\purchase\provider-detail.html" />
@@ -659,7 +651,7 @@
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Activity\MyActivity.cshtml" />
     <Content Include="Views\System\Sources.cshtml" />
-    <Content Include="Views\Activity\Operate.cshtml" />
+    <Content Include="Views\Activity\Create.cshtml" />
     <Content Include="Views\System\Teams.cshtml" />
     <Content Include="Views\System\Stages.cshtml" />
     <Content Include="Views\System\Warehouse.cshtml" />
@@ -758,13 +750,10 @@
     <Content Include="modules\css\shoppingcart\filterproducts.css" />
     <Content Include="modules\css\shoppingcart\filterdetails.css" />
     <Content Include="modules\images\default.png" />
-    <Content Include="modules\images\ico-add.png" />
     <Content Include="modules\images\ico-back.png" />
     <Content Include="modules\images\ico-del-deep.png" />
     <Content Include="modules\images\ico-del-light.png" />
     <Content Include="modules\images\ico-delete.png" />
-    <Content Include="modules\images\ico-edit-deep.png" />
-    <Content Include="modules\images\ico-edit-light.png" />
     <Content Include="modules\images\ico-goback.png" />
     <Content Include="modules\images\ico-gonext.png" />
     <Content Include="modules\images\ico-gouwuche.png" />

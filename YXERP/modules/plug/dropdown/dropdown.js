@@ -32,16 +32,23 @@ define(function (require, exports, module) {
 
             obj.data("itemid", Global.guid());
             obj.data("id", opts.defaultValue);
+
             if (!obj.hasClass("dropdown-module")) {
                 obj.addClass("dropdown-module").css("width", opts.width);
             }
+
+
             var _input = $('<div class="dropdown-text long">' + opts.prevText + opts.defaultText + '</div>');
             _input.css("width", opts.width - 30);
-            var _ico = $('<div class="dropdown-ico"><span></span></div>');
+            var _ico = $('<div class="dropdown-ico"><span class="top"></span><span class="bottom"></span></div>');
+            obj.empty();
             obj.append(_input).append(_ico);
 
+
+
             //处理事件
-            obj.click(function () {
+            obj.unbind().click(function () {
+
                 var _this = $(this);
                 if (_this.hasClass("hover")) {
                     $("#" + obj.data("itemid")).hide();
@@ -81,10 +88,11 @@ define(function (require, exports, module) {
                     _items.append("<li data-id='" + opts.defaultValue + "'>" + opts.defaultText + "</li>");
                 }
                 for (var i = 0; i < opts.data.length; i++) {
-                    if (opts.data[i][opts.dataValue] != opts.defaultValue)
+                    if (opts.data[i][opts.dataValue] != opts.defaultValue) {
                         _items.append("<li data-id='" + opts.data[i][opts.dataValue] + "'>" + opts.data[i][opts.dataText] + "</li>");
+                    }
                 }
-                _items.find("li").click(function () {
+                _items.find("li").unbind().click(function () {
                     obj.find(".dropdown-text").html(opts.prevText + $(this).html());
                     obj.data("id", $(this).data("id"));
                     obj.removeClass("hover");

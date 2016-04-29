@@ -29,6 +29,12 @@
 .stageitems li{ width:33%; height:25px; min-width:200px; line-height:25px; float:left; color:#666; text-indent:5px; }
 
 
+/*选择仓库*/
+.ordertype-items { width:336px; overflow:auto; }
+.ordertype-items li{ width:100px; height:35px; float:left; line-height:35px; border:solid 1px #ccc; margin:10px 5px; text-align:center; cursor:pointer; }
+.ordertype-items li:hover{ border-color:#2F73B8; color:#2F73B8;}
+.ordertype-items li.hover{ border-color:#2F73B8; color:#fff; background-color:#2F73B8;}
+
 /*讨论备忘*/
 .talk-body { }
 .talk-body .content-main { height:150px; position:relative; width:700px; }

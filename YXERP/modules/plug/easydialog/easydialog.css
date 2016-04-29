@@ -1,5 +1,5 @@
 button::-moz-focus-inner { border: 0; padding: 0; margin: 0; }
-.easyDialog_wrapper { color: #333; border:1px solid #666;background-color:#fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); display: none; }
+.easyDialog_wrapper { color: #333; border:1px solid #ccc;background-color:#fff; border-radius: 5px; box-shadow: 0 0 10px #ccc; display: none; }
 .easyDialog_wrapper .easyDialog_content { border-radius: 4px; background: #fff; }
 
 .easyDialog_wrapper .easyDialog_title { margin: 0px 0px!important; height: 30px; line-height: 25px; overflow: hidden; 

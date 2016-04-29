@@ -127,7 +127,7 @@ define(function (require, exports, module) {
                 var overlay = doc.createElement('div'),
                     style = overlay.style;
 
-                style.cssText = 'margin:0;padding:0;border:none;width:100%;height:100%;background:#333;opacity:0.8;filter:alpha(opacity=60);z-index:9999;position:fixed;top:0;left:0;';
+                style.cssText = 'margin:0;padding:0;border:none;width:100%;height:100%;background:#f2f4f8;opacity:0.8;filter:alpha(opacity=60);z-index:9999;position:fixed;top:0;left:0;';
 
                 // IE6模拟fixed
                 if (isIE6) {

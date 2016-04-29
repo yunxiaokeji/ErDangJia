@@ -636,8 +636,9 @@ define(function (require, exports, module) {
             $("div[name='activityDetail']").hide();
             $("#" + $(this).data("id")).show();
 
-            if ($(this).data("id") == "activityCustoms")
+            if ($(this).data("id") == "activityCustoms" && (!$(this).data("first") || $(this).data("first") == 0))
             {
+                $(this).data("first", "1");
                 ObjectJS.getCustomersByActivityID();
             }
 

@@ -589,11 +589,12 @@
     <Content Include="modules\template\finance\billingpays.html" />
     <Content Include="modules\template\finance\orderpay-detail.html" />
     <Content Include="modules\template\myaccount\setloginname.html" />
-    <Content Include="modules\template\orders\order-detail.html" />
-    <Content Include="modules\template\orders\orders.html" />
-    <Content Include="modules\template\orders\cuatomerorders.html" />
-    <Content Include="modules\template\orders\opportunitys.html" />
-    <Content Include="modules\template\orders\customeroppors.html" />
+    <Content Include="modules\template\sales\choose-ordertype.html" />
+    <Content Include="modules\template\sales\order-detail.html" />
+    <Content Include="modules\template\sales\orders.html" />
+    <Content Include="modules\template\sales\cuatomerorders.html" />
+    <Content Include="modules\template\sales\opportunitys.html" />
+    <Content Include="modules\template\sales\customeroppors.html" />
     <Content Include="modules\template\purchase\provider-detail.html" />
     <Content Include="modules\template\purchase\providers.html" />
     <Content Include="modules\template\report\teamcustomers.html" />

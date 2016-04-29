@@ -7,7 +7,7 @@
         Easydialog = require("easydialog");
     require("pager");
 
-    var ObjectJS = {}, CacheIems = [];
+    var ObjectJS = {}, CacheIems = [], CacheTypes = [];
     //初始化
     ObjectJS.init = function (customerid, MDToken) {
         var _self = this;
@@ -323,7 +323,81 @@
             });
         });
 
+        //新建机会
+        $("#btnCreateOpportunity").click(function () {
+            if (CacheTypes && CacheTypes.length > 0) {
+                _self.createOpporOrOrder(CacheTypes, 1);
+            } else {
+                Global.post("/System/GetOrderTypes", {}, function (data) {
+                    CacheTypes = data.items;
+                    _self.createOpporOrOrder(CacheTypes, 1);
+                });
+            }
+           
+        });
+
+        //新建订单
+        $("#btnCreateOrder").click(function () {
+            if (CacheTypes && CacheTypes.length > 0) {
+                _self.createOpporOrOrder(CacheTypes, 2);
+            } else {
+                Global.post("/System/GetOrderTypes", {}, function (data) {
+                    CacheTypes = data.items;
+                    _self.createOpporOrOrder(CacheTypes, 2);
+                });
+            }
+        });
+
     }
+    //创建机会或者订单 type 1 机会 2订单
+    ObjectJS.createOpporOrOrder = function (items, type) {
+        var _self = this;
+        var url = type == 1 ? "/Opportunitys/Create" : "/Orders/Create";
+        doT.exec("template/sales/choose-ordertype.html", function (template) {
+            var innerHtml = template(items);
+            Easydialog.open({
+                container: {
+                    id: "show-model-choosetype",
+                    header: type == 1 ? "新建机会" : "新建订单",
+                    content: innerHtml,
+                    yesFn: function () {
+                        var typeid = $(".ordertype-items .hover").data("id");
+                        if (!typeid) {
+                            alert("请选择订单类型！");
+                            return false;
+                        } else {
+                            Global.post(url, {
+                                customerid: _self.customerid,
+                                typeid: typeid
+                            }, function (data) {
+                                if (data.id && data.id.length > 0) {
+                                    if (type == 1) {
+                                        alert("机会创建成功", function () {
+                                            _self.getOpportunitys(_self.customerid, 1);
+                                        });
+                                    } else {
+
+                                    }
+                                    
+                                } else {
+                                    alert((type == 1 ? "机会" : "订单") + "创建失败");
+                                }
+                            });
+                        }
+                    },
+                    callback: function () {
+
+                    }
+                }
+            });
+
+            $(".ordertype-items .item").click(function () {
+                $(this).siblings().removeClass("hover");
+                $(this).addClass("hover");
+            });
+        });
+    }
+
     //获取日志
     ObjectJS.getLogs = function (customerid, page) {
         var _self = this;
@@ -378,13 +452,12 @@
         }, function (data) {
             $("#navOrder .tr-header").nextAll().remove();
             if (data.items.length > 0) {
-            doT.exec("template/orders/cuatomerorders.html", function (template) {
-                var innerhtml = template(data.items);
-                console.log(innerhtml);
+                doT.exec("template/sales/cuatomerorders.html", function (template) {
+                    var innerhtml = template(data.items);
 
-                innerhtml = $(innerhtml);
-                $("#navOrder .tr-header").after(innerhtml);
-            });
+                    innerhtml = $(innerhtml);
+                    $("#navOrder .tr-header").after(innerhtml);
+                });
             } else {
                 $("#navOrder .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
@@ -416,17 +489,15 @@
         var _self = this;
         $("#navOppor .tr-header").nextAll().remove();
         $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
-        Global.post("/Orders/GetOpportunityaByCustomerID", {
+        Global.post("/Opportunitys/GetOpportunityaByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page
         }, function (data) {
             $("#navOppor .tr-header").nextAll().remove();
             if (data.items.length > 0) {
-                doT.exec("template/orders/customeroppors.html", function (template) {
+                doT.exec("template/sales/customeroppors.html", function (template) {
                     var innerhtml = template(data.items);
-                    console.log(innerhtml);
-
                     innerhtml = $(innerhtml);
                     $("#navOppor .tr-header").after(innerhtml);
                 });

@@ -215,7 +215,7 @@ define(function (require, exports, module) {
     //编辑信息
     ObjectJS.editOrder = function (model) {
         var _self = this;
-        doT.exec("template/orders/order-detail.html", function (template) {
+        doT.exec("template/sales/order-detail.html", function (template) {
             var innerText = template(model);
             Easydialog.open({
                 container: {

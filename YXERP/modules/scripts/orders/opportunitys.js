@@ -203,7 +203,7 @@
         $(".tr-header").nextAll().remove();
 
         if (data.items.length > 0) {
-            doT.exec("template/orders/opportunitys.html", function (template) {
+            doT.exec("template/sales/opportunitys.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 

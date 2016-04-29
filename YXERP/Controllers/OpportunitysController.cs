@@ -77,22 +77,21 @@ namespace YXERP.Controllers
             }
         }
 
-        public ActionResult Create(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return Redirect("/Opportunitys/MyOpportunity");
-            }
-            string orderid = OrdersBusiness.BaseBusiness.CreateOrder(id, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-            if (string.IsNullOrEmpty(orderid))
-            {
-                return Redirect("/Opportunitys/MyOpportunity");
-            }
-            return Redirect("/Opportunitys/ChooseProducts/" + orderid);
-        }
+        
 
 
         #region Ajax
+
+        public JsonResult Create(string customerid, string typeid)
+        {
+            string id = OpportunityBusiness.BaseBusiness.CreateOpportunity(customerid, typeid, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("id", id);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
 
         public JsonResult GetOpportunitys(string filter)
         {
@@ -101,7 +100,23 @@ namespace YXERP.Controllers
             int totalCount = 0;
             int pageCount = 0;
 
-            var list = OrdersBusiness.BaseBusiness.GetOpportunitys(model.SearchType, model.TypeID, model.StageID, model.UserID, model.TeamID, model.AgentID, model.BeginTime, model.EndTime, model.Keywords, model.PageSize, model.PageIndex, ref totalCount, ref pageCount, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            var list = OpportunityBusiness.BaseBusiness.GetOpportunitys(model.SearchType, model.TypeID, model.StageID, model.UserID, model.TeamID, model.AgentID, model.BeginTime, model.EndTime, model.Keywords, model.PageSize, model.PageIndex, ref totalCount, ref pageCount, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
+            JsonDictionary.Add("totalCount", totalCount);
+            JsonDictionary.Add("pageCount", pageCount);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetOpportunityaByCustomerID(string customerid, int pagesize, int pageindex)
+        {
+            int totalCount = 0;
+            int pageCount = 0;
+
+            var list = OpportunityBusiness.BaseBusiness.GetOpportunityaByCustomerID(customerid, pagesize, pageindex, ref totalCount, ref pageCount, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);

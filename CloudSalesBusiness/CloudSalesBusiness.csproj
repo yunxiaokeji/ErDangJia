@@ -54,6 +54,7 @@
     <Compile Include="Manage\ModulesProductBusiness.cs" />
     <Compile Include="Report\CustomerRPTBusiness.cs" />
     <Compile Include="Report\SalesRPTBusiness.cs" />
+    <Compile Include="Sales\OpportunityBusiness.cs" />
     <Compile Include="Sales\OrdersBusiness.cs" />
     <Compile Include="Manage\IndustryBusiness.cs" />
     <Compile Include="Stock\AgentOrderBusiness.cs" />

@@ -86,7 +86,7 @@
         Global.post("/Customer/SaveCustomer", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.CustomerID) {
                 alert("客户创建成功", function () {
-                    location.href = location.href;
+                    location.href = "/Customer/Detail/" + data.model.CustomerID;
                     _self.isLoading = false;
                 });
             } else {

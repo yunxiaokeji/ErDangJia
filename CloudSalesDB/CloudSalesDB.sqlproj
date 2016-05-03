@@ -215,4 +215,7 @@
   <ItemGroup>
     <None Include="Procedures\Sales\P_UpdateOpportunityOwner.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Procedures\Sales\P_CloseOpportunity.sql" />
+  </ItemGroup>
 </Project>

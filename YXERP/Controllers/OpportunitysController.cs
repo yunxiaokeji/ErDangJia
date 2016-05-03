@@ -178,9 +178,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult DeleteOrder(string orderid)
+        public JsonResult CloseOpportunity(string opportunityid)
         {
-            var bl = OrdersBusiness.BaseBusiness.DeleteOrder(orderid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var bl = OpportunityBusiness.BaseBusiness.CloseOpportunity(opportunityid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {

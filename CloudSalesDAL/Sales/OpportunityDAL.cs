@@ -138,5 +138,17 @@ namespace CloudSalesDAL
 
             return ExecuteNonQuery("P_UpdateOpportunityStage", paras, CommandType.StoredProcedure) > 0;
         }
+
+        public bool CloseOpportunity(string opportunityid, string operateid, string agentid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@OpportunityID",opportunityid),
+                                     new SqlParameter("@OperateID" , operateid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            return ExecuteNonQuery("P_CloseOpportunity", paras, CommandType.StoredProcedure) > 0;
+        }
     }
 }

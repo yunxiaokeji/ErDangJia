@@ -171,6 +171,17 @@ namespace CloudSalesBusiness
             return bl;
         }
 
+        public bool CloseOpportunity(string opportunityid, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OpportunityDAL.BaseProvider.CloseOpportunity(opportunityid, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = "关闭机会";
+                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Opportunity, msg, operateid, ip, "", agentid, clientid);
+            }
+            return bl;
+        }
+
         #endregion
 
     }

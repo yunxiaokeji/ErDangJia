@@ -120,9 +120,10 @@ define(function (require, exports, module) {
             
         });
 
-        $("#btndelete").click(function () {
-            confirm("机会删除后不可恢复，确认删除吗？", function () {
-                _self.deleteOrder();
+        //关闭机会
+        $("#btnClose").click(function () {
+            confirm("机会关闭后不可恢复，确认关闭吗？", function () {
+                _self.closeOpportunity();
             });
         });
 
@@ -131,14 +132,7 @@ define(function (require, exports, module) {
         $(".stage-items li").click(function () {
             var _this = $(this);
 
-            if (_this.data("mark") == 2) {
-                !_this.hasClass("hover") && confirm("请确认信息是否填写正确，销售机会切换到此阶段后将自动转为订单，转为订单后只能编辑价格，确认操作吗？", function () {
-                    _self.submitOrder();
-                    return;
-                });
-                return;
-            }
-            !_this.hasClass("hover") && confirm("确认将销售机会切换到此阶段吗?", function () {
+            !_this.hasClass("hover") && confirm("确认将机会切换到此阶段吗?", function () {
                 Global.post("/Opportunitys/UpdateOpportunityStage", {
                     ids: _self.opportunityid,
                     stageid: _this.data("id")
@@ -309,14 +303,14 @@ define(function (require, exports, module) {
         })
     }
 
-    //删除订单
-    ObjectJS.deleteOrder = function () {
+    //关闭机会
+    ObjectJS.closeOpportunity = function () {
         var _self = this;
-        Global.post("/Opportunitys/DeleteOrder", { orderid: _self.orderid }, function (data) {
+        Global.post("/Opportunitys/CloseOpportunity", { opportunityid: _self.opportunityid }, function (data) {
             if (data.status) {
-                location.href = "/Opportunitys/MyOpportunity";
+                location.href = location.href;
             } else {
-                alert("机会删除失败，可能因为机会状态已改变，请刷新页面后重试！");
+                alert("机会关闭失败，可能因为机会状态已改变，请刷新页面后重试！");
             }
         });
     }

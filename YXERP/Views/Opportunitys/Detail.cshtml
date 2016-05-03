@@ -14,8 +14,14 @@
 }
 <div class="header-box">
     <span class="header-title left">机会编号：@(model.OpportunityCode)</span>
-    <div id="editOpportunity" class="iconfont icon-edit left">&#xe607;</div>
-    <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"102029003"))" id="btndelete" >关闭机会</div>
+    @if (model.Status==1)
+    {
+        <div id="editOpportunity" class="iconfont icon-edit left">&#xe607;</div>
+        
+        <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"102029003"))" id="btndelete" >关闭机会</div>
+        <div class="btn right mRight20" id="btnconfirm" >转为订单</div>
+    }
+    
 </div>
 <div class="content-body">
     <ul class="content-info">
@@ -62,7 +68,7 @@
     </ul>
     <div class="tab-nav mTop30">
         <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navProducts">意向产品明细</li>
+            <li class="hover" data-id="navProducts">意向产品</li>
             <li data-id="navRemark">备忘</li>
             <li data-id="navLog">日志</li>
         </ul>
@@ -104,8 +110,7 @@
             </tr>
         </table>
         <div class="mTop20">
-             <div class="btn right" id="btnconfirm" >转为订单</div>
-             <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" class="btnccc right mRight20">继续添加产品</a>
+             <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" class="btn right mRight20">继续选择产品</a>
         </div>
     </div>
     <div id="navRemark" class="mTop20 talk-body nav-partdiv hide">

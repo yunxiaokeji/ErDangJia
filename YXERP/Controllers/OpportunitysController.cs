@@ -119,13 +119,13 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateOrderOwner(string ids, string userid)
+        public JsonResult UpdateOpportunityOwner(string ids, string userid)
         {
             bool bl = false;
             string[] list = ids.Split(',');
             foreach (var id in list)
             {
-                if (!string.IsNullOrEmpty(id) && OrdersBusiness.BaseBusiness.UpdateOrderOwner(id, userid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
+                if (!string.IsNullOrEmpty(id) && OpportunityBusiness.BaseBusiness.UpdateOpportunityOwner(id, userid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
                 {
                     bl = true;
                 }
@@ -151,13 +151,13 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult EditOrder(string entity)
+        public JsonResult UpdateOpportunity(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            OrderEntity model = serializer.Deserialize<OrderEntity>(entity);
+            OpportunityEntity model = serializer.Deserialize<OpportunityEntity>(entity);
 
 
-            var bl = OrdersBusiness.BaseBusiness.EditOrder(model.OrderID, model.PersonName, model.MobileTele, model.CityCode, model.Address, model.PostalCode, model.TypeID, model.ExpressType, model.Remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var bl = OpportunityBusiness.BaseBusiness.UpdateOpportunity(model.OpportunityID, model.PersonName, model.MobileTele, model.CityCode, model.Address, model.PostalCode, model.TypeID, model.Remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
 
             return new JsonResult

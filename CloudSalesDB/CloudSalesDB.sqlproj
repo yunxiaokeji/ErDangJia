@@ -209,4 +209,10 @@
   <ItemGroup>
     <None Include="Procedures\Sales\P_CreateOpportunityReply.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Procedures\Sales\P_UpdateOpportunity.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Procedures\Sales\P_UpdateOpportunityOwner.sql" />
+  </ItemGroup>
 </Project>

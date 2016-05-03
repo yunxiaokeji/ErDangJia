@@ -111,7 +111,7 @@ namespace CloudSalesBusiness
 
         #endregion
 
-        #region 添加
+        #region 添加、编辑、删除
 
         public string CreateOpportunity(string customerid, string typeid, string operateid, string agentid, string clientid)
         {
@@ -134,6 +134,29 @@ namespace CloudSalesBusiness
         public static string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
         {
             return OpportunityDAL.BaseProvider.CreateReply(guid, content, userID, agentID, fromReplyID, fromReplyUserID, fromReplyAgentID);
+        }
+
+        public bool UpdateOpportunity(string opportunityid, string personName, string mobileTele, string cityCode, string address, string postalcode, string typeid, string remark, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OpportunityDAL.BaseProvider.UpdateOpportunity(opportunityid, personName, mobileTele, cityCode, address, postalcode, typeid, remark, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = "编辑机会信息";
+                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Opportunity, msg, operateid, ip, operateid, agentid, clientid);
+            }
+            return bl;
+        }
+
+        public bool UpdateOpportunityOwner(string opportunityid, string userid, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OpportunityDAL.BaseProvider.UpdateOpportunityOwner(opportunityid, userid, operateid, agentid, clientid);
+            if (bl)
+            {
+                var model = OrganizationBusiness.GetUserByUserID(userid, agentid);
+                string msg = "拥有者更换为：" + model.Name;
+                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Opportunity, msg, operateid, ip, userid, agentid, clientid);
+            }
+            return bl;
         }
 
         #endregion

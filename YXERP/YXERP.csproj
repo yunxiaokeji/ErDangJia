@@ -604,6 +604,7 @@
     <Content Include="modules\template\report\userorders.html" />
     <Content Include="modules\plug\sharemingdao\sharetype.html" />
     <Content Include="modules\plug\sharemingdao\share_mingdao_post.html" />
+    <Content Include="modules\template\sales\opportunity-detail.html" />
     <Content Include="modules\template\shoppingcart\product-detail.html" />
     <Content Include="modules\template\organization\departments.html" />
     <Content Include="modules\template\organization\department-detail.html" />

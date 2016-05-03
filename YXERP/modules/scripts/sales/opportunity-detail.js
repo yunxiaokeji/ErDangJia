@@ -45,7 +45,7 @@ define(function (require, exports, module) {
                 callback: function (items) {
                     if (items.length > 0) {
                         if (_this.data("userid") != items[0].id) {
-                            Global.post("/Opportunitys/UpdateOrderOwner", {
+                            Global.post("/Opportunitys/UpdateOpportunityOwner", {
                                 userid: items[0].id,
                                 ids: _this.data("id")
                             }, function (data) {
@@ -69,6 +69,7 @@ define(function (require, exports, module) {
                 $(this).val($(this).data("value"));
             }
         });
+
         //编辑单价
         $(".price").change(function () {
             var _this = $(this);
@@ -93,6 +94,7 @@ define(function (require, exports, module) {
                 _this.val(_this.data("value"));
             }
         });
+
         //删除产品
         $(".ico-del").click(function () {
             var _this = $(this);
@@ -170,36 +172,34 @@ define(function (require, exports, module) {
         
 
         $("#editOpportunity").click(function () {
-            _self.editOrder(_self.model);
+            _self.updateOpportunity(_self.model);
         });
     }
     //编辑信息
-    ObjectJS.editOrder = function (model) {
+    ObjectJS.updateOpportunity = function (model) {
         var _self = this;
-        doT.exec("template/sales/order-detail.html", function (template) {
+        doT.exec("template/sales/opportunity-detail.html", function (template) {
             var innerText = template(model);
             Easydialog.open({
                 container: {
                     id: "show-model-detail",
-                    header: "编辑销售机会",
+                    header: "编辑机会",
                     content: innerText,
                     yesFn: function () {
                         var entity = {
-                            OrderID: _self.orderid,
+                            OpportunityID: _self.opportunityid,
                             PersonName: $("#personName").val().trim(),
                             MobileTele: $("#mobileTele").val().trim(),
                             CityCode: CityObj.getCityCode(),
                             Address: $("#address").val().trim(),
                             TypeID: $("#orderType").val().trim(),
-                            ExpressType: $("#expressType").val().trim(),
-                            PostalCode: $("#postalcode").val().trim(),
                             Remark: $("#remark").val().trim()
                         };
-                        Global.post("/Opportunitys/EditOrder", { entity: JSON.stringify(entity) }, function (data) {
+                        Global.post("/Opportunitys/UpdateOpportunity", { entity: JSON.stringify(entity) }, function (data) {
                             if (data.status) {
                                 location.href = location.href;
                             } else {
-                                alert("销售机会编辑失败，请刷新页面重试！");
+                                alert("机会编辑失败，请刷新页面重试！");
                             }
                         })
                     },
@@ -215,10 +215,6 @@ define(function (require, exports, module) {
             });
 
             $("#orderType").val(model.TypeID);
-
-            $("#extent").val(model.Extent);
-
-            $("#industry").val(model.IndustryID);
         });
     }
 

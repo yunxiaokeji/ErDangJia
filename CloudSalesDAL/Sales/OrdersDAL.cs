@@ -243,19 +243,6 @@ namespace CloudSalesDAL
             return result == 1;
         }
 
-        public bool UpdateOpportunityStage(string opportunityid, string stageid, string operateid, string agentid, string clientid)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@OpportunityID",opportunityid),
-                                     new SqlParameter("@StageID",stageid),
-                                     new SqlParameter("@OperateID" , operateid),
-                                     new SqlParameter("@AgentID" , agentid),
-                                     new SqlParameter("@ClientID" , clientid)
-                                   };
-
-            return ExecuteNonQuery("P_UpdateOpportunityStage", paras, CommandType.StoredProcedure) > 0;
-        }
-
         #endregion
 
     }

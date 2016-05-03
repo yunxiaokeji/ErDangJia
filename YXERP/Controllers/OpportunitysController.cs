@@ -213,7 +213,7 @@ namespace YXERP.Controllers
             string[] list = ids.Split(',');
             foreach (var id in list)
             {
-                if (!string.IsNullOrEmpty(id) && OrdersBusiness.BaseBusiness.UpdateOpportunityStage(id, stageid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
+                if (!string.IsNullOrEmpty(id) && OpportunityBusiness.BaseBusiness.UpdateOpportunityStage(id, stageid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
                 {
                     bl = true;
                 }

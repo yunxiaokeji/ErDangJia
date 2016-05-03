@@ -72,21 +72,7 @@
         </li>
     </ul>
     <div class="clear"></div>
-    <ul class="stage-items mTop30">
-        @foreach (var stage in (List<CloudSalesEntity.CustomStageEntity>)ViewBag.Stages)
-        { 
-            <li data-id="@(stage.StageID)" data-sort="@(stage.Sort)">
-                <span class="leftbg bg"></span>
-                <span class="name">@(stage.StageName)</span>
-                <span class="rightbg bg"></span>
-            </li>
-        }
-    </ul>
-    <div class="clear"></div>
-    <div class="color666 lineHeight25 mTop20 pLeft5">当前阶段下，销售行为建议：</div>
-    <ul class="stageitems mTop10" id="stageItems">
-       
-    </ul>
+
     <div class="tab-nav">
         <ul class="tab-nav-ul left">
             <li class="hover" data-id="navRemark">备忘</li>

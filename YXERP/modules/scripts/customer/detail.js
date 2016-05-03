@@ -34,12 +34,6 @@
         $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
         $("#recoveryCustomer,#loseCustomer,#closeCustomer").hide();
 
-        var stages = $(".stage-items"), width = stages.width();
-
-        stages.find("li .leftbg").first().removeClass("leftbg");
-        stages.find("li .rightbg").last().removeClass("rightbg");
-        stages.find("li").width(width / stages.find("li").length - 20);
-
     }
     //基本信息
     ObjectJS.bindCustomerInfo = function (model) {
@@ -75,25 +69,7 @@
             $("#lblType").html("企")
             $(".companyinfo").show();
         }
-
-        //处理阶段
-        var stage = $(".stage-items li[data-id='" + model.StageID + "']");
-        stage.addClass("hover");
-        if (model.Stage) {
-            CacheIems[model.StageID] = model.Stage.StageItem;
-            if (model.Stage.StageItem) {
-                _self.bindStageItems(model.Stage.StageItem);
-            }
-        }
-
     }
-    //阶段行为项
-    ObjectJS.bindStageItems = function (items) {
-        $("#stageItems").empty();
-        for (var i = 0; i < items.length; i++) {
-            $("#stageItems").append("<li>" + items[i].ItemName + "</li>");
-        }
-    };
     //绑定事件
     ObjectJS.bindEvent = function (model) {
         var _self = this;
@@ -135,37 +111,6 @@
                     Global.post("/Customer/CloseCustomer", { ids: model.CustomerID }, function (data) {
                         if (data.status) {
                             location.href = location.href;
-                        }
-                    });
-                });
-            });
-
-            //切换阶段
-            $(".stage-items li").click(function () {
-                var _this = $(this);
-                !_this.hasClass("hover") && confirm("确认客户切换到此阶段吗?", function () {
-                    Global.post("/Customer/UpdateCustomStage", {
-                        ids: model.CustomerID,
-                        stageid: _this.data("id")
-                    }, function (data) {
-                        if (data.result == "10001") {
-                            alert("您没有此操作权限，请联系管理员帮您添加权限！");
-                            return;
-                        }
-
-                        if (data.status) {
-                            _this.siblings().removeClass("hover");
-                            _this.addClass("hover");
-                            if (CacheIems[_this.data("id")]) {
-                                _self.bindStageItems(CacheIems[_this.data("id")]);
-                            } else {
-                                Global.post("/Customer/GetStageItems", {
-                                    stageid: _this.data("id")
-                                }, function (data) {
-                                    CacheIems[_this.data("id")] = data.items;
-                                    _self.bindStageItems(CacheIems[_this.data("id")]);
-                                });
-                            }
                         }
                     });
                 });

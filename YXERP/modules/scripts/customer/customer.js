@@ -11,7 +11,7 @@
         SearchType: 1,
         Type: -1,
         SourceID: "",
-        StageID: "",
+        StageID: "-1",
         Status: 1,
         Mark: -1,
         OrderBy: "cus.CreateTime desc",

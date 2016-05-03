@@ -27,7 +27,7 @@
     <ul class="content-info">
         <li>
             <span class="column-title">客户名称：</span> 
-            <a href="/Customer/Detail/@(model.CustomerID)" target="_blank">@(model.Customer.Name)</a> </li>
+            <a href="javascript:void(0)" class="btn-open-window" data-id="@(model.Customer.CustomerID)" data-name="客户详情-@(model.Customer.Name)" data-url="/Customer/Detail/@(model.CustomerID)">@(model.Customer.Name)</a> </li>
         <li>
             <span class="column-title">拥有者：</span> 
             <label class="left" id="lblOwner">@(model.Owner.Name)</label>
@@ -44,7 +44,7 @@
             
         <li>
             <span class="column-title">地址：</span>
-            <label>@(model.City!=null?(model.City.Province+" "+model.City.City+" "+model.City.Counties):"")@(model.Address)</label>
+            <label>@(model.City!=null?model.City.Description:"") @(model.Address)</label>
         </li>
         <li>
             <span class="column-title">订单类型：</span>

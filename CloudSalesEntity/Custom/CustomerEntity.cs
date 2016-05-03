@@ -57,10 +57,6 @@ namespace CloudSalesEntity
 
         public ActivityEntity Activity { get; set; }
 
-        [Property("Lower")]
-        public string StageID { get; set; }
-
-        public CustomStageEntity Stage { get; set; }
 
         [Property("Lower")]
         public string OwnerID { get; set; }
@@ -68,6 +64,10 @@ namespace CloudSalesEntity
         public Users Owner { get; set; }
 
         public int Status { get; set; }
+
+        public int StageStatus { get; set; }
+
+        public string StageStatusStr { get; set; }
 
         public int Mark { get; set; }
 

@@ -28,11 +28,10 @@
     <div class="search-item">
         <div class="name">阶段</div>
         <ul class="search-stages">
-            <li data-id="" class="hover">全部</li>
-            @foreach (var model in (List<CloudSalesEntity.CustomStageEntity>)ViewBag.Stages)
-            {
-                <li data-id="@(model.StageID)">@(model.StageName)</li>
-            }
+            <li data-id="-1" class="hover">全部</li>
+            <li data-id="1">新客户</li>
+            <li data-id="2">机会客户</li>
+            <li data-id="3">成交客户</li>
         </ul>
     </div>
     <div class="search-item">

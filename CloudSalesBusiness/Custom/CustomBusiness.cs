@@ -49,7 +49,8 @@ namespace CloudSalesBusiness
 
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 list.Add(model);
             }
             return list;
@@ -68,7 +69,8 @@ namespace CloudSalesBusiness
 
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 list.Add(model);
             }
             return list;
@@ -84,7 +86,8 @@ namespace CloudSalesBusiness
                 model.FillData(dr);
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 list.Add(model);
             }
             return list;
@@ -99,7 +102,8 @@ namespace CloudSalesBusiness
                 model.FillData(ds.Tables["Customer"].Rows[0]);
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 if (model.Extent > 0)
                 {
                     model.ExtentStr = GetExtents().Where(m => m.ExtentID == model.Extent.ToString()).FirstOrDefault().ExtentName;

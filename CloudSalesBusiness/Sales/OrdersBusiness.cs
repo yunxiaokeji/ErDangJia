@@ -264,18 +264,6 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool UpdateOpportunityStage(string opportunityid, string stageid, string operateid, string ip, string agentid, string clientid)
-        {
-            bool bl = OrdersDAL.BaseProvider.UpdateOpportunityStage(opportunityid, stageid, operateid, agentid, clientid);
-            if (bl)
-            {
-                var model = SystemBusiness.BaseBusiness.GetOpportunityStageByID(stageid, agentid, clientid);
-                string msg = "机会阶段更换为：" + model.StageName;
-                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Orders, msg, operateid, ip, stageid, agentid, clientid);
-            }
-            return bl;
-        }
-
         #endregion
     }
 }

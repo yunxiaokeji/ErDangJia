@@ -38,6 +38,20 @@ namespace CloudSalesEnum
         [DescriptionAttribute("成交阶段")]
         Success = 2
     }
+
+    /// <summary>
+    /// 客户阶段
+    /// </summary>
+    public enum EnumCustomStageStatus
+    {
+        [DescriptionAttribute("新客户")]
+        New = 1,
+        [DescriptionAttribute("机会客户")]
+        Opportunity = 2,
+        [DescriptionAttribute("成交客户")]
+        Success = 3
+    }
+
     /// <summary>
     /// 客户状态
     /// </summary>

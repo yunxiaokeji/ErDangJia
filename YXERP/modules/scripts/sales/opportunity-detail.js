@@ -140,7 +140,7 @@ define(function (require, exports, module) {
             }
             !_this.hasClass("hover") && confirm("确认将销售机会切换到此阶段吗?", function () {
                 Global.post("/Opportunitys/UpdateOpportunityStage", {
-                    ids: _self.orderid,
+                    ids: _self.opportunityid,
                     stageid: _this.data("id")
                 }, function (data) {
                     if (data.status) {

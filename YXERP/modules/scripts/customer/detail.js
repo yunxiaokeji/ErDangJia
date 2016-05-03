@@ -489,7 +489,7 @@
         var _self = this;
         $("#navOppor .tr-header").nextAll().remove();
         $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
-        Global.post("/Opportunitys/GetOpportunityaByCustomerID", {
+        Global.post("/Opportunitys/GetOpportunityByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page

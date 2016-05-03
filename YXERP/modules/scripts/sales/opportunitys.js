@@ -3,13 +3,16 @@
         doT = require("dot"),
         Easydialog = require("easydialog"),
         ChooseCustomer = require("choosecustomer"),
-        ChooseUser = require("chooseuser");
+        ChooseUser = require("chooseuser"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     var Params = {
         SearchType: 1,
         TypeID: '',
         StageID: '',
+        Status: 1,
         UserID: "",
         AgentID: "",
         TeamID: "",
@@ -17,7 +20,8 @@
         BeginTime: "",
         EndTime: "",
         PageIndex: 1,
-        PageSize: 20
+        PageSize: 20,
+        OrderBy: "o.CreateTime Desc"
     };
 
     var ObjectJS = {};
@@ -38,6 +42,7 @@
                 $(".dropdown-ul").hide();
             }
         });
+        //新建销售机会
         $("#createOrder").click(function () {
             ChooseCustomer.create({
                 title: "选择客户",
@@ -56,11 +61,34 @@
             });
         });
 
-        $("#btnSearch").click(function () {
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
+        });
+
+        //切换阶段
+        $(".search-stages li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.StageID = _this.data("id");
+                _self.getList();
+            }
         });
 
         //切换状态
@@ -70,9 +98,26 @@
                 _this.siblings().removeClass("hover");
                 _this.addClass("hover");
                 Params.PageIndex = 1;
-                Params.StageID = _this.data("id");
+                Params.Status = _this.data("id");
                 _self.getList();
             }
+        });
+
+        //订单类型
+        Global.post("/System/GetOrderTypes", {}, function (data) {
+            for (var i = 0; i < data.items.length; i++) {
+                $("#orderType").append('<li data-id="' + data.items[i].TypeID + '">' + data.items[i].TypeName + '</li>')
+            }
+            $("#orderType li").click(function () {
+                var _this = $(this);
+                if (!_this.hasClass("hover")) {
+                    _this.siblings().removeClass("hover");
+                    _this.addClass("hover");
+                    Params.PageIndex = 1;
+                    Params.TypeID = _this.data("id");
+                    _self.getList();
+                }
+            });
         });
 
         //关键字搜索
@@ -130,29 +175,6 @@
                 $(".table-list .check").addClass("ico-check").removeClass("ico-checked");
             }
         });
-        //转移拥有者
-        $("#changeOwner").click(function () {
-            var _this = $(this);
-            ChooseUser.create({
-                title: "更换拥有者",
-                type: 1,
-                single: true,
-                callback: function (items) {
-                    if (items.length > 0) {
-                        if (_this.data("userid") != items[0].id) {
-                            _self.ChangeOwner(_this.data("id"), items[0].id);
-                        } else {
-                            alert("请选择不同人员进行转移!");
-                        }
-                    }
-                }
-            });
-        });
-
-        $("#auditOrReturn").click(function () {
-            var _this = $(this);
-            location.href = "/Opportunitys/Detail/" + _this.data("id");
-        });
 
         //批量转移
         $("#batchChangeOwner").click(function () {
@@ -174,15 +196,37 @@
                             if (ids.length > 0) {
                                 _self.ChangeOwner(ids, userid);
                             } else {
-                                alert("请选择不同人员进行转移!");
+                                alert("请选择不同人员进行更换");
                             }
                         }
                     }
                 });
             } else {
-                alert("您尚未选择客户!")
+                alert("您尚未选择机会")
             }
-        });        
+        });
+
+        //排序
+        $(".sort-item").click(function () {
+            var _this = $(this);
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    _this.find(".asc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " desc ";
+                } else {
+                    _this.find(".desc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " asc ";
+                }
+            } else {
+                _this.addClass("hover").siblings().removeClass("hover");
+                _this.siblings().find(".hover").removeClass("hover");
+                _this.find(".desc").addClass("hover");
+                Params.OrderBy = _this.data("column") + " desc ";
+            }
+            _self.getList();
+        });
     }
 
     //获取列表
@@ -192,8 +236,9 @@
         $(".tr-header").nextAll().remove();
         $(".tr-header").after("<tr><td colspan='11'><div class='data-loading' ><div></td></tr>");
 
-        Global.post("/Opportunitys/GetOpportunitys", { filter: JSON.stringify(Params) }, function (data)
-        {
+        Global.post("/Opportunitys/GetOpportunitys", {
+            filter: JSON.stringify(Params)
+        }, function (data) {
             _self.bindList(data);
         });
     }
@@ -207,16 +252,7 @@
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 
-                //下拉事件
-                innerhtml.find(".dropdown").click(function () {
-                    var _this = $(this);
-                    var position = _this.find(".ico-dropdown").position();
-                    $(".dropdown-ul li").data("id", _this.data("id")).data("userid", _this.data("userid"));
-                    $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 90 }).show().mouseleave(function () {
-                        $(this).hide();
-                    });
-                    return false;
-                });
+                //选择复选框
                 innerhtml.find(".check").click(function () {
                     var _this = $(this);
                     if (!_this.hasClass("ico-checked")) {
@@ -227,21 +263,10 @@
                     return false;
                 });
 
-                //innerhtml.click(function () {
-                //    var _this = $(this).find(".check");
-                //    if (!_this.hasClass("ico-checked")) {
-                //        _this.addClass("ico-checked").removeClass("ico-check");
-                //    } else {
-                //        _this.addClass("ico-check").removeClass("ico-checked");
-                //    }
-                //});
-
                 $(".tr-header").after(innerhtml);
 
             });
-        }
-        else
-        {
+        } else {
             $(".tr-header").after("<tr><td colspan='11'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
 

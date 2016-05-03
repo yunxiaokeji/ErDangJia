@@ -8,11 +8,11 @@ define(function (require, exports, module) {
     require("pager");
     var ObjectJS = {};
     //添加页初始化
-    ObjectJS.init = function (orderid, model, ordertypes) {
+    ObjectJS.init = function (opportunityid, model, ordertypes) {
         var _self = this;
         _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
         _self.model.OrderTypes = JSON.parse(ordertypes.replace(/&quot;/g, '"'));
-        _self.orderid = orderid;
+        _self.opportunityid = opportunityid;
         _self.bindEvent();
         _self.getAmount();
         _self.bindStyle(_self.model);
@@ -164,12 +164,12 @@ define(function (require, exports, module) {
                 _self.getLogs(1);
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                _self.initTalk(_self.orderid);
+                _self.initTalk(_self.opportunityid);
             }
         });
         
 
-        $("#editOrder").click(function () {
+        $("#editOpportunity").click(function () {
             _self.editOrder(_self.model);
         });
     }
@@ -221,20 +221,26 @@ define(function (require, exports, module) {
             $("#industry").val(model.IndustryID);
         });
     }
+
     //获取日志
     ObjectJS.getLogs = function (page) {
         var _self = this;
-        $("#orderLog").empty();
-        Global.post("/Orders/GetOrderLogs", {
-            orderid: _self.orderid,
+        $("#opportunityLog").empty();
+        $("#opportunityLog").append("<div class='data-loading'><div>");
+        Global.post("/Opportunitys/GetOpportunityLogs", {
+            opportunityid: _self.opportunityid,
             pageindex: page
         }, function (data) {
-
-            doT.exec("template/common/logs.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
-                $("#orderLog").append(innerhtml);
-            });
+            $("#opportunityLog").empty();
+            if (data.items.length > 0) {
+                doT.exec("template/common/logs.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
+                    $("#opportunityLog").append(innerhtml);
+                });
+            } else {
+                $("#opportunityLog").append("<div class='nodata-txt'>暂无日志<div>");
+            }
             $("#pagerLogs").paginate({
                 total_count: data.totalCount,
                 count: data.pageCount,
@@ -252,11 +258,12 @@ define(function (require, exports, module) {
                 mouse: 'slide',
                 float: "left",
                 onChange: function (page) {
-                    _self.getLogs(page);
+                    _self.getLogs(customerid, page);
                 }
             });
         });
     }
+
     //计算总金额
     ObjectJS.getAmount = function () {
         var amount = 0;
@@ -319,14 +326,14 @@ define(function (require, exports, module) {
     }
 
     //讨论备忘
-    ObjectJS.initTalk = function (orderid) {
+    ObjectJS.initTalk = function (opportunityid) {
         var _self = this;
 
         $("#btnSaveTalk").click(function () {
             var txt = $("#txtContent");
             if (txt.val().trim()) {
                 var model = {
-                    GUID: orderid,
+                    GUID: opportunityid,
                     Content: txt.val().trim(),
                     FromReplyID: "",
                     FromReplyUserID: "",
@@ -338,57 +345,60 @@ define(function (require, exports, module) {
             }
 
         });
-        _self.getReplys(orderid, 1);
+        _self.getReplys(opportunityid, 1);
 
     }
 
     //获取备忘
-    ObjectJS.getReplys = function (orderid, page) {
+    ObjectJS.getReplys = function (opportunityid, page) {
         var _self = this;
         $("#replyList").empty();
+        $("#replyList").append("<div class='data-loading'><div>");
         Global.post("/Opportunitys/GetReplys", {
-            guid: orderid,
+            guid: opportunityid,
             pageSize: 10,
             pageIndex: page
         }, function (data) {
-            doT.exec("template/customer/replys.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
+            $("#replyList").empty();
+            if (data.items.length > 0) {
+                doT.exec("template/customer/replys.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
 
-                $("#replyList").append(innerhtml);
+                    $("#replyList").append(innerhtml);
 
-                innerhtml.find(".btn-reply").click(function () {
-                    var _this = $(this), reply = _this.nextAll(".reply-box");
-                    reply.slideDown(500);
-                    reply.find("textarea").focus();
-                    reply.find("textarea").blur(function () {
-                        if (!$(this).val().trim()) {
-                            reply.slideUp(200);
-                        }
+                    innerhtml.find(".btn-reply").click(function () {
+                        var _this = $(this), reply = _this.nextAll(".reply-box");
+                        reply.slideDown(500);
+                        reply.find("textarea").focus();
+                        reply.find("textarea").blur(function () {
+                            if (!$(this).val().trim()) {
+                                reply.slideUp(200);
+                            }
+                        });
                     });
-                });
-                innerhtml.find(".save-reply").click(function () {
-                    var _this = $(this);
-                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                        var entity = {
-                            GUID: _this.data("id"),
-                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                            FromReplyID: _this.data("replyid"),
-                            FromReplyUserID: _this.data("createuserid"),
-                            FromReplyAgentID: _this.data("agentid")
-                        };
+                    innerhtml.find(".save-reply").click(function () {
+                        var _this = $(this);
+                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
+                            var entity = {
+                                GUID: _this.data("id"),
+                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
+                                FromReplyID: _this.data("replyid"),
+                                FromReplyUserID: _this.data("createuserid"),
+                                FromReplyAgentID: _this.data("agentid")
+                            };
 
-                        _self.saveReply(entity);
-                    }
+                            _self.saveReply(entity);
+                        }
 
-                    $("#Msg_" + _this.data("replyid")).val('');
-                    $(this).parent().slideUp(100);
-                });
+                        $("#Msg_" + _this.data("replyid")).val('');
+                        $(this).parent().slideUp(100);
+                    });
 
-                require.async("businesscard", function () {
-                    innerhtml.find("img").businessCard();
                 });
-            });
+            } else {
+                $("#replyList").append("<div class='nodata-txt'>暂无备忘<div>");
+            }
 
             $("#pagerReply").paginate({
                 total_count: data.totalCount,
@@ -412,9 +422,10 @@ define(function (require, exports, module) {
             });
         });
     }
+
     ObjectJS.saveReply = function (model) {
         var _self = this;
-
+        $("#replyList .nodata-txt").remove();
         Global.post("/Opportunitys/SavaReply", { entity: JSON.stringify(model) }, function (data) {
             doT.exec("template/customer/replys.html", function (template) {
                 var innerhtml = template(data.items);
@@ -446,10 +457,6 @@ define(function (require, exports, module) {
                     }
                     $("#Msg_" + _this.data("replyid")).val('');
                     $(this).parent().slideUp(100);
-                });
-
-                require.async("businesscard", function () {
-                    innerhtml.find("img").businessCard();
                 });
             });
         });

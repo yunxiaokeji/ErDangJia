@@ -9,7 +9,7 @@ using CloudSalesEntity;
 namespace YXERP.Models
 {
     [Serializable]
-    public class FilterOrders
+    public class FilterOpportunity
     {
         public EnumSearchType SearchType { get; set; }
 

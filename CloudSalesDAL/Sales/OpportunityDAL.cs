@@ -12,14 +12,15 @@ namespace CloudSalesDAL
     {
         public static OpportunityDAL BaseProvider = new OpportunityDAL();
 
-        public DataSet GetOpportunitys(int searchtype, string typeid, string stageid, string searchuserid, string searchteamid, string searchagentid, string begintime, string endtime,
-                string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
+        public DataSet GetOpportunitys(int searchtype, string typeid, int status, string stageid, string searchuserid, string searchteamid, string searchagentid, string begintime, string endtime,
+                string keyWords, string orderBy, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@totalCount",SqlDbType.Int),
                                        new SqlParameter("@pageCount",SqlDbType.Int),
                                        new SqlParameter("@SearchType",searchtype),
                                        new SqlParameter("@TypeID",typeid),
+                                       new SqlParameter("@Status",status),
                                        new SqlParameter("@StageID",stageid),
                                        new SqlParameter("@SearchUserID",searchuserid),
                                        new SqlParameter("@SearchTeamID",searchteamid),
@@ -27,6 +28,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@BeginTime",begintime),
                                        new SqlParameter("@EndTime",endtime),
                                        new SqlParameter("@Keywords",keyWords),
+                                       new SqlParameter("@OrderBy",orderBy),
                                        new SqlParameter("@pageSize",pageSize),
                                        new SqlParameter("@pageIndex",pageIndex),
                                        new SqlParameter("@UserID",userid),
@@ -41,6 +43,18 @@ namespace CloudSalesDAL
             DataSet ds = GetDataSet("P_GetOpportunitys", paras, CommandType.StoredProcedure);
             totalCount = Convert.ToInt32(paras[0].Value);
             pageCount = Convert.ToInt32(paras[1].Value);
+            return ds;
+        }
+
+        public DataSet GetOpportunityByID(string opportunityid, string agentid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@OpportunityID",opportunityid),
+                                       new SqlParameter("@AgentID", agentid),
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+
+            DataSet ds = GetDataSet("P_GetOpportunityByID", paras, CommandType.StoredProcedure, "Opportunity|Customer|Details");
             return ds;
         }
 

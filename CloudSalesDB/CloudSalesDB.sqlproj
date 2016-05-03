@@ -203,4 +203,10 @@
   <ItemGroup>
     <None Include="Procedures\Sales\P_CreateOpportunity.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Procedures\Sales\P_GetOpportunityByID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Procedures\Sales\P_CreateOpportunityReply.sql" />
+  </ItemGroup>
 </Project>

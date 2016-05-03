@@ -155,7 +155,7 @@
     <Content Include="DLL\JsonObject.dll" />
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
-    <Content Include="modules\css\opportunitys.css" />
+    <Content Include="modules\css\sales.css" />
     <Content Include="modules\css\stock\stock.css" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
@@ -226,6 +226,7 @@
     <Compile Include="Models\FilterBills.cs" />
     <Compile Include="Models\FilterAgentsOrders.cs" />
     <Compile Include="Models\ShoppingCartProduct.cs" />
+    <Compile Include="Models\FilterOpportunity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\homeico\mingdao-hover.png" />
     <Content Include="Content\homeico\mingdao.png" />
@@ -527,11 +528,11 @@
     <Content Include="modules\scripts\myaccount\setavatar.js" />
     <Content Include="modules\scripts\myaccount\setpassword.js" />
     <Content Include="modules\scripts\myaccount\account.js" />
-    <Content Include="modules\scripts\orders\confirmorder.js" />
-    <Content Include="modules\scripts\orders\orders.js" />
-    <Content Include="modules\scripts\orders\detail.js" />
-    <Content Include="modules\scripts\orders\applydetail.js" />
-    <Content Include="modules\scripts\orders\opportunitys.js" />
+    <Content Include="modules\scripts\sales\opportunity-detail.js" />
+    <Content Include="modules\scripts\sales\orders.js" />
+    <Content Include="modules\scripts\sales\detail.js" />
+    <Content Include="modules\scripts\sales\applydetail.js" />
+    <Content Include="modules\scripts\sales\opportunitys.js" />
     <Content Include="modules\scripts\organization\roles.js" />
     <Content Include="modules\scripts\organization\users.js" />
     <Content Include="modules\scripts\organization\structure.js" />
@@ -667,7 +668,7 @@
     <Content Include="Views\Orders\Orders.cshtml" />
     <Content Include="Views\System\Client.cshtml" />
     <Content Include="Views\Orders\Detail.cshtml" />
-    <Content Include="Views\Opportunitys\ConfirmOrder.cshtml" />
+    <Content Include="Views\Opportunitys\Detail.cshtml" />
     <Content Include="Views\Finance\Index.cshtml" />
     <Content Include="Views\Finance\PayableBills.cshtml" />
     <Content Include="Views\Agents\Index.cshtml" />

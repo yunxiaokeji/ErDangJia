@@ -18,11 +18,11 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        public List<OpportunityEntity> GetOpportunitys(EnumSearchType searchtype, string typeid, string stageid, string searchuserid, string searchteamid, string searchagentid,
-                                  string begintime, string endtime, string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
+        public List<OpportunityEntity> GetOpportunitys(EnumSearchType searchtype, string typeid, int status, string stageid, string searchuserid, string searchteamid, string searchagentid,
+                                  string begintime, string endtime, string keyWords, string orderBy, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
         {
             List<OpportunityEntity> list = new List<OpportunityEntity>();
-            DataSet ds = OpportunityDAL.BaseProvider.GetOpportunitys((int)searchtype, typeid, stageid, searchuserid, searchteamid, searchagentid, begintime, endtime, keyWords, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
+            DataSet ds = OpportunityDAL.BaseProvider.GetOpportunitys((int)searchtype, typeid, status, stageid, searchuserid, searchteamid, searchagentid, begintime, endtime, keyWords, orderBy, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 OpportunityEntity model = new OpportunityEntity();
@@ -52,6 +52,63 @@ namespace CloudSalesBusiness
             return list;
         }
 
+        public OpportunityEntity GetOpportunityByID(string opportunityid, string agentid, string clientid)
+        {
+            DataSet ds = OpportunityDAL.BaseProvider.GetOpportunityByID(opportunityid, agentid, clientid);
+            OpportunityEntity model = new OpportunityEntity();
+            if (ds.Tables["Opportunity"].Rows.Count > 0)
+            {
+
+                model.FillData(ds.Tables["Opportunity"].Rows[0]);
+                model.OrderType = SystemBusiness.BaseBusiness.GetOrderTypeByID(model.TypeID, model.AgentID, model.ClientID);
+                model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
+
+                model.StatusStr = CommonBusiness.GetEnumDesc((EnumOrderStatus)model.Status);
+
+                model.City = CommonBusiness.GetCityByCode(model.CityCode);
+
+                if (ds.Tables["Customer"].Rows.Count > 0)
+                {
+                    model.Customer = new CustomerEntity();
+                    model.Customer.FillData(ds.Tables["Customer"].Rows[0]);
+                }
+                model.Details = new List<OrderDetail>();
+                if (ds.Tables["Details"].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables["Details"].Rows)
+                    {
+                        OrderDetail detail = new OrderDetail();
+                        detail.FillData(dr);
+                        model.Details.Add(detail);
+                    }
+                }
+            }
+            return model;
+        }
+
+        public static List<ReplyEntity> GetReplys(string guid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
+        {
+            List<ReplyEntity> list = new List<ReplyEntity>();
+            string whereSql = " Status<>9 and GUID='" + guid + "' ";
+            DataTable dt = CommonBusiness.GetPagerData("OpportunityReply", "*", whereSql, "AutoID", "CreateTime desc ", pageSize, pageIndex, out totalCount, out pageCount, false);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                ReplyEntity model = new ReplyEntity();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
+                if (!string.IsNullOrEmpty(model.FromReplyID))
+                {
+                    model.FromReplyUser = OrganizationBusiness.GetUserByUserID(model.FromReplyUserID, model.FromReplyAgentID);
+                }
+                list.Add(model);
+            }
+
+            return list;
+
+        }
+
         #endregion
 
         #region 添加
@@ -72,6 +129,11 @@ namespace CloudSalesBusiness
                 LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Opportunity, EnumLogType.Create, "", operateid, agentid, clientid);
             }
             return id;
+        }
+
+        public static string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
+        {
+            return OpportunityDAL.BaseProvider.CreateReply(guid, content, userID, agentID, fromReplyID, fromReplyUserID, fromReplyAgentID);
         }
 
         #endregion

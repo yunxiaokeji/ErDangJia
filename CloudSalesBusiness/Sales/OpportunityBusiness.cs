@@ -171,6 +171,20 @@ namespace CloudSalesBusiness
             return bl;
         }
 
+        public bool SubmitOrder(string opportunityid, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OpportunityDAL.BaseProvider.SubmitOrder(opportunityid, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = "转为订单";
+                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Opportunity, msg, operateid, ip, operateid, agentid, clientid);
+
+                //日志
+                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Orders, EnumLogType.Create, ip, operateid, agentid, clientid);
+            }
+            return bl;
+        }
+
         public bool CloseOpportunity(string opportunityid, string operateid, string ip, string agentid, string clientid)
         {
             bool bl = OpportunityDAL.BaseProvider.CloseOpportunity(opportunityid, operateid, agentid, clientid);

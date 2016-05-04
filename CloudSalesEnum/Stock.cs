@@ -47,6 +47,8 @@ namespace CloudSalesEnum
         TH = 6,
         [DescriptionAttribute("手工出库单")]
         SGCK = 7,
+        [DescriptionAttribute("销售机会")]
+        Opportunity = 10,
         [DescriptionAttribute("销售订单")]
         Order = 11,
         [DescriptionAttribute("代理商订单")]

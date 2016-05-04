@@ -148,6 +148,11 @@ namespace CloudSalesEntity
 
         public CustomerEntity Customer { get; set; }
 
+        [Property("Lower")] 
+        public string OrderID { get; set; }
+
+        public string OrderCode { get; set; }
+
         public int ReplyTimes { get; set; }
 
         /// <summary>

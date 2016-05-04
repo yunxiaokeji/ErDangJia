@@ -48,9 +48,9 @@ namespace YXERP.Controllers
 
         public ActionResult ChooseProducts(string id)
         {
-            ViewBag.Type = (int)EnumDocType.Order;
+            ViewBag.Type = (int)EnumDocType.Opportunity;
             ViewBag.GUID = id;
-            ViewBag.Title = "销售机会选择产品";
+            ViewBag.Title = "添加意向产品";
             return View("FilterProducts");
         }
 
@@ -139,9 +139,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult SubmitOrder(string orderid)
+        public JsonResult SubmitOrder(string opportunityid)
         {
-            var bl = OrdersBusiness.BaseBusiness.SubmitOrder(orderid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var bl = OpportunityBusiness.BaseBusiness.SubmitOrder(opportunityid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
 
             return new JsonResult

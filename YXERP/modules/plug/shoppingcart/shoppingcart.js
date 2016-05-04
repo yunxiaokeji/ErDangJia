@@ -72,7 +72,7 @@ define(function (require, exports, module) {
                         //删除产品
                         innerText.find(".ico-del").click(function () {
                             var _this = $(this);
-                            confirm("确认从购物车移除此产品吗？", function () {
+                            confirm("确认从已选中移除此产品吗？", function () {
                                 Global.post("/ShoppingCart/DeleteCart", {
                                     autoid: _this.data("id")
                                 }, function (data) {
@@ -89,8 +89,10 @@ define(function (require, exports, module) {
                         //入库单
                         if (opts.ordertype == 1) {
                             obj.find(".btnconfirm").attr("href", "/Purchase/ConfirmPurchase");
-                        }else if (opts.ordertype == 11) {
-                            obj.find(".btnconfirm").attr("href", "/Opportunitys/Detail/" + opts.guid);
+                        } else if (opts.ordertype == 10) {
+                            obj.find(".btnconfirm").attr("href", "/Opportunitys/Detail/" + opts.guid).html("返回机会详情");
+                        } else if (opts.ordertype == 11) {
+                            obj.find(".btnconfirm").attr("href", "/Orders/Detail/" + opts.guid);
                         }
                         obj.find(".cart-product-list").append(innerText);
                     } else {

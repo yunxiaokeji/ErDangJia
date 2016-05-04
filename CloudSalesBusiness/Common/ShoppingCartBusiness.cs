@@ -15,7 +15,15 @@ namespace CloudSalesBusiness
     {
         public static int GetShoppingCartCount(EnumDocType ordertype, string guid)
         {
-            object obj = CommonBusiness.Select("ShoppingCart", "count(0)", "ordertype=" + (int)ordertype + " and [GUID]='" + guid + "'");
+            object obj = 0;
+            if (ordertype == EnumDocType.Opportunity)
+            {
+                obj = CommonBusiness.Select("OpportunityProduct", "count(0)", "OpportunityID='" + guid + "'");
+            }
+            else
+            {
+                obj = CommonBusiness.Select("ShoppingCart", "count(0)", "ordertype=" + (int)ordertype + " and [GUID]='" + guid + "'");
+            }
             return Convert.ToInt32(obj);
         }
         /// <summary>
@@ -29,6 +37,7 @@ namespace CloudSalesBusiness
             {
                 ProductDetail model = new ProductDetail();
                 model.FillData(dr);
+
                 list.Add(model);
             }
             return list;

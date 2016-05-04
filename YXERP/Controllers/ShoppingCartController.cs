@@ -23,11 +23,7 @@ namespace YXERP.Controllers
 
         #region Ajax 订单和购物车相关
 
-        /// <summary>
-        /// 过滤产品
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
+
         public JsonResult GetProductListForShopping(string filter)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -46,14 +42,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 加入到购物车
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <param name="detailsid"></param>
-        /// <param name="quantity"></param>
-        /// <param name="ordertype"></param>
-        /// <returns></returns>
         public JsonResult AddShoppingCart(string productid, string detailsid, int quantity, string unitid, int isBigUnit, EnumDocType ordertype, string remark = "", string guid = "")
         {
             var bl = ShoppingCartBusiness.AddShoppingCart(productid, detailsid, quantity, unitid, isBigUnit, ordertype, remark, guid, CurrentUser.UserID, OperateIP);

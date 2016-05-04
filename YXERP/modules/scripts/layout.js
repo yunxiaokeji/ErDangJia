@@ -54,7 +54,7 @@ define(function (require, exports, module) {
                 parent.find("#iframeBox").append('<iframe id="iframe' + _this.data("id") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
 
                 var height = window.parent.document.documentElement.clientHeight;
-                parent.find("#iframe" + _this.data("id")).css("height", height - 100);
+                parent.find("#iframe" + _this.data("id")).css("height", height - 95);
             }
         });
 

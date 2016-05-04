@@ -13,13 +13,17 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">机会编号：@(model.OpportunityCode)</span>
+    <span class="header-title left @(model.Status==3?"colorccc":"")">机会编号：@(model.OpportunityCode) @(model.Status==3?"(已关闭)":"")</span>
     @if (model.Status==1)
     {
         <div id="editOpportunity" class="iconfont icon-edit left">&#xe607;</div>
         
         <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"102029003"))" id="btnClose" >关闭机会</div>
         <div class="btn right mRight20" id="btnconfirm" >转为订单</div>
+    }
+    else if (model.Status == 2)
+    {
+         <a href="javascript:void(0);" class="right font14 btn-open-window" data-id="@(model.OrderID)" data-name="订单详情-@(model.OrderCode)" data-url="/Orders/Detail/@(model.OrderID)">订单编号：@(model.OrderCode) </a>
     }
     
 </div>
@@ -110,7 +114,10 @@
             </tr>
         </table>
         <div class="mTop20">
-             <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" class="btn right mRight20">继续选择产品</a>
+            @if(model.Status==1)
+            {
+                <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" class="btn right mRight20">继续选择产品</a>
+            }
         </div>
     </div>
     <div id="navRemark" class="mTop20 talk-body nav-partdiv hide">

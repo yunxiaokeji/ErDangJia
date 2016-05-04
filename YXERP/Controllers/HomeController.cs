@@ -84,10 +84,14 @@ namespace YXERP.Controllers
 
         public ActionResult MDLogin(string ReturnUrl)
         {
-            if(string.IsNullOrEmpty(ReturnUrl))
-            return Redirect(OauthBusiness.GetAuthorizeUrl());
+            if (string.IsNullOrEmpty(ReturnUrl))
+            {
+                return Redirect(OauthBusiness.GetAuthorizeUrl());
+            }
             else
+            {
                 return Redirect(OauthBusiness.GetAuthorizeUrl() + "&state=" + ReturnUrl);
+            }
         }
 
         public ActionResult MDCallBack(string code, string state)

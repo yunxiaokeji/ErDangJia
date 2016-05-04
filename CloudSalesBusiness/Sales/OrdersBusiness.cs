@@ -195,20 +195,6 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool SubmitOrder(string orderid, string operateid, string ip, string agentid, string clientid)
-        {
-            bool bl = OrdersDAL.BaseProvider.SubmitOrder(orderid, operateid, agentid, clientid);
-            if (bl)
-            {
-                string msg = "提交订单";
-                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, operateid, agentid, clientid);
-
-                //日志
-                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Orders, EnumLogType.Create, ip, operateid, agentid, clientid);
-            }
-            return bl;
-        }
-
         public bool EditOrder(string orderid, string personName, string mobileTele, string cityCode, string address, string postalcode, string typeid, int expresstype, string remark, string operateid, string ip, string agentid, string clientid)
         {
             bool bl = OrdersDAL.BaseProvider.EditOrder(orderid, personName, mobileTele, cityCode, address, postalcode, typeid, expresstype, remark, operateid, agentid, clientid);

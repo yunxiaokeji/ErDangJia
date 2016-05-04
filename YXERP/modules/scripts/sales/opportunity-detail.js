@@ -114,7 +114,13 @@ define(function (require, exports, module) {
 
         //提交订单
         $("#btnconfirm").click(function () {
-            confirm("请确认信息是否填写正确，转为订单后只能编辑价格，确认转为订单吗？", function () {
+
+            if ($(".cart-item").length == 0) {
+                alert("您尚未选择产品！");
+                return;
+            }
+
+            confirm("机会转为订单后不可撤销，确认转为订单吗？", function () {
                 _self.submitOrder();
             });
             
@@ -127,12 +133,11 @@ define(function (require, exports, module) {
             });
         });
 
-
         //切换阶段
         $(".stage-items li").click(function () {
             var _this = $(this);
 
-            !_this.hasClass("hover") && confirm("确认将机会切换到此阶段吗?", function () {
+            _self.model.Status == 1 && !_this.hasClass("hover") && confirm("确认将机会切换到此阶段吗?", function () {
                 Global.post("/Opportunitys/UpdateOpportunityStage", {
                     ids: _self.opportunityid,
                     stageid: _this.data("id")
@@ -282,19 +287,14 @@ define(function (require, exports, module) {
         });
     }
 
-    //保存
+    //转为订单
     ObjectJS.submitOrder = function () {
         var _self = this;
-        var totalamount = 0, bl = false;
-        //单据明细
-        $(".cart-item").each(function () {
-            bl = true;
-        });
-        if (!bl) {
+        if ($(".cart-item").length == 0) {
             alert("您尚未选择产品！");
             return;
         }
-        Global.post("/Opportunitys/SubmitOrder", { orderid: _self.orderid }, function (data) {
+        Global.post("/Opportunitys/SubmitOrder", { opportunityid: _self.opportunityid }, function (data) {
             if (data.status) {
                 location.href = location.href;
             } else {

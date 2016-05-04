@@ -15,6 +15,7 @@ namespace CloudSalesBusiness
 {
     public class ProductsBusiness
     {
+        public static ProductsBusiness BaseBusiness = new ProductsBusiness();
         /// <summary>
         /// 文件默认存储路径
         /// </summary>

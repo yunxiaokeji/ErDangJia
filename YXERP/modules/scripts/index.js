@@ -20,7 +20,7 @@ define(function (require, exports, module) {
     //绑定元素定位和样式
     LayoutObject.bindStyle = function () {
         var height = document.documentElement.clientHeight;
-        $(".iframe-window").css("height", height - 100);
+        $(".iframe-window").css("height", height - 95);
     }
 
     //绑定事件

@@ -51,6 +51,7 @@ define(function (require, exports, module) {
             var expressCompany = {
                 ExpressID: ExpressCompany.Params.id,
                 Name: $("#Name").val(),
+                AutoID: $("#AutoID").val(),
                 Website: $("#Website").val()
             };
 
@@ -68,6 +69,7 @@ define(function (require, exports, module) {
             if (data.Result == "1") {
                 var item = data.Item;
                 $("#Name").val(item.Name);
+                $("#AutoID").val(item.AutoID);
                 $("#Website").val(item.Website);
 
             } else if (data.Result == "2") {

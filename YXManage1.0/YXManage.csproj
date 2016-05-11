@@ -125,6 +125,10 @@
     <Content Include="modules\css\default\list.css" />
     <Content Include="modules\css\home.css" />
     <Content Include="modules\css\base.css" />
+    <Content Include="modules\css\iconfont\demo.css" />
+    <Content Include="modules\css\iconfont\demo.html" />
+    <Content Include="modules\css\iconfont\iconfont.css" />
+    <Content Include="modules\css\iconfont\iconfont.svg" />
     <Content Include="modules\css\layout.css" />
     <Content Include="modules\css\login.css" />
     <Content Include="modules\images\default.png" />
@@ -174,7 +178,7 @@
     <Content Include="modules\scripts\global.js" />
     <Content Include="modules\scripts\home.js" />
     <Content Include="modules\scripts\layout.js" />
-    <Content Include="modules\scripts\clients.js" />
+    <Content Include="modules\scripts\client\clients.js" />
     <Content Include="modules\scripts\modulesproduct.js" />
     <Content Include="modules\scripts\expresscompany.js" />
     <Content Include="modules\scripts\industry.js" />
@@ -182,8 +186,10 @@
     <Content Include="modules\scripts\feedback.js" />
     <Content Include="modules\scripts\agentactionreport.js" />
     <Content Include="modules\scripts\order.js" />
-    <Content Include="modules\template\client-orders.html" />
-    <Content Include="modules\template\client-list.html" />
+    <Content Include="modules\template\client\client-authorize.html" />
+    <Content Include="modules\template\client\client-edit.html" />
+    <Content Include="modules\template\client\client-orders.html" />
+    <Content Include="modules\template\client\client-list.html" />
     <Content Include="modules\template\clientauthorizelog-list.html" />
     <Content Include="modules\template\modulesproduct-list.html" />
     <Content Include="modules\template\expresscompany-list.html" />
@@ -275,6 +281,9 @@
   <ItemGroup>
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
+    <Content Include="modules\css\iconfont\iconfont.eot" />
+    <Content Include="modules\css\iconfont\iconfont.ttf" />
+    <Content Include="modules\css\iconfont\iconfont.woff" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

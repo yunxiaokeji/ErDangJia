@@ -65,12 +65,12 @@ namespace CloudSalesBusiness.Manage
 
             if (!string.IsNullOrEmpty(beginDate))
             {
-                sqlWhere += " and createtime>=" + beginDate;
+                sqlWhere += " and createtime>='" + beginDate+"'";
             }
 
             if (!string.IsNullOrEmpty(endDate))
             {
-                sqlWhere += " and createtime<=" +DateTime.Parse(endDate).AddDays(1);
+                sqlWhere += " and createtime<='" +DateTime.Parse(endDate).AddDays(1).ToString("yyyy-MM-dd")+"'";
             }
 
             DataTable dt = CommonBusiness.GetPagerData("FeedBack", "*", sqlWhere, "AutoID", pageSize, pageIndex, out totalCount, out pageCount);

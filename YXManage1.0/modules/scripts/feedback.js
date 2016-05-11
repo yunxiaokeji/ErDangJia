@@ -65,44 +65,22 @@ define(function (require, exports, module) {
                 onChange: function (data) {
                     FeedBack.Params.pageIndex = 1;
                     FeedBack.Params.type = parseInt(data.value);
+                    FeedBack.Params.beginDate = $("#BeginTime").val();
+                    FeedBack.Params.endDate = $("#EndTime").val();
                     FeedBack.bindData();
                 }
             });
 
-            var Status = [
-                {
-                    ID: "1",
-                    Name: "待解决"
-                },
-                {
-                    ID: "2",
-                    Name: "已解决"
-                },
-                {
-                    ID: "3",
-                    Name: "驳回"
-                },
-                {
-                    ID: "4",
-                    Name: "删除"
-                }
-            ];
-            $("#FeedStatus").dropdown({
-                prevText: "意见状态-",
-                defaultText: "所有",
-                defaultValue: "-1",
-                data: Status,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "120",
-                onChange: function (data) {
-                    FeedBack.Params.pageIndex = 1;
-                    FeedBack.Params.status = parseInt(data.value);
-                    FeedBack.bindData();
-                }
+            $(".search-tab li").click(function () {
+                $(this).addClass("hover").siblings().removeClass("hover");
+                var index = $(this).data("index");
+                $(".content-body div[name='navContent']").hide().eq(parseInt(index)).show();
+                FeedBack.Params.pageIndex = 1;
+                FeedBack.Params.status = index == 0 ? -1 : index;
+                FeedBack.Params.beginDate = $("#BeginTime").val();
+                FeedBack.Params.endDate = $("#EndTime").val();
+                FeedBack.bindData();
             });
-
-
 
         });
 

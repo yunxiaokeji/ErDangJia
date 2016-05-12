@@ -185,18 +185,18 @@
     <Content Include="modules\scripts\admin.js" />
     <Content Include="modules\scripts\feedback.js" />
     <Content Include="modules\scripts\agentactionreport.js" />
-    <Content Include="modules\scripts\order.js" />
+    <Content Include="modules\scripts\client\order.js" />
     <Content Include="modules\template\client\client-authorize.html" />
     <Content Include="modules\template\client\client-edit.html" />
     <Content Include="modules\template\client\client-orders.html" />
     <Content Include="modules\template\client\client-list.html" />
-    <Content Include="modules\template\clientauthorizelog-list.html" />
+    <Content Include="modules\template\client\clientauthorizelog-list.html" />
     <Content Include="modules\template\modulesproduct-list.html" />
     <Content Include="modules\template\expresscompany-list.html" />
     <Content Include="modules\template\industry-list.html" />
     <Content Include="modules\template\feedback-list.html" />
     <Content Include="modules\template\agentactionreport-list.html" />
-    <Content Include="modules\template\agent-orders.html" />
+    <Content Include="modules\template\client\agent-orders.html" />
     <Content Include="Scripts\jquery-1.11.1.js" />
     <Content Include="Scripts\sea-config.js" />
     <Content Include="Scripts\sea.js" />
@@ -284,6 +284,9 @@
     <Content Include="modules\css\iconfont\iconfont.eot" />
     <Content Include="modules\css\iconfont\iconfont.ttf" />
     <Content Include="modules\css\iconfont\iconfont.woff" />
+    <Content Include="Views\Client\OrderIndex.cshtml" />
+    <Content Include="Views\System\ExpressIndex.cshtml" />
+    <Content Include="Views\System\ExpressDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

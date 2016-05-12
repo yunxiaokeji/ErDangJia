@@ -45,12 +45,12 @@
                         <span class="cursor"></span>
                     </a> 
                 </li>
-                <li class="left" BindController="expresscompany">
+             @*   <li class="left" BindController="expresscompany">
                     <a href="/ExpressCompany/index" >
                         <span class="name">快递公司</span>
                         <span class="cursor"></span>
                     </a> 
-                </li>
+                </li>*@
                 <li class="left" BindController="industry">
                     <a href="/Industry/index" >
                         <span class="name">公司行业</span>
@@ -63,12 +63,12 @@
                         <span class="cursor"></span>
                     </a> 
                 </li>
-                <li class="left" BindController="order">
+          @*      <li class="left" BindController="order">
                     <a href="/Order/index" >
                         <span class="name">订单</span>
                         <span class="cursor"></span>
                     </a> 
-                </li>
+                </li>*@
                 <li class="left" BindController="report">
                     <a href="/Report/AgentActionReport" >
                         <span class="name">统计</span>
@@ -107,8 +107,9 @@
                 </div>
 
                 <ul class="action-box">
-                    <li class="action" BindAction="create"><a href="/Client/Create" >添加客户</a></li>
+                    @*<li class="action" BindAction="create"><a href="/Client/Create" >添加客户</a></li>*@
                     <li class="action" BindAction="index"><a href="/Client/index" >客户列表</a></li>
+                    <li class="action" BindAction="orderindex"><a href="/Client/OrderIndex" >客户订单</a></li>
                 </ul>
             </div>
 
@@ -126,7 +127,7 @@
                 </ul>
             </div>
 
-            <div class="controller" BindController="expresscompany">
+            @*<div class="controller" BindController="expresscompany">
                 <div class="controller-box">
                     <div class="controller-name">
                         <span class="open left"></span>
@@ -139,7 +140,7 @@
                     <li class="action " BindAction="index"><a href="/ExpressCompany/index" >快递公司列表</a></li>
                 </ul>
             </div>
-
+            *@
             <div class="controller" BindController="industry">
                 <div class="controller-box">
                     <div class="controller-name">
@@ -167,7 +168,7 @@
                 </ul>
             </div>
 
-            <div class="controller" BindController="order">
+   @*         <div class="controller" BindController="order">
                 <div class="controller-box">
                     <div class="controller-name">
                         <span class="open left"></span>
@@ -178,7 +179,7 @@
                 <ul class="action-box">
                      <li class="action " BindAction="index"><a href="/Order/Index" >客户订单列表</a></li>
                 </ul>
-            </div>
+            </div>*@
 
             <div class="controller" BindController="report">
                 <div class="controller-box">
@@ -194,10 +195,19 @@
             </div>
 
             <div class="controller" BindController="system">
+                  <div class="controller-box">
+                    <div class="controller-name">
+                        <span class="open left"></span>
+                        <span class="name left">系统设置</span>
+                    </div>                  
+                </div>
+                  <ul class="action-box">
+                        <li class="action " BindAction="expressindex"><a href="/System/ExpressIndex" >快递公司列表</a></li>
+                    </ul>
                 <div class="controller-box">
                     <div class="controller-name">
                         <span class="open left"></span>
-                        <span class="name left">系统信息</span>
+                        <span class="name left">用户管理</span>
                     </div>
                 </div>
 

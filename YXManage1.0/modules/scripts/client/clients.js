@@ -500,7 +500,7 @@ define(function (require, exports, module) {
         var _self = this;
         $("#client-header").nextAll().remove();
         Global.post("/Client/GetClientAuthorizeLogs", Clients.Params, function (data) {
-            doT.exec("template/clientauthorizelog-list.html?3", function (templateFun) {
+            doT.exec("template/client/clientauthorizelog-list.html?3", function (templateFun) {
                 var innerText = templateFun(data.Items);
                 innerText = $(innerText);
                 $("#client-header").after(innerText);
@@ -541,7 +541,7 @@ define(function (require, exports, module) {
         $("#clientOrders").nextAll().remove();
 
         Global.post("/Client/GetClientOrders", Clients.Params, function (data) {
-            doT.exec("template/client-orders.html?3", function (templateFun) {
+            doT.exec("template/client/client-orders.html?3", function (templateFun) {
                 var innerText = templateFun(data.Items);
                 innerText = $(innerText);
                 $("#clientOrders").after(innerText);

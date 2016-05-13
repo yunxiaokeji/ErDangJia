@@ -1,0 +1,11 @@
+﻿{%
+    var item = $data;
+%} 
+<ul>
+    <li><span class="column-title">标题：</span><label >{%=item.Title%}</label></li>
+    <li><span class="column-title">类型：</span><label >{%=item.Type==1?"问题":item.Type==2?"建议":"需求"%}</label></li>
+    <li><span class="column-title">状态：</span><label >{%=item.Status==1?"待解决":item.Status==2?"已解决":item.Status==3?"未接受":"已清理"%}</label> </li>
+    <li><span class="column-title">描述：</span><label >{%=item.Remark%}</label> </li>
+    <li><span class="column-title">创建时间：</span><label >{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</label></li>
+    <li><span class="column-title">解答：</span><textarea >{%=item.Content%}</textarea></li> 
+</ul> 

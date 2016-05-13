@@ -42,7 +42,7 @@ namespace CloudSalesBusiness.Manage
         #endregion
 
         #region 查
-        public static List<FeedBack> GetFeedBacks(string keywords, string beginDate, string endDate, int type, int status, int pageSize, int pageIndex, out int totalCount, out int pageCount)
+        public static List<FeedBack> GetFeedBacks(string keywords, string beginDate, string endDate, int type, int status,string userID, int pageSize, int pageIndex, out int totalCount, out int pageCount)
         {
             string sqlWhere = "1=1";
             if (type != -1)
@@ -54,13 +54,13 @@ namespace CloudSalesBusiness.Manage
             {
                 sqlWhere += " and status="+status;
             }
-
             if (!string.IsNullOrEmpty(keywords))
             {
-                sqlWhere += " and (Title like '%"+keywords+"%'";
-                sqlWhere += " or ContactName like '%" + keywords + "%'";
-                sqlWhere += " or MobilePhone like '%" + keywords + "%'";
-                sqlWhere += " or Remark like '%" + keywords + "%' )";
+                sqlWhere += " and status=" + status;
+            }
+            if (!string.IsNullOrEmpty(userID))
+            {
+                sqlWhere += " and CreateUserID='" + userID + "'";
             }
 
             if (!string.IsNullOrEmpty(beginDate))

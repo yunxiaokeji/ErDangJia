@@ -163,6 +163,9 @@ define(function (require, exports, module) {
                 var statusName = "待解决";
                 if (item.Status == 2) {
                     statusName = "已解决";
+                    $('#btn-finish').hide();
+                    $('#btn-cancel').hide();
+                    $('#btn-delete').hide();
                 }
                 else if (item.Status == 3)
                     statusName = "驳回";
@@ -173,6 +176,7 @@ define(function (require, exports, module) {
                 $("#ContactName").html(item.ContactName);
                 $("#MobilePhone").html(item.MobilePhone);
                 $("#Remark").html(item.Remark);
+                $("#Content").html(item.Content);
                 $("#CreateTime").html(item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss"));
             } 
         });
@@ -180,7 +184,7 @@ define(function (require, exports, module) {
 
     //更改状态
     FeedBack.updateFeedBackStatus = function (status) {
-        Global.post("/FeedBack/UpdateFeedBackStatus", { id: FeedBack.Params.id, status: status }, function (data) {
+        Global.post("/FeedBack/UpdateFeedBackStatus", { id: FeedBack.Params.id, status: status, content: $('#Content').val() }, function (data) {
             if (data.Result == 1) {
                 alert("保存成功");
                 FeedBack.getFeedBackDetail();

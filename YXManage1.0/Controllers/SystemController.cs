@@ -31,6 +31,19 @@ namespace YXManage.Controllers
              return View();
          }
          #endregion
+         #region IndustryView
+         public ActionResult IndustryIndex()
+         {
+             return View();
+         }
+
+         public ActionResult IndustryDetail(string id)
+         {
+             ViewBag.IndustryID = id;
+
+             return View();
+         }
+         #endregion
         #endregion
 
         #region ajax
@@ -139,6 +152,69 @@ namespace YXManage.Controllers
         {
             bool flag = ExpressCompanyBusiness.DeleteExpressCompany(id);
             JsonDictionary.Add("Result", flag ? 1 : 0);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        #endregion
+        #region IndustryAjax
+        /// <summary>
+        /// 获取行业列表
+        /// </summary>
+        public JsonResult GetIndustrys(string keyWords)
+        {
+            var list = IndustryBusiness.GetIndustrys();
+            if (!string.IsNullOrEmpty(keyWords))
+            {
+                list = list.FindAll(m => m.Name.Contains(keyWords));
+            }
+            JsonDictionary.Add("Items", list);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        /// <summary>
+        /// 获取行业详情
+        /// </summary>
+        public JsonResult GetIndustryDetail(string id)
+        {
+            var item = IndustryBusiness.GetIndustryDetail(id);
+            JsonDictionary.Add("Item", item);
+            JsonDictionary.Add("Result", 1);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        /// <summary>
+        /// 保存行业
+        /// </summary>
+        public JsonResult SaveIndustry(string industry)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            Industry model = serializer.Deserialize<Industry>(industry);
+
+            bool flag = false;
+            if (string.IsNullOrEmpty(model.IndustryID))
+            {
+                model.CreateUserID = string.Empty;
+                flag = !string.IsNullOrEmpty(IndustryBusiness.InsertIndustry(model.Name, model.Description, CurrentUser.UserID, string.Empty)) ? true : false;
+            }
+            else
+            {
+                model.CreateUserID = string.Empty;
+                flag = IndustryBusiness.UpdateIndustry(model.IndustryID, model.Name, model.Description);
+            }
+            JsonDictionary.Add("Result", flag ? 1 : 0);
+
             return new JsonResult()
             {
                 Data = JsonDictionary,

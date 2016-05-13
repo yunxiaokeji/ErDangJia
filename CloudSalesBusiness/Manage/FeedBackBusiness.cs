@@ -99,9 +99,9 @@ namespace CloudSalesBusiness.Manage
         #endregion
 
         #region 改
-        public static bool UpdateFeedBackStatus(string id, int status)
+        public static bool UpdateFeedBackStatus(string id, int status,string content)
         {
-           return FeedBackDAL.BaseProvider.UpdateFeedBackStatus(id, status);
+           return FeedBackDAL.BaseProvider.UpdateFeedBackStatus(id, status,content);
         }
         #endregion
     }

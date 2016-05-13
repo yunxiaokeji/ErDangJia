@@ -53,9 +53,9 @@ define(function (require, exports, module) {
                 Description: $("#Description").val()
             };
 
-            Global.post("/Industry/SaveIndustry", { industry: JSON.stringify(industry) }, function (data) {
+            Global.post("/System/SaveIndustry", { industry: JSON.stringify(industry) }, function (data) {
                 if (data.Result == "1") {
-                    location.href = "/Industry/Index";
+                    location.href = "/System/IndustryIndex";
                 }
             });
         });
@@ -63,7 +63,7 @@ define(function (require, exports, module) {
 
     //详情
     Industry.getIndustryDetail = function () {
-        Global.post("/Industry/GetIndustryDetail", { id: Industry.Params.id }, function (data) {
+        Global.post("/System/GetIndustryDetail", { id: Industry.Params.id }, function (data) {
             if (data.Result == "1") {
                 var item = data.Item;
                 $("#Name").val(item.Name);
@@ -95,8 +95,8 @@ define(function (require, exports, module) {
     Industry.bindData = function () {
         $(".tr-header").nextAll().remove();
 
-        Global.post("/Industry/GetIndustrys", Industry.Params, function (data) {
-            doT.exec("template/Industry-list.html?3", function (templateFun) {
+        Global.post("/System/GetIndustrys", Industry.Params, function (data) {
+            doT.exec("template/system/Industry-list.html?3", function (templateFun) {
                 var innerText = templateFun(data.Items);
                 innerText = $(innerText);
                 $(".tr-header").after(innerText);

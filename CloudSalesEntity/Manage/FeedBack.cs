@@ -23,6 +23,7 @@ namespace CloudSalesEntity.Manage
 
         public string Remark { get; set; }
 
+        public string Content { get; set; }
         public DateTime CreateTime { get; set; }
 
         [Property("Lower")]

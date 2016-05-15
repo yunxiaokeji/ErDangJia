@@ -32,14 +32,17 @@
 
         ObjectJS.getDetail();
 
-        if (option == 3) {
-            $(".search-stages li").eq(2).click();
-        }
-        else if (option == 2) {
-            $(".search-stages li").eq(1).click();
-        }
-        else if (option == 4) {
-            $(".search-stages li").eq(3).click();
+        if (option !== 1) {
+            $(".search-stages li[data-id='" + option + "']").click();
+            //if (option == 3) {
+            //    $(".search-stages li").eq(2).click();
+            //}
+            //else if (option == 2) {
+            //    $(".search-stages li").eq(1).click();
+            //}
+            //else if (option == 4) {
+            //    $(".search-stages li").eq(3).click();
+            //}
         }
     }
 

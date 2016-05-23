@@ -20,19 +20,17 @@ define(function (require, exports, module) {
     //详情初始化
     ExpressCompany.detailInit = function (id) {
         ExpressCompany.detailEvent();
-
         if (id != '')
         {
-            $("#pageTitle").html("设置产品");
+            $('.header-title').html("修改快递公司");
             $("#saveExpressCompany").val("保存");
             ExpressCompany.Params.id = id;
-
             ExpressCompany.getExpressCompanyDetail();
         }
     }
     //绑定事件
     ExpressCompany.detailEvent = function () {
-
+        
         //验证插件
         VerifyObject = Verify.createVerify({
             element: ".verify",
@@ -40,23 +38,20 @@ define(function (require, exports, module) {
             verifyType: "data-type",
             regText: "data-text"
         });
-
         //保存
         $("#saveExpressCompany").click(function () {
-
             if (!VerifyObject.isPass()) {
                 return false;
             };
-
             var expressCompany = {
                 ExpressID: ExpressCompany.Params.id,
                 Name: $("#Name").val(),
+                AutoID: $("#AutoID").val(),
                 Website: $("#Website").val()
             };
-
-            Global.post("/ExpressCompany/SaveExpressCompany", { expressCompany: JSON.stringify(expressCompany) }, function (data) {
+            Global.post("/System/SaveExpressCompany", { expressCompany: JSON.stringify(expressCompany) }, function (data) {
                 if (data.Result == "1") {
-                    location.href = "/ExpressCompany/Index";
+                    location.href = "/System/ExpressIndex";
                 }
             });
         });
@@ -64,10 +59,11 @@ define(function (require, exports, module) {
 
     //详情
     ExpressCompany.getExpressCompanyDetail = function () {
-        Global.post("/ExpressCompany/GetExpressCompanyDetail", { id: ExpressCompany.Params.id }, function (data) {
+        Global.post("/System/GetExpressCompanyDetail", { id: ExpressCompany.Params.id }, function (data) {
             if (data.Result == "1") {
                 var item = data.Item;
                 $("#Name").val(item.Name);
+                $("#AutoID").val(item.AutoID);
                 $("#Website").val(item.Website);
 
             } else if (data.Result == "2") {
@@ -99,8 +95,8 @@ define(function (require, exports, module) {
     ExpressCompany.bindData = function () {
         $(".tr-header").nextAll().remove();
 
-        Global.post("/ExpressCompany/GetExpressCompanys", ExpressCompany.Params, function (data) {
-            doT.exec("template/expresscompany-list.html?3", function (templateFun) {
+        Global.post("/System/GetExpressCompanys", ExpressCompany.Params, function (data) {
+            doT.exec("template/system/expresscompany-list.html?3", function (templateFun) {
                 var innerText = templateFun(data.Items);
                 innerText = $(innerText);
                 $(".tr-header").after(innerText);
@@ -108,9 +104,9 @@ define(function (require, exports, module) {
                 $(".table-list a.ico-del").bind("click", function () {
                     if (confirm("确定删除?"))
                     {
-                        Global.post("/ExpressCompany/DeleteExpressCompany", { id: $(this).data("id") }, function (data) {
+                        Global.post("/System/DeleteExpressCompany", { id: $(this).data("id") }, function (data) {
                             if (data.Result == 1) {
-                                location.href = "/ExpressCompany/Index";
+                                location.href = "/System/ExpressIndex";
                             }
                             else
                             {

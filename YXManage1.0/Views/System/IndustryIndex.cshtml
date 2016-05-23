@@ -4,7 +4,7 @@
 
 @section scripts{
     <script type="text/javascript">
-        seajs.use(["scripts/industry"], function (Industry) {
+        seajs.use(["scripts/system/industry"], function (Industry) {
             Industry.init();
         });
     </script>
@@ -12,10 +12,12 @@
 
 <div class="header-box">
     <span class="header-title">行业列表</span>
-    <div class="right searth-module"> </div>
+     <a href="IndustryDetail" class="btn right">新建行业</a>
 </div>
 
 <div class="content-body">
+    <div class="right searth-module"> </div>
+    <div class="clear"></div>
     <table class="table-list">
         <tr class="tr-header">            
             <td class="tLeft">名称</td>

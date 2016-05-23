@@ -1,15 +1,21 @@
 ﻿@{
     ViewBag.Title = "意见反馈";
+    Layout = "/Views/Shared/_LayoutUserCenter.cshtml";
 }
-
+@section css{
+        <link href="/modules/css/myaccount/myaccount.css" rel="stylesheet" />
+        <link href="/modules/css/myaccount/cropbox.css" rel="stylesheet" />
+}
 @section scripts{
 <script src="/Scripts/jquery-1.11.1.js"></script>
 <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
-        seajs.use(["scripts/feedback"], function (feedback) {
+        var feedbacks;
+        seajs.use(["scripts/myaccount/myfeedback"], function (feedback) {
             feedback.init();
+            feedbacks = feedback;
         });
-
+        
         $(function () {
             var begin = {
                 elem: '#BeginTime',
@@ -38,11 +44,12 @@
         });
     </script>
 }
-
-<div class="header-box">
-    <span class="header-title">意见反馈</span>
+<div class="accountContent">
+<div class="accountHeader">
+    意见反馈
+    <a class="btn right" href="#">新建反馈</a>
 </div>
-<div class="search-header mTop20">
+@*<div class="search-header mTop20">
     <ul class="search-tab search-status">
         <li class="hover"  data-index="-1">所有</li>
         <li data-index="1">待解决</li>            
@@ -50,12 +57,10 @@
         <li data-index="3">驳回</li>
         <li data-index="4">删除</li>
     </ul>  
-</div>
+</div>*@
 
 <div class="content-body">
     <div class="search-body">
-        <div id="FeedTypes" class="left"></div>
-        @*<div id="FeedStatus" class="left mLeft20"></div>*@
 
         <div class="left mLeft20">
             <span class="width80">创建时间：</span><input type="text" id="BeginTime"  class="input"  />
@@ -71,13 +76,12 @@
         <tr class="tr-header">            
             <td class="tLeft">标题</td>
             <td class="tLeft">类型</td>
-            <td class="tLeft">状态</td>
-            <td class="tLeft">联系人</td>
-            <td class="tLeft">电话</td>
-            <td class="tLeft">创建时间</td>
-            <td class="tLeft" width="10%">操作</td>
+            <td class="tLeft">解答</td>
+            <td class="tLeft">创建时间</td>           
+            <td class="tLeft" width="10%">状态</td>
         </tr>
     </table>
 
      <div id="pager" class="mTop20"></div>
+</div>
 </div>

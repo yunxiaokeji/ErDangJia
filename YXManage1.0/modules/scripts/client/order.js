@@ -120,8 +120,9 @@ define(function (require, exports, module) {
     Order.bindData = function () {
         $(".tr-header").nextAll().remove();
 
-        Global.post("/Order/GetClientOrders", Order.Params, function (data) {
-            doT.exec("template/agent-orders.html?3", function (templateFun) {
+        // Global.post("/Order/GetClientOrders", Order.Params, function (data) {
+        Global.post("/Client/GetAllClientOrders", Order.Params, function (data) {
+            doT.exec("template/client/agent-orders.html?3", function (templateFun) {
                 var innerText = templateFun(data.Items);
                 innerText = $(innerText);
                 $(".tr-header").after(innerText);

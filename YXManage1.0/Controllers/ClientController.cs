@@ -36,9 +36,32 @@ namespace YXManage.Controllers
             ViewBag.Industry = IndustryBusiness.GetIndustrys();
             return View();
         }
+        public ActionResult OrderIndex()
+        {
+            return View();
+        }
 
+       
         #region Ajax
+        /// <summary>
+        /// 获取客户订单列表
+        /// </summary>
+        public JsonResult GetAllClientOrders(int status, int type, string beginDate, string endDate, int pageSize, int pageIndex)
+        {
+            int pageCount = 0;
+            int totalCount = 0;
 
+            List<ClientOrder> list = ClientOrderBusiness.GetClientOrders(status, type, beginDate, endDate, string.Empty, string.Empty, pageSize, pageIndex, ref totalCount, ref pageCount);
+            JsonDictionary.Add("Items", list);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
+
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
         /// <summary>
         /// 获取客户端列表
         /// </summary>

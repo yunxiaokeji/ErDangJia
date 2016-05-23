@@ -42,6 +42,11 @@ namespace YXERP.Controllers
         {
             return View();
         }
+        public ActionResult MyFeedBack()
+        {
+            return View();
+        }
+
         #endregion
 
         #region ajax
@@ -264,6 +269,35 @@ namespace YXERP.Controllers
         }
         #endregion
 
+        #region 我的反馈
+        public JsonResult GetFeedBacks(int pageIndex, int type, int status, string keyWords, string beginDate, string endDate)
+        {
+            string userID = CurrentUser.UserID;
+            int totalCount = 0, pageCount = 0;
+            var list = CloudSalesBusiness.Manage.FeedBackBusiness.GetFeedBacks(keyWords, beginDate, endDate, type, status,userID, PageSize, pageIndex, out totalCount, out pageCount);
+            JsonDictionary.Add("Items", list);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetFeedBackDetail(string id)
+        {
+            var item = CloudSalesBusiness.Manage.FeedBackBusiness.GetFeedBackDetail(id);
+            JsonDictionary.Add("Item", item);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        #endregion
         #endregion
 
     }

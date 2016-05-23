@@ -525,6 +525,7 @@
     <Content Include="modules\images\icon-close-filter.png" />
     <Content Include="modules\scripts\myaccount\cropbox.js" />
     <Content Include="modules\scripts\myaccount\myaccount.js" />
+    <Content Include="modules\scripts\myaccount\myfeedback.js" />
     <Content Include="modules\scripts\myaccount\setavatar.js" />
     <Content Include="modules\scripts\myaccount\setpassword.js" />
     <Content Include="modules\scripts\myaccount\account.js" />
@@ -589,6 +590,8 @@
     <Content Include="modules\template\finance\accountbills.html" />
     <Content Include="modules\template\finance\billingpays.html" />
     <Content Include="modules\template\finance\orderpay-detail.html" />
+    <Content Include="modules\template\myaccount\myfeedback-detail.html" />
+    <Content Include="modules\template\myaccount\myfeedback-list.html" />
     <Content Include="modules\template\myaccount\setloginname.html" />
     <Content Include="modules\template\sales\choose-ordertype.html" />
     <Content Include="modules\template\sales\order-detail.html" />
@@ -736,6 +739,7 @@
     <Content Include="Views\Default\Index.cshtml" />
     <Content Include="Views\Default\Home.cshtml" />
     <Content Include="Views\Default\LeftMenu.cshtml" />
+    <Content Include="Views\MyAccount\MyFeedBack.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

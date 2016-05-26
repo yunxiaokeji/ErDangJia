@@ -50,10 +50,12 @@
     <Compile Include="Custom\ActivityDAL.cs" />
     <Compile Include="Custom\CustomDAL.cs" />
     <Compile Include="Finance\FinanceDAL.cs" />
+    <Compile Include="Manage\ClientOrderAccountDAL.cs" />
     <Compile Include="Manage\ClientOrderDAL.cs" />
     <Compile Include="Manage\FeedBackDAL.cs" />
     <Compile Include="Manage\ModulesProductDAL.cs" />
     <Compile Include="Manage\ExpressCompanyDAL.cs" />
+    <Compile Include="Manage\SystemDAL.cs" />
     <Compile Include="Report\CustomerRPTDAL.cs" />
     <Compile Include="Report\SalesRPTDAL.cs" />
     <Compile Include="Sales\OpportunityDAL.cs" />

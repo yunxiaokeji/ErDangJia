@@ -81,7 +81,6 @@ define(function (require, exports, module) {
                 FeedBack.Params.endDate = $("#EndTime").val();
                 FeedBack.bindData();
             });
-
         });
 
         //时间段查询
@@ -93,7 +92,6 @@ define(function (require, exports, module) {
                 FeedBack.bindData();
             }
         });
-
     };
 
     //绑定数据列表
@@ -121,13 +119,11 @@ define(function (require, exports, module) {
                     FeedBack.bindData();
                 }
             });
-
         });
     }
 
     FeedBack.detailInit = function (id) {
         FeedBack.Params.id = id;
-
         FeedBack.detailBindEvent();
         FeedBack.getFeedBackDetail();
     }
@@ -136,11 +132,9 @@ define(function (require, exports, module) {
         $("#btn-finish").click(function () {
             FeedBack.updateFeedBackStatus(2);
         });
-
         $("#btn-cancel").click(function () {
             FeedBack.updateFeedBackStatus(3);
         });
-
         $("#btn-delete").click(function () {
             FeedBack.updateFeedBackStatus(9);
         });
@@ -151,7 +145,6 @@ define(function (require, exports, module) {
         Global.post("/FeedBack/GetFeedBackDetail", { id: FeedBack.Params.id }, function (data) {
             if (data.Item) {
                 var item = data.Item;
-
                 $("#Title").html(item.Title);
                 var typeName = "问题";
                 if (item.Type == 2)
@@ -166,13 +159,15 @@ define(function (require, exports, module) {
                     $('#btn-finish').hide();
                     $('#btn-cancel').hide();
                     $('#btn-delete').hide();
-                }
-                else if (item.Status == 3)
+                } else if (item.Status == 3) {
                     statusName = "驳回";
-                else if (item.Status == 9)
+                    $('#btn-finish').hide();
+                    $('#btn-cancel').hide();
+                    $('#btn-delete').hide();
+                } else if (item.Status == 9) {
                     statusName = "删除";
+                }
                 $("#Status").html(statusName);
-
                 $("#ContactName").html(item.ContactName);
                 $("#MobilePhone").html(item.MobilePhone);
                 $("#Remark").html(item.Remark);
@@ -188,8 +183,7 @@ define(function (require, exports, module) {
             if (data.Result == 1) {
                 alert("保存成功");
                 FeedBack.getFeedBackDetail();
-            }
-            else {
+            } else {
                 alert("保存失败");
             }
         });

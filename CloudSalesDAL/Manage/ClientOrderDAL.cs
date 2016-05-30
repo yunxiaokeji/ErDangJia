@@ -66,16 +66,17 @@ namespace CloudSalesDAL.Manage
                                      new SqlParameter("@OrderID",orderID)
                                    };
 
-            string cmdText = "select * from ClientOrder where orderID=@orderID and status<>9";
+            string cmdText = "select a.*,b.CompanyName from ClientOrder a left join Clients b on a.ClientID=b.ClientID where orderID=@OrderID and a.status<>9";
 
             return GetDataTable(cmdText, paras, CommandType.Text);
         }
 
-        public DataTable GetClientOrders(int status,int type, string beginDate, string endDate, string agentID, string clientID, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
+        public DataTable GetClientOrders(string keyWords, int status, int type, string beginDate, string endDate, string agentID, string clientID, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
         {
             SqlParameter[] paras = { 
                                     new SqlParameter("@totalCount",SqlDbType.Int),
                                     new SqlParameter("@pageCount",SqlDbType.Int),
+                                    new SqlParameter("@KeyWords",keyWords),
                                      new SqlParameter("@Status",status),
                                      new SqlParameter("@Type",type),
                                      new SqlParameter("@BeginDate",beginDate),
@@ -123,6 +124,16 @@ namespace CloudSalesDAL.Manage
 
             string cmdText = "update ClientOrder set RealAmount=@Amount  where orderID=@orderID";
 
+            return ExecuteNonQuery(cmdText, paras, CommandType.Text) > 0;
+        }
+        public bool UpdateClientOrderPayStatus(string orderID, int payStatus)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@OrderID",orderID),
+                                     new SqlParameter("@PayStatus",payStatus),
+                                   };
+
+            string cmdText = "update ClientOrder set PayStatus=@PayStatus  where orderID=@OrderID";
             return ExecuteNonQuery(cmdText, paras, CommandType.Text) > 0;
         }
         #endregion

@@ -76,20 +76,47 @@ namespace CloudSalesBusiness.Manage
         /// </summary>
         public static ClientOrder GetClientOrderInfo(string orderID)
         {
+            //DataTable dt = ClientOrderDAL.BaseProvider.GetClientOrderInfo(orderID);
+            //ClientOrder model = new ClientOrder();
+            //if (dt.Rows.Count == 1)
+            //{
+            //    DataRow row = dt.Rows[0];
+            //    model.FillData(row);
+            //}
             DataTable dt = ClientOrderDAL.BaseProvider.GetClientOrderInfo(orderID);
             ClientOrder model = new ClientOrder();
             if (dt.Rows.Count == 1)
             {
                 DataRow row = dt.Rows[0];
                 model.FillData(row);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
+                if (string.IsNullOrEmpty(model.CreateUser.Name))
+                {
+                    M_Users mUser = M_UsersBusiness.GetUserDetail(model.CreateUserID);
+                    if (mUser != null && !string.IsNullOrEmpty(mUser.Name))
+                    {
+                        model.CreateUser.Name = mUser.Name;
+                    }
+                }
+                if (!string.IsNullOrEmpty(model.CheckUserID))
+                {
+                    model.CheckUser = OrganizationBusiness.GetUserByUserID(model.CheckUserID, model.AgentID);
+                    if (string.IsNullOrEmpty(model.CheckUser.Name))
+                    {
+                        M_Users mUser = M_UsersBusiness.GetUserDetail(model.CheckUserID);
+                        if (mUser != null && !string.IsNullOrEmpty(mUser.Name))
+                        {
+                            model.CheckUser.Name = mUser.Name;
+                        }
+                    }
+                }
             }
-
             return model;
         }
 
-        public static List<ClientOrder> GetClientOrders(int status, int type, string beginDate, string endDate, string agentID, string clientID, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
+        public static List<ClientOrder> GetClientOrders(string keyWords, int status, int type, string beginDate, string endDate, string agentID, string clientID, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
         {
-            DataTable dt = ClientOrderDAL.BaseProvider.GetClientOrders(status,type, beginDate, endDate, agentID, clientID, pageSize,pageIndex,ref totalCount,ref pageCount);
+            DataTable dt = ClientOrderDAL.BaseProvider.GetClientOrders(keyWords,status, type, beginDate, endDate, agentID, clientID, pageSize, pageIndex, ref totalCount, ref pageCount);
 
             List<ClientOrder> list = new List<ClientOrder>();
             if (dt.Rows.Count > 0)
@@ -99,7 +126,28 @@ namespace CloudSalesBusiness.Manage
                     ClientOrder model = new ClientOrder();
 
                     model.FillData(row);
+                   // model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
                     model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
+                    if (string.IsNullOrEmpty(model.CreateUser.Name))
+                    {
+                        M_Users mUser = M_UsersBusiness.GetUserDetail(model.CreateUserID);
+                        if (mUser != null && !string.IsNullOrEmpty(mUser.Name))
+                        {
+                            model.CreateUser.Name = mUser.Name;
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(model.CheckUserID))
+                    {
+                        model.CheckUser = OrganizationBusiness.GetUserByUserID(model.CheckUserID, model.AgentID);
+                        if (string.IsNullOrEmpty(model.CheckUser.Name))
+                        {
+                            M_Users mUser = M_UsersBusiness.GetUserDetail(model.CheckUserID);
+                            if (mUser != null && !string.IsNullOrEmpty(mUser.Name))
+                            {
+                                model.CheckUser.Name = mUser.Name;
+                            }
+                        }
+                    }
                     list.Add(model);
                 }
             }
@@ -126,6 +174,10 @@ namespace CloudSalesBusiness.Manage
         /// <returns></returns>
         public static bool UpdateOrderAmount(string orderID, decimal amount) {
             return ClientOrderDAL.BaseProvider.UpdateOrderAmount(orderID, amount);
+        }
+        public static bool PayClientOrder(string orderID, int payStatus)
+        {
+            return ClientOrderDAL.BaseProvider.UpdateClientOrderPayStatus(orderID, payStatus);
         }
         #endregion
     }

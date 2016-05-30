@@ -22,6 +22,7 @@ define(function (require, exports, module) {
         _self.getList();
         _self.bindEvent();
     }
+
     //绑定列表页事件
     ObjectJS.bindEvent = function () {
         var _self = this;
@@ -227,6 +228,7 @@ define(function (require, exports, module) {
             });
         });
     }
+
     //更改品牌状态
     ObjectJS.editStatus = function (obj, id, status, callback) {
         var _self = this;

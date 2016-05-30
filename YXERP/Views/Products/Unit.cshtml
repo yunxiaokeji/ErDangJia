@@ -3,7 +3,7 @@
 }
 
 @section css{
-    <link rel="stylesheet" href="/modules/css/stock/products.css" />
+    <link rel="stylesheet" href="/modules/css/products.css" />
 }
 @section scripts{
     <script type="text/javascript">
@@ -12,9 +12,9 @@
         });
     </script>
 }
-<div class="header-box">
+@*<div class="header-box">
     <span class="header-title left">单位设置</span>
-</div>
+</div>*@
 <div class="content-body mTop20">
     <ul class="unit-list">
         @foreach (var item in (List<CloudSalesEntity.ProductUnit>)ViewBag.Items)
@@ -23,7 +23,10 @@
                 <span data-id="@(item.UnitID)" class="ico-delete @(ExpandClass.IsLimits(HttpContext.Current,"103010102"))"></span></li>
         }
        
-        <li id="addUnit"><a href="javascript:void(0)" class="ico-add left mTop4 @(ExpandClass.IsLimits(HttpContext.Current,"103010201"))">添加</a></li>
+        <li id="addUnit" class="hand">
+            <span class="iconfont ico-add left @(ExpandClass.IsLimits(HttpContext.Current,"103010201"))"></span>
+            <span class="left mLeft5">添加</span>
+        </li>
     </ul>
     
 </div>

@@ -256,7 +256,7 @@
     <Content Include="modules\css\myaccount\cropbox.css" />
     <Content Include="modules\css\shoppingcart\confirmcart.css" />
     <Content Include="modules\css\base.css" />
-    <Content Include="modules\css\stock\products.css" />
+    <Content Include="modules\css\products.css" />
     <Content Include="modules\css\system\system.css" />
     <Content Include="modules\images\auction\bg-pay-order-active.png" />
     <Content Include="modules\images\auction\bg-pay-order.png" />

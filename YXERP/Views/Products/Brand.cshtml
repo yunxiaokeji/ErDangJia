@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "品牌设置";
 }
-<link href="/modules/css/stock/products.css" rel="stylesheet" />
+<link href="/modules/css/products.css" rel="stylesheet" />
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/products/brand"], function (brand) {
@@ -10,20 +10,20 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">品牌设置</span>
+    <span class="header-title left"></span>
     <div  class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103010101"))" id="addBrand">新建品牌</div>
     
 </div>
-<div class="content-body mTop20">
-    <div class="search-body">
-        <div class="right searth-module"> </div> 
-    </div>
+<div class="search-header">
+    <div class="right searth-module"> </div> 
+</div>
+<div class="content-body">
     <table class="table-list">
         <tr class="tr-header" id="brand-items">
-            <td class="width50">商标</td>
+            <td class="width50 tLeft">商标</td>
             <td class="width200 tLeft">品牌名称</td>
-            <td class="width200 tLeft">其他名称</td>
             <td class="width200 tLeft">品牌风格</td>
+            <td class="width200">所在地</td>
             <td class="width100">启用/禁用</td>
             <td class="tLeft">备注</td>
             <td class="width150">添加时间</td>

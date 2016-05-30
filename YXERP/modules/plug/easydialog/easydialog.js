@@ -649,9 +649,9 @@ define(function (require, exports, module) {
                     overlayer = doc.getElementById(options.guid + 'overlay');
 
 
-                event.bind(overlayer, 'click', function () {
-                    self.close(options.guid);
-                });
+                //event.bind(overlayer, 'click', function () {
+                //    self.close(options.guid);
+                //});
 
                 // 绑定确定按钮的回调函数
                 if (dialogYesBtn) {

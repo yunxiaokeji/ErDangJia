@@ -1,26 +1,15 @@
-﻿/*创建弹出层*/
-.create-model { min-width:300px;  }
-.create-model li{ margin-top:10px; overflow:auto; }
-.create-model li input[type="text"]{ width:180px; }
-.create-model li textarea{ width:300px; }
-.create-model li label{ line-height:20px; height:20px; cursor:pointer; }
-.create-model li label input{ line-height:20px; height:20px; }
-.create-model span{ display:inline-block; vertical-align:top;}
-
-/*品牌*/
-.create-brand { width:500px; }
-.list-item img{  height:18px; vertical-align:middle;}
-.brand-img { position:absolute; top:60px; right:20px; height:100px; width:100px; }
+﻿
 
 /*单位*/
 .unit-list li{ height:30px; line-height:30px; width:80px;  float:left; margin:10px 10px;  text-align:center; position:relative;  }
 .unit-list li input{ height:28px; line-height:30px; width:50px; padding:0 15px; text-align:center; border:solid 1px #ccc; cursor:pointer; }
-.unit-list li span{ position:absolute; right:-9px; top:-9px; display:none; background-color:white; }
-.unit-list li:hover span{ display:inline-block; }
+.unit-list li .ico-delete{ position:absolute; right:-9px; top:-9px; display:none; background-color:white; }
+.unit-list li:hover .ico-delete{ display:inline-block; }
 .unit-list .unit-item:hover input{ border:solid 1px #318ae4; }
 
 /*属性值*/
-.attr-value-box { border:solid 1px #318ae4; width:300px; overflow-x:hidden; overflow-y:auto; background-color:#fff; position:fixed; top:49px; bottom:3px; right:-302px; z-index:666; }
+.attr-value-box { border:solid 1px #ccc; box-shadow:0 0 5px #ccc; width:300px; overflow-x:hidden; overflow-y:auto; background-color:#fff; 
+                  position:fixed; top:0px; bottom:0px; right:-302px; z-index:666; }
 .attr-value-box .title { margin:20px 20px 0 20px; border-bottom:solid 1px #318ae4; padding-bottom:5px; }
 .attr-value-box .header-title {display:block; margin-bottom:10px;}
 .attr-value-box .add-value { position:relative; height:30px;  width:248px;margin-bottom:10px;}

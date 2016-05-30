@@ -756,7 +756,13 @@ namespace CloudSalesBusiness
         public bool UpdateAttrValueStatus(string valueid, EnumStatus status, string operateIP, string operateID)
         {
             var dal = new ProductsDAL();
-            return dal.UpdateAttrValueStatus(valueid, (int)status);
+            var bl = dal.UpdateAttrValueStatus(valueid, (int)status);
+            if (bl && status == EnumStatus.Delete)
+            {
+                var model = GetProductAttrByID(attrid, clientid);
+                var value = model.AttrValues.Where(m => m.ValueID == valueID).FirstOrDefault();
+            }
+            return bl;
         }
 
         public bool UpdateCategory(string categoryid, string categoryName, int status, List<string> attrlist, List<string> saleattr, string description, string operateid)

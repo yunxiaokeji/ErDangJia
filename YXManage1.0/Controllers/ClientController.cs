@@ -141,7 +141,7 @@ namespace YXManage.Controllers
             if (string.IsNullOrEmpty(model.ClientID))
 
             {
-                string clientid = ClientBusiness.InsertClient(model, loginName, loginName, CurrentUser.UserID, out result);
+                string clientid = ClientBusiness.InsertClient(model, loginName, loginName, CurrentUser.UserID, out result,"","","",2);
                 JsonDictionary.Add("Result", result);
                 JsonDictionary.Add("ClientID", clientid);
             }

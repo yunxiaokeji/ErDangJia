@@ -46,10 +46,8 @@ define(function (require, exports, module) {
         clientID: ""
     };
     //客户详情初始化
-    Clients.detailInit = function (id) {
-        var _self = this;
-        Clients.Params.clientID = id;
-        _self.clientsChart = ec.init(document.getElementById('clientdetailVitalityRPT'));
+    Clients.detailInit = function (id) { 
+        Clients.Params.clientID = id;       
         Clients.detailEvent();
         //行业为空
         if ($("#industry option").length == 1) $("#industry").change();
@@ -123,6 +121,7 @@ define(function (require, exports, module) {
             } else if (index == 2) {
                 $("#reportBeginTime").val(new Date().setMonth(new Date().getMonth() - 3).toString().toDate("yyyy-MM-dd"));
                 $("#reportEndTime").val(Date.now().toString().toDate("yyyy-MM-dd"));
+                Clients.clientsChart = ec.init(document.getElementById('clientdetailVitalityRPT'));
                 $("#btnSearch").click();
                 $('#addNewOrder').hide();
                 $('#addAuthorize').hide();

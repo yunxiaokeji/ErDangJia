@@ -53,6 +53,7 @@ namespace YXManage.Controllers
             if (model != null)
             {
                 CurrentUser = model;
+                Session["Manager"] = model;     
                 bl = true;
             }
             JsonDictionary.Add("result", bl);

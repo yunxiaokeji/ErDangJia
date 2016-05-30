@@ -35,7 +35,7 @@
                 </li>
              @foreach (CloudSalesEntity.Menu model in ExpandClass.GetChildMenuByCode(HttpContext.Current, ExpandClass.CLIENT_TOP_CODE))
             {                   
-                <li class="@(model.MenuCode.ToUpper()==(controllerMenu!=null?controllerMenu.PCode.ToUpper():"") ? "select left" : "left")"  BindController="@(model.Controller)"  data-code="@(model.MenuCode)">            
+                <li class="@(model.MenuCode.ToUpper()==(controllerMenu!=null?controllerMenu.PCode.ToUpper():"") ? "select left" : "left")"  BindController="@(model.Controller.ToLower())"  data-code="@(model.MenuCode)">            
                     <a  href="/@(model.Controller)/@(model.View)">
                         <span class="name">@(model.Name)</span>
                         <span class="cursor"></span>
@@ -94,14 +94,14 @@
             {
                 foreach (CloudSalesEntity.Menu model in ExpandClass.GetChildMenuByCode(HttpContext.Current, controllerMenu.PCode))
                 { 
-                    <div class="controller @(model.Controller.ToLower()==controller ? "select" : "")" data-code="@(model.MenuCode)">
+                    <div class="controller @(model.Controller.ToLower()==controller ? "select" : "")" data-code="@(model.MenuCode)" BindController="@(model.Controller.ToLower())">
                         <div class="controller-box">
                             <div class="controller-name">
                                 <span class="open left @(model.Controller.ToLower()==controller ? "rotate" : "")"></span>
                                 <span class="name left">@(model.Name)</span>
                             </div>
                         </div>
-                        <ul class="action-box @(model.Controller.ToLower()==controller ? "" : "hide")">
+                        <ul class="action-box">   @*@(model.Controller.ToLower()==controller ? "" : "hide")*@
                             @foreach (CloudSalesEntity.Menu view in ExpandClass.GetChildMenuByCode(HttpContext.Current, model.MenuCode))
                             {
                                 <li class="action @(view.View.ToLower()==action ? "select" : "")" BindAction="@(model.Controller.ToLower())" data-code="@(view.MenuCode)">

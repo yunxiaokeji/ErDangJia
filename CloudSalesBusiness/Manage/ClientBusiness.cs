@@ -9,6 +9,7 @@ using CloudSalesDAL.Manage;
 using CloudSalesTool;
 using System.IO;
 using System.Web;
+using CloudSalesEntity.Manage.Report;
 
 
 namespace CloudSalesBusiness.Manage
@@ -136,6 +137,43 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
 
             return list;
         }
+        /// <summary>
+        /// 获取工厂活跃度报表
+        /// </summary>
+        public static List<ClientVitalityEntity> GetClientsVitalityReport(int type, string begintime, string endtime, string clientId)
+        {
+            List<ClientVitalityEntity> list = new List<ClientVitalityEntity>();
+            DataSet ds = ClientDAL.BaseProvider.GetClientsVitalityReport(type, begintime, endtime, clientId);
+            string clientName = "当前";
+            if (!string.IsNullOrEmpty(clientId))
+            {
+                Clients client = GetClientDetail(clientId);
+                if (client != null && !string.IsNullOrEmpty(client.CompanyName))
+                {
+                    clientName = client.CompanyName;
+                }
+            }
+            List<ClientVitalityItem> sysReport = new List<ClientVitalityItem>();
+            List<ClientVitalityItem> clientReport = new List<ClientVitalityItem>();
+            foreach (DataRow dr in ds.Tables["SystemReport"].Rows)
+            {
+                sysReport.Add(new ClientVitalityItem() { Name = dr["ReportDate"].ToString(), Value = Convert.ToDecimal(dr["Vitality"]) });
+                if (ds.Tables["ClientReport"].Rows.Count > 0)
+                {
+                    DataRow[] drs = ds.Tables["ClientReport"].Select("ReportDate='" + dr["ReportDate"].ToString() + "'");
+                    decimal clientValue = drs.Count() > 0 ? Convert.ToDecimal(drs.FirstOrDefault()["Vitality"]) : (decimal)0.0000;
+                    clientReport.Add(new ClientVitalityItem() { Name = dr["ReportDate"].ToString(), Value = clientValue });
+                }
+                else { clientReport.Add(new ClientVitalityItem() { Name = dr["ReportDate"].ToString(), Value = (decimal)0.0000 }); }
+
+            }
+            list.Add(new ClientVitalityEntity() { Name = "系统均值", Items = sysReport });
+            list.Add(new ClientVitalityEntity() { Name = clientName, Items = clientReport });
+
+            return list;
+        }
+
+
         #endregion
 
         #region 添加
@@ -161,12 +199,12 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
         /// <param name="loginPwd">密码</param>
         /// <param name="userid">操作人</param>
         /// <param name="result">0：失败 1：成功 2：账号已存在 3：模块未选择</param>
-        public static string InsertClient(Clients model, string bindMobilePhone, string loginPwd, string userid, out int result, string email = "", string mduserid = "", string mdprojectid = "")
+        public static string InsertClient(Clients model, string bindMobilePhone, string loginPwd, string userid, out int result, string email = "", string mduserid = "", string mdprojectid = "",int type=1)
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, bindMobilePhone);
 
             string clientid = ClientDAL.BaseProvider.InsertClient(model.CompanyName, model.ContactName, model.MobilePhone, model.Industry, model.CityCode,
-                                                             model.Address, model.Description, bindMobilePhone, loginPwd, email, mduserid, mdprojectid, userid, out result);
+                                                             model.Address, model.Description, bindMobilePhone, loginPwd, email, mduserid, mdprojectid, userid, out result,type);
 
             return clientid;
         }

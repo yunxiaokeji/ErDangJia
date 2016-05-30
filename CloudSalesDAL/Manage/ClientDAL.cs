@@ -20,12 +20,22 @@ namespace CloudSalesDAL.Manage
                                    };
             return GetDataTable("select * from Clients where ClientID=@ClientID", paras, CommandType.Text);
         }
+        public DataSet GetClientsVitalityReport(int type, string begintime, string endtime, string clientId)
+        {
+            SqlParameter[] paras = { 
+                                    new SqlParameter("@DateType",type), 
+                                    new SqlParameter("@BeginTime",begintime),
+                                    new SqlParameter("@EndTime",endtime),
+                                    new SqlParameter("@ClientID",clientId)
+                                   };
+            return GetDataSet("R_GetClientsActiveReprot", paras, CommandType.StoredProcedure, "ClientReport|SystemReport");
+        }
         #endregion
 
         #region 添加
 
         public string InsertClient(string companyName, string contactName, string mobilePhone, string industry, string cityCode, string address,
-                                   string description, string bindMobilePhone, string loginPwd, string email, string mduserid, string mdprojectid, string userid, out int result)
+                                   string description, string bindMobilePhone, string loginPwd, string email, string mduserid, string mdprojectid, string userid, out int result,int type=1)
         {
             string clientid = Guid.NewGuid().ToString();
             result = 0;
@@ -44,7 +54,8 @@ namespace CloudSalesDAL.Manage
                                        new SqlParameter("@Email",email),
                                        new SqlParameter("@MDUserID",mduserid),
                                        new SqlParameter("@MDprojectID",mdprojectid),
-                                       new SqlParameter("@CreateUserID",userid)
+                                       new SqlParameter("@CreateUserID",userid),
+                                       new SqlParameter("@Type",type)
                                    };
             parms[0].Direction = ParameterDirection.Output;
 

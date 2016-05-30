@@ -40,6 +40,26 @@ namespace CloudSalesEntity.Manage
         public Users CreateUser { get; set; }
 
         public DateTime CreateTime { get; set; }
+         
+        public string ClientCode { get; set; }
+
+        public string CompanyName { get; set; }
+
+        public decimal PayFee { get; set; }
+
+        public decimal RefundFee { get; set; }
+
+        public int PayStatus { get; set; }
+
+        public int SourceType { get; set; }
+
+        public string CheckUserID { get; set; }
+
+        public DateTime CheckTime { get; set; }
+
+        public Users CheckUser { get; set; }      
+
+
         public List<ClientOrderDetail> Details { get; set; }
         /// <summary>
         /// 填充数据
@@ -49,5 +69,8 @@ namespace CloudSalesEntity.Manage
         {
             dr.FillData(this);
         }
+
+
+
     }
 }

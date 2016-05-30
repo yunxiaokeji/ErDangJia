@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using CloudSalesBusiness;
 using System.Web.Script.Serialization;
 using CloudSalesEntity;
+using CloudSalesBusiness.Manage;
 namespace YXManage.Controllers
 {
     [YXManage.Common.UserAuthorize]
@@ -24,6 +25,17 @@ namespace YXManage.Controllers
         {
             var list = AgentsBusiness.GetAgentActionReport(keyword, startDate, endDate);
             JsonDictionary.Add("Items", list);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public JsonResult GetClientVitalityReport(int dateType, string beginTime, string endTime, string clientId)
+        {
+            var list = ClientBusiness.GetClientsVitalityReport(dateType, beginTime, endTime, clientId);
+            JsonDictionary.Add("items", list);
 
             return new JsonResult()
             {

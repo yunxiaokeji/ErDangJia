@@ -15,6 +15,7 @@
 *└──────────────────────────────────┘
 */
 using System;
+using System.Collections.Generic;
 namespace CloudSalesEntity.Manage
 {
 	/// <summary>
@@ -41,6 +42,7 @@ namespace CloudSalesEntity.Manage
 		private string _description="";
 		private DateTime? _createtime= DateTime.Now;
         private string _createuserid;
+        public List<Menu> Menus { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
@@ -163,6 +165,16 @@ namespace CloudSalesEntity.Manage
 			set{ _createuserid=value;}
 			get{return _createuserid;}
 		}
+        public string RoleID
+        {
+            set;
+            get;
+        }
+        public M_Role Role
+        {
+            set;
+            get;
+        }
 		#endregion Model
 
         /// <summary>
@@ -173,6 +185,7 @@ namespace CloudSalesEntity.Manage
         {
             dr.FillData(this);
         }
+        
 
 	}
 }

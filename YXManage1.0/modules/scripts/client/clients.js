@@ -22,7 +22,8 @@ define(function (require, exports, module) {
         beginDate: '',
         endDate: '',
         clientID: '',
-        agentID:'',
+        agentID: '',
+        orderBy:'a.CreateTime',
         keyWords: ''
     };
 
@@ -546,11 +547,18 @@ define(function (require, exports, module) {
                 innerText = $(innerText);
                 $("#clientOrders").after(innerText);
 
+                $("#tb-clientOrders a.alipayOrder").bind("click", function () {
+                    if (confirm("确定标记已支付吗?")) {
+                        Global.post("/Client/PayClientOrder", { id: $(this).data("id") }, function (data) {
+                            Clients.validateResult(data);
+                        });
+                    }
+                });
                 $("#tb-clientOrders a.deleteOrder").bind("click", function () {
                     if (confirm("确定删除?")) {
                         Global.post("/Client/CloseClientOrder", { id: $(this).data("id") }, function (data) {
                             if (data.Result == 1) {
-                                Clients.getClientOrders();
+                                Clients.validateResult(data);
                             }
                             else {
                                 alert("关闭失败");
@@ -572,7 +580,7 @@ define(function (require, exports, module) {
    
                                 Global.post("/Client/UpdateOrderAmount", { id: id, amount: $("#txt-orderAmount").val() }, function (data) {
                                     if (data.Result == 1) {
-                                        Clients.getClientOrders();
+                                        Clients.validateResult(data);
                                     }else {
                                         alert("修改失败");
                                     }
@@ -588,7 +596,7 @@ define(function (require, exports, module) {
                     if (confirm("审核通过?")) {
                         Global.post("/Client/PayOrderAndAuthorizeClient", { id: $(this).data("id"), agentID: Clients.Params.agentID }, function (data) {
                             if (data.Result == 1) {
-                                Clients.getClientOrders();
+                                Clients.validateResult(data);
                             }else {
                                 alert("审核失败");
                             }
@@ -630,8 +638,33 @@ define(function (require, exports, module) {
                 Clients.bindData();
             });
         });
+        $(".td-span").click(function () {
+            var _this = $(this);
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    $(".td-span").find(".asc").removeClass("hover");
+                    $(".td-span").find(".desc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    Clients.Params.orderBy = _this.data("column") + " desc ";
+                } else {
+                    $(".td-span").find(".desc").removeClass("hover");
+                    $(".td-span").find(".asc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    Clients.Params.orderBy = _this.data("column") + " asc ";
+                }
+            } else { 
+                $(".td-span").removeClass("hover");
+                $(".td-span").find(".desc").removeClass("hover");
+                $(".td-span").find(".asc").removeClass("hover");
+                _this.addClass("hover");
+                _this.find(".desc").addClass("hover");
+                Clients.Params.orderBy = _this.data("column") + " desc ";
+            }
+            Clients.Params.pageIndex = 1;
+            Clients.bindData();
+        });
     };
-
+  
     //绑定数据
     Clients.bindData = function () {
         var _self = this;
@@ -672,5 +705,16 @@ define(function (require, exports, module) {
             });
         });
     }
+    Clients.validateResult = function (data) {
+        if (data.Result == 1) {
+            Clients.getClientOrders();
+        } else if (data.Result == 1001) {
+            alert("订单已被处理,操作失败,请刷新页面查看.");
+        } else if (data.Result == 1002) {
+            alert("订单已被删除,操作失败,请刷新页面查看.");
+        } else {
+            alert("操作失败");
+        }
+    };
     module.exports = Clients;
 });

@@ -78,7 +78,38 @@ namespace CloudSalesBusiness
                 _clientMenus = value;
             }
         }
+        private static List<Menu> _manageMenus;
+        /// <summary>
+        /// 后台端菜单
+        /// </summary>
+        public static List<Menu> ManageMenus
+        {
+            get
+            {
+                if (_manageMenus == null)
+                {
+                    _manageMenus = new List<Menu>();
+                    DataTable dt = new CommonDAL().GetManageMenus();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        Menu model = new Menu();
+                        model.FillData(dr);
+                        _manageMenus.Add(model);
+                    }
 
+                    foreach (var menu in _manageMenus)
+                    {
+                        menu.ChildMenus = _manageMenus.Where(m => m.PCode == menu.MenuCode).ToList();
+                    }
+
+                }
+                return _manageMenus;
+            }
+            set
+            {
+                _manageMenus = value;
+            }
+        }
         #endregion
 
 

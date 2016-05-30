@@ -46,11 +46,14 @@ namespace YXManage.Controllers
             bool bl = false;
 
             string operateip = string.IsNullOrEmpty(Request.Headers.Get("X-Real-IP")) ? Request.UserHostAddress : Request.Headers["X-Real-IP"];
-
-            CloudSalesEntity.Manage.M_Users model = CloudSalesBusiness.M_UsersBusiness.GetM_UserByUserName(userName, pwd, operateip);
+            int result = 0;
+           // CloudSalesEntity.Manage.M_Users model = CloudSalesBusiness.M_UsersBusiness.GetM_UserByUserName(userName, pwd, operateip);
+            CloudSalesEntity.Manage.M_Users model = CloudSalesBusiness.M_UsersBusiness.GetM_UserByProUserName(userName, pwd, operateip,out result);
+            
             if (model != null)
             {
                 CurrentUser = model;
+                Session["Manager"] = model;     
                 bl = true;
             }
             JsonDictionary.Add("result", bl);

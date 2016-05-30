@@ -142,7 +142,7 @@ define(function (require, exports, module) {
                 doT.exec("template/purchase/providers.html", function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
-                    $("#brand-items").after(innerText);
+                    $(".tr-header").after(innerText);
 
                     //下拉事件
                     innerText.find(".dropdown").click(function () {

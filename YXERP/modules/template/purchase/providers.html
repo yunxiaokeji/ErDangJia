@@ -6,7 +6,7 @@
     <td>{%=item.Name%}</td>
     <td>{%=item.Contact%}</td>
     <td>{%=item.MobileTele%}</td>
-    <td>{%=item.City ? item.City.Province + " " + item.City.City + " " + item.City.Counties : ""%} </td>
+    <td>{%=item.City ? item.City.Description : ""%} </td>
     <td>{%=item.Address%}</td>
     <td class="center">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
      <td class="center dropdown" data-id="{%=item.ProviderID%}">

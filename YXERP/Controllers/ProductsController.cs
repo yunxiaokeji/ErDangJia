@@ -564,11 +564,7 @@ namespace YXERP.Controllers
 
         #region 产品
 
-        /// <summary>
-        /// 保存产品
-        /// </summary>
-        /// <param name="product"></param>
-        /// <returns></returns>
+        [ValidateInput(false)]
         public JsonResult SavaProduct(string product)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();

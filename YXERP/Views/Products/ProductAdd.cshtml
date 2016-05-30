@@ -2,7 +2,7 @@
     ViewBag.Title = "添加新品";
     var model = (CloudSalesEntity.Category)ViewBag.Model;
 }
-<link href="/modules/css/stock/products.css" rel="stylesheet" />
+<link href="/modules/css/products.css" rel="stylesheet" />
 <link href="/modules/plug/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
 @section scripts{
     <script src="/Scripts/jquery-1.11.1.js"></script>
@@ -18,7 +18,7 @@
 
 <div class="header-box">
     <span class="header-title left">添加新品 >> @(model.CategoryName)</span>
-    <a class="ico-back left mLeft5" title="返回" href="/Products/ProductAdd">返回</a>
+    <a class="btn-back right mLeft5" href="/Products/ProductAdd">返回</a>
     <input type="hidden" id="categoryID" value="@(model.CategoryID)" />
 </div>
 <div class="content-body mTop20">

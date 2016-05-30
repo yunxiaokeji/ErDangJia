@@ -145,14 +145,15 @@ define(function (require, exports, module) {
                     //绑定启用插件
                     innerText.find(".ico-del").click(function () {
                         var _this = $(this);
-                        if (confirm("确认删除此规格吗？")) {
+                        confirm("确认删除此规格吗？", function () {
                             _this.parents("tr.list-item").remove();
-                        }
+                        });
                     });
                 });
             }
         });
     }
+
     //保存产品
     Product.savaProduct = function () {
         var _self = this, attrlist = "", valuelist = "", attrvaluelist = "";
@@ -221,6 +222,8 @@ define(function (require, exports, module) {
             });
             Product.ProductDetails = details;
         }
+        console.log(Product);
+
         Global.post("/Products/SavaProduct", {
             product: JSON.stringify(Product)
         }, function (data) {
@@ -229,6 +232,7 @@ define(function (require, exports, module) {
             }
         });
     }
+
     //列表页初始化
     Product.initList = function () {
         var _self = this;
@@ -527,6 +531,7 @@ define(function (require, exports, module) {
             editor.setContent(decodeURI(model.Description));
         });
     }
+
     //详情页事件
     Product.bindDetailEvent = function (model) {
         var _self = this;
@@ -578,6 +583,7 @@ define(function (require, exports, module) {
             _self.showTemplate(model, "");
         });
     }
+
     //子产品列表
     Product.getChildList = function (model) {
         var _self = this;
@@ -637,7 +643,7 @@ define(function (require, exports, module) {
                             attrlist += _this.data("id") + ",";
                             valuelist += _this.find("select").val() + ",";
                             attrvaluelist += _this.data("id") + ":" + _this.find("select").val() + ",";
-                            //desc += "[" + _this.find(".column-name").html() + _this.find("select option:selected").text() + "]";
+                            desc += "[" + _this.find(".column-name").html() + _this.find("select option:selected").text() + "]";
                         });
 
                         var Model = {

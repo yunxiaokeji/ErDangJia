@@ -3,7 +3,7 @@
     var model = (CloudSalesEntity.Products)ViewBag.Model;
 }
 @section css{
-   <link href="/modules/css/stock/products.css" rel="stylesheet" />
+   <link href="/modules/css/products.css" rel="stylesheet" />
    <link href="/modules/plug/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
 }
 
@@ -21,18 +21,14 @@
         });
     </script>
 }
-
-<div class="header-box">
-    <span class="header-title left">产品详情页</span>
-    <a class="ico-back left mLeft5" title="返回" href="/Products/ProductList">返回</a>
-    <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
-</div>
-<div class="search-box">
-    <div class="search-header ">
-        <ul class="search-tab ">
+<div class="search-header">
+    <div class="tab-nav">
+        <ul class="search-tab left">
             <li class="hover" data-id="productinfo">产品信息</li>
             <li class="" data-id="childproduct">子产品管理</li>
         </ul>
+        <a class="btn-back right mLeft5" title="返回" href="/Products/ProductList">返回</a>
+        <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
     </div>
 </div>
 <div class="content-body">
@@ -140,7 +136,6 @@
         <img class="product-img" id="productImg" alt="" src="/modules/images/default.png" />
         <div class="mTop20">
             <div class="btn left" id="btnSaveProduct">保存</div>
-            <a class="btn left mLeft10" title="返回" href="/Products/ProductList">返回</a>
         </div>
     </div>
     <div id="childproduct" class="hide mTop20">

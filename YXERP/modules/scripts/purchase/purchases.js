@@ -2,7 +2,9 @@
 define(function (require, exports, module) {
     var Global = require("global"),
         Easydialog = require("easydialog"),
-        doT = require("dot");
+        doT = require("dot"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     //缓存货位
@@ -21,16 +23,15 @@ define(function (require, exports, module) {
     };
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (type, wares, providers) {
+    ObjectJS.init = function (type, wares) {
         var _self = this;
-        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
-        providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         Params.type = type;
-        _self.bindEvent(wares, providers);
+        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
+        _self.bindEvent(wares);
         _self.getList();
     }
     //绑定事件
-    ObjectJS.bindEvent = function (wares, providers) {
+    ObjectJS.bindEvent = function (wares) {
         var _self = this;
 
         $(document).click(function (e) {
@@ -59,46 +60,46 @@ define(function (require, exports, module) {
             }
         });
 
-
-        $("#btnSearch").click(function () {
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.pageIndex = 1;
-            Params.begintime = $("#BeginTime").val().trim();
-            Params.endtime = $("#EndTime").val().trim();
+            Params.begintime = start ? start.format("YYYY-MM-DD") : "";
+            Params.endtime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 
-        require.async("dropdown", function () {
-            $("#wares").dropdown({
-                prevText: "仓库-",
-                defaultText: "全部",
-                defaultValue: "",
-                data: wares,
-                dataValue: "WareID",
-                dataText: "Name",
-                width: "180",
-                onChange: function (data) {
-                    Params.pageIndex = 1;
-                    Params.wareid = data.value;
-                    _self.getList();
-                }
-            });
+        //供应商
+        $(".search-providers li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.pageIndex = 1;
+                Params.providerid = _this.data("id");
+                _self.getList();
+            }
         });
 
-        require.async("dropdown", function () {
-            $("#providers").dropdown({
-                prevText: "供应商-",
-                defaultText: "全部",
-                defaultValue: "",
-                data: providers,
-                dataValue: "ProviderID",
-                dataText: "Name",
-                width: "180",
-                onChange: function (data) {
-                    Params.pageIndex = 1;
-                    Params.providerid = data.value;
-                    _self.getList();
-                }
-            });
+        //仓库
+        $(".search-wares li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.pageIndex = 1;
+                Params.wareid = _this.data("id");
+                _self.getList();
+            }
         });
 
         //新建采购
@@ -133,7 +134,6 @@ define(function (require, exports, module) {
             });
         });
 
-        
         //审核
         $("#audit").click(function () {
             location.href = "/Purchase/AuditDetail/" + _self.docid;
@@ -173,8 +173,6 @@ define(function (require, exports, module) {
         $(".tr-header").after("<tr><td colspan='8'><div class='data-loading' ><div></td></tr>");
         var url = "/Purchase/GetPurchases",
             template = "template/purchase/purchases.html";
-        console.log(Params);
-
         Global.post(url, Params, function (data) {
             $(".tr-header").nextAll().remove();
 

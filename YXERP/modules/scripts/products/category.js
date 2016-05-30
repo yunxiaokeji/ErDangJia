@@ -415,7 +415,7 @@ define(function (require, exports, module) {
     };
     //显示属性值悬浮层
     ObjectJS.showValues = function (attrID) {
-        var height = document.documentElement.clientHeight - 53;
+        var height = document.documentElement.clientHeight;
         $("#attrValueBox").css("height", height + "px");
         $("#attrValueBox").animate({ right: "0px" }, "fast");
         Value.AttrID = attrID;

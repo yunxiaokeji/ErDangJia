@@ -446,9 +446,9 @@ namespace YXERP.Controllers
         /// </summary>
         /// <param name="valueid"></param>
         /// <returns></returns>
-        public JsonResult DeleteAttrValue(string valueid)
+        public JsonResult DeleteAttrValue(string valueid, string attrid)
         {
-            bool bl = new ProductsBusiness().UpdateAttrValueStatus(valueid, EnumStatus.Delete, OperateIP, CurrentUser.UserID);
+            bool bl = new ProductsBusiness().UpdateAttrValueStatus(valueid, attrid, EnumStatus.Delete, OperateIP, CurrentUser.UserID, CurrentUser.ClientID);
             JsonDictionary.Add("Status", bl);
             return new JsonResult
             {

@@ -753,14 +753,15 @@ namespace CloudSalesBusiness
             return dal.UpdateCategoryAttrStatus(categoryid, attrid, (int)status, type);
         }
 
-        public bool UpdateAttrValueStatus(string valueid, EnumStatus status, string operateIP, string operateID)
+        public bool UpdateAttrValueStatus(string valueid, string attrid, EnumStatus status, string operateIP, string operateID, string clientid)
         {
             var dal = new ProductsDAL();
             var bl = dal.UpdateAttrValueStatus(valueid, (int)status);
             if (bl && status == EnumStatus.Delete)
             {
                 var model = GetProductAttrByID(attrid, clientid);
-                var value = model.AttrValues.Where(m => m.ValueID == valueID).FirstOrDefault();
+                var value = model.AttrValues.Where(m => m.ValueID == valueid).FirstOrDefault();
+                model.AttrValues.Remove(value);
             }
             return bl;
         }

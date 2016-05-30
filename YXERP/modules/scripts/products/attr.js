@@ -27,7 +27,8 @@
         var _self = this;
 
         $(document).click(function (e) {
-            if (!$(e.target).hasClass("attr-values") && !$(e.target).parents().hasClass("attr-values") && !$(e.target).hasClass("attr-value-box") && !$(e.target).parents().hasClass("attr-value-box")) {
+            if (!$(e.target).hasClass("attr-values") && !$(e.target).parents().hasClass("attr-values") && !$(e.target).hasClass("attr-value-box")
+                && !$(e.target).parents().hasClass("attr-value-box") && !$(e.target).parents().hasClass("alert")) {
                 _self.hideValues();
             }
         });
@@ -250,7 +251,10 @@
     }
     //删除属性值
     ObjectJS.deleteValue = function (valueid, callback) {
-        Global.post("/Products/DeleteAttrValue", { valueid: valueid }, function (data) {
+        Global.post("/Products/DeleteAttrValue", {
+            valueid: valueid,
+            attrid: Value.AttrID
+        }, function (data) {
             if (data.result == "10001") {
                 alert("您没有此操作权限，请联系管理员帮您添加权限！");
                 return;

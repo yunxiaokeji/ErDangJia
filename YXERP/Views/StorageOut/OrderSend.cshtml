@@ -2,8 +2,8 @@
     ViewBag.Title = "订单发货";
     var model = (CloudSalesEntity.AgentOrderEntity)ViewBag.Model;
 }
+
 @section scripts{
-    
     <script type="text/javascript">
         seajs.use(["scripts/storageout/storagesend"], function (ObjectJS) {
             ObjectJS.initDetail('@(model.OrderID)');
@@ -11,15 +11,9 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">订单发货</span>
-</div>
-<div class="search-box">
-    
+    <span class="header-title left">订单编号：@(model.OrderCode)</span>
 </div>
 <div class="content-body">
-    <div class="content-title">
-        <div class="left titlename">订单编号：@(model.OrderCode)</div>
-    </div>
     <ul class="content-info">
         <li>
             <span class="column-title">总金额：</span>

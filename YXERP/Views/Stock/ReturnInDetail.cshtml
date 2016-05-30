@@ -13,12 +13,9 @@
 }
 
 <div class="header-box">
-    <span class="header-title left">退货入库</span>
+    <span class="header-title left">退货单号：@(model.DocCode)</span>
 </div>
 <div class="content-body mTop20">
-    <div class="content-title">
-        <span class="titlename">单据编号：@(model.DocCode)</span>
-    </div>
     <ul class="content-info">
         <li><span class="column-title">总金额：</span>@(model.TotalMoney.ToString("f2"))</li>
         <li><span class="column-title">状态：</span>@(model.StatusStr)</li>

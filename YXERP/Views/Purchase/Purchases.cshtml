@@ -6,7 +6,6 @@
     <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/purchase/purchases"], function (obj) {
             obj.init('@ViewBag.Type','@Html.ToJSONString((List<CloudSalesEntity.WareHouse>)ViewBag.Wares)');

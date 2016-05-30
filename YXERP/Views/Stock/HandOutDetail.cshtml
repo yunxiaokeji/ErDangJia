@@ -11,15 +11,12 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">审核手工出库单</span>
+    <span class="header-title left">手工出库单号：@(model.DocCode)</span>
     <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"103030504"))" id="btnDelete">删除</div>
     <div class="btn999 right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"103030503"))" id="btnInvalid">作废</div>
     <div class="btn right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"103030502"))" id="btnAudit">审核</div>
 </div>
 <div class="content-body mTop20">
-    <div class="content-title">
-        <div class="left titlename">报损单号：@(model.DocCode)</div>
-    </div>
     <ul class="content-info">
         <li>
             <span class="column-title">总金额：</span>

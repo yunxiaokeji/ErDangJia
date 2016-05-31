@@ -1,6 +1,11 @@
 ﻿@{
-    ViewBag.Title = "系统续费";
+    ViewBag.Title = "购买用户人数";
+<<<<<<< HEAD
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
+=======
+    Layout = "/Views/Shared/_LayoutNoLeft.cshtml";
     var IsOrder = string.IsNullOrEmpty(ViewBag.OrderID) ? false : true;
+>>>>>>> dfa99ffda7902b460b595c3c6e008b111cda1fac
 }
 
 @section css{
@@ -16,10 +21,11 @@
 @section scripts{
 <script type="text/javascript">
     seajs.use(["scripts/auction/buynow"], function (ObjectJS) {
-        ObjectJS.init(3, '@ViewBag.OrderID');
+        ObjectJS.init(2,'@ViewBag.OrderID');
     });
 </script>
 }
+
 <div class="buy-box">
     <div class="buy-box-header">
         <ul class="header-nav">
@@ -108,10 +114,9 @@
                 授权信息：
                 <span>上限人数 :</span><span class="mLeft5">@ViewBag.CurrentAgent.UserQuantity 人</span>
                 <span class="mLeft20">上限日期 :</span><span class="mLeft5">@ViewBag.CurrentAgent.EndTime.ToString("yyyy-MM-dd")</span>
-                <span class="mLeft20 font16 blue">剩余还能使用:</span>
-                <span class="mLeft5 blue font16">@ViewBag.Days 天</span>
+                <span class="mLeft20 font16 blue">剩余还能使用 :</span>
+                <span class="mLeft5 blue font16">@ViewBag.remainderMonths 个月</span>
             </div>
-
 
             <div class="select-info">
                 <ul>
@@ -119,23 +124,9 @@
                         <span class="iconfont">&#xe601;</span>
                         <span>人数</span>
                         <span>
-                            <input id="UserCount" type="text" style="width:46px;" value="@ViewBag.UserQuantity"/>
+                            <input id="UserCount" type="text" style="width:46px;"/>
                         </span>
-                        <span>
-                            * 若您公司人数超过500人，请
-                             <a href="http://yunxiaokeji.com/about.html" target="_blank">联系我们</a>，为您专业定制
-                        </span>
-                    </li>
-                    <li>
-                        <span class="iconfont">&#xe639;</span>
-                        <span>时间</span>
-                        <span>
-                            <select id="UserYear">
-                                <option value="1">1年</option>
-                                <option value="2">2年</option>
-                                <option value="3">3年</option>
-                            </select>
-                        </span>
+                        <input type="hidden" id="UserYear" value="@ViewBag.remainderMonths" />
                     </li>
                 </ul>
 
@@ -171,12 +162,12 @@
             <li>
                 <span class="iconfont">&#xe646;</span>
                 <span>原价</span>
-                <span class="mLeft15" id="order-trueamount">￥0</span>
+                <span class="mLeft15" id="order-trueamount">￥0.00</span>
             </li>
             <li>
                 <span class="iconfont">&#xe645;</span>
                 <span>优惠</span>
-               <span class="mLeft15" id="order-freeamount">￥0</span>
+               <span class="mLeft15" id="order-freeamount">￥0.00</span>
             </li>
         </ul>
 
@@ -247,7 +238,7 @@
                     <li>·  浏览器本身的问题，建议使用常用的浏览器。</li>
                     <li>·  能和网络有关，建议稍微等一会在进行支付尝试。</li>
                 </ul>
-                <div class="mTop10"><span style="color:#666">您可能需要联系:</span><a href="http://yunxiaokeji.com/about.html" target="_blank">管理员处理</a></div>
+                <div class="mTop10"><span style="color:#666">您可能需要联系:</span><a>管理员处理</a></div>
             </div>
             <div class="btn-pre mTop50" onclick="location.href='/Home/Index'" style="margin-left:auto;margin-right:auto;">返回首页</div>
 
@@ -255,7 +246,8 @@
      </div>
 
 </div>
-<input type="hidden" id="txt-userCount" value="@ViewBag.UserQuantity" />
+
+
 
 
 

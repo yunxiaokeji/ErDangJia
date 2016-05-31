@@ -1,6 +1,11 @@
 ﻿@{
     ViewBag.Title = "系统续费";
+<<<<<<< HEAD
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
+=======
+    Layout = "/Views/Shared/_LayoutNoLeft.cshtml";
     var IsOrder = string.IsNullOrEmpty(ViewBag.OrderID) ? false : true;
+>>>>>>> dfa99ffda7902b460b595c3c6e008b111cda1fac
 }
 
 @section css{

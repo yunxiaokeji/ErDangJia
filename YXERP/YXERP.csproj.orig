@@ -153,10 +153,19 @@
     <Content Include="Content\menuico\customer.png" />
     <Content Include="Content\menuico\default-menu.png" />
     <Content Include="DLL\JsonObject.dll" />
+<<<<<<< HEAD
+    <Content Include="modules\css\iconfont\iconfont.css" />
+    <Content Include="modules\css\iconfont\iconfont.svg" />
+    <Content Include="modules\css\sales.css" />
+    <Content Include="modules\css\stock.css" />
+=======
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
+    <Content Include="modules\css\opportunitys.css" />
+    <Content Include="modules\css\stock\stock.css" />
+>>>>>>> dfa99ffda7902b460b595c3c6e008b111cda1fac
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
     <Content Include="modules\images\ico-company.png" />

@@ -1,25 +1,32 @@
 ﻿@{
-    ViewBag.Title = "系统续费";
-    var IsOrder = string.IsNullOrEmpty(ViewBag.OrderID) ? false : true;
+<<<<<<< HEAD
+    ViewBag.Title = "购买二当家";
+=======
+    ViewBag.Title = "购买智能工厂";
+    Layout = "/Views/Shared/_LayoutNoLeft.cshtml";
+    var IsOrder = string.IsNullOrEmpty(ViewBag.OrderID)?false:true;
+>>>>>>> dfa99ffda7902b460b595c3c6e008b111cda1fac
 }
 
 @section css{
-<style type="text/css">
-.main-content {
-  margin-left:0px;  
-}
-</style>
+    <style type="text/css">
+        .main-content {
+          margin-left:0px;  
+        }
+    </style>
 
-<link href="/modules/css/auction/buynow.css" rel="stylesheet" />
+    <link href="/modules/css/auction/buynow.css" rel="stylesheet" />
 }
 
 @section scripts{
-<script type="text/javascript">
-    seajs.use(["scripts/auction/buynow"], function (ObjectJS) {
-        ObjectJS.init(3, '@ViewBag.OrderID');
-    });
-</script>
+    <script type="text/javascript">
+        seajs.use(["scripts/auction/buynow"], function (ObjectJS) {
+            ObjectJS.init(1, '@ViewBag.OrderID');
+        });
+    </script>
 }
+
+
 <div class="buy-box">
     <div class="buy-box-header">
         <ul class="header-nav">
@@ -89,7 +96,7 @@
                 </div>
             }
         }
-
+        
         <div class="buy-product-list">
             <table class="product-list" width="790px">
                 <thead class="tb-thead">
@@ -104,14 +111,21 @@
         </div>
 
         <div class="buy-product-select">
-            <div class="select-notice">
-                授权信息：
-                <span>上限人数 :</span><span class="mLeft5">@ViewBag.CurrentAgent.UserQuantity 人</span>
-                <span class="mLeft20">上限日期 :</span><span class="mLeft5">@ViewBag.CurrentAgent.EndTime.ToString("yyyy-MM-dd")</span>
-                <span class="mLeft20 font16 blue">剩余还能使用:</span>
-                <span class="mLeft5 blue font16">@ViewBag.Days 天</span>
-            </div>
+           @* <div class="select-notice">
+                * 首次购买人数不能少于10人,若您公司人数超过500人，请
+                <a href="http://yunxiaokeji.com/about.html" target="_blank">联系我们</a>，为您专业定制
+            </div>*@
 
+           @* <div class="mTop20">
+                <span class="select-title">选择购买人数</span>
+                @{
+                        if( (float)ViewBag.Discount<10){
+                            <span class="font14">
+                            (首次购买,特惠<span class="mLeft5 mRight5">@ViewBag.Discount</span>折)
+                            </span>
+                        }
+                    }
+            </div>*@
 
             <div class="select-info">
                 <ul>
@@ -119,7 +133,7 @@
                         <span class="iconfont">&#xe601;</span>
                         <span>人数</span>
                         <span>
-                            <input id="UserCount" type="text" style="width:46px;" value="@ViewBag.UserQuantity"/>
+                            <input id="UserCount" type="text" style="width:46px;"/>
                         </span>
                         <span>
                             * 若您公司人数超过500人，请
@@ -247,7 +261,7 @@
                     <li>·  浏览器本身的问题，建议使用常用的浏览器。</li>
                     <li>·  能和网络有关，建议稍微等一会在进行支付尝试。</li>
                 </ul>
-                <div class="mTop10"><span style="color:#666">您可能需要联系:</span><a href="http://yunxiaokeji.com/about.html" target="_blank">管理员处理</a></div>
+                <div class="mTop10"><span style="color:#666">您可能需要联系:</span><a>管理员处理</a></div>
             </div>
             <div class="btn-pre mTop50" onclick="location.href='/Home/Index'" style="margin-left:auto;margin-right:auto;">返回首页</div>
 
@@ -255,7 +269,6 @@
      </div>
 
 </div>
-<input type="hidden" id="txt-userCount" value="@ViewBag.UserQuantity" />
 
 
 

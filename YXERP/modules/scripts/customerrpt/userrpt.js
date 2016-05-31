@@ -1,6 +1,8 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
-    doT = require("dot");
+        doT = require("dot"),
+        moment = require("moment");
+    require("daterangepicker");
     var Params = {
         type: 1,
         userid: "",
@@ -18,9 +20,6 @@
     ObjectJS.bindEvent = function () {
         var _self = this;
 
-        $("#beginTime").val(new Date().setMonth(new Date().getMonth() - 1).toString().toDate("yyyy-MM-dd"));
-        $("#endTime").val(Date.now().toString().toDate("yyyy-MM-dd"));
-
         $(".search-type li").click(function () {
             var _this = $(this);
             
@@ -30,23 +29,28 @@
 
                 Params.type = _this.data("type");
 
-                $("#btnSearch").click();
+                _self.getUserCustomer();
             }
 
         });
 
-        $("#btnSearch").click(function () {
-            Params.beginTime = $("#beginTime").val().trim();
-            Params.endTime = $("#endTime").val().trim();
-            if (Params.beginTime && Params.endTime && Params.beginTime > Params.endTime) {
-                alert("开始日期不能大于结束日期！");
-                return;
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
             }
+        }, function (start, end, label) {
+            Params.pageIndex = 1;
+            Params.beginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.endTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getUserCustomer();
         });
-
-        $("#btnSearch").click();
-
     }
 
     ObjectJS.getUserCustomer = function () {

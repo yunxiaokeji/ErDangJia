@@ -1,7 +1,9 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
         ChooseUser = require("chooseuser"),
-        ec = require("echarts/echarts");
+        ec = require("echarts/echarts"),
+        moment = require("moment");
+    require("daterangepicker");
     require("echarts/chart/pie");
     require("echarts/chart/map");
     var Params = {
@@ -103,17 +105,20 @@
             }
 
         });
-
-        $("#beginTime").val(new Date().setMonth(new Date().getMonth() - 6).toString().toDate("yyyy-MM-dd"));
-        $("#endTime").val(Date.now().toString().toDate("yyyy-MM-dd"));
-
-        Params.beginTime = $("#beginTime").val().trim();
-        Params.endTime = $("#endTime").val().trim();
-
-        $("#btnSearch").click(function () {
-            Params.beginTime = $("#beginTime").val().trim();
-            Params.endTime = $("#endTime").val().trim();
-
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
+            Params.beginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.endTime = end ? end.format("YYYY-MM-DD") : "";
             if (Params.type == 1) {
                 _self.ordermap();
             }

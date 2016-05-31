@@ -7,6 +7,7 @@
 </style>
 
 @section scripts{
+    <script src="/Scripts/jquery-1.11.1.js"></script>
     <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -36,23 +37,21 @@
 <div class="header-box">
     <span class="header-title left">客户阶段统计</span>
 </div>
-<div class="search-box">
-    <div class="search-header">
-        <ul class="search-tab search-type">
-            <li data-type="1" data-id="chartRPT" class="hover">客户转化率</li>
-            <li data-type="2" data-id="teamRPT">按阶段统计</li>
-            <li data-type="3" data-id="teamRPT">按团队统计</li>
-        </ul>
-    </div>
-</div>
-<div class="content-body">
-    <div class="search-body mBottom10">
+<div class="search-header">
+    <ul class="search-tab search-type">
+        <li data-type="1" data-id="chartRPT" class="hover">客户转化率</li>
+        <li data-type="2" data-id="teamRPT">按阶段统计</li>
+        <li data-type="3" data-id="teamRPT">按团队统计</li>
+    </ul>
+    <div class="mTop20">
         <div class="left lineHeight25">日期：</div>
         <input type="text" class="left" id="beginTime"/>
         <div class="left lineHeight25">&nbsp;-&nbsp;</div>
         <input  type="text" class="left" id="endTime"/>
         <div class="left btn mLeft20" id="btnSearch">查询</div>
     </div>
+</div>
+<div class="content-body">
     <div id="chartRPT" class="source-box">
 
     </div>

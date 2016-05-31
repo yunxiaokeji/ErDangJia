@@ -248,15 +248,15 @@ select option{ padding:2px; }
 .tab-nav ul { height: 32px; border-bottom: solid 3px #fff; }
 .tab-nav ul li { height:32px; float:left; padding:0 20px; cursor:pointer; }
 .tab-nav ul li:hover { color:#318ae4; }
-.tab-nav ul li.hover { position: relative; height: 32px; line-height: 35px; border-bottom: 6px solid #4a98e7; color:#318ae4;  }
+.tab-nav ul li.hover { position: relative; height: 32px; line-height: 35px; border-bottom: 6px solid #4a98e7; color:#318ae4;}
 
 /*search样式*/
 .search-header { overflow:auto; margin:10px 20px; }
 
-.search-header .search-tab { height:30px; border-bottom:solid 2px #ccc; }
+.search-header .search-tab { height:30px; border-bottom:solid 2px #B5C2CA; }
 .search-header .search-tab li{ padding:0 10px; cursor:pointer; min-width:70px; text-align:center; margin-right:5px;height:30px; line-height:30px; color:#fff;
                                float:left; background-color:#B5C2CA; border-radius:2px;border-bottom-left-radius:0; border-bottom-right-radius:0; }
-.search-header .search-tab li:hover{ background-color:#fff; color:#4a98e7;}
+.search-header .search-tab li:hover{ background-color:#4a98e7; color:#fff;}
 .search-header .search-tab li.hover{ height:32px; background-color:#4a98e7; color:#fff; }
 
 .search-header .search-tab-status { float:right; height:25px; line-height:25px;margin-top:5px; }

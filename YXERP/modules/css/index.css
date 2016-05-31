@@ -82,6 +82,8 @@ nav .action-items .point { width:6px; height:6px; border-radius:3px; background-
                                  border-radius:2px; border-bottom-left-radius:0; border-bottom-right-radius:0; 
                                  padding:0 10px; margin-right:5px;  width:100px; height:25px; line-height:26px; color:#fff;
                                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+
+
 .window-items li .iconfont{ color:#fff; }
 
 .window-items li:hover { background-color:#fff; color:#666; height:26px; }

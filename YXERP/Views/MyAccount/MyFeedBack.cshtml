@@ -3,8 +3,7 @@
     Layout = "/Views/Shared/_LayoutUserCenter.cshtml";
 }
 @section css{
-        <link href="/modules/css/myaccount/myaccount.css" rel="stylesheet" />
-        <link href="/modules/css/myaccount/cropbox.css" rel="stylesheet" />
+        <link href="/modules/css/myaccount/myaccount.css" rel="stylesheet" /> 
 }
 @section scripts{
 <script src="/Scripts/jquery-1.11.1.js"></script>
@@ -45,29 +44,16 @@
     </script>
 }
 <div class="accountContent">
-<div class="accountHeader">
-    意见反馈
-    <a class="btn right" href="#">新建反馈</a>
-</div>
-@*<div class="search-header mTop20">
-    <ul class="search-tab search-status">
-        <li class="hover"  data-index="-1">所有</li>
-        <li data-index="1">待解决</li>            
-        <li data-index="2">已解决</li>
-        <li data-index="3">驳回</li>
-        <li data-index="4">删除</li>
-    </ul>  
-</div>*@
-
 <div class="content-body">
-    <div class="search-body">
+    <div class="accountsearch-body">
 
-        <div class="left mLeft20">
+        <div class="left mLeft5">
             <span class="width80">创建时间：</span><input type="text" id="BeginTime"  class="input"  />
             <span style="padding:0px 5px 0px 3px;">至</span><input type="text" id="EndTime"  class="input"  />
             <span class="btn mLeft10" id="SearchFeedBacks">搜索</span>
 
         </div>
+         <a class="btn right mLeft20 ico-feedback" href="#">新建反馈</a>
         <div class="right searth-module" data-text="输入关键字..." data-width="150"></div>
         <div class="clear"></div>
     </div>

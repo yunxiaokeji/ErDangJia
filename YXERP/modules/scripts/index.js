@@ -100,6 +100,28 @@ define(function (require, exports, module) {
             }
         });
 
+        //打开窗口
+        $(".btn-open-windows").click( function () {
+            var _this = $(this),
+                nav = $("#windowItems li[data-id='" + _this.data("code") + "']");
+
+            $(".action-items li").removeClass("hover");
+            _this.addClass("hover");
+
+            $("#windowItems li").removeClass("hover");
+            $(".iframe-window").hide();
+            if (nav.length == 1) {
+                nav.addClass("hover");
+                $("#iframe" + _this.data("code")).show();
+                $("#iframe" + _this.data("code")).attr("src", _this.data("url"));
+            } else {
+                $("#windowItems").append('<li data-id="' + _this.data("code") + '" class="hover" title="' + _this.data("name") + '">'
+                                              + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'
+                                       + '</li>');
+                $("#iframeBox").append('<iframe id="iframe' + _this.data("code") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
+                _self.bindStyle();
+            }
+        });
         //切换窗口
         $("#windowItems").delegate("li", "click", function () {
             var _this = $(this);

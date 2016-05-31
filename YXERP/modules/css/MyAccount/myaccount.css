@@ -1,23 +1,32 @@
 ﻿
-.accountMenu { position: fixed; left: 0px; width: 200px; height: 100%; background-color: #fff; border-right: solid 1px #ccc; }
+body {  background-color:#fff; }
 
-.accountTitle { margin-top: 20px; padding-bottom:20px; border-bottom: solid 1px #ccc; background:url('/modules/images/ico-member.png') no-repeat 45px 0px; }
+.accountMenu { position: fixed; left: 0px; top:50px; bottom:0px; width: 200px; background-color:#f6f6f6; 
+                               border-right:solid 1px #ccc; box-shadow:0 0px 3px #ddd; }
 
-.accountTitle .title { font-size: 16px; margin-left:70px; }
+/*.accountMenu .accountTitle { padding:15px 0 5px 0; overflow:auto; cursor:pointer; border-bottom: solid 1px #ccc;}
+.accountMenu .accountTitle .avatar { height:38px; width:38px; border:solid 1px #F2F4F8; border-radius:20px; }
+.accountMenu .accountTitle img{ margin-left:20px; display:inline-block; float:left;}
+.accountMenu .accountTitle span{  display:inline-block; float:left; line-height:42px; font-size:14px;}
+    */
+.accountTitle { padding:5px 0 5px 0; width:180px; overflow:auto; cursor:pointer; }
+.accountTitle .avatar { height:38px; width:38px; border:solid 1px #2f74b9; border-radius:20px; }
+.accountTitle span{  display:inline-block; float:left; line-height:42px; font-size:14px;}
+
+.content-body { background-color:#fff;  margin-left:200px; padding-top:60px; } 
 .accountUl { margin-top: 15px; }
-
 .accountUl li { line-height: 40px; }
 .accountUl li a{ line-height: 40px; font-size: 13px; width:200px; text-align:center; display:inline-block; color:#333; }
-
-.accountUl .active { background-color: #eee; }
+.accountUl .active { background-color: #fff; }
 
 .accountContent { margin: 0px 0px 0px 0px; }
+.account-box { padding:15px 20px 5px 20px; overflow:auto; background-color:#fff;  }
+.account-box a {margin-left:8px;}
+.accountHeader { line-height: 62px;padding-left:10px; border-bottom: solid 1px #ccc; font-size: 16px; color: #666; }
+.accountsearch-body { margin-top:15px;}
 
-.accountHeader { line-height: 62px; border-bottom: solid 1px #ccc; font-size: 16px; color: #666; }
 
 .error-body { display: none; }
-
 .error-lump { border-right:solid 7px #ED9E9E; border-top:solid 8px transparent ;border-bottom:solid 8px transparent; 
                 width:0; height:0; position:absolute; left:325px; top:12px;z-index:100; }
-
 .error-msg { padding: 8px; background-color: #ED9E9E; color: red; position: absolute; left: 332px; top: 5px; z-index: 100; width: 110px; }

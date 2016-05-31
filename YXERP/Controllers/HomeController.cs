@@ -50,6 +50,7 @@ namespace YXERP.Controllers
                     CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(cook["username"], cook["pwd"],out result, operateip);
                     if (model != null)
                     {
+
                         Session["ClientManager"] = model;
                         return Redirect("/Default/Index");
                     }

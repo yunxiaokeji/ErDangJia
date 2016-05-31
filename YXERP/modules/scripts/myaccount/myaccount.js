@@ -58,8 +58,9 @@
                 var item = data;
                 //基本信息
                 $("#Name").val(item.Name);
-                $("#Jobs").val(item.Jobs);
-                $("#Birthday").val(item.Birthday.toDate("yyyy-MM-dd"));
+                $("#Jobs").val(item.Jobs); 
+                var birthday = item.Birthday.toDate("yyyy-MM-dd");
+                $("#Birthday").val(birthday != "3939-01-01" ?  birthday:"");
                 $("#Age").val(item.Age);
                 //部门
                 $("#DepartmentName").val(item.DepartmentName);
@@ -73,6 +74,7 @@
                         dataValue: "DepartID",
                         dataText: "Name",
                         width: "157",
+                        isposition:true,
                         onChange: function (data) {
                             $("#DepartID").val(data.value);
                         }

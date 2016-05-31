@@ -50,6 +50,8 @@ define(function (require, exports, module) {
             if (!$(e.target).parents().hasClass("company-logo") && !$(e.target).hasClass("company-logo")) {
                 $(".dropdown-companyinfo").fadeOut("1000");
             }
+
+            $("#contentMenu").hide();
         });
 
         //向左滑动
@@ -127,6 +129,31 @@ define(function (require, exports, module) {
                 $(".iframe-window").hide();
                 $("#iframe" + _this.data("id")).show();
             }
+        });
+        
+        //右键菜单
+        $("#windowItems").delegate("li", "contextmenu", function (e) {
+            var _this = $(this);
+            if (e.clientX < $(".window-box").width()) {
+                $("#contentMenu").css({ left: e.clientX, top: e.clientY }).show();
+
+            } else {
+                $("#contentMenu").css({ left: e.clientX - 130, top: e.clientY }).show();
+            }
+            $("#contentMenu li").data("id", _this.data("id"));
+
+            if (window.Event) {
+                if (e.which == 2 || e.which == 3) {
+                    e.cancelBubble = true
+                    e.returnValue = false;
+                    return false;
+                }
+            } else if (event.button == 2 || event.button == 3) {
+                event.cancelBubble = true
+                event.returnValue = false;
+                return false;
+            }
+            return false;
         });
 
         //关闭窗口
@@ -218,7 +245,28 @@ define(function (require, exports, module) {
 
         });
 
+        //关闭标签
+        $("#closeThis").click(function () {
+            $("#windowItems li[data-id='" + $(this).data("id") + "']").find(".close").click();
+        });
+
+        //关闭其他标签
+        $("#closeOthers").click(function () {
+            $("#windowItems li[data-id!='" + $(this).data("id") + "']").find(".close").click();
+        });
+
+        //关闭全部标签
+        $("#closeAll").click(function () {
+            $("#windowItems li .close").click();
+        });
+
+        //刷新标签
+        $("#refreshThis").click(function () {
+            $("#iframe" + $(this).data("id")).attr("src", $("#iframe" + $(this).data("id")).attr("src"));
+        });
+
         $("#modulesMenu li").first().click();
+
     }
 
     //打开新窗口
@@ -250,7 +298,6 @@ define(function (require, exports, module) {
         _self.bindStyle();
 
     }
-
 
     //下级菜单
     LayoutObject.getChildMenu = function (code) {

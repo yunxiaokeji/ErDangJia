@@ -96,12 +96,34 @@
         </ul>
     </div>
 
+    <ul class="dropdown-ul hide" id="contentMenu"  style="width:130px;">
+        <li id="refreshThis">刷新标签页</li>
+        <li id="closeThis">关闭标签页</li>
+        <li id="closeOthers">关闭其他标签页</li>
+        <li id="closeAll">关闭所有标签页</li>
+    </ul>
+
     <script type="text/javascript" src="/Scripts/sea.js"></script>
     <script type="text/javascript" src="/Scripts/sea-config.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/index"], function (layout) {
             layout.init();
         });
+
+        //document.getElementById("windowItems").oncontextmenu = function (event) {
+        //    if (window.event) {
+        //        event = window.event;
+        //    } try {
+        //        var the = event.srcElement;
+        //        if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")) {
+        //            return false;
+        //        }
+        //        return true;
+        //    } catch (e) {
+        //        return false;
+        //    }
+        //}
+
     </script>
 </body>
 </html>

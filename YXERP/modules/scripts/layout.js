@@ -6,6 +6,7 @@ define(function (require, exports, module) {
         doT = require("dot"),
         Global = require("global"),
         Easydialog = require("easydialog");
+    require("sortable");
 
     var LayoutObject = {};
     //初始化数据
@@ -56,6 +57,11 @@ define(function (require, exports, module) {
                 var height = window.parent.document.documentElement.clientHeight;
                 parent.find("#iframe" + _this.data("id")).css("height", height - 95);
             }
+
+            //拖动排序
+            parent.find("#windowItems").sortable({
+                items: "li[data-id!='Home']"
+            });
         });
 
     }

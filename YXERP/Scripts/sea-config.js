@@ -18,7 +18,9 @@ seajs.config({
         'zrender': 'plug/echarts/zrender/zrender.js',
         //日期控件
         'moment': 'plug/daterangepicker/moment.js',
-        'daterangepicker': 'plug/daterangepicker/daterangepicker.js'
+        'daterangepicker': 'plug/daterangepicker/daterangepicker.js',
+        //拖动排序
+        "sortable": "plug/sortable.js"
     }
 });
 

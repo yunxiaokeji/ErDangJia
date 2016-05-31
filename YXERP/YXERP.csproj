@@ -504,6 +504,7 @@
     <Content Include="modules\plug\chooseproduct\chooseproduct.js" />
     <Content Include="modules\plug\chooseproduct\productout.html" />
     <Content Include="modules\plug\chooseproduct\style.css" />
+    <Content Include="modules\plug\Sortable.js" />
     <Content Include="modules\plug\upload\jquery.form.js" />
     <Content Include="modules\plug\upload\upload.js" />
     <Content Include="modules\scripts\customer\activity.js" />

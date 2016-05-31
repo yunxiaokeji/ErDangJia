@@ -6,6 +6,7 @@ define(function (require, exports, module) {
         doT = require("dot"),
         Global = require("global"),
         Easydialog = require("easydialog");
+    require("sortable");
 
     var LayoutObject = {};
     //初始化数据
@@ -79,49 +80,14 @@ define(function (require, exports, module) {
 
         //打开窗口
         $("nav").delegate(".action-items li", "click", function () {
-            var _this = $(this),
-                nav = $("#windowItems li[data-id='" + _this.data("code") + "']");
-
-            $(".action-items li").removeClass("hover");
-            _this.addClass("hover");
-
-            $("#windowItems li").removeClass("hover");
-            $(".iframe-window").hide();
-            if (nav.length == 1) {
-                nav.addClass("hover");
-                $("#iframe" + _this.data("code")).show();
-                $("#iframe" + _this.data("code")).attr("src", _this.data("url"));
-            } else {
-                $("#windowItems").append('<li data-id="' + _this.data("code") + '" class="hover" title="' + _this.data("name") + '">'
-                                              + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'
-                                       + '</li>');
-                $("#iframeBox").append('<iframe id="iframe' + _this.data("code") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
-                _self.bindStyle();
-            }
+            _self.openWindows($(this));
         });
 
         //打开窗口
         $(".btn-open-windows").click( function () {
-            var _this = $(this),
-                nav = $("#windowItems li[data-id='" + _this.data("code") + "']");
-
-            $(".action-items li").removeClass("hover");
-            _this.addClass("hover");
-
-            $("#windowItems li").removeClass("hover");
-            $(".iframe-window").hide();
-            if (nav.length == 1) {
-                nav.addClass("hover");
-                $("#iframe" + _this.data("code")).show();
-                $("#iframe" + _this.data("code")).attr("src", _this.data("url"));
-            } else {
-                $("#windowItems").append('<li data-id="' + _this.data("code") + '" class="hover" title="' + _this.data("name") + '">'
-                                              + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'
-                                       + '</li>');
-                $("#iframeBox").append('<iframe id="iframe' + _this.data("code") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
-                _self.bindStyle();
-            }
+            _self.openWindows($(this));
         });
+
         //切换窗口
         $("#windowItems").delegate("li", "click", function () {
             var _this = $(this);
@@ -221,6 +187,34 @@ define(function (require, exports, module) {
         });
 
         $("#modulesMenu li").first().click();
+    }
+
+    //打开新窗口
+    LayoutObject.openWindows = function (element) {
+        var _self = this,
+            _this = element,
+            nav = $("#windowItems li[data-id='" + _this.data("code") + "']");
+
+        $(".action-items li").removeClass("hover");
+        _this.addClass("hover");
+
+        $("#windowItems li").removeClass("hover");
+        $(".iframe-window").hide();
+        if (nav.length == 1) {
+            nav.addClass("hover");
+            $("#iframe" + _this.data("code")).show();
+            $("#iframe" + _this.data("code")).attr("src", _this.data("url"));
+        } else {
+            $("#windowItems").append('<li data-id="' + _this.data("code") + '" class="hover" title="' + _this.data("name") + '">'
+                                          + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'
+                                   + '</li>');
+            $("#iframeBox").append('<iframe id="iframe' + _this.data("code") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
+            _self.bindStyle();
+        }
+        //拖动排序
+        $("#windowItems").sortable({
+            items: "li[data-id!='Home']"
+        });
     }
 
     //下级菜单

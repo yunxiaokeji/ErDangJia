@@ -16,7 +16,7 @@
     <span class="header-title left @(model.Status==3?"colorccc":"")">机会编号：@(model.OpportunityCode) @(model.Status==3?"(已关闭)":"")</span>
     @if (model.Status==1)
     {
-        <div id="editOpportunity" class="iconfont ico-edit left">&#xe607;</div>
+        <div id="editOpportunity" class="iconfont ico-edit left"></div>
         
         <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"102029003"))" id="btnClose" >关闭机会</div>
         <div class="btn right mRight20" id="btnconfirm" >转为订单</div>

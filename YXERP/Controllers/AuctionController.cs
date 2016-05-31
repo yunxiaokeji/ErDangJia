@@ -284,7 +284,7 @@ namespace YXERP.Controllers
             {
                 int pageCount = 0;
                 int totalCount = 0;
-                List<ClientOrder> list = ClientOrderBusiness.GetClientOrders(0, -1, string.Empty, string.Empty, CurrentUser.AgentID, CurrentUser.ClientID, int.MaxValue, 1, ref totalCount, ref pageCount);
+                List<ClientOrder> list = ClientOrderBusiness.GetClientOrders("", 0, -1, string.Empty, string.Empty, CurrentUser.AgentID, CurrentUser.ClientID, int.MaxValue, 1, ref totalCount, ref pageCount);
 
                 if (list.Count > 0)
                 {

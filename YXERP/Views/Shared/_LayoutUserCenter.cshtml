@@ -6,8 +6,7 @@
     string companyName = string.IsNullOrEmpty(CurrentUser.Client.CompanyName) ? "" : CurrentUser.Client.CompanyName;
 }
 <html>
-<head>
-    <title>@ViewBag.Title @companyName</title>
+<head> 
     <link href="/modules/css/base.css" rel="stylesheet" /> 
     <link href="/modules/css/index.css" rel="stylesheet" />
     <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
@@ -15,75 +14,36 @@
     @RenderSection("css", false)
       
 </head>
-<body >
-    <header> 
-                <div class="accountTitle left mLeft20">
-                    <span class="left"> 
-                        <img  id="userImg" src="@(string.IsNullOrEmpty(CurrentUser.Avatar)?"/modules/images/defaultavatar.png":CurrentUser.Avatar)" class="avatar" />
-                    </span>
-                    <span class="left mLeft20">
-                        @(CurrentUser.Name)
-                    </span>
-                </div>  
-          @*  <ul id="modulesMenu" class="menu left">
-
-            <li class="left">
-                <a href="/Home/Index">
-                    <img class="ico" data-ico="/Content/menuico/home.png" data-hover="/Content/menuico/homehover.png" src="/Content/menuico/home.png" /> 
-                    <span class="name right">返回首页</span>
-                 <span class="cursor"></span>
-                </a> 
-            </li>
-              <li class="left mLeft5">
-                <a href="/Home/Logout">
-                    <i class="iconfont " style="color:#C5D6F3">&#xe624;</i> 
-                    <span class="name right">安全退出</span>
- @*                   <span class="cursor"></span
-                </a> 
-            </li>
-        </ul>>*@
-    </header>
-    <div class="main-body">
-        <div class="accoun-content">
-            <div class="accountMenu"> 
-              @*  <div class="accountTitle">
-                    <span class="left"> 
-                        <img id="userImg" src="@(string.IsNullOrEmpty(CurrentUser.Avatar)?"/modules/images/defaultavatar.png":CurrentUser.Avatar)" class="avatar" />
-                    </span>
-                    <span class="left mLeft20">
-                        @(CurrentUser.Name)
-                    </span>
-                </div> *@
+<body > 
+    <div class="main-body"> 
+            <div class="accountMenu left mTop10">
                 <ul class="accountUl" >
-                    <li class="@("INDEX"==action ? "active" : "")"><a href="/MyAccount/Index">基本信息</a> </li>
-                    <li class="@("ACCOUNT"==action ? "active" : "")"><a href="/MyAccount/Account">账号设置</a> </li>
-                    <li class="@("SETAVATAR"==action ? "active" : "")"><a href="/MyAccount/SetAvatar">设置头像</a> </li>
-                    <li class="@("SETPASSWORD"==action ? "active" : "")"><a href="/MyAccount/SetPassWord">重置密码</a> </li>
-                    <li class="@("MYFEEDBACK"==action ? "active" : "")"><a href="/MyAccount/MyFeedBack">我的反馈</a> </li>
+                    <li class="@("INDEX"==action ? "active left " : "left ")">
+                         <span id="movespan"></span>
+                        <a href="/MyAccount/Index">基本信息</a> 
+                       
+                    </li>
+                    <li class="@("ACCOUNT"==action ? "active left " : "left ")">
+                        <a href="/MyAccount/Account">账号设置</a>  
+                    </li>
+                    <li  class="@("SETAVATAR"==action ? "active left " : "left ")">
+                        <a href="/MyAccount/SetAvatar">设置头像</a>  
+                    </li>
+                    <li class="@("SETPASSWORD"==action ? "active left " : "left ")">
+                        <a href="/MyAccount/SetPassWord">重置密码 </a> 
+                    </li>
+                    <li class="@("MYFEEDBACK"==action ? "active left " : "left ")">
+                        <a href="/MyAccount/MyFeedBack">我的反馈</a>                   
+                    </li>
                 </ul> 
-            </div>
-           @* <div class="account-box"> 
-                <a class="back right color333" href="javascript:if(history.length>1){ history.go(-1);} else{}">
-                    <i class="iconfont color666">&#xe600;</i> 返回首页
-                </a>  
-                <a class="back right color333" href="/Home/Logout">
-                    <i class="iconfont color666">&#xe601;</i> 安全退出
-                </a>  
-            </div>*@
+            </div> 
             @RenderBody()
-        </div>
-    </div>
-        <ul class="help-feedback">
-        <li class="ico-help" title="帮助中心"><a target="_blank" href="http://www.yunxiaokeji.com/help.html"></a></li>
-        <li class="ico-contact" title="联系我们"><a target="_blank" href="http://www.yunxiaokeji.com/about.html"></a></li>
-        <li class="ico-feedback feedback" title="意见反馈"></li>
-        <li class="ico-open" title="展开"></li>
-    </ul>
-    @*<div class="feedback">意见反馈</div>*@
+    </div> 
+    <input id="aaaa" type="hidden" value="@(action)">
+        @*<div class="feedback">意见反馈</div>*@
     <input id="feedback-filepath" type="hidden" />
     <input id="txt_username" value="@CurrentUser.Name" type="hidden" />
     <input id="txt_usermobilephone" value="@CurrentUser.MobilePhone" type="hidden" />
-
     <script src="/Scripts/jquery-1.11.1.js"></script>
     <script type="text/javascript" src="/Scripts/sea.js"></script>
     <script type="text/javascript" src="/Scripts/sea-config.js"></script>
@@ -94,6 +54,72 @@
           seajs.use(["scripts/index"], function (layout) {
               layout.init();
           }); 
+    </script>
+    <script type="text/javascript">       
+        $(function () {
+            $("#movespan").css("left", "0px");
+            var lastcenter = $('#lastcenter', parent.document).val(); 
+            if (typeof(lastcenter) == "undefined") {
+                $('#currentUser', parent.document).html($('#currentUser', parent.document).html() + "<input id='lastcenter' type='hidden' value='1' />");
+                lastcenter = 1; 
+            }  else {
+                $("#movespan").css("left", getmenuindex($('#lastcenter', parent.document).val()) + "px"); 
+            } 
+            $("#movespan").show();
+            switch ($('#aaaa').val()) {
+                case "INDEX":
+                    movespan(lastcenter,1);
+                    $('#lastcenter', parent.document).val(1);
+                    break
+                case "ACCOUNT":
+                    movespan(lastcenter,2);
+                    $('#lastcenter', parent.document).val(2);
+                    break;
+                case "SETAVATAR":
+                    movespan(lastcenter,3);
+                    $('#lastcenter', parent.document).val(3);
+                    break;
+                case "SETPASSWORD":
+                    movespan(lastcenter,4);
+                    $('#lastcenter', parent.document).val(4);
+                    break;
+                case "MYFEEDBACK":
+                    movespan(lastcenter,5);
+                    $('#lastcenter', parent.document).val(5);
+                    break; 
+            }            
+        });
+        function getmenuindex(elem) {
+            switch (elem) {
+                case "INDEX":
+                case "1":
+                    return 10; 
+                case "ACCOUNT":
+                case "2":
+                    return 120;
+                case "SETAVATAR":
+                case "3":
+                    return 240;
+                case "SETPASSWORD":
+                case "4":
+                    return 360;
+                case "MYFEEDBACK":
+                case "5":
+                    return 480;
+            }
+        }
+        function movespan(a, b) {
+            if (a == b) { return;}
+            var c = setleft(a,b);
+           $("#movespan").animate({ left: c+ "px" }, {
+               queue: false, duration: 1000, complete: function () {
+                   $("#movespan").css("left", c + "px")
+               }
+           }); 
+       }
+        function setleft(a, b) { 
+            return parseInt($("#movespan").css("left").replace("px", "")) + $(".accountUl li").eq(b - 1).offset().left - $(".accountUl li").eq(a - 1).offset().left;
+       }
     </script>
     @RenderSection("scripts", false)
 </body>

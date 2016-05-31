@@ -569,6 +569,7 @@ namespace YXERP.Controllers
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
+        [ValidateInput(false)]
         public JsonResult SavaProduct(string product)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();

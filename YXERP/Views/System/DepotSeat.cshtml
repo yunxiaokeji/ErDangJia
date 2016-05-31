@@ -15,13 +15,12 @@
 <div class="header-box">
     <span class="header-title left">@(model.Name)-货位设置</span>
     <a href="javascript:void(0);" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"108020604"))">新建货位</a>
-    <a href="/System/Warehouse" class="ico-back left">返回仓库设置</a> 
+    <a href="/System/Warehouse" class="btn-back right mRight20">返回仓库设置</a> 
 </div>
-
-<div class="content-body mTop20">
-    <div class="search-body">
-         <div class="right searth-module"> </div> 
-    </div>
+<div class="search-header">
+    <div class="right searth-module"> </div> 
+</div>
+<div class="content-body">
     <table class="table-list">
         <tr class="tr-header" id="warehouse-items">
             <td class="width150 tLeft">货位编码</td>

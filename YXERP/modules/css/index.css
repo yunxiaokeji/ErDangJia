@@ -76,13 +76,25 @@ nav .action-items .point { width:6px; height:6px; border-radius:3px; background-
 
 /*内容页*/
 .main-content { position:fixed; top:50px; right:0; bottom:0; left:180px;}
-.main-content .window-box { padding-top:17px; border-bottom:solid 1px #fff; height:28px;  }
-.main-content .window-items { padding:0 20px; border-bottom:solid 1px #B5C2CA; height:27px;}
+.main-content .window-box { padding-top:17px; border-bottom:solid 1px #fff; height:28px; position:relative; overflow:hidden; }
+
+.main-content .window-box .left-btn, .main-content .window-box .right-btn{ position:absolute; bottom:1px; width:16px; height:27px; background-color:#B5C2CA;
+                                                                            cursor:pointer; display:none; }
+.main-content .window-box .left-btn { left:0px; border-right:solid 4px #f2f4f8;}
+.main-content .window-box .right-btn { right:0px; border-left:solid 4px #f2f4f8;}
+
+.main-content .window-box .left-btn:hover, 
+.main-content .window-box .right-btn:hover{ background-color:#4a98e7; }
+
+.main-content .left-btn span,.main-content .right-btn span{  border-top:solid 8px transparent ;border-bottom:solid 8px transparent; width:0; height:0; display:inline-block; margin-top:5px; }
+.main-content .left-btn span{ border-right:solid 8px #fff; margin-left:3px;}
+.main-content .right-btn span{ border-left:solid 8px #fff; margin-left:7px;}
+
+.main-content .window-items { padding:0 20px; position:absolute; left:0; border-bottom:solid 1px #B5C2CA; height:27px; width:10000px;}
 .main-content .window-items li{  position:relative;  float:left;  background-color:#B5C2CA; cursor:pointer; border:solid 1px #B5C2CA;
                                  border-radius:3px; border-bottom-left-radius:0; border-bottom-right-radius:0; 
                                  padding:0 10px; margin-right:5px;  width:100px; height:25px; line-height:26px; color:#fff;
                                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-
 
 .window-items li .iconfont{ color:#fff; }
 

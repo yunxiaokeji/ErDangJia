@@ -22,6 +22,15 @@ define(function (require, exports, module) {
     LayoutObject.bindStyle = function () {
         var height = document.documentElement.clientHeight;
         $(".iframe-window").css("height", height - 95);
+
+        //左右滚动
+        if ($("#windowItems li").length * 127 + 40 > $(".window-box").width()) {
+            $(".left-btn,.right-btn").show();
+            $("#windowItems").css("left", $(".window-box").width() - 40 - $("#windowItems li").length * 127);
+        } else {
+            $(".left-btn,.right-btn").hide();
+            $("#windowItems").css("left", "0")
+        }
     }
 
     //绑定事件
@@ -40,6 +49,26 @@ define(function (require, exports, module) {
 
             if (!$(e.target).parents().hasClass("company-logo") && !$(e.target).hasClass("company-logo")) {
                 $(".dropdown-companyinfo").fadeOut("1000");
+            }
+        });
+
+        //向左滑动
+        $(".left-btn").click(function () {
+            var position = $("#windowItems").position();
+            if (position.left < -500) {
+                $("#windowItems").animate({ left: position.left + 500 }, 200);
+            } else {
+                $("#windowItems").animate({ left: 0 }, 200);
+            }
+        });
+
+        //向右滑动
+        $(".right-btn").click(function () {
+            var position = $("#windowItems").position();
+            if (position.left > $(".window-box").width() - 40 - $("#windowItems li").length * 127 + 500) {
+                $("#windowItems").animate({ left: position.left - 500 }, 200);
+            } else {
+                $("#windowItems").animate({ left: $(".window-box").width() - 40 - $("#windowItems li").length * 127 }, 200);
             }
         });
 
@@ -109,6 +138,9 @@ define(function (require, exports, module) {
             }
             _this.remove();
             $("#iframe" + _this.data("id")).remove();
+
+            _self.bindStyle();
+
             return false;
         });
 
@@ -209,13 +241,16 @@ define(function (require, exports, module) {
                                           + _this.data("name") + ' <span title="关闭" class="iconfont close">&#xe606;</span>'
                                    + '</li>');
             $("#iframeBox").append('<iframe id="iframe' + _this.data("code") + '" class="iframe-window" src="' + _this.data("url") + '"></iframe>');
-            _self.bindStyle();
         }
         //拖动排序
         $("#windowItems").sortable({
             items: "li[data-id!='Home']"
         });
+
+        _self.bindStyle();
+
     }
+
 
     //下级菜单
     LayoutObject.getChildMenu = function (code) {

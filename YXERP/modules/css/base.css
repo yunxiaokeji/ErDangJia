@@ -267,9 +267,9 @@ select option{ padding:2px; }
 .search-body { border:solid 1px #ddd; margin:0 20px; background-color:#f9f9f9;  position:relative;}
 .search-body .search-item { clear:both; border-top:dashed 1px #ddd; overflow:auto;}
 .search-body .search-item:first-child{  border-top:none; }
-.search-body .search-item .name { float:left; width:100px; color:#999; line-height:45px; text-indent:10px;}
+.search-body .search-item .name { float:left; width:100px; color:#999; line-height:35px; text-indent:10px;}
 .search-body .search-item ul { margin-left:100px; background-color:#fff; overflow:auto;}
-.search-body .search-item li{ float:left; height:25px; line-height:25px;  color:#333; margin:10px; padding:0 10px; cursor:pointer; border:solid 1px #fff;}
+.search-body .search-item li{ float:left; height:25px; line-height:25px;  color:#333; margin:5px 10px; padding:0 10px; cursor:pointer; border:solid 1px #fff;}
 .search-body .search-item li:hover{ color:#4A99E8; }
 .search-body .search-item li.hover{ border:solid 1px #4A99E8; color:#4A99E8; }
 

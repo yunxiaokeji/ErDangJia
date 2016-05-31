@@ -1,6 +1,8 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
-        doT = require("dot");
+        doT = require("dot"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     var Params = {
@@ -31,12 +33,25 @@
         //        $(".dropdown-ul").hide();
         //    }
         //});
-        $("#btnSearch").click(function () {
+        
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
+
         //切换状态
         $(".search-status li").click(function () {
             var _this = $(this);
@@ -68,27 +83,18 @@
                 _self.getList();
             });
         });
-        require.async("dropdown", function () {
-            var items = [
-                { ID: 0, Name: "未开票" },
-                { ID: 1, Name: "已申请" },
-                { ID: 2, Name: "已开票" }
-            ];
-            $("#invoiceStatus").dropdown({
-                prevText: "开票-",
-                defaultText: "全部",
-                defaultValue: "-1",
-                data: items,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "180",
-                onChange: function (data) {
-                    Params.PageIndex = 1;
-                    Params.InvoiceStatus = data.value;
-                    _self.getList();
-                }
-            });
-        });
+
+        $("#invoiceStatus li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.InvoiceStatus = _this.data("id");
+                _self.getList();
+            }
+        })
+
         //全部选中
         $("#checkAll").click(function () {
             var _this = $(this);

@@ -14,7 +14,7 @@ define(function (require, exports, module) {
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
         LayoutObject.getAgentAuthorizes();
-        LayoutObject.bindUpcomings();
+        //LayoutObject.bindUpcomings();
     }
 
     //绑定元素定位和样式
@@ -385,10 +385,10 @@ define(function (require, exports, module) {
             else {
                 if (parseInt(data.remainderDays) < 31) {
                     $("#remainderDays").addClass("red");
-                    $(".btn-buy").html("续费").attr("href", "/Auction/ExtendNow");
+                    $(".btn-buy").html("续费").data("url", "/Auction/ExtendNow");
                 }
                 else {
-                    $(".btn-buy").html("购买人数").attr("href", "/Auction/BuyUserQuantity");
+                    $(".btn-buy").html("购买人数").data("url", "/Auction/BuyUserQuantity");
                 }
             }
         });

@@ -263,7 +263,7 @@ namespace CloudSalesBusiness
 
         #endregion
 
-        #region 查询
+        #region 属性
 
         public List<ProductAttr> GetAttrs(string clientid)
         {
@@ -279,7 +279,7 @@ namespace CloudSalesBusiness
                 ProductAttr model = new ProductAttr();
                 model.FillData(dr);
                 model.AttrValues = new List<AttrValue>();
-                foreach (DataRow item in ds.Tables["Values"].Rows)
+                foreach (DataRow item in ds.Tables["Values"].Select(" AttrID='" + model.AttrID + "' "))
                 {
                     AttrValue attrValue = new AttrValue();
                     attrValue.FillData(item);
@@ -297,25 +297,12 @@ namespace CloudSalesBusiness
             DataSet ds = dal.GetAttrList(categoryid, keyWords, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
 
             List<ProductAttr> list = new List<ProductAttr>();
-            if (ds.Tables.Contains("Attrs"))
+            foreach (DataRow dr in ds.Tables["Attrs"].Rows)
             {
-                foreach (DataRow dr in ds.Tables["Attrs"].Rows)
-                {
-                    ProductAttr model = new ProductAttr();
-                    model.FillData(dr);
-                    model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
-
-                    List<AttrValue> valueList = new List<AttrValue>();
-                    foreach (DataRow drValue in ds.Tables["Values"].Select("AttrID='" + model.AttrID + "'"))
-                    {
-                        AttrValue valueModel = new AttrValue();
-                        valueModel.FillData(drValue);
-                        valueList.Add(valueModel);
-                    }
-                    model.AttrValues = valueList;
-
-                    list.Add(model);
-                }
+                ProductAttr model = new ProductAttr();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                list.Add(model);
             }
             return list;
         }
@@ -356,12 +343,122 @@ namespace CloudSalesBusiness
                     attrValue.FillData(item);
                     model.AttrValues.Add(attrValue);
                 }
+
+                list.Add(model);
             }
 
-            ClientAttrs[clientid].Add(model);
-            
             return model;
         }
+
+        public string AddProductAttr(string attrName, string description, string categoryID, int type, string operateid, string clientid)
+        {
+            var attrid = Guid.NewGuid().ToString().ToLower();
+            var dal = new ProductsDAL();
+            if (dal.AddProductAttr(attrid, attrName, description, categoryID, type, operateid, clientid))
+            {
+                var list = GetAttrs(clientid);
+                list.Add(new ProductAttr()
+                {
+                    AttrID = attrid,
+                    AttrName = attrName,
+                    Description = description,
+                    CategoryID = categoryID,
+                    ClientID = clientid,
+                    CreateTime = DateTime.Now,
+                    CreateUserID = operateid,
+                    Status = 1,
+                    AttrValues = new List<AttrValue>()
+                });
+                return attrid;
+            }
+            return string.Empty;
+        }
+
+        public string AddAttrValue(string valueName, string attrID, string operateid, string clientid)
+        {
+            var valueid = Guid.NewGuid().ToString().ToLower();
+            var dal = new ProductsDAL();
+            if (dal.AddAttrValue(valueid, valueName, attrID, operateid, clientid))
+            {
+                var model = GetProductAttrByID(attrID, clientid);
+                model.AttrValues.Add(new AttrValue()
+                {
+                    ValueID = valueid,
+                    ValueName = valueName,
+                    Status = 1,
+                    AttrID = attrID,
+                    ClientID = clientid,
+                    CreateTime = DateTime.Now
+                });
+
+                return valueid;
+            }
+            return string.Empty;
+        }
+
+        public bool UpdateProductAttr(string attrid, string attrName, string description, string operateIP, string operateID, string clientid)
+        {
+            var dal = new ProductsDAL();
+            var bl = dal.UpdateProductAttr(attrid, attrName, description);
+            if (bl)
+            {
+                var model = GetProductAttrByID(attrid, clientid);
+                model.AttrName = attrName;
+                model.Description = description;
+            }
+            return bl;
+        }
+
+        public bool UpdateAttrValue(string valueid, string attrid, string valueName, string operateIP, string operateID, string clientid)
+        {
+            var dal = new ProductsDAL();
+            var bl = dal.UpdateAttrValue(valueid, valueName);
+            if (bl)
+            {
+                var model = GetProductAttrByID(attrid, clientid);
+                var value = model.AttrValues.Where(m => m.ValueID == valueid).FirstOrDefault();
+                value.ValueName = valueName;
+            }
+            return bl;
+        }
+
+        public bool DeleteProductAttr(string attrid, string operateIP, string operateid, string clientid, out int result)
+        {
+            var dal = new ProductsDAL();
+            bool bl = dal.DeleteProductAttr(attrid, clientid,out result);
+            if (bl)
+            {
+                var list = GetAttrs(clientid);
+                var model = GetProductAttrByID(attrid, clientid);
+                list.Remove(model);
+            }
+            return bl;
+        }
+
+        public bool UpdateCategoryAttrStatus(string categoryid, string attrid, EnumStatus status, int type, string operateIP, string operateID)
+        {
+            var dal = new ProductsDAL();
+            return dal.UpdateCategoryAttrStatus(categoryid, attrid, (int)status, type);
+        }
+
+        public bool DeleteAttrValue(string valueid, string attrid, string operateIP, string operateID, string clientid, out int result)
+        {
+            var dal = new ProductsDAL();
+            var bl = dal.DeleteAttrValue(valueid, clientid, out result);
+            if (bl)
+            {
+                var model = GetProductAttrByID(attrid, clientid);
+                var value = model.AttrValues.Where(m => m.ValueID == valueid).FirstOrDefault();
+                model.AttrValues.Remove(value);
+            }
+            return bl;
+        }
+
+        #endregion
+
+        
+
+        #region 查询
 
         public List<Category> GetChildCategorysByID(string categoryid, string clientid)
         {
@@ -656,53 +753,7 @@ namespace CloudSalesBusiness
 
         #region 添加
 
-        public string AddProductAttr(string attrName, string description, string categoryID, int type, string operateid, string clientid)
-        {
-            var attrID = Guid.NewGuid().ToString().ToLower();
-            var dal = new ProductsDAL();
-            if (dal.AddProductAttr(attrID, attrName, description, categoryID, type, operateid, clientid))
-            {
-                if (ClientAttrs.ContainsKey(clientid))
-                {
-                    ClientAttrs[clientid].Add(new ProductAttr()
-                    {
-                        AttrID = attrID,
-                        AttrName = attrName,
-                        Description = description,
-                        CategoryID = categoryID,
-                        ClientID = clientid,
-                        CreateTime = DateTime.Now,
-                        CreateUserID = operateid,
-                        Status = 1,
-                        AttrValues = new List<AttrValue>()
-                    });
-                }
-                return attrID;
-            }
-            return string.Empty;
-        }
-
-        public string AddAttrValue(string valueName, string attrID, string operateid, string clientid)
-        {
-            var valueID = Guid.NewGuid().ToString().ToLower();
-            var dal = new ProductsDAL();
-            if (dal.AddAttrValue(valueID, valueName, attrID, operateid, clientid))
-            {
-                var model = GetProductAttrByID(attrID, clientid);
-                model.AttrValues.Add(new AttrValue()
-                {
-                    ValueID = valueID,
-                    ValueName = valueName,
-                    Status = 1,
-                    AttrID = attrID,
-                    ClientID = clientid,
-                    CreateTime = DateTime.Now
-                });
-
-                return valueID;
-            }
-            return string.Empty;
-        }
+        
 
         public string AddCategory(string categoryCode, string categoryName, string pid, int status, List<string> attrlist, List<string> saleattr, string description, string operateid, string clientid)
         {
@@ -787,60 +838,6 @@ namespace CloudSalesBusiness
         #region 编辑、删除
 
         
-
-        
-
-        public bool UpdateProductAttr(string attrID, string attrName, string description, string operateIP, string operateID,string clientid)
-        {
-            var dal = new ProductsDAL();
-            var bl = dal.UpdateProductAttr(attrID, attrName, description);
-            if (bl)
-            {
-                var model = GetProductAttrByID(attrID, clientid);
-                model.AttrName = attrName;
-                model.Description = description;
-            }
-            return bl;
-        }
-
-        public bool UpdateAttrValue(string valueID, string attrid, string valueName, string operateIP, string operateID, string clientid)
-        {
-            var dal = new ProductsDAL();
-            var bl = dal.UpdateAttrValue(valueID, valueName);
-            if (bl)
-            {
-                var model = GetProductAttrByID(attrid, clientid);
-                var value = model.AttrValues.Where(m => m.ValueID == valueID).FirstOrDefault();
-                value.ValueName = valueName;
-            }
-            return bl;
-        }
-
-        public bool UpdateProductAttrStatus(string attrid, EnumStatus status, string operateIP, string operateID)
-        {
-            var dal = new ProductsDAL();
-            return dal.UpdateProductAttrStatus(attrid, (int)status);
-        }
-
-        public bool UpdateCategoryAttrStatus(string categoryid, string attrid, EnumStatus status, int type, string operateIP, string operateID)
-        {
-            var dal = new ProductsDAL();
-            return dal.UpdateCategoryAttrStatus(categoryid, attrid, (int)status, type);
-        }
-
-        public bool UpdateAttrValueStatus(string valueid, string attrid, EnumStatus status, string operateIP, string operateID, string clientid)
-        {
-            var dal = new ProductsDAL();
-            var bl = dal.UpdateAttrValueStatus(valueid, (int)status);
-            if (bl && status == EnumStatus.Delete)
-            {
-                var model = GetProductAttrByID(attrid, clientid);
-                var value = model.AttrValues.Where(m => m.ValueID == valueid).FirstOrDefault();
-                model.AttrValues.Remove(value);
-            }
-            return bl;
-        }
-
         public bool UpdateCategory(string categoryid, string categoryName, int status, List<string> attrlist, List<string> saleattr, string description, string operateid)
         {
             var dal = new ProductsDAL();

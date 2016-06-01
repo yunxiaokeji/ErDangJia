@@ -172,7 +172,7 @@ namespace CloudSalesDAL
 
         #endregion
 
-        #region 查询
+        #region 属性
 
         public DataSet GetAttrs(string clientid)
         {
@@ -197,7 +197,7 @@ namespace CloudSalesDAL
 
             paras[0].Direction = ParameterDirection.InputOutput;
             paras[1].Direction = ParameterDirection.InputOutput;
-            DataSet ds = GetDataSet("P_GetProductAttrList", paras, CommandType.StoredProcedure, "Attrs|Values");
+            DataSet ds = GetDataSet("P_GetProductAttrList", paras, CommandType.StoredProcedure, "Attrs");
             totalCount = Convert.ToInt32(paras[0].Value);
             pageCount = Convert.ToInt32(paras[1].Value);
             return ds;
@@ -221,6 +221,100 @@ namespace CloudSalesDAL
             DataSet ds = GetDataSet("P_GetProductAttrByID", paras, CommandType.StoredProcedure, "Attrs|Values");
             return ds;
         }
+
+        public bool AddProductAttr(string attrID, string attrName, string description, string categoryID, int type, string operateid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@AttrID" , attrID),
+                                     new SqlParameter("@AttrName" , attrName),
+                                     new SqlParameter("@Description" , description),
+                                     new SqlParameter("@CategoryID" , categoryID),
+                                     new SqlParameter("@Type" , type),
+                                     new SqlParameter("@CreateUserID" , operateid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            return ExecuteNonQuery("P_InsertAttr", paras, CommandType.StoredProcedure) > 0;
+        }
+
+        public bool AddAttrValue(string valueID, string valueName, string attrID, string operateid, string clientid)
+        {
+            string sqlText = "INSERT INTO AttrValue([ValueID] ,[ValueName],[Status],[AttrID],CreateUserID,ClientID) "
+                                             + "values(@ValueID ,@ValueName,1,@AttrID,@CreateUserID,@ClientID) ";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ValueID" , valueID),
+                                     new SqlParameter("@ValueName" , valueName),
+                                     new SqlParameter("@AttrID" , attrID),
+                                     new SqlParameter("@CreateUserID" , operateid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool DeleteProductAttr(string attrid, string clientid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",result),
+                                     new SqlParameter("@AttrID",attrid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteProductAttr", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
+        }
+
+        public bool UpdateProductAttr(string attrID, string attrName, string description)
+        {
+            string sqlText = "Update ProductAttr set [AttrName]=@AttrName,[Description]=@Description  where [AttrID]=@AttrID";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@AttrID",attrID),
+                                     new SqlParameter("@AttrName" , attrName),
+                                     new SqlParameter("@Description" , description),
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool UpdateAttrValue(string valueid, string ValueName)
+        {
+            string sqlText = "Update AttrValue set [ValueName]=@ValueName  where [ValueID]=@ValueID";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ValueID",valueid),
+                                     new SqlParameter("@ValueName" , ValueName),
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool DeleteAttrValue(string valueid, string clientid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",result),
+                                     new SqlParameter("@ValueID",valueid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteAttrValue", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
+        }
+
+        public bool UpdateCategoryAttrStatus(string categoryid, string attrid, int status, int type)
+        {
+            string sqlText = "Update CategoryAttr set Status=@Status,UpdateTime=getdate()  where [AttrID]=@AttrID and CategoryID=@CategoryID and Type=@Type";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@CategoryID",categoryid),
+                                     new SqlParameter("@AttrID",attrid),
+                                     new SqlParameter("@Status" , status),
+                                     new SqlParameter("@Type" , type)
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        #endregion
+
+        #region 查询
 
         public DataTable GetChildCategorysByID(string categoryid, string clientid)
         {
@@ -334,35 +428,6 @@ namespace CloudSalesDAL
         #endregion
 
         #region 添加
-
-        public bool AddProductAttr(string attrID, string attrName, string description, string categoryID, int type, string operateid, string clientid)
-        {
-            string sqlText = "P_InsertAttr";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AttrID" , attrID),
-                                     new SqlParameter("@AttrName" , attrName),
-                                     new SqlParameter("@Description" , description),
-                                     new SqlParameter("@CategoryID" , categoryID),
-                                     new SqlParameter("@Type" , type),
-                                     new SqlParameter("@CreateUserID" , operateid),
-                                     new SqlParameter("@ClientID" , clientid)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.StoredProcedure) > 0;
-        }
-
-        public bool AddAttrValue(string valueID, string valueName, string attrID, string operateid, string clientid)
-        {
-            string sqlText = "INSERT INTO AttrValue([ValueID] ,[ValueName],[Status],[AttrID],CreateUserID,ClientID) "
-                                             + "values(@ValueID ,@ValueName,1,@AttrID,@CreateUserID,@ClientID) ";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ValueID" , valueID),
-                                     new SqlParameter("@ValueName" , valueName),
-                                     new SqlParameter("@AttrID" , attrID),
-                                     new SqlParameter("@CreateUserID" , operateid),
-                                     new SqlParameter("@ClientID" , clientid)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
 
         public string AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
         {
@@ -481,59 +546,6 @@ namespace CloudSalesDAL
         #endregion
 
         #region 编辑
-
-        public bool UpdateProductAttr(string attrID, string attrName, string description)
-        {
-            string sqlText = "Update ProductAttr set [AttrName]=@AttrName,[Description]=@Description  where [AttrID]=@AttrID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AttrID",attrID),
-                                     new SqlParameter("@AttrName" , attrName),
-                                     new SqlParameter("@Description" , description),
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
-
-        public bool UpdateAttrValue(string ValueID, string ValueName)
-        {
-            string sqlText = "Update AttrValue set [ValueName]=@ValueName  where [ValueID]=@ValueID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ValueID",ValueID),
-                                     new SqlParameter("@ValueName" , ValueName),
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
-
-        public bool UpdateProductAttrStatus(string attrid, int status)
-        {
-            string sqlText = "Update ProductAttr set Status=@Status,UpdateTime=getdate()  where [AttrID]=@AttrID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AttrID",attrid),
-                                     new SqlParameter("@Status" , status)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
-
-        public bool UpdateCategoryAttrStatus(string categoryid, string attrid, int status, int type)
-        {
-            string sqlText = "Update CategoryAttr set Status=@Status,UpdateTime=getdate()  where [AttrID]=@AttrID and CategoryID=@CategoryID and Type=@Type";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@CategoryID",categoryid),
-                                     new SqlParameter("@AttrID",attrid),
-                                     new SqlParameter("@Status" , status),
-                                     new SqlParameter("@Type" , type)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
-
-        public bool UpdateAttrValueStatus(string valueid, int status)
-        {
-            string sqlText = "Update AttrValue set Status=@Status,UpdateTime=getdate()  where [ValueID]=@ValueID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ValueID",valueid),
-                                     new SqlParameter("@Status" , status)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
 
         public bool UpdateCategory(string categoryid, string categoryName, int status, string attrlist, string saleattr, string description, string operateid)
         {

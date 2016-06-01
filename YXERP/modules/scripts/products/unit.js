@@ -13,6 +13,7 @@
             !!callback && callback(data.result);
         })
     }
+
     //绑定事件
     Unit.bindEvent = function () {
         var _self = this;
@@ -24,6 +25,7 @@
             _ele.find("input").focus();
         });
     }
+
     //附加元素事件
     Unit.bindElementEvent = function (elments) {
         var _self = this;
@@ -69,6 +71,8 @@
                            _this.parent().remove();
                         } else if (result == 10002) {
                             alert("单位存在关联产品，删除失败");
+                        } else {
+                            alert("删除失败");
                         }
                     });
                 })
@@ -77,5 +81,6 @@
             }
         })
     }
+
     module.exports = Unit;
 });

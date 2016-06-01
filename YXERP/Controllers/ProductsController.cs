@@ -26,7 +26,7 @@ namespace YXERP.Controllers
 
         public ActionResult Unit() 
         {
-            ViewBag.Items = new ProductsBusiness().GetClientUnits(CurrentUser.ClientID);
+            ViewBag.Items = ProductsBusiness.BaseBusiness.GetClientUnits(CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
             return View();
         }
 
@@ -219,12 +219,6 @@ namespace YXERP.Controllers
 
         #region 属性
 
-        /// <summary>
-        /// 获取属性列表
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="keyWorks"></param>
-        /// <returns></returns>
         public JsonResult GetAttrList(int index, string keyWorks)
         {
             List<ProductAttr> list = new List<ProductAttr>();
@@ -241,10 +235,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 获取所有属性
-        /// </summary>
-        /// <returns></returns>
+  
         public JsonResult GetAttrsByCategoryID(string categoryid)
         {
             List<ProductAttr> list = new List<ProductAttr>();
@@ -258,11 +249,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存属性
-        /// </summary>
-        /// <param name="attr"></param>
-        /// <returns></returns>
         public JsonResult SaveAttr(string attr)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -287,11 +273,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取属性详情
-        /// </summary>
-        /// <param name="attr"></param>
-        /// <returns></returns>
         public JsonResult GetAttrByID(string attrID = "")
         {
             if (string.IsNullOrEmpty(attrID))
@@ -310,11 +291,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存属性值
-        /// </summary>
-        /// <param name="attr"></param>
-        /// <returns></returns>
         public JsonResult SaveAttrValue(string value)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -341,12 +317,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 删除分类属性
-        /// </summary>
-        /// <param name="categoryid"></param>
-        /// <param name="attrid"></param>
-        /// <returns></returns>
         public JsonResult DeleteCategoryAttr(string categoryid, string attrid, int type)
         {
             bool bl = new ProductsBusiness().UpdateCategoryAttrStatus(categoryid, attrid, EnumStatus.Delete, type, OperateIP, CurrentUser.UserID);
@@ -358,13 +328,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 添加分类通用属性
-        /// </summary>
-        /// <param name="categoryid"></param>
-        /// <param name="attrid"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public JsonResult AddCategoryAttr(string categoryid, string attrid, int type)
         {
             bool bl = new ProductsBusiness().AddCategoryAttr(categoryid, attrid, type, OperateIP, CurrentUser.UserID);
@@ -376,15 +339,11 @@ namespace YXERP.Controllers
             };
         } 
 
-        /// <summary>
-        /// 删除属性
-        /// </summary>
-        /// <param name="attrid"></param>
-        /// <returns></returns>
         public JsonResult DeleteProductAttr(string attrid)
         {
-            bool bl = new ProductsBusiness().UpdateProductAttrStatus(attrid, EnumStatus.Delete, OperateIP, CurrentUser.UserID);
-            JsonDictionary.Add("Status", bl);
+            int result = 0;
+            bool bl = new ProductsBusiness().DeleteProductAttr(attrid, OperateIP, CurrentUser.UserID, CurrentUser.ClientID, out result);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -392,15 +351,11 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 删除属性值
-        /// </summary>
-        /// <param name="valueid"></param>
-        /// <returns></returns>
         public JsonResult DeleteAttrValue(string valueid, string attrid)
         {
-            bool bl = new ProductsBusiness().UpdateAttrValueStatus(valueid, attrid, EnumStatus.Delete, OperateIP, CurrentUser.UserID, CurrentUser.ClientID);
-            JsonDictionary.Add("Status", bl);
+            int result = 0;
+            bool bl = new ProductsBusiness().DeleteAttrValue(valueid, attrid, OperateIP, CurrentUser.UserID, CurrentUser.ClientID,out result);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,

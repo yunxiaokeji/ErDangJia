@@ -56,8 +56,13 @@
             var _this = $(this);
             confirm("属性删除后不可恢复,确认删除吗？", function () {
                 Global.post("/Products/DeleteProductAttr", { attrid: _this.data("id") }, function (data) {
-                    if (data.Status) {
+                    if (data.result == 1) {
+                        alert("属删除成功");
                         _self.getList();
+                    } else if (data.result == 10002) {
+                        alert("属性存在关联数据，删除失败");
+                    } else {
+                        alert("删除失败");
                     }
                 });
             });
@@ -92,6 +97,7 @@
             }
         });
     }
+
     //获取属性列表
     ObjectJS.getList = function () {
         var _self = this;
@@ -123,6 +129,7 @@
             });
         });
     }
+
     //加载属性数据
     ObjectJS.innerItems = function (items, clear) {
         var _self = this;
@@ -158,12 +165,14 @@
         }
 
     }
+
     //显示属性值悬浮层
     ObjectJS.showValues = function (attrID) {
         $("#attrValueBox").animate({ right: "0px" }, "fast");
         Value.AttrID = attrID;
         ObjectJS.getAttrDetail();
     }
+
     //获取属性明细
     ObjectJS.getAttrDetail = function () {
         Global.post("/Products/GetAttrByID", { attrID: Value.AttrID }, function (data) {
@@ -172,10 +181,12 @@
             
         });
     }
+
     //隐藏属性值悬浮层
     ObjectJS.hideValues = function () {
         $("#attrValueBox").animate({ right: "-302px" }, "fast");
     }
+
     //加载值数据
     ObjectJS.innerValuesItems = function (items, clear) {
         var _self = this;
@@ -191,6 +202,7 @@
             $("#attrValues").prepend(item);
         }
     }
+
     //元素绑定事件
     ObjectJS.bindElementEvent = function (elments) {
         var _self = this;
@@ -217,19 +229,28 @@
                 });
             }
         });
+
         elments.find(".ico-delete").click(function () {
             var _this = $(this);
             if (_this.data("id") != "") {
                 confirm("删除后不可恢复,确认删除吗？", function () {
-                    _self.deleteValue(_this.data("id"), function (status) {
-                        status && _this.parent().remove();
+                    _self.deleteValue(_this.data("id"), function (result) {
+                        if (result == 1) {
+                            alert("删除成功");
+                            _this.parent().remove();
+                        } else if (result == 10002) {
+                            alert("属性值存在关联数据，删除失败");
+                        } else {
+                            alert("删除失败");
+                        }
                     });
                 });
             } else {
                 _this.parent().remove();
             }
-        })
+        });
     }
+
     //保存属性值
     ObjectJS.saveValue = function (editback) {
         var _self = this;
@@ -249,6 +270,7 @@
             }
         });
     }
+
     //删除属性值
     ObjectJS.deleteValue = function (valueid, callback) {
         Global.post("/Products/DeleteAttrValue", {
@@ -259,8 +281,9 @@
                 alert("您没有此操作权限，请联系管理员帮您添加权限！");
                 return;
             }
-            !!callback && callback(data.Status);
+            !!callback && callback(data.result);
         });
     }
+
     module.exports = ObjectJS;
 });

@@ -14,9 +14,6 @@ namespace YXERP.Controllers
 {
     public class ProductsController : BaseController
     {
-        //
-        // GET: /Products/
-
         public ActionResult Index()
         {
             return View();
@@ -180,11 +177,6 @@ namespace YXERP.Controllers
 
         #region 单位
 
-        /// <summary>
-        /// 保存单位
-        /// </summary>
-        /// <param name="unit"></param>
-        /// <returns></returns>
         public JsonResult SaveUnit(string unit)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -197,7 +189,7 @@ namespace YXERP.Controllers
             }
             else
             {
-                bool bl = new ProductsBusiness().UpdateUnit(model.UnitID, model.UnitName, model.Description, CurrentUser.UserID);
+                bool bl = ProductsBusiness.BaseBusiness.UpdateUnit(model.UnitID, model.UnitName, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
                 if (bl)
                 {
                     UnitID = model.UnitID;
@@ -210,14 +202,12 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 删除单位
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult DeleteUnit(string unitID)
+
+        public JsonResult DeleteUnit(string unitid)
         {
-            bool bl = new ProductsBusiness().UpdateUnitStatus(unitID, EnumStatus.Delete, OperateIP, CurrentUser.UserID);
-            JsonDictionary.Add("Status", bl);
+            int result = 0;
+            bool bl = ProductsBusiness.BaseBusiness.DeleteUnit(unitid, OperateIP, CurrentUser.UserID, CurrentUser.ClientID, out result);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -547,14 +537,14 @@ namespace YXERP.Controllers
             string id = "";
             if (string.IsNullOrEmpty(model.ProductID))
             {
-                id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.SmallUnitID,
+                id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                                                         model.DiscountValue.Value, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
             }
             else
             {
-                bool bl = new ProductsBusiness().UpdateProduct(model.ProductID,model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.SmallUnitID,
+                bool bl = new ProductsBusiness().UpdateProduct(model.ProductID,model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.Status.Value, model.CategoryID, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                                                         model.DiscountValue.Value, model.ProductImage, model.ShapeCode, model.Description, CurrentUser.UserID, CurrentUser.ClientID);

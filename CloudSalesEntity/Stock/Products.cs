@@ -35,7 +35,7 @@ namespace CloudSalesEntity
 		private int? _iscombineproduct=0;
 		private string _brandid;
 		private string _bigunitid;
-		private string _smallunitid;
+		private string _UnitID;
 		private int? _bigsmallmultiple=1;
 		private string _categorycode="";
 		private string _categorycodelist="";
@@ -144,10 +144,10 @@ namespace CloudSalesEntity
         /// 
         /// </summary>
         [Property("Lower")] 
-		public string SmallUnitID
+		public string UnitID
 		{
-			set{ _smallunitid=value;}
-			get{return _smallunitid;}
+			set{ _UnitID=value;}
+			get{return _UnitID;}
 		}
 
         public ProductUnit SmallUnit { get; set; }

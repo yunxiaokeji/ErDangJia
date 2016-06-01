@@ -41,8 +41,22 @@ namespace CloudSalesBusiness
             set { _attrs = value; }
         }
 
-        #endregion
+        private static Dictionary<string, List<ProductUnit>> _units;
 
+        private static Dictionary<string, List<ProductUnit>> CacheUnits
+        {
+            get
+            {
+                if (_units == null)
+                {
+                    _units = new Dictionary<string, List<ProductUnit>>();
+                }
+                return _units;
+            }
+            set { _units = value; }
+        }
+
+        #endregion
 
         #region 品牌
 
@@ -164,11 +178,17 @@ namespace CloudSalesBusiness
 
         #endregion
 
-        #region 查询
+        #region 单位
 
         public List<ProductUnit> GetClientUnits(string clientid)
         {
             var dal = new ProductsDAL();
+
+            if (CacheUnits.ContainsKey(clientid))
+            {
+                return CacheUnits[clientid];
+            }
+
             DataTable dt = dal.GetClientUnits(clientid);
 
             List<ProductUnit> list = new List<ProductUnit>();
@@ -178,8 +198,72 @@ namespace CloudSalesBusiness
                 model.FillData(dr);
                 list.Add(model);
             }
+            CacheUnits.Add(clientid, list);
             return list;
         }
+
+        public ProductUnit GetUnitByID(string unitid, string clientid)
+        {
+            var list = GetClientUnits(clientid);
+            if (list.Where(m => m.UnitID.ToLower() == unitid.ToLower()).Count() > 0)
+            {
+                return list.Where(m => m.UnitID.ToLower() == unitid.ToLower()).FirstOrDefault();
+            }
+            ProductUnit model = new ProductUnit();
+            DataTable dt = ProductsDAL.BaseProvider.GetUnitByUnitID(unitid);
+            if (dt.Rows.Count > 0)
+            {
+                model.FillData(dt.Rows[0]);
+                list.Add(model);
+            }
+            return model;
+        }
+
+        public string AddUnit(string unitName, string description, string operateid, string clientid)
+        {
+            var dal = new ProductsDAL();
+            string id = dal.AddUnit(unitName, description, operateid, clientid);
+            if (!string.IsNullOrEmpty(id))
+            {
+                var list = GetClientUnits(clientid);
+                list.Add(new ProductUnit()
+                {
+                    UnitID = id,
+                    UnitName = unitName,
+                    Description = description,
+                    ClientID = clientid
+                });
+            }
+            return id;
+        }
+
+        public bool UpdateUnit(string unitid, string unitName, string desciption, string operateID,string clientid)
+        {
+            var dal = new ProductsDAL();
+            bool bl = dal.UpdateUnit(unitid, unitName, desciption);
+            if (bl)
+            {
+                var model = GetUnitByID(unitid, clientid);
+                model.UnitName = unitName;
+            }
+            return bl;
+        }
+
+        public bool DeleteUnit(string unitid, string operateIP, string operateID, string clientid,out int result)
+        {
+            bool bl = ProductsDAL.BaseProvider.DeleteUnit(unitid, operateID, clientid, out result);
+            if (bl)
+            {
+                var list = GetClientUnits(unitid);
+                var model = GetUnitByID(unitid, clientid);
+                list.Remove(model);
+            }
+            return bl;
+        }
+
+        #endregion
+
+        #region 查询
 
         public List<ProductAttr> GetAttrs(string clientid)
         {
@@ -380,7 +464,7 @@ namespace CloudSalesBusiness
                 model.BigUnit = bigunit;
 
                 var smallunit = new ProductUnit();
-                smallunit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.SmallUnitID + "'").FirstOrDefault());
+                smallunit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.UnitID + "'").FirstOrDefault());
                 model.SmallUnit = smallunit;
 
                 model.ProductDetails = new List<ProductDetail>();
@@ -489,11 +573,6 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        /// <summary>
-        /// 获取产品信息（加入购物车页面）
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <returns></returns>
         public Products GetProductByIDForDetails(string productid)
         {
             var dal = new ProductsDAL();
@@ -509,7 +588,7 @@ namespace CloudSalesBusiness
                 model.BigUnit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.BigUnitID + "'").FirstOrDefault());
 
                 model.SmallUnit = new ProductUnit();
-                model.SmallUnit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.SmallUnitID + "'").FirstOrDefault());
+                model.SmallUnit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.UnitID + "'").FirstOrDefault());
 
                 model.AttrLists = new List<ProductAttr>();
                 model.SaleAttrs = new List<ProductAttr>();
@@ -572,16 +651,10 @@ namespace CloudSalesBusiness
 
             return model;
         }
+
         #endregion
 
         #region 添加
-
-     
-        public string AddUnit(string unitName, string description,string operateid,string clientid)
-        {
-            var dal = new ProductsDAL();
-            return dal.AddUnit(unitName, description, operateid, clientid);
-        }
 
         public string AddProductAttr(string attrName, string description, string categoryID, int type, string operateid, string clientid)
         {
@@ -637,7 +710,7 @@ namespace CloudSalesBusiness
             return dal.AddCategory(categoryCode, categoryName, pid, status, string.Join(",", attrlist), string.Join(",", saleattr), description, operateid, clientid);
         }
 
-        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string smallunitid, int bigSmallMultiple,
+        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
                                  bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, List<ProductDetail> details, string operateid, string agentid, string clientid)
         {
@@ -658,7 +731,7 @@ namespace CloudSalesBusiness
                 }
 
                 var dal = new ProductsDAL();
-                string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, brandid, bigunitid, smallunitid, bigSmallMultiple, categoryid, status, attrlist,
+                string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
                                         valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, productImg, shapeCode, description, operateid, clientid);
                 //产品添加成功添加子产品
                 if (!string.IsNullOrEmpty(pid))
@@ -715,20 +788,7 @@ namespace CloudSalesBusiness
 
         
 
-        public bool UpdateUnit(string unitID, string unitName, string desciption, string operateID)
-        {
-            var dal = new ProductsDAL();
-            DataTable dt = dal.GetUnitByUnitID(unitID);
-            string message = "单位名称“" + dt.Rows[0]["unitName"].ToString() + "”变更为“" + unitName + "”；描述“" + dt.Rows[0]["Description"].ToString() + "”变更为“" + desciption + "”";
-            LogBusiness.AddOperateLog(operateID, "ProductsBusiness.UpdateUnit", EnumLogType.Update, EnumLogModules.Stock, EnumLogEntity.ProductUnit, unitID, message,"");
-            return dal.UpdateUnit(unitID, unitName, desciption);
-        }
-
-        public bool UpdateUnitStatus(string unitID, EnumStatus status, string operateIP, string operateID)
-        {
-            var dal = new ProductsDAL();
-            return dal.UpdateUnitStatus(unitID, (int)status);
-        }
+        
 
         public bool UpdateProductAttr(string attrID, string attrName, string description, string operateIP, string operateID,string clientid)
         {
@@ -808,7 +868,7 @@ namespace CloudSalesBusiness
             return CommonBusiness.Update("Products", "IsRecommend", isRecommend ? "1" : "0", " ProductID='" + productid + "'");
         }
 
-        public bool UpdateProduct(string productid,string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string smallunitid, int bigSmallMultiple,
+        public bool UpdateProduct(string productid,string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
                          bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
@@ -828,7 +888,7 @@ namespace CloudSalesBusiness
             }
 
             var dal = new ProductsDAL();
-            return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, brandid, bigunitid, smallunitid, bigSmallMultiple, status, categoryid,attrlist,
+            return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid,attrlist,
                                     valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, productImg, shapeCode, description, operateid, clientid);
         }
 

@@ -60,6 +60,7 @@ define(function (require, exports, module) {
                 });
             });
         });
+
         //编辑
         $("#updateObject").click(function () {
             var _this = $(this);

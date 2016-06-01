@@ -51,7 +51,30 @@ namespace CloudSalesDAL
             return dt;
         }
 
-        public bool UpdateBrand(string brandID, string name, string anotherName, string countryCode, string cityCode, int status, string icopath, string remark, string brandStyle, string operateIP, string operateID)
+        public string AddBrand(string name, string anotherName, string icoPath, string countryCode, string cityCode, int status, string remark, string brandStyle, string operateIP, string operateID, string clientID)
+        {
+            string brandID = Guid.NewGuid().ToString();
+            string sqlText = "INSERT INTO Brand([BrandID] ,[Name],[AnotherName] ,[IcoPath],[CountryCode],[CityCode],[Status],[Remark],[BrandStyle],[OperateIP],[CreateUserID],ClientID) "
+                                      + "values(@BrandID ,@Name,@AnotherName ,@IcoPath,@CountryCode,@CityCode,@Status,@Remark,@BrandStyle,@OperateIP,@CreateUserID,@ClientID)";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@BrandID" , brandID),
+                                     new SqlParameter("@Name" , name),
+                                     new SqlParameter("@AnotherName" , anotherName),
+                                     new SqlParameter("@IcoPath" , icoPath),
+                                     new SqlParameter("@CountryCode" , countryCode),
+                                     new SqlParameter("@CityCode" , cityCode),
+                                     new SqlParameter("@Status" , status),
+                                     new SqlParameter("@Remark" , remark),
+                                     new SqlParameter("@BrandStyle" , brandStyle),
+                                     new SqlParameter("@OperateIP" , operateIP),
+                                     new SqlParameter("@CreateUserID" , operateID),
+                                     new SqlParameter("@ClientID" , clientID)
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0 ? brandID : "";
+
+        }
+
+        public bool UpdateBrand(string brandid, string name, string anotherName, string countryCode, string cityCode, int status, string icopath, string remark, string brandStyle, string operateIP, string operateID)
         {
             string sqlText = "Update Brand set [Name]=@Name,[AnotherName]=@AnotherName ,[CountryCode]=@CountryCode,[CityCode]=@CityCode," +
                 "[Status]=@Status,IcoPath=@IcoPath,[Remark]=@Remark,[BrandStyle]=@BrandStyle,[UpdateTime]=getdate() where BrandID=@BrandID";
@@ -64,7 +87,7 @@ namespace CloudSalesDAL
                                      new SqlParameter("@IcoPath" , icopath),
                                      new SqlParameter("@Remark" , remark),
                                      new SqlParameter("@BrandStyle" , brandStyle),
-                                     new SqlParameter("@BrandID" , brandID),
+                                     new SqlParameter("@BrandID" , brandid),
                                    };
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
@@ -76,7 +99,6 @@ namespace CloudSalesDAL
                                        new SqlParameter("@Result",result),
                                        new SqlParameter("@BrandID",brandid),
                                        new SqlParameter("@OperateID",operateid)
-                                       
                                    };
             paras[0].Direction = ParameterDirection.Output;
             ExecuteNonQuery("P_DeleteBrand", paras, CommandType.StoredProcedure);
@@ -87,16 +109,7 @@ namespace CloudSalesDAL
 
         #endregion
 
-        #region 查询
-
-        
-
-        public DataTable GetUnitByUnitID(string unitID) 
-        {
-            SqlParameter[] paras = { new SqlParameter("@unitID", unitID) };
-            DataTable dt = GetDataTable("select * from ProductUnit where UnitID=@unitID", paras, CommandType.Text);
-            return dt;
-        }
+        #region 单位
 
         public DataTable GetClientUnits(string clientid)
         {
@@ -104,6 +117,62 @@ namespace CloudSalesDAL
             DataTable dt = GetDataTable("select * from ProductUnit where ClientID=@ClientID and Status<>9", paras, CommandType.Text);
             return dt;
         }
+
+        public DataTable GetUnitByUnitID(string unitid)
+        {
+            SqlParameter[] paras = { new SqlParameter("@UnitID", unitid) };
+            DataTable dt = GetDataTable("select * from ProductUnit where UnitID=@UnitID", paras, CommandType.Text);
+            return dt;
+        }
+
+        public string AddUnit(string unitName, string description, string operateid, string clientid)
+        {
+            string guid = Guid.NewGuid().ToString();
+            string sqlText = "INSERT INTO ProductUnit([UnitID] ,[UnitName],[Description],CreateUserID,ClientID) "
+                                            + "values(@UnitID ,@UnitName,@Description,@CreateUserID,@ClientID)";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@UnitID" , guid),
+                                     new SqlParameter("@UnitName" , unitName),
+                                     new SqlParameter("@Description" , description),
+                                     new SqlParameter("@CreateUserID" , operateid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            if (ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0)
+            {
+                return guid;
+            }
+            return "";
+        }
+
+        public bool UpdateUnit(string unitid, string unitName, string description)
+        {
+            string sqlText = "Update ProductUnit set [UnitName]=@UnitName,[Description]=@Description,UpdateTime=getdate()  where [UnitID]=@UnitID";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@UnitID",unitid),
+                                     new SqlParameter("@UnitName" , unitName),
+                                     new SqlParameter("@Description" , description)
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool DeleteUnit(string unitid, string operateid, string clientid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",result),
+                                       new SqlParameter("@UnitID",unitid),
+                                       new SqlParameter("@OperateID",operateid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteUnit", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
+
+        }
+
+        #endregion
+
+        #region 查询
 
         public DataSet GetAttrs(string clientid)
         {
@@ -266,48 +335,6 @@ namespace CloudSalesDAL
 
         #region 添加
 
-        public string AddBrand(string name, string anotherName, string icoPath, string countryCode, string cityCode, int status, string remark, string brandStyle, string operateIP, string operateID, string clientID)
-        {
-            string brandID = Guid.NewGuid().ToString();
-            string sqlText = "INSERT INTO Brand([BrandID] ,[Name],[AnotherName] ,[IcoPath],[CountryCode],[CityCode],[Status],[Remark],[BrandStyle],[OperateIP],[CreateUserID],ClientID) "
-                                      + "values(@BrandID ,@Name,@AnotherName ,@IcoPath,@CountryCode,@CityCode,@Status,@Remark,@BrandStyle,@OperateIP,@CreateUserID,@ClientID)";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@BrandID" , brandID),
-                                     new SqlParameter("@Name" , name),
-                                     new SqlParameter("@AnotherName" , anotherName),
-                                     new SqlParameter("@IcoPath" , icoPath),
-                                     new SqlParameter("@CountryCode" , countryCode),
-                                     new SqlParameter("@CityCode" , cityCode),
-                                     new SqlParameter("@Status" , status),
-                                     new SqlParameter("@Remark" , remark),
-                                     new SqlParameter("@BrandStyle" , brandStyle),
-                                     new SqlParameter("@OperateIP" , operateIP),
-                                     new SqlParameter("@CreateUserID" , operateID),
-                                     new SqlParameter("@ClientID" , clientID)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0 ? brandID : "";
-
-        }
-
-        public string AddUnit(string unitName, string description, string operateid, string clientid)
-        {
-            string guid = Guid.NewGuid().ToString();
-            string sqlText = "INSERT INTO ProductUnit([UnitID] ,[UnitName],[Description],CreateUserID,ClientID) "
-                                            + "values(@UnitID ,@UnitName,@Description,@CreateUserID,@ClientID)";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@UnitID" , guid),
-                                     new SqlParameter("@UnitName" , unitName),
-                                     new SqlParameter("@Description" , description),
-                                     new SqlParameter("@CreateUserID" , operateid),
-                                     new SqlParameter("@ClientID" , clientid)
-                                   };
-            if (ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0)
-            {
-                return guid;
-            }
-            return "";
-        }
-
         public bool AddProductAttr(string attrID, string attrName, string description, string categoryID, int type, string operateid, string clientid)
         {
             string sqlText = "P_InsertAttr";
@@ -360,7 +387,7 @@ namespace CloudSalesDAL
             return id;
         }
 
-        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string smallunitid, int bigSmallMultiple,
+        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
                                  decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
@@ -375,7 +402,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@IsCombineProduct",iscombineproduct),
                                        new SqlParameter("@BrandID",brandid),
                                        new SqlParameter("@BigUnitID",bigunitid),
-                                       new SqlParameter("@SmallUnitID",smallunitid),
+                                       new SqlParameter("@UnitID",UnitID),
                                        new SqlParameter("@BigSmallMultiple",bigSmallMultiple),
                                        new SqlParameter("@CategoryID",categoryid),
                                        new SqlParameter("@Status",status),
@@ -454,29 +481,6 @@ namespace CloudSalesDAL
         #endregion
 
         #region 编辑
-
-       
-
-        public bool UpdateUnit(string unitID, string unitName, string description)
-        {
-            string sqlText = "Update ProductUnit set [UnitName]=@UnitName,[Description]=@Description,UpdateTime=getdate()  where [UnitID]=@UnitID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@UnitID",unitID),
-                                     new SqlParameter("@UnitName" , unitName),
-                                     new SqlParameter("@Description" , description)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
-
-        public bool UpdateUnitStatus(string unitid, int status)
-        {
-            string sqlText = "Update ProductUnit set Status=@Status,UpdateTime=getdate()  where [UnitID]=@UnitID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@UnitID",unitid),
-                                     new SqlParameter("@Status" , status)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
 
         public bool UpdateProductAttr(string attrID, string attrName, string description)
         {
@@ -562,7 +566,7 @@ namespace CloudSalesDAL
             return bl;
         }
 
-        public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string smallunitid, int bigSmallMultiple,
+        public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
                                  decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
@@ -574,7 +578,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@IsCombineProduct",iscombineproduct),
                                        new SqlParameter("@BrandID",brandid),
                                        new SqlParameter("@BigUnitID",bigunitid),
-                                       new SqlParameter("@SmallUnitID",smallunitid),
+                                       new SqlParameter("@UnitID",UnitID),
                                        new SqlParameter("@BigSmallMultiple",bigSmallMultiple),
                                        new SqlParameter("@Status",status),
                                        new SqlParameter("@CategoryID",categoryid),

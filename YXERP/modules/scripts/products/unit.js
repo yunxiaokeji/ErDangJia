@@ -9,8 +9,8 @@
     }
     //删除单位
     Unit.deleteUnit = function (unitid, callback) {
-        Global.post("/Products/DeleteUnit", { unitID: unitid }, function (data) {
-            !!callback && callback(data.Status);
+        Global.post("/Products/DeleteUnit", { unitid: unitid }, function (data) {
+            !!callback && callback(data.result);
         })
     }
     //绑定事件
@@ -63,8 +63,13 @@
             var _this = $(this);
             if (_this.data("id") != "") {
                 confirm("单位删除后不可恢复,确认删除吗？", function () {
-                    _self.deleteUnit(_this.data("id"), function (status) {
-                        status && _this.parent().remove();
+                    _self.deleteUnit(_this.data("id"), function (result) {
+                        if (result == 1) {
+                            alert("单位删除成功");
+                           _this.parent().remove();
+                        } else if (result == 10002) {
+                            alert("单位存在关联产品，删除失败");
+                        }
                     });
                 })
             } else {

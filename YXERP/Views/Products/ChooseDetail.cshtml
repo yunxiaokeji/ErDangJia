@@ -50,7 +50,7 @@
                     <li class="attrValues">
                         <ul id="unit">
                             <li class="value hover" id="small" data-value="0" data-id="@(model.SmallUnit.UnitID)">@(model.SmallUnit.UnitName)</li>
-                            @if (model.SmallUnitID != model.BigUnitID)
+                            @if (model.UnitID != model.BigUnitID)
                             {
                                 <li class="value" id="big"  data-value="1" data-id="@(model.BigUnit.UnitID)">@(model.BigUnit.UnitName)</li>
                             }

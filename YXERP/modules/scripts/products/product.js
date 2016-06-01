@@ -181,7 +181,7 @@ define(function (require, exports, module) {
             IsCombineProduct: 0,
             BrandID: $("#brand").val(),
             BigUnitID: $("#bigUnit").val().trim(),
-            SmallUnitID: $("#smallUnit").val().trim(),
+            UnitID: $("#smallUnit").val().trim(),
             BigSmallMultiple: $("#bigSmallMultiple").val().trim(),
             CategoryID: $("#categoryID").val(),
             Status: $("#status").prop("checked") ? 1 : 0,
@@ -215,7 +215,7 @@ define(function (require, exports, module) {
                     SaleAttrValue: _this.data("attrvalue"),
                     Weight: 0,
                     Price: _this.find(".price").val(),
-                    BigPrice: (Product.SmallUnitID != Product.BigUnitID ? _this.find(".bigprice").val() : _this.find(".price").val()) * Product.BigSmallMultiple,
+                    BigPrice: (Product.UnitID != Product.BigUnitID ? _this.find(".bigprice").val() : _this.find(".price").val()) * Product.BigSmallMultiple,
                     Description: ""
                 };
                 details.push(modelDetail);
@@ -509,7 +509,7 @@ define(function (require, exports, module) {
         }
 
         $("#brand").val(model.BrandID);
-        $("#smallUnit").val(model.SmallUnitID);
+        $("#smallUnit").val(model.UnitID);
         $("#bigUnit").val(model.BigUnitID);
 
         $("#bigSmallMultiple").val(model.BigSmallMultiple);
@@ -656,7 +656,7 @@ define(function (require, exports, module) {
                             AttrValue: valuelist,
                             SaleAttrValue: attrvaluelist,
                             Price: $("#detailsPrice").val(),
-                            BigPrice: (model.SmallUnitID != model.BigUnitID ? $("#bigPrice").val() : $("#detailsPrice").val()) * model.BigSmallMultiple,
+                            BigPrice: (model.UnitID != model.BigUnitID ? $("#bigPrice").val() : $("#detailsPrice").val()) * model.BigSmallMultiple,
                             Weight: 0,
                             ImgS: _self.ImgS,
                             Description: desc
@@ -681,7 +681,7 @@ define(function (require, exports, module) {
 
             //绑定单位
             $("#unitName").text(model.SmallUnit.UnitName)
-            if (model.SmallUnitID != model.BigUnitID) {
+            if (model.UnitID != model.BigUnitID) {
                 $("#bigName").text(model.BigUnit.UnitName);
                 $("#bigquantity").text(model.BigSmallMultiple);
             } else {

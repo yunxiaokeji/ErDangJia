@@ -125,6 +125,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         /// <summary>
         /// 获取团队
         /// </summary>
@@ -143,6 +144,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         //快递公司
         public JsonResult GetExpress()
         {

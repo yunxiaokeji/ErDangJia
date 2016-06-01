@@ -48,9 +48,12 @@ define(function (require, exports, module) {
         $("#deleteObject").click(function () {
             var _this = $(this);
             confirm("品牌删除后不可恢复,确认删除吗？", function () {
-                Global.post("/Products/DeleteBrand", { brandID: _this.data("id") }, function (data) {
-                    if (data.Status) {
+                Global.post("/Products/DeleteBrand", { brandid: _this.data("id") }, function (data) {
+                    if (data.result == 1) {
+                        alert("品牌删除成功");
                         _self.getList();
+                    } else if (data.result == 10002) {
+                        alert("品牌存在关联产品，删除失败");
                     } else {
                         alert("删除失败！");
                     }
@@ -87,7 +90,7 @@ define(function (require, exports, module) {
                             BrandID: model ? model.BrandID : "",
                             Name: $("#brandName").val().trim(),
                             AnotherName: $("#anotherName").val().trim(),
-                            IcoPath: _self.IcoPath,
+                            IcoPath: $("#brandImg").data("src"),
                             CountryCode: "0086",
                             CityCode: BrandCity.getCityCode(),
                             Status: $("#brandStatus").prop("checked") ? 1 : 0,
@@ -115,15 +118,12 @@ define(function (require, exports, module) {
             $("#brandName").focus();
 
             if (model) {
-
                 $("#brandName").val(model.Name);
                 $("#anotherName").val(model.AnotherName);
                 $("#brandStyle").val(model.BrandStyle);
                 $("#brandStatus").prop("checked", model.Status == 1);
                 $("#description").val(model.Remark);
-                $("#brandImg").attr("src", model.IcoPath);
-
-                _self.IcoPath = model.IcoPath;
+                model.IcoPath && $("#brandImg").attr("src", model.IcoPath).data("src", model.IcoPath);
 
                 BrandCity = City.createCity({
                     elementID: "brandCity",
@@ -137,7 +137,7 @@ define(function (require, exports, module) {
                     data: { folder: '', action: 'edit', oldPath: model.IcoPath },
                     success: function (data, status) {
                         if (data.Items.length > 0) {
-                            _self.IcoPath = data.Items[0];
+                            $("#brandImg").data("src", data.Items[0]);
                             $("#brandImg").attr("src", data.Items[0] + "?" + Global.guid());
                         } else {
                             alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
@@ -145,7 +145,6 @@ define(function (require, exports, module) {
                     }
                 });
             } else {
-                _self.IcoPath = "";
                 BrandCity = City.createCity({
                     elementID: "brandCity"
                 });
@@ -156,8 +155,8 @@ define(function (require, exports, module) {
                     data: { folder: '', action: 'add', oldPath: "" },
                     success: function (data, status) {
                         if (data.Items.length > 0) {
-                            _self.IcoPath = data.Items[0];
-                            $("#brandImg").attr("src", data.Items[0]);
+                            $("#brandImg").data("src", data.Items[0]);
+                            $("#brandImg").attr("src", data.Items[0] + "?" + Global.guid());
                         } else {
                             alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
                         }

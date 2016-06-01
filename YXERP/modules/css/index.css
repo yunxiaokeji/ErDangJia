@@ -27,7 +27,7 @@ header .menu .name{ margin-left:5px; color:#BFD2F2; font-size:14px; float:left;}
 header .menu .point { width:6px; height:6px; border-radius:3px; background-color:#f8aa9b; float:left; display:inline-block; margin-top:18px; margin-left:3px; }
 header .menu .cursor {border-bottom:solid 9px #f2f4f8; border-left:solid 10px transparent ;border-right:solid 10px transparent; 
                                    width:0; height:0; position:absolute; left:35px; bottom:0px; display:none;  }
-header .menu a:hover .name,header .menu .hover .name{ color:#fff;}
+header .menu li:hover .name,header .menu .hover .name{ color:#fff;}
 header .menu .hover .cursor{ display:inline-block;}
 
 /*登录信息*/

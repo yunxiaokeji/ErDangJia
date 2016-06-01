@@ -19,7 +19,7 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 文件默认存储路径
         /// </summary>
-        public string FILEPATH = CloudSalesTool.AppSettings.Settings["UploadFilePath"];
+        public string FILEPATH = CloudSalesTool.AppSettings.Settings["UploadFilePath"] + "Product/" + DateTime.Now.ToString("yyyyMM") + "/";
         public string TempPath = CloudSalesTool.AppSettings.Settings["UploadTempPath"];
 
         public static object SingleLock = new object();
@@ -44,7 +44,7 @@ namespace CloudSalesBusiness
         #endregion
 
 
-        #region 查询
+        #region 品牌
 
         public List<Brand> GetBrandList(string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
@@ -91,6 +91,81 @@ namespace CloudSalesBusiness
             return model;
         }
 
+        public string AddBrand(string name, string anotherName, string icoPath, string countryCode, string cityCode, int status, string remark, string brandStyle, string operateIP, string operateID, string clientID)
+        {
+            if (!string.IsNullOrEmpty(icoPath))
+            {
+                if (icoPath.IndexOf("?") > 0)
+                {
+                    icoPath = icoPath.Substring(0, icoPath.IndexOf("?"));
+                }
+
+                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                if (!directory.Exists)
+                {
+                    directory.Create();
+                }
+
+                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icoPath));
+                icoPath = FILEPATH + file.Name;
+                if (file.Exists)
+                {
+                    file.MoveTo(HttpContext.Current.Server.MapPath(icoPath));
+                }
+            }
+
+            return new ProductsDAL().AddBrand(name, anotherName, icoPath, countryCode, cityCode, status, remark, brandStyle, operateIP, operateID, clientID);
+        }
+
+        public bool UpdateBrandStatus(string brandID, EnumStatus status, string operateIP, string operateID)
+        {
+            bool bl = CommonBusiness.Update("Brand", "Status", ((int)status).ToString(), " BrandID='" + brandID + "'");
+
+            if (bl)
+            {
+                string message = "编辑品牌状态为：" + CommonBusiness.GetEnumDesc(status);
+                LogBusiness.AddOperateLog(operateID, "ProductsBusiness.UpdateBrandStatus", EnumLogType.Update, EnumLogModules.Stock, EnumLogEntity.Brand, brandID, message, operateIP);
+            }
+
+            return bl;
+        }
+
+        public bool UpdateBrand(string brandID, string name, string anotherName, string countryCode, string cityCode, string icopath, int status, string remark, string brandStyle, string operateIP, string operateID)
+        {
+            if (!string.IsNullOrEmpty(icopath) && icopath.IndexOf(TempPath) >= 0)
+            {
+                if (icopath.IndexOf("?") > 0)
+                {
+                    icopath = icopath.Substring(0, icopath.IndexOf("?"));
+                }
+
+                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                if (!directory.Exists)
+                {
+                    directory.Create();
+                }
+
+                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icopath));
+                icopath = FILEPATH + file.Name;
+                if (file.Exists)
+                {
+                    file.MoveTo(HttpContext.Current.Server.MapPath(icopath));
+                }
+            }
+            var dal = new ProductsDAL();
+            return dal.UpdateBrand(brandID, name, anotherName, countryCode, cityCode, status, icopath, remark, brandStyle, operateIP, operateID);
+        }
+
+        public bool DeleteBrand(string brandid, string operateip, string operateid, string agentid, string clientid, out int result)
+        {
+            var bl = ProductsDAL.BaseProvider.DeleteBrand(brandid, operateid, out result);
+            return bl;
+        }
+
+        #endregion
+
+        #region 查询
+
         public List<ProductUnit> GetClientUnits(string clientid)
         {
             var dal = new ProductsDAL();
@@ -132,9 +207,6 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        /// <summary>
-        /// 获取属性列表（包括属性值列表）
-        /// </summary>
         public List<ProductAttr> GetAttrList(string categoryid, string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
             var dal = new ProductsDAL();
@@ -223,9 +295,6 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        /// <summary>
-        /// 获取产品分类
-        /// </summary>
         public Category GetCategoryByID(string categoryid)
         {
             var dal = new ProductsDAL();
@@ -240,9 +309,6 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        /// <summary>
-        /// 获取产品分类详情（包括属性和值）
-        /// </summary>
         public Category GetCategoryDetailByID(string categoryid)
         {
             var dal = new ProductsDAL();
@@ -510,28 +576,7 @@ namespace CloudSalesBusiness
 
         #region 添加
 
-        public string AddBrand(string name, string anotherName, string icoPath, string countryCode, string cityCode, int status, string remark, string brandStyle, string operateIP, string operateID, string clientID)
-        {
-            lock (SingleLock)
-            {
-                if (!string.IsNullOrEmpty(icoPath))
-                {
-                    if (icoPath.IndexOf("?") > 0)
-                    {
-                        icoPath = icoPath.Substring(0, icoPath.IndexOf("?"));
-                    }
-                    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icoPath));
-                    icoPath = FILEPATH + file.Name;
-                    if (file.Exists)
-                    {
-                        file.MoveTo(HttpContext.Current.Server.MapPath(icoPath));
-                    }
-                }
-                
-                return new ProductsDAL().AddBrand(name, anotherName, icoPath, countryCode, cityCode, status, remark, brandStyle, operateIP, operateID, clientID);
-            }
-        }
-
+     
         public string AddUnit(string unitName, string description,string operateid,string clientid)
         {
             var dal = new ProductsDAL();
@@ -668,37 +713,7 @@ namespace CloudSalesBusiness
 
         #region 编辑、删除
 
-        public bool UpdateBrandStatus(string brandID, EnumStatus status, string operateIP, string operateID)
-        {
-            bool bl = CommonBusiness.Update("Brand", "Status", ((int)status).ToString(), " BrandID='" + brandID + "'");
-
-            if (bl)
-            {
-                string message = "编辑品牌状态为：" + CommonBusiness.GetEnumDesc(status);
-                LogBusiness.AddOperateLog(operateID, "ProductsBusiness.UpdateBrandStatus", EnumLogType.Update, EnumLogModules.Stock, EnumLogEntity.Brand, brandID, message, operateIP);
-            }
-
-            return bl;
-        }
-
-        public bool UpdateBrand(string brandID, string name, string anotherName, string countryCode, string cityCode, string icopath, int status, string remark, string brandStyle, string operateIP, string operateID)
-        {
-            if (!string.IsNullOrEmpty(icopath) && icopath.IndexOf(TempPath) >= 0)
-            {
-                if (icopath.IndexOf("?") > 0)
-                {
-                    icopath = icopath.Substring(0, icopath.IndexOf("?"));
-                }
-                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icopath));
-                icopath = FILEPATH + file.Name;
-                if (file.Exists)
-                {
-                    file.MoveTo(HttpContext.Current.Server.MapPath(icopath));
-                }
-            }
-            var dal = new ProductsDAL();
-            return dal.UpdateBrand(brandID, name, anotherName, countryCode, cityCode, status, icopath, remark, brandStyle, operateIP, operateID);
-        }
+        
 
         public bool UpdateUnit(string unitID, string unitName, string desciption, string operateID)
         {

@@ -10,7 +10,8 @@ namespace CloudSalesDAL
     public class ProductsDAL : BaseDAL
     {
         public static ProductsDAL BaseProvider = new ProductsDAL();
-        #region 查询
+
+        #region 品牌
 
         public DataSet GetBrandList(string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
@@ -25,7 +26,7 @@ namespace CloudSalesDAL
                                    };
             paras[0].Value = totalCount;
             paras[1].Value = pageCount;
-            
+
             paras[0].Direction = ParameterDirection.InputOutput;
             paras[1].Direction = ParameterDirection.InputOutput;
             DataSet ds = GetDataSet("P_GetBrandList", paras, CommandType.StoredProcedure);
@@ -49,6 +50,46 @@ namespace CloudSalesDAL
             DataTable dt = GetDataTable("select * from Brand where BrandID=@brandID", paras, CommandType.Text);
             return dt;
         }
+
+        public bool UpdateBrand(string brandID, string name, string anotherName, string countryCode, string cityCode, int status, string icopath, string remark, string brandStyle, string operateIP, string operateID)
+        {
+            string sqlText = "Update Brand set [Name]=@Name,[AnotherName]=@AnotherName ,[CountryCode]=@CountryCode,[CityCode]=@CityCode," +
+                "[Status]=@Status,IcoPath=@IcoPath,[Remark]=@Remark,[BrandStyle]=@BrandStyle,[UpdateTime]=getdate() where BrandID=@BrandID";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Name" , name),
+                                     new SqlParameter("@AnotherName" , anotherName),
+                                     new SqlParameter("@CountryCode" , countryCode),
+                                     new SqlParameter("@CityCode" , cityCode),
+                                     new SqlParameter("@Status" , status),
+                                     new SqlParameter("@IcoPath" , icopath),
+                                     new SqlParameter("@Remark" , remark),
+                                     new SqlParameter("@BrandStyle" , brandStyle),
+                                     new SqlParameter("@BrandID" , brandID),
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool DeleteBrand(string brandid, string operateid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",result),
+                                       new SqlParameter("@BrandID",brandid),
+                                       new SqlParameter("@OperateID",operateid)
+                                       
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteBrand", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
+
+        }
+
+        #endregion
+
+        #region 查询
+
+        
 
         public DataTable GetUnitByUnitID(string unitID) 
         {
@@ -414,23 +455,7 @@ namespace CloudSalesDAL
 
         #region 编辑
 
-        public bool UpdateBrand(string brandID, string name, string anotherName, string countryCode, string cityCode, int status, string icopath, string remark, string brandStyle, string operateIP, string operateID)
-        {
-            string sqlText = "Update Brand set [Name]=@Name,[AnotherName]=@AnotherName ,[CountryCode]=@CountryCode,[CityCode]=@CityCode," +
-                "[Status]=@Status,IcoPath=@IcoPath,[Remark]=@Remark,[BrandStyle]=@BrandStyle,[UpdateTime]=getdate() where [BrandID]=@BrandID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@Name" , name),
-                                     new SqlParameter("@AnotherName" , anotherName),
-                                     new SqlParameter("@CountryCode" , countryCode),
-                                     new SqlParameter("@CityCode" , cityCode),
-                                     new SqlParameter("@Status" , status),
-                                     new SqlParameter("@IcoPath" , icopath),
-                                     new SqlParameter("@Remark" , remark),
-                                     new SqlParameter("@BrandStyle" , brandStyle),
-                                     new SqlParameter("@BrandID" , brandID),
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
+       
 
         public bool UpdateUnit(string unitID, string unitName, string description)
         {

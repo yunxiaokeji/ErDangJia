@@ -15,7 +15,7 @@ define(function (require, exports, module) {
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
         LayoutObject.getAgentAuthorizes();
-        //LayoutObject.bindUpcomings();
+        LayoutObject.bindUpcomings();
     }
 
     //绑定元素定位和样式
@@ -337,6 +337,7 @@ define(function (require, exports, module) {
 
     //待办小红点
     LayoutObject.bindUpcomings = function () {
+        return;
         Global.post("/Default/GetClientUpcomings", {}, function (data) {
             for (var i = 0; i < data.items.length; i++) {
                 var item = data.items[i];

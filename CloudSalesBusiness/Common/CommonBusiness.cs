@@ -57,15 +57,8 @@ namespace CloudSalesBusiness
                         model.FillData(dr);
                         _clientMenus.Add(model);
                     }
-                    foreach (var menu in _clientMenus.Where(m => m.Layer == 3))
-                    {
-                        menu.ChildMenus = _clientMenus.Where(m => m.PCode == menu.MenuCode).ToList();
-                    }
-                    foreach (var menu in _clientMenus.Where(m => m.Layer == 2))
-                    {
-                        menu.ChildMenus = _clientMenus.Where(m => m.PCode == menu.MenuCode).ToList();
-                    }
-                    foreach (var menu in _clientMenus.Where(m => m.Layer == 1))
+
+                    foreach (var menu in _clientMenus)
                     {
                         menu.ChildMenus = _clientMenus.Where(m => m.PCode == menu.MenuCode).ToList();
                     }
@@ -78,6 +71,7 @@ namespace CloudSalesBusiness
                 _clientMenus = value;
             }
         }
+
         private static List<Menu> _manageMenus;
         /// <summary>
         /// 后台端菜单
@@ -110,6 +104,7 @@ namespace CloudSalesBusiness
                 _manageMenus = value;
             }
         }
+
         #endregion
 
 

@@ -23,6 +23,7 @@ define(function (require, exports, module) {
     //绑定列表页事件
     ObjectJS.bindEvent = function () {
         var _self = this;
+
         $(document).click(function (e) {
             //隐藏下拉
             if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
@@ -36,6 +37,7 @@ define(function (require, exports, module) {
                 _self.getList();
             });
         });
+
         //添加
         $("#addObject").click(function () {
             _self.createModel();
@@ -45,20 +47,24 @@ define(function (require, exports, module) {
         $("#deleteObject").click(function () {
             var _this = $(this);
             confirm("供应商删除后不可恢复,确认删除吗？", function () {
-                Global.post("/Purchase/DeleteProvider", { id: _this.data("id") }, function (data) {
-                    if (data.status) {
+                Global.post("/Products/DeleteProvider", { id: _this.data("id") }, function (data) {
+                    if (data.result == 1) {
+                        alert("删除成功");
                         _self.getList();
+                    } else if (data.result == 10002) {
+                        alert("存在关联数据，删除失败");
                     } else {
                         alert("删除失败！");
                     }
                 });
             });
         });
+
         //编辑
         $("#updateObject").click(function () {
             var _this = $(this);
 
-            Global.post("/Purchase/GetProviderDetail", { id: _this.data("id") }, function (data) {
+            Global.post("/Products/GetProviderDetail", { id: _this.data("id") }, function (data) {
                 var model = data.model;
                 _self.createModel(model);
             });
@@ -69,7 +75,7 @@ define(function (require, exports, module) {
     ObjectJS.createModel = function (model) {
         var _self = this;
 
-        doT.exec("template/purchase/provider-detail.html", function (template) {
+        doT.exec("template/products/provider-detail.html", function (template) {
             var html = template([]);
             Easydialog.open({
                 container: {
@@ -89,7 +95,7 @@ define(function (require, exports, module) {
                             Address: $("#address").val().trim(),
                             Remark: $("#description").val().trim()
                         };
-                        Global.post("/Purchase/SavaProviders", { entity: JSON.stringify(entity) }, function (data) {
+                        Global.post("/Products/SavaProviders", { entity: JSON.stringify(entity) }, function (data) {
                             if (data.ID.length > 0) {
                                 _self.getList();
                             }
@@ -136,10 +142,10 @@ define(function (require, exports, module) {
         $(".tr-header").nextAll().remove();
         $(".tr-header").after("<tr><td colspan='7'><div class='data-loading' ><div></td></tr>");
 
-        Global.post("/Purchase/GetProviders", Params, function (data) {
+        Global.post("/Products/GetProviders", Params, function (data) {
             $(".tr-header").nextAll().remove();
             if (data.items.length > 0) {
-                doT.exec("template/purchase/providers.html", function (templateFun) {
+                doT.exec("template/products/providers.html", function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
                     $(".tr-header").after(innerText);
@@ -182,5 +188,6 @@ define(function (require, exports, module) {
             });
         });
     }
+
     module.exports = ObjectJS;
 })

@@ -4,14 +4,14 @@
 
 @section scripts{
     <script type="text/javascript">
-        seajs.use(["scripts/purchase/providers"], function (obj) {
+        seajs.use(["scripts/products/providers"], function (obj) {
             obj.init();
         });
     </script>
 }
 <div class="header-box">
     <span class="header-title left"></span>
-    <div  class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103020301"))" id="addObject">添加供应商</div>
+    <div  class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103020301"))" id="addObject">新建供应商</div>
     
 </div>
 <div class="search-header">

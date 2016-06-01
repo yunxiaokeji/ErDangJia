@@ -21,10 +21,7 @@ namespace YXERP.Controllers
         {
             return View("Purchase");
         }
-        public ActionResult Providers()
-        {
-            return View();
-        }
+        
 
         /// <summary>
         /// 我的采购
@@ -41,7 +38,7 @@ namespace YXERP.Controllers
         {
             ViewBag.Title = "我的采购";
             ViewBag.Type = (int)EnumSearchType.Myself;
-            ViewBag.Providers = StockBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
             return View("Purchases");
         }
@@ -50,7 +47,7 @@ namespace YXERP.Controllers
         {
             ViewBag.Title = "所有采购";
             ViewBag.Type = (int)EnumSearchType.All;
-            ViewBag.Providers = StockBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
             return View("Purchases");
         }
@@ -86,7 +83,7 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Purchase/MyPurchase");
             }
-            ViewBag.Providers = StockBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.Ware = ware;
             ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.RK, ware.WareID, CurrentUser.UserID);
             return View();
@@ -106,76 +103,10 @@ namespace YXERP.Controllers
 
         #region 供应商
 
-        public JsonResult GetProviders(string keyWords, int pageIndex, int totalCount)
-        {
-            int pageCount = 0;
-            var list = StockBusiness.BaseBusiness.GetProviders(keyWords, PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
-            JsonDictionary.Add("items", list);
-            JsonDictionary.Add("TotalCount", totalCount);
-            JsonDictionary.Add("PageCount", pageCount);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult GetProviderDetail(string id)
-        {
-            var model = new StockBusiness().GetProviderByID(id);
-            JsonDictionary.Add("model", model);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult SavaProviders(string entity)
-        {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            ProvidersEntity model = serializer.Deserialize<ProvidersEntity>(entity);
-
-            string id = "";
-            if (string.IsNullOrEmpty(model.ProviderID))
-            {
-                id = new StockBusiness().AddProviders(model.Name, model.Contact, model.MobileTele, "", model.CityCode, model.Address, model.Remark, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-            }
-            else
-            {
-                bool bl = new StockBusiness().UpdateProvider(model.ProviderID, model.Name, model.Contact, model.MobileTele, "", model.CityCode, model.Address, model.Remark, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-                if (bl)
-                {
-                    id = model.ProviderID;
-                }
-            }
-            JsonDictionary.Add("ID", id);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult DeleteProvider(string id)
-        {
-            bool bl = new StockBusiness().UpdateProviderStatus(id, EnumStatus.Delete, OperateIP, CurrentUser.UserID);
-            JsonDictionary.Add("status", bl);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
+        
 
         #endregion
 
-
-        /// <summary>
-        /// 保存采购单
-        /// </summary>
-        /// <param name="doc"></param>
-        /// <returns></returns>
         public JsonResult SubmitPurchase(string wareid, string providerid, string remark)
         {
 

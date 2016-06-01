@@ -13,20 +13,7 @@ namespace CloudSalesDAL
         public static StockDAL BaseProvider = new StockDAL();
         #region 查询
 
-        public DataTable GetProviders(string clientID)
-        {
-            SqlParameter[] paras = { new SqlParameter("@ClientID", clientID) };
-            DataTable dt = GetDataTable("select ProviderID,Name from Providers where ClientID=@ClientID and Status<>9", paras, CommandType.Text);
-            return dt;
-
-        }
-
-        public DataTable GetProviderByID(string ProviderID)
-        {
-            SqlParameter[] paras = { new SqlParameter("@ProviderID", ProviderID) };
-            DataTable dt = GetDataTable("select * from Providers where ProviderID=@ProviderID", paras, CommandType.Text);
-            return dt;
-        }
+        
 
         public static DataSet GetStorageDocList(string userid, int type, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
         {
@@ -135,28 +122,6 @@ namespace CloudSalesDAL
 
         #region 添加
 
-        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
-        {
-            string id = Guid.NewGuid().ToString();
-            string sqlText = "insert into Providers(ProviderID,Name,Contact,MobileTele,Email,Website,CityCode,Address,Remark,CreateTime,CreateUserID,AgentID,ClientID)"
-                                      + "values(@ProviderID ,@Name,@Contact ,@MobileTele,@Email,'',@CityCode,@Address,@Remark,getdate(),@CreateUserID,@AgentID,@ClientID)";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ProviderID" , id),
-                                     new SqlParameter("@Name" , name),
-                                     new SqlParameter("@Contact" , contact),
-                                     new SqlParameter("@MobileTele" , mobile),
-                                     new SqlParameter("@Email" , email),
-                                     new SqlParameter("@CityCode" , cityCode),
-                                     new SqlParameter("@Address" , address),
-                                     new SqlParameter("@Remark" , remark),
-                                     new SqlParameter("@CreateUserID" , operateID),
-                                     new SqlParameter("@AgentID" , agentid),
-                                     new SqlParameter("@ClientID" , clientID)
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0 ? id : "";
-
-        }
-
         public static bool AddStorageDoc(string docid, int doctype, decimal totalmoney, string providerid, string remark, string wareid, string userid, string operateip, string clientid)
         {
             SqlParameter[] paras = { 
@@ -210,22 +175,6 @@ namespace CloudSalesDAL
         #endregion
 
         #region 编辑、删除
-
-        public bool UpdateProvider(string providerid, string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
-        {
-            string sqlText = "Update Providers set [Name]=@Name,[Contact]=@Contact ,[MobileTele]=@MobileTele,[CityCode]=@CityCode," +
-                "[Address]=@Address,[Remark]=@Remark where [ProviderID]=@ProviderID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@Name" , name),
-                                     new SqlParameter("@Contact" , contact),
-                                     new SqlParameter("@MobileTele" , mobile),
-                                     new SqlParameter("@CityCode" , cityCode),
-                                     new SqlParameter("@Address" , address),
-                                     new SqlParameter("@Remark" , remark),
-                                     new SqlParameter("@ProviderID" , providerid),
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
 
         public bool UpdateStorageDetailWare(string docid, string autoid, string wareid, string depotid)
         {

@@ -93,7 +93,12 @@ namespace YXERP.Controllers
             ViewBag.OrderType = type;
             ViewBag.GUID = guid;
             return View();
-        } 
+        }
+
+        public ActionResult Providers()
+        {
+            return View();
+        }
 
         #region Ajax
 
@@ -355,6 +360,73 @@ namespace YXERP.Controllers
         {
             int result = 0;
             bool bl = new ProductsBusiness().DeleteAttrValue(valueid, attrid, OperateIP, CurrentUser.UserID, CurrentUser.ClientID,out result);
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        #endregion
+
+        #region 供应商
+
+        public JsonResult GetProviders(string keyWords, int pageIndex, int totalCount)
+        {
+            int pageCount = 0;
+            var list = ProductsBusiness.BaseBusiness.GetProviders(keyWords, PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetProviderDetail(string id)
+        {
+            var model = ProductsBusiness.BaseBusiness.GetProviderByID(id);
+            JsonDictionary.Add("model", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult SavaProviders(string entity)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ProvidersEntity model = serializer.Deserialize<ProvidersEntity>(entity);
+
+            string id = "";
+            if (string.IsNullOrEmpty(model.ProviderID))
+            {
+                id = ProductsBusiness.BaseBusiness.AddProviders(model.Name, model.Contact, model.MobileTele, "", model.CityCode, model.Address, model.Remark, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            }
+            else
+            {
+                bool bl = ProductsBusiness.BaseBusiness.UpdateProvider(model.ProviderID, model.Name, model.Contact, model.MobileTele, "", model.CityCode, model.Address, model.Remark, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+                if (bl)
+                {
+                    id = model.ProviderID;
+                }
+            }
+            JsonDictionary.Add("ID", id);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DeleteProvider(string id)
+        {
+            int result = 0;
+            bool bl = ProductsBusiness.BaseBusiness.DeleteProvider(id, OperateIP, CurrentUser.UserID, CurrentUser.ClientID, out result);
             JsonDictionary.Add("result", result);
             return new JsonResult
             {

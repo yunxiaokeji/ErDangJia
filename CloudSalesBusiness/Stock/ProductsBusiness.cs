@@ -456,7 +456,74 @@ namespace CloudSalesBusiness
 
         #endregion
 
-        
+        #region 供应商
+
+        public List<ProvidersEntity> GetProviders(string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
+        {
+            var dal = new StockDAL();
+
+            string where = " ClientID='" + clientID + "' and Status<>9";
+            if (!string.IsNullOrEmpty(keyWords))
+            {
+                where += " and (Name like '%" + keyWords + "%' or Contact like '%" + keyWords + "%' or MobileTele like '%" + keyWords + "%') ";
+            }
+
+            DataTable dt = CommonBusiness.GetPagerData("Providers", "*", where, "AutoID", pageSize, pageIndex, out totalCount, out pageCount);
+
+            List<ProvidersEntity> list = new List<ProvidersEntity>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ProvidersEntity model = new ProvidersEntity();
+                model.FillData(dr);
+                model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
+                list.Add(model);
+            }
+            return list;
+        }
+
+        public List<ProvidersEntity> GetProviders(string clientid)
+        {
+            DataTable dt = ProductsDAL.BaseProvider.GetProviders(clientid);
+
+            List<ProvidersEntity> list = new List<ProvidersEntity>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ProvidersEntity model = new ProvidersEntity();
+                model.FillData(dr);
+                list.Add(model);
+            }
+            return list;
+        }
+
+        public ProvidersEntity GetProviderByID(string providerid)
+        {
+            DataTable dt = ProductsDAL.BaseProvider.GetProviderByID(providerid);
+
+            ProvidersEntity model = new ProvidersEntity();
+            if (dt.Rows.Count > 0)
+            {
+                model.FillData(dt.Rows[0]);
+                model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
+            }
+            return model;
+        }
+
+        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
+        {
+            return ProductsDAL.BaseProvider.AddProviders(name, contact, mobile, email, cityCode, address, remark, operateID, agentid, clientID);
+        }
+
+        public bool UpdateProvider(string providerid, string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
+        {
+            return ProductsDAL.BaseProvider.UpdateProvider(providerid, name, contact, mobile, email, cityCode, address, remark, operateID, agentid, operateID);
+        }
+
+        public bool DeleteProvider(string providerid, string ip, string operateid, string clientid, out int result)
+        {
+            return ProductsDAL.BaseProvider.DeleteProvider(providerid, clientid, out result);
+        }
+
+        #endregion
 
         #region 查询
 
@@ -753,8 +820,6 @@ namespace CloudSalesBusiness
 
         #region 添加
 
-        
-
         public string AddCategory(string categoryCode, string categoryName, string pid, int status, List<string> attrlist, List<string> saleattr, string description, string operateid, string clientid)
         {
             var dal = new ProductsDAL();
@@ -837,7 +902,6 @@ namespace CloudSalesBusiness
 
         #region 编辑、删除
 
-        
         public bool UpdateCategory(string categoryid, string categoryName, int status, List<string> attrlist, List<string> saleattr, string description, string operateid)
         {
             var dal = new ProductsDAL();

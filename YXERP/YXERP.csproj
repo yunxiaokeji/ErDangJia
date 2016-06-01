@@ -538,7 +538,7 @@
     <Content Include="modules\scripts\organization\roles.js" />
     <Content Include="modules\scripts\organization\users.js" />
     <Content Include="modules\scripts\organization\structure.js" />
-    <Content Include="modules\scripts\purchase\providers.js" />
+    <Content Include="modules\scripts\products\providers.js" />
     <Content Include="modules\scripts\purchase\purchases.js" />
     <Content Include="modules\scripts\purchase\confirmpurchase.js" />
     <Content Include="modules\scripts\purchase\docdetail.js" />
@@ -600,8 +600,8 @@
     <Content Include="modules\template\sales\cuatomerorders.html" />
     <Content Include="modules\template\sales\opportunitys.html" />
     <Content Include="modules\template\sales\customeroppors.html" />
-    <Content Include="modules\template\purchase\provider-detail.html" />
-    <Content Include="modules\template\purchase\providers.html" />
+    <Content Include="modules\template\products\provider-detail.html" />
+    <Content Include="modules\template\products\providers.html" />
     <Content Include="modules\template\report\teamcustomers.html" />
     <Content Include="modules\template\report\usercustomers.html" />
     <Content Include="modules\template\report\teamorders.html" />
@@ -727,7 +727,7 @@
     <Content Include="Views\Organization\CreateUser.cshtml" />
     <Content Include="Views\Home\FindPassword.cshtml" />
     <Content Include="Views\Opportunitys\Opportunitys.cshtml" />
-    <Content Include="Views\Purchase\Providers.cshtml" />
+    <Content Include="Views\Products\Providers.cshtml" />
     <Content Include="Views\Home\Terms.cshtml" />
     <Content Include="Views\Auction\GoAlipayPay.cshtml" />
     <None Include="Properties\PublishProfiles\yunxiaoweb.pubxml" />

@@ -250,6 +250,17 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
+        public bool UpdateProductAttr(string attrID, string attrName, string description)
+        {
+            string sqlText = "Update ProductAttr set [AttrName]=@AttrName,[Description]=@Description  where [AttrID]=@AttrID";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@AttrID",attrID),
+                                     new SqlParameter("@AttrName" , attrName),
+                                     new SqlParameter("@Description" , description),
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
         public bool DeleteProductAttr(string attrid, string clientid, out int result)
         {
             result = 0;
@@ -263,17 +274,6 @@ namespace CloudSalesDAL
             ExecuteNonQuery("P_DeleteProductAttr", paras, CommandType.StoredProcedure);
             result = Convert.ToInt32(paras[0].Value);
             return result == 1;
-        }
-
-        public bool UpdateProductAttr(string attrID, string attrName, string description)
-        {
-            string sqlText = "Update ProductAttr set [AttrName]=@AttrName,[Description]=@Description  where [AttrID]=@AttrID";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AttrID",attrID),
-                                     new SqlParameter("@AttrName" , attrName),
-                                     new SqlParameter("@Description" , description),
-                                   };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
         public bool UpdateAttrValue(string valueid, string ValueName)
@@ -310,6 +310,78 @@ namespace CloudSalesDAL
                                      new SqlParameter("@Type" , type)
                                    };
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        #endregion
+
+        #region 供应商
+
+        public DataTable GetProviders(string clientid)
+        {
+            SqlParameter[] paras = { new SqlParameter("@ClientID", clientid) };
+            DataTable dt = GetDataTable("select ProviderID,Name from Providers where ClientID=@ClientID and Status<>9", paras, CommandType.Text);
+            return dt;
+
+        }
+
+        public DataTable GetProviderByID(string providerid)
+        {
+            SqlParameter[] paras = { new SqlParameter("@ProviderID", providerid) };
+            DataTable dt = GetDataTable("select * from Providers where ProviderID=@ProviderID", paras, CommandType.Text);
+            return dt;
+        }
+
+        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
+        {
+            string id = Guid.NewGuid().ToString();
+            string sqlText = "insert into Providers(ProviderID,Name,Contact,MobileTele,Email,Website,CityCode,Address,Remark,CreateTime,CreateUserID,AgentID,ClientID)"
+                                      + "values(@ProviderID ,@Name,@Contact ,@MobileTele,@Email,'',@CityCode,@Address,@Remark,getdate(),@CreateUserID,@AgentID,@ClientID)";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ProviderID" , id),
+                                     new SqlParameter("@Name" , name),
+                                     new SqlParameter("@Contact" , contact),
+                                     new SqlParameter("@MobileTele" , mobile),
+                                     new SqlParameter("@Email" , email),
+                                     new SqlParameter("@CityCode" , cityCode),
+                                     new SqlParameter("@Address" , address),
+                                     new SqlParameter("@Remark" , remark),
+                                     new SqlParameter("@CreateUserID" , operateID),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientID)
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0 ? id : "";
+
+        }
+        
+        public bool UpdateProvider(string providerid, string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
+        {
+            string sqlText = "Update Providers set [Name]=@Name,[Contact]=@Contact ,[MobileTele]=@MobileTele,[CityCode]=@CityCode," +
+                "[Address]=@Address,[Remark]=@Remark where [ProviderID]=@ProviderID";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Name" , name),
+                                     new SqlParameter("@Contact" , contact),
+                                     new SqlParameter("@MobileTele" , mobile),
+                                     new SqlParameter("@CityCode" , cityCode),
+                                     new SqlParameter("@Address" , address),
+                                     new SqlParameter("@Remark" , remark),
+                                     new SqlParameter("@ProviderID" , providerid),
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool DeleteProvider(string providerid, string clientid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",result),
+                                     new SqlParameter("@ProviderID",providerid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteProvider", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
         }
 
         #endregion

@@ -56,6 +56,21 @@ namespace CloudSalesBusiness
             set { _units = value; }
         }
 
+        private static Dictionary<string, List<Category>> _categorys;
+
+        private static Dictionary<string, List<Category>> CacheCategorys
+        {
+            get
+            {
+                if (_categorys == null)
+                {
+                    _categorys = new Dictionary<string, List<Category>>();
+                }
+                return _categorys;
+            }
+            set { _categorys = value; }
+        }
+
         #endregion
 
         #region 品牌
@@ -525,33 +540,54 @@ namespace CloudSalesBusiness
 
         #endregion
 
-        #region 查询
+        #region 分类
 
-        public List<Category> GetChildCategorysByID(string categoryid, string clientid)
+        public List<Category> GetCategorys(string clientid)
         {
-            var dal = new ProductsDAL();
-            DataTable dt = dal.GetChildCategorysByID(categoryid, clientid);
+            if (CacheCategorys.ContainsKey(clientid))
+            {
+                return CacheCategorys[clientid];
+            }
 
+            DataTable dt = ProductsDAL.BaseProvider.GetCategorys(clientid);
             List<Category> list = new List<Category>();
-
             foreach (DataRow dr in dt.Rows)
             {
                 Category model = new Category();
                 model.FillData(dr);
                 list.Add(model);
             }
+
+            foreach (var model in list)
+            {
+                model.ChildCategorys = list.Where(m => m.PID == model.CategoryID).ToList();
+            }
+
+            CacheCategorys.Add(clientid, list);
             return list;
         }
 
-        public Category GetCategoryByID(string categoryid)
+        public List<Category> GetChildCategorysByID(string categoryid, string clientid)
         {
-            var dal = new ProductsDAL();
-            DataTable dt = dal.GetCategoryByID(categoryid);
+            var list = GetCategorys(clientid);
+            return list.Where(m => m.PID == categoryid).ToList();
+        }
+
+        public Category GetCategoryByID(string categoryid,string clientid)
+        {
+            var list = GetCategorys(clientid);
+            if (list.Where(m => m.CategoryID == categoryid).Count() > 0)
+            {
+                return list.Where(m => m.CategoryID == categoryid).FirstOrDefault();
+            }
+
+            DataTable dt = ProductsDAL.BaseProvider.GetCategoryByID(categoryid);
 
             Category model = new Category();
             if (dt.Rows.Count > 0)
             {
                 model.FillData(dt.Rows[0]);
+                list.Add(model);
             }
 
             return model;
@@ -574,7 +610,7 @@ namespace CloudSalesBusiness
 
                     ProductAttr modelattr = new ProductAttr();
                     modelattr.FillData(attr);
-                    if (modelattr.Type==1)
+                    if (modelattr.Type == 1)
                     {
                         attrlist.Add(modelattr);
                     }
@@ -597,6 +633,69 @@ namespace CloudSalesBusiness
 
             return model;
         }
+
+        public Category AddCategory(string categoryCode, string categoryName, string pid, int status, List<string> attrlist, List<string> saleattr, string description, string operateid, string clientid)
+        {
+            var id = ProductsDAL.BaseProvider.AddCategory(categoryCode, categoryName, pid, status, string.Join(",", attrlist), string.Join(",", saleattr), description, operateid, clientid);
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                var model = GetCategoryByID(id, clientid);
+                if (!string.IsNullOrEmpty(model.PID))
+                {
+                    var pModel = GetCategoryByID(model.PID, clientid);
+                    if (pModel.ChildCategorys == null)
+                    {
+                        pModel.ChildCategorys = new List<Category>();
+                    }
+                    pModel.ChildCategorys.Add(model);
+                }
+                return model;
+            }
+            
+            return null;
+        }
+
+        public bool AddCategoryAttr(string categoryid, string attrid, int type, string operateIP, string operateID)
+        {
+            var dal = new ProductsDAL();
+            return dal.AddCategoryAttr(categoryid, attrid, type, operateID);
+        }
+
+        public Category UpdateCategory(string categoryid, string categoryName, int status, List<string> attrlist, List<string> saleattr, string description, string operateid, string clientid)
+        {
+            bool bl = ProductsDAL.BaseProvider.UpdateCategory(categoryid, categoryName, status, string.Join(",", attrlist), string.Join(",", saleattr), description, operateid);
+            if (bl)
+            {
+                var model = GetCategoryByID(categoryid, clientid);
+                model.CategoryName = categoryName;
+                model.Status = status;
+                model.Description = description;
+                return model;
+            }
+            return null;
+        }
+
+        public bool DeleteCategory(string categoryid, string operateid, string ip, string agentid, string clientid, out int result)
+        {
+            bool bl = ProductsDAL.BaseProvider.DeleteCategory(categoryid, operateid, out result);
+            if (bl)
+            {
+                var list = GetCategorys(clientid);
+                var model = GetCategoryByID(categoryid, clientid);
+                if (!string.IsNullOrEmpty(model.PID))
+                {
+                    var pModel = GetCategoryByID(model.PID, clientid);
+                    pModel.ChildCategorys.Remove(model);
+                }
+                list.Remove(model);
+            }
+            return bl;
+        }
+
+        #endregion
+
+        #region 产品
 
         public List<Products> GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, bool isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
@@ -816,16 +915,6 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        #endregion
-
-        #region 添加
-
-        public string AddCategory(string categoryCode, string categoryName, string pid, int status, List<string> attrlist, List<string> saleattr, string description, string operateid, string clientid)
-        {
-            var dal = new ProductsDAL();
-            return dal.AddCategory(categoryCode, categoryName, pid, status, string.Join(",", attrlist), string.Join(",", saleattr), description, operateid, clientid);
-        }
-
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
                                  bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, List<ProductDetail> details, string operateid, string agentid, string clientid)
@@ -864,14 +953,8 @@ namespace CloudSalesBusiness
                 return pid;
             }
         }
-        
-        public bool AddCategoryAttr(string categoryid, string attrid, int type, string operateIP, string operateID)
-        {
-            var dal = new ProductsDAL();
-            return dal.AddCategoryAttr(categoryid, attrid, type, operateID);
-        }
 
-        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight,decimal bigprice, string productImg, string description, string operateid, string clientid)
+        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string description, string operateid, string clientid)
         {
             lock (SingleLock)
             {
@@ -898,22 +981,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        #endregion
-
-        #region 编辑、删除
-
-        public bool UpdateCategory(string categoryid, string categoryName, int status, List<string> attrlist, List<string> saleattr, string description, string operateid)
-        {
-            var dal = new ProductsDAL();
-            return dal.UpdateCategory(categoryid, categoryName, status, string.Join(",", attrlist), string.Join(",", saleattr), description, operateid);
-        }
-
-        public bool DeleteCategory(string categoryid, string operateid, string ip, string agentid, string clientid, out int result)
-        {
-            var dal = new ProductsDAL();
-            return dal.DeleteCategory(categoryid, operateid, out result);
-        }
-
         public bool UpdateProductStatus(string productid, EnumStatus status, string operateIP, string operateID)
         {
             return CommonBusiness.Update("Products", "Status", ((int)status).ToString(), " ProductID='" + productid + "'");
@@ -929,7 +996,7 @@ namespace CloudSalesBusiness
             return CommonBusiness.Update("Products", "IsRecommend", isRecommend ? "1" : "0", " ProductID='" + productid + "'");
         }
 
-        public bool UpdateProduct(string productid,string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
+        public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
                          bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
@@ -949,7 +1016,7 @@ namespace CloudSalesBusiness
             }
 
             var dal = new ProductsDAL();
-            return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid,attrlist,
+            return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid, attrlist,
                                     valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, productImg, shapeCode, description, operateid, clientid);
         }
 

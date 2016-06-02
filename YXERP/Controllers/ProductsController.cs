@@ -439,12 +439,6 @@ namespace YXERP.Controllers
 
         #region 分类
 
-        /// <summary>
-        /// 保存分类
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="attrlist"></param>
-        /// <returns></returns>
         public JsonResult SavaCategory(string category, string attrlist, string saleattr)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -459,20 +453,19 @@ namespace YXERP.Controllers
             {
                 saleattr = saleattr.Substring(0, saleattr.Length - 1);
             }
-            string caregoryid = "";
+            Category result;
             if (string.IsNullOrEmpty(model.CategoryID))
             {
-                caregoryid = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist.Split(',').ToList(), saleattr.Split(',').ToList(), model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                result = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist.Split(',').ToList(), saleattr.Split(',').ToList(), model.Description, CurrentUser.UserID, CurrentUser.ClientID);
             }
             else
             {
-                bool bl = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.Status.Value, attrlist.Split(',').ToList(), saleattr.Split(',').ToList(), model.Description, CurrentUser.UserID);
-                if (bl)
-                {
-                    caregoryid = model.CategoryID;
-                }
+                result = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.Status.Value, attrlist.Split(',').ToList(), saleattr.Split(',').ToList(), model.Description, CurrentUser.UserID, CurrentUser.ClientID);
             }
-            JsonDictionary.Add("ID", caregoryid);
+
+            JsonDictionary.Add("status", result != null);
+            JsonDictionary.Add("model", result);
+
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -480,29 +473,20 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取下级分类
-        /// </summary>
-        /// <param name="categoryid"></param>
-        /// <returns></returns>
         public JsonResult GetChildCategorysByID(string categoryid)
         {
-            var list = new ProductsBusiness().GetChildCategorysByID(categoryid, CurrentUser.ClientID);
-            JsonDictionary.Add("Items", list);
+            var list = ProductsBusiness.BaseBusiness.GetChildCategorysByID(categoryid, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
             return new JsonResult
             {
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 获取分类详情
-        /// </summary>
-        /// <param name="categoryid"></param>
-        /// <returns></returns>
+
         public JsonResult GetCategoryByID(string categoryid)
         {
-            var model = new ProductsBusiness().GetCategoryByID(categoryid);
+            var model = new ProductsBusiness().GetCategoryByID(categoryid, CurrentUser.ClientID);
             JsonDictionary.Add("Model", model);
             return new JsonResult
             {
@@ -510,11 +494,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 获取分类详情(带属性)
-        /// </summary>
-        /// <param name="categoryid"></param>
-        /// <returns></returns>
+
         public JsonResult GetCategoryDetailsByID(string categoryid)
         {
             var model = new ProductsBusiness().GetCategoryDetailByID(categoryid);

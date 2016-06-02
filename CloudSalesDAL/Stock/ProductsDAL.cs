@@ -386,15 +386,14 @@ namespace CloudSalesDAL
 
         #endregion
 
-        #region 查询
+        #region 分类
 
-        public DataTable GetChildCategorysByID(string categoryid, string clientid)
+        public DataTable GetCategorys(string clientid)
         {
             SqlParameter[] paras = { 
-                                       new SqlParameter("@PID", categoryid) ,
                                        new SqlParameter("@ClientID", clientid) 
                                    };
-            DataTable dt = GetDataTable("select * from Category where PID=@PID and ClientID=@ClientID and Status<>9 Order by CreateTime", paras, CommandType.Text);
+            DataTable dt = GetDataTable("select * from Category where ClientID=@ClientID and Status<>9 Order by CreateTime", paras, CommandType.Text);
             return dt;
         }
 
@@ -411,6 +410,75 @@ namespace CloudSalesDAL
             DataSet ds = GetDataSet("P_GetCategoryDetailByID", paras, CommandType.StoredProcedure, "Category|Attrs|Values");
             return ds;
         }
+
+        public string AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
+        {
+            string id = "";
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@CategoryID",SqlDbType.NVarChar,64),
+                                       new SqlParameter("@CategoryCode",categoryCode),
+                                       new SqlParameter("@CategoryName",categoryName),
+                                       new SqlParameter("@PID",pid),
+                                       new SqlParameter("@Status",status),
+                                       new SqlParameter("@AttrList",attrlist),
+                                       new SqlParameter("@SaleAttr",saleattr),
+                                       new SqlParameter("@Description",description),
+                                       new SqlParameter("@CreateUserID",operateid),
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+            paras[0].Value = id;
+            paras[0].Direction = ParameterDirection.InputOutput;
+
+            ExecuteNonQuery("P_InsertCategory", paras, CommandType.StoredProcedure);
+            id = paras[0].Value.ToString();
+            return id;
+        }
+
+        public bool AddCategoryAttr(string categoryid, string attrid, int type, string operateid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@CategoryID",categoryid),
+                                     new SqlParameter("@AttrID",attrid),
+                                     new SqlParameter("@Type" , type),
+                                     new SqlParameter("@CreateUserID" , operateid)
+                                   };
+            return ExecuteNonQuery("P_AddCategoryAttr", paras, CommandType.StoredProcedure) > 0;
+        }
+
+        public bool UpdateCategory(string categoryid, string categoryName, int status, string attrlist, string saleattr, string description, string operateid)
+        {
+            string sql = "P_UpdateCategory";
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@CategoryID",categoryid),
+                                       new SqlParameter("@CategoryName",categoryName),
+                                       new SqlParameter("@Status",status),
+                                       new SqlParameter("@AttrList",attrlist),
+                                       new SqlParameter("@SaleAttr",saleattr),
+                                       new SqlParameter("@UserID",operateid),
+                                       new SqlParameter("@Description",description)
+                                   };
+
+            return ExecuteNonQuery(sql, paras, CommandType.StoredProcedure) > 0;
+
+        }
+
+        public bool DeleteCategory(string categoryid, string operateid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",result),
+                                       new SqlParameter("@CategoryID",categoryid),
+                                       new SqlParameter("@OperateID",operateid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            bool bl = ExecuteNonQuery("P_DeleteCategory", paras, CommandType.StoredProcedure) > 0;
+            result = Convert.ToInt32(paras[0].Value);
+            return bl;
+        }
+
+        #endregion
+
+        #region 产品
 
         public DataSet GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, int isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
@@ -497,36 +565,9 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        #endregion
-
-        #region 添加
-
-        public string AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
-        {
-            string id = "";
-            SqlParameter[] paras = { 
-                                       new SqlParameter("@CategoryID",SqlDbType.NVarChar,64),
-                                       new SqlParameter("@CategoryCode",categoryCode),
-                                       new SqlParameter("@CategoryName",categoryName),
-                                       new SqlParameter("@PID",pid),
-                                       new SqlParameter("@Status",status),
-                                       new SqlParameter("@AttrList",attrlist),
-                                       new SqlParameter("@SaleAttr",saleattr),
-                                       new SqlParameter("@Description",description),
-                                       new SqlParameter("@CreateUserID",operateid),
-                                       new SqlParameter("@ClientID",clientid)
-                                   };
-            paras[0].Value = id;
-            paras[0].Direction = ParameterDirection.InputOutput;
-
-            ExecuteNonQuery("P_InsertCategory", paras, CommandType.StoredProcedure);
-            id = paras[0].Value.ToString();
-            return id;
-        }
-
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
-                                 string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
-                                 decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
+                         string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
+                         decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
             string id = "";
             int result = 0;
@@ -572,17 +613,6 @@ namespace CloudSalesDAL
             return id;
         }
 
-        public bool AddCategoryAttr(string categoryid, string attrid, int type, string operateid)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@CategoryID",categoryid),
-                                     new SqlParameter("@AttrID",attrid),
-                                     new SqlParameter("@Type" , type),
-                                     new SqlParameter("@CreateUserID" , operateid)
-                                   };
-            return ExecuteNonQuery("P_AddCategoryAttr", paras, CommandType.StoredProcedure) > 0;
-        }
-
         public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string description, string operateid, string clientid)
         {
             string id = "";
@@ -615,44 +645,9 @@ namespace CloudSalesDAL
             return id;
         }
 
-        #endregion
-
-        #region 编辑
-
-        public bool UpdateCategory(string categoryid, string categoryName, int status, string attrlist, string saleattr, string description, string operateid)
-        {
-            string sql = "P_UpdateCategory";
-            SqlParameter[] paras = { 
-                                       new SqlParameter("@CategoryID",categoryid),
-                                       new SqlParameter("@CategoryName",categoryName),
-                                       new SqlParameter("@Status",status),
-                                       new SqlParameter("@AttrList",attrlist),
-                                       new SqlParameter("@SaleAttr",saleattr),
-                                       new SqlParameter("@UserID",operateid),
-                                       new SqlParameter("@Description",description)
-                                   };
-
-            return ExecuteNonQuery(sql, paras, CommandType.StoredProcedure) > 0;
-           
-        }
-
-        public bool DeleteCategory(string categoryid, string operateid, out int result)
-        {
-            result = 0;
-            SqlParameter[] paras = { 
-                                       new SqlParameter("@Result",result),
-                                       new SqlParameter("@CategoryID",categoryid),
-                                       new SqlParameter("@OperateID",operateid)
-                                   };
-            paras[0].Direction = ParameterDirection.Output;
-            bool bl = ExecuteNonQuery("P_DeleteCategory", paras, CommandType.StoredProcedure) > 0;
-            result = Convert.ToInt32(paras[0].Value);
-            return bl;
-        }
-
         public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
-                                 int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
-                                 decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
+                            int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
+                            decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@ProductID",productid),

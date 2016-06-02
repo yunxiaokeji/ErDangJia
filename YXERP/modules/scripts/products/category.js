@@ -11,19 +11,16 @@ define(function (require, exports, module) {
     var Category = {
         CategoryID: "",
         PID: ""
-    }, Value = {
-        AttrID: "",
-        ValueID: "",
-        ValueName: ""
     };
+    var CacheCategorys = [];
     var CacheAttrs = [];
 
     var ObjectJS = {};
     //初始化数据
     ObjectJS.init = function () {
-        ObjectJS.cache();
-        ObjectJS.bindStyle();
         ObjectJS.bindEvent();
+        ObjectJS.bindCategory();
+        //ObjectJS.cache();
     }
     //缓存数据
     ObjectJS.cache = function () {
@@ -34,151 +31,198 @@ define(function (require, exports, module) {
             CacheAttrs = data.Items;
         });
     }
-    //绑定元素定位和样式
-    ObjectJS.bindStyle = function () {
 
-        var _height = document.documentElement.clientHeight - 270;
-        $(".category-all").css("height", _height);
-        $(".category-all").css("width", $(".category-layer").length * 200 + 650);
-        $(".category-list").css("max-height", _height);
-
-        $("div.content-body").scrollLeft($("div.content-body").width());
-    }
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-        //调整浏览器窗体
-        $(window).resize(function () {
-            ObjectJS.bindStyle();
-        });
 
-        $(document).click(function (e) {
-            if (!$(e.target).hasClass("attritem") && !$(e.target).parents().hasClass("attritem") && !$(e.target).hasClass("attr-value-box") && !$(e.target).parents().hasClass("attr-value-box")) {
-                _self.hideValues();
-            }
-
-            if (!$(e.target).hasClass("ddlcategory")) {
-                $("#ddlCategory").hide();
-            }
-
-            if (!$(e.target).hasClass("ddlattr")) {
-                $("#ddlAttr").hide();
-            }
-        });
-
-        //添加属性值
-        $(".ico-input-add").click(function () {
-            if ($("#valueName").val()) {
-                Value.ValueID = "";
-                Value.ValueName = $("#valueName").val();
-                _self.saveValue(function () {
-                    $("#valueName").val("");
-                });
-            }
-        });
-        //删除分类
-        $("#deleteCategory").click(function () {
+        //展开
+        $(".content-body").delegate(".openchild", "click", function () {
             var _this = $(this);
-            confirm("分类删除后不可恢复,确认删除吗?", function () {
+            if (_this.attr("data-state") == "close") {
+                _this.attr("data-state", "open");
+                _this.removeClass("icoopen").addClass("icoclose");
+
+                if ($("#" + _this.data("id")).length == 0) {
+                    var _obj = _self.getChild(_this.data("id"), _this.prevUntil("div").html(), _this.data("eq"));
+                    _this.parent().after(_obj);
+                }
+                $("#" + _this.data("id")).show();
+            } else { //隐藏子下属
+                _this.attr("data-state", "close");
+                _this.removeClass("icoclose").addClass("icoopen");
+
+                $("#" + _this.attr("data-id")).hide();
+            }
+        });
+
+        //添加子类
+        $(".content-body").delegate(".category-add", "click", function () {
+            var _this = $(this).prevAll(".openspan");
+
+            var _leftLine = $(this).prevAll(".left-box");
+
+            Category.CategoryID = "";
+            Category.PID = _this.data("id");
+            _self.showCategory(function (model) {
+
+                if (model.Layers == 1) {
+                    location.href = location.href;
+                    return;
+                }
+
+                $("#" + _this.data("id")).remove();
+                if (CacheCategorys[_this.data("id")]) {
+                    CacheCategorys[_this.data("id")].push(model);
+                } else {
+                    CacheCategorys[_this.data("id")] = [model];
+                }
+
+                if (!_this.hasClass("icoopen") && !_this.hasClass("icoclose")) {
+                    _this.addClass("icoclose");
+                }
+
+                var _leftBg = $(document.createElement("div")).css("display", "inline-block").addClass("left");
+                _leftBg.append(_leftLine.html());
+                var _obj = _self.getChild(_this.data("id"), _leftBg.html(), _this.data("eq"));
+
+                _this.parent().after(_obj);
+                $("#" + _this.data("id")).show();
+            });
+        });
+
+        //删除分类
+        $(".content-body").delegate(".category-del", "click", function () {
+            var _this = $(this);
+            confirm("分类删除后不可恢复,确认删除吗？", function () {
                 Global.post("/Products/DeleteCategory", { id: _this.data("id") }, function (data) {
                     if (data.status == 1) {
-                        $(".category-list li[data-id='" + _this.data("id") + "']").remove();
+                        if (_this.siblings().length > 1) {
+
+                        } else {
+                            _this.parent().parent().prev().find(".openspan").removeClass("icoclose").removeClass("icoopen");
+                        }
+                        _this.parent().remove();
+                        
                     } else if (data.status == 10002) {
-                        alert("存在下级分类,不能删除,可以选择不启用!");
+                        alert("存在关联数据,不能删除,可以选择不启用");
                     } else {
-                        alert("删除失败!");
+                        alert("删除失败");
                     }
                 });
             });
         });
+
         //编辑分类
-        $("#editCategory").click(function () {
+        $(".content-body").delegate(".category-edit", "click", function () {
             var _this = $(this);
-            
+
             Global.post("/Products/GetCategoryByID", {
                 categoryid: _this.data("id")
             }, function (data) {
                 Category = data.Model;
                 _self.showCategory(function (model) {
-                    var _old = $(".category-list li[data-id='" + _this.data("id") + "']").find(".category-name");
-                    _old.html(model.CategoryName);
+                    _this.prev().html(model.CategoryName);
                     if (model.Status == 1) {
-                        _old.removeClass("color999");
+                        _this.prev().removeClass("close");
                     } else {
-                        _old.addClass("color999");
-                    }
-                    _old.parent().attr("title", model.Description);
-                }, Category.Layers);
-            });
-            return false;
-        });
-
-        //删除属性
-        $("#deleteAttr").click(function () {
-            var _this = $(this);
-            confirm("删除后不可恢复,确认删除吗?", function () {
-                Global.post("/Products/DeleteCategoryAttr", {
-                    categoryid: _this.data("categoryid"),
-                    attrid: _this.data("id"),
-                    type: _this.data("type")
-                }, function (data) {
-                    if (data.Status) {
-                        $(".category-attr-list li[data-id='" + _this.data("id") + "']").remove();
-
-                        $(".common-attr-list li[data-id='" + _this.data("id") + "']").find(".addcommon").show();
-
+                        _this.prev().addClass("close");
                     }
                 });
             });
-        });
-        //编辑属性
-        $("#editAttr").click(function () {
-            var _this = $(this);
-
-            AttrPlug.init({
-                attrid: _this.data("id"),
-                categoryid: "",
-                callback: function (Attr) {
-                    var _old = $(".category-attr-list li[data-id='" + _this.data("id") + "']");
-                    _old.attr("title", Attr.Description);
-                    _old.find(".category-attr-name").html(Attr.AttrName);
-                }
-            });
-
             return false;
         });
-
-        _self.addBindEvent($(".create-child"));
-
-        _self.bindElementEvent($(".category-list li"));
-        
     }
 
-    //添加分类绑定事件并处理回调
-    ObjectJS.addBindEvent = function (ele) {
+    //绑定一级分类
+    ObjectJS.bindCategory = function () {
         var _self = this;
-        ele.click(function () {
-            var _this = $(this);
-            Category.CategoryID = "";
-            Category.PID = _this.data("id");
-            _self.showCategory(function (model) {
-                var ele = $('<li data-id="' + model.CategoryID + '" title="' + model.Description + '" data-layer="' + _this.data("layer") + '">' +
-                                '<span class="category-name long width150 left">' + model.CategoryName + '</span>' +
-                                '<span data-id="' + model.CategoryID + '" class="ddlcategory right">></span>' +
-                            '</li>');
-                _self.bindElementEvent(ele);
-                _this.prev("ul").append(ele);
-            }, _this.data("layer"));
+
+        Global.post("/Products/GetChildCategorysByID", {
+            categoryid: ""
+        }, function (data) {
+            doT.exec("template/products/categorys.html", function (template) {
+                var innerHtml = template(data.items);
+                innerHtml = $(innerHtml);
+
+                $("#categoryBox").append(innerHtml);
+
+                for (var i = 0; i < data.items.length; i++) {
+                    var item=data.items[i];
+                    CacheCategorys[item.CategoryID] = item.ChildCategorys;
+                }
+            });
         });
+    }
+
+    //展开下级
+    ObjectJS.getChild = function (categoryid, provHtml, isLast) {
+        var _self = this;
+        var _div = $(document.createElement("div")).attr("id", categoryid).addClass("childbox").addClass("hide");
+        for (var i = 0; i < CacheCategorys[categoryid].length; i++) {
+            var _item = $(document.createElement("div")).addClass("category-item");
+
+            //添加左侧背景图
+            var _leftBg = $(document.createElement("div")).css("display", "inline-block").addClass("left").addClass("left-box");
+            _leftBg.append(provHtml);
+            if (isLast == "last") {
+                _leftBg.append("<span class='null left'></span>");
+            } else {
+                _leftBg.append("<span class='line left'></span>");
+            }
+            _item.append(_leftBg);
+
+            //是否最后一位
+            if (i == CacheCategorys[categoryid].length - 1) {
+                _item.append("<span class='lastline left'></span>");
+
+                //加载显示下属图标和缓存数据
+                if (CacheCategorys[categoryid][i].ChildCategorys && CacheCategorys[categoryid][i].ChildCategorys.length > 0) {
+                    _item.append("<span data-id='" + CacheCategorys[categoryid][i].CategoryID + "' data-eq='last' data-state='close' class='icoopen openchild left openspan'></span>");
+                    if (!CacheCategorys[CacheCategorys[categoryid][i].CategoryID]) {
+                        CacheCategorys[CacheCategorys[categoryid][i].CategoryID] = CacheCategorys[categoryid][i].ChildCategorys;
+                    }
+                } else {
+                    _item.append("<span data-id='" + CacheCategorys[categoryid][i].CategoryID + "' data-eq='last' data-state='close' class='left openspan'></span>");
+                }
+            } else {
+                _item.append("<span class='leftline left'></span>");
+
+                //加载显示下属图标和缓存数据
+                if (CacheCategorys[categoryid][i].ChildCategorys && CacheCategorys[categoryid][i].ChildCategorys.length > 0) {
+                    _item.append("<span data-id='" + CacheCategorys[categoryid][i].CategoryID + "' data-eq='' data-state='close' class='icoopen openchild left openspan'></span>");
+                    if (!CacheCategorys[CacheCategorys[categoryid][i].CategoryID]) {
+                        CacheCategorys[CacheCategorys[categoryid][i].CategoryID] = CacheCategorys[categoryid][i].ChildCategorys;
+                    }
+                } else {
+                    _item.append("<span data-id='" + CacheCategorys[categoryid][i].CategoryID + "' data-eq='' data-state='close' class='left openspan'></span>");
+                }
+            }
+            _item.append('<span class="left category ' + (CacheCategorys[categoryid][i].Status == 1 || 'close') + '">' + CacheCategorys[categoryid][i].CategoryName + '</span>');
+            _item.append('<a class="category-edit" data-id="' + CacheCategorys[categoryid][i].CategoryID + '" href="javascript:void(0)">编辑</a>');
+            _item.append('<a class="category-add" data-id="' + CacheCategorys[categoryid][i].CategoryID + '" href="javascript:void(0)">添加子类</a>');
+            _item.append('<a class="category-child" data-id="' + CacheCategorys[categoryid][i].CategoryID + '" href="javascript:void(0)">添加产品</a>');
+            _item.append('<a class="category-del" data-id="' + CacheCategorys[categoryid][i].CategoryID + '" href="javascript:void(0)">删除</a>');
+            
+            _div.append(_item);
+
+            //默认加载下级
+            _item.find(".openchild").each(function () {
+                var _this = $(this);
+                var _obj = _self.getChild(_this.data("id"), _leftBg.html(), _this.data("eq"));
+                _this.parent().after(_obj);
+            });
+        }
+        return _div;
     }
 
     //添加分类弹出层
-    ObjectJS.showCategory = function (callback, Layers) {
+    ObjectJS.showCategory = function (callback) {
         var _self = this;
         doT.exec("template/products/category_add.html", function (templateFun) {
 
-            var html= templateFun([]);
-            
+            var html = templateFun([]);
+
             Easydialog.open({
                 container: {
                     id: "category-add-div",
@@ -226,19 +270,27 @@ define(function (require, exports, module) {
             });
         });
     }
+
+    //保存分类
+    ObjectJS.saveCategory = function (category, attrs, saleattrs, callback) {
+        Global.post("/Products/SavaCategory", {
+            category: JSON.stringify(category),
+            attrlist: attrs,
+            saleattr: saleattrs
+        }, function (data) {
+            if (data.result == "10001") {
+                alert("您没有此操作权限，请联系管理员帮您添加权限！");
+                return;
+            }
+            if (data.status) {
+                !!callback && callback(data.model);
+            }
+        });
+    };
+
     //元素绑定事件
     ObjectJS.bindElementEvent = function (element) {
         var _self = this;
-
-        //element.mouseover(function () {
-        //    var _this = $(this);
-        //    _this.find(".ddlcategory").addClass("ico-dropdown").html("");
-        //});
-        ////鼠标悬浮
-        //element.mouseout(function () {
-        //    var _this = $(this);
-        //    _this.find(".ddlcategory").removeClass("ico-dropdown").html("");
-        //});
 
         //下拉事件
         element.find(".ddlcategory").click(function () {
@@ -396,23 +448,7 @@ define(function (require, exports, module) {
             _self.showValues($(this).data("id"));
         })
     }
-    //保存分类
-    ObjectJS.saveCategory = function (category, attrs, saleattrs, callback) {
-        Global.post("/Products/SavaCategory", {
-            category: JSON.stringify(category),
-            attrlist: attrs,
-            saleattr: saleattrs
-        }, function (data) {
-            if (data.result == "10001") {
-                alert("您没有此操作权限，请联系管理员帮您添加权限！");
-                return;
-            }
-            if (data.ID) {
-                category.CategoryID = data.ID;
-                !!callback && callback(category);
-            }
-        });
-    };
+    
     //显示属性值悬浮层
     ObjectJS.showValues = function (attrID) {
         var height = document.documentElement.clientHeight;

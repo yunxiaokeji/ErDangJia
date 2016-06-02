@@ -159,6 +159,8 @@
     <Content Include="modules\css\iconfont\iconfont.svg" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
+    <Content Include="modules\images\ico-category-close.png" />
+    <Content Include="modules\images\ico-category.png" />
     <Content Include="modules\images\ico-company.png" />
     <Content Include="modules\images\ico-contact.png" />
     <Content Include="modules\images\ico-feedback.png" />
@@ -753,7 +755,6 @@
     <Content Include="modules\css\index.css" />
     <Content Include="modules\css\home\login.css" />
     <Content Include="modules\css\system\organization.css" />
-    <Content Include="modules\css\stock\attrplug.css" />
     <Content Include="modules\css\shoppingcart\filterproducts.css" />
     <Content Include="modules\css\shoppingcart\filterdetails.css" />
     <Content Include="modules\images\default.png" />

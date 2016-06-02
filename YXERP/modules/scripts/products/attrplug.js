@@ -14,7 +14,7 @@ define(function (require, exports, module) {
         Verify = require("verify"), VerifyObject,
         doT = require("dot"),
         Easydialog = require("easydialog");
-    require("css/stock/attrplug.css");
+
     var Attr = {
         AttrID: "",
         AttrName: "",
@@ -62,7 +62,7 @@ define(function (require, exports, module) {
     //添加属性弹出层
     ObjectJS.prototype.addAttr = function () {
         var _self = this;
-        var html = '<ul class="create-attr">' +
+        var html = '<ul class="easydialog-create">' +
                         '<li><span class="width80 left">名称：</span><input type="text" id="attrName" maxlength="10" value="" class="input verify " data-empty="必填" /></li>';
         if (!!Attr.CategoryID && !Attr.AttrID) {
             html += '<li><span class="width80 left">类型：</span>' +

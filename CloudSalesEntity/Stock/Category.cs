@@ -192,6 +192,7 @@ namespace CloudSalesEntity
         }
         #endregion Model
 
+        public List<Category> ChildCategorys { get; set; }
 
         /// <summary>
         /// 填充数据

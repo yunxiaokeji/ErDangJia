@@ -76,6 +76,16 @@ define(function (require, exports, module) {
 
         $("#productName").focus();
 
+        //checkbox
+        $(".checked").click(function () {
+            var _this = $(this);
+            if (_this.find(".checkbox").hasClass("hover")) {
+                _this.find(".checkbox").removeClass("hover");
+            } else {
+                _this.find(".checkbox").addClass("hover");
+            }
+        });
+
         //更改价格同步子产品
         $("#price").change(function () {
             $(".child-product-table").find(".price,.bigprice").val($("#price").val());
@@ -83,32 +93,39 @@ define(function (require, exports, module) {
 
         //组合子产品
         $(".productsalesattr .attritem").click(function () {
-            var bl = false, details = [], isFirst = true;
+            var _this = $(this), bl = false, details = [], isFirst = true;
+            if (_this.find(".checkbox").hasClass("hover")) {
+                _this.find(".checkbox").removeClass("hover");
+            } else {
+                _this.find(".checkbox").addClass("hover");
+            }
             $(".productsalesattr").each(function () {
                 bl = false;
                 var _attr = $(this), attrdetail = details;
                 //组合规格
-                _attr.find("input:checked").each(function () {
+                _attr.find(".checkbox.hover").each(function () {
                     bl = true;
                     var _value = $(this);
                     //首个规格
                     if (isFirst) {
                         var model = {};
-                        model.ids = _attr.data("id") + ":" + _value.val();
+                        model.ids = _attr.data("id") + ":" + _value.data("id");
                         model.saleAttr = _attr.data("id");
-                        model.attrValue = _value.val();
+                        model.attrValue = _value.data("id");
                         model.names = _attr.data("text") + ":" + _value.data("text");
                         model.layer = 1;
+                        model.guid = Global.guid();
                         details.push(model);
                     }else {
                         for (var i = 0, j = attrdetail.length; i < j; i++) {
-                            if (attrdetail[i].ids.indexOf(_value.data("id")) < 0) {
+                            if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
                                 var model = {};
-                                model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.val();
+                                model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
                                 model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
-                                model.attrValue = attrdetail[i].attrValue + "," + _value.val();
+                                model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
                                 model.names = attrdetail[i].names + "," + _attr.data("text") + ":" + _value.data("text");
                                 model.layer = attrdetail[i].layer + 1;
+                                model.guid = Global.guid();
                                 details.push(model);
                             }
                         }
@@ -131,6 +148,23 @@ define(function (require, exports, module) {
                     var innerText = templateFun(items);
                     innerText = $(innerText);
                     $(".child-product-li").append(innerText);
+
+                    innerText.find(".upload-child-img").each(function () {
+                        var _this = $(this);
+                        Upload.createUpload({
+                            element: "#" + _this.attr("id"),
+                            buttonText: "选择图片",
+                            className: "",
+                            data: { folder: '', action: 'add', oldPath: "" },
+                            success: function (data, status) {
+                                if (data.Items.length > 0) {
+                                    _this.siblings("img").attr("src", data.Items[0]).data("src", data.Items[0]);
+                                } else {
+                                    alert("只能上传jpg/png/gif类型的图片，且大小不能超过5M！");
+                                }
+                            }
+                        });
+                    })
 
                     innerText.find(".price,.bigprice").val($("#price").val());
 
@@ -180,20 +214,20 @@ define(function (require, exports, module) {
             GeneralName: $("#generalName").val().trim(),
             IsCombineProduct: 0,
             BrandID: $("#brand").val(),
-            BigUnitID: $("#bigUnit").val().trim(),
+            BigUnitID: $("#smallUnit").val().trim(),//$("#bigUnit").val().trim(),
             UnitID: $("#smallUnit").val().trim(),
-            BigSmallMultiple: $("#bigSmallMultiple").val().trim(),
+            BigSmallMultiple: 1,//$("#bigSmallMultiple").val().trim(),
             CategoryID: $("#categoryID").val(),
-            Status: $("#status").prop("checked") ? 1 : 0,
+            Status: $("#status").hasClass("hover") ? 1 : 0,
             AttrList: attrlist,
             ValueList: valuelist,
             AttrValueList: attrvaluelist,
             CommonPrice: $("#commonprice").val(),
             Price: $("#price").val(),
             Weight: $("#weight").val(),
-            IsNew: $("#isNew").prop("checked") ? 1 : 0,
-            IsRecommend: $("#isRecommend").prop("checked") ? 1 : 0,
-            IsAllow: $("#isAllow").prop("checked") ? 1 : 0,
+            IsNew: 0,//$("#isNew").prop("checked") ? 1 : 0,
+            IsRecommend: 0,//$("#isRecommend").prop("checked") ? 1 : 0,
+            IsAllow: $("#isAllow").hasClass("hover") ? 1 : 0,
             IsAutoSend: 0, //$("#isAutoSend").prop("checked") ? 1 : 0,
             EffectiveDays: $("#effectiveDays").val(),
             DiscountValue:1,
@@ -210,20 +244,19 @@ define(function (require, exports, module) {
                 var modelDetail = {
                     DetailsCode: _this.find(".code").val(),
                     ShapeCode: "",
+                    ImgS: _this.find("img").data("src"),
                     SaleAttr: _this.data("attr"),
                     AttrValue: _this.data("value"),
                     SaleAttrValue: _this.data("attrvalue"),
                     Weight: 0,
                     Price: _this.find(".price").val(),
-                    BigPrice: (Product.UnitID != Product.BigUnitID ? _this.find(".bigprice").val() : _this.find(".price").val()) * Product.BigSmallMultiple,
-                    Description: ""
+                    BigPrice: _this.find(".price").val(),//(Product.UnitID != Product.BigUnitID ? _this.find(".bigprice").val() : _this.find(".price").val()) * Product.BigSmallMultiple,
+                    Description: _this.data("desc")
                 };
                 details.push(modelDetail);
             });
             Product.ProductDetails = details;
         }
-        console.log(Product);
-
         Global.post("/Products/SavaProduct", {
             product: JSON.stringify(Product)
         }, function (data) {
@@ -239,6 +272,7 @@ define(function (require, exports, module) {
         _self.getChildCategory("");;
         _self.bindListEvent();
     }
+
     //获取分类信息和下级分类
     Product.getChildCategory = function (pid) {
         var _self = this;
@@ -258,6 +292,7 @@ define(function (require, exports, module) {
         Params.CategoryID = pid;
         _self.getList();
     }
+
     //绑定下级分类
     Product.bindChildCagegory = function (pid) {
         var _self = this;
@@ -384,6 +419,7 @@ define(function (require, exports, module) {
             _self.getList();
         });
     }
+
     //获取产品列表
     Product.getList = function () {
         var _self = this;
@@ -454,6 +490,7 @@ define(function (require, exports, module) {
 
         });
     }
+
     //更改产品状态
     Product.editStatus = function (obj, id, status, callback) {
         var _self = this;
@@ -464,6 +501,7 @@ define(function (require, exports, module) {
             !!callback && callback(data.Status);
         });
     }
+
     //更改产品是否新品
     Product.editIsNew = function (obj, id, status, callback) {
         var _self = this;
@@ -474,6 +512,7 @@ define(function (require, exports, module) {
             !!callback && callback(data.Status);
         });
     }
+
     //更改产品是否推荐
     Product.editIsRecommend = function (obj, id, status, callback) {
         var _self = this;
@@ -484,6 +523,7 @@ define(function (require, exports, module) {
             !!callback && callback(data.Status);
         });
     }
+
     //初始化编辑页数据
     Product.initEdit = function (model, Editor) {
         var _self = this;
@@ -493,6 +533,7 @@ define(function (require, exports, module) {
         _self.bindDetail(model);
         _self.getChildList(model);
     }
+
     //获取详细信息
     Product.bindDetail = function (model) {
         var _self = this;
@@ -518,11 +559,11 @@ define(function (require, exports, module) {
         $("#weight").val(model.Weight);
         $("#effectiveDays").val(model.EffectiveDays);
 
-        $("#status").prop("checked", model.Status == 1);
-        $("#isNew").prop("checked", model.IsNew == 1);
-        $("#isRecommend").prop("checked", model.IsRecommend == 1);
-        $("#isAllow").prop("checked", model.IsAllow == 1);
-        $("#isAutoSend").prop("checked", model.IsAutoSend == 1);
+        model.Status != 1 || $("#status").addClass("hover");
+        model.IsAllow != 1 || $("#isAllow").addClass("hover");
+        //$("#isNew").prop("checked", model.IsNew == 1);
+        //$("#isRecommend").prop("checked", model.IsRecommend == 1);
+        //$("#isAutoSend").prop("checked", model.IsAutoSend == 1);
         $("#productImg").attr("src", model.ProductImage);
         
         _self.ProductImage = model.ProductImage;
@@ -565,6 +606,17 @@ define(function (require, exports, module) {
                 }
             }
         });
+
+        //checkbox
+        $(".checked").click(function () {
+            var _this = $(this);
+            if (_this.find(".checkbox").hasClass("hover")) {
+                _this.find(".checkbox").removeClass("hover");
+            } else {
+                _this.find(".checkbox").addClass("hover");
+            }
+        });
+
         //切换内容
         $(".search-tab li").click(function () {
             var _this = $(this);
@@ -608,6 +660,7 @@ define(function (require, exports, module) {
             });
         });
     }
+
     //更改子产品状态
     Product.editDetailsStatus = function (obj, id, status, callback) {
         var _self = this;
@@ -618,6 +671,7 @@ define(function (require, exports, module) {
             !!callback && callback(data.Status);
         });
     }
+
     //添加/编辑子产品
     Product.showTemplate = function (model, id) {
         var _self = this, count = 1;

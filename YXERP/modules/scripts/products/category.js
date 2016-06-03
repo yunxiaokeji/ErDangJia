@@ -11,17 +11,17 @@ define(function (require, exports, module) {
         CategoryID: "",
         PID: ""
     };
-    var CacheCategorys = [];
-    var CacheDel = [];
-    var CacheAttrs = [];
+    var CacheCategorys = [], CacheDel = [], CacheAttrs = [];
 
     var ObjectJS = {};
+
     //初始化数据
     ObjectJS.init = function () {
         ObjectJS.bindEvent();
         ObjectJS.bindCategory();
         ObjectJS.cache();
     }
+
     //缓存数据
     ObjectJS.cache = function () {
         //获取所有属性

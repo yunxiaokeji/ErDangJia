@@ -49,10 +49,11 @@
 .product-add { overflow:auto; }
 .product-add li { height:auto; }
 .product-add .column-name{ width:85px; float:left; }
-.product-add input[type="checkbox"] { vertical-align:middle; margin:0 2px; }
+/*.product-add input[type="checkbox"] { vertical-align:middle; margin:0 2px; }*/
 
 /*添加产品组合规格*/
 .child-product-table { min-width:700px;  width:80%; margin-left:85px;}
+.child-product-table img { width: 80px; height: 80px; display: inline-block; vertical-align: middle; }
 
 .edui-container { min-width:700px; width:80%; float:left; }
 

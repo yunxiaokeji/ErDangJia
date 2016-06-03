@@ -44,12 +44,6 @@ namespace YXERP.Controllers
 
         public ActionResult ProductAdd(string id) 
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                var list = new ProductsBusiness().GetChildCategorysByID("", CurrentUser.ClientID);
-                ViewBag.Items = list;
-                return View("ChooseCategory");
-            }
             ViewBag.Model = new ProductsBusiness().GetCategoryDetailByID(id);
             ViewBag.BrandList = new ProductsBusiness().GetBrandList(CurrentUser.ClientID);
             ViewBag.UnitList = new ProductsBusiness().GetClientUnits(CurrentUser.ClientID);

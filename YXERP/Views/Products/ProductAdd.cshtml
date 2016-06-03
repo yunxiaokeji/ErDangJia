@@ -17,8 +17,8 @@
 }
 
 <div class="header-box">
-    <span class="header-title left">添加新品 >> @(model.CategoryName)</span>
-    <a class="btn-back right mLeft5" href="/Products/ProductAdd">返回</a>
+    <span class="header-title left">产品分类： @(model.CategoryName)</span>
+    @*<a class="btn-back right mLeft5" href="/Products/ProductAdd">返回</a>*@
     <input type="hidden" id="categoryID" value="@(model.CategoryID)" />
 </div>
 <div class="content-body mTop20">
@@ -67,7 +67,7 @@
             }
             </select>
         </li>
-        <li>
+       @* <li>
             <span class="column-name">大单位：</span>
            
             <select id="bigUnit">
@@ -76,17 +76,16 @@
                 <option value="@unit.UnitID">@unit.UnitName</option> 
             }
             </select>
-        </li>
-
-        <li>
+        </li>*@
+       @* <li>
              <span class="column-name">大小单位比：</span>
             <input type="text" maxlength="3" id="bigSmallMultiple" value="1" data-empty="必填" data-type="int"  class="input verify width30" />
+        </li>*@
+        <li>
+            <span class="column-name">成本价：</span><input type="text" maxlength="10" data-empty="必填" data-type="double" data-text="请输入数字!"  id="commonprice" class="input verify width80" />
         </li>
         <li>
-            <span class="column-name">正常价：</span><input type="text" maxlength="10" data-empty="必填" data-type="double" data-text="请输入数字!"  id="commonprice" class="input verify width80" />
-        </li>
-        <li>
-            <span class="column-name">优惠价：</span><input type="text" maxlength="10" data-empty="必填" data-type="double" data-text="请输入数字!"  id="price" class="input verify width80" />
+            <span class="column-name">销售价：</span><input type="text" maxlength="10" data-empty="必填" data-type="double" data-text="请输入数字!"  id="price" class="input verify width80" />
         </li>
         <li>
             <span class="column-name">缩略图：</span><span id="productIco"></span>
@@ -98,30 +97,36 @@
             <span class="column-name">有效期（天）：</span><input type="text" maxlength="10" value="0" data-empty="必填" data-type="int" data-text="请输入数字!" id="effectiveDays" class="input verify width50" />
         </li>
         <li>
-            <span class="column-name">是否上架：</span><label><input type="checkbox" checked="checked" id="status" />是</label> 
+            <span class="column-name">允许销售：</span><span class="checked hand"><span class="iconfont checkbox hover mTop3" id="status"></span>&nbsp;允许</span> 
         </li>
-        <li>
+        @*<li>
             <span class="column-name">是否新品：</span><label><input type="checkbox" id="isNew" />是</label> 
         </li>
         <li>
             <span class="column-name">是否推荐：</span><label><input type="checkbox" id="isRecommend" />是</label> 
-        </li>
+        </li>*@
         <li>
-            <span class="column-name">限制：</span><label><input type="checkbox" id="isAllow" />库存不足允许下单</label> 
+            <span class="column-name">限制：</span><span class="checked hand"><span class="iconfont checkbox mTop3" id="isAllow"></span>&nbsp;库存不足允许下单</span> 
         </li>
 @*        <li>
             <span class="column-name">自动发货：</span><label><input type="checkbox" id="isAutoSend" />订单生效自动出库发货（例：虚拟产品）</label> 
         </li>*@
-        <li class="color666">
-            组合设置子产品
-        </li>
+
+        @if(model.SaleAttrs.Count>0)
+        {
+            <li class="color666">
+                组合设置子产品
+            </li>
+        }
         @foreach (CloudSalesEntity.ProductAttr attr in model.SaleAttrs)
         {
             <li data-id="@attr.AttrID" data-text="@attr.AttrName" class="productsalesattr">
                 <span class="column-name">@attr.AttrName：</span>
                 @foreach (CloudSalesEntity.AttrValue value in attr.AttrValues)
-                {
-                    <label class="mRight10"><input type="checkbox" class="attritem" data-id="@attr.AttrID" data-text="@value.ValueName" value="@value.ValueID" />@value.ValueName</label> 
+                {  
+                     <span class="attritem mRight10 hand"  data-attrid="@value.AttrID"  data-id="@value.ValueID" data-text="@value.ValueName">
+                         <span class="iconfont checkbox mTop3" data-attrid="@value.AttrID" data-id="@value.ValueID" data-text="@value.ValueName"></span>&nbsp;@value.ValueName
+                     </span> 
                 }
             </li>
         }

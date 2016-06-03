@@ -644,6 +644,8 @@ namespace CloudSalesBusiness
                 var model = GetCategoryByID(categoryid, clientid);
                 model.CategoryName = categoryName;
                 model.Status = status;
+                model.SaleAttr = saleattr;
+                model.AttrList = attrlist;
                 model.Description = description;
                 return model;
             }
@@ -696,13 +698,9 @@ namespace CloudSalesBusiness
             {
                 model.FillData(ds.Tables["Product"].Rows[0]);
                 model.Category = GetCategoryDetailByID(model.CategoryID);
-                var bigunit = new ProductUnit();
-                bigunit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.BigUnitID + "'").FirstOrDefault());
-                model.BigUnit = bigunit;
 
-                var smallunit = new ProductUnit();
-                smallunit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.UnitID + "'").FirstOrDefault());
-                model.SmallUnit = smallunit;
+                model.BigUnit = GetUnitByID(model.UnitID, model.ClientID);
+                model.SmallUnit = GetUnitByID(model.UnitID, model.ClientID);
 
                 model.ProductDetails = new List<ProductDetail>();
                 foreach (DataRow item in ds.Tables["Details"].Rows)
@@ -901,8 +899,16 @@ namespace CloudSalesBusiness
                     {
                         productImg = productImg.Substring(0, productImg.IndexOf("?"));
                     }
+
+                    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                    if (!directory.Exists)
+                    {
+                        directory.Create();
+                    }
+
                     FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
                     productImg = FILEPATH + file.Name;
+
                     if (file.Exists)
                     {
                         file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
@@ -920,7 +926,27 @@ namespace CloudSalesBusiness
 
                     foreach (var model in details)
                     {
-                        model.ImgS = "";
+                        if (!string.IsNullOrEmpty(model.ImgS))
+                        {
+                            if (model.ImgS.IndexOf("?") > 0)
+                            {
+                                model.ImgS = model.ImgS.Substring(0, model.ImgS.IndexOf("?"));
+                            }
+
+                            DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                            if (!directory.Exists)
+                            {
+                                directory.Create();
+                            }
+
+                            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(model.ImgS));
+                            model.ImgS = FILEPATH + file.Name;
+                            if (file.Exists)
+                            {
+                                file.MoveTo(HttpContext.Current.Server.MapPath(model.ImgS));
+                            }
+                        }
+
                         dal.AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Description, operateid, clientid);
                     }
                 }

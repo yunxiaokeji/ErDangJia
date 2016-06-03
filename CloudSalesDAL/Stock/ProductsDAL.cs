@@ -500,7 +500,7 @@ namespace CloudSalesDAL
         public DataSet GetProductByID(string productid)
         {
             SqlParameter[] paras = { new SqlParameter("@ProductID", productid) };
-            DataSet ds = GetDataSet("P_GetProductByID", paras, CommandType.StoredProcedure, "Product|Details|Unit");
+            DataSet ds = GetDataSet("P_GetProductByID", paras, CommandType.StoredProcedure, "Product|Details");
             return ds;
         }
 

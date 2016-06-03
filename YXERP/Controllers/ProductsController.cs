@@ -487,7 +487,7 @@ namespace YXERP.Controllers
         public JsonResult GetCategoryByID(string categoryid)
         {
             var model = new ProductsBusiness().GetCategoryByID(categoryid, CurrentUser.ClientID);
-            JsonDictionary.Add("Model", model);
+            JsonDictionary.Add("model", model);
             return new JsonResult
             {
                 Data = JsonDictionary,

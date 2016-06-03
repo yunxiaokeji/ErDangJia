@@ -13,6 +13,7 @@ define(function (require, exports, module) {
         PID: ""
     };
     var CacheCategorys = [];
+    var CacheDel = [];
     var CacheAttrs = [];
 
     var ObjectJS = {};
@@ -39,8 +40,8 @@ define(function (require, exports, module) {
         //展开
         $(".content-body").delegate(".openchild", "click", function () {
             var _this = $(this);
-            if (_this.attr("data-state") == "close") {
-                _this.attr("data-state", "open");
+            if (_this.data("state") == "close") {
+                _this.data("state", "open");
                 _this.removeClass("icoopen").addClass("icoclose");
 
                 if ($("#" + _this.data("id")).length == 0) {
@@ -49,7 +50,7 @@ define(function (require, exports, module) {
                 }
                 $("#" + _this.data("id")).show();
             } else { //隐藏子下属
-                _this.attr("data-state", "close");
+                _this.data("state", "close");
                 _this.removeClass("icoclose").addClass("icoopen");
 
                 $("#" + _this.attr("data-id")).hide();
@@ -72,22 +73,23 @@ define(function (require, exports, module) {
                 }
 
                 $("#" + _this.data("id")).remove();
-                if (CacheCategorys[_this.data("id")]) {
-                    CacheCategorys[_this.data("id")].push(model);
-                } else {
-                    CacheCategorys[_this.data("id")] = [model];
-                }
 
                 if (!_this.hasClass("icoopen") && !_this.hasClass("icoclose")) {
-                    _this.addClass("icoclose");
+                    _this.addClass("icoclose").addClass("openchild").data("state", "open");
+                } else if (_this.hasClass("icoopen")) {
+                    _this.addClass("icoclose").removeClass("icoopen").data("state", "open");
                 }
 
-                var _leftBg = $(document.createElement("div")).css("display", "inline-block").addClass("left");
-                _leftBg.append(_leftLine.html());
-                var _obj = _self.getChild(_this.data("id"), _leftBg.html(), _this.data("eq"));
+                Global.post("/Products/GetCategoryByID", { categoryid: _this.data("id") }, function (data) {
+                    CacheCategorys[_this.data("id")] = data.model.ChildCategorys;
 
-                _this.parent().after(_obj);
-                $("#" + _this.data("id")).show();
+                    var _leftBg = $(document.createElement("div")).css("display", "inline-block").addClass("left");
+                    _leftBg.append(_leftLine.html());
+                    var _obj = _self.getChild(_this.data("id"), _leftBg.html(), _this.data("eq"));
+
+                    _this.parent().after(_obj);
+                    $("#" + _this.data("id")).show();
+                });
             });
         });
 
@@ -97,12 +99,16 @@ define(function (require, exports, module) {
             confirm("分类删除后不可恢复,确认删除吗？", function () {
                 Global.post("/Products/DeleteCategory", { id: _this.data("id") }, function (data) {
                     if (data.status == 1) {
-                        if (_this.siblings().length > 1) {
-
-                        } else {
+                        if (_this.parent().nextAll().length == 0) {
+                            _this.parent().prev().find(".leftline").removeClass("leftline").addClass("lastline");
+                            _this.parent().prev().find(".openspan").data("eq", "last");
+                        }
+                        if (_this.parent().siblings().length == 0) {
                             _this.parent().parent().prev().find(".openspan").removeClass("icoclose").removeClass("icoopen");
                         }
                         _this.parent().remove();
+                        //缓存删除分类
+                        CacheDel[_this.data("id")] = _this.data("id");
                         
                     } else if (data.status == 10002) {
                         alert("存在关联数据,不能删除,可以选择不启用");
@@ -120,7 +126,7 @@ define(function (require, exports, module) {
             Global.post("/Products/GetCategoryByID", {
                 categoryid: _this.data("id")
             }, function (data) {
-                Category = data.Model;
+                Category = data.model;
                 _self.showCategory(function (model) {
                     _this.prev().html(model.CategoryName);
                     if (model.Status == 1) {

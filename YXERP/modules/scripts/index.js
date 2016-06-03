@@ -115,7 +115,7 @@ define(function (require, exports, module) {
         });
 
         //打开窗口
-        $(".btn-open-windows").click( function () {
+        $(".btn-open-window").click( function () {
             _self.openWindows($(this));
         });
 

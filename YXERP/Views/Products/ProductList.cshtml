@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="/modules/css/shoppingcart/filterproducts.css" />
 
 @section scripts{
-    <script src="/modules/plug/kindeditor-4.1.7/kindeditor.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/products/product"], function (obj) {
             obj.initList();
@@ -15,7 +14,7 @@
 
 <div class="header-box">
     <span class="header-title left">产品列表</span>
-    <a href="ProductAdd" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103010500"))">添加新品</a> 
+    <a href="javascript:void(0);" data-url="/Products/Category" data-id="103010400" data-name="添加产品" class="btn-add right btn-open-window @(ExpandClass.IsLimits(HttpContext.Current,"103010500"))">添加产品</a> 
 </div>
 <div class="content-body mTop20">
     <div class="top-div">

@@ -300,6 +300,7 @@ namespace CloudSalesBusiness
                     attrValue.FillData(item);
                     model.AttrValues.Add(attrValue);
                 }
+                list.Add(model);
             }
             ClientAttrs.Add(clientid, list);
 
@@ -317,21 +318,6 @@ namespace CloudSalesBusiness
                 ProductAttr model = new ProductAttr();
                 model.FillData(dr);
                 model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
-                list.Add(model);
-            }
-            return list;
-        }
-
-        public List<ProductAttr> GetAttrList(string categoryid, string clientid)
-        {
-            var dal = new ProductsDAL();
-            DataTable dt = dal.GetAttrList(categoryid, clientid);
-
-            List<ProductAttr> list = new List<ProductAttr>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                ProductAttr model = new ProductAttr();
-                model.FillData(dr);
                 list.Add(model);
             }
             return list;
@@ -601,42 +587,30 @@ namespace CloudSalesBusiness
             Category model = new Category();
             if (ds.Tables.Contains("Category") && ds.Tables["Category"].Rows.Count > 0)
             {
+                model.SaleAttrs = new List<ProductAttr>();
+                model.AttrLists = new List<ProductAttr>();
                 model.FillData(ds.Tables["Category"].Rows[0]);
-                List<ProductAttr> salelist = new List<ProductAttr>();
-                List<ProductAttr> attrlist = new List<ProductAttr>();
 
                 foreach (DataRow attr in ds.Tables["Attrs"].Rows)
                 {
-
                     ProductAttr modelattr = new ProductAttr();
                     modelattr.FillData(attr);
                     if (modelattr.Type == 1)
                     {
-                        attrlist.Add(modelattr);
+                        model.AttrLists.Add(GetProductAttrByID(modelattr.AttrID, model.ClientID));
                     }
-                    else if (modelattr.Type == 2)
+                    else
                     {
-                        salelist.Add(modelattr);
-                    }
-                    modelattr.AttrValues = new List<AttrValue>();
-                    foreach (DataRow value in ds.Tables["Values"].Select("AttrID='" + modelattr.AttrID + "'"))
-                    {
-                        AttrValue valuemodel = new AttrValue();
-                        valuemodel.FillData(value);
-                        modelattr.AttrValues.Add(valuemodel);
+                        model.SaleAttrs.Add(GetProductAttrByID(modelattr.AttrID, model.ClientID));
                     }
                 }
-
-                model.SaleAttrs = salelist;
-                model.AttrLists = attrlist;
             }
-
             return model;
         }
 
-        public Category AddCategory(string categoryCode, string categoryName, string pid, int status, List<string> attrlist, List<string> saleattr, string description, string operateid, string clientid)
+        public Category AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
         {
-            var id = ProductsDAL.BaseProvider.AddCategory(categoryCode, categoryName, pid, status, string.Join(",", attrlist), string.Join(",", saleattr), description, operateid, clientid);
+            var id = ProductsDAL.BaseProvider.AddCategory(categoryCode, categoryName, pid, status, attrlist, saleattr, description, operateid, clientid);
 
             if (!string.IsNullOrEmpty(id))
             {
@@ -662,9 +636,9 @@ namespace CloudSalesBusiness
             return dal.AddCategoryAttr(categoryid, attrid, type, operateID);
         }
 
-        public Category UpdateCategory(string categoryid, string categoryName, int status, List<string> attrlist, List<string> saleattr, string description, string operateid, string clientid)
+        public Category UpdateCategory(string categoryid, string categoryName, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
         {
-            bool bl = ProductsDAL.BaseProvider.UpdateCategory(categoryid, categoryName, status, string.Join(",", attrlist), string.Join(",", saleattr), description, operateid);
+            bool bl = ProductsDAL.BaseProvider.UpdateCategory(categoryid, categoryName, status, attrlist, saleattr, description, operateid);
             if (bl)
             {
                 var model = GetCategoryByID(categoryid, clientid);

@@ -248,7 +248,7 @@ define(function (require, exports, module) {
             Global.post("/Products/GetChildCategorysByID", {
                 categoryid: pid
             }, function (data) {
-                CacheChildCategorys[pid] = data.Items;
+                CacheChildCategorys[pid] = data.items;
                 _self.bindChildCagegory(pid);
             });
         } else {

@@ -10,7 +10,7 @@
     <span class="left category {%=item.Status==1?'':'close'%}">{%=item.CategoryName%}</span>
     <a class="category-edit" data-id="{%=item.CategoryID%}" href="javascript:void(0)">编辑</a>
     <a class="category-add" data-id="{%=item.CategoryID%}" href="javascript:void(0)">添加子类</a>
-    <a class="category-child" data-id="{%=item.CategoryID%}" href="javascript:void(0)">添加产品</a>
+    <a class="btn-open-window" data-id="103010500" data-name="添加产品" data-url="/Products/ProductAdd/{%=item.CategoryID%}" href="javascript:void(0)">添加产品</a>
     <a class="category-del" data-id="{%=item.CategoryID%}" href="javascript:void(0)">删除</a>
 </div>
 {% } %}

@@ -17,7 +17,6 @@ define(function (require, exports, module) {
         //}
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
-
     }
 
     //绑定元素定位和样式
@@ -72,7 +71,6 @@ define(function (require, exports, module) {
                 parent.find("#windowItems").css("left", "0")
             }
         });
-
     }
 
     module.exports = LayoutObject;

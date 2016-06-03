@@ -204,17 +204,6 @@ namespace CloudSalesDAL
 
         }
 
-        public DataTable GetAttrList(string categoryid, string clientid)
-        {
-            SqlParameter[] paras = { 
-                                       new SqlParameter("@CategoryID", categoryid),
-                                       new SqlParameter("@ClientID", clientid) 
-                                   };
-
-            return GetDataTable("P_GetAttrsByCategoryID", paras, CommandType.StoredProcedure);
-
-        }
-
         public DataSet GetProductAttrByID(string attrID)
         {
             SqlParameter[] paras = { new SqlParameter("@AttrID", attrID) };

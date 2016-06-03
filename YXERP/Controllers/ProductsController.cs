@@ -240,13 +240,13 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-  
-        public JsonResult GetAttrsByCategoryID(string categoryid)
+
+        public JsonResult GetAttrs()
         {
             List<ProductAttr> list = new List<ProductAttr>();
-            list = new ProductsBusiness().GetAttrList(categoryid, CurrentUser.ClientID);
+            list = new ProductsBusiness().GetAttrs(CurrentUser.ClientID);
 
-            JsonDictionary.Add("Items", list);
+            JsonDictionary.Add("items", list);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -456,11 +456,11 @@ namespace YXERP.Controllers
             Category result;
             if (string.IsNullOrEmpty(model.CategoryID))
             {
-                result = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist.Split(',').ToList(), saleattr.Split(',').ToList(), model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                result = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
             }
             else
             {
-                result = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.Status.Value, attrlist.Split(',').ToList(), saleattr.Split(',').ToList(), model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                result = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
             }
 
             JsonDictionary.Add("status", result != null);
@@ -498,7 +498,7 @@ namespace YXERP.Controllers
         public JsonResult GetCategoryDetailsByID(string categoryid)
         {
             var model = new ProductsBusiness().GetCategoryDetailByID(categoryid);
-            JsonDictionary.Add("Model", model);
+            JsonDictionary.Add("model", model);
             return new JsonResult
             {
                 Data = JsonDictionary,

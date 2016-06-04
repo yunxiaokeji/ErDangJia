@@ -1,4 +1,5 @@
 ﻿using CloudSalesDAL;
+using CloudSalesDAL.Manage;
 using CloudSalesEntity;
 using CloudSalesEnum;
 using System;
@@ -38,7 +39,21 @@ namespace CloudSalesBusiness
                 return _citys;
             }
         }
-
+        private static List<Industry> _industryList;
+        /// <summary>
+        /// 城市
+        /// </summary>
+        public static List<Industry> IndustryList
+        {
+            get
+            {
+                if (_industryList == null)
+                {
+                    _industryList = CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
+                }
+                return _industryList;
+            }
+        }
         private static List<Menu> _clientMenus;
         /// <summary>
         /// 客户端菜单
@@ -255,6 +270,83 @@ namespace CloudSalesBusiness
             if (Enumtype == null) throw new ArgumentNullException("Enumtype");
             if (!Enumtype.GetType().IsEnum) throw new Exception("参数类型不正确");
             return ((DescriptionAttribute)Enumtype.GetType().GetField(Enumtype.ToString()).GetCustomAttributes(typeof(DescriptionAttribute), false)[0]).Description;
+        }
+
+        public static int GetEnumindexByDesc<T>(T Enumtype, string enumDesc)
+        {
+            int result  = 0;
+            if (Enumtype == null) throw new ArgumentNullException("Enumtype");
+            if (!Enumtype.GetType().IsEnum) throw new Exception("参数类型不正确");
+            Array arrays = Enum.GetValues(typeof (T));
+            for (int i = 0; i < arrays.LongLength; i++)
+            {
+                T test = (T) arrays.GetValue(i);
+                FieldInfo fieldInfo = test.GetType().GetField(test.ToString());
+                object[] attribArray = fieldInfo.GetCustomAttributes(false);
+                DescriptionAttribute des = (DescriptionAttribute) attribArray[0];
+                if (des.Description == enumDesc)
+                {
+                    result= i;
+                    break;
+                }
+            }
+            return result; 
+        }
+
+        /// <summary>
+        /// Excel下拉框数据源 Michuax
+        /// </summary>
+        /// <param name="dropsource">Enum:DropSourceList</param>
+        /// <returns></returns>
+        public static string GetDropList(DropSourceList dropsource)
+        {
+            string listStr ="";
+            switch (dropsource)
+            {
+                case DropSourceList.Province: 
+                    if (Citys.Any())
+                    {
+                        Citys.Where(x => x.Level == 1).ToList().ForEach(x => listStr += x.Name + ",");
+                        listStr = listStr.TrimEnd(',');
+                    }
+                    break;
+                case DropSourceList.Industry: 
+                    if (IndustryList.Any())
+                    {
+                        IndustryList.ForEach(x => listStr += x.Name + ",");
+                        listStr = listStr.TrimEnd(',');
+                    }
+                    break;
+                default:
+                     listStr="";
+                    break;;
+            }
+            return listStr;
+        }
+        /// <summary>
+        /// DataRow 转实体类 Michaux 添加
+        /// </summary>
+        /// <typeparam name="T">实体类</typeparam>
+        /// <param name="dr"></param>
+        /// <returns></returns>
+        public static T FillModel<T>(DataRow dr)
+        {
+            if (dr == null)
+            {
+                return default(T);
+            }
+            T model = (T)Activator.CreateInstance(typeof(T));
+
+            for (int i = 0; i < dr.Table.Columns.Count; i++)
+            {
+                BindingFlags flag = BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance;
+                PropertyInfo propertyInfo = model.GetType().GetProperty(dr.Table.Columns[i].ColumnName, flag);
+                if (propertyInfo != null && dr[i] != DBNull.Value)
+                    propertyInfo.SetValue(model, dr[i], null);
+                else continue;
+            }
+             
+            return model;
         }
     }
 }

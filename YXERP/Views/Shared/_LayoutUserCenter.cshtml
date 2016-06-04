@@ -112,7 +112,7 @@
             if (a == b) { return;}
             var c = setleft(a,b);
            $("#movespan").animate({ left: c+ "px" }, {
-               queue: false, duration: 1000, complete: function () {
+               queue: false, duration: 500, complete: function () {
                    $("#movespan").css("left", c + "px")
                }
            }); 

@@ -73,7 +73,7 @@ namespace CloudSalesDAL
                                    };
             return GetDataSet("P_GetCustomerByID", paras, CommandType.StoredProcedure, "Customer|Contact|Activity");
         }
-
+  
         public DataTable GetContactsByCustomerID(string customerid)
         {
             SqlParameter[] paras = { 
@@ -122,6 +122,36 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_CreateCustomer", paras, CommandType.StoredProcedure) > 0;
         }
 
+        public bool ExeclInsertCustomer(string customerid, string name, int type, string sourceid, string activityid, string industryid, int extent, string citycode, string address, string contactname,
+                                  string mobile, string officephone, string email, string jobs, string desc, string ownerid, string operateid, string agentid, string clientid, int overType, int checkType)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@CustomerID",customerid),
+                                     new SqlParameter("@Name",name),
+                                     new SqlParameter("@Type",type),
+                                     new SqlParameter("@SourceID",sourceid),
+                                     new SqlParameter("@ActivityID",activityid),
+                                     new SqlParameter("@IndustryID" , industryid),
+                                     new SqlParameter("@Extent" , extent),
+                                     new SqlParameter("@CityCode" , citycode),
+                                     new SqlParameter("@Address" , address),
+                                     new SqlParameter("@ContactName" , contactname),
+                                     new SqlParameter("@MobilePhone" , mobile),
+                                     new SqlParameter("@OfficePhone" , officephone),
+                                     new SqlParameter("@Email" , email),
+                                     new SqlParameter("@Jobs" , jobs),
+                                     new SqlParameter("@Description" , desc),
+                                     new SqlParameter("@OwnerID" , ownerid),
+                                     new SqlParameter("@CreateUserID" , operateid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid),
+                                     new SqlParameter("@OverType" , overType),
+                                     new SqlParameter("@CheckType" , checkType)
+                                   };
+
+            return ExecuteNonQuery("E_ImportCustomer", paras, CommandType.StoredProcedure) > 0;
+        }
+
         public string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
         {
             string replyID = Guid.NewGuid().ToString();
@@ -160,7 +190,29 @@ namespace CloudSalesDAL
 
             return ExecuteNonQuery("P_CreateContact", paras, CommandType.StoredProcedure) > 0;
         }
+        public bool ExcelInsertContact(string contactid, string customerid, string name, string citycode, string address, string mobile, string officephone, string email, string jobs, string desc, string userid, string agentid, string clientid,string companyName,int checkType,int overType)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ContactID",contactid),
+                                     new SqlParameter("@CustomerID",customerid),
+                                     new SqlParameter("@Name",name),
+                                     new SqlParameter("@CompanyName",companyName),
+                                     new SqlParameter("@CityCode" , citycode),
+                                     new SqlParameter("@Address" , address),
+                                     new SqlParameter("@MobilePhone" , mobile),
+                                     new SqlParameter("@OfficePhone" , officephone),
+                                     new SqlParameter("@Email" , email),
+                                     new SqlParameter("@Jobs" , jobs),
+                                     new SqlParameter("@Description" , desc),
+                                     new SqlParameter("@CreateUserID" , userid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid),
+                                     new SqlParameter("@CheckType" , checkType),
+                                     new SqlParameter("@OverType" , overType)
+                                   };
 
+            return ExecuteNonQuery("E_ImportContact", paras, CommandType.StoredProcedure) > 0;
+        }
 
         #endregion
 

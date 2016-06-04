@@ -5,7 +5,7 @@ body {  background-color:#fff; }
   
 .content-body { background-color:#fff; padding-top:16px; } 
 .accountUl li { line-height: 30px; width:120px; }
-.accountUl li a{ line-height: 30px; font-size: 13px; width:120px; text-align:center; display:inline-block; color:#333; }
+.accountUl li a{ line-height: 30px; font-size: 10px; width:120px; text-align:center; display:inline-block; color:#333; }
 .accountUl .active { background-color: #fff; font-weight:bold;  }
 #movespan {position: absolute;top:40px; width:110px;border-bottom:solid 2px #4380BE;}
 .accountContent { margin: 0px 0px 0px 0px; float:left;width: 100%;  }

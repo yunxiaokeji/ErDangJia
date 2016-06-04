@@ -51,35 +51,6 @@
             });
         });
 
-        //删除
-        $("#deleteObject").click(function () {
-            var _this = $(this);
-            confirm("属性删除后不可恢复,确认删除吗？", function () {
-                Global.post("/Products/DeleteProductAttr", { attrid: _this.data("id") }, function (data) {
-                    if (data.result == 1) {
-                        alert("属删除成功");
-                        _self.getList();
-                    } else if (data.result == 10002) {
-                        alert("属性存在关联数据，删除失败");
-                    } else {
-                        alert("删除失败");
-                    }
-                });
-            });
-        });
-
-        //编辑
-        $("#updateObject").click(function () {
-            var _this = $(this);
-
-            AttrPlug.init({
-                attrid: _this.data("id"),
-                callback: function (Attr) {
-                    _self.getList();
-                }
-            });
-        });
-
         //添加属性值
         $(".ico-input-add").click(function () {
             if ($("#valueName").val()) {
@@ -143,14 +114,31 @@
                 inner = $(inner);
                 $("#attrList").after(inner);
 
-                //下拉事件
-                inner.find(".dropdown").click(function () {
+                //删除
+                inner.find(".ico-del").click(function () {
                     var _this = $(this);
+                    confirm("属性删除后不可恢复,确认删除吗？", function () {
+                        Global.post("/Products/DeleteProductAttr", { attrid: _this.data("id") }, function (data) {
+                            if (data.result == 1) {
+                                alert("属删除成功");
+                                _self.getList();
+                            } else if (data.result == 10002) {
+                                alert("属性存在关联数据，删除失败");
+                            } else {
+                                alert("删除失败");
+                            }
+                        });
+                    });
+                });
 
-                    var position = _this.find(".ico-dropdown").position();
-                    $(".dropdown-ul li").data("id", _this.data("id"));
-                    $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 55 }).show().mouseleave(function () {
-                        $(this).hide();
+                //编辑
+                inner.find(".ico-edit").click(function () {
+                    var _this = $(this);
+                    AttrPlug.init({
+                        attrid: _this.data("id"),
+                        callback: function (Attr) {
+                            _self.getList();
+                        }
                     });
                 });
 

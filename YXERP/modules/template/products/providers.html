@@ -9,8 +9,9 @@
     <td>{%=item.City ? item.City.Description : ""%} </td>
     <td>{%=item.Address%}</td>
     <td class="center">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
-     <td class="center dropdown" data-id="{%=item.ProviderID%}">
-        <span  class="ico-dropdown"></span>
+    <td class="center" data-id="{%=item.ProviderID%}">
+        <span title="编辑" class="iconfont ico-edit left mLeft3" data-id="{%=item.ProviderID%}"></span>
+        <span title="删除" class="iconfont ico-del right mTop1 mRight3" data-id="{%=item.ProviderID%}"></span>
     </td>
 </tr>
 {% } %}

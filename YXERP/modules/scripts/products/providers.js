@@ -42,33 +42,6 @@ define(function (require, exports, module) {
         $("#addObject").click(function () {
             _self.createModel();
         });
-
-        //删除
-        $("#deleteObject").click(function () {
-            var _this = $(this);
-            confirm("供应商删除后不可恢复,确认删除吗？", function () {
-                Global.post("/Products/DeleteProvider", { id: _this.data("id") }, function (data) {
-                    if (data.result == 1) {
-                        alert("删除成功");
-                        _self.getList();
-                    } else if (data.result == 10002) {
-                        alert("存在关联数据，删除失败");
-                    } else {
-                        alert("删除失败！");
-                    }
-                });
-            });
-        });
-
-        //编辑
-        $("#updateObject").click(function () {
-            var _this = $(this);
-
-            Global.post("/Products/GetProviderDetail", { id: _this.data("id") }, function (data) {
-                var model = data.model;
-                _self.createModel(model);
-            });
-        });
     }
 
     //添加/编辑弹出层
@@ -150,14 +123,30 @@ define(function (require, exports, module) {
                     innerText = $(innerText);
                     $(".tr-header").after(innerText);
 
-                    //下拉事件
-                    innerText.find(".dropdown").click(function () {
+                    //删除
+                    innerText.find(".ico-del").click(function () {
+                        var _this = $(this);
+                        confirm("供应商删除后不可恢复,确认删除吗？", function () {
+                            Global.post("/Products/DeleteProvider", { id: _this.data("id") }, function (data) {
+                                if (data.result == 1) {
+                                    alert("删除成功");
+                                    _self.getList();
+                                } else if (data.result == 10002) {
+                                    alert("存在关联数据，删除失败");
+                                } else {
+                                    alert("删除失败！");
+                                }
+                            });
+                        });
+                    });
+
+                    //编辑
+                    innerText.find(".ico-edit").click(function () {
                         var _this = $(this);
 
-                        var position = _this.find(".ico-dropdown").position();
-                        $(".dropdown-ul li").data("id", _this.data("id"));
-                        $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 55 }).show().mouseleave(function () {
-                            $(this).hide();
+                        Global.post("/Products/GetProviderDetail", { id: _this.data("id") }, function (data) {
+                            var model = data.model;
+                            _self.createModel(model);
                         });
                     });
                 });

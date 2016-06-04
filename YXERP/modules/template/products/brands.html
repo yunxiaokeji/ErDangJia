@@ -10,8 +10,9 @@
     <td class='center'><div class="status" data-id="{%=item.BrandID%}" data-value="{%=item.Status==1%}"></div></td>
     <td title="{%=item.Remark%}">{%=item.Remark%}</td>
     <td class="center">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
-     <td class="center dropdown" data-id="{%=item.BrandID%}">
-        <span  class="ico-dropdown"></span>
+    <td class="center" data-id="{%=item.BrandID%}">
+        <span title="编辑" class="iconfont ico-edit left mLeft3" data-id="{%=item.BrandID%}"></span>
+        <span title="删除" class="iconfont ico-del right mTop1 mRight3" data-id="{%=item.BrandID%}"></span>
     </td>
 </tr>
 {% } %}

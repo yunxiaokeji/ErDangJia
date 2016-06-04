@@ -256,7 +256,6 @@
     <Content Include="modules\css\default\home.css" />
     <Content Include="modules\css\myaccount\myaccount.css" />
     <Content Include="modules\css\myaccount\cropbox.css" />
-    <Content Include="modules\css\shoppingcart\confirmcart.css" />
     <Content Include="modules\css\base.css" />
     <Content Include="modules\css\products.css" />
     <Content Include="modules\css\system\system.css" />
@@ -758,7 +757,6 @@
     <Content Include="modules\css\home\login.css" />
     <Content Include="modules\css\system\organization.css" />
     <Content Include="modules\css\shoppingcart.css" />
-    <Content Include="modules\css\shoppingcart\filterdetails.css" />
     <Content Include="modules\images\default.png" />
     <Content Include="modules\images\ico-back.png" />
     <Content Include="modules\images\ico-del-deep.png" />

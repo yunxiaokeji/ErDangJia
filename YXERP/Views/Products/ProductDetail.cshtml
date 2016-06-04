@@ -23,10 +23,16 @@
 }
 <div class="tab-nav">
     <a class="btn-back right mLeft5" title="返回" href="/Products/ProductList">返回</a>
-    <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
+    @if (model.HasDetails==1)
+    {
+       <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
+    }
     <ul class="search-tab">
         <li class="hover" data-id="productinfo">产品信息</li>
-        <li class="" data-id="childproduct">子产品管理</li>
+         @if (model.HasDetails==1)
+        {
+            <li class="" data-id="childproduct">子产品管理</li>
+         }
     </ul>
 </div>
 <div class="content-body">
@@ -139,10 +145,10 @@
     <div id="childproduct" class="hide mTop20">
         <table class="table-list child-table-list clear">
             <tr class="tr-header" id="header-items">
+                <td class="tLeft">图片</td>
                 <td class="tLeft">编码</td>
                 <td class="tLeft">规格</td>
-                <td class="m-len tRight">价格/@(model.SmallUnit.UnitName)</td>
-                <td class="s-len tRight">价格/@(model.BigUnit.UnitName)</td>
+                <td class="m-len tRight">销售价格</td>
                 <td class="m-len">启用/禁用</td>
                 <td class="s-len">编辑</td>
             </tr>

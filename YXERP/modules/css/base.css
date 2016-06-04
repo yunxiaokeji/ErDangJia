@@ -304,7 +304,7 @@ select option{ padding:2px; }
 
 /*表格样式*/
 .table-list { width:100%; border-spacing:0px;}
-.table-list img{ height:20px; vertical-align:middle; }
+.table-list img{ max-height:80px;max-width:80px; vertical-align:middle; }
 .table-list .tr-header{ height:35px; text-align:center; }
 .table-list .tr-header td{ height:35px; border-bottom:solid 2px #eee; font-size:13px; color:#999; padding:0 5px;
                            white-space:nowrap; overflow: hidden; text-overflow:ellipsis; }

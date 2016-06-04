@@ -12,7 +12,7 @@
 	    var item = $data[i];
     %}
         <li data-id="{%=item.AttrID%}" class="productattr">
-                <span class="width80">{%=item.AttrName%}：</span>
+                <span class="width80 attrname">{%=item.AttrName%}：</span>
                 <select id="{%=item.AttrID%}">
                     {%
 	                    for(var ii=0, jj=item.AttrValues.length; ii < jj; ii++){
@@ -27,11 +27,6 @@
         <span class="width80">价格/<label id="unitName"></label>：</span>
         <input type="text" maxlength="10" data-empty="*" data-type="double" data-text="请输入数字!"  id="detailsPrice" class="input verify width80" />
         
-    </li>
-    <li id="bigpriceli">
-        <span class="width80">价格/<label id="bigName"></label>：</span>
-        <input type="text" maxlength="10" data-empty="*" data-type="double" data-text="请输入数字!"  id="bigPrice" class="input verify width80" />
-        *<label id="bigquantity"></label>
     </li>
     <li>
         <span class="width80">缩略图：</span>

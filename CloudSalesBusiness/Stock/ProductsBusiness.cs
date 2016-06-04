@@ -708,29 +708,6 @@ namespace CloudSalesBusiness
                     //子产品
                     ProductDetail detail = new ProductDetail();
                     detail.FillData(item);
-
-                    Dictionary<string, string> attrs = new Dictionary<string, string>();
-                    foreach (string attr in detail.SaleAttrValue.Split(','))
-                    {
-                        if (!string.IsNullOrEmpty(attr))
-                        {
-                            attrs.Add(attr.Split(':')[0], attr.Split(':')[1]);
-                        }
-                    }
-                    detail.SaleAttrValueString = "";
-                    foreach (var attr in model.Category.SaleAttrs)
-                    {
-                        if (attrs.ContainsKey(attr.AttrID))
-                        {
-                            detail.SaleAttrValueString += attr.AttrName + ":" + attr.AttrValues.Where(a => a.ValueID.ToLower() == attrs[attr.AttrID].ToLower()).FirstOrDefault().ValueName + ",";
-                        }
-                    }
-
-                    if (detail.SaleAttrValueString.Length > 0)
-                    {
-                        detail.SaleAttrValueString = detail.SaleAttrValueString.Substring(0, detail.SaleAttrValueString.Length - 1);
-                    }
-
                     model.ProductDetails.Add(detail);
                 }
             }
@@ -782,27 +759,6 @@ namespace CloudSalesBusiness
             {
                 ProductDetail model = new ProductDetail();
                 model.FillData(dr);
-                model.SaleAttrValueString = "";
-                if (!string.IsNullOrEmpty(model.SaleAttrValue))
-                {
-                    string[] attrs = model.SaleAttrValue.Split(',');
-                    foreach (string attrid in attrs)
-                    {
-                        if (!string.IsNullOrEmpty(attrid))
-                        {
-                            var attr = new ProductsBusiness().GetProductAttrByID(attrid.Split(':')[0], clientid);
-                            var value = attr.AttrValues.Where(m => m.ValueID == attrid.Split(':')[1]).FirstOrDefault();
-                            if (attr != null && value != null)
-                            {
-                                model.SaleAttrValueString += attr.AttrName + "：" + value.ValueName + "，";
-                            }
-                        }
-                    }
-                    if (model.SaleAttrValueString.Length > 0)
-                    {
-                        model.SaleAttrValueString = model.SaleAttrValueString.Substring(0, model.SaleAttrValueString.Length - 1);
-                    }
-                }
                 list.Add(model);
             }
             return list;
@@ -926,59 +882,38 @@ namespace CloudSalesBusiness
 
                     foreach (var model in details)
                     {
-                        if (!string.IsNullOrEmpty(model.ImgS))
-                        {
-                            if (model.ImgS.IndexOf("?") > 0)
-                            {
-                                model.ImgS = model.ImgS.Substring(0, model.ImgS.IndexOf("?"));
-                            }
-
-                            DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                            if (!directory.Exists)
-                            {
-                                directory.Create();
-                            }
-
-                            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(model.ImgS));
-                            model.ImgS = FILEPATH + file.Name;
-                            if (file.Exists)
-                            {
-                                file.MoveTo(HttpContext.Current.Server.MapPath(model.ImgS));
-                            }
-                        }
-
-                        dal.AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Description, operateid, clientid);
+                        AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, operateid, clientid);
                     }
                 }
                 return pid;
             }
         }
 
-        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string description, string operateid, string clientid)
+        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string remark, string description, string operateid, string clientid)
         {
-            lock (SingleLock)
+            if (!string.IsNullOrEmpty(productImg))
             {
-                if (!string.IsNullOrEmpty(productImg))
+                if (productImg.IndexOf("?") > 0)
                 {
-                    if (productImg.IndexOf("?") > 0)
-                    {
-                        productImg = productImg.Substring(0, productImg.IndexOf("?"));
-                    }
-                    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
-                    productImg = FILEPATH + file.Name;
-                    if (file.Exists)
-                    {
-                        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
-                    }
-                }
-                else
-                {
-                    productImg = FILEPATH + DateTime.Now.ToString("yyyyMMddHHmmssms") + new Random().Next(1000, 9999).ToString() + ".png";
+                    productImg = productImg.Substring(0, productImg.IndexOf("?"));
                 }
 
-                var dal = new ProductsDAL();
-                return dal.AddProductDetails(productid, productCode, shapeCode, attrlist, valuelist, attrvaluelist, price, weight, bigprice, productImg, description, operateid, clientid);
+                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                if (!directory.Exists)
+                {
+                    directory.Create();
+                }
+
+                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
+                productImg = FILEPATH + file.Name;
+                if (file.Exists)
+                {
+                    file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
+                }
             }
+
+            var dal = new ProductsDAL();
+            return dal.AddProductDetails(productid, productCode, shapeCode, attrlist, valuelist, attrvaluelist, price, weight, bigprice, productImg, remark, description, operateid, clientid);
         }
 
         public bool UpdateProductStatus(string productid, EnumStatus status, string operateIP, string operateID)
@@ -1007,6 +942,13 @@ namespace CloudSalesBusiness
                 {
                     productImg = productImg.Substring(0, productImg.IndexOf("?"));
                 }
+
+                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                if (!directory.Exists)
+                {
+                    directory.Create();
+                }
+
                 FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
                 productImg = FILEPATH + file.Name;
                 if (file.Exists)
@@ -1025,7 +967,8 @@ namespace CloudSalesBusiness
             return CommonBusiness.Update("ProductDetail", "Status", (int)status, " ProductDetailID='" + productdetailid + "'");
         }
 
-        public bool UpdateProductDetails(string detailid, string productid, string productCode, string shapeCode, decimal bigPrice, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, string description, string productImg, string operateid, string clientid)
+        public bool UpdateProductDetails(string detailid, string productid, string productCode, string shapeCode, decimal bigPrice, string attrlist, string valuelist, string attrvaluelist, decimal price,
+                                         decimal weight, string remark, string description, string productImg, string operateid, string clientid)
         {
             lock (SingleLock)
             {
@@ -1035,6 +978,13 @@ namespace CloudSalesBusiness
                     {
                         productImg = productImg.Substring(0, productImg.IndexOf("?"));
                     }
+
+                    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                    if (!directory.Exists)
+                    {
+                        directory.Create();
+                    }
+
                     FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
                     productImg = FILEPATH + file.Name;
                     if (file.Exists)
@@ -1043,7 +993,7 @@ namespace CloudSalesBusiness
                     }
                 }
                 var dal = new ProductsDAL();
-                return dal.UpdateProductDetails(detailid, productid, productCode, shapeCode, bigPrice, attrlist, valuelist, attrvaluelist, price, weight, description, productImg);
+                return dal.UpdateProductDetails(detailid, productid, productCode, shapeCode, bigPrice, attrlist, valuelist, attrvaluelist, price, weight, remark, description, productImg);
             }
         }
 

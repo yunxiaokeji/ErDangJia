@@ -436,6 +436,7 @@ namespace CloudSalesEntity
         /// </summary>
         public List<ProductAttr> SaleAttrs { get; set; }
 
+        public int HasDetails { get; set; }
 
         public int StockIn { get; set; }
         public int LogicOut { get; set; }

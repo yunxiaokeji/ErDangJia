@@ -602,7 +602,7 @@ namespace CloudSalesDAL
             return id;
         }
 
-        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string description, string operateid, string clientid)
+        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string remark, string description, string operateid, string clientid)
         {
             string id = "";
             int result = 0;
@@ -619,6 +619,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@Weight",weight),
                                        new SqlParameter("@ProductImg",productImg),
                                        new SqlParameter("@ShapeCode",shapeCode),
+                                       new SqlParameter("@Remark",remark),
                                        new SqlParameter("@Description",description),
                                        new SqlParameter("@CreateUserID",operateid),
                                        new SqlParameter("@ClientID",clientid)
@@ -673,7 +674,8 @@ namespace CloudSalesDAL
 
         }
 
-        public bool UpdateProductDetails(string detailid, string productid, string productCode, string shapeCode, decimal bigPrice, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, string description, string image)
+        public bool UpdateProductDetails(string detailid, string productid, string productCode, string shapeCode, decimal bigPrice, string attrlist, string valuelist, string attrvaluelist,
+                                         decimal price, decimal weight, string remark, string description, string image)
         {
             int result = 0;
             SqlParameter[] paras = { 
@@ -689,6 +691,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@Weight",weight),
                                        new SqlParameter("@ShapeCode",shapeCode),
                                        new SqlParameter("@ImgS",image),
+                                       new SqlParameter("@Remark",remark),
                                        new SqlParameter("@Description",description)
                                    };
             paras[0].Value = result;

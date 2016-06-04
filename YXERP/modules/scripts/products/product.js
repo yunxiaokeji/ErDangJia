@@ -112,7 +112,7 @@ define(function (require, exports, module) {
                         model.ids = _attr.data("id") + ":" + _value.data("id");
                         model.saleAttr = _attr.data("id");
                         model.attrValue = _value.data("id");
-                        model.names = _attr.data("text") + ":" + _value.data("text");
+                        model.names = "[" + _attr.data("text") + "：" + _value.data("text") + "]";
                         model.layer = 1;
                         model.guid = Global.guid();
                         details.push(model);
@@ -123,7 +123,7 @@ define(function (require, exports, module) {
                                 model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
                                 model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
                                 model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
-                                model.names = attrdetail[i].names + "," + _attr.data("text") + ":" + _value.data("text");
+                                model.names = attrdetail[i].names + " [" + _attr.data("text") + "：" + _value.data("text") + "]";
                                 model.layer = attrdetail[i].layer + 1;
                                 model.guid = Global.guid();
                                 details.push(model);
@@ -251,7 +251,8 @@ define(function (require, exports, module) {
                     Weight: 0,
                     Price: _this.find(".price").val(),
                     BigPrice: _this.find(".price").val(),//(Product.UnitID != Product.BigUnitID ? _this.find(".bigprice").val() : _this.find(".price").val()) * Product.BigSmallMultiple,
-                    Description: _this.data("desc")
+                    Remark: _this.data("desc"),
+                    Description: ""
                 };
                 details.push(modelDetail);
             });
@@ -261,7 +262,17 @@ define(function (require, exports, module) {
             product: JSON.stringify(Product)
         }, function (data) {
             if (data.ID.length > 0) {
-                location.href = "/Products/ProductDetail/" + data.ID;
+                if (!_self.ProductID) {
+                    alert("产品保存成功", function () {
+                        location.href = location.href;
+                    });
+                } else {
+                    alert("保存成功", function () {
+                        location.href = location.href;
+                    });
+                }
+            } else {
+                alert("网络异常，操作失败");
             }
         });
     }
@@ -697,7 +708,7 @@ define(function (require, exports, module) {
                             attrlist += _this.data("id") + ",";
                             valuelist += _this.find("select").val() + ",";
                             attrvaluelist += _this.data("id") + ":" + _this.find("select").val() + ",";
-                            desc += "[" + _this.find(".column-name").html() + _this.find("select option:selected").text() + "]";
+                            desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
                         });
 
                         var Model = {
@@ -710,10 +721,11 @@ define(function (require, exports, module) {
                             AttrValue: valuelist,
                             SaleAttrValue: attrvaluelist,
                             Price: $("#detailsPrice").val(),
-                            BigPrice: (model.UnitID != model.BigUnitID ? $("#bigPrice").val() : $("#detailsPrice").val()) * model.BigSmallMultiple,
+                            BigPrice: $("#detailsPrice").val(),
                             Weight: 0,
                             ImgS: _self.ImgS,
-                            Description: desc
+                            Remark: desc,
+                            Description: ""
                         };
                         Global.post("/Products/SavaProductDetail", {
                             product: JSON.stringify(Model)
@@ -734,13 +746,7 @@ define(function (require, exports, module) {
             });
 
             //绑定单位
-            $("#unitName").text(model.SmallUnit.UnitName)
-            if (model.UnitID != model.BigUnitID) {
-                $("#bigName").text(model.BigUnit.UnitName);
-                $("#bigquantity").text(model.BigSmallMultiple);
-            } else {
-                $("#bigpriceli").hide();
-            }
+            $("#unitName").text(model.SmallUnit.UnitName);
 
             if (!id) {
                 $("#detailsPrice").val(model.Price);
@@ -753,16 +759,14 @@ define(function (require, exports, module) {
                     }
                 }
                 $("#detailsPrice").val(detailsModel.Price);
-                $("#bigPrice").val(detailsModel.BigPrice / model.BigSmallMultiple);
                 $("#detailsCode").val(detailsModel.DetailsCode);
                 _self.ImgS = detailsModel.ImgS;
-                $("#imgS").attr("src", detailsModel.ImgS);
+                $("#imgS").attr("src", detailsModel.ImgS || "/modules/images/default.png");
 
                 var list = detailsModel.SaleAttrValue.split(',');
                 for (var i = 0, j = list.length; i < j; i++) {
                     $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]).prop("disabled", true);
                 }
-
             }
 
             ImgsIco = Upload.createUpload({

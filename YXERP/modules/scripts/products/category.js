@@ -267,7 +267,7 @@ define(function (require, exports, module) {
             //编辑填充数据
             if (Category.CategoryID) {
                 $("#categoryName").val(Category.CategoryName);
-                Category.Status != 1 || $("#categoryStatus").addClass("hover");
+                Category.Status == 1 || $("#categoryStatus").removeClass("hover");
                 $("#description").val(Category.Description);
 
                 for (var i = 0; i < Category.AttrLists.length; i++) {

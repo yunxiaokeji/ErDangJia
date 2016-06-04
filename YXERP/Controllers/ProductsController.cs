@@ -562,10 +562,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取产品列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetProductList(string filter)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -584,11 +580,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取产品信息
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <returns></returns>
         public JsonResult GetProductByID(string productid) 
         {
             var model = new ProductsBusiness().GetProductByID(productid);
@@ -600,11 +591,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取产品信息（加入购物车）
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <returns></returns>
         public JsonResult GetProductByIDForDetails(string productid)
         {
             var model = new ProductsBusiness().GetProductByIDForDetails(productid);
@@ -616,12 +602,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 编辑产品状态
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
         public JsonResult UpdateProductStatus(string productid, int status)
         {
             bool bl = new ProductsBusiness().UpdateProductStatus(productid, (EnumStatus)status, OperateIP, CurrentUser.UserID);
@@ -632,12 +612,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 编辑产品是否新品
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <param name="isnew"></param>
-        /// <returns></returns>
+
         public JsonResult UpdateProductIsNew(string productid, bool isnew)
         {
             bool bl = new ProductsBusiness().UpdateProductIsNew(productid, isnew, OperateIP, CurrentUser.UserID);
@@ -648,12 +623,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 编辑产品是否推荐
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <param name="isRecommend"></param>
-        /// <returns></returns>
+
         public JsonResult UpdateProductIsRecommend(string productid, bool isRecommend)
         {
             bool bl = new ProductsBusiness().UpdateProductIsRecommend(productid, isRecommend, OperateIP, CurrentUser.UserID);
@@ -665,11 +635,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 产品编码是否存在
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
         public JsonResult IsExistsProductCode(string code)
         {
             bool bl = new ProductsBusiness().IsExistProductCode(code, CurrentUser.ClientID);
@@ -681,11 +646,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存子产品
-        /// </summary>
-        /// <param name="product"></param>
-        /// <returns></returns>
         public JsonResult SavaProductDetail(string product)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -708,12 +668,12 @@ namespace YXERP.Controllers
             if (string.IsNullOrEmpty(model.ProductDetailID))
             {
                 id = new ProductsBusiness().AddProductDetails(model.ProductID, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue,
-                                                              model.Price, model.Weight, model.BigPrice, model.ImgS, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                                                              model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
             }
             else
             {
                 bool bl = new ProductsBusiness().UpdateProductDetails(model.ProductDetailID, model.ProductID, model.DetailsCode, model.ShapeCode, model.BigPrice, model.SaleAttr, model.AttrValue, model.SaleAttrValue,
-                                                              model.Price, model.Weight, model.Description, model.ImgS, CurrentUser.UserID, CurrentUser.ClientID); 
+                                                              model.Price, model.Weight, model.Remark, model.Description, model.ImgS, CurrentUser.UserID, CurrentUser.ClientID); 
                 if (bl)
                 {
                     id = model.ProductDetailID;
@@ -727,12 +687,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 编辑子产品状态
-        /// </summary>
-        /// <param name="productdetailid"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
         public JsonResult UpdateProductDetailsStatus(string productdetailid, int status)
         {
             bool bl = new ProductsBusiness().UpdateProductDetailsStatus(productdetailid, (EnumStatus)status, OperateIP, CurrentUser.UserID);

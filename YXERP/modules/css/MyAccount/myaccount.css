@@ -1,25 +1,15 @@
 ﻿
 body {  background-color:#fff; }
 
-.accountMenu { position: fixed; left: 0px; top:50px; bottom:0px; width: 200px; background-color:#f6f6f6; 
-                               border-right:solid 1px #ccc; box-shadow:0 0px 3px #ddd; }
-
-/*.accountMenu .accountTitle { padding:15px 0 5px 0; overflow:auto; cursor:pointer; border-bottom: solid 1px #ccc;}
-.accountMenu .accountTitle .avatar { height:38px; width:38px; border:solid 1px #F2F4F8; border-radius:20px; }
-.accountMenu .accountTitle img{ margin-left:20px; display:inline-block; float:left;}
-.accountMenu .accountTitle span{  display:inline-block; float:left; line-height:42px; font-size:14px;}
-    */
-.accountTitle { padding:5px 0 5px 0; width:180px; overflow:auto; cursor:pointer; }
-.accountTitle .avatar { height:38px; width:38px; border:solid 1px #2f74b9; border-radius:20px; }
-.accountTitle span{  display:inline-block; float:left; line-height:42px; font-size:14px;}
-
-.content-body { background-color:#fff;  margin-left:200px; padding-top:60px; } 
-.accountUl { margin-top: 15px; }
-.accountUl li { line-height: 40px; }
-.accountUl li a{ line-height: 40px; font-size: 13px; width:200px; text-align:center; display:inline-block; color:#333; }
-.accountUl .active { background-color: #fff; }
-
-.accountContent { margin: 0px 0px 0px 0px; }
+.accountMenu { left: 0px; top:1px; bottom:0px; width: 100%;background-color:#fff; }
+  
+.content-body { background-color:#fff; padding-top:16px; } 
+.accountUl li { line-height: 30px; width:120px; }
+.accountUl li a{ line-height: 30px; font-size: 10px; width:120px; text-align:center; display:inline-block; color:#333; }
+.accountUl .active { background-color: #fff; font-weight:bold;  }
+#movespan {position: absolute;top:40px; width:110px;border-bottom:solid 2px #4380BE;}
+.accountContent { margin: 0px 0px 0px 0px; float:left;width: 100%;  }
+div[name="accountInfo"] { margin-left:5px; }
 .account-box { padding:15px 20px 5px 20px; overflow:auto; background-color:#fff;  }
 .account-box a {margin-left:8px;}
 .accountHeader { line-height: 62px;padding-left:10px; border-bottom: solid 1px #ccc; font-size: 16px; color: #666; }

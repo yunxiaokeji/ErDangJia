@@ -154,7 +154,28 @@ namespace CloudSalesBusiness
 
             return list;
         }
-
+        public List<ContactEntity> GetContactsByCustomerID(string ownerID,string customerid="", string agentid="")
+        {
+            int total = 0;
+            List<ContactEntity> list = new List<ContactEntity>(); 
+            string cloumns = " status<>9 and OwnerID='" + ownerID + "'";
+            if (!string.IsNullOrEmpty(agentid))
+            {
+                cloumns += " and agentid='" + agentid + "'";
+            }
+            if (!string.IsNullOrEmpty(customerid))
+            {
+                cloumns += " and customerid='" + customerid + "'";
+            }
+            DataTable dt = CommonBusiness.GetPagerData("Contact", "*", cloumns, "CustomerID", int.MaxValue, 1, out total, out total);
+            foreach (DataRow dr in dt.Rows)
+            {
+                ContactEntity model = new ContactEntity();
+                model.FillData(dr);
+                list.Add(model);
+            }
+            return list;
+        }
         public ContactEntity GetContactByID(string contactid)
         {
             ContactEntity model = new ContactEntity();
@@ -164,6 +185,30 @@ namespace CloudSalesBusiness
                 model.FillData(dt.Rows[0]);
             }
             return model;
+        }
+
+        public List<CustomerEntity> GetCustomerByOwneID(string ownerID, string agentid="", string clientid="")
+        {
+            int total = 0;
+            List<CustomerEntity> list=new List<CustomerEntity>();
+            string cloumns = " status<>9 and OwnerID='" + ownerID + "'";
+            if (!string.IsNullOrEmpty(agentid))
+            {
+                cloumns += " and agentid='" +agentid+ "'";
+            } 
+            if (!string.IsNullOrEmpty(clientid))
+            {
+                cloumns += " and clientid='" + clientid + "'";
+            }
+
+           DataTable dt = CommonBusiness.GetPagerData("Customer", "*", cloumns, "CustomerID", int.MaxValue, 1, out total, out total);
+           foreach (DataRow dr in dt.Rows)
+           {
+               CustomerEntity model = new CustomerEntity();
+               model.FillData(dr); 
+               list.Add(model);
+           }
+            return list;
         }
 
         public static List<ReplyEntity> GetReplys(string guid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)

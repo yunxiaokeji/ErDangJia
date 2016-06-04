@@ -2,11 +2,11 @@
 
  */
 define(function (require, exports, module) {
-    require("plug/easydialog/easydialog.css");
+    require("plug/dialog/dialog.css");
     var Global = require("global");
     var win = window, doc = win.document,
 	docElem = doc.documentElement;
-    var easyDialog = function () {
+    var dialog = function () {
 
         var body = doc.body,
             isIE = !-[1, ],	// 判断IE6/7/8 不能判断IE9
@@ -31,7 +31,7 @@ define(function (require, exports, module) {
                     options = {},
                     // 默认参数
                     defaults = {
-                        id: 'easyDialogWrapper',
+                        id: 'dialogWrapper',
                         container: null,			// string / object   弹处层内容的id或内容模板
                         overlay: true,			// boolean  		 是否添加遮罩层
                         drag: true,			// boolean  		 是否绑定拖拽事件
@@ -47,6 +47,10 @@ define(function (require, exports, module) {
                          *	container : {
                          *		header : '弹出层标题',
                          *		content : '弹出层内容',
+                         *  	herf : '弹出层内容连接页面',
+                         *      importUrl:'导入调用放大地址',
+                         *      exportUrl:'导出Excel方法地址 ',
+                         *      exportParam:'导出Excel的参数对应JS中的Param{}, 其中如果要下载Json中的多个模版model参数|拼接 model:Item|OwnItem
                          *		yesFn : function(){},	    // 确定按钮的回调函数
                          *		noFn : function(){} / true,	// 取消按钮的回调函数
                          *		yesText : '确定',		    // 确定按钮的文本，默认为‘确定’
@@ -106,9 +110,9 @@ define(function (require, exports, module) {
                         style.setExpression('top', 'fuckIE6=document.documentElement.scrollTop+document.documentElement.clientHeight/2+"px"');
                     }
                     else {
-                        style.top = '50%';
+                        style.top = '40%';
                     }
-                    style.left = '50%';
+                    style.left = '40%';
                 }
                 else {
                     if (isIE6) {
@@ -146,50 +150,49 @@ define(function (require, exports, module) {
              */
             createDialogBox: function (guid) {
                 var dialogBox = doc.createElement('div');
-                dialogBox.style.cssText = 'margin:0;padding:0;border:none;z-index:10000;';
-                dialogBox.id = guid + 'easyDialogBox';
+                dialogBox.style.cssText = 'margin:0;padding:0;border:none;z-index:10000;border-radius:3px;background-color: rgba(242, 244, 248, 0.95);';
+                dialogBox.id = guid + 'dialogBox';
                 return dialogBox;
             },
-
             /**
              * 创建默认的弹出层内容模板
              * @param { Object } 模板参数
              * @return { Object } 弹出层内容模板
              &times;
              */
-            createDialogWrap: function (tmpl) {
+            createDialogWrap: function (tmpl) { 
                 // 弹出层标题
                 var header = tmpl.header ?
-                '<h4 class="easyDialog_title" id="' + tmpl.guid + 'easyDialogTitle"><a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="' + tmpl.guid + 'closeBtn"></a>' + tmpl.header + '</h4>' :
-                    '',
+                    '<div class="header-div"> <span class="dialog_title"  id="' + tmpl.guid + 'dialogTitle">' + tmpl.header + '</span>' +
+                    '<i class="right iconfont mRight5" style="cursor: pointer; margin-top:-8px;" title="关闭窗口"   id="' + tmpl.guid + 'closeBtn">&#xe628;</i></div>' : '';
                     // 确定按钮
                     yesBtn = typeof tmpl.yesFn === 'function' ?
-                        '<button class="btn_highlight" id="' + tmpl.guid + 'easyDialogYesBtn">' + (typeof tmpl.yesText === 'string' ? tmpl.yesText : '确定') + '</button>' :
+                        '<button class="btn_highlight" id="' + tmpl.guid + 'dialogYesBtn">' + (typeof tmpl.yesText === 'string' ? tmpl.yesText : '确定') + '</button>' :
                         '',
                     // 取消按钮	
                     noBtn = typeof tmpl.noFn === 'function' || tmpl.noFn === true ?
-                        '<button class="btn_normal" id="' + tmpl.guid + 'easyDialogNoBtn">' + (typeof tmpl.noText === 'string' ? tmpl.noText : '取消') + '</button>' :
+                        '<button class="btn_normal" id="' + tmpl.guid + 'dialogNoBtn">' + (typeof tmpl.noText === 'string' ? tmpl.noText : '取消') + '</button>' :
                         '',
                     // footer
-                    footer = yesBtn === '' && noBtn === '' ? '' :
-                        '<div class="easyDialog_footer">' + yesBtn + noBtn + '</div>',
+                    footer = yesBtn === '' && noBtn === '' ? '' : '<div class="dialog_footer">' + yesBtn + noBtn + '</div>',
 
                     dialogTmpl = [
-                    '<div class="easyDialog_content">',
+                    '<div class="dialog_content">',
                         header,
-                        '<div class="easyDialog_text">' + tmpl.content + '</div>',
+                        '<form id="upfileForm" action="' + tmpl.importUrl + '" method="POST" enctype="multipart/form-data"><div class="dialog_text">' + (typeof (tmpl.content) != 'undefined'?tmpl.content:"") + ((typeof (tmpl.herf) != 'undefined' && tmpl.herfherf != '') ? loadPage(tmpl.herf) : '') + '</div></form>',
                         footer,
                     '</div>'
-                    ].join(''),
-
+                    ].join(''), 
                     dialogWrap = doc.getElementById(tmpl.id),
                     rScript = /<[\/]*script[\s\S]*?>/ig;
+
                 if (!dialogWrap) {
                     dialogWrap = doc.createElement('div');
                     dialogWrap.id = tmpl.id;
-                    dialogWrap.className = 'easyDialog_wrapper';
+                    dialogWrap.className = 'dialog_wrapper';
                 }
-                dialogWrap.innerHTML = dialogTmpl.replace(rScript, '');
+                dialogWrap.innerHTML = dialogTmpl;// dialogTmpl.replace(rScript, '');
+             
                 return dialogWrap;
             }
         };
@@ -520,9 +523,10 @@ define(function (require, exports, module) {
             };
 
         var extend = {
-            open: function () {
+            open: function() {
+
                 var $ = new Dialog(),
-                    options = $.getOptions(arguments[0] || {}),	// 获取参数
+                    options = $.getOptions(arguments[0] || {}), // 获取参数
                     event = Dialog.event,
                     docWidth = docElem.clientWidth,
                     docHeight = docElem.clientHeight,
@@ -531,10 +535,7 @@ define(function (require, exports, module) {
                     dialogBox,
                     dialogWrap,
                     boxChild;
-
-                clearTimer();
-
-
+                clearTimer(); 
                 // ------------------------------------------------------
                 // ---------------------插入遮罩层-----------------------
                 // ------------------------------------------------------
@@ -560,17 +561,16 @@ define(function (require, exports, module) {
                 // ---------------------插入弹出层-----------------------
                 // ------------------------------------------------------
 
-                
 
-                // 如果页面中已经缓存弹出层，直接显示
-                dialogBox = doc.getElementById(options.guid + 'easyDialogBox');
+// 如果页面中已经缓存弹出层，直接显示
+                dialogBox = doc.getElementById(options.guid + 'dialogBox');
                 if (!dialogBox) {
                     dialogBox = $.createDialogBox(options.guid);
                     body.appendChild(dialogBox);
                 }
 
                 if (options.follow) {
-                    var follow = function () {
+                    var follow = function() {
                         $.setFollow(dialogBox, options.follow, options.followX, options.followY);
                     };
 
@@ -581,8 +581,7 @@ define(function (require, exports, module) {
                         overlay.style.display = 'none';
                     }
                     options.fixed = false;
-                }
-                else {
+                } else {
                     $.setPosition(dialogBox, options.fixed);
                 }
                 dialogBox.style.display = 'block';
@@ -600,8 +599,7 @@ define(function (require, exports, module) {
 
                 if (!boxChild) {
                     dialogBox.appendChild(dialogWrap);
-                }
-                else if (boxChild && dialogWrap !== boxChild) {
+                } else if (boxChild && dialogWrap !== boxChild) {
                     boxChild.style.display = 'none';
                     body.appendChild(boxChild);
                     dialogBox.appendChild(dialogWrap);
@@ -612,11 +610,11 @@ define(function (require, exports, module) {
                     eHeight = dialogWrap.offsetHeight,
                     widthOverflow = eWidth > docWidth,
                     heigthOverflow = eHeight > docHeight;
-                var toPosition = function () {
+                var toPosition = function() {
                     eWidth = dialogWrap.offsetWidth,
-                    eHeight = dialogWrap.offsetHeight,
-                    widthOverflow = eWidth > docWidth,
-                    heigthOverflow = eHeight > docHeight;
+                        eHeight = dialogWrap.offsetHeight,
+                        widthOverflow = eWidth > docWidth,
+                        heigthOverflow = eHeight > docHeight;
                     // 强制去掉自定义弹出层内容的margin	
                     dialogWrap.style.marginTop = dialogWrap.style.marginRight = dialogWrap.style.marginBottom = dialogWrap.style.marginLeft = '0px';
 
@@ -624,8 +622,7 @@ define(function (require, exports, module) {
                     if (!options.follow) {
                         dialogBox.style.marginLeft = '-' + (widthOverflow ? docWidth / 2 : eWidth / 2) + 'px';
                         dialogBox.style.marginTop = '-' + (heigthOverflow ? docHeight / 2 : eHeight / 2) + 'px';
-                    }
-                    else {
+                    } else {
                         dialogBox.style.marginLeft = dialogBox.style.marginTop = '0px';
                     }
                 }
@@ -642,28 +639,40 @@ define(function (require, exports, module) {
                 // --------------------绑定相关事件----------------------
                 // ------------------------------------------------------
                 var closeBtn = doc.getElementById(options.guid + 'closeBtn'),
-                    dialogTitle = doc.getElementById(options.guid + 'easyDialogTitle'),
-                    dialogYesBtn = doc.getElementById(options.guid + 'easyDialogYesBtn'),
-                    dialogNoBtn = doc.getElementById(options.guid + 'easyDialogNoBtn'),
-                    overlayer = doc.getElementById(options.guid + 'overlay');
-
-
-                //event.bind(overlayer, 'click', function () {
-                //    self.close(options.guid);
-                //});
-
+                    dialogTitle = doc.getElementById(options.guid + 'dialogTitle'),
+                    dialogYesBtn = doc.getElementById(options.guid + 'dialogYesBtn'),
+                    dialogNoBtn = doc.getElementById(options.guid + 'dialogNoBtn'),
+                    overlayer = doc.getElementById(options.guid + 'overlay'),
+                    dialogSpanWare = doc.getElementById('spanWare'),
+                    dialogExportModel = doc.getElementById('exportModel'),
+                    dialogFileName=doc.getElementById('modelName');
                 // 绑定确定按钮的回调函数
                 if (dialogYesBtn) {
-                    event.bind(dialogYesBtn, 'click', function (event) {
+                    event.bind(dialogYesBtn, 'click', function(event) {
                         if (options.container.yesFn.call(self, event) !== false) {
                             self.close(options.guid);
                         }
                     });
                 }
-                
+                if (dialogSpanWare) {
+                    event.bind(dialogSpanWare, 'click', function() { self.infoShow() });
+                }
+                if (dialogExportModel) {
+                    var tempContent = options.container || {};
+                    if (tempContent != null && typeof (tempContent.exportUrl) != "undefined" && tempContent.exportUrl != "") {
+                        var objPara = tempContent.exportParam || {}; 
+                        event.bind(dialogExportModel, 'click', function () {
+                            if (typeof (dialogFileName) != "undefined") { 
+                                objPara.model = dialogFileName.value;
+                                objPara.filleName = dialogFileName.options[dialogFileName.selectedIndex].text;
+                            } 
+                            self.exportModel(tempContent.exportUrl, objPara); 
+                        });
+                    }
+                } 
                 // 绑定取消按钮的回调函数
                 if (dialogNoBtn) {
-                    var noCallback = function (event) {
+                    var noCallback = function(event) {
                         if (options.container.noFn === true || options.container.noFn.call(self, event) !== false) {
                             self.close(options.guid);
                         }
@@ -676,7 +685,7 @@ define(function (require, exports, module) {
                 }
                 // 关闭按钮绑定事件	
                 else if (closeBtn) {
-                    event.bind(closeBtn, 'click', function () {
+                    event.bind(closeBtn, 'click', function() {
                         self.close(options.guid);
                     });
                 }
@@ -697,7 +706,7 @@ define(function (require, exports, module) {
                 // 确保弹出层绝对定位时放大缩小窗口也可以垂直居中显示
 
                 if (!options.follow && !options.fixed) {
-                    var resize = function () {
+                    var resize = function() {
                         $.setPosition(dialogBox, false);
                     };
                     // 如果弹出层内容的宽度或高度溢出将不绑定resize事件
@@ -725,16 +734,16 @@ define(function (require, exports, module) {
                     dialogNoBtn: dialogNoBtn
                 });
                 var method = {
-                    content: function (html) {
+                    content: function(html) {
                         var jQuery = require("jquery");
-                        jQuery(dialogWrap).find("div.easyDialog_text").html(html);
+                        jQuery(dialogWrap).find("div.dialog_text").html(html);
                         toPosition();
                     }
                 }
-                
+
                 return method;
             },
-            close: function (guid) {
+            close: function(guid) {
                 if (!guid) {
                     guid = "";
                 }
@@ -759,7 +768,6 @@ define(function (require, exports, module) {
                 // ------------------------------------------------------
 
 
-
                 if (elements.closeBtn) {
                     event.unbind(elements.closeBtn, 'click');
                 }
@@ -771,7 +779,12 @@ define(function (require, exports, module) {
                 if (elements.dialogYesBtn) {
                     event.unbind(elements.dialogYesBtn, 'click');
                 }
-
+                if (elements.dialogSpanWare) {
+                    event.unbind(elements.dialogSpanWare, 'click');
+                }
+                if (elements.dialogExportModel) {
+                    event.unbind(elements.dialogExportModel, 'click');
+                }
                 if (elements.dialogNoBtn) {
                     event.unbind(elements.dialogNoBtn, 'click');
                 }
@@ -798,18 +811,81 @@ define(function (require, exports, module) {
                 }
                 // 清除缓存
                 Dialog.removeData(guid + 'dialogElements');
+            },
+            exportModel: function(path, qic) {
+                var form = $("<form>"); //定义一个form表单
+                form.attr("style", "display:none");
+                form.attr("target", "");
+                form.attr("method", "post");
+                form.attr("action", path);
+                for (var i in qic) {
+                    if (qic.hasOwnProperty(i)) {
+                        var input = $("<input>");
+                        input.attr("hide", "hide");
+                        input.attr("value", qic[i]);
+                        input.attr("name", i);
+                        form.append(input); 
+                    };
+                }
+                $("body").append(form);
+                form.submit(); //表单提交 
+            },
+            infoShow: function() {
+                $('#spanWare').hide();
+                $('#divInfo').show();
             }
         };
 
         return extend;
 
     };
-
+    //加载herf连接页面
+    var loadPage = function(path) {
+        var textcontent = "";
+        $.ajax({
+            type: "get",
+            url: path +'?random=' + Math.random(),
+            async: false,
+            success: function (data) {
+                //data = data.replace(/<[\/]*script[\s\S]*?>/ig, ""); //移除 script 标签 
+                data = data.replace(/<\/?link.*>/ig, ""); //移除 link 标签 
+                data = data.replace(/<\/?html.*>/ig, ""); //移除 html 标签 
+                data = data.replace(/<\/?body.*>/ig, ""); //移除 body 标签 
+                data = data.replace(/<\/?head.*>/ig, ""); //移除 head 标签 
+                data = data.replace(/<\/?!doctype.*>/ig, ""); //移除 doctype 标签 
+                textcontent = data.replace(/<title.*>.*<\/title>/ig, ""); //移除 title 标签  
+            }
+        }); 
+        return textcontent; //html 
+    };
+    //var exportModel = function (path,qic) {
+    //    var form = $("<form>");//定义一个form表单
+    //    form.attr("style", "display:none");
+    //    form.attr("target", "");
+    //    form.attr("method", "post");
+    //    form.attr("action", path);
+    //    for (var i in qic) {
+    //        if (qic.hasOwnProperty(i)) {
+    //            var input = $("<input>");
+    //            input.attr("hide", "hide");
+    //            input.attr("value", qic[i]);
+    //            input.attr("name",i);
+    //            form.append(input);
+    //            console.log(i, ":", qic[i]);
+    //        };
+    //    } 
+    //    $("body").append(form);
+    //    form.submit();//表单提交 
+    //};
+    //var infoShow = function () {
+    //    $('.spanWare').hide();
+    //    $('.divInfo').show();
+    //};
     // ------------------------------------------------------
     // ---------------------DOM加载模块----------------------
     // ------------------------------------------------------
     var loaded = function () {
-        module.exports = easyDialog();
+        module.exports = dialog();
     },
 
         doScrollCheck = function () {

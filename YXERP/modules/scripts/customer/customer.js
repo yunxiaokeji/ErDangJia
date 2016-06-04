@@ -2,10 +2,14 @@
     var Global = require("global"),
         doT = require("dot"),
         ChooseUser = require("chooseuser"),
+        Dialog = require("dialog"), 
         moment = require("moment");
     require("daterangepicker");
     require("pager");
     require("mark");
+    var $ = require('jquery');
+    require("parser")($);
+    require("form")($);
 
     var Params = {
         SearchType: 1,
@@ -50,7 +54,9 @@
                 _self.getList();
             }
         });
-
+        $("#exportExcel").click(function () { 
+            ObjectJS.ShowExportExcel()
+        });
         //客户状态
         $(".search-status li").click(function () {
             var _this = $(this);
@@ -344,5 +350,37 @@
         });
     }
 
+    ObjectJS.ShowExportExcel = function () { 
+        $('#show-customer-export').empty();
+        Dialog.open({
+            container: {
+                id: "show-customer-export",
+                header: "导入客户信息", 
+                importUrl: '/Customer/CustomerImport',
+                yesFn: function () { 
+                    $('#upfileForm').form('submit', {
+                        onSubmit: function () { 
+                        },
+                        success: function (data) {
+                            if (data == "操作成功") {
+                                alert('111');
+                            } else {
+                                alert(data);
+                            }
+                        }
+                    });
+                },
+                exportUrl: '/Customer/ExportFromCustomer',
+                exportParam: { test: true, model: 'Item|OwnItem' },
+                herf: '/Customer/CustomerImport',
+                noFn:true,
+                yesText:'导入',
+                callback: function () {
+
+                }
+            }
+        }); 
+      
+    } 
     module.exports = ObjectJS;
 });

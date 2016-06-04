@@ -51,27 +51,25 @@
             cropper.zoomOut();
         })
         
-        $('#btnCrop').on('click', function () {
-            if ($(".imageBox").css("background-image") == "none") return;
+        $('#btnCrop').on('click', function () { 
+            if ($(".imageBox").css("background-image") == "none") {
+                return;
+            } else {
+                var img = cropper.getDataURL();
+                $('.cropped').html('').show();
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:160px;margin-top:4px;border-radius:160px;box-shadow:0px 0px 12px #7E7E7E;"><p>160px*160px</p>');
 
-            var img = cropper.getDataURL();
-            $('.cropped').html('').show();
-            $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
-            $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
-            $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:160px;margin-top:4px;border-radius:160px;box-shadow:0px 0px 12px #7E7E7E;"><p>160px*160px</p>');
-
-
-
-            Global.post("/MyAccount/SaveAccountAvatar", { avatar: img }, function (data) {
-
-                if (data.Result == 1) {
-                    console.log(data.Result);
-                    $("#userImg").attr("src", data.Avatar + "?t=" + new Date().toLocaleString());
-                }
-                else {
-                    alert("保存失败");
-                }
-            });
+                Global.post("/MyAccount/SaveAccountAvatar", { avatar: img }, function (data) {
+                    if (data.Result == 1) {
+                        $(".avatar", parent.document).attr("src", data.Avatar + "?t=" + new Date().toLocaleString());
+                    }
+                    else {
+                        alert("保存失败");
+                    }
+                });
+            }
         });
     }
 

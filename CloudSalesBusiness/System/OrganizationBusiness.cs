@@ -591,7 +591,9 @@ namespace CloudSalesBusiness
             }
             return user;
         }
-
+        public static DataTable GetUserById(string userID) {
+            return OrganizationDAL.BaseProvider.GetUserByUserID(userID);
+        }
         #endregion
 
         #region 编辑/删除

@@ -38,8 +38,15 @@
 
             $(".content-body div[name='accountInfo']").hide().eq( parseInt(_this.data("id")) ).show();
         });
-
-
+        $("#btnExportExcel").click(function () {
+            var form = $("<form>");//定义一个form表单
+            form.attr("style", "display:none");
+            form.attr("target", "");
+            form.attr("method", "post");
+            form.attr("action", "/MyAccount/ExportFromCfg");
+            $("body").append(form);
+            form.submit();//表单提交 
+        });
         //用户基本信息
         $("#btnSaveAccountInfo").click(function () {
             if (!VerifyObject.isPass("#accountInfo")) {

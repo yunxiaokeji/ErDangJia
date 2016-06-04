@@ -1,4 +1,4 @@
-﻿using CloudSalesBusiness;
+﻿using CloudSalesBusiness; 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -75,6 +75,22 @@ namespace YXERP.Controllers
             };
         }
 
+
+        public ActionResult ExportFromCfg()
+        {
+            var excelWriter = new ExcelWriter();
+            Dictionary<string, object> listColumn = new Dictionary<string, object>();
+            excelWriter.Map("LoginName","登录名");
+            excelWriter.Map("Name", "姓名");
+            excelWriter.Map("MobilePhone", "手机号"); 
+            excelWriter.Map("Birthday", "生日");
+            byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserById(CurrentUser.UserID), new Dictionary<string, ExcelFormatter>() { { "birthday", new ExcelFormatter() { ColumnTrans = EnumColumnTrans.ConvertTime, DropSource = "" } } });
+            var fileName = "用户信息导入";
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
+        }
         /// <summary>
         /// 保存用户基本信息
         /// </summary>

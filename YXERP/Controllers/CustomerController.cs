@@ -9,6 +9,12 @@ using CloudSalesBusiness;
 using System.Web.Script.Serialization;
 using CloudSalesEntity;
 using YXERP.Models;
+using System.Data;
+using CloudSalesBusiness.Manage;
+using Xfrog.Net;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.IO; 
 
 namespace YXERP.Controllers
 {
@@ -28,7 +34,10 @@ namespace YXERP.Controllers
             ViewBag.Type = (int)EnumSearchType.Myself;
             return View("Customers");
         }
-
+        public ActionResult CustomerImport()
+        { 
+            return View();
+        }
         public ActionResult BranchCustomer()
         {
             ViewBag.Title = "下属客户";
@@ -71,7 +80,245 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+        public ActionResult ExportFromCfg()
+        {
+            var excelWriter = new ExcelWriter();
+            Dictionary<string, object> listColumn = new Dictionary<string, object>();
+            excelWriter.Map("Name", "公司名称");
+            excelWriter.Map("Contcat", "客户名称");
+            excelWriter.Map("Jobs", "职位");
+            excelWriter.Map("MobilePhone", "联系电话");
+            excelWriter.Map("Email", "邮箱");
+            excelWriter.Map("Province", "省");
+            excelWriter.Map("City", "市");
+            excelWriter.Map("District", "区");
+            excelWriter.Map("Address", "详细地址");
+            excelWriter.Map("Description", "描述");
+            byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserById(CurrentUser.UserID),
+                new Dictionary<string, ExcelFormatter>()
+                {
+                    {
+                        "birthday", new ExcelFormatter()
+                        {
+                            ColumnTrans = EnumColumnTrans.ConvertTime,
+                            DropSource = ""
 
+                        }
+                    }
+                });
+            var fileName = "客户信息导入";
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
+        }
+
+        public ActionResult ExportFromCustomer(bool test = false,string model="",string filleName="企业客户")
+        {
+            Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+            Dictionary<string, string> listColumn = GetColumnForJson("customer", ref dic, model);
+            var excelWriter = new ExcelWriter();
+            foreach (var key in listColumn)
+            {
+                excelWriter.Map(key.Key, key.Value);
+            }
+            byte[] buffer;
+            DataTable dt = new DataTable();
+            if (test)
+            {
+                DataRow dr = dt.NewRow();
+                foreach (var key in listColumn)
+                {
+                    DataColumn dc1 = new DataColumn(key.Key, Type.GetType("System.String"));
+                    dt.Columns.Add(dc1);
+                    if (key.Key == "excent")
+                    {
+                        dr[key.Key] = "下拉框中选择";
+                    }
+                    else if (key.Key == "industry")
+                    {
+                        dr[key.Key] = "下拉框中选择";
+                    }
+                    else if (key.Key == "province")
+                    {
+                        dr[key.Key] = "下拉框中选择";
+                    }
+                    else
+                    {
+                        dr[key.Key] = key.Value;
+                    }
+                }
+                dt.Rows.Add(dr);
+            }
+            else
+            {
+                dt = OrganizationBusiness.GetUserById(CurrentUser.UserID);
+                //dic.Add("birthday", new ExcelFormatter() {ColumnTrans = EnumColumnTrans.ConvertTime, DropSource = ""});
+            }
+            buffer = excelWriter.Write(dt, dic);
+            var fileName =filleName+"导入模版";
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerImport(HttpPostedFileBase file, int overType = 0, int type=0)
+        {
+            if (file == null) { return Content("请选择要导入的文件"); }
+            if (!file.FileName.Contains(".xls") && !file.FileName.Contains(".xlsx")) { return Content("文件格式类型不正确"); }
+            string mes = "";
+            DataTable dt= ImportExcelToDataTable(file);
+            if (dt.Columns.Count > 0)
+            {
+                ///1.获取系统模版列
+                var checkColumn = dt.Columns.Contains("公司规模");
+                Dictionary<string, string> listColumn;
+                if (checkColumn)
+                {
+                    listColumn = GetColumnForJson("customer", "Item");
+                }
+                else
+                {
+                    listColumn = GetColumnForJson("customer", "OwnItem");
+                }
+                ///2.上传Excel 与模板中列是否一致 不一致返回提示
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    if (!listColumn.ContainsKey(dc.ColumnName))
+                    {
+                        mes += dc.ColumnName + ",";
+                    }
+                }
+                if (!string.IsNullOrEmpty(mes))
+                {
+                    return Content("Excel模版与系统模版不一致,请重新下载模板,编辑后再上传.错误:缺少列 " + mes);
+                }
+                ///3.开始处理
+                int k = 1;
+                List<CustomerEntity> list = new List<CustomerEntity>();
+                List<ContactEntity> contactList = new List<ContactEntity>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    try
+                    {
+                        CustomerEntity customers;
+                        ContactEntity contact;
+                        if (checkColumn)
+                        {
+                            customers = GetCustomerByDataRow(dr, checkColumn); 
+                            list.Add(customers); 
+                        }
+                        else
+                        {
+                            if (dr["公司名称"] != null && !string.IsNullOrEmpty(dr["公司名称"].ToString()))
+                            {
+                                contact = GetContactByDataRow(dr, checkColumn);
+                                contactList.Add(contact);
+                            }
+                            else
+                            {
+                                customers = GetCustomerByDataRow(dr, checkColumn);
+                                list.Add(customers);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        mes += k + ",";
+                    }
+                } 
+                try
+                {
+                    if (list.Count>0) ExcelImportBusiness.InsertCustomer(list, type, overType);
+                    if (contactList.Count >0) ExcelImportBusiness.InsertContact(contactList, type, overType);
+                }
+                catch (Exception ex)
+                {
+                    return Content("系统异常:请联系管理员,错误原因" + ex.ToString());
+                }
+
+            }
+            if (!string.IsNullOrEmpty(mes))
+            {
+                return Content("部分数据未导入成功,Excel行位置" + mes);
+            }
+            return Content("操作成功");
+        }
+         
+
+        public CustomerEntity GetCustomerByDataRow(DataRow dr ,bool isQiYe=false)
+        {
+            CustomerEntity customers = new CustomerEntity();
+            customers.Address = dr["详细地址"].ToString();
+            customers.Description = dr["描述"].ToString();
+            customers.Email = dr["邮箱"].ToString();
+            customers.MobilePhone = dr["联系电话"].ToString();
+            customers.Jobs = dr["职位"].ToString();
+            customers.ClientID = CurrentUser.ClientID;
+            customers.AgentID = CurrentUser.AgentID;
+            customers.CreateUserID = CurrentUser.UserID;
+            customers.OwnerID = CurrentUser.UserID;
+            customers.CreateTime = DateTime.Now;
+            customers.Type = isQiYe?1:0;
+            customers.ContactName = dr["客户名称"].ToString();
+            customers.CustomerID = Guid.NewGuid().ToString();
+            customers.CityCode = GetCityCode(dr);
+            if (isQiYe)
+            {
+                customers.Name = dr["公司名称"].ToString();
+                customers.IndustryID =
+                    CommonBusiness.IndustryList.Where(x => x.Name.Equals(dr["行业"].ToString()))
+                        .FirstOrDefault()
+                        .IndustryID;
+                customers.Extent =
+                    (int)CommonBusiness.GetEnumindexByDesc<EnumCustomerExtend>(EnumCustomerExtend.Huge, dr["公司规模"].ToString());
+            }
+            else
+            {
+                customers.Name = dr["客户名称"].ToString();
+            }
+            return customers;
+        }
+        public ContactEntity GetContactByDataRow(DataRow dr, bool isQiYe = false)
+        {
+            ContactEntity contact = new ContactEntity();
+            contact.Address = dr["详细地址"].ToString();
+            contact.CompanyName = dr["公司名称"].ToString();
+            contact.Address = dr["客户名称"].ToString();
+            contact.Description = dr["描述"].ToString();
+            contact.Email = dr["邮箱"].ToString();
+            contact.MobilePhone = dr["联系电话"].ToString();
+            contact.Jobs = dr["职位"].ToString();
+            contact.CityCode = GetCityCode(dr);
+            contact.ClientID = CurrentUser.ClientID;
+            contact.AgentID = CurrentUser.AgentID;
+            contact.CreateUserID = CurrentUser.UserID;
+            contact.OwnerID = CurrentUser.UserID;
+            contact.CreateTime = DateTime.Now;
+            contact.Type = isQiYe ? 1 : 0;
+            return contact;
+        }
+        //public CustomerEntity GetCustomerBtContact(ContactEntity contact)
+        //{ 
+        //    CustomerEntity customers = new CustomerEntity();
+        //    customers.Address = contact.Address;
+        //    customers.Description = contact.Description;
+        //    customers.Email = contact.Email;
+        //    customers.MobilePhone = contact.MobilePhone;
+        //    customers.Jobs = contact.Jobs;
+        //    customers.ClientID = CurrentUser.ClientID;
+        //    customers.AgentID = CurrentUser.AgentID;
+        //    customers.CreateUserID = CurrentUser.UserID;
+        //    customers.OwnerID = CurrentUser.UserID;
+        //    customers.CreateTime = DateTime.Now;
+        //    customers.CityCode = contact.CityCode;
+        //    customers.Type = 0;
+        //    customers.CustomerID = Guid.NewGuid().ToString();
+        //    return customers;
+        //}
         public JsonResult SaveCustomer(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();

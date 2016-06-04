@@ -1,0 +1,161 @@
+﻿{
+    "Error": "",
+    "Item": {
+        "Name": {
+            "title": "公司名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Extent": {
+            "title": "公司规模",
+            "hide": false,
+            "format": true,
+            "type": 7,
+			"datasource":"List|0-49,50-99,100-199,200-499,500-999,1000+"
+        },
+        "IndustryId": {
+            "title": "行业",
+            "hide": false,
+            "format": true,
+            "type": 7,
+			"datasource":"DropSourceList|1"
+        },
+        "Contcat": {
+            "title": "客户名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Jobs": {
+            "title": "职位",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "MobilePhone": {
+            "title": "联系电话",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Email": {
+            "title": "邮箱",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Province": {
+            "title": "省",
+            "hide": false,
+            "format": true,
+            "type": 7,
+			"datasource":"DropSourceList|2"
+        },
+        "City": {
+            "title": "市",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "District": {
+            "title": "区",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Address": {
+            "title": "详细地址",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Description": {
+            "title": "描述",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        }
+    },
+	 "OwnItem": {
+        "Name": {
+            "title": "公司名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        }, 
+        "Contcat": {
+            "title": "客户名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Jobs": {
+            "title": "职位",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "MobilePhone": {
+            "title": "联系电话",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Email": {
+            "title": "邮箱",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Province": {
+            "title": "省",
+            "hide": false,
+            "format": true,
+            "type": 7,
+			"datasource":"DropSourceList|2"
+        },
+        "City": {
+            "title": "市",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "District": {
+            "title": "区",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Address": {
+            "title": "详细地址",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "Description": {
+            "title": "描述",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        }
+    }
+}

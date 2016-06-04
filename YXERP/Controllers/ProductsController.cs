@@ -635,6 +635,18 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult DeleteProduct(string productid)
+        {
+            int result = 0;
+            bool bl = new ProductsBusiness().DeleteProduct(productid, OperateIP, CurrentUser.UserID, out result);
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public JsonResult IsExistsProductCode(string code)
         {
             bool bl = new ProductsBusiness().IsExistProductCode(code, CurrentUser.ClientID);
@@ -702,6 +714,18 @@ namespace YXERP.Controllers
         {
             var list = new ProductsBusiness().GetProductDetails(wareid, keywords, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DeleteProductDetail(string productDetailID)
+        {
+            int result = 0;
+            bool bl = new ProductsBusiness().DeleteProductDetail(productDetailID, OperateIP, CurrentUser.UserID, out result);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,

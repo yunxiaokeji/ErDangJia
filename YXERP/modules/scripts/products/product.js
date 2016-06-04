@@ -288,7 +288,6 @@ define(function (require, exports, module) {
     Product.getChildCategory = function (pid) {
         var _self = this;
         $("#category-child").empty();
-
         if (!CacheChildCategorys[pid]) {
             Global.post("/Products/GetChildCategorysByID", {
                 categoryid: pid
@@ -309,12 +308,11 @@ define(function (require, exports, module) {
         var _self = this;
         var length = CacheChildCategorys[pid].length;
         if (length > 0) {
-            $(".category-child").show();
             for (var i = 0; i < length; i++) {
                 var _ele = $(" <li data-id='" + CacheChildCategorys[pid][i].CategoryID + "'>" + CacheChildCategorys[pid][i].CategoryName + "</li>");
                 _ele.click(function () {
                     //处理分类MAP
-                    var _map = $(" <li data-id='" + $(this).data("id") + "'>" + $(this).html() + "<span>></span></li>");
+                    var _map = $(" <li data-id='" + $(this).data("id") + "'><a href='javascript:void(0);'>" + $(this).html() + "</a></li>");
                     _map.click(function () {
                         $(this).nextAll().remove();
                         _self.getChildCategory($(this).data("id"));
@@ -325,7 +323,7 @@ define(function (require, exports, module) {
                 $("#category-child").append(_ele);
             }
         } else {
-            $(".category-child").hide();
+            $("#category-child").html("<li>无下级分类</li>");
         }
     }
 
@@ -343,19 +341,7 @@ define(function (require, exports, module) {
                 Product.getList();
             });
         });
-        //价格筛选
-        $("#attr-price .attrValues .price").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.BeginPrice = _this.data("begin");
-                Params.EndPrice = _this.data("end");
-                _self.getList();
-                $("#beginprice").val("");
-                $("#endprice").val("");
-            }
-        });
+
         //搜索价格区间
         $("#searchprice").click(function () {
             if (!!$("#beginprice").val() && !isNaN($("#beginprice").val())) {
@@ -378,54 +364,25 @@ define(function (require, exports, module) {
 
             _self.getList();
         });
-        //按时间排序
-        $(".orderby-new").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.OrderBy = "p.CreateTime desc";
-                Params.IsAsc = false;
-                Params.PageIndex = 1;
-                _self.getList();
-            }
-        });
 
-        //按销量排序
-        $(".orderby-sales").click(function () {
+        //排序
+        $(".sort-item").click(function () {
             var _this = $(this);
-            $(".orderby-price").find(".xia").removeClass("xia-hover");
-            $(".orderby-price").find(".shang").removeClass("shang-hover");
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.OrderBy = "p.SaleCount desc";
-                Params.IsAsc = false;
-                Params.PageIndex = 1;
-                _self.getList();
-            }
-        });
-
-        //按价格排序
-        $(".orderby-price").click(function () {
-            var _this = $(this);
-
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.IsAsc = true;
-                Params.PageIndex = 1;
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    _this.find(".asc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " desc ";
+                } else {
+                    _this.find(".desc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " asc ";
+                }
             } else {
-                Params.IsAsc = !Params.IsAsc;
-            }
-            if (Params.IsAsc) {
-                _this.find(".shang").addClass("shang-hover");
-                _this.find(".xia").removeClass("xia-hover");
-                Params.OrderBy = "p.Price";
-            } else {
-                _this.find(".shang").removeClass("shang-hover");
-                _this.find(".xia").addClass("xia-hover");
-                Params.OrderBy = "p.Price desc";
+                _this.addClass("hover").siblings().removeClass("hover");
+                _this.siblings().find(".hover").removeClass("hover");
+                _this.find(".desc").addClass("hover");
+                Params.OrderBy = _this.data("column") + " desc ";
             }
             _self.getList();
         });
@@ -435,7 +392,7 @@ define(function (require, exports, module) {
     Product.getList = function () {
         var _self = this;
         $("#product-items").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='9'><div class='data-loading' ><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='11'><div class='data-loading' ><div></td></tr>");
 
         Global.post("/Products/GetProductList", { filter: JSON.stringify(Params) }, function (data) {
             $("#product-items").nextAll().remove();
@@ -455,22 +412,24 @@ define(function (require, exports, module) {
                             _self.editStatus(data, data.data("id"), data.data("value"), callback);
                         }
                     });
-                    innerText.find(".isnew").switch({
-                        open_title: "设为新品",
-                        close_title: "取消新品",
-                        value_key: "value",
-                        change: function (data, callback) {
-                            _self.editIsNew(data, data.data("id"), data.data("value"), callback);
-                        }
+
+                    //删除
+                    innerText.find(".ico-del").click(function () {
+                        var _this = $(this);
+                        confirm("产品删除后不可恢复,确认删除吗？", function () {
+                            Global.post("/Products/DeleteProduct", { productid: _this.data("id") }, function (data) {
+                                if (data.result == 1) {
+                                    alert("产品删除成功");
+                                    _self.getList();
+                                } else if (data.result == 10002) {
+                                    alert("产品存在销售业务，删除失败");
+                                } else {
+                                    alert("删除失败！");
+                                }
+                            });
+                        });
                     });
-                    innerText.find(".isrecommend").switch({
-                        open_title: "点击推荐",
-                        close_title: "取消推荐",
-                        value_key: "value",
-                        change: function (data, callback) {
-                            _self.editIsRecommend(data, data.data("id"), data.data("value"), callback);
-                        }
-                    });
+                   
                 });
                 $("#pager").paginate({
                     total_count: data.TotalCount,
@@ -495,7 +454,7 @@ define(function (require, exports, module) {
             }
             else
             {
-                $(".tr-header").after("<tr><td colspan='9'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='11'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
             
 
@@ -655,6 +614,23 @@ define(function (require, exports, module) {
             var innerText = templateFun(model.ProductDetails);
             innerText = $(innerText);
             $("#header-items").after(innerText);
+
+            //删除
+            innerText.find(".ico-del").click(function () {
+                var _this = $(this);
+                confirm("子产品删除后不可恢复,确认删除吗？", function () {
+                    Global.post("/Products/DeleteProductDetail", { productDetailID: _this.data("id") }, function (data) {
+                        if (data.result == 1) {
+                            alert("子产品删除成功");
+                            _this.parent().parent().remove();
+                        } else if (data.result == 10002) {
+                            alert("子产品存在销售业务，删除失败");
+                        } else {
+                            alert("删除失败！");
+                        }
+                    });
+                });
+            });
 
             //绑定启用插件
             innerText.find(".status").switch({

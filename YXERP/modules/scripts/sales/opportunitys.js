@@ -25,6 +25,7 @@
     };
 
     var ObjectJS = {};
+
     //初始化
     ObjectJS.init = function (type) {
         var _self = this;
@@ -164,6 +165,7 @@
                 });
             });
         }
+
         //全部选中
         $("#checkAll").click(function () {
             var _this = $(this);
@@ -242,6 +244,7 @@
             _self.bindList(data);
         });
     }
+
     //加载列表
     ObjectJS.bindList = function (data) {
         var _self = this;

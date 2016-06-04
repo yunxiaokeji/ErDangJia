@@ -674,6 +674,20 @@ namespace CloudSalesDAL
 
         }
 
+        public bool DeleteProduct(string productid, string operateid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",result),
+                                       new SqlParameter("@ProductID",productid),
+                                       new SqlParameter("@OperateID",operateid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            bool bl = ExecuteNonQuery("P_DeleteProduct", paras, CommandType.StoredProcedure) > 0;
+            result = Convert.ToInt32(paras[0].Value);
+            return bl;
+        }
+
         public bool UpdateProductDetails(string detailid, string productid, string productCode, string shapeCode, decimal bigPrice, string attrlist, string valuelist, string attrvaluelist,
                                          decimal price, decimal weight, string remark, string description, string image)
         {
@@ -701,6 +715,20 @@ namespace CloudSalesDAL
             ExecuteNonQuery("P_UpdateProductDetail", paras, CommandType.StoredProcedure);
             result = Convert.ToInt32(paras[0].Value);
             return result == 1;
+        }
+
+        public bool DeleteProductDetail(string productDetailID, string operateid, out int result)
+        {
+            result = 0;
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",result),
+                                       new SqlParameter("@ProductDetailID",productDetailID),
+                                       new SqlParameter("@OperateID",operateid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            bool bl = ExecuteNonQuery("P_DeleteProductDetail", paras, CommandType.StoredProcedure) > 0;
+            result = Convert.ToInt32(paras[0].Value);
+            return bl;
         }
 
         #endregion

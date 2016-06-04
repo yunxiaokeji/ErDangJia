@@ -918,7 +918,12 @@ namespace CloudSalesBusiness
 
         public bool UpdateProductStatus(string productid, EnumStatus status, string operateIP, string operateID)
         {
-            return CommonBusiness.Update("Products", "Status", ((int)status).ToString(), " ProductID='" + productid + "'");
+            return CommonBusiness.Update("Products", "Status", ((int)status).ToString(), " ProductID='" + productid + "' and Status<>9 ");
+        }
+
+        public bool DeleteProduct(string productid, string operateip, string operateid, out int result)
+        {
+            return ProductsDAL.BaseProvider.DeleteProduct(productid, operateid, out result);
         }
 
         public bool UpdateProductIsNew(string productid, bool isNew, string operateIP, string operateID)
@@ -995,6 +1000,11 @@ namespace CloudSalesBusiness
                 var dal = new ProductsDAL();
                 return dal.UpdateProductDetails(detailid, productid, productCode, shapeCode, bigPrice, attrlist, valuelist, attrvaluelist, price, weight, remark, description, productImg);
             }
+        }
+
+        public bool DeleteProductDetail(string productDetailID, string operateip, string operateid, out int result)
+        {
+            return ProductsDAL.BaseProvider.DeleteProductDetail(productDetailID, operateid, out result);
         }
 
         #endregion

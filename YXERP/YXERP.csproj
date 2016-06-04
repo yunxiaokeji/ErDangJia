@@ -757,7 +757,7 @@
     <Content Include="modules\css\index.css" />
     <Content Include="modules\css\home\login.css" />
     <Content Include="modules\css\system\organization.css" />
-    <Content Include="modules\css\shoppingcart\filterproducts.css" />
+    <Content Include="modules\css\shoppingcart.css" />
     <Content Include="modules\css\shoppingcart\filterdetails.css" />
     <Content Include="modules\images\default.png" />
     <Content Include="modules\images\ico-back.png" />

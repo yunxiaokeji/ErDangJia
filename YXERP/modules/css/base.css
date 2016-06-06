@@ -249,7 +249,7 @@ select option{ padding:2px; }
 .header-box .ico-edit { margin-top: 6px; margin-left: 30px; float: left; }
 
 /*切换导航样式*/
-.tab-nav { margin:10px 20px; height:32px; line-height:32px; border-bottom: solid 2px #ccc; }
+.tab-nav { margin:10px 20px; height:33px; line-height:33px; border-bottom: solid 1px #ccc; }
 .tab-nav ul { height: 32px; }
 .tab-nav ul li { height:32px; float:left; padding:0 20px; cursor:pointer; }
 .tab-nav ul li:hover { color:#318ae4; }
@@ -299,7 +299,7 @@ select option{ padding:2px; }
 
 
 /*content样式*/
-.content-body{ padding:0px 20px; overflow:auto; background-color:#fff; min-height:200px; }
+.content-body{ margin:0 20px; padding-bottom:50px; overflow:auto; background-color:#fff; min-height:200px; }
 
 /*表格样式*/
 .table-list { width:100%; border-spacing:0px;}

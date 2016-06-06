@@ -31,6 +31,7 @@ define(function (require, exports, module) {
                     options = {},
                     // 默认参数
                     defaults = {
+                        guid: Global.guid() + "_",
                         id: 'dialogWrapper',
                         container: null,			// string / object   弹处层内容的id或内容模板
                         overlay: true,			// boolean  		 是否添加遮罩层
@@ -62,9 +63,10 @@ define(function (require, exports, module) {
                 for (i in defaults) {
                     options[i] = arg[i] !== undefined ? arg[i] : defaults[i];
                 }
-                var guid = Global.guid() + "_";
-                options.container.guid = guid;
-                options.guid = guid;
+                //var guid = Global.guid() + "_";
+                //options.container.guid = guid;
+                //options.guid = guid; 
+                options.container.guid = options.guid;
                 Dialog.data(options.guid + 'options', options);
                 return options;
             },
@@ -131,7 +133,7 @@ define(function (require, exports, module) {
                 var overlay = doc.createElement('div'),
                     style = overlay.style;
 
-                style.cssText = 'margin:0;padding:0;border:none;width:100%;height:100%;background:#f2f4f8;opacity:0.8;filter:alpha(opacity=60);z-index:9999;position:fixed;top:0;left:0;';
+                style.cssText = 'margin:0;padding:0;border:none;width:100%;height:100%;text-algin:center; background:#f2f4f8;opacity:0.8;filter:alpha(opacity=60);z-index:9999;position:fixed;top:0;left:0;';
 
                 // IE6模拟fixed
                 if (isIE6) {
@@ -650,7 +652,7 @@ define(function (require, exports, module) {
                 if (dialogYesBtn) {
                     event.bind(dialogYesBtn, 'click', function(event) {
                         if (options.container.yesFn.call(self, event) !== false) {
-                            self.close(options.guid);
+                            //self.close(options.guid);
                         }
                     });
                 }
@@ -746,7 +748,7 @@ define(function (require, exports, module) {
             close: function(guid) {
                 if (!guid) {
                     guid = "";
-                }
+                } 
                 var options = Dialog.data(guid + 'options'),
                     elements = Dialog.data(guid + 'dialogElements'),
                     event = Dialog.event;
@@ -811,6 +813,17 @@ define(function (require, exports, module) {
                 }
                 // 清除缓存
                 Dialog.removeData(guid + 'dialogElements');
+            },
+            setOverlay: function(guid,topshow) {
+                var options = Dialog.data(guid + 'options'),
+                    elements = Dialog.data(guid + 'dialogElements');
+                if (topshow) {
+                    elements.overlay.style.zIndex = '10001';
+                   // elements.overlay.innerHTML = '数据正在导入请等待....';
+                } else {
+                    elements.overlay.style.zIndex = '9999';
+                    elements.overlay.innerHTML = '';
+                }
             },
             exportModel: function(path, qic) {
                 var form = $("<form>"); //定义一个form表单

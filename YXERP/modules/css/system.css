@@ -1,6 +1,4 @@
 ﻿
-
-
 /*机会阶段*/
 .stages-box { width:100%; overflow-y:auto; white-space:nowrap; padding-bottom:30px; }
 .stages-box .stages-item { width:240px; border:solid 1px #ccc; margin-right:10px; border-radius:2px; vertical-align:top;
@@ -22,19 +20,15 @@
 .stages-box .create-child { height:30px; line-height:30px; color:#999; cursor:pointer; text-indent:5px; margin-top:5px; }
 .stages-box .create-child:hover { background-color:#fff; color:#333; }
 
-
 /*团队成员*/
-
 .team-header { font-size:14px; height:20px; line-height:20px; font-weight:bold; padding-bottom:5px;}
 
 .team-list .child-item { height:85px; width:100%; }
-
 .team-list .team-item { height:30px; width:180px; border:solid 1px #ccc; border-radius:2px; box-shadow:0 0 3px #eee;
                         margin-top:12px; padding:10px; position:relative; cursor:pointer; float:left; margin-top:25px; border-radius:8px;}
 .team-list .team-item:hover { border:solid 1px #4a98e7; }
 .team-list .team-item .name{ height:30px; width:120px; float:left; margin-left:10px; line-height:30px;}
 .team-list .team-item .ico-dropdown { position:absolute; right:10px; top:15px; }
-
 
 .team-list .user-item { height:50px; width:180px; border:solid 1px #ccc; border-radius:2px; box-shadow:0 0 3px #eee;
                              margin-top:12px; padding:10px; position:relative; cursor:pointer; float:left; border-radius:8px;}
@@ -43,11 +37,8 @@
 .team-list .user-item .user-name li{  line-height:15px;width:120px;}
 .team-list .user-item .ico-dropdown { position:absolute; right:10px; top:10px; }
 
-
 .team-list .user-avatar { height:50px; width:50px; float:left; }
 .team-list .user-avatar img{ height:50px; width:50px; border-radius:25px;}
-
-
 
 .team-list .icoopen,.team-list  .icoclose { display:inline-block; width:20px; height:20px; margin-top:40px; cursor:pointer; margin-left:-46px;}
 .team-list .icoopen{ background:url('/modules/images/ico-tree-open.png') no-repeat;  }
@@ -57,7 +48,4 @@
 .team-list .line{ background:url('/modules/images/ico-structure-line.png') no-repeat -5px;display:inline-block; width:65px; height:85px; }
 .team-list .null{ display:inline-block; width:65px; height:85px;}
 
-
-/*图片预览*/
-.brand-img { position:absolute; top:170px; right:20px; height:220px; width:220px; }
 

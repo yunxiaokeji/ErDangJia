@@ -63,9 +63,9 @@ define(function (require, exports, module) {
             });
 
             //左右滚动
-            if (parent.find("#windowItems li").length * 127 + 40 > parent.find(".window-box").width()) {
+            if (parent.find("#windowItems li.hover").prevAll().length * 127 + 40 > parent.find(".window-box").width()) {
                 parent.find(".left-btn,.right-btn").show();
-                parent.find("#windowItems").css("left", parent.find(".window-box").width() - 40 - parent.find("#windowItems li").length * 127);
+                parent.find("#windowItems").css("left", parent.find(".window-box").width() - 40 - parent.find("#windowItems li.hover").prevAll().length * 127);
             } else {
                 parent.find(".left-btn,.right-btn").hide();
                 parent.find("#windowItems").css("left", "0")

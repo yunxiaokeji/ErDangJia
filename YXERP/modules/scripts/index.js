@@ -24,9 +24,9 @@ define(function (require, exports, module) {
         $(".iframe-window").css("height", height - 95);
 
         //左右滚动
-        if ($("#windowItems li").length * 127 + 40 > $(".window-box").width()) {
+        if ($("#windowItems li.hover").prevAll().length * 127 + 40 > $(".window-box").width()) {
             $(".left-btn,.right-btn").show();
-            $("#windowItems").css("left", $(".window-box").width() - 40 - $("#windowItems li").length * 127);
+            $("#windowItems").css("left", $(".window-box").width() - 40 - $("#windowItems li.hover").prevAll().length * 127);
         } else {
             $(".left-btn,.right-btn").hide();
             $("#windowItems").css("left", "0")

@@ -285,18 +285,6 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool UpdateCustomerStage(string customerid, string stageid, string operateid, string ip,string agentid, string clientid)
-        {
-            bool bl = CustomDAL.BaseProvider.UpdateCustomerStage(customerid, stageid, operateid, agentid, clientid);
-            if (bl)
-            {
-                var model = SystemBusiness.BaseBusiness.GetCustomStageByID(stageid, agentid, clientid);
-                string msg = "客户阶段更换为：" + model.StageName;
-                LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, ip, stageid, agentid, clientid);
-            }
-            return bl;
-        }
-
         public bool UpdateCustomerOwner(string customerid, string userid, string operateid, string ip, string agentid, string clientid)
         {
             bool bl = CustomDAL.BaseProvider.UpdateCustomerOwner(customerid, userid, operateid, agentid, clientid);

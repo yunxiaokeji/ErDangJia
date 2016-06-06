@@ -37,7 +37,7 @@ namespace YXERP.Controllers
 
         public ActionResult UserReport()
         {
-            ViewBag.Stages = SystemBusiness.BaseBusiness.GetCustomStages(CurrentUser.AgentID, CurrentUser.ClientID);
+            ViewBag.Stages = SystemBusiness.BaseBusiness.GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
             return View();
         }
 

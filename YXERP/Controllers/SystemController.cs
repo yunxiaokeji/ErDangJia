@@ -28,7 +28,7 @@ namespace YXERP.Controllers
 
         public ActionResult Stages()
         {
-            ViewBag.Items = new SystemBusiness().GetCustomStages(CurrentUser.AgentID, CurrentUser.ClientID);
+            ViewBag.Items = new SystemBusiness().GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
             return View();
         }
         public ActionResult OpportunityStages()
@@ -163,22 +163,22 @@ namespace YXERP.Controllers
 
         #endregion
 
-        #region 客户阶段配置
+        #region 机会阶段配置
 
-        public JsonResult SaveCustomStage(string entity)
+        public JsonResult SaveStage(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            CustomStageEntity model = serializer.Deserialize<CustomStageEntity>(entity);
+            OpportunityStageEntity model = serializer.Deserialize<OpportunityStageEntity>(entity);
 
             int result = 0;
 
             if (string.IsNullOrEmpty(model.StageID))
             {
-                model.StageID = new SystemBusiness().CreateCustomStage(model.StageName, model.Sort, "", CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
+                model.StageID = new SystemBusiness().CreateOpportunityStage(model.StageName, model.Probability, model.Sort, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
             }
             else
             {
-                bool bl = new SystemBusiness().UpdateCustomStage(model.StageID, model.StageName, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+                bool bl = new SystemBusiness().UpdateOpportunityStage(model.StageID, model.StageName, model.Probability, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
                 if (bl)
                 {
                     result = 1;
@@ -218,17 +218,6 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult DeleteCustomStage(string id)
-        {
-            bool bl = new SystemBusiness().DeleteCustomStage(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("status", bl);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
         public JsonResult DeleteStageItem(string id, string stageid)
         {
             bool bl = new SystemBusiness().DeleteStageItem(id, stageid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
@@ -239,71 +228,6 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         } 
-
-        #endregion
-
-        #region 机会订单阶段
-
-        public JsonResult GetOpportunityStages()
-        {
-
-            var list = new SystemBusiness().GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID).ToList();
-            JsonDictionary.Add("items", list);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult GetOpportunityStageByID(string id)
-        {
-
-            var model = new SystemBusiness().GetOpportunityStageByID(id, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("model", model);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult SaveOpportunityStage(string entity)
-        {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            OpportunityStageEntity model = serializer.Deserialize<OpportunityStageEntity>(entity);
-
-            if (string.IsNullOrEmpty(model.StageID))
-            {
-                model.StageID = new SystemBusiness().CreateOpportunityStage(model.StageName, model.Probability, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-            }
-            else
-            {
-                bool bl = new SystemBusiness().UpdateOpportunityStage(model.StageID, model.StageName, model.Probability, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-                if (!bl)
-                {
-                    model.StageID = "";
-                }
-                
-            }
-            JsonDictionary.Add("model", model);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult DeleteOpportunityStage(string id)
-        {
-            bool bl = new SystemBusiness().DeleteOpportunityStage(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("status", bl);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
 
         #endregion
 

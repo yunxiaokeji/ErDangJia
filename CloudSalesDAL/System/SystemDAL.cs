@@ -35,44 +35,24 @@ namespace CloudSalesDAL
             return GetDataTable(sqlText, paras, CommandType.Text);
         }
 
-        public DataSet GetCustomStages(string clientid)
-        {
-            SqlParameter[] paras = { 
-                                       new SqlParameter("@ClientID",clientid)
-                                   };
-
-            return GetDataSet("select * from CustomStage where ClientID=@ClientID and Status=1 Order by Sort; select * from StageItem where ClientID=@ClientID and Status=1;", paras, CommandType.Text, "Stages|Items");
-
-        }
-
-        public DataSet GetCustomStageByID(string stageid)
-        {
-            string sqlText = "select * from CustomStage where StageID=@StageID and Status=1; select * from StageItem where StageID=@StageID and Status=1;";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@StageID",stageid)
-                                   };
-
-            return GetDataSet(sqlText, paras, CommandType.Text, "Stages|Items");
-        }
-
         public DataSet GetOpportunityStages(string clientid)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@ClientID",clientid)
                                    };
 
-            return GetDataSet("select * from OpportunityStage where ClientID=@ClientID and Status=1 Order by Probability", paras, CommandType.Text, "Stages");
+            return GetDataSet("select * from OpportunityStage where ClientID=@ClientID and Status=1 Order by Sort; select * from StageItem where ClientID=@ClientID and Status=1;", paras, CommandType.Text, "Stages|Items");
 
         }
 
-        public DataTable GetOpportunityStageByID(string stageid)
+        public DataSet GetOpportunityStageByID(string stageid)
         {
-            string sqlText = "select * from OpportunityStage where StageID=@StageID and Status=1";
+            string sqlText = "select * from OpportunityStage where StageID=@StageID and Status=1; select * from StageItem where StageID=@StageID and Status=1;";
             SqlParameter[] paras = { 
                                      new SqlParameter("@StageID",stageid)
                                    };
 
-            return GetDataTable(sqlText, paras, CommandType.Text);
+            return GetDataSet(sqlText, paras, CommandType.Text, "Stages|Items");
         }
 
         public DataSet GetOrderTypes(string clientid)
@@ -213,24 +193,6 @@ namespace CloudSalesDAL
             return bl;
         }
 
-        public bool CreateCustomStage(string stageid, string name, int sort, string pid, string userid, string clientid, out int result)
-        {
-            result = 0;
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@Result",result),
-                                     new SqlParameter("@StageID",stageid),
-                                     new SqlParameter("@StageName",name),
-                                     new SqlParameter("@Sort",sort),
-                                     new SqlParameter("@PID",pid),
-                                     new SqlParameter("@CreateUserID" , userid),
-                                     new SqlParameter("@ClientID" , clientid)
-                                   };
-            paras[0].Direction = ParameterDirection.Output;
-            bool bl = ExecuteNonQuery("P_InsertCustomStage", paras, CommandType.StoredProcedure) > 0;
-            result = Convert.ToInt32(paras[0].Value);
-            return bl;
-        }
-
         public bool CreateStageItem(string itemid, string name, string stageid, string userid, string clientid)
         {
             string sqlText = "insert into StageItem(ItemID,ItemName,StageID,CreateUserID,ClientID) " +
@@ -245,18 +207,21 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
-        public bool CreateOpportunityStage(string stageid, string stagename, decimal probability, string userid, string clientid)
+        public bool CreateOpportunityStage(string stageid, string stagename, decimal probability, int sort, string userid, string clientid, out int result)
         {
-            string sqlText = "insert into OpportunityStage(StageID,StageName,Probability,Status,Mark,CreateUserID,ClientID) " +
-                                           " values(@StageID,@StageName,@Probability,1,0,@CreateUserID,@ClientID) ";
+            result = 0;
             SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",result),
                                      new SqlParameter("@StageID" , stageid),
                                      new SqlParameter("@StageName" , stagename),
                                      new SqlParameter("@Probability" , probability),
+                                     new SqlParameter("@Sort",sort),
                                      new SqlParameter("@CreateUserID" , userid),
                                      new SqlParameter("@ClientID" , clientid)
                                    };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+            bool bl = ExecuteNonQuery("P_CreateOpportunityStage", paras, CommandType.Text) > 0;
+            result = Convert.ToInt32(paras[0].Value);
+            return bl;
         }
 
         public bool CreateOrderType(string typeid, string typename, string typecode, string userid, string clientid)
@@ -377,17 +342,6 @@ namespace CloudSalesDAL
                                      new SqlParameter("@ClientID" , clientid)
                                    };
             bool bl = ExecuteNonQuery(sqltext, paras, CommandType.Text) > 0;
-            return bl;
-        }
-
-        public bool DeleteCustomStage(string stageid, string userid, string clientid)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@StageID",stageid),
-                                     new SqlParameter("@UserID",userid),
-                                     new SqlParameter("@ClientID" , clientid)
-                                   };
-            bool bl = ExecuteNonQuery("P_DeletetCustomStage", paras, CommandType.StoredProcedure) > 0;
             return bl;
         }
 

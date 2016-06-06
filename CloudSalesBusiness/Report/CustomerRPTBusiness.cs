@@ -79,7 +79,7 @@ namespace CloudSalesBusiness
             List<ReportCommonEntity> list = new List<ReportCommonEntity>();
             DataSet ds = CustomerRPTDAL.BaseProvider.GetCustomerStageRate(begintime, endtime, agentid, clientid);
 
-            var stages = SystemBusiness.BaseBusiness.GetCustomStages(agentid, clientid);
+            var stages = SystemBusiness.BaseBusiness.GetOpportunityStages(agentid, clientid);
             int total = 0, prev = 0;
             foreach (var stage in stages)
             {
@@ -177,7 +177,7 @@ namespace CloudSalesBusiness
 
             DataTable dt = ds.Tables["Users"];
 
-            var stages = SystemBusiness.BaseBusiness.GetCustomStages(agentid, clientid);
+            var stages = SystemBusiness.BaseBusiness.GetOpportunityStages(agentid, clientid);
 
             
 

@@ -1,10 +1,10 @@
 ﻿@{
-    ViewBag.Title = "客户阶段";
-    var list = (List<CloudSalesEntity.CustomStageEntity>)ViewBag.Items;
+    ViewBag.Title = "机会阶段配置";
+    var list = (List<CloudSalesEntity.OpportunityStageEntity>)ViewBag.Items;
 }
 
 @section css{
-    <link rel="stylesheet" href="/modules/css/system/system.css" />
+    <link rel="stylesheet" href="/modules/css/system.css" />
 }
 @section scripts{
     <script type="text/javascript">
@@ -13,10 +13,7 @@
         });
     </script>
 }
-<div class="header-box">
-    <span class="header-title left">客户阶段设置</span>
-</div>
-<div class="content-body mTop20">
+<div class="content-body pTop20">
     <ul class="stages-box">
         @foreach (var model in list.Where(m => m.PID == "").ToList())
         { 

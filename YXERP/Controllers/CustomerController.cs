@@ -442,38 +442,6 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateCustomStage(string ids, string stageid)
-        {
-            bool bl = false;
-            string[] list = ids.Split(',');
-            foreach (var id in list)
-            {
-                if (!string.IsNullOrEmpty(id) && CustomBusiness.BaseBusiness.UpdateCustomerStage(id, stageid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
-                {
-                    bl = true;
-                }
-            }
-
-
-            JsonDictionary.Add("status", bl);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult GetStageItems(string stageid)
-        {
-            var list = new SystemBusiness().GetCustomStageByID(stageid, CurrentUser.AgentID, CurrentUser.ClientID).StageItem;
-            JsonDictionary.Add("items", list);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
         public JsonResult LoseCustomer(string ids)
         {
             bool bl = false;

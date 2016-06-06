@@ -14,10 +14,10 @@ namespace CloudSalesBusiness
     public class SystemBusiness
     {
         public static SystemBusiness BaseBusiness = new SystemBusiness();
+
         #region Cache
 
         private static Dictionary<string, List<CustomSourceEntity>> _source;
-        private static Dictionary<string, List<CustomStageEntity>> _stages;
 
         private static Dictionary<string, List<OpportunityStageEntity>> _opportunitystages;
 
@@ -44,26 +44,6 @@ namespace CloudSalesBusiness
                 _source = value;
             }
         }
-
-        /// <summary>
-        /// 客户阶段
-        /// </summary>
-        private static Dictionary<string, List<CustomStageEntity>> CustomStages
-        {
-            get
-            {
-                if (_stages == null)
-                {
-                    _stages = new Dictionary<string, List<CustomStageEntity>>();
-                }
-                return _stages;
-            }
-            set
-            {
-                _stages = value;
-            }
-        }
-
 
         /// <summary>
         /// 机会阶段
@@ -191,68 +171,11 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public List<CustomStageEntity> GetCustomStages(string agentid, string clientid)
-        {
-            if (CustomStages.ContainsKey(clientid))
-            {
-                return CustomStages[clientid].OrderBy(m => m.Sort).ToList();
-            }
-
-            List<CustomStageEntity> list = new List<CustomStageEntity>();
-            DataSet ds = SystemDAL.BaseProvider.GetCustomStages(clientid);
-            foreach (DataRow dr in ds.Tables["Stages"].Rows)
-            {
-                CustomStageEntity model = new CustomStageEntity();
-                model.FillData(dr);
-                model.StageItem = new List<StageItemEntity>();
-                foreach (DataRow itemdr in ds.Tables["Items"].Select("StageID='" + model.StageID + "'"))
-                {
-                    StageItemEntity item = new StageItemEntity();
-                    item.FillData(itemdr);
-                    model.StageItem.Add(item);
-                }
-
-                list.Add(model);
-            }
-            CustomStages.Add(clientid, list);
-
-            return list;
-        }
-
-        public CustomStageEntity GetCustomStageByID(string stageid, string agentid, string clientid)
-        {
-            if (string.IsNullOrEmpty(stageid))
-            {
-                return null;
-            }
-            var list = GetCustomStages(agentid, clientid);
-            if (list.Where(m => m.StageID == stageid).Count() > 0)
-            {
-                return list.Where(m => m.StageID == stageid).FirstOrDefault();
-            }
-
-            CustomStageEntity model = new CustomStageEntity();
-            DataSet ds = SystemDAL.BaseProvider.GetCustomStageByID(stageid);
-            if (ds.Tables["Stages"].Rows.Count > 0)
-            {
-                model.FillData(ds.Tables["Stages"].Rows[0]);
-                model.StageItem = new List<StageItemEntity>();
-                foreach (DataRow itemdr in ds.Tables["Items"].Rows)
-                {
-                    StageItemEntity item = new StageItemEntity();
-                    item.FillData(itemdr);
-                    model.StageItem.Add(item);
-                }
-                CustomStages[clientid].Add(model);
-            }
-            return model;
-        }
-
         public List<OpportunityStageEntity> GetOpportunityStages(string agentid, string clientid)
         {
             if (OpportunityStages.ContainsKey(clientid))
             {
-                return OpportunityStages[clientid].OrderBy(m => m.Probability).ToList();
+                return OpportunityStages[clientid].OrderBy(m => m.Sort).ToList();
             }
 
             List<OpportunityStageEntity> list = new List<OpportunityStageEntity>();
@@ -261,7 +184,13 @@ namespace CloudSalesBusiness
             {
                 OpportunityStageEntity model = new OpportunityStageEntity();
                 model.FillData(dr);
-
+                model.StageItem = new List<StageItemEntity>();
+                foreach (DataRow itemdr in ds.Tables["Items"].Select("StageID='" + model.StageID + "'"))
+                {
+                    StageItemEntity item = new StageItemEntity();
+                    item.FillData(itemdr);
+                    model.StageItem.Add(item);
+                }
                 list.Add(model);
             }
             OpportunityStages.Add(clientid, list);
@@ -282,11 +211,18 @@ namespace CloudSalesBusiness
             }
 
             OpportunityStageEntity model = new OpportunityStageEntity();
-            DataTable dt = SystemDAL.BaseProvider.GetOpportunityStageByID(stageid);
-            if (dt.Rows.Count > 0)
+            DataSet ds = SystemDAL.BaseProvider.GetOpportunityStageByID(stageid);
+            if (ds.Tables["Stages"].Rows.Count > 0)
             {
-                model.FillData(dt.Rows[0]);
+                model.FillData(ds.Tables["Stages"].Rows[0]);
                 model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                model.StageItem = new List<StageItemEntity>();
+                foreach (DataRow itemdr in ds.Tables["Items"].Rows)
+                {
+                    StageItemEntity item = new StageItemEntity();
+                    item.FillData(itemdr);
+                    model.StageItem.Add(item);
+                }
                 OpportunityStages[clientid].Add(model);
             }
 
@@ -449,16 +385,6 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        /// <summary>
-        /// 获取货位列表
-        /// </summary>
-        /// <param name="keyWords">关键词</param>
-        /// <param name="pageSize">每页条数</param>
-        /// <param name="pageIndex">页码</param>
-        /// <param name="totalCount">总记录数</param>
-        /// <param name="pageCount">总页数</param>
-        /// <param name="clientID">客户端ID</param>
-        /// <returns></returns>
         public List<DepotSeat> GetDepotSeats(string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID, string wareid = "")
         {
             DataSet ds = SystemDAL.BaseProvider.GetDepotSeats(keyWords, pageSize, pageIndex, ref totalCount, ref pageCount, clientID, wareid);
@@ -473,7 +399,6 @@ namespace CloudSalesBusiness
             return list;
         }
         
-
         public List<DepotSeat> GetDepotSeatsByWareID(string wareid, string clientid)
         {
             DataTable dt = SystemDAL.BaseProvider.GetDepotSeatsByWareID(wareid);
@@ -535,43 +460,6 @@ namespace CloudSalesBusiness
             return "";
         }
 
-        public string CreateCustomStage(string name, int sort, string pid, string userid, string agentid, string clientid, out int result)
-        {
-            string stageid = Guid.NewGuid().ToString();
-
-            bool bl = SystemDAL.BaseProvider.CreateCustomStage(stageid, name, sort, pid, userid, clientid, out result);
-            if (bl)
-            {
-                if (!CustomStages.ContainsKey(clientid))
-                {
-                    GetCustomStages(agentid, clientid);
-                }
-
-                var list = CustomStages[clientid].Where(m => m.Sort >= sort && m.Status == 1).ToList();
-                foreach (var model in list)
-                {
-                    model.Sort += 1;
-                }
-
-                CustomStages[clientid].Add(new CustomStageEntity()
-                {
-                    StageID = stageid.ToLower(),
-                    StageName = name,
-                    Sort = sort,
-                    PID = pid,
-                    Mark = 0,
-                    Status = 1,
-                    CreateTime = DateTime.Now,
-                    CreateUserID = userid,
-                    ClientID = clientid,
-                    StageItem = new List<StageItemEntity>()
-                });
-
-                return stageid;
-            }
-            return "";
-        }
-
         public string CreateStageItem(string name, string stageid, string userid, string agentid, string clientid)
         {
             string itemid = Guid.NewGuid().ToString().ToLower();
@@ -579,7 +467,7 @@ namespace CloudSalesBusiness
             bool bl = SystemDAL.BaseProvider.CreateStageItem(itemid, name, stageid, userid, clientid);
             if (bl)
             {
-                var model = GetCustomStageByID(stageid, agentid, clientid);
+                var model = GetOpportunityStageByID(stageid, agentid, clientid);
                 if (model.StageItem == null)
                 {
                     model.StageItem = new List<StageItemEntity>();
@@ -598,16 +486,22 @@ namespace CloudSalesBusiness
             return "";
         }
 
-        public string CreateOpportunityStage(string stagename, decimal probability, string userid, string agentid, string clientid)
+        public string CreateOpportunityStage(string stagename, decimal probability, int sort, string userid, string agentid, string clientid,out int result)
         {
             string guid = Guid.NewGuid().ToString();
 
-            bool bl = SystemDAL.BaseProvider.CreateOpportunityStage(guid, stagename, probability, userid, clientid);
+            bool bl = SystemDAL.BaseProvider.CreateOpportunityStage(guid, stagename, probability, sort, userid, clientid,out result);
             if (bl)
             {
                 if (!OpportunityStages.ContainsKey(clientid))
                 {
                     GetOpportunityStages(agentid, clientid);
+                }
+
+                var list = OpportunityStages[clientid].Where(m => m.Sort >= sort && m.Status == 1).ToList();
+                foreach (var model in list)
+                {
+                    model.Sort += 1;
                 }
 
                 OpportunityStages[clientid].Add(new OpportunityStageEntity()
@@ -616,9 +510,11 @@ namespace CloudSalesBusiness
                     StageName = stagename,
                     Probability = probability,
                     Status = 1,
+                    Sort = sort,
                     CreateTime = DateTime.Now,
                     CreateUserID = userid,
                     CreateUser = OrganizationBusiness.GetUserByUserID(userid, agentid),
+                    StageItem = new List<StageItemEntity>(),
                     ClientID = clientid
                 });
 
@@ -761,66 +657,6 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool UpdateCustomStage(string stageid, string name, string userid, string ip, string agentid, string clientid)
-        {
-            var model = GetCustomStageByID(stageid, agentid, clientid);
-
-            bool bl = SystemDAL.BaseProvider.UpdateCustomStage(stageid, name, clientid);
-            if (bl)
-            {
-                model.StageName = name;
-            }
-            return bl;
-        }
-
-        public bool DeleteCustomStage(string stageid, string userid, string ip, string agentid, string clientid)
-        {
-            var model = GetCustomStageByID(stageid, agentid, clientid);
-            //新客户和成交客户不能删除
-            if (model.Mark != 0)
-            {
-                return false;
-            }
-            bool bl = SystemDAL.BaseProvider.DeleteCustomStage(stageid, userid, clientid);
-            if (bl)
-            {
-                CustomStages[clientid].Remove(model);
-
-                var list = CustomStages[clientid].Where(m => m.Sort > model.Sort && m.Status == 1).ToList();
-                foreach (var stage in list)
-                {
-                    stage.Sort -= 1;
-                }
-            }
-            return bl;
-        }
-
-        public bool UpdateStageItem(string itemid, string name, string stageid, string userid, string ip, string agentid, string clientid)
-        {
-            var model = GetCustomStageByID(stageid, agentid, clientid);
-
-            bool bl = CommonBusiness.Update("StageItem", "ItemName", name, "ItemID='" + itemid + "'");
-            if (bl)
-            {
-                var item = model.StageItem.Where(m => m.ItemID == itemid).FirstOrDefault();
-                item.ItemName = name;
-            }
-            return bl;
-        }
-
-        public bool DeleteStageItem(string itemid, string stageid, string userid, string ip, string agentid, string clientid)
-        {
-            var model = GetCustomStageByID(stageid, agentid, clientid);
-
-            bool bl = CommonBusiness.Update("StageItem", "Status", "9", "ItemID='" + itemid + "'");
-            if (bl)
-            {
-                var item = model.StageItem.Where(m => m.ItemID == itemid).FirstOrDefault();
-                model.StageItem.Remove(item);
-            }
-            return bl;
-        }
-
         public bool UpdateOpportunityStage(string stageid, string stagename, decimal probability, string userid, string ip, string agentid, string clientid)
         {
             var model = GetOpportunityStageByID(stageid, agentid, clientid);
@@ -846,6 +682,38 @@ namespace CloudSalesBusiness
             if (bl)
             {
                 OpportunityStages[clientid].Remove(model);
+
+                var list = OpportunityStages[clientid].Where(m => m.Sort > model.Sort && m.Status == 1).ToList();
+                foreach (var stage in list)
+                {
+                    stage.Sort -= 1;
+                }
+            }
+            return bl;
+        }
+
+        public bool UpdateStageItem(string itemid, string name, string stageid, string userid, string ip, string agentid, string clientid)
+        {
+            var model = GetOpportunityStageByID(stageid, agentid, clientid);
+
+            bool bl = CommonBusiness.Update("StageItem", "ItemName", name, "ItemID='" + itemid + "'");
+            if (bl)
+            {
+                var item = model.StageItem.Where(m => m.ItemID == itemid).FirstOrDefault();
+                item.ItemName = name;
+            }
+            return bl;
+        }
+
+        public bool DeleteStageItem(string itemid, string stageid, string userid, string ip, string agentid, string clientid)
+        {
+            var model = GetOpportunityStageByID(stageid, agentid, clientid);
+
+            bool bl = CommonBusiness.Update("StageItem", "Status", "9", "ItemID='" + itemid + "'");
+            if (bl)
+            {
+                var item = model.StageItem.Where(m => m.ItemID == itemid).FirstOrDefault();
+                model.StageItem.Remove(item);
             }
             return bl;
         }

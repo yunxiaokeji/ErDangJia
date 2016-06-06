@@ -365,7 +365,7 @@ namespace YXERP.Controllers
             return null;
         }
 
-        public Dictionary<string, string> GetColumnForJson(string modelName, ref Dictionary<string, ExcelFormatter> formatColumn, string key="")
+        public Dictionary<string, string> GetColumnForJson(string modelName, ref Dictionary<string, ExcelFormatter> formatColumn, string key="",string test="")
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             string path = Server.MapPath("~/") + "modules/excelmodel/" + modelName + ".json";
@@ -391,7 +391,7 @@ namespace YXERP.Controllers
                     if (!Convert.ToBoolean(jChild["hide"]))
                     {
                         dic.Add(keyvalue.Key.ToLower(), jChild["title"].ToString());
-                        int columnType = Convert.ToInt32(jChild["type"]);
+                        int columnType = Convert.ToInt32(jChild[test+"type"]);
                         if (Convert.ToBoolean(jChild["format"]) && columnType > 0)
                         {
                             string dataList = jChild["datasource"].ToString();

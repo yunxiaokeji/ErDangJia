@@ -132,6 +132,20 @@ namespace CloudSalesBusiness
             return Citys.Where(m => m.CityCode == citycode).FirstOrDefault();
         }
 
+        public static string GetIndustryID(string industryID)
+        {
+            if (string.IsNullOrEmpty(industryID))
+            {
+                return "个人";
+            }
+            var industry= IndustryList.Where(m => m.IndustryID == industryID).FirstOrDefault();
+            if (industry != null)
+            {
+                return string.IsNullOrEmpty(industry.Name) ? "个人" : industry.Name;
+            }
+            return "个人";
+        }
+
         /// <summary>
         /// 修改表中某字段值
         /// </summary>

@@ -25,6 +25,7 @@
         Keywords: "",
         BeginTime: "",
         EndTime: "",
+        ExcelType:0,
         PageIndex: 1,
         PageSize: 20
     };
@@ -183,6 +184,16 @@
             }
         });
 
+        ///Excel导出客户
+        $("#batchCustomerExport").click(function () {
+            Params.ExcelType = 0;
+            Dialog.exportModel("/Customer/ExportFromCustomer", { filter: JSON.stringify(Params), filleName: "客户" });
+        });
+        ///Excel导出联系人
+        $("#batchContactExport").click(function () {
+            Params.ExcelType = 1;
+            Dialog.exportModel("/Customer/ExportFromCustomer", { filter: JSON.stringify(Params), filleName: "联系人" });
+        });
         //过滤标记
         $("#filterMark").markColor({
             isAll: true,

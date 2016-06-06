@@ -132,8 +132,8 @@ define(function (require, exports, module) {
             createOverlay: function (guid) {
                 var overlay = doc.createElement('div'),
                     style = overlay.style;
-
-                style.cssText = 'margin:0;padding:0;border:none;width:100%;height:100%;text-algin:center; background:#f2f4f8;opacity:0.8;filter:alpha(opacity=60);z-index:9999;position:fixed;top:0;left:0;';
+                
+                style.cssText = 'margin:0;padding:0;border:none;width:100%;height:100%;text-align:center; background:#f2f4f8;opacity:0.8;filter:alpha(opacity=60);z-index:9999;position:fixed;top:0;left:0;';
 
                 // IE6模拟fixed
                 if (isIE6) {
@@ -551,6 +551,17 @@ define(function (require, exports, module) {
                         if (isIE6) {
                             $.appendIframe(overlay);
                         }
+                        var overlayText = doc.createElement('div'),
+                        styleText = overlayText.style;
+                        styleText.cssText = 'margin-top:10%;margin-left:30%;padding:0;height:100px;width:200px;;border:none;text-align:center;display:none;background: url(/modules/images/ico-loading.jpg) no-repeat center center;opacity:8;filter:alpha(opacity=60);position:absolute;';
+                        overlayText.id = options.guid + 'overlayText';
+                        overlay.appendChild(overlayText);
+                        var textDiv = doc.createElement('div'),
+                        styleDiv = textDiv.style;
+                        styleDiv.cssText = 'margin-top:40px;margin-left:88px;height:20px;width:100%;border:none;';
+                        textDiv.id = options.guid + 'textDiv';
+                        textDiv.innerHTML = "数据正在导入请等待...";
+                        overlayText.appendChild(textDiv);
                     }
                     overlay.style.display = 'block';
                 }
@@ -816,13 +827,14 @@ define(function (require, exports, module) {
             },
             setOverlay: function(guid,topshow) {
                 var options = Dialog.data(guid + 'options'),
-                    elements = Dialog.data(guid + 'dialogElements');
+                    elements = Dialog.data(guid + 'dialogElements'),
+                    overlayText = doc.getElementById(guid + 'overlayText'); 
                 if (topshow) {
                     elements.overlay.style.zIndex = '10001';
-                   // elements.overlay.innerHTML = '数据正在导入请等待....';
+                    overlayText.style.display = 'block'; 
                 } else {
                     elements.overlay.style.zIndex = '9999';
-                    elements.overlay.innerHTML = '';
+                    overlayText.style.display = 'none'; 
                 }
             },
             exportModel: function(path, qic) {

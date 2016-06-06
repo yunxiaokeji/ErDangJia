@@ -40,9 +40,9 @@ namespace CloudSalesBusiness
                                                  string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
         {
             List<CustomerEntity> list = new List<CustomerEntity>();
-            DataSet ds = CustomDAL.BaseProvider.GetCustomers((int)searchtype, type, sourceid, stageid, status, mark, activityid, searchuserid, searchteamid, searchagentid, begintime, endtime, 
+            DataTable dt = GetCustomersDatable(searchtype, type, sourceid, stageid, status, mark, activityid, searchuserid, searchteamid, searchagentid, begintime, endtime, 
                                                                 keyWords, orderby, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
-            foreach (DataRow dr in ds.Tables[0].Rows)
+            foreach (DataRow dr in dt.Rows)
             {
                 CustomerEntity model = new CustomerEntity();
                 model.FillData(dr);
@@ -55,7 +55,18 @@ namespace CloudSalesBusiness
             }
             return list;
         }
-
+        public DataTable GetCustomersDatable(EnumSearchType searchtype, int type, string sourceid, string stageid, int status, int mark, string activityid, string searchuserid, string searchteamid, string searchagentid,
+                                                string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid,int excelType=0)
+        {
+            DataTable dt=new DataTable();
+            DataSet ds = CustomDAL.BaseProvider.GetCustomers((int)searchtype, type, sourceid, stageid, status, mark, activityid, searchuserid, searchteamid, searchagentid, begintime, endtime,
+                                                                keyWords, orderby, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
+            if (ds.Tables.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            return dt;
+        }
         public List<CustomerEntity> GetCustomersByActivityID(string activityid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
         {
             List<CustomerEntity> list = new List<CustomerEntity>();

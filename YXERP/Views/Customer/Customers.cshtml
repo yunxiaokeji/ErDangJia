@@ -48,7 +48,7 @@
         <ul id="customerType">
             <li data-id="-1" class="hover">全部</li>
             <li data-id="1">企业客户</li>
-            <li data-id="2">个人客户</li>
+            <li data-id="0">个人客户</li>
         </ul>
     </div>
     <div class="search-item">
@@ -103,7 +103,12 @@
             <li>
                 <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="batchChangeOwner">更换拥有者</a>
             </li>
-         
+            <li>
+                &nbsp;<a href="javascript:void(0);" class="btn" id="batchCustomerExport">导出客户</a>
+            </li>
+             <li>
+                &nbsp;<a href="javascript:void(0);" class="btn" id="batchContactExport">导出联系人</a>
+            </li>
         </ul>
         <div id="pager"></div>
     </div>

@@ -15,7 +15,7 @@ namespace CloudSalesDAL
         #region 查询
 
         public DataSet GetCustomers(int searchtype, int type, string sourceid, string stageid, int status, int mark, string activityid, string searchuserid, string searchteamid, string searchagentid,
-                                    string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
+                                    string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid,int excelType=0)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@totalCount",SqlDbType.Int),
@@ -38,7 +38,8 @@ namespace CloudSalesDAL
                                        new SqlParameter("@pageIndex",pageIndex),
                                        new SqlParameter("@UserID",userid),
                                        new SqlParameter("@AgentID", agentid),
-                                       new SqlParameter("@ClientID",clientid)
+                                       new SqlParameter("@ClientID",clientid),
+                                       new SqlParameter("@ExcelType",excelType)
                                    };
             paras[0].Value = totalCount;
             paras[1].Value = pageCount;

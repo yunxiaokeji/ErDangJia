@@ -245,6 +245,8 @@ namespace CloudSalesBusiness
                     return CommonBusiness.GetEnumDesc<EnumExpressType>((EnumExpressType)Enum.Parse(typeof(EnumExpressType), coulumnValue));
                 case EnumColumnTrans.ConvertCustomerExtent:
                     return  CommonBusiness.GetEnumDesc<EnumCustomerExtend>((EnumCustomerExtend) Enum.Parse(typeof (EnumCustomerExtend), coulumnValue));
+                    case EnumColumnTrans.ConvertIndustry:
+                    return CommonBusiness.GetIndustryID(coulumnValue);
                 default:
                     return coulumnValue;
             }
@@ -290,7 +292,11 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 公司规模
         /// </summary>
-        ConvertCustomerExtent = 8
+        ConvertCustomerExtent = 8,
+        /// <summary>
+        /// 公司规模
+        /// </summary>
+        ConvertIndustry = 9
     }
 
     public enum DropSourceList

@@ -352,6 +352,7 @@
 
     ObjectJS.ShowExportExcel = function () { 
         $('#show-customer-export').empty();
+        var guid = Global.guid() + "_";
         Dialog.open({
             container: {
                 id: "show-customer-export",
@@ -359,14 +360,15 @@
                 importUrl: '/Customer/CustomerImport',
                 yesFn: function () { 
                     $('#upfileForm').form('submit', {
-                        onSubmit: function () { 
+                        onSubmit: function () {
+                            Dialog.setOverlay(guid, true);
                         },
                         success: function (data) {
+                            Dialog.setOverlay(guid, false);
                             if (data == "操作成功") {
-                                alert('111');
-                            } else {
-                                alert(data);
-                            }
+                                Dialog.close(guid); 
+                            }  
+                            alert(data); 
                         }
                     });
                 },
@@ -378,7 +380,8 @@
                 callback: function () {
 
                 }
-            }
+            },
+            guid: guid
         }); 
       
     } 

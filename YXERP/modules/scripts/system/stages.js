@@ -34,45 +34,29 @@
         //添加新阶段
         $("#addObject").click(function () {
 
-            var _this = $(this), input = $("#" + _this.data("id")), parent = input.parents(".stages-item").first();
-            //复制并处理新对象
-            var element = parent.clone();
-
-            element.find(".name span").html("").hide();
-            var _input = element.find(".name input");
-            _input.attr("id", "").data("sort", _input.data("sort") + 1).show();
-            
-            element.find(".ico-dropdown").data("type", "0").data("id", "").hide();
-            element.find(".child-items").empty();
-            _self.bindElement(element);
-            parent.after(element);
-            _input.focus();
+            _self.showLayer("", "", $(this).data("sort") * 1 + 1, 0);
         });
 
         //删除阶段
         $("#deleteObject").click(function () {
             var _this = $(this);
-            confirm("客户阶段删除后不可恢复,此阶段的客户自动回归到上个阶段,确认删除吗？", function () {
+            confirm("机会阶段删除后不可恢复,确认删除吗？", function () {
                 _self.deleteModel(_this.data("id"), function (status) {
                     if (status) {
-                        location.href = location.href;
-                    } 
+                        alert("阶段删除成功", function () {
+                            location.href = location.href;
+                        });
+                    } else {
+                        alert("此阶段存在关联机会，删除失败");
+                    }
                 });
             });
         });
 
         //编辑阶段名称
         $("#editObject").click(function () {
-
-            var _this = $(this), input = $("#" + _this.data("id")), span = input.siblings("span");
-            var input = $("#" + _this.data("id"));
-            
-            input.siblings().hide();
-            input.parent().siblings(".ico-dropdown").hide();
-            input.show();
-            input.focus();
-
-            input.val(span.html());
+            var _this = $(this);
+            _self.showLayer(_this.data("id"), $("#" + _this.data("id")).html(), _this.data("sort"), _this.data("probability"));
         });
 
         //编辑项目名称
@@ -107,6 +91,57 @@
         });
 
     }
+
+    //添加、编辑浮层
+    ObjectJS.showLayer = function (id, name, sort, probability) {
+        var _self = this;
+        doT.exec("template/system/opportunitystage-detail.html", function (template) {
+            var innerText = template([]);
+            Easydialog.open({
+                container: {
+                    id: "addOrderStage",
+                    header: id ? "编辑阶段" : "添加阶段",
+                    content: innerText,
+                    yesFn: function () {
+                        if (!$("#stagename").val().trim()) {
+                            alert("阶段名称不能为空");
+                            return false;
+                        }
+                        if (!$("#probability").val().trim().isDouble() || $("#probability").val().trim() < 0 || $("#probability").val().trim() > 100) {
+                            alert("成交概率只能是大于0小于等于100的数字");
+                            return false;
+                        }
+                        var model = {
+                            StageID: id,
+                            StageName: $("#stagename").val().trim(),
+                            Probability: $("#probability").val().trim() / 100,
+                            Sort: sort
+                        };
+                        _self.saveModel(model);
+                    },
+                    callback: function () {
+
+                    }
+                }
+            });
+
+            if (id) {
+                $("#stagename").val(name);
+                $("#probability").val(probability);
+            }
+
+            $("#addOrderStage .stage-item").click(function () {
+                var _this = $(this);
+                if (_this.hasClass("hover")) {
+                    _this.removeClass("hover");
+                } else {
+                    _this.siblings().removeClass("hover");
+                    _this.addClass("hover");
+                }
+            });
+        });
+    }
+
     //元素绑定事件
     ObjectJS.bindElement = function (items) {
         var _self = this;
@@ -119,7 +154,7 @@
                 $("#deleteObject").show();
             }
             var offset = _this.offset();
-            $("#ddlStage li").data("id", _this.data("id")).data("sort", _this.data("sort"));
+            $("#ddlStage li").data("id", _this.data("id")).data("sort", _this.data("sort")).data("probability", _this.data("probability"));
             var left = offset.left;
             if (left > document.documentElement.clientWidth - 150) {
                 left = left - 150;
@@ -127,26 +162,6 @@
             $("#ddlStage").css({ "top": offset.top + 20, "left": left }).show().mouseleave(function () {
                 $(this).hide();
             });
-        });
-        //阶段文本改变事件
-        items.find(".name input").blur(function () {
-            var _this = $(this), span = _this.siblings("span");
-            if (_this.val() != span.html()) {
-                var model = {
-                    StageID: _this.attr("id"),
-                    StageName: _this.val().trim(),
-                    Sort: _this.data("sort")
-                };
-                _self.saveModel(model);
-            } else {
-                if (!_this.attr("id")) {
-                    _this.parents(".stages-item").first().remove();
-                } else {
-                    span.html(_this.val()).show();
-                    _this.val("").hide();
-                    _this.parent().siblings(".ico-dropdown").show();
-                }
-            }
         });
 
         //添加行为项
@@ -209,27 +224,25 @@
             });
         });
     }
+
     //保存阶段实体
     ObjectJS.saveModel = function (model) {
         var _self = this;
-        Global.post("/System/SaveCustomStage", { entity: JSON.stringify(model) }, function (data) {
+        Global.post("/System/SaveStage", { entity: JSON.stringify(model) }, function (data) {
             if (data.status == 1) {
-                if (model.StageID) {
-                    var _this = $("#" + model.StageID), span = _this.siblings("span");
-                    span.html(_this.val()).show();
-                    _this.val("").hide();
-                    _this.parent().siblings(".operatestage").show();
-                } else {
+                alert("保存成功", function () {
                     location.href = location.href;
-                }
+                });
+                
             } else {
-                alert("系统异常!");
+                alert("系统异常，请稍后重试");
             }
         });
     }
+
     //删除
     ObjectJS.deleteModel = function (id, callback) {
-        Global.post("/System/DeleteCustomStage", { id: id }, function (data) {
+        Global.post("/System/DeleteStage", { id: id }, function (data) {
             !!callback && callback(data.status);
         })
     }

@@ -219,7 +219,8 @@ namespace CloudSalesDAL
                                      new SqlParameter("@CreateUserID" , userid),
                                      new SqlParameter("@ClientID" , clientid)
                                    };
-            bool bl = ExecuteNonQuery("P_CreateOpportunityStage", paras, CommandType.Text) > 0;
+            paras[0].Direction = ParameterDirection.Output;
+            bool bl = ExecuteNonQuery("P_CreateOpportunityStage", paras, CommandType.StoredProcedure) > 0;
             result = Convert.ToInt32(paras[0].Value);
             return bl;
         }

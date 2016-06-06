@@ -15,11 +15,16 @@
 }
 <div class="content-body pTop20">
     <ul class="stages-box">
-        @foreach (var model in list.Where(m => m.PID == "").ToList())
+        @foreach (var model in list)
         { 
             <li class="stages-item">
-                <div class="name"><span class="long">@(model.StageName)</span><input type="text" data-sort="@(model.Sort)" maxlength="50" id="@(model.StageID)" class="hide" /></div>
-                <div class="ico-dropdown operatestage" data-type="@(model.Mark)" data-id="@(model.StageID)"></div>
+                <div class="name" title="@(model.StageName)(成交概率：@((model.Probability*100).ToString("f2"))%)">
+                    <span class="long left" id="@(model.StageID)">@(model.StageName)</span>
+                </div>
+                <div class="ico-dropdown operatestage" data-type="@(model.Mark)" data-sort="@(model.Sort)" data-probability="@((model.Probability*100).ToString("f2"))" data-id="@(model.StageID)"></div>
+                <div class="pLeft5 mTop5">
+                    成交概率：@((model.Probability*100).ToString("f2"))%
+                </div>
                 <ul class="child-items">
                     @foreach (var item in model.StageItem)
                     {

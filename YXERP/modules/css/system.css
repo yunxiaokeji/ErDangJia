@@ -1,7 +1,7 @@
 ﻿
 
 
-/*客户阶段*/
+/*机会阶段*/
 .stages-box { width:100%; overflow-y:auto; white-space:nowrap; padding-bottom:30px; }
 .stages-box .stages-item { width:240px; border:solid 1px #ccc; margin-right:10px; border-radius:2px; vertical-align:top;
                            background-color:#f6f6f6; padding:10px; position:relative; display:inline-block;  }

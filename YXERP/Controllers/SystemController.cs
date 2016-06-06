@@ -28,7 +28,8 @@ namespace YXERP.Controllers
 
         public ActionResult Stages()
         {
-            ViewBag.Items = new SystemBusiness().GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
+            var list = SystemBusiness.BaseBusiness.GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
+            ViewBag.Items = list;
             return View();
         }
         public ActionResult OpportunityStages()
@@ -186,6 +187,17 @@ namespace YXERP.Controllers
             }
             JsonDictionary.Add("status", result);
             JsonDictionary.Add("model", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DeleteStage(string id)
+        {
+            bool bl = new SystemBusiness().DeleteOpportunityStage(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
             return new JsonResult
             {
                 Data = JsonDictionary,

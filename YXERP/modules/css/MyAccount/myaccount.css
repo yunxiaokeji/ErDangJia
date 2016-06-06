@@ -3,11 +3,12 @@ body {  background-color:#fff; }
 
 .accountMenu { left: 0px; top:1px; bottom:0px; width: 100%;background-color:#fff; }
   
-.content-body { background-color:#fff; padding-top:16px; } 
+.content-body { background-color:#fff; padding-top:16px; }
+.accountUl { border-bottom:solid 1px #ccc; height:31px; }
 .accountUl li { line-height: 30px; width:120px; }
-.accountUl li a{ line-height: 30px; font-size: 10px; width:120px; text-align:center; display:inline-block; color:#333; }
-.accountUl .active { background-color: #fff; font-weight:bold;  }
-#movespan {position: absolute;top:40px; width:110px;border-bottom:solid 2px #4380BE;}
+.accountUl li a{ line-height: 30px;  width:120px; text-align:center; display:inline-block; color:#333; }
+.accountUl .active { background-color: #fff; }
+#movespan {position: absolute;top:40px; width:110px; border-bottom:solid 2px #4380BE;}
 .accountContent { margin: 0px 0px 0px 0px; float:left;width: 100%;  }
 div[name="accountInfo"] { margin-left:5px; }
 .account-box { padding:15px 20px 5px 20px; overflow:auto; background-color:#fff;  }

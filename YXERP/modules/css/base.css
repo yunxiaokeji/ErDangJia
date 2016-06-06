@@ -299,7 +299,7 @@ select option{ padding:2px; }
 
 
 /*content样式*/
-.content-body{ margin:0 20px; padding-bottom:50px; overflow:auto; background-color:#fff; min-height:200px; }
+.content-body{ margin:0 20px; padding-bottom:50px; overflow:auto; background-color:#fff; min-height:100px; }
 
 /*表格样式*/
 .table-list { width:100%; border-spacing:0px;}

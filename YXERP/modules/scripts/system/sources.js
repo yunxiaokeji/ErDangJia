@@ -89,14 +89,15 @@
             });
 
             if (Model.SourceID) {
-                $("#modelCode").attr("disabled", "disabled")
+                $("#modelCode").attr("disabled", "disabled");
             }
 
             $("#modelName").focus();
             $("#modelName").val(Model.SourceName);
             $("#modelCode").val(Model.SourceCode);
-            $("#isChoose").prop("checked", Model.IsChoose == 1);
-
+            $("#isChoose").prop("checked", true);
+            if(Model.SourceID) $('.red').hide();
+            // $("#isChoose").prop("checked", Model.IsChoose == 1);
         }); 
     }
     //获取列表

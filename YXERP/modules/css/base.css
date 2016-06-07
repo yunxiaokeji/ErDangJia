@@ -207,7 +207,8 @@ select option{ padding:2px; }
 .ico-add:before{ content:"\e63c"; }
 .ico-add{ display:inline-block; cursor:pointer;  color:#4a98e7; font-size:24px !important; }
 .ico-add:hover { color: #2F73B8; }
-
+.ico-add-white{ background:url(/modules/images/ico-btnadd.png) no-repeat; height:13px; min-width:13px; line-height:13px; 
+          display:inline-block; cursor:pointer;}
 /*返回*/
 .ico-back{ background:url(/modules/images/ico-back.png) no-repeat 0px -1px; height:24px; min-width:24px; line-height:24px; 
           display:inline-block; cursor:pointer; color:#4a98e7; padding-left:28px; font-size:13px;  }

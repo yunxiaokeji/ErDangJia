@@ -55,8 +55,8 @@
                 _self.getList();
             }
         });
-        $("#exportExcel").click(function () { 
-            ObjectJS.ShowExportExcel()
+        $("#exportExcel").click(function () {
+            ObjectJS.ShowExportExcel();
         });
         //客户状态
         $(".search-status li").click(function () {
@@ -153,6 +153,18 @@
                 $(".table-list .check").addClass("ico-check").removeClass("ico-checked");
             }
         });
+        $("#dropdown").click(function () { 
+            var position = $(".ico-dropdown-white").position();  
+            $(".dropdown-ul").css({ "top": position.top + 22, "left": position.left - 80 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+         
+        $(document).click(function (e) { 
+            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass(".ico-dropdown-white")) {
+                $(".dropdown-ul").hide();
+            }
+        });
 
         //批量转移
         $("#batchChangeOwner").click(function () {
@@ -180,7 +192,7 @@
                     }
                 });
             } else {
-                alert("您尚未选择客户!")
+                alert("您尚未选择客户!");
             }
         });
 

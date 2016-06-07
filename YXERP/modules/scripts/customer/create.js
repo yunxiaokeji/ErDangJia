@@ -8,14 +8,34 @@
     //初始化
     ObjectJS.init = function (activityid) {
         var _self = this;
-        _self.bindEvent(activityid);
+        _self.activityid = activityid;
+        _self.bindEvent();
     }
 
     //绑定事件
-    ObjectJS.bindEvent = function (activityid) {
+    ObjectJS.bindEvent = function () {
         var _self = this;
+        if (_self.activityid) {
+            $("#source option[data-code='Source-Activity']").prop("selected", true);
+            $("#source").prop("disabled", true);
+            Global.post("/Customer/GetActivityBaseInfoByID", { activityid: _self.activityid }, function (data) {
+                if (data.model.Name) {
+                    $("#activityName").html("活动：" + data.model.Name);
+                }
+            });
+            $('#activity').val(_self.activityid);
+        } else {
+            $('#activity').show();
+        }
+        $('#source').bind("change", function () {
+            if ($(this).children(":selected").data("code") == "Source-Activity") {
+                $('#activity').show();
+            } else {
+                $('#activity').hide();
+            }
+        });
         //保存
-        $("#btnSave").click(function () {
+        $("#btnSave").click(function () { 
             if (_self.isLoading) {
                 alert("数据处理中，请勿重复操作");
                 return false;
@@ -24,19 +44,10 @@
                 return false;
             }
             _self.isLoading = true;
-            _self.saveModel(activityid);
+            _self.saveModel();
         });
 
-        if (activityid) {
-            $("#source option[data-code='Source-Activity']").prop("selected", true);
-            $("#source").prop("disabled", true);
-
-            Global.post("/Customer/GetActivityBaseInfoByID", { activityid: activityid }, function (data) {
-                if (data.model.Name) {
-                    $("#activityName").html("活动：" + data.model.Name);
-                }
-            })
-        }
+       
 
         VerifyObject = Verify.createVerify({
             element: ".verify",
@@ -65,14 +76,15 @@
     }
 
     //保存实体
-    ObjectJS.saveModel = function (activityid) {
-        var _self = this;
-
+    ObjectJS.saveModel = function () {
+        console.log($('#source').children(":selected").data("code"));
+        console.log($('#activity').val());
+        var _self = this; 
         var model = {
             Name: $("#name").val().trim(),
             Type: $("#companyCustom").hasClass("ico-checked") ? 1 : 0,
             IndustryID: $("#industry").val().trim(),
-            ActivityID: activityid,
+            ActivityID: $('#source').children(":selected").data("code") == "Source-Activity"?$('#activity').val():"",
             SourceID: $("#source").val().trim(),
             Extent: $("#extent").val().trim(),
             CityCode: CityObject.getCityCode(),

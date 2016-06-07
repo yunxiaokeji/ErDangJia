@@ -21,10 +21,16 @@
         <li>
             <span class="column-title">客户来源：</span>
             <select id="source">
-            @foreach (CloudSalesEntity.CustomSourceEntity model in (List<CloudSalesEntity.CustomSourceEntity>)ViewBag.Sources)
-            {
-                <option value="@(model.SourceID)" data-code="@(model.SourceCode)">@(model.SourceName)</option> 
-            }
+                @foreach (CloudSalesEntity.CustomSourceEntity model in (List<CloudSalesEntity.CustomSourceEntity>) ViewBag.Sources)
+                {
+                    <option value="@(model.SourceID)" data-code="@(model.SourceCode)">@(model.SourceName)</option>
+                }
+            </select>
+            <select id="activity" class="mLeft20 hide">
+                 @foreach (CloudSalesEntity.ActivityEntity model in (List<CloudSalesEntity.ActivityEntity>)ViewBag.Activity)
+                {
+                    <option value="@(model.ActivityID)" data-code="@(model.ActivityCode)">@(model.Name)</option>
+                }
             </select>
             <span class="mLeft20 mTop2" id="activityName"></span>
         </li>

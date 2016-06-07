@@ -44,56 +44,55 @@
     <input id="feedback-filepath" type="hidden" />
     <input id="txt_username" value="@CurrentUser.Name" type="hidden" />
     <input id="txt_usermobilephone" value="@CurrentUser.MobilePhone" type="hidden" />
-    <script src="/Scripts/jquery-1.11.1.js"></script>
     <script type="text/javascript" src="/Scripts/sea.js"></script>
     <script type="text/javascript" src="/Scripts/sea-config.js"></script>
     <script type="text/javascript">
-        seajs.use(["scripts/layout"], function (layout) {
+        seajs.use(["scripts/layout"],["scripts/index"], function (layout,index) {
             layout.init();
-        }); 
-          seajs.use(["scripts/index"], function (layout) {
-              layout.init();
-          }); 
+            index.init();
+        });   
     </script>
-    <script type="text/javascript">       
+    <script src="/Scripts/jquery-1.11.1.js"></script>
+    <script type="text/javascript">
         $(function () {
             $("#movespan").css("left", "0px");
-            var lastcenter = $('#lastcenter', parent.document).val(); 
-            if (typeof(lastcenter) == "undefined") {
+            var lastcenter = $('#lastcenter', parent.document).val();
+            if (typeof (lastcenter) == "undefined") {
                 $('#currentUser', parent.document).html($('#currentUser', parent.document).html() + "<input id='lastcenter' type='hidden' value='1' />");
-                lastcenter = 1; 
-            }  else {
-                $("#movespan").css("left", getmenuindex($('#lastcenter', parent.document).val()) + "px"); 
-            } 
+                lastcenter = 1;
+            } else {
+                $("#movespan").css("left", getmenuindex($('#lastcenter', parent.document).val()) + "px");
+            }
             $("#movespan").show();
             switch ($('#aaaa').val()) {
                 case "INDEX":
-                    movespan(lastcenter,1);
+                    movespan(lastcenter, 1);
                     $('#lastcenter', parent.document).val(1);
-                    break
+                    break;
                 case "ACCOUNT":
-                    movespan(lastcenter,2);
+                    movespan(lastcenter, 2);
                     $('#lastcenter', parent.document).val(2);
                     break;
                 case "SETAVATAR":
-                    movespan(lastcenter,3);
+                    movespan(lastcenter, 3);
                     $('#lastcenter', parent.document).val(3);
                     break;
                 case "SETPASSWORD":
-                    movespan(lastcenter,4);
+                    movespan(lastcenter, 4);
                     $('#lastcenter', parent.document).val(4);
                     break;
                 case "MYFEEDBACK":
-                    movespan(lastcenter,5);
+                    movespan(lastcenter, 5);
                     $('#lastcenter', parent.document).val(5);
-                    break; 
-            }            
+                    break;
+            }
         });
+
         function getmenuindex(elem) {
             switch (elem) {
                 case "INDEX":
                 case "1":
-                    return 10; 
+                    return 10;
                 case "ACCOUNT":
                 case "2":
                     return 120;
@@ -106,21 +105,29 @@
                 case "MYFEEDBACK":
                 case "5":
                     return 480;
+                default:
+                    return 10;
             }
         }
+
         function movespan(a, b) {
-            if (a == b) { return;}
-            var c = setleft(a,b);
-           $("#movespan").animate({ left: c+ "px" }, {
-               queue: false, duration: 500, complete: function () {
-                   $("#movespan").css("left", c + "px")
-               }
-           }); 
-       }
-        function setleft(a, b) { 
+            if (a == b) {
+                return;
+            }
+            var c = setleft(a, b);
+            $("#movespan").animate({ left: c + "px" }, {
+                queue: false,
+                duration: 500,
+                complete: function () {
+                    $("#movespan").css("left", c + "px")
+                }
+            });
+        }
+
+        function setleft(a, b) {
             return parseInt($("#movespan").css("left").replace("px", "")) + $(".accountUl li").eq(b - 1).offset().left - $(".accountUl li").eq(a - 1).offset().left;
-       }
-    </script>
+        }
+</script> 
     @RenderSection("scripts", false)
 </body>
     

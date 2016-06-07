@@ -54,9 +54,11 @@ namespace YXERP.Controllers
 
         public ActionResult Create(string id)
         {
+            int total = 0;
             ViewBag.ActivityID = id;
             ViewBag.Sources = new SystemBusiness().GetCustomSources(CurrentUser.AgentID, CurrentUser.ClientID);
             ViewBag.Industrys = CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
+            ViewBag.Activity = ActivityBusiness.GetActivitys("", (EnumActivityStage)2, 0, "", "", "", "", int.MaxValue, 1, ref total, ref total, CurrentUser.AgentID, CurrentUser.ClientID);
             ViewBag.Extents = CustomBusiness.GetExtents();
             return View();
         }

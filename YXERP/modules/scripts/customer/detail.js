@@ -56,7 +56,15 @@
         $("#lblUser").text(model.CreateUser ? model.CreateUser.Name : "--");
 
         $("#lblSource").text(model.Source ? model.Source.SourceName : "--");
-
+        if (model.Activity != null) {
+            if (model.Source.SourceCode == "Source-Activity") { 
+                $("#aSource").data("url", "/Activity/Detail/" + model.ActivityID);
+                $("#aSource").data("id", Global.guid());
+                $("#aSource").data("name", "活动详情-" + model.Activity.Name);
+                $("#aSource").html(model.Activity ? " 活动名称: "+ model.Activity.Name : "--");
+                $("#aSource").show();
+            }
+        }
         $("#lblOwner").text(model.Owner ? model.Owner.Name : "--");
         $("#changeOwner").data("userid", model.OwnerID);
 

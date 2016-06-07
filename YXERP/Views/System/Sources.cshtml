@@ -43,20 +43,3 @@
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"108020101"))" id="updateObject">编辑</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"108020102"))" id="deleteObject">删除</li>
 </ul>
-
-<script type="text/javascript"> 
-    function movespan( b) { 
-            var c = setleft( b);
-            $("#movespan").animate({ left: c + "px" }, {
-                queue: false,
-                duration: 500,
-                complete: function () {
-                    $("#movespan").css("left", c + "px");
-                }
-            });
-        }
-
-        function setleft( b) {
-            return 40 + $(".accountUl li").eq(b - 1).offset().left - $(".accountUl li").eq(0).offset().left;
-        }
-    </script>

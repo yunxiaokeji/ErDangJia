@@ -62,10 +62,10 @@
             _this.addClass("hover"); 
             $("#" + _this.data("id")).show();
             $("#createModel,#createColor").hide();
-            var c = setleft(_this.data("index"));
+            var c = _self.getLeft(_this.data("index"));
             $("#movespan").animate({ left: c + "px" }, {
                 queue: false,
-                duration: 500,
+                duration: 300,
                 complete: function () {
                     $("#movespan").css("left", c + "px");
                 }

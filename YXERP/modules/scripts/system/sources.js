@@ -55,6 +55,31 @@
             });
         });
 
+        //切换模块
+        $(".accountUl li").click(function () {
+            var _this = $(this);
+            _this.siblings().removeClass("hover");
+            _this.addClass("hover"); 
+            $("#" + _this.data("id")).show();
+            $("#createModel,#createColor").hide();
+            var c = setleft(_this.data("index"));
+            $("#movespan").animate({ left: c + "px" }, {
+                queue: false,
+                duration: 500,
+                complete: function () {
+                    $("#movespan").css("left", c + "px");
+                }
+            });
+            if (_this.data("index") == 1) {
+                $('#colorList').hide();
+                $('#createModel').show();
+            } else if (_this.data("index") == 2) {
+                $('#sourceList').hide();
+                $("#createColor").show();
+            } else {
+                console.log("error index");
+            }
+        });
     }
     //添加/编辑弹出层
     ObjectJS.createModel = function () {
@@ -180,9 +205,12 @@
     }
     //删除
     ObjectJS.deleteModel = function (id, callback) {
-        Global.post("/System/DeleteCustomSource", { id: id }, function (data) {
+        Global.post("/System/DeleteCustomSource", { id: id }, function(data) {
             !!callback && callback(data.status);
-        })
+        });
+    }
+    ObjectJS.getLeft = function (b) {
+        return 40 + $(".accountUl li").eq(b - 1).offset().left - $(".accountUl li").eq(0).offset().left;
     }
 
     module.exports = ObjectJS;

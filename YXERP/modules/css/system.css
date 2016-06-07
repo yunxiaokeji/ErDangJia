@@ -21,8 +21,12 @@
 
 .stages-box .create-child { height:30px; line-height:30px; color:#999; cursor:pointer; text-indent:5px; margin-top:5px; }
 .stages-box .create-child:hover { background-color:#fff; color:#333; }
-
-
+/*客户来源*/
+.accountUl { height:31px; }
+.accountUl li { line-height: 30px; width:120px; }
+.accountUl li a{ line-height: 30px;  width:120px; text-align:center; display:inline-block; color:#333; }
+.accountUl .active { background-color: #fff; }
+#movespan {position: absolute;top:50px;left: 40px; width:80px; border-bottom:solid 2px #4380BE;}
 /*团队成员*/
 
 .team-header { font-size:14px; height:20px; line-height:20px; font-weight:bold; padding-bottom:5px;}

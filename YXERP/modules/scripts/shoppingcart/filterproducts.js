@@ -44,7 +44,7 @@
             Global.post("/Products/GetChildCategorysByID", {
                 categoryid: pid
             }, function (data) {
-                CacheChildCategorys[pid] = data.Items;
+                CacheChildCategorys[pid] = data.items;
                 _self.bindChildCagegory(pid);
             });
         } else {
@@ -55,11 +55,11 @@
                 Global.post("/Products/GetCategoryDetailsByID", {
                     categoryid: pid
                 }, function (data) {
-                    CacheCategorys[pid] = data.Model;
-                    _self.bindCagegoryAttr(pid);
+                    CacheCategorys[pid] = data.model;
+                    //_self.bindCagegoryAttr(pid);
                 });
             } else {
-                _self.bindCagegoryAttr(pid);
+                //_self.bindCagegoryAttr(pid);
             }
         } else {
             $("#attr-price").nextAll(".attr-item").remove();
@@ -114,12 +114,11 @@
         var _self = this;
         var length = CacheChildCategorys[pid].length;
         if (length > 0) {
-            $(".category-child").show();
             for (var i = 0; i < length; i++) {
                 var _ele = $(" <li data-id='" + CacheChildCategorys[pid][i].CategoryID + "'>" + CacheChildCategorys[pid][i].CategoryName + "</li>");
                 _ele.click(function () {
                     //处理分类MAP
-                    var _map = $(" <li data-id='" + $(this).data("id") + "'>" + $(this).html() + "<span>></span></li>");
+                    var _map = $(" <li data-id='" + $(this).data("id") + "'><a href='javascript:void(0);'>" + $(this).html() + "</a></li>");
                     _map.click(function () {
                         $(this).nextAll().remove();
                         _self.getChildCategory($(this).data("id"));
@@ -130,7 +129,7 @@
                 $("#category-child").append(_ele);
             }
         } else {
-            $(".category-child").hide();
+            $("#category-child").html("<li>无下级分类</li>");
         }
     }
 
@@ -150,19 +149,7 @@
                 _self.getProducts();
             });
         });
-        //价格筛选
-        $("#attr-price .attrValues .price").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.BeginPrice = _this.data("begin");
-                Params.EndPrice = _this.data("end");
-                _self.getProducts();
-                $("#beginprice").val("");
-                $("#endprice").val("");
-            }
-        });
+
         //搜索价格区间
         $("#searchprice").click(function () {
             if (!!$("#beginprice").val() && !isNaN($("#beginprice").val())) {
@@ -186,52 +173,24 @@
             _self.getProducts();
         });
 
-        //按时间排序
-        $(".orderby-new").click(function () {
+        //排序
+        $(".sort-item").click(function () {
             var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.OrderBy = "pd.CreateTime desc";
-                Params.IsAsc = false;
-                Params.PageIndex = 1;
-                _self.getProducts();
-            }
-        });
-
-        //按销量排序
-        $(".orderby-sales").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.OrderBy = "pd.SaleCount desc";
-                Params.IsAsc = false;
-                Params.PageIndex = 1;
-                _self.getProducts();
-            }
-        });
-
-        //按价格排序
-        $(".orderby-price").click(function () {
-            var _this = $(this);
-            
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover");
-                _this.siblings().removeClass("hover");
-                Params.IsAsc = true;
-                Params.PageIndex = 1;
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    _this.find(".asc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " desc ";
+                } else {
+                    _this.find(".desc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " asc ";
+                }
             } else {
-                Params.IsAsc = !Params.IsAsc;
-            }
-            if (Params.IsAsc) {
-                _this.find(".shang").addClass("shang-hover");
-                _this.find(".xia").removeClass("xia-hover");
-                Params.OrderBy = "pd.Price";
-            } else {
-                _this.find(".shang").removeClass("shang-hover");
-                _this.find(".xia").addClass("xia-hover");
-                Params.OrderBy = "pd.Price desc";
+                _this.addClass("hover").siblings().removeClass("hover");
+                _this.siblings().find(".hover").removeClass("hover");
+                _this.find(".desc").addClass("hover");
+                Params.OrderBy = _this.data("column") + " desc ";
             }
             _self.getProducts();
         });

@@ -89,10 +89,11 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_UpdateCartPrice", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool DeleteCart(string autoid, string guid)
+        public static bool DeleteCart(string productid, int ordertype, string guid)
         {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AutoID",autoid),
+            SqlParameter[] paras = {
+                                     new SqlParameter("@ProductID",productid),
+                                     new SqlParameter("@Ordertype",ordertype),
                                      new SqlParameter("@GUID" , guid)
                                    };
             return ExecuteNonQuery("P_DeleteCart", paras, CommandType.StoredProcedure) > 0;

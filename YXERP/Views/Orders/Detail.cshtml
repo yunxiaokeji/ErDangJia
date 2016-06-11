@@ -31,8 +31,8 @@
             <span class="column-title">客户名称：</span> 
             <a href="/Customer/Detail/@(model.CustomerID)" target="_blank">@(model.Customer.Name)</a> </li>
         <li>
-            <span class="column-title">拥有者：</span> <label class="left" id="lblOwner">@(model.Owner!=null?model.Owner.Name:"--")</label>
-            <span title="更换拥有者" class="ico-change left mTop5 mLeft10 @(ExpandClass.IsLimits(HttpContext.Current,"102019004"))" data-userid="@(model.OwnerID)" data-id="@(model.OrderID)" id="changeOwner"></span>
+            <span class="column-title">负责人：</span> <label class="left" id="lblOwner">@(model.Owner!=null?model.Owner.Name:"--")</label>
+            <span title="更换负责人" class="ico-change left mTop5 mLeft10 @(ExpandClass.IsLimits(HttpContext.Current,"102019004"))" data-userid="@(model.OwnerID)" data-id="@(model.OrderID)" id="changeOwner"></span>
         </li>
         <li>
             <span class="column-title">总金额：</span>

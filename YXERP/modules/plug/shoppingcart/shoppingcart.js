@@ -64,17 +64,14 @@ define(function (require, exports, module) {
                         var innerText = templateFun(data.Items);
                         innerText = $(innerText);
 
-                        //详情页增加单据类型
-                        innerText.find(".productname").each(function () {
-                            $(this).attr("href", $(this).attr("href") + "&type=" + opts.ordertype + "&guid=" + opts.guid);
-                        });
-
                         //删除产品
                         innerText.find(".ico-del").click(function () {
                             var _this = $(this);
                             confirm("确认从已选中移除此产品吗？", function () {
                                 Global.post("/ShoppingCart/DeleteCart", {
-                                    autoid: _this.data("id")
+                                    ordertype: opts.ordertype,
+                                    guid: opts.guid,
+                                    productid: _this.data("id")
                                 }, function (data) {
                                     if (!data.Status) {
                                         alert("系统异常，请重新操作！");

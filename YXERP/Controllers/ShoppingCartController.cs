@@ -23,7 +23,6 @@ namespace YXERP.Controllers
 
         #region Ajax 订单和购物车相关
 
-
         public JsonResult GetProductListForShopping(string filter)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -53,7 +52,6 @@ namespace YXERP.Controllers
             };
         }
 
-        //批量加入购物车
         public JsonResult AddShoppingCartBatchOut(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -96,11 +94,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取购物车产品数
-        /// </summary>
-        /// <param name="ordertype"></param>
-        /// <returns></returns>
         public JsonResult GetShoppingCartCount(EnumDocType ordertype, string guid = "")
         {
             if (string.IsNullOrEmpty(guid))
@@ -115,11 +108,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 获取购物车产品
-        /// </summary>
-        /// <param name="ordertype"></param>
-        /// <returns></returns>
+
         public JsonResult GetShoppingCart(EnumDocType ordertype, string guid = "")
         {
             if (string.IsNullOrEmpty(guid))
@@ -136,12 +125,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 编辑购物车产品数量
-        /// </summary>
-        /// <param name="autoid"></param>
-        /// <param name="quantity"></param>
-        /// <returns></returns>
         public JsonResult UpdateCartQuantity(string autoid, int quantity)
         {
             var bl = ShoppingCartBusiness.UpdateCartQuantity(autoid, quantity, CurrentUser.UserID);
@@ -174,14 +157,10 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 删除购物车产品
-        /// </summary>
-        /// <param name="autoid"></param>
-        /// <returns></returns>
-        public JsonResult DeleteCart(string autoid)
+
+        public JsonResult DeleteCart(string productid, int ordertype, string guid)
         {
-            var bl = ShoppingCartBusiness.DeleteCart(autoid, CurrentUser.UserID);
+            var bl = ShoppingCartBusiness.DeleteCart(productid, ordertype, guid, CurrentUser.UserID);
             JsonDictionary.Add("Status", bl);
             return new JsonResult
             {

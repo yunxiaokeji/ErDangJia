@@ -208,11 +208,11 @@
                 $(".table-list .check").addClass("ico-check").removeClass("ico-checked");
             }
         });
-        //转移拥有者
+        //转移负责人
         $("#changeOwner").click(function () {
             var _this = $(this);
             ChooseUser.create({
-                title: "更换拥有者",
+                title: "更换负责人",
                 type: 1,
                 single: true,
                 callback: function (items) {
@@ -237,7 +237,7 @@
             var checks = $(".table-list .ico-checked");
             if (checks.length > 0) {
                 ChooseUser.create({
-                    title: "批量更换拥有者",
+                    title: "批量更换负责人",
                     type: 1,
                     single: true,
                     callback: function (items) {

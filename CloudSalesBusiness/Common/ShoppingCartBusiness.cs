@@ -98,13 +98,9 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 删除购物车记录
         /// </summary>
-        /// <param name="autoid"></param>
-        /// <param name="userid"></param>
-        /// <param name="clientid"></param>
-        /// <returns></returns>
-        public static bool DeleteCart(string autoid, string userid)
+        public static bool DeleteCart(string productid, int ordertype, string guid, string userid)
         {
-            return ShoppingCartDAL.DeleteCart(autoid, userid);
+            return ShoppingCartDAL.DeleteCart(productid, ordertype, guid);
         }
     }
 }

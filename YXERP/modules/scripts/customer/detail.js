@@ -141,11 +141,11 @@
             _self.addContact();
         });
 
-        //更换拥有者
+        //更换负责人
         $("#changeOwner").click(function () {
             var _this = $(this);
             ChooseUser.create({
-                title: "更换拥有者",
+                title: "更换负责人",
                 type: 1,
                 single: true,
                 callback: function (items) {

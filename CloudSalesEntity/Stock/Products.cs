@@ -441,6 +441,8 @@ namespace CloudSalesEntity
         public int StockIn { get; set; }
         public int LogicOut { get; set; }
 
+        public string ImgS { get; set; }
+
         /// <summary>
         /// 填充数据
         /// </summary>

@@ -206,6 +206,7 @@
     <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\loginBackground.png" />
+    <Content Include="modules\images\none-img.png" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />
     <Content Include="modules\plug\chooseproduct\productin.html" />
     <Content Include="modules\plug\daterangepicker\daterangepicker.css" />
@@ -797,8 +798,6 @@
     <Content Include="modules\css\shoppingcart.css" />
     <Content Include="modules\images\default.png" />
     <Content Include="modules\images\ico-back.png" />
-    <Content Include="modules\images\ico-del-deep.png" />
-    <Content Include="modules\images\ico-del-light.png" />
     <Content Include="modules\images\ico-delete.png" />
     <Content Include="modules\images\ico-goback.png" />
     <Content Include="modules\images\ico-gonext.png" />

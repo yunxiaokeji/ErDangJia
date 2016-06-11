@@ -9,7 +9,7 @@
         <h1>{%=model.ProductName%}</h1>
 
         <ul class="price">
-            <li class="column">促&nbsp;&nbsp;销&nbsp;&nbsp;价：</li>
+            <li class="column">销&nbsp;&nbsp;售&nbsp;&nbsp;价：</li>
             <li id="price" class="salesprice">￥{%=model.Price.toFixed(2)%}</li>
             <!--<li class="commonprice">￥{%=model.CommonPrice.toFixed(2)%}</li>-->
         </ul>
@@ -37,10 +37,6 @@
                 <li class="cart-attrValues">
                     <ul id="unit">
                         <li class="cart-value hover" id="small" data-value="0" data-id="{%=model.SmallUnit.UnitID%}">{%=model.SmallUnit.UnitName%}</li>
-                        {% if(model.UnitID != model.BigUnitID){ %}
-                        
-                            <li class="cart-value" id="big"  data-value="1" data-id="{%=model.BigUnit.UnitID%}">{%=model.BigUnit.UnitName%}</li>
-                        {%}%}
                     </ul>
                 </li>
             </ul>
@@ -55,7 +51,7 @@
                 <input type="button" class="addcart" id="addcart" value="选择产品" />
             </div>
             <div class="left mLeft10 stock">
-                    库存：<label id="productStockQuantity">0</label>
+                库存：<label id="productStockQuantity">0</label>
             </div>
         </div>
     </div>

@@ -198,6 +198,12 @@ select option{ padding:2px; }
                 cursor:pointer; box-shadow:0 0 1px #ccc inset; font-size:14px !important; line-height:16px !important; }
 .checkbox.hover {border:solid 1px #4a98e7; background-color:#4a98e7; }
 
+/*单选框*/
+.radiobox { width:20px; height:20px; display:inline-block; background-color:#fff; border:solid 1px #4a98e7; text-align:center; border-radius:11px;
+                cursor:pointer; box-shadow:0 0 1px #4a98e7 inset; line-height:20px !important;}
+.radiobox span { clear:both;}
+.radiobox.hover span{ background-color:#4a98e7; display:inline-block; height:12px; width:12px; border-radius:6px; margin-top:4px; }
+
 /*编辑*/
 .ico-edit:before{ content:"\e607"; }
 .ico-edit{  display:inline-block; cursor:pointer;  color:#4a98e7; }
@@ -214,7 +220,7 @@ select option{ padding:2px; }
 .ico-back:hover{ color:#2F73B8; }
 
 /*替换*/
-.ico-change:before{  content:"\e60b;";}
+.ico-change:before{  content:"\e60b";}
 .ico-change{ display:inline-block; cursor:pointer;  color:#4a98e7; font-size:20px !important; }
 .ico-change:hover { color: #2F73B8; }
 

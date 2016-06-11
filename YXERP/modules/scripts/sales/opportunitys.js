@@ -50,11 +50,12 @@
                 isAll: true,
                 callback: function (items) {
                     if (items.length > 0) {
-                        Global.post("/Orders/CreateOrder", {
-                            customerid: items[0].id
+                        Global.post("/Opportunitys/Create", {
+                            customerid: items[0].id,
+                            typeid: ""
                         }, function (data) {
                             if (data.id) {
-                                location.href = "/Orders/ChooseProducts/" + data.id;
+                                location.href = "/Opportunitys/ChooseProducts/" + data.id;
                             }
                         });
                     }
@@ -183,7 +184,7 @@
             var checks = $(".table-list .ico-checked");
             if (checks.length > 0) {
                 ChooseUser.create({
-                    title: "批量更换拥有者",
+                    title: "批量更换负责人",
                     type: 1,
                     single: true,
                     callback: function (items) {
@@ -295,7 +296,7 @@
         });
     }
 
-    //转移客户
+    //转移负责人
     ObjectJS.ChangeOwner = function (ids, userid) {
         var _self = this;
         Global.post("/Opportunitys/UpdateOpportunityOwner", {

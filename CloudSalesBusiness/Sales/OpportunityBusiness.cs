@@ -66,6 +66,8 @@ namespace CloudSalesBusiness
 
                 model.StatusStr = CommonBusiness.GetEnumDesc((EnumOrderStatus)model.Status);
 
+                model.Stage = SystemBusiness.BaseBusiness.GetOpportunityStageByID(model.StageID, agentid, clientid);
+
                 model.City = CommonBusiness.GetCityByCode(model.CityCode);
 
                 if (ds.Tables["Customer"].Rows.Count > 0)
@@ -143,6 +145,28 @@ namespace CloudSalesBusiness
             {
                 string msg = "编辑机会信息";
                 LogBusiness.AddLog(opportunityid, EnumLogObjectType.Opportunity, msg, operateid, ip, operateid, agentid, clientid);
+            }
+            return bl;
+        }
+
+        public bool UpdateOpportunityProductPrice(string opportunityid, string productid, string name, decimal price, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OpportunityDAL.BaseProvider.UpdateOpportunityProductPrice(opportunityid, productid, price, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = name + "的价格调整为：" + price;
+                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Opportunity, msg, operateid, ip, productid, agentid, clientid);
+            }
+            return bl;
+        }
+
+        public bool UpdateOpportunityProductQuantity(string opportunityid, string productid, string name, int quantity, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OpportunityDAL.BaseProvider.UpdateOpportunityProductQuantity(opportunityid, productid, quantity, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = name + "的数量调整为：" + quantity;
+                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Opportunity, msg, operateid, ip, productid, agentid, clientid);
             }
             return bl;
         }

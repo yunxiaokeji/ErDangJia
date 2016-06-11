@@ -167,9 +167,30 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateOrderPrice(string orderid, string autoid, string name, decimal price)
+        public JsonResult GetStageItems(string stageid)
         {
-            var bl = OrdersBusiness.BaseBusiness.UpdateOrderPrice(orderid, autoid, name, price, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var list = SystemBusiness.BaseBusiness.GetOpportunityStageByID(stageid, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list.StageItem);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public JsonResult UpdateOpportunityProductPrice(string opportunityid, string productid, string name, decimal price)
+        {
+            var bl = OpportunityBusiness.BaseBusiness.UpdateOpportunityProductPrice(opportunityid, productid, name, price, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult UpdateOpportunityProductQuantity(string opportunityid, string productid, string name, int quantity)
+        {
+            var bl = OpportunityBusiness.BaseBusiness.UpdateOpportunityProductQuantity(opportunityid, productid, name, quantity, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {

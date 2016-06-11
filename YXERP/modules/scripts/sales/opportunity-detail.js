@@ -7,6 +7,7 @@ define(function (require, exports, module) {
         Easydialog = require("easydialog");
     require("pager");
     var ObjectJS = {};
+
     //添加页初始化
     ObjectJS.init = function (opportunityid, model, ordertypes) {
         var _self = this;
@@ -31,6 +32,7 @@ define(function (require, exports, module) {
         var stage = $(".stage-items li[data-id='" + model.StageID + "']");
         stage.addClass("hover");
     }
+
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
@@ -75,11 +77,13 @@ define(function (require, exports, module) {
             var _this = $(this);
             if (_this.val().isDouble() && _this.val() > 0) {
 
-                Global.post("/ShoppingCart/UpdateCartPrice", {
-                    autoid: _this.data("id"),
+                Global.post("/Opportunitys/UpdateOpportunityProductPrice", {
+                    opportunityid: _self.opportunityid,
+                    productid: _this.data("id"),
+                    name: _this.data("name"),
                     price: _this.val()
                 }, function (data) {
-                    if (!data.Status) {
+                    if (!data.status) {
                         _this.val(_this.data("value"));
                         alert("价格编辑失败，请刷新页面后重试！");
                     } else {
@@ -98,13 +102,17 @@ define(function (require, exports, module) {
         //删除产品
         $(".ico-del").click(function () {
             var _this = $(this);
-            confirm("确认从购物车移除此产品吗？", function () {
+            confirm("确认移除此产品吗？", function () {
                 Global.post("/ShoppingCart/DeleteCart", {
-                    autoid: _this.data("id")
+                    ordertype: 10,
+                    guid: _self.opportunityid,
+                    productid: _this.data("id"),
+                    name: _this.data("name")
                 }, function (data) {
-                    if (!data.Status) {
-                        alert("系统异常，请重新操作！");
+                    if (!data.status) {
+                        alert("网络异常或数据状态有变更，请重新操作");
                     } else {
+                        alert("产品移除成功");
                         _this.parents("tr.item").remove();
                         _self.getAmount();
                     }
@@ -143,6 +151,14 @@ define(function (require, exports, module) {
                     stageid: _this.data("id")
                 }, function (data) {
                     if (data.status) {
+                        Global.post("/Opportunitys/GetStageItems", {
+                            stageid: _this.data("id")
+                        }, function (items) {
+                            $("#stageItems").empty();
+                            for (var i = 0; i < items.items.length; i++) {
+                                $("#stageItems").append("<li>" + items.items[i].ItemName + "</li>")
+                            }
+                        });
                         _this.siblings().removeClass("hover");
                         _this.addClass("hover");
                     }
@@ -169,11 +185,11 @@ define(function (require, exports, module) {
             }
         });
         
-
         $("#editOpportunity").click(function () {
             _self.updateOpportunity(_self.model);
         });
     }
+
     //编辑信息
     ObjectJS.updateOpportunity = function (model) {
         var _self = this;
@@ -269,16 +285,19 @@ define(function (require, exports, module) {
         });
         $("#amount").text(amount.toFixed(2));
     }
+
     //更改数量
     ObjectJS.editQuantity = function (ele) {
         var _self = this;
-        Global.post("/ShoppingCart/UpdateCartQuantity", {
-            autoid: ele.data("id"),
+        Global.post("/Opportunitys/UpdateOpportunityProductQuantity", {
+            opportunityid: _self.opportunityid,
+            productid: ele.data("id"),
+            name: ele.data("name"),
             quantity: ele.val()
         }, function (data) {
-            if (!data.Status) {
+            if (!data.status) {
                 ele.val(ele.data("value"));
-                alert("系统异常，请重新操作！");
+                alert("网络异常或数据状态有变更，请重新操作");
             } else {
                 ele.parent().nextAll(".amount").html((ele.parent().prevAll(".tr-price").find("input").val() * ele.val()).toFixed(2));
                 ele.data("value", ele.val());

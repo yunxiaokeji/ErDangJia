@@ -26,9 +26,7 @@ namespace CloudSalesBusiness
             }
             return Convert.ToInt32(obj);
         }
-        /// <summary>
-        /// 获取购物车列表
-        /// </summary>
+
         public static List<ProductDetail> GetShoppingCart(EnumDocType ordertype, string guid, string userid)
         {
             DataTable dt = ShoppingCartDAL.GetShoppingCart((int)ordertype, guid, userid);
@@ -43,17 +41,22 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        /// <summary>
-        /// 加入购物车
-        /// </summary>
-        /// <returns></returns>
-        public static bool AddShoppingCart(string productid, string detailsid, int quantity, string unitid, int isBigUnit, EnumDocType ordertype, string remark, string guid, string userid, string operateip)
+        public static bool AddShoppingCart(EnumDocType ordertype, string guid, string productid, string detailsid, string name, string unitid, int quantity, string remark, string userid, string operateip, string agentid, string clientid)
         {
             if (string.IsNullOrEmpty(guid))
             {
                 guid = userid;
             }
-            return ShoppingCartDAL.AddShoppingCart(productid, detailsid, quantity, unitid, isBigUnit, (int)ordertype, remark, guid, userid, operateip);
+            bool bl = ShoppingCartDAL.AddShoppingCart((int)ordertype, guid, productid, detailsid, quantity, remark, userid, operateip);
+            if (bl)
+            {
+                string msg = "添加产品：" + name + " " + remark + " " + quantity + ProductsBusiness.BaseBusiness.GetUnitByID(unitid, clientid).UnitName;
+                if (ordertype == EnumDocType.Opportunity)
+                {
+                    LogBusiness.AddLog(guid, EnumLogObjectType.Opportunity, msg, userid, operateip, userid, agentid, clientid);
+                }
+            }
+            return bl;
         }
 
         public static bool AddShoppingCartBatchOut(string productid, string detailsid, int quantity, string batchcode, string depotid, EnumDocType ordertype, string remark, string guid, string userid, string operateip)
@@ -74,33 +77,33 @@ namespace CloudSalesBusiness
             return ShoppingCartDAL.AddShoppingCartBatchIn(productid, detailsid, quantity, (int)ordertype, remark, guid, userid, operateip);
         }
 
-        /// <summary>
-        /// 编辑购物车产品数量
-        /// </summary>
-        /// <param name="autoid"></param>
-        /// <param name="quantity"></param>
-        /// <returns></returns>
-        public static bool UpdateCartQuantity(string autoid, int quantity, string userid)
+        public static bool UpdateCartQuantity(EnumDocType ordertype, string productid, string guid, int quantity, string userid)
         {
-            return ShoppingCartDAL.UpdateCartQuantity(autoid, quantity, userid);
+            return ShoppingCartDAL.UpdateCartQuantity(productid, quantity, userid);
         }
 
-        public static bool UpdateCartBatch(string autoid, string batch, string userid)
+        public static bool UpdateCartBatch(EnumDocType ordertype, string productid, string guid, string batch, string userid)
         {
-            return CommonBusiness.Update("ShoppingCart", "BatchCode", batch, "AutoID=" + autoid);
+            return CommonBusiness.Update("ShoppingCart", "BatchCode", batch, "AutoID=" + productid);
         }
 
-        public static bool UpdateCartPrice(string autoid, decimal price, string userid)
+        public static bool UpdateCartPrice(EnumDocType ordertype, string productid, string guid, decimal price, string userid)
         {
-            return ShoppingCartDAL.UpdateCartPrice(autoid, price, userid);
+            return ShoppingCartDAL.UpdateCartPrice(productid, price, userid);
         }
 
-        /// <summary>
-        /// 删除购物车记录
-        /// </summary>
-        public static bool DeleteCart(string productid, int ordertype, string guid, string userid)
+        public static bool DeleteCart(EnumDocType ordertype, string guid, string productid, string name, string userid, string ip, string agentid, string clientid)
         {
-            return ShoppingCartDAL.DeleteCart(productid, ordertype, guid);
+            bool bl = ShoppingCartDAL.DeleteCart(guid, productid, (int)ordertype);
+            if (bl)
+            {
+                string msg = "移除产品：" + name;
+                if (ordertype == EnumDocType.Opportunity)
+                {
+                    LogBusiness.AddLog(guid, EnumLogObjectType.Opportunity, msg, userid, ip, userid, agentid, clientid);
+                }
+            }
+            return bl;
         }
     }
 }

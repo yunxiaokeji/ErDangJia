@@ -25,7 +25,7 @@
     <td class="center">{%=item.Quantity%}</td>
     <td class="tRight amount">{%=(item.Price*item.Quantity).toFixed(2)%}</td>
     <td class="center">
-        <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="{%=item.ProductDetailID%}"></a>
+        <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-name="{%=item.ProductName+' '+item.Remark %}" data-id="{%=item.ProductDetailID%}"></a>
     </td>
 </tr>
 {% } %}

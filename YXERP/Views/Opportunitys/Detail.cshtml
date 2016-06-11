@@ -27,7 +27,7 @@
     }
     
 </div>
-<div class="content-body">
+<div class="content-body pTop20">
     <ul class="content-info">
         <li>
             <span class="column-title">客户名称：</span> 
@@ -70,6 +70,14 @@
             </li>
         }
     </ul>
+    <div class="clear"></div>
+    <div class="color666 lineHeight25 mTop20 pLeft5">当前阶段下，销售行为建议：</div>
+    <ul class="stageitems mTop10" id="stageItems">
+       @foreach (var item in model.Stage.StageItem)
+       {
+           <li>@(item.ItemName)</li> 
+       }
+    </ul>
 </div>
 <div class="tab-nav mTop30">
     <ul class="tab-nav-ul left">
@@ -84,7 +92,6 @@
             <tr class="tr-header">
                 <td class="tLeft">产品名称</td>
                 <td class="tLeft">规格</td>
-                <td class="center width80">单位</td>
                 <td class="">单价</td>
                 <td class="center">数量</td>
                 <td class="tRight">小计</td>
@@ -93,15 +100,19 @@
             @foreach (var detail in model.Details)
             { 
                 <tr class="item cart-item" data-autoid="@(detail.AutoID)" data-id="@(detail.ProductDetailID)" >
-                    <td><a href="/Products/ChooseDetail?pid=@(detail.ProductID)&did=@(detail.ProductDetailID)&type=11&guid=@(model.OpportunityID)" target="_blank">@(detail.ProductName)</a></td>
+                    <td>
+                        <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(detail.ProductID)&did=@(detail.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(detail.ProductName)" data-id="Detail-@(detail.ProductID)">@(detail.ProductName)</a>
+                    </td>
                     <td>@(detail.Remark)</td>
-                    <td class="center">@(detail.UnitName)</td>
-                    <td class="tr-price center"><input type="text" data-id="@(detail.AutoID)" data-value="@(detail.Price.ToString("f2"))" class="price width80" value="@(detail.Price.ToString("f2"))" /></td>
-                    @*<td class="tr-price tRight"><label class="price">@(detail.Price.ToString("f2"))</label></td>*@
-                    <td class="center tr-quantity"><input  type="text" data-id="@(detail.AutoID)" data-value="@(detail.Quantity)" class="quantity width50" value="@(detail.Quantity)" /></td>
-                    <td class="tRight amount">@((detail.Price*detail.Quantity).ToString("f2"))</td>
+                    <td class="tr-price center">
+                        <input type="text" data-id="@(detail.ProductDetailID)" data-name="@(detail.ProductName+" "+detail.Remark)" data-value="@(detail.Price.ToString("f2"))" class="price width80" value="@(detail.Price.ToString("f2"))" />
+                    </td>
+                    <td class="center tr-quantity">
+                        <input  type="text" data-id="@(detail.ProductDetailID)" data-name="@(detail.ProductName+" "+detail.Remark)" data-value="@(detail.Quantity)" class="quantity width50" value="@(detail.Quantity)" />
+                    </td>
+                    <td class="tRight amount">@(detail.TotalMoney.ToString("f2"))</td>
                     <td class="center">
-                        <a class="ico-del" href="javascript:void(0)" title="删除" data-id="@(detail.AutoID)"></a>
+                        <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-name="@(detail.ProductName+" "+detail.Remark)" data-id="@(detail.ProductDetailID)"></a>
                     </td>
                 </tr>
             }
@@ -109,9 +120,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
                 <td class="tRight">合计：</td>
-                <td class="tRight"><label id="amount"></label></td>
+                <td class="tRight"><label id="amount">@(model.TotalMoney.ToString("f2"))</label></td>
                 <td></td>
             </tr>
         </table>

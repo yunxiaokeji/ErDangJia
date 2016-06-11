@@ -71,10 +71,11 @@ define(function (require, exports, module) {
                                 Global.post("/ShoppingCart/DeleteCart", {
                                     ordertype: opts.ordertype,
                                     guid: opts.guid,
-                                    productid: _this.data("id")
+                                    productid: _this.data("id"),
+                                    name: _this.data("name")
                                 }, function (data) {
-                                    if (!data.Status) {
-                                        alert("系统异常，请重新操作！");
+                                    if (!data.status) {
+                                        alert("网络异常或数据状态有变更，请重新操作！");
                                     } else {
                                         _this.parents("tr.item").remove();
                                         obj.find(".totalcount").html(obj.find(".totalcount").html() - 1);

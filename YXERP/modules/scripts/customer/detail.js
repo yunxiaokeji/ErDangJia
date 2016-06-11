@@ -27,6 +27,7 @@
 
         _self.initTalk(customerid);
     }
+
     //样式
     ObjectJS.bindStyle = function () {
 
@@ -35,6 +36,7 @@
         $("#recoveryCustomer,#loseCustomer,#closeCustomer").hide();
 
     }
+
     //基本信息
     ObjectJS.bindCustomerInfo = function (model) {
 
@@ -70,6 +72,7 @@
             $(".companyinfo").show();
         }
     }
+
     //绑定事件
     ObjectJS.bindEvent = function (model) {
         var _self = this;
@@ -294,6 +297,7 @@
         });
 
     }
+
     //创建机会或者订单 type 1 机会 2订单
     ObjectJS.createOpporOrOrder = function (items, type) {
         var _self = this;

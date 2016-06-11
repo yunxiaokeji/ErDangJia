@@ -113,6 +113,34 @@ namespace CloudSalesDAL
             return result == 1;
         }
 
+        public bool UpdateOpportunityProductPrice(string opportunityid, string productid, decimal price, string operateid, string agentid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@OpportunityID",opportunityid),
+                                     new SqlParameter("@ProductID",productid),
+                                     new SqlParameter("@Price",price),
+                                     new SqlParameter("@OperateID" , operateid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            return ExecuteNonQuery("P_UpdateOpportunityProductPrice", paras, CommandType.StoredProcedure) > 0;
+        }
+
+        public bool UpdateOpportunityProductQuantity(string opportunityid, string productid, int quantity, string operateid, string agentid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@OpportunityID",opportunityid),
+                                     new SqlParameter("@ProductID",productid),
+                                     new SqlParameter("@Quantity",quantity),
+                                     new SqlParameter("@OperateID" , operateid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            return ExecuteNonQuery("P_UpdateOpportunityProductQuantity", paras, CommandType.StoredProcedure) > 0;
+        }
+
         public bool UpdateOpportunityOwner(string opportunityid, string userid, string operateid, string agentid, string clientid)
         {
             SqlParameter[] paras = { 

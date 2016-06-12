@@ -13,12 +13,12 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left @(model.Status==3?"colorccc":"")">机会编号：@(model.OpportunityCode) @(model.Status==3?"(已关闭)":"")</span>
-    @if (model.Status==1)
+    <span class="header-title left @(model.Status == 3 ? "colorccc" : "")">机会编号：@(model.OpportunityCode) @(model.Status == 3 ? "(已关闭)" : "")</span>
+    @if (model.Status == 1)
     {
         <div id="editOpportunity" class="iconfont ico-edit left"></div>
         
-        <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"102029003"))" id="btnClose" >关闭机会</div>
+        <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current, "102029003"))" id="btnClose" >关闭机会</div>
         <div class="btn right mRight20" id="btnconfirm" >转为订单</div>
     }
     else if (model.Status == 2)
@@ -27,7 +27,7 @@
     }
     
 </div>
-<div class="content-body pTop20">
+<div class="content-body pTop10">
     <ul class="content-info">
         <li>
             <span class="column-title">客户名称：</span> 
@@ -35,7 +35,7 @@
         <li>
             <span class="column-title">负责人：</span> 
             <label class="left" id="lblOwner">@(model.Owner.Name)</label>
-            <span title="更换负责人" class="iconfont ico-change left mLeft10 @(ExpandClass.IsLimits(HttpContext.Current,"102029002"))" data-userid="@(model.OwnerID)" data-id="@(model.OpportunityID)" id="changeOwner"></span>
+            <span title="更换负责人" class="iconfont ico-change left mLeft10 @(ExpandClass.IsLimits(HttpContext.Current, "102029002"))" data-userid="@(model.OwnerID)" data-id="@(model.OpportunityID)" id="changeOwner"></span>
         </li>
          <li>
             <span class="column-title">联系人：</span>
@@ -48,11 +48,11 @@
             
         <li>
             <span class="column-title">地址：</span>
-            <label>@(model.City!=null?model.City.Description:"") @(model.Address)</label>
+            <label>@(model.City != null ? model.City.Description : "") @(model.Address)</label>
         </li>
         <li>
             <span class="column-title">订单类型：</span>
-            <label>@(model.OrderType!=null?model.OrderType.TypeName:"--")</label>
+            <label>@(model.OrderType != null ? model.OrderType.TypeName : "--")</label>
         </li>
         <li style="width:100%;">
             <span class="column-title">备注：</span> 
@@ -65,7 +65,7 @@
         { 
             <li data-id="@(stage.StageID)" data-mark="@(stage.Mark)">
                 <span class="leftbg bg"></span>
-                <span class="name">@(stage.StageName)(@((stage.Probability*100).ToString("f2"))%)</span>
+                <span class="name">@(stage.StageName)(@((stage.Probability * 100).ToString("f2"))%)</span>
                 <span class="rightbg bg"></span>
             </li>
         }
@@ -105,14 +105,31 @@
                     </td>
                     <td>@(detail.Remark)</td>
                     <td class="tr-price center">
-                        <input type="text" data-id="@(detail.ProductDetailID)" data-name="@(detail.ProductName+" "+detail.Remark)" data-value="@(detail.Price.ToString("f2"))" class="price width80" value="@(detail.Price.ToString("f2"))" />
+                        @if (model.Status == 1)
+                        {
+                           <input type="text" data-id="@(detail.ProductDetailID)" data-name="@(detail.ProductName + " " + detail.Remark)" data-value="@(detail.Price.ToString("f2"))" class="price width80" value="@(detail.Price.ToString("f2"))" />
+                        }
+                        else
+                        {
+                            @(detail.Price.ToString("f2"))
+                        }
                     </td>
                     <td class="center tr-quantity">
-                        <input  type="text" data-id="@(detail.ProductDetailID)" data-name="@(detail.ProductName+" "+detail.Remark)" data-value="@(detail.Quantity)" class="quantity width50" value="@(detail.Quantity)" />
-                    </td>
+                        @if (model.Status == 1)
+                        {
+                           <input  type="text" data-id="@(detail.ProductDetailID)" data-name="@(detail.ProductName + " " + detail.Remark)" data-value="@(detail.Quantity)" class="quantity width50" value="@(detail.Quantity)" />
+                        }
+                        else
+                        {
+                            @(detail.Quantity)
+                        }
+                     </td>
                     <td class="tRight amount">@(detail.TotalMoney.ToString("f2"))</td>
                     <td class="center">
-                        <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-name="@(detail.ProductName+" "+detail.Remark)" data-id="@(detail.ProductDetailID)"></a>
+                        @if (model.Status == 1)
+                        {
+                            <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-name="@(detail.ProductName + " " + detail.Remark)" data-id="@(detail.ProductDetailID)"></a>
+                        }
                     </td>
                 </tr>
             }
@@ -126,7 +143,7 @@
             </tr>
         </table>
         <div class="mTop20">
-            @if(model.Status==1)
+            @if (model.Status == 1)
             {
                 <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" class="btn right mRight20">继续选择产品</a>
             }

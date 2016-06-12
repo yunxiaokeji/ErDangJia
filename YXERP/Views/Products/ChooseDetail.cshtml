@@ -14,15 +14,16 @@
         });
     </script>
 }
-<div class="header-box">
+@*<div class="header-box">
     <span class="header-title left">产品名称：@(model.ProductName)</span>
-</div>
+</div>*@
 <div class="content-body pTop20">
     <div class="top-div">
         <div class="image left">
             <img id="productimg" src="@(model.ProductImage)" />
         </div>
         <div class="product-name left">
+            <h1>@(model.ProductName)</h1>
             <ul class="price">
                 <li class="column">销&nbsp;&nbsp;售&nbsp;&nbsp;价：</li>
                 <li id="price" class="salesprice">￥@(model.Price.ToString("f2"))</li>

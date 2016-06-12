@@ -15,7 +15,6 @@ define(function (require, exports, module) {
         _self.model.OrderTypes = JSON.parse(ordertypes.replace(/&quot;/g, '"'));
         _self.opportunityid = opportunityid;
         _self.bindEvent();
-        _self.getAmount();
         _self.bindStyle(_self.model);
     }
 
@@ -85,7 +84,9 @@ define(function (require, exports, module) {
                 }, function (data) {
                     if (!data.status) {
                         _this.val(_this.data("value"));
-                        alert("价格编辑失败，请刷新页面后重试！");
+                        alert("价格编辑失败，请刷新页面后重试！", function () {
+                            location.href = location.href;
+                        });
                     } else {
                         _this.parent().nextAll(".amount").html((_this.parent().nextAll(".tr-quantity").find("input").val() * _this.val()).toFixed(2));
                         _this.data("value", _this.val());
@@ -110,7 +111,9 @@ define(function (require, exports, module) {
                     name: _this.data("name")
                 }, function (data) {
                     if (!data.status) {
-                        alert("网络异常或数据状态有变更，请重新操作");
+                        alert("网络异常或数据状态有变更，请重新操作", function () {
+                            location.href = location.href;
+                        });
                     } else {
                         alert("产品移除成功");
                         _this.parents("tr.item").remove();
@@ -297,7 +300,9 @@ define(function (require, exports, module) {
         }, function (data) {
             if (!data.status) {
                 ele.val(ele.data("value"));
-                alert("网络异常或数据状态有变更，请重新操作");
+                alert("网络异常或数据状态有变更，请重新操作", function () {
+                    location.href = location.href;
+                });
             } else {
                 ele.parent().nextAll(".amount").html((ele.parent().prevAll(".tr-price").find("input").val() * ele.val()).toFixed(2));
                 ele.data("value", ele.val());

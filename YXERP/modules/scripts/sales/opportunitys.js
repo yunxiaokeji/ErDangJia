@@ -56,7 +56,7 @@
                             typeid: ""
                         }, function (data) {
                             if (data.id) {
-                                location.href = "/Opportunitys/ChooseProducts/" + data.id;
+                                location.href = "/Opportunitys/Detail/" + data.id;
                             }
                         });
                     }

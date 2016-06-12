@@ -177,7 +177,7 @@ define(function (require, exports, module) {
             $(".nav-partdiv").hide();
             $("#" + _this.data("id")).show();
 
-            $("#addInvoice").hide();
+            $("#addProduct").hide();
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
@@ -185,6 +185,8 @@ define(function (require, exports, module) {
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
                 _self.initTalk(_self.opportunityid);
+            } else if (_this.data("id") == "navProducts") {
+                $("#addProduct").show();
             }
         });
         

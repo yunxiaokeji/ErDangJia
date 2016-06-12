@@ -325,7 +325,9 @@
                                             _self.getOpportunitys(_self.customerid, 1);
                                         });
                                     } else {
-
+                                        alert("订单创建成功", function () {
+                                            _self.getOrders(_self.customerid, 1);
+                                        });
                                     }
                                     
                                 } else {

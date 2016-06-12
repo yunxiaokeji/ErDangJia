@@ -96,6 +96,10 @@
         <li data-id="navRemark">备忘</li>
         <li data-id="navLog">日志</li>
     </ul>
+    @if (model.Status == 1)
+    {
+        <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" id="addProduct" class="btn right">选择意向产品</a>
+    }
 </div>
 <div class="content-body">
     <div id="navProducts" class="nav-partdiv">
@@ -153,12 +157,6 @@
                 <td></td>
             </tr>
         </table>
-        <div class="mTop20">
-            @if (model.Status == 1)
-            {
-                <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" class="btn right mRight20">继续选择产品</a>
-            }
-        </div>
     </div>
     <div id="navRemark" class="mTop20 talk-body nav-partdiv hide">
         <div class="content-main">

@@ -14,9 +14,6 @@ namespace YXERP.Controllers
 {
     public class OrdersController : BaseController
     {
-        //
-        // GET: /Orders/
-
         public ActionResult Index()
         {
             return View();
@@ -80,21 +77,6 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult Create(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return Redirect("/Orders/MyOrder");
-            }
-            string orderid = OrdersBusiness.BaseBusiness.CreateOrder(id, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-            if (string.IsNullOrEmpty(orderid))
-            {
-                return Redirect("/Orders/MyOrder");
-            }
-            return Redirect("/Orders/ChooseProducts/" + orderid);
-        }
-
-
         #region Ajax
 
         public JsonResult GetOrders(string filter)
@@ -109,6 +91,17 @@ namespace YXERP.Controllers
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult Create(string customerid, string typeid)
+        {
+            string orderid = OrdersBusiness.BaseBusiness.CreateOrder(customerid, typeid, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("id", orderid);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -132,17 +125,6 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult CreateOrder(string customerid)
-        {
-            string orderid = OrdersBusiness.BaseBusiness.CreateOrder(customerid, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("id", orderid);
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
         public JsonResult UpdateOrderOwner(string ids, string userid)
         {
             bool bl = false;
@@ -154,7 +136,6 @@ namespace YXERP.Controllers
                     bl = true;
                 }
             }
-
 
             JsonDictionary.Add("status", bl);
             return new JsonResult

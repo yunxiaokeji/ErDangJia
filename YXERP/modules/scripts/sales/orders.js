@@ -39,23 +39,19 @@
     //绑定事件
     ObjectJS.bindEvent = function (type) {
         var _self = this;
-        $(document).click(function (e) {
-            //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
-                $(".dropdown-ul").hide();
-            }
-        });
+
         $("#createOrder").click(function () {
             ChooseCustomer.create({
                 title: "选择客户",
                 isAll: true,
                 callback: function (items) {
                     if (items.length > 0) {
-                        Global.post("/Orders/CreateOrder", {
-                            customerid: items[0].id
+                        Global.post("/Orders/Create", {
+                            customerid: items[0].id,
+                            typeid: ""
                         }, function (data) {
                             if (data.id) {
-                                location.href = "/Orders/ChooseProducts/" + data.id;
+                                location.href = "/Orders/Detail/" + data.id;
                             }
                         });
                     }

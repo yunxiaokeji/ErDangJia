@@ -5,21 +5,17 @@
 
 @section scripts{
     <script type="text/javascript">
-        seajs.use(["scripts/orders/detail"], function (obj) {
+        seajs.use(["scripts/sales/detail"], function (obj) {
             obj.init('@(model.OrderID)','@(model.Status)','@Html.ToJSONString(model)');
         });
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">销售订单详情</span>
-    <a class="ico-back right" href="@(Url.RequestContext.HttpContext.Request.UrlReferrer == null ? "/Orders/MyOrder" : "javascript:if(history.length>1){ history.go(-1);} else{ location.href='/Orders/MyOrder'}")">
-        返回订单列表
-    </a>
+    <span class="header-title left">订单编号：@(model.OrderCode)</span>
+    <div id="updateOrderInfo" class="left iconfont ico-edit mLeft50"></div>
 </div>
-<div class="content-body mTop20">
+<div class="content-body pTop10">
     <div class="content-title">
-        <div class="left titlename">订单编号：@(model.OrderCode)</div>
-        <div id="updateOrderInfo" class="left ico-edit mLeft50"></div>
         <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"102019005"))" id="btnreturn" >申请退单</div>
         <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"102019003"))" id="btndelete" >删除订单</div>
         <div class="btn right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"102019002"))" id="btnconfirm" >审核订单</div>
@@ -32,7 +28,7 @@
             <a href="/Customer/Detail/@(model.CustomerID)" target="_blank">@(model.Customer.Name)</a> </li>
         <li>
             <span class="column-title">负责人：</span> <label class="left" id="lblOwner">@(model.Owner!=null?model.Owner.Name:"--")</label>
-            <span title="更换负责人" class="ico-change left mTop5 mLeft10 @(ExpandClass.IsLimits(HttpContext.Current,"102019004"))" data-userid="@(model.OwnerID)" data-id="@(model.OrderID)" id="changeOwner"></span>
+            <span title="更换负责人" class="ico-change iconfont left mLeft10 @(ExpandClass.IsLimits(HttpContext.Current,"102019004"))" data-userid="@(model.OwnerID)" data-id="@(model.OrderID)" id="changeOwner"></span>
         </li>
         <li>
             <span class="column-title">总金额：</span>
@@ -72,17 +68,19 @@
             <label>@(model.Remark.Trim())</label>
         </li>
     </ul>
-    <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navProducts">产品明细</li>
-            <li data-id="navPays" class="hide navPays">付款记录</li>
-            <li data-id="navInvoices" class="hide navInvoices">开票记录</li>
-            <li data-id="navLog">日志</li>
-        </ul>
-        <div id="addInvoice" class="btn right">开票申请</div>
-    </div>
+</div>
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navProducts">产品明细</li>
+        <li data-id="navPays" class="hide navPays">付款记录</li>
+        <li data-id="navInvoices" class="hide navInvoices">开票记录</li>
+        <li data-id="navLog">日志</li>
+    </ul>
+    <div id="addInvoice" class="btn right">开票申请</div>
+</div>
+<div class="content-body">
     <div id="navProducts" class="nav-partdiv">
-        <table class="table-list mTop20">
+        <table class="table-list">
             <tr class="tr-header">
                 <td class="tLeft">产品名称</td>
                 <td class="tLeft">规格</td>

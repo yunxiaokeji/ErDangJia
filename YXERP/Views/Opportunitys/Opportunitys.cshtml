@@ -13,6 +13,7 @@
     </script>
 }
 <div class="header-box">
+    <span class="header-title left">@ViewBag.Title</span>
     <a href="javascript:void(0)"  id="createOrder" class="btn-add right">新建机会</a>
 </div>
 <div class="search-header">
@@ -50,15 +51,12 @@
             <li data-id="" class="hover">全部</li>
         </ul>
     </div>
-    <div class="close-filter">
-        <span>收起</span>
-    </div>
 </div>
 
 <ul class="search-sort">
     <li>排序</li>
     <li class="sort-item hover" data-column="o.CreateTime">
-        创建日期
+        创建时间
         <span class="asc"></span>
         <span class="desc hover"></span>
     </li>

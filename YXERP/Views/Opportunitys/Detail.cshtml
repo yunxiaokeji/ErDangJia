@@ -18,7 +18,6 @@
     @if (model.Status == 1)
     {
         <div id="editOpportunity" class="iconfont ico-edit left"></div>
-        
         <div class="btnccc right mLeft20 @(ExpandClass.IsLimits(HttpContext.Current, "102029003"))" id="btnClose" >关闭机会</div>
         <div class="btn right mLeft20" id="btnconfirm" >转为订单</div>
     } 
@@ -39,21 +38,20 @@
             <label>@(model.PersonName)</label>
         </li>
         <li>
+            <span class="column-title">意向金额：</span>
+            <label id="lblTotalMoney">@(model.TotalMoney.ToString("f2"))</label>
+        </li>
+        <li>
             <span class="column-title">联系方式：</span>
             <label>@(model.MobileTele)</label>
-        </li>
-            
-        <li>
-            <span class="column-title">地址：</span>
-            <label>@(model.City != null ? model.City.Description : "") @(model.Address)</label>
         </li>
         <li>
             <span class="column-title">订单类型：</span>
             <label>@(model.OrderType != null ? model.OrderType.TypeName : "--")</label>
-        </li>
+        </li>  
         <li>
-            <span class="column-title">创建日期：</span>
-            <label>@(model.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"))</label>
+            <span class="column-title">地址：</span>
+            <label>@(model.City != null ? model.City.Description : "") @(model.Address)</label>
         </li>
         <li>
             <span class="column-title">订单编号：</span>
@@ -62,6 +60,11 @@
                 <a href="javascript:void(0);" class="btn-open-window" data-id="@(model.OrderID)" data-name="订单详情-@(model.OrderCode)" data-url="/Orders/Detail/@(model.OrderID)">@(model.OrderCode) </a>
             }
         </li>
+        <li>
+            <span class="column-title">创建日期：</span>
+            <label>@(model.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"))</label>
+        </li>
+        
         <li style="width:100%;">
             <span class="column-title">备注：</span> 
             <label>@(model.Remark.Trim())</label>
@@ -100,16 +103,16 @@
             <tr class="tr-header">
                 <td class="tLeft">产品名称</td>
                 <td class="tLeft">规格</td>
-                <td class="">单价</td>
-                <td class="center">数量</td>
-                <td class="tRight">小计</td>
+                <td class="width150">单价</td>
+                <td class="center width150">数量</td>
+                <td class="tRight width200">小计</td>
                 <td class="center width80">删除</td>
             </tr>
             @foreach (var detail in model.Details)
             { 
                 <tr class="item cart-item" data-autoid="@(detail.AutoID)" data-id="@(detail.ProductDetailID)" >
                     <td>
-                        <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(detail.ProductID)&did=@(detail.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(detail.ProductName)" data-id="Detail-@(detail.ProductID)">@(detail.ProductName)</a>
+                        <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(detail.ProductID)&did=@(detail.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(detail.ProductName)" data-id="@(detail.ProductID)">@(detail.ProductName)</a>
                     </td>
                     <td>@(detail.Remark)</td>
                     <td class="tr-price center">

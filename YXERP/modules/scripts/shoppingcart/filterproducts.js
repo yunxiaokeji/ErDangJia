@@ -233,7 +233,7 @@
 
                 //打开产品详情页
                 html.find(".productimg,.name").each(function () {
-                    $(this).attr("href", $(this).attr("href") + "&type=" + _self.type + "&guid=" + _self.guid);
+                    $(this).data("url", $(this).data("url") + "&type=" + _self.type + "&guid=" + _self.guid);
                 });
                 //加入购物车
                 html.find(".btnAddCart").click(function () {

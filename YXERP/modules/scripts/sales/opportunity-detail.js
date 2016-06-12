@@ -331,6 +331,7 @@ define(function (require, exports, module) {
             amount += _this.html() * 1;
         });
         $("#amount").text(amount.toFixed(2));
+        $("#lblTotalMoney").text(amount.toFixed(2));
     }
 
     //更改数量

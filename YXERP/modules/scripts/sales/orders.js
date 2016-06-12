@@ -3,7 +3,9 @@
         doT = require("dot"),
         Easydialog = require("easydialog"),
         ChooseCustomer = require("choosecustomer"),
-        ChooseUser = require("chooseuser");
+        ChooseUser = require("chooseuser"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     var Params = {
@@ -19,11 +21,13 @@
         Keywords: "",
         BeginTime: "",
         EndTime: "",
+        OrderBy: "o.CreateTime desc",
         PageIndex: 1,
         PageSize: 20
     };
 
     var ObjectJS = {};
+
     //初始化
     ObjectJS.init = function (type) {
         var _self = this;
@@ -59,10 +63,21 @@
             });
         });
 
-        $("#btnSearch").click(function () {
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 
@@ -89,6 +104,7 @@
                 _self.getList();
             }
         });
+
         //关键字搜索
         require.async("search", function () {
             $(".searth-module").searchKeys(function (keyWords) {
@@ -97,71 +113,48 @@
                 _self.getList();
             });
         });
+
         //订单类型
         Global.post("/System/GetOrderTypes", {}, function (data) {
-            require.async("dropdown", function () {
-                $("#orderType").dropdown({
-                    prevText: "类型-",
-                    defaultText: "全部",
-                    defaultValue: "",
-                    data: data.items,
-                    dataValue: "TypeID",
-                    dataText: "TypeName",
-                    width: "120",
-                    onChange: function (data) {
-                        Params.PageIndex = 1;
-                        Params.TypeID = data.value;
-                        _self.getList();
-                    }
-                });
+            for (var i = 0; i < data.items.length; i++) {
+                $("#orderType").append('<li data-id="' + data.items[i].TypeID + '">' + data.items[i].TypeName + '</li>')
+            }
+            $("#orderType li").click(function () {
+                var _this = $(this);
+                if (!_this.hasClass("hover")) {
+                    _this.siblings().removeClass("hover");
+                    _this.addClass("hover");
+                    Params.PageIndex = 1;
+                    Params.TypeID = _this.data("id");
+                    _self.getList();
+                }
             });
         });
 
         //支付状态
-        require.async("dropdown", function () {
-            var items = [
-                { ID: 0, Name: "未付款" },
-                { ID: 1, Name: "部分付款" },
-                { ID: 2, Name: "已付款" }
-            ];
-            $("#payStatus").dropdown({
-                prevText: "付款-",
-                defaultText: "全部",
-                defaultValue: "-1",
-                data: items,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "90",
-                onChange: function (data) {
-                    Params.PageIndex = 1;
-                    Params.PayStatus = data.value;
-                    _self.getList();
-                }
-            });
-        });
-        //开票状态
-        require.async("dropdown", function () {
-            var items = [
-                { ID: 0, Name: "未开票" },
-                { ID: 1, Name: "已申请" },
-                { ID: 2, Name: "已开票" }
-            ];
-            $("#invoiceStatus").dropdown({
-                prevText: "开票-",
-                defaultText: "全部",
-                defaultValue: "-1",
-                data: items,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "90",
-                onChange: function (data) {
-                    Params.PageIndex = 1;
-                    Params.InvoiceStatus = data.value;
-                    _self.getList();
-                }
-            });
+        $("#payStatus li").click(function (data) {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.PayStatus = _this.data("id");
+                _self.getList();
+            }
         });
 
+        //开票状态
+        $("#invoiceStatus li").click(function (data) {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.InvoiceStatus = _this.data("id");
+                _self.getList();
+            }
+        });
+        
         if (type == 2) {
             require.async("choosebranch", function () {
                 $("#chooseBranch").chooseBranch({
@@ -220,7 +213,7 @@
                         if (_this.data("userid") != items[0].id) {
                             _self.ChangeOwner(_this.data("id"), items[0].id);
                         } else {
-                            alert("请选择不同人员进行转移!");
+                            alert("请选择不同人员进行更换!");
                         }
                     }
                 }
@@ -258,9 +251,31 @@
                     }
                 });
             } else {
-                alert("您尚未选择客户!")
+                alert("您尚未选择订单!")
             }
-        });        
+        });
+
+        //排序
+        $(".sort-item").click(function () {
+            var _this = $(this);
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    _this.find(".asc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " desc ";
+                } else {
+                    _this.find(".desc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " asc ";
+                }
+            } else {
+                _this.addClass("hover").siblings().removeClass("hover");
+                _this.siblings().find(".hover").removeClass("hover");
+                _this.find(".desc").addClass("hover");
+                Params.OrderBy = _this.data("column") + " desc ";
+            }
+            _self.getList();
+        });
     }
 
     //获取列表
@@ -275,6 +290,7 @@
             _self.bindList(data);
         });
     }
+
     //加载列表
     ObjectJS.bindList = function (data) {
         var _self = this;

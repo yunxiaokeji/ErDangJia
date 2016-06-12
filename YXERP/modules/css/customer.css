@@ -79,8 +79,6 @@
 
 .talk-body .activityOwnerImg { width: 24px; height: 24px; border-radius: 12px; }
 
-.member { padding-top: 3px; }
-
 .member img { width: 24px; height: 24px; border-radius: 12px; }
 
 #MemberList { list-style: none; width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #666; }

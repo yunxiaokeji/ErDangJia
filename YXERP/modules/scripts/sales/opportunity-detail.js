@@ -191,6 +191,50 @@ define(function (require, exports, module) {
         $("#editOpportunity").click(function () {
             _self.updateOpportunity(_self.model);
         });
+
+        //分享到明道
+        require.async("sharemingdao", function () {
+            $("#btnShareMD").sharemingdao({
+                post_pars: {
+                    content: _self.model.Customer.Name + "的机会：" + _self.model.OpportunityCode,
+                    groups: [],
+                    share_type: 0
+                },
+                task_pars: {
+                    name: _self.model.Customer.Name + "的机会：" + _self.model.OpportunityCode,
+                    end_date: "",
+                    charger: _self.model.Owner,
+                    members: [_self.model.Owner],
+                    des: "",
+                    url: "/Opportunitys/Detail?id=" + _self.opportunityid + "&source=md"
+                },
+                schedule_pars: {
+                    name: _self.model.Customer.Name + "的机会：" + _self.model.OpportunityCode,
+                    start_date: "",
+                    end_date: "",
+                    members: [_self.model.Owner],
+                    address: _self.model.Address,
+                    des: "",
+                    url: "/Opportunitys/Detail?id=" + _self.opportunityid + "&source=md"
+                },
+                callback: function (type, url) {
+                    if (type == "Calendar") {
+                        url = "<a href='" + url + "' target='_blank'>分享明道日程，点击查看详情</a>";
+                    } else if (type == "Task") {
+                        url = "<a href='" + url + "' target='_blank'>分享明道任务，点击查看详情</a>";
+                    }
+
+                    var entity = {
+                        GUID: _self.opportunityid,
+                        Content: encodeURI(url),
+                        FromReplyID: "",
+                        FromReplyUserID: "",
+                        FromReplyAgentID: ""
+                    };
+                    _self.saveReply(entity);
+                }
+            });
+        });
     }
 
     //编辑信息

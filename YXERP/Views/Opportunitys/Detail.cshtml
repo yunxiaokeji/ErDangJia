@@ -6,6 +6,7 @@
     <link href="/modules/css/sales.css" rel="stylesheet" />
 }
 @section scripts{
+    <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/sales/opportunity-detail"], function (obj) {
             obj.init('@(model.OpportunityID)','@Html.ToJSONString(model)','@Html.ToJSONString((List<CloudSalesEntity.OrderTypeEntity>)ViewBag.OrderTypes)');
@@ -18,14 +19,10 @@
     {
         <div id="editOpportunity" class="iconfont ico-edit left"></div>
         
-        <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current, "102029003"))" id="btnClose" >关闭机会</div>
-        <div class="btn right mRight20" id="btnconfirm" >转为订单</div>
-    }
-    else if (model.Status == 2)
-    {
-         <a href="javascript:void(0);" class="right font14 btn-open-window" data-id="@(model.OrderID)" data-name="订单详情-@(model.OrderCode)" data-url="/Orders/Detail/@(model.OrderID)">订单编号：@(model.OrderCode) </a>
-    }
-    
+        <div class="btnccc right mLeft20 @(ExpandClass.IsLimits(HttpContext.Current, "102029003"))" id="btnClose" >关闭机会</div>
+        <div class="btn right mLeft20" id="btnconfirm" >转为订单</div>
+    } 
+    <div class="right btn-share btn-share-md" id="btnShareMD">分享到明道</div>   
 </div>
 <div class="content-body pTop10">
     <ul class="content-info">
@@ -53,6 +50,17 @@
         <li>
             <span class="column-title">订单类型：</span>
             <label>@(model.OrderType != null ? model.OrderType.TypeName : "--")</label>
+        </li>
+        <li>
+            <span class="column-title">创建日期：</span>
+            <label>@(model.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"))</label>
+        </li>
+        <li>
+            <span class="column-title">订单编号：</span>
+            @if (model.Status == 2)
+            {
+                <a href="javascript:void(0);" class="btn-open-window" data-id="@(model.OrderID)" data-name="订单详情-@(model.OrderCode)" data-url="/Orders/Detail/@(model.OrderID)">@(model.OrderCode) </a>
+            }
         </li>
         <li style="width:100%;">
             <span class="column-title">备注：</span> 

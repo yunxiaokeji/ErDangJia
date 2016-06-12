@@ -29,7 +29,15 @@ define(function (require, exports, module) {
 
         //展开筛选
         $(".btn-filter").click(function () {
-            $(".search-body").show("fast");
+            var _this = $(this);
+            if (_this.hasClass("close")) {
+                $(".search-body").show("fast");
+                _this.removeClass("close");
+            } else {
+                $(".search-body").hide("fast");
+                _this.addClass("close");
+            }
+            
         });
         //折叠筛选
         $(".close-filter span").click(function () {

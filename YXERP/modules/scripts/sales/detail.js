@@ -15,12 +15,10 @@ define(function (require, exports, module) {
         _self.status = status;
         _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
         _self.bindEvent();
-        _self.getAmount();
-
-
 
         $("#addInvoice").hide();
     }
+
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
@@ -193,6 +191,7 @@ define(function (require, exports, module) {
                 });
             });
         });
+
         //切换模块
         $(".tab-nav-ul li").click(function () {
             var _this = $(this);
@@ -206,12 +205,16 @@ define(function (require, exports, module) {
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
                 _self.getLogs(1);
+            } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
+                _this.data("first", "1");
+                _self.initTalk(_self.orderid);
             } else if (_this.data("id") == "navInvoices" && _self.billingid) {
                 $("#addInvoice").show();
             }
         });
         
     }
+
     //编辑信息
     ObjectJS.editOrder = function (model) {
         var _self = this;
@@ -260,6 +263,7 @@ define(function (require, exports, module) {
             $("#industry").val(model.IndustryID);
         });
     }
+
     //登记发票
     ObjectJS.addInvoice = function () {
         var _self = this;
@@ -324,6 +328,7 @@ define(function (require, exports, module) {
             });
         });
     }
+
     //保存发票信息
     ObjectJS.saveOrderInvoice = function (model) {
         Easydialog.close();
@@ -337,6 +342,7 @@ define(function (require, exports, module) {
             }
         });
     }
+
     //绑定支付列表
     ObjectJS.getPays = function (items, empty) {
         var _self = this;
@@ -381,6 +387,7 @@ define(function (require, exports, module) {
             $("#navInvoices .tr-header").after(innerhtml);
         });
     }
+
     //计算总金额
     ObjectJS.getAmount = function () {
         var amount = 0;
@@ -391,6 +398,7 @@ define(function (require, exports, module) {
         });
         $("#amount").text(amount.toFixed(2));
     }
+
     //更改数量
     ObjectJS.editPrice = function (ele) {
         var _self = this;
@@ -410,6 +418,7 @@ define(function (require, exports, module) {
             }
         });
     }
+
     //删除订单
     ObjectJS.deleteOrder = function () {
         var _self = this;
@@ -421,20 +430,26 @@ define(function (require, exports, module) {
             }
         });
     }
+
     //获取日志
     ObjectJS.getLogs = function (page) {
         var _self = this;
         $("#orderLog").empty();
+        $("#orderLog").append("<div class='data-loading'><div>");
         Global.post("/Orders/GetOrderLogs", {
             orderid: _self.orderid,
             pageindex: page
         }, function (data) {
-
-            doT.exec("template/common/logs.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
-                $("#orderLog").append(innerhtml);
-            });
+            $("#orderLog").empty();
+            if (data.items.length > 0) {
+                doT.exec("template/common/logs.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
+                    $("#orderLog").append(innerhtml);
+                });
+            } else {
+                $("#orderLog").append("<div class='nodata-txt'>暂无日志<div>");
+            }
             $("#pagerLogs").paginate({
                 total_count: data.totalCount,
                 count: data.pageCount,
@@ -457,5 +472,143 @@ define(function (require, exports, module) {
             });
         });
     }
+
+    //讨论备忘
+    ObjectJS.initTalk = function (orderid) {
+        var _self = this;
+
+        $("#btnSaveTalk").click(function () {
+            var txt = $("#txtContent");
+            if (txt.val().trim()) {
+                var model = {
+                    GUID: orderid,
+                    Content: txt.val().trim(),
+                    FromReplyID: "",
+                    FromReplyUserID: "",
+                    FromReplyAgentID: ""
+                };
+                _self.saveReply(model);
+
+                txt.val("");
+            }
+
+        });
+        _self.getReplys(orderid, 1);
+
+    }
+
+    //获取备忘
+    ObjectJS.getReplys = function (orderid, page) {
+        var _self = this;
+        $("#replyList").empty();
+        $("#replyList").append("<div class='data-loading'><div>");
+        Global.post("/Opportunitys/GetReplys", {
+            guid: orderid,
+            pageSize: 10,
+            pageIndex: page
+        }, function (data) {
+            $("#replyList").empty();
+            if (data.items.length > 0) {
+                doT.exec("template/customer/replys.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
+
+                    $("#replyList").append(innerhtml);
+
+                    innerhtml.find(".btn-reply").click(function () {
+                        var _this = $(this), reply = _this.nextAll(".reply-box");
+                        reply.slideDown(500);
+                        reply.find("textarea").focus();
+                        reply.find("textarea").blur(function () {
+                            if (!$(this).val().trim()) {
+                                reply.slideUp(200);
+                            }
+                        });
+                    });
+                    innerhtml.find(".save-reply").click(function () {
+                        var _this = $(this);
+                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
+                            var entity = {
+                                GUID: _this.data("id"),
+                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
+                                FromReplyID: _this.data("replyid"),
+                                FromReplyUserID: _this.data("createuserid"),
+                                FromReplyAgentID: _this.data("agentid")
+                            };
+
+                            _self.saveReply(entity);
+                        }
+
+                        $("#Msg_" + _this.data("replyid")).val('');
+                        $(this).parent().slideUp(100);
+                    });
+
+                });
+            } else {
+                $("#replyList").append("<div class='nodata-txt'>暂无备忘<div>");
+            }
+
+            $("#pagerReply").paginate({
+                total_count: data.totalCount,
+                count: data.pageCount,
+                start: page,
+                display: 5,
+                border: true,
+                border_color: '#fff',
+                text_color: '#333',
+                background_color: '#fff',
+                border_hover_color: '#ccc',
+                text_hover_color: '#000',
+                background_hover_color: '#efefef',
+                rotate: true,
+                images: false,
+                mouse: 'slide',
+                float: "left",
+                onChange: function (page) {
+                    _self.getReplys(orderid, page);
+                }
+            });
+        });
+    }
+
+    ObjectJS.saveReply = function (model) {
+        var _self = this;
+        $("#replyList .nodata-txt").remove();
+        Global.post("/Opportunitys/SavaReply", { entity: JSON.stringify(model) }, function (data) {
+            doT.exec("template/customer/replys.html", function (template) {
+                var innerhtml = template(data.items);
+                innerhtml = $(innerhtml);
+
+                $("#replyList").prepend(innerhtml);
+
+                innerhtml.find(".btn-reply").click(function () {
+                    var _this = $(this), reply = _this.nextAll(".reply-box");
+                    reply.slideDown(500);
+                    reply.find("textarea").focus();
+                    reply.find("textarea").blur(function () {
+                        if (!$(this).val().trim()) {
+                            reply.slideUp(200);
+                        }
+                    });
+                });
+                innerhtml.find(".save-reply").click(function () {
+                    var _this = $(this);
+                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
+                        var entity = {
+                            GUID: _this.data("id"),
+                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
+                            FromReplyID: _this.data("replyid"),
+                            FromReplyUserID: _this.data("createuserid"),
+                            FromReplyAgentID: _this.data("agentid")
+                        };
+                        _self.saveReply(entity);
+                    }
+                    $("#Msg_" + _this.data("replyid")).val('');
+                    $(this).parent().slideUp(100);
+                });
+            });
+        });
+    }
+
     module.exports = ObjectJS;
 })

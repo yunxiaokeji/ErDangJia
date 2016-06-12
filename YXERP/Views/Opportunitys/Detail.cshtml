@@ -27,7 +27,8 @@
     <ul class="content-info">
         <li>
             <span class="column-title">客户名称：</span> 
-            <a href="javascript:void(0)" class="btn-open-window" data-id="@(model.Customer.CustomerID)" data-name="客户详情-@(model.Customer.Name)" data-url="/Customer/Detail/@(model.CustomerID)">@(model.Customer.Name)</a> </li>
+            <a href="javascript:void(0)" class="btn-open-window" data-id="@(model.Customer.CustomerID)" data-name="客户详情-@(model.Customer.Name)" data-url="/Customer/Detail/@(model.CustomerID)">@(model.Customer.Name)</a> 
+        </li>
         <li>
             <span class="column-title">负责人：</span> 
             <label class="left" id="lblOwner">@(model.Owner.Name)</label>
@@ -158,6 +159,7 @@
             </tr>
         </table>
     </div>
+
     <div id="navRemark" class="mTop20 talk-body nav-partdiv hide">
         <div class="content-main">
             <textarea id="txtContent" class="txt-content left"></textarea>

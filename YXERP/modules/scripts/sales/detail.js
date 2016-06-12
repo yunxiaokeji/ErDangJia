@@ -502,7 +502,7 @@ define(function (require, exports, module) {
         var _self = this;
         $("#replyList").empty();
         $("#replyList").append("<div class='data-loading'><div>");
-        Global.post("/Opportunitys/GetReplys", {
+        Global.post("/Orders/GetReplys", {
             guid: orderid,
             pageSize: 10,
             pageIndex: page
@@ -574,7 +574,7 @@ define(function (require, exports, module) {
     ObjectJS.saveReply = function (model) {
         var _self = this;
         $("#replyList .nodata-txt").remove();
-        Global.post("/Opportunitys/SavaReply", { entity: JSON.stringify(model) }, function (data) {
+        Global.post("/Orders/SavaReply", { entity: JSON.stringify(model) }, function (data) {
             doT.exec("template/customer/replys.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);

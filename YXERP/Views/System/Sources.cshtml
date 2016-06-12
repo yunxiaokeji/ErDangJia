@@ -1,8 +1,9 @@
 ﻿@{
-    ViewBag.Title = "客户来源";
+    ViewBag.Title = "客户配置";
 }
 @section css{
-<link href="/modules/css/system.css" rel="stylesheet" />
+    <link href="/modules/css/system.css" rel="stylesheet"/> 
+    <link href="/modules/plug/choosecolor/spectrum.css" rel="stylesheet" />
 }
 @section scripts{
     <script type="text/javascript">
@@ -21,7 +22,6 @@
             <li class="left " data-id="colorList" data-index="2" > <a href="javascript:void(0);">标签配置</a> </li>
         </ul>
         <div class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" id="createModel">新建来源</div>
-        <div class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" id="createColor">新建标签</div>
     </div>
     
 </div>
@@ -38,6 +38,8 @@
     </table>
 </div>
 <div class="content-body hide mTop20" id="colorList">
+    <ul class="unit-list mTop5" id="colorItem"> 
+    </ul>
 </div>
 <ul class="dropdown-ul hide"  style="width:65px;">
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"108020101"))" id="updateObject">编辑</li>

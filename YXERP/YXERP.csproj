@@ -195,6 +195,8 @@
     <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\loginBackground.png" />
+    <Content Include="modules\plug\choosecolor\spectrum.css" />
+    <Content Include="modules\plug\choosecolor\spectrum.js" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />
     <Content Include="modules\plug\chooseproduct\productin.html" />
     <Content Include="modules\plug\daterangepicker\daterangepicker.css" />

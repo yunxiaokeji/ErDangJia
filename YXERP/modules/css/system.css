@@ -27,6 +27,13 @@
 .accountUl li a{ line-height: 30px;  width:120px; text-align:center; display:inline-block; color:#333; }
 .accountUl .active { background-color: #fff; }
 #movespan {position: absolute;top:50px;left: 40px; width:80px; border-bottom:solid 2px #4380BE;}
+
+.unit-list li{ height:30px; line-height:30px; width:115px;  float:left; margin:10px 10px;  text-align:center; position:relative;  }
+.unit-list li input{ height:28px; line-height:30px; width:70px; padding:0 5px; text-align:center; border:solid 1px #ccc; cursor:pointer; }
+.unit-list li .ico-delete{ position:absolute; right:-9px; top:-9px; display:none; background-color:white; }
+.unit-list li:hover .ico-delete{ display:inline-block; }
+.unit-list .unit-item:hover input{ border:solid 1px #318ae4; }
+
 /*团队成员*/
 
 .team-header { font-size:14px; height:20px; line-height:20px; font-weight:bold; padding-bottom:5px;}

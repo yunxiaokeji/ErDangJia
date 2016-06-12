@@ -10,6 +10,8 @@ seajs.config({
         "jquery": "/Scripts/jquery-1.11.1.js",
         "form": "/Scripts/jquery.form.js",
         "parser": "/Scripts/jquery.parser.js",
+        //颜色选择器
+        "color": "plug/choosecolor/spectrum.js",
         //全局JS
         "global": "scripts/global.js",
         //HTML模板引擎

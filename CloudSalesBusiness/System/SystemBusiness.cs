@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 using CloudSalesEntity;
 using System.Data;
+using CloudSalesBusiness.Custom;
 using CloudSalesDAL;
+using CloudSalesDAL.Custom;
 using CloudSalesEnum;
 
 namespace CloudSalesBusiness
@@ -18,7 +20,7 @@ namespace CloudSalesBusiness
         #region Cache
 
         private static Dictionary<string, List<CustomSourceEntity>> _source;
-
+        private static Dictionary<string, List<CustomerColorEntity>> _color;
         private static Dictionary<string, List<OpportunityStageEntity>> _opportunitystages;
 
         private static Dictionary<string, List<OrderTypeEntity>> _ordertypes;
@@ -42,6 +44,24 @@ namespace CloudSalesBusiness
             set 
             {
                 _source = value;
+            }
+        }
+        /// <summary>
+        /// 客户标签
+        /// </summary>
+        private static Dictionary<string, List<CustomerColorEntity>> CustomColor
+        {
+            get
+            {
+                if (_color == null)
+                {
+                    _color = new Dictionary<string, List<CustomerColorEntity>>();
+                }
+                return _color;
+            }
+            set
+            {
+                _color = value;
             }
         }
 
@@ -145,6 +165,16 @@ namespace CloudSalesBusiness
 
             return list;
 
+        }
+        public List<CustomerColorEntity> GetCustomerColors(string agentid, string clientid)
+        {
+            if (CustomColor.ContainsKey(clientid))
+            {
+                return CustomColor[clientid];
+            }
+            List<CustomerColorEntity> list =  CustomerColorBusiness.GetCustomerColors(agentid,clientid); 
+            CustomColor.Add(clientid, list);
+            return list;
         }
 
         public CustomSourceEntity GetCustomSourcesByID(string sourceid, string agentid, string clientid)
@@ -459,7 +489,23 @@ namespace CloudSalesBusiness
             }
             return "";
         }
-
+        public int CreateCustomerColor(string colorName, string colorValue, string customerid, string agentid, string clientid, string userid, int status = 0)
+        {
+            int result= CustomerColorDAL.BaseProvider.InsertCustomerColor(colorName, colorValue, customerid, agentid,
+                clientid, userid, status);
+             if (result>0)
+            {
+                if (!CustomColor.ContainsKey(clientid))
+                {
+                    GetCustomerColors(agentid, clientid);
+                }
+                else
+                {
+                    CustomColor[clientid] = CustomerColorBusiness.GetCustomerColors(agentid, clientid); 
+                }
+            }
+            return result;
+        }
         public string CreateStageItem(string name, string stageid, string userid, string agentid, string clientid)
         {
             string itemid = Guid.NewGuid().ToString().ToLower();
@@ -640,7 +686,7 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
-
+       
         public bool DeleteCustomSource(string sourceid, string userid, string ip, string agentid, string clientid)
         {
             var model = GetCustomSourcesByID(sourceid, agentid, clientid);
@@ -655,6 +701,37 @@ namespace CloudSalesBusiness
                 CustomSources[clientid].Remove(model);
             }
             return bl;
+        }
+        public bool UpdateCustomerColor(string agentid, string clientid, int colorid, string colorName, string colorValue, string updateuserid)
+        {
+            bool result = CustomerColorDAL.BaseProvider.UpdateCustomerColor(agentid, clientid, colorid, colorName, colorValue, updateuserid);
+            if (result)
+            {
+                if (!CustomColor.ContainsKey(clientid))
+                {
+                    GetCustomerColors(agentid, clientid);
+                }
+                else
+                {
+                    CustomColor[clientid] = CustomerColorBusiness.GetCustomerColors(agentid, clientid);
+                }
+            }
+            return result;
+        }
+        public  bool DeleteCutomerColor(int status,int colorid,  string agentid, string clientid, string updateuserid)
+        {
+            bool result = CustomerColorDAL.BaseProvider.UpdateStatus(status, colorid, agentid, clientid, updateuserid);
+            if (result)
+            {
+                if (!CustomColor.ContainsKey(clientid))
+                {
+                    GetCustomerColors(agentid, clientid);
+                }
+                else
+                {
+                    CustomColor[clientid] = CustomerColorBusiness.GetCustomerColors(agentid, clientid);
+                }
+            } return result;
         }
 
         public bool UpdateOpportunityStage(string stageid, string stagename, decimal probability, string userid, string ip, string agentid, string clientid)

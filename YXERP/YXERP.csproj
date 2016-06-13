@@ -206,9 +206,12 @@
     <Content Include="modules\images\ico-username.png" />
     <Content Include="modules\images\iconback.png" />
     <Content Include="modules\images\icondate.png" />
+    <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\images\none-img.png" />
+    <Content Include="modules\plug\choosecolor\spectrum.css" />
+    <Content Include="modules\plug\choosecolor\spectrum.js" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />
     <Content Include="modules\plug\chooseproduct\productin.html" />
     <Content Include="modules\plug\daterangepicker\daterangepicker.css" />
@@ -218,6 +221,9 @@
     <Content Include="modules\plug\dialog\dialog.js" />
     <Content Include="modules\plug\dialog\ico-close-hover.png" />
     <Content Include="modules\plug\dialog\ico-close.png" />
+    <Content Include="modules\plug\colormark\colormark.js" />
+    <Content Include="modules\plug\colormark\ico-ball.png" />
+    <Content Include="modules\plug\colormark\style.css" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\an_hui_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\ao_men_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\bei_jing_geo.json" />

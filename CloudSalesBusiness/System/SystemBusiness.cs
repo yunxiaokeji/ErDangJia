@@ -166,6 +166,7 @@ namespace CloudSalesBusiness
             return list;
 
         }
+
         public List<CustomerColorEntity> GetCustomerColors(string agentid, string clientid)
         {
             if (CustomColor.ContainsKey(clientid))
@@ -489,6 +490,7 @@ namespace CloudSalesBusiness
             }
             return "";
         }
+
         public int CreateCustomerColor(string colorName, string colorValue, string customerid, string agentid, string clientid, string userid, int status = 0)
         {
             int result= CustomerColorDAL.BaseProvider.InsertCustomerColor(colorName, colorValue, customerid, agentid,
@@ -506,6 +508,7 @@ namespace CloudSalesBusiness
             }
             return result;
         }
+
         public string CreateStageItem(string name, string stageid, string userid, string agentid, string clientid)
         {
             string itemid = Guid.NewGuid().ToString().ToLower();
@@ -702,6 +705,7 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
+
         public bool UpdateCustomerColor(string agentid, string clientid, int colorid, string colorName, string colorValue, string updateuserid)
         {
             bool result = CustomerColorDAL.BaseProvider.UpdateCustomerColor(agentid, clientid, colorid, colorName, colorValue, updateuserid);
@@ -718,7 +722,8 @@ namespace CloudSalesBusiness
             }
             return result;
         }
-        public  bool DeleteCutomerColor(int status,int colorid,  string agentid, string clientid, string updateuserid)
+
+        public bool DeleteCutomerColor(int status,int colorid,  string agentid, string clientid, string updateuserid)
         {
             bool result = CustomerColorDAL.BaseProvider.UpdateStatus(status, colorid, agentid, clientid, updateuserid);
             if (result)

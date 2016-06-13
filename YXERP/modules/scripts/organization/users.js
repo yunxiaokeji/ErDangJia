@@ -352,12 +352,9 @@
         };
         Global.post("/Organization/SaveUser", { entity: JSON.stringify(model) }, function (data) {
             if (data.model && data.model.UserID) {
-                confirm("员工保存成功,初始密码为登录账号,是否继续添加员工?", function () {
+                alert("员工保存成功,初始密码为登录账号", function () {
                     location.href = location.href;
-                }, function () {
-                    location.href = "/Organization/Users";
                 });
-
             } else if (data.result == 2) {
                 alert("员工保存失败，登录账号已存在！");
             } else if (data.result == 3) {

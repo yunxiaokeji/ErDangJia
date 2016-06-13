@@ -41,6 +41,8 @@ seajs.config({
         "switch": "plug/switch/switch.js",
         //标签插件
         "mark": "plug/mark/mark.js",
+        //标签插件(取配系统置)
+        "colormark": "plug/colormark/colormark.js",
         //弹出层插件
         "easydialog": "plug/easydialog/easydialog.js",
         //导入弹出层插件

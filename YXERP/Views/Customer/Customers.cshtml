@@ -1,5 +1,5 @@
 ﻿@{
-    
+    var colorData = (List<CloudSalesEntity.CustomerColorEntity>)ViewBag.ColorData;
 }
 
 @section css{
@@ -9,7 +9,7 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/customer/customer"], function (ObjectJS) {
-            ObjectJS.init('@ViewBag.Type'); 
+            ObjectJS.init('@ViewBag.Type', '@Html.ToJSONString(colorData)'); 
         });
     </script>
 }

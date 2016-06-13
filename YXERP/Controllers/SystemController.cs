@@ -9,7 +9,6 @@ using CloudSalesBusiness;
 using CloudSalesBusiness.Custom;
 using CloudSalesEntity;
 using CloudSalesBusiness.Manage;
-using CloudSalesEntity.Custom;
 using CloudSalesEntity.Manage;
 namespace YXERP.Controllers
 {
@@ -104,7 +103,7 @@ namespace YXERP.Controllers
         public JsonResult GetCustomColor()
         {
 
-            var list = CustomerColorBusiness.GetCustomerColors("", CurrentUser.AgentID, CurrentUser.ClientID).ToList();
+            var list = SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.AgentID, CurrentUser.ClientID).ToList();
             JsonDictionary.Add("items", list);
             return new JsonResult
             {
@@ -124,12 +123,12 @@ namespace YXERP.Controllers
             int ColorID =-1;
             if ( model.ColorID==0)
             {
-                ColorID = CustomerColorBusiness.CreateCustomerColor(model.ColorName, model.ColorValue, "",
+                ColorID = SystemBusiness.BaseBusiness.CreateCustomerColor(model.ColorName, model.ColorValue, "",
                     model.AgentID, model.ClientID, model.CreateUserID, model.Status);
             }
             else
             {
-                bool bl = CustomerColorBusiness.UpdateCustomerColor(model.AgentID, model.ClientID, model.ColorID,
+                bool bl = SystemBusiness.BaseBusiness.UpdateCustomerColor(model.AgentID, model.ClientID, model.ColorID,
                     model.ColorName, model.ColorValue, CurrentUser.UserID);
                 if (bl)
                 {
@@ -146,7 +145,7 @@ namespace YXERP.Controllers
 
         public JsonResult DeleteColor(int colorid)
         {
-          bool result=  CustomerColorBusiness.UpdateStatus(9, colorid, CurrentUser.AgentID, CurrentUser.ClientID,
+            bool result = SystemBusiness.BaseBusiness.DeleteCutomerColor(9, colorid, CurrentUser.AgentID, CurrentUser.ClientID,
                 CurrentUser.UserID);
             JsonDictionary.Add("result", result ? 1 : 0);
             return new JsonResult

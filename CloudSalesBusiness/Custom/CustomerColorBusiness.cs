@@ -1,4 +1,4 @@
-﻿using CloudSalesEntity.Custom;
+﻿using CloudSalesEntity;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,15 +12,11 @@ namespace CloudSalesBusiness.Custom
 {
     public class CustomerColorBusiness
     {
-        public static List<CustomerColorEntity> GetCustomerColors(string customerid, string agentid, string clientid)
+        public static List<CustomerColorEntity> GetCustomerColors(  string agentid, string clientid)
         {
             int totalCount = 0;
             List<CustomerColorEntity> list = new List<CustomerColorEntity>();
-            string whereSql = " status<>9 ";
-            if (!string.IsNullOrEmpty(customerid))
-            {
-                whereSql += " and customerid='" + customerid + "' ";
-            }
+            string whereSql = " status<>9 "; 
             if (!string.IsNullOrEmpty(agentid))
             {
                 whereSql += " and agentid='" + agentid + "' ";
@@ -35,25 +31,26 @@ namespace CloudSalesBusiness.Custom
             {
                 CustomerColorEntity model = new CustomerColorEntity();
                 model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
-                if (!string.IsNullOrEmpty(model.CreateUserID))
-                {
-                    model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
-                }
+                //model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
+                //if (!string.IsNullOrEmpty(model.CreateUserID))
+                //{
+                //    model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
+                //}
                 list.Add(model);
             }
 
             return list;
 
         }
-
+        #region 新增 编辑 删除 已移动到SystemBusiness中
+        /*
         public static int CreateCustomerColor(string colorName,   string colorValue, string customerid, string agentid, string clientid, string userid, int status=0)
         {
             return CustomerColorDAL.BaseProvider.InsertCustomerColor(colorName,   colorValue, customerid, agentid,
                 clientid, userid, status);
         }
 
-        #region 编辑删除
+      
         public static bool UpdateCustomerColor(string agentid, string clientid, int colorid, string colorName, string colorValue,string updateuserid)
         {
             return CustomerColorDAL.BaseProvider.UpdateCustomerColor(  agentid, clientid, colorid, colorName, colorValue, updateuserid);
@@ -63,7 +60,7 @@ namespace CloudSalesBusiness.Custom
         {
             return CustomerColorDAL.BaseProvider.UpdateStatus(status, colorid, agentid, clientid, updateuserid);
         }
-
+        */
         #endregion
     }
 }

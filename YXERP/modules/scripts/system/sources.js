@@ -296,9 +296,12 @@
                         alert("您没有此操作权限，请联系管理员帮您添加权限！");
                         return;
                     }
-                    if (data.ID.length > 0) {
+                    if (data.ID > 0) {
                         _this.data("id", data.ID);
                         _this.next().data("id", data.ID);
+                    } else {
+                        alert("系统已存在相同标签颜色！");
+                        return;
                     }
                 });
             }

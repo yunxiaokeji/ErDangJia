@@ -206,6 +206,9 @@
     <Content Include="modules\plug\dialog\dialog.js" />
     <Content Include="modules\plug\dialog\ico-close-hover.png" />
     <Content Include="modules\plug\dialog\ico-close.png" />
+    <Content Include="modules\plug\colormark\colormark.js" />
+    <Content Include="modules\plug\colormark\ico-ball.png" />
+    <Content Include="modules\plug\colormark\style.css" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\an_hui_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\ao_men_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\bei_jing_geo.json" />

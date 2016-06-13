@@ -8,7 +8,7 @@ define(function (require, exports, module) {
     require("pager");
     var ObjectJS = {};
 
-    //添加页初始化
+    //初始化
     ObjectJS.init = function (opportunityid, model, ordertypes) {
         var _self = this;
         _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
@@ -332,8 +332,7 @@ define(function (require, exports, module) {
             _this.html((_this.prevAll(".tr-quantity").find("input").val() * _this.prevAll(".tr-price").find("input").val()).toFixed(2));
             amount += _this.html() * 1;
         });
-        $("#amount").text(amount.toFixed(2));
-        $("#lblTotalMoney").text(amount.toFixed(2));
+        $("#amount,#lblTotalMoney").text(amount.toFixed(2));
     }
 
     //更改数量

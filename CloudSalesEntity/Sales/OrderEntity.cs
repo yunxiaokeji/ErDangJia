@@ -182,6 +182,10 @@ namespace CloudSalesEntity
 
         public int ReplyTimes { get; set; }
 
+        public string OpportunityID { get; set; }
+
+        public string OpportunityCode { get; set; }
+
         /// <summary>
         /// 填充数据
         /// </summary>

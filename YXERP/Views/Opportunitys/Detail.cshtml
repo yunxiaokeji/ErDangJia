@@ -60,6 +60,10 @@
             {
                 <a href="javascript:void(0);" class="btn-open-window" data-id="@(model.OrderID)" data-name="订单详情-@(model.OrderCode)" data-url="/Orders/Detail/@(model.OrderID)">@(model.OrderCode) </a>
             }
+            else
+            {
+                <span>--</span>
+            }
         </li>
         <li>
             <span class="column-title">创建日期：</span>

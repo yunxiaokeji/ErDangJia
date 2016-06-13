@@ -200,7 +200,7 @@ namespace CloudSalesBusiness
             bool bl = OrdersDAL.BaseProvider.EditOrder(orderid, personName, mobileTele, cityCode, address, postalcode, typeid, expresstype, remark, operateid, agentid, clientid);
             if (bl)
             {
-                string msg = "编辑收货信息";
+                string msg = "编辑订单信息";
                 LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, operateid, agentid, clientid);
             }
             return bl;

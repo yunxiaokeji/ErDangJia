@@ -8,22 +8,28 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/sales/detail"], function (obj) {
+            $("#addInvoice,#btnreturn").hide();
             obj.init('@(model.OrderID)','@(model.Status)','@Html.ToJSONString(model)');
         });
     </script>
 }
 <div class="header-box">
     <span class="header-title left">订单编号：@(model.OrderCode)</span>
-    <div id="updateOrderInfo" class="left iconfont ico-edit mLeft50"></div>
-</div>
-<div class="content-body pTop10">
-    <div class="content-title">
-        <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"102019005"))" id="btnreturn" >申请退单</div>
+    
+    
+    @if (model.Status == 1)
+    {
+        <div id="updateOrderInfo" class="left iconfont ico-edit mLeft50"></div>
         <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"102019003"))" id="btndelete" >删除订单</div>
         <div class="btn right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"102019002"))" id="btnconfirm" >审核订单</div>
-        <span class="right lineHeight25 mRight10 mTop2" id="lblStatus">@(model.StatusStr)</span>
-        <span class="right lineHeight25 mTop2">订单状态：</span>
-    </div>
+    }
+    else
+    {
+        <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"102019005"))" id="btnreturn" >申请退单</div>
+    }
+    
+</div>
+<div class="content-body pTop10">
     <ul class="content-info">
         <li>
             <span class="column-title">客户名称：</span> 
@@ -38,32 +44,48 @@
             <label>@(model.PersonName)</label>
         </li>
         <li>
-            <span class="column-title">总金额：</span>
-            <label>@(model.TotalMoney.ToString("f2"))</label>
+            <span class="column-title">订单状态：</span> 
+            <span class="" id="lblStatus">@(model.StatusStr)</span>
         </li>
         <li>
             <span class="column-title">联系方式：</span>
             <label>@(model.MobileTele)</label>
         </li>
         <li>
-            <span class="column-title">付款金额：</span>
-            <label id="infoPaymoney">0.00</label>
+            <span class="column-title">来源机会：</span> 
+            @if (!string.IsNullOrEmpty(model.OpportunityID))
+            {
+                <a href="javascript:void(0);" class="btn-open-window" data-id="@(model.OpportunityID)" data-name="机会详情-@(model.OpportunityCode)" data-url="/Opportunitys/Detail/@(model.OpportunityID)">@(model.OpportunityCode) </a>
+            }
+            else
+            {
+                <span>--</span>
+            }
         </li>
         <li>
             <span class="column-title">地址：</span>
             <label>@(model.City!=null?model.City.Description:"")@(model.Address)</label>
         </li>
+        
         <li>
-            <span class="column-title">订单类型：</span>
-            <label>@(model.OrderType!=null?model.OrderType.TypeName:"--")</label>
+            <span class="column-title">总金额：</span>
+            <label id="lblTotalMoney">@(model.TotalMoney.ToString("f2"))</label>
         </li>
         <li>
             <span class="column-title">邮编：</span>
             <label>@(model.PostalCode)</label>
         </li>
         <li>
+            <span class="column-title">付款金额：</span>
+            <label id="infoPaymoney">0.00</label>
+        </li>
+        <li>
             <span class="column-title">发货方式：</span>
             <label>@(model.ExpressTypeStr)</label>
+        </li>
+        <li>
+            <span class="column-title">订单类型：</span>
+            <label>@(model.OrderType!=null?model.OrderType.TypeName:"--")</label>
         </li>
         <li style="width:100%;">
             <span class="column-title">备注：</span> 
@@ -75,12 +97,16 @@
     <ul class="tab-nav-ul left">
         <li class="hover" data-id="navProducts">产品明细</li>
         <li data-id="navRemark">备忘</li>
-        <li data-id="navPays" class="hide navPays">付款记录</li>
-        <li data-id="navInvoices" class="hide navInvoices">开票记录</li>
+        @if (model.Status > 1)
+        {
+            <li data-id="navPays">付款记录</li>
+            <li data-id="navInvoices">开票记录</li>
+        }
         <li data-id="navLog">日志</li>
     </ul>
     <div class="nav-btn-box">
-        <div id="addInvoice" class="btn right">开票申请</div>
+        <div id="addInvoice" data-id="navInvoices" class="btn right">开票申请</div>
+        <a href="/Orders/ChooseProducts/@(model.OrderID)" data-id="navProducts" class="btn right">选择产品</a>
     </div>
 </div>
 <div class="content-body">

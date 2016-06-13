@@ -44,7 +44,7 @@ namespace YXERP.Controllers
         {
             ViewBag.Type = (int)EnumDocType.Order;
             ViewBag.GUID = id;
-            ViewBag.Title = "新建机会订单-选择产品";
+            ViewBag.Title = "选择产品";
             return View("FilterProducts");
         }
 

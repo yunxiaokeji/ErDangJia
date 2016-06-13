@@ -90,7 +90,7 @@ define(function (require, exports, module) {
                         } else if (opts.ordertype == 10) {
                             obj.find(".btnconfirm").attr("href", "/Opportunitys/Detail/" + opts.guid).html("返回机会详情");
                         } else if (opts.ordertype == 11) {
-                            obj.find(".btnconfirm").attr("href", "/Orders/Detail/" + opts.guid);
+                            obj.find(".btnconfirm").attr("href", "/Orders/Detail/" + opts.guid).html("返回订单详情");
                         }
                         obj.find(".cart-product-list").append(innerText);
                     } else {

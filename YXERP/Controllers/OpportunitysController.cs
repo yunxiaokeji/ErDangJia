@@ -177,6 +177,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         public JsonResult UpdateOpportunityProductPrice(string opportunityid, string productid, string name, decimal price)
         {
             var bl = OpportunityBusiness.BaseBusiness.UpdateOpportunityProductPrice(opportunityid, productid, name, price, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);

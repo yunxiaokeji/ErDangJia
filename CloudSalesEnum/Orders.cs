@@ -13,7 +13,7 @@ namespace CloudSalesEnum
     {
         [DescriptionAttribute("全部")]
         All = -1,
-        [DescriptionAttribute("机会订单")]
+        [DescriptionAttribute("草案订单")]
         Normal = 0,
         [DescriptionAttribute("待审核")]
         New = 1,
@@ -22,7 +22,9 @@ namespace CloudSalesEnum
         [DescriptionAttribute("已退单")]
         Return = 3,
         [DescriptionAttribute("作废")]
-        Invalid = 4
+        Invalid = 4,
+        [DescriptionAttribute("已删除")]
+        Delete = 9
     }
     /// <summary>
     /// 出库状态

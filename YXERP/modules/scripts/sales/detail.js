@@ -15,15 +15,40 @@ define(function (require, exports, module) {
         _self.status = status;
         _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
         _self.bindEvent();
+        _self.bindCache();
+    }
 
-        $("#addInvoice").hide();
+    ObjectJS.bindCache = function () {
+        var _self = this;
+
+        //订单类型
+        Global.post("/System/GetOrderTypes", {}, function (data) {
+            _self.model.OrderTypes = data.items;
+        });
+
+        if (_self.status > 1 && _self.status != 9) {
+            Global.post("/Finance/GetOrderBillByID", { id: _self.orderid }, function (data) {
+                var model = data.model;
+                if (model.BillingID) {
+                    $("#infoPaymoney").text(model.PayMoney.toFixed(2));
+                    _self.getPays(model.BillingPays, true);
+                    _self.getInvoices(model.BillingInvoices, true);
+
+                    //申请开票
+                    if (model.InvoiceStatus == 0) {
+                        _self.billingid = model.BillingID;
+                        $("#addInvoice").click(function () {
+                            _self.addInvoice();
+                        });
+                    }
+                }
+            });
+        }
     }
 
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-
-        $("#btnreturn,#btnconfirm,#btndelete,#updateOrderInfo").hide();
 
         //转移负责人
         $("#changeOwner").click(function () {
@@ -51,62 +76,51 @@ define(function (require, exports, module) {
             });
         });
 
-        if (_self.status == 1) {
-            $("#btnconfirm,#btndelete,#updateOrderInfo").show();
+        //编辑单价
+        $(".price").change(function () {
+            var _this = $(this);
+            if (_this.val().isDouble() && _this.val() > 0) {
+                _self.editPrice(_this);
+            } else {
+                _this.val(_this.data("value"));
+            }
+        });
 
-            //订单类型
-            Global.post("/System/GetOrderTypes", {}, function (data) {
-                _self.model.OrderTypes = data.items;
+        //删除订单
+        $("#btndelete").click(function () {
+            confirm("订单删除后不可恢复，确认删除吗？", function () {
+                _self.deleteOrder();
             });
+        });
 
-            //编辑单价
-            $(".price").change(function () {
-                var _this = $(this);
-                if (_this.val().isDouble() && _this.val() > 0) {
-                    _self.editPrice(_this);
-                } else {
-                    _this.val(_this.data("value"));
-                }
-            });
-
-            //删除订单
-            $("#btndelete").click(function () {
-                confirm("订单删除后不可恢复，确认删除吗？", function () {
-                    _self.deleteOrder();
-                });
-            });
-
-            //审核订单
-            $("#btnconfirm").click(function () {
-                confirm("确认审核订单吗？", function () {
-                    Global.post("/Orders/EffectiveOrder", { orderid: _self.orderid }, function (data) {
-                        if (data.status) {
-                            location.href = location.href;
+        //审核订单
+        $("#btnconfirm").click(function () {
+            confirm("确认审核订单吗？", function () {
+                Global.post("/Orders/EffectiveOrder", { orderid: _self.orderid }, function (data) {
+                    if (data.status) {
+                        location.href = location.href;
+                    } else {
+                        if (data.result = 0) {
+                            alert("订单审核失败，可能因为订单状态已改变，请刷新页面后重试！");
+                        } else if (data.result = 2) {
+                            alert("产品库存不足，订单审核失败！");
+                        } else if (data.result = 3) {
+                            alert("账户余额不足，订单审核失败！");
                         } else {
-                            if (data.result = 0) {
-                                alert("订单审核失败，可能因为订单状态已改变，请刷新页面后重试！");
-                            } else if (data.result = 2) {
-                                alert("产品库存不足，订单审核失败！");
-                            } else if (data.result = 3) {
-                                alert("账户余额不足，订单审核失败！");
-                            } else {
-                                alert("订单审核失败！");
-                            }
+                            alert("订单审核失败！");
                         }
-                    });
+                    }
                 });
             });
+        });
 
-            $("#updateOrderInfo").click(function () {
-                _self.editOrder(_self.model);
-            });
+        //编辑订单
+        $("#updateOrderInfo").click(function () {
+            _self.editOrder(_self.model);
+        });
 
-        } else if (_self.status == 2) {
-            $(".navPays,.navInvoices").show();
-
+        if (_self.status == 2) {
             $("#lblStatus").addClass("blue");
-            
-            $(".cart-item").find(".tr-price input").prop("disabled", true);
 
             if (_self.model.SendStatus > 0) {
                 $("#btnreturn").html("申请退货")
@@ -146,33 +160,8 @@ define(function (require, exports, module) {
             } else if (_self.model.ReturnStatus == 3) {
                 $("#lblStatus").html("已退货");
             }
-
-            Global.post("/Finance/GetOrderBillByID", { id: _self.orderid }, function (data) {
-                var model = data.model;
-                if (model.BillingID) {
-                    $("#infoPaymoney").text(model.PayMoney.toFixed(2));
-                    _self.getPays(model.BillingPays, true);
-                    _self.getInvoices(model.BillingInvoices, true);
-                    
-                    //申请开票
-                    if(model.InvoiceStatus == 0 ){
-                        _self.billingid = model.BillingID;
-                        $("#addInvoice").click(function () {
-                            _self.addInvoice();
-                        });
-                    }
-                }
-            });
-
-        } else if (_self.status == 3) { 
+        } else if (_self.status > 2) {
             $("#lblStatus").addClass("red");
-
-            $(".cart-item").find(".tr-price input").prop("disabled", true);
-        } else {
-
-            $("#lblStatus").addClass("red");
-
-            $(".cart-item").find(".tr-price input").prop("disabled", true);
         }
         //删除发票信息
         $("#deleteInvoice").click(function () {
@@ -197,10 +186,10 @@ define(function (require, exports, module) {
             var _this = $(this);
             _this.siblings().removeClass("hover");
             _this.addClass("hover");
-            $(".nav-partdiv").hide();
+            $(".nav-partdiv,.nav-btn-box .btn").hide();
             $("#" + _this.data("id")).show();
 
-            $("#addInvoice").hide();
+            $(".nav-btn-box .btn[data-id='" + _this.data("id") + "']").show();
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
@@ -208,11 +197,31 @@ define(function (require, exports, module) {
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
                 _self.initTalk(_self.orderid);
-            } else if (_this.data("id") == "navInvoices" && _self.billingid) {
-                $("#addInvoice").show();
-            }
+            } 
         });
-        
+
+        //删除产品
+        $("#navProducts .ico-del").click(function () {
+            var _this = $(this);
+            confirm("确认移除此产品吗？", function () {
+                Global.post("/ShoppingCart/DeleteCart", {
+                    ordertype: 11,
+                    guid: _self.orderid,
+                    productid: _this.data("id"),
+                    name: _this.data("name")
+                }, function (data) {
+                    if (!data.status) {
+                        alert("网络异常或数据状态有变更，请重新操作", function () {
+                            location.href = location.href;
+                        });
+                    } else {
+                        alert("产品移除成功");
+                        _this.parents("tr.item").remove();
+                        _self.getAmount();
+                    }
+                });
+            });
+        });
     }
 
     //编辑信息
@@ -237,7 +246,7 @@ define(function (require, exports, module) {
                             PostalCode: $("#postalcode").val().trim(),
                             Remark: $("#remark").val().trim()
                         };
-                        Global.post("/Opportunitys/EditOrder", { entity: JSON.stringify(entity) }, function (data) {
+                        Global.post("/Orders/EditOrder", { entity: JSON.stringify(entity) }, function (data) {
                             if (data.status) {
                                 location.href = location.href;
                             } else {
@@ -256,11 +265,7 @@ define(function (require, exports, module) {
                 elementID: "city"
             });
 
-            $("#orderType").val(model.TypeID);
-
-            $("#extent").val(model.Extent);
-
-            $("#industry").val(model.IndustryID);
+            model.TypeID && $("#orderType").val(model.TypeID);
         });
     }
 
@@ -393,10 +398,10 @@ define(function (require, exports, module) {
         var amount = 0;
         $(".amount").each(function () {
             var _this = $(this);
-            _this.html((_this.prevAll(".tr-quantity").find("label").text() * _this.prevAll(".tr-price").find("input").val()).toFixed(2));
+            _this.html((_this.prevAll(".tr-quantity").find("input").val() * _this.prevAll(".tr-price").find("input").val()).toFixed(2));
             amount += _this.html() * 1;
         });
-        $("#amount").text(amount.toFixed(2));
+        $("#amount,#lblTotalMoney").text(amount.toFixed(2));
     }
 
     //更改数量

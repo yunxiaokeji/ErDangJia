@@ -20,6 +20,10 @@ namespace CloudSalesBusiness
             {
                 obj = CommonBusiness.Select("OpportunityProduct", "count(0)", "OpportunityID='" + guid + "'");
             }
+            else if (ordertype == EnumDocType.Order)
+            {
+                obj = CommonBusiness.Select("OrderDetail", "count(0)", "OrderID='" + guid + "'");
+            }
             else
             {
                 obj = CommonBusiness.Select("ShoppingCart", "count(0)", "ordertype=" + (int)ordertype + " and [GUID]='" + guid + "'");
@@ -54,6 +58,10 @@ namespace CloudSalesBusiness
                 if (ordertype == EnumDocType.Opportunity)
                 {
                     LogBusiness.AddLog(guid, EnumLogObjectType.Opportunity, msg, userid, operateip, userid, agentid, clientid);
+                }
+                else if (ordertype == EnumDocType.Order)
+                {
+                    LogBusiness.AddLog(guid, EnumLogObjectType.Orders, msg, userid, operateip, userid, agentid, clientid);
                 }
             }
             return bl;

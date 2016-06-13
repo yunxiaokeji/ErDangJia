@@ -10,6 +10,8 @@ seajs.config({
         "jquery": "/Scripts/jquery-1.11.1.js",
         "form": "/Scripts/jquery.form.js",
         "parser": "/Scripts/jquery.parser.js",
+        //颜色选择器
+        "color": "plug/choosecolor/spectrum.js",
         //全局JS
         "global": "scripts/global.js",
         //HTML模板引擎
@@ -39,6 +41,8 @@ seajs.config({
         "switch": "plug/switch/switch.js",
         //标签插件
         "mark": "plug/mark/mark.js",
+        //标签插件(取配系统置)
+        "colormark": "plug/colormark/colormark.js",
         //弹出层插件
         "easydialog": "plug/easydialog/easydialog.js",
         //导入弹出层插件

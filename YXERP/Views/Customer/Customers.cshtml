@@ -1,5 +1,5 @@
 ﻿@{
-    
+    var colorData = (List<CloudSalesEntity.CustomerColorEntity>)ViewBag.ColorData;
 }
 
 @section css{
@@ -9,20 +9,24 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/customer/customer"], function (ObjectJS) {
-            ObjectJS.init('@ViewBag.Type'); 
+            ObjectJS.init('@ViewBag.Type', '@Html.ToJSONString(colorData)'); 
         });
     </script>
 }
 <div class="header-box">
-    <div data-url="/Customer/Create" data-id="101019001" data-name="新建客户" class="btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current,"101019001"))">新建客户</div>
-    <div id="exportExcel" class="btn left @(ExpandClass.IsLimits(HttpContext.Current,"101019001"))">导入客户</div>
+    <div class="dropdown  right @(ExpandClass.IsLimits(HttpContext.Current, "101019001"))" style="background-color: #4A98E7; border-radius: 3px; width: 45px; padding: 7px 10px; width: 80px;">
+        <span  class="ico-add-white mTop1 mRight2 left"></span>
+        <span data-url="/Customer/Create" data-id="101019001" data-name="新建客户"  class=" btn-open-window left" style="color: #fff;" >新建客户</span>
+        <span id="dropdown" class="ico-dropdown-white mTop2 right"></span>
+    </div>
+    @*<div id="exportExcel" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"101019001"))">导入客户</div>*@
 </div>
 <div class="search-header">
     <div class="left mRight20" id="chooseBranch"></div>
     <div class="left" title="创建时间">
         <input type="text" id="iptCreateTime" placeholder="创建时间" class="ipt-date"  />
     </div>
-    <div class="btn-filter right"></div>
+    <div class="btn-filter right">更多筛选</div>
     <div class="searth-module right mRight20" data-text="关键字搜索..." data-width="160"> </div>
 </div>
 <div class="search-body">
@@ -79,16 +83,16 @@
 <div class="content-body">
     <table class="table-list">
         <tr class="tr-header">
-            <td class="width30"><span id="filterMark"></span></td>  
+            <td class="width30"><span id="filterMark"></span></td>
             <td class="width30"></td>
             <td class="tLeft">客户名称</td>
             <td class="width50">类型</td>
             <td class="width150">来源</td>
             <td class="width100">阶段</td>
             <td class="width100">联系人</td>
-            <td class="width100">联系电话</td> 
-            <td class="width80">备忘数</td>     
-            <td class="width100">负责人</td>
+            <td class="width100">联系电话</td>
+            <td class="width80">备忘数</td>
+            <td class="width100">拥有者</td>
             <td class="width100">创建时间</td>
         </tr>
     </table>
@@ -101,15 +105,19 @@
                 <span class="ico-check pLeft5 mTop5" id="checkAll">批量操作</span>
             </li>
             <li>
-                <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="batchChangeOwner">更换负责人</a>
+                <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current, "101019002"))" id="batchChangeOwner">更换拥有者</a>
             </li>
             <li>
                 &nbsp;<a href="javascript:void(0);" class="btn" id="batchCustomerExport">导出客户</a>
             </li>
-             <li>
+            <li>
                 &nbsp;<a href="javascript:void(0);" class="btn" id="batchContactExport">导出联系人</a>
             </li>
         </ul>
         <div id="pager"></div>
     </div>
 </div>
+<ul class="dropdown-ul hide" style="width: 100px;">
+    <li class="" id="exportExcel">导入客户</li> 
+</ul>
+

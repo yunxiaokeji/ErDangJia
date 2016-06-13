@@ -6,7 +6,7 @@
         moment = require("moment");
     require("daterangepicker");
     require("pager");
-    require("mark");
+    require("colormark");
     var $ = require('jquery');
     require("parser")($);
     require("form")($);
@@ -31,10 +31,12 @@
     };
 
     var ObjectJS = {};
+    ObjectJS.ColorList = [];
     //初始化
-    ObjectJS.init = function (type) {
+    ObjectJS.init = function (type,colorList) {
         var _self = this;
         Params.SearchType = type;
+        _self.ColorList = JSON.parse(colorList.replace(/&quot;/g, '"'));
         _self.getList();
         _self.bindEvent(type);
     }
@@ -55,8 +57,8 @@
                 _self.getList();
             }
         });
-        $("#exportExcel").click(function () { 
-            ObjectJS.ShowExportExcel()
+        $("#exportExcel").click(function () {
+            ObjectJS.ShowExportExcel();
         });
         //客户状态
         $(".search-status li").click(function () {
@@ -153,6 +155,18 @@
                 $(".table-list .check").addClass("ico-check").removeClass("ico-checked");
             }
         });
+        $("#dropdown").click(function () { 
+            var position = $(".ico-dropdown-white").position();  
+            $(".dropdown-ul").css({ "top": position.top + 22, "left": position.left - 80 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+         
+        $(document).click(function (e) { 
+            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass(".ico-dropdown-white")) {
+                $(".dropdown-ul").hide();
+            }
+        });
 
         //批量转移
         $("#batchChangeOwner").click(function () {
@@ -180,7 +194,7 @@
                     }
                 });
             } else {
-                alert("您尚未选择客户!")
+                alert("您尚未选择客户!");
             }
         });
 
@@ -193,10 +207,11 @@
         $("#batchContactExport").click(function () {
             Params.ExcelType = 1;
             Dialog.exportModel("/Customer/ExportFromCustomer", { filter: JSON.stringify(Params), filleName: "联系人" });
-        });
+        }); 
         //过滤标记
         $("#filterMark").markColor({
             isAll: true,
+            data:_self.ColorList,
             onChange: function (obj, callback) {
                 callback && callback(true);
                 Params.PageIndex = 1;
@@ -207,6 +222,7 @@
         //批量标记
         $("#batchMark").markColor({
             isAll: true,
+            data: _self.ColorList,
             onChange: function (obj, callback) {
                 var checks = $(".table-list .ico-checked");
                 if (checks.length > 0) {
@@ -300,8 +316,8 @@
 
                 innerhtml.find(".mark").markColor({
                     isAll: false,
+                    data:_self.ColorList,
                     onChange: function (obj, callback) {
-
                         _self.markCustomer(obj.data("id"), obj.data("value"), callback);
 
                     }

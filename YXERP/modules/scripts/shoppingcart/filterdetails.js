@@ -51,11 +51,7 @@ define(function (require, exports, module) {
                     if (bl) {
                         $("#addcart").prop("disabled", false).removeClass("addcartun");
                         _self.detailid = model.ProductDetails[i].ProductDetailID;
-                        if ($("#small").hasClass("hover")) {
-                            $("#price").html("￥" + model.ProductDetails[i].Price.toFixed(2));
-                        } else {
-                            $("#price").html("￥" + model.ProductDetails[i].BigPrice.toFixed(2));
-                        }
+                        $("#price").html("￥" + model.ProductDetails[i].Price.toFixed(2));
                         $("#productimg").attr("src", model.ProductDetails[i].ImgS);
                         $("#productStockQuantity").text(model.ProductDetails[i].StockIn - model.ProductDetails[i].LogicOut);
                         return;
@@ -103,8 +99,8 @@ define(function (require, exports, module) {
                     productid: _self.productid,
                     detailsid: _self.detailid,
                     quantity: $("#quantity").val(),
-                    unitid: $("#unit li.hover").data("id"),
-                    isBigUnit: $("#unit li.hover").data("value"),
+                    unitid: $("#small").data("id"),
+                    isBigUnit: 0,
                     ordertype: _self.ordertype,
                     guid: _self.guid,
                     remark: remark

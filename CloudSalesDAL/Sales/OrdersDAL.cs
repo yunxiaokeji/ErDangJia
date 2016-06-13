@@ -116,18 +116,32 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_UpdateOrderOwner", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public bool UpdateOrderPrice(string orderid, string autoid, decimal price, string operateid, string agentid, string clientid)
+        public bool UpdateOrderProductPrice(string orderid, string productid, decimal price, string operateid, string agentid, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@OrderID",orderid),
-                                     new SqlParameter("@AutoID",autoid),
+                                     new SqlParameter("@ProductID",productid),
                                      new SqlParameter("@Price",price),
                                      new SqlParameter("@OperateID" , operateid),
                                      new SqlParameter("@AgentID" , agentid),
                                      new SqlParameter("@ClientID" , clientid)
                                    };
 
-            return ExecuteNonQuery("P_UpdateOrderPrice", paras, CommandType.StoredProcedure) > 0;
+            return ExecuteNonQuery("P_UpdateOrderProductPrice", paras, CommandType.StoredProcedure) > 0;
+        }
+
+        public bool UpdateOrderProductQuantity(string orderid, string productid, int quantity, string operateid, string agentid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@OrderID",orderid),
+                                     new SqlParameter("@ProductID",productid),
+                                     new SqlParameter("@Quantity",quantity),
+                                     new SqlParameter("@OperateID" , operateid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            return ExecuteNonQuery("P_UpdateOrderProductQuantity", paras, CommandType.StoredProcedure) > 0;
         }
 
         public bool DeleteOrder(string orderid, string operateid, string agentid, string clientid)

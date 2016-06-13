@@ -37,9 +37,9 @@ define(function (require, exports, module) {
                     //申请开票
                     if (model.InvoiceStatus == 0) {
                         _self.billingid = model.BillingID;
-                        $("#addInvoice").click(function () {
-                            _self.addInvoice();
-                        });
+                        
+                    } else {
+                        $("#addInvoice").addClass("nolimits");
                     }
                 }
             });
@@ -163,6 +163,12 @@ define(function (require, exports, module) {
         } else if (_self.status > 2) {
             $("#lblStatus").addClass("red");
         }
+
+        //添加发票申请
+        $("#addInvoice").click(function () {
+            _self.addInvoice();
+        });
+
         //删除发票信息
         $("#deleteInvoice").click(function () {
             var _this = $(this);
@@ -172,6 +178,7 @@ define(function (require, exports, module) {
                     billingid: _this.data("billingid")
                 }, function (data) {
                     if (data.status) {
+                        $("#addInvoice").removeClass("nolimits").show();
                         var ele = $("#navInvoices tr[data-id='" + _this.data("id") + "']");
                         ele.remove();
                     } else {
@@ -222,6 +229,42 @@ define(function (require, exports, module) {
                 });
             });
         });
+
+        //编辑数量
+        $("#navProducts .quantity").change(function () {
+            if ($(this).val().isInt() && $(this).val() > 0 && $(this).val() * 1 != $(this).data("value") * 1) {
+                _self.editQuantity($(this));
+            } else {
+                $(this).val($(this).data("value"));
+            }
+        });
+
+        //编辑单价
+        $("#navProducts .price").change(function () {
+            var _this = $(this);
+            if (_this.val().isDouble() && _this.val() > 0 && _this.val() * 1 != _this.data("value") * 1) {
+
+                Global.post("/Orders/UpdateOrderProductPrice", {
+                    orderid: _self.orderid,
+                    productid: _this.data("id"),
+                    name: _this.data("name"),
+                    price: _this.val()
+                }, function (data) {
+                    if (!data.status) {
+                        _this.val(_this.data("value"));
+                        alert("价格编辑失败，请刷新页面后重试！", function () {
+                            location.href = location.href;
+                        });
+                    } else {
+                        _this.parent().nextAll(".amount").html((_this.parent().nextAll(".tr-quantity").find("input").val() * _this.val()).toFixed(2));
+                        _this.data("value", _this.val());
+                        _self.getAmount();
+                    }
+                });
+            } else {
+                _this.val(_this.data("value"));
+            }
+        });
     }
 
     //编辑信息
@@ -266,6 +309,28 @@ define(function (require, exports, module) {
             });
 
             model.TypeID && $("#orderType").val(model.TypeID);
+        });
+    }
+
+    //更改数量
+    ObjectJS.editQuantity = function (ele) {
+        var _self = this;
+        Global.post("/Orders/UpdateOrderProductQuantity", {
+            orderid: _self.orderid,
+            productid: ele.data("id"),
+            name: ele.data("name"),
+            quantity: ele.val()
+        }, function (data) {
+            if (!data.status) {
+                ele.val(ele.data("value"));
+                alert("网络异常或数据状态有变更，请重新操作", function () {
+                    location.href = location.href;
+                });
+            } else {
+                ele.parent().nextAll(".amount").html((ele.parent().prevAll(".tr-price").find("input").val() * ele.val()).toFixed(2));
+                ele.data("value", ele.val());
+                _self.getAmount();
+            }
         });
     }
 
@@ -340,8 +405,8 @@ define(function (require, exports, module) {
         var _self = this;
         Global.post("/Finance/SaveBillingInvoice", { entity: JSON.stringify(model) }, function (data) {
             if (data.item.InvoiceID) {
-                $("#addInvoice").hide();
-                _self.getInvoices([data.item], false)
+                $("#addInvoice").addClass("nolimits");
+                _self.getInvoices([data.item], false);
             } else {
                 alert("已提交过申请，不能重复操作！");
             }
@@ -354,12 +419,15 @@ define(function (require, exports, module) {
         if (empty) {
             $("#navPays .tr-header").nextAll().remove();
         }
-        doT.exec("template/finance/billingpays.html", function (template) {
-            var innerhtml = template(items);
-            innerhtml = $(innerhtml);
-
-            $("#navPays .tr-header").after(innerhtml);
-        });
+        if (items.length > 0) {
+            doT.exec("template/finance/billingpays.html", function (template) {
+                var innerhtml = template(items);
+                innerhtml = $(innerhtml);
+                $("#navPays .tr-header").after(innerhtml);
+            });
+        } else {
+            $("#navPays .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+        }
     }
 
     //绑定开票列表
@@ -367,30 +435,36 @@ define(function (require, exports, module) {
         var _self = this;
         if (empty) {
             $("#navInvoices .tr-header").nextAll().remove();
+        } else {
+            $("#navInvoices .nodata-tr").remove();
         }
-        doT.exec("template/finance/billinginvoices.html", function (template) {
-            var innerhtml = template(items);
-            innerhtml = $(innerhtml);
+        if (items.length > 0) {
+            doT.exec("template/finance/billinginvoices.html", function (template) {
+                var innerhtml = template(items);
+                innerhtml = $(innerhtml);
 
-            innerhtml.find(".ico-dropdown").each(function () {
-                if ($(this).data("status") == 1) {
-                    $(this).remove();
-                }
-            });
-            innerhtml.find(".dropdown").click(function () {
-                var _this = $(this);
-                if ($(this).data("status") != 1) {
-                    var position = _this.find(".ico-dropdown").position();
-                    $(".dropdown-ul li").data("id", _this.data("id")).data("billingid", _this.data("billingid"));
-                    $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 50 }).show().mouseleave(function () {
-                        $(this).hide();
-                    });
-                }
-                return false;
-            });
+                innerhtml.find(".ico-dropdown").each(function () {
+                    if ($(this).data("status") == 1) {
+                        $(this).remove();
+                    }
+                });
+                innerhtml.find(".dropdown").click(function () {
+                    var _this = $(this);
+                    if ($(this).data("status") != 1) {
+                        var position = _this.find(".ico-dropdown").position();
+                        $(".dropdown-ul li").data("id", _this.data("id")).data("billingid", _this.data("billingid"));
+                        $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 50 }).show().mouseleave(function () {
+                            $(this).hide();
+                        });
+                    }
+                    return false;
+                });
 
-            $("#navInvoices .tr-header").after(innerhtml);
-        });
+                $("#navInvoices .tr-header").after(innerhtml);
+            });
+        } else {
+            $("#navInvoices .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+        }
     }
 
     //计算总金额

@@ -161,13 +161,24 @@ namespace CloudSalesBusiness
 
         #region 编辑、删除
 
-        public bool UpdateOrderPrice(string orderid, string autoid, string name, decimal price, string operateid, string ip, string agentid, string clientid)
+        public bool UpdateOrderProductPrice(string orderid, string productid, string name, decimal price, string operateid, string ip, string agentid, string clientid)
         {
-            bool bl = OrdersDAL.BaseProvider.UpdateOrderPrice(orderid, autoid, price, operateid, agentid, clientid);
+            bool bl = OrdersDAL.BaseProvider.UpdateOrderProductPrice(orderid, productid, price, operateid, agentid, clientid);
             if (bl)
             {
-                string msg = "修改产品" + name + "价格：" + price;
-                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, autoid, agentid, clientid);
+                string msg = name + "的价格调整为：" + price;
+                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, productid, agentid, clientid);
+            }
+            return bl;
+        }
+
+        public bool UpdateOrderProductQuantity(string orderid, string productid, string name, int quantity, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OrdersDAL.BaseProvider.UpdateOrderProductQuantity(orderid, productid, quantity, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = name + "的数量调整为：" + quantity;
+                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, productid, agentid, clientid);
             }
             return bl;
         }

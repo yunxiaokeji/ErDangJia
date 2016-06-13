@@ -63,8 +63,8 @@ define(function (require, exports, module) {
         });
 
         //编辑数量
-        $(".quantity").change(function () {
-            if ($(this).val().isInt() && $(this).val() > 0) {
+        $("#navProducts .quantity").change(function () {
+            if ($(this).val().isInt() && $(this).val() > 0 && $(this).val() * 1 != $(this).data("value") * 1) {
                 _self.editQuantity($(this));
             } else {
                 $(this).val($(this).data("value"));
@@ -72,9 +72,9 @@ define(function (require, exports, module) {
         });
 
         //编辑单价
-        $(".price").change(function () {
+        $("#navProducts .price").change(function () {
             var _this = $(this);
-            if (_this.val().isDouble() && _this.val() > 0) {
+            if (_this.val().isDouble() && _this.val() > 0 && _this.val() * 1 != _this.data("value") * 1) {
 
                 Global.post("/Opportunitys/UpdateOpportunityProductPrice", {
                     opportunityid: _self.opportunityid,
@@ -101,7 +101,7 @@ define(function (require, exports, module) {
         });
 
         //删除产品
-        $(".ico-del").click(function () {
+        $("#navProducts .ico-del").click(function () {
             var _this = $(this);
             confirm("确认移除此产品吗？", function () {
                 Global.post("/ShoppingCart/DeleteCart", {

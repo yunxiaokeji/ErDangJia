@@ -181,6 +181,7 @@
     <Content Include="Content\menuico\salesChance.png" />
     <Content Include="Content\menuico\salesOrder.png" />
     <Content Include="Content\menuico\salesRPT.png" />
+    <Content Include="Content\menuico\stockmanage.png" />
     <Content Include="Content\menuico\systemSet.png" />
     <Content Include="DLL\JsonObject.dll" />
     <Content Include="modules\css\iconfont\demo.css" />

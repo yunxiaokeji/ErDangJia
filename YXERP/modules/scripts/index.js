@@ -23,10 +23,13 @@ define(function (require, exports, module) {
         var height = document.documentElement.clientHeight;
         $(".iframe-window").css("height", height - 95);
 
+        console.log($("#windowItems li.hover").prevAll().length);
+        console.log($(".window-box").width());
+
         //左右滚动
         if ($("#windowItems li.hover").prevAll().length * 127 + 40 > $(".window-box").width()) {
             $(".left-btn,.right-btn").show();
-            $("#windowItems").css("left", $(".window-box").width() - 40 - $("#windowItems li.hover").prevAll().length * 127);
+            $("#windowItems").css("left", $(".window-box").width() - 40 - ($("#windowItems li.hover").prevAll().length + 1) * 127);
         } else {
             $(".left-btn,.right-btn").hide();
             $("#windowItems").css("left", "0")

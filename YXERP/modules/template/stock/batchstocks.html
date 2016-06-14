@@ -3,8 +3,12 @@
 	var item = $data[i];
 %}
 <tr class="list-item">
-    <td>{%=item.ProductCode%}</td>
-    <td>{%=item.ProductName%}</td>
+    <td>
+        <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=item.ProductID%}&did={%=item.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-id="{%=item.ProductID%}">{%=item.ProductCode%}</a>
+    </td>
+    <td>
+         <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=item.ProductID%}&did={%=item.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-id="{%=item.ProductID%}">{%=item.ProductName%}</a>
+    </td>
     <td>{%=item.SaleAttrValueString%}</td>
     <td>{%=item.WareName%}</td>
     <td>{%=item.DepotCode%}</td>

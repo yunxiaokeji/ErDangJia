@@ -3,7 +3,9 @@
 	var item = $data[i];
 %}
 <tr class="list-item">
-    <td>{%=item.ProductCode%}</td>
+    <td>
+         <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=item.ProductID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-id="{%=item.ProductID%}">{%=item.ProductCode%}</a>
+    </td>
     <td>
         <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=item.ProductID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-id="{%=item.ProductID%}">{%=item.ProductName%}</a>
     </td>
@@ -12,6 +14,8 @@
     <td class="tRight">{%=item.CommonPrice.toFixed(2)%}</td>
     <td class="tRight">{%=item.Price.toFixed(2)%}</td>
     <td class='center'>{%=item.SaleCount%}</td>
+    <td class='center'>{%=item.StockIn-item.LogicOut%}</td>
+    <td class='center'>{%=item.StockIn-item.SaleCount%}</td>
     <td class='center'><div class="status" data-id="{%=item.ProductID%}" data-value="{%=item.Status==1%}"></div></td>
     <td class='center'>{%=item.CreateTime.toDate("yyyy-MM-dd")%}</td>
     <td class="center">

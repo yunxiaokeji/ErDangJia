@@ -12,12 +12,10 @@
 }
 
 <div class="header-box">
-    <span class="header-title left">采购审核</span>
+    <span class="header-title left">采购单号：@(model.DocCode)</span>
+    <a class="btn-back right" href="/Purchase/Purchases">返回</a>
 </div>
-<div class="content-body mTop20">
-    <div class="content-title">
-        <span class="titlename">单据编号：@(model.DocCode)</span>
-    </div>
+<div class="content-body mTop10">
     <ul class="content-info">
         <li><span class="column-title">总金额：</span>@(model.TotalMoney.ToString("f2"))</li>
         <li><span class="column-title">状态：</span>@(model.StatusStr)</li>
@@ -26,11 +24,13 @@
         <li><span class="column-title">仓库：</span>@(model.WareHouse!=null?model.WareHouse.Name:"")</li>
         <li style="width:100%;"><span class="column-title">备注：</span>@(model.Remark)</li>
     </ul>
-    <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navRemark">产品明细</li>
-        </ul>
-    </div>
+</div>
+<div class="tab-nav mTop30">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navRemark">产品明细</li>
+    </ul>
+</div>
+<div class="content-body">
     <table class="table-list mTop20">
         <tr class="tr-header">
             <td class="center"></td>
@@ -47,7 +47,9 @@
         { 
             <tr class="item" data-id="@(item.AutoID)" >
                 <td class="width50"> @if(item.Status==0) { <span class="ico-check check" data-id="@(item.AutoID)"></span>}</td>
-                <td><a href="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)&type=1" target="_blank">@(item.ProductName)</a></td>
+                <td>
+                    <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(item.ProductName)" data-id="@(item.ProductID)">@(item.ProductName)</a>
+                </td>
                 <td>@(item.Remark)</td>
                 <td class="center">@(item.UnitName)</td>
                 <td>@(item.BatchCode)</td>

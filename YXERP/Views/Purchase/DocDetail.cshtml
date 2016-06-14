@@ -13,7 +13,7 @@
 <div class="header-box">
     <span class="header-title left">采购单号：@(model.DocCode)</span>
 </div>
-<div class="content-body">
+<div class="content-body mTop10">
     <ul class="content-info">
         <li><span class="column-title">总金额：</span>@(model.TotalMoney.ToString("f2"))</li>
         <li><span class="column-title">状态：</span>@(model.StatusStr)</li>
@@ -22,12 +22,14 @@
         <li><span class="column-title">仓库：</span>@(model.WareHouse!=null?model.WareHouse.Name:"")</li>
         <li style="width:100%;"><span class="column-title">备注：</span>@(model.Remark)</li>
     </ul>
-     <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover " data-id="navProduct">产品明细</li>
-            <li data-id="navLog">操作日志</li>
-        </ul>
-    </div>
+</div>
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover " data-id="navProduct">产品明细</li>
+        <li data-id="navLog">操作日志</li>
+    </ul>
+</div>
+<div class="content-body">
     <table class="table-list mTop20 nav-partdiv" id="navProduct">
         <tr class="tr-header">
             <td class="tLeft">产品名称</td>
@@ -41,7 +43,9 @@
         @foreach (var item in model.Details)
         { 
             <tr class="item" >
-                <td><a href="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)" target="_blank"> @(item.ProductName)</a></td>
+                <td>
+                    <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(item.ProductName)" data-id="@(item.ProductID)">@(item.ProductName)</a>
+                </td>
                 <td>@(item.Remark)</td>
                 <td class="center">@(item.UnitName)</td>
                 <td>@(item.BatchCode)</td>

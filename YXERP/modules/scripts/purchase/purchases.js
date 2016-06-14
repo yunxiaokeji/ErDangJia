@@ -143,11 +143,11 @@ define(function (require, exports, module) {
             confirm("采购单作废后不可恢复,确认作废吗？", function () {
                 Global.post("/Purchase/InvalidPurchase", { docid: _self.docid }, function (data) {
                     if (data.Status) {
-                        Params.pageIndex = 1;
-                        _self.getList();
+                        alert("采购单作废成功");
                     } else {
-                        alert("作废失败！");
+                        alert("采购单作废失败");
                     }
+                    _self.getList();
                 });
             });
         });
@@ -156,11 +156,11 @@ define(function (require, exports, module) {
             confirm("采购单删除后不可恢复,确认删除吗？", function () {
                 Global.post("/Purchase/DeletePurchase", { docid: _self.docid }, function (data) {
                     if (data.Status) {
-                        Params.pageIndex = 1;
-                        _self.getList();
+                        alert("采购单删除成功");
                     } else {
-                        alert("删除失败！");
+                        alert("采购单删除失败");
                     }
+                    _self.getList();
                 });
             });
         });

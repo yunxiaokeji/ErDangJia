@@ -3,7 +3,9 @@
 	var item = $data[i];
 %}
 <tr class="list-item">
-    <td><a href="DocDetail/{%=item.DocID%}" target="_blank">{%=item.DocCode%}</a></td>
+    <td>
+        <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">{%=item.DocCode%}</a>
+    </td>
     <td>{%=item.WareHouse?item.WareHouse.Name:""%}</td>
     <td>{%=item.ProviderName||""%}</td>
     <td class="center {%=item.Status<2?'red':''%}">{%=item.StatusStr%}</td>

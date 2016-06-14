@@ -14,11 +14,8 @@
 }
 <div class="header-box">
     <span id="infoBillingCode" class="header-title left"></span>
-    <a class="btn-back right" href="/Finance/ReceivableBills" >
-        返回
-    </a>
 </div>
-<div class="content-body">
+<div class="content-body mTop10">
     <ul class="content-info">
         <li>
             <span class="column-title">应收金额：</span>
@@ -27,7 +24,7 @@
         <li>
             <span class="column-title">订单编号：</span>
             <span class="column-value">
-                <a href="/Orders/Detail" target="_blank" id="infoSourceCode"> </a>
+                <a href="javascript:void(0)" id="infoSourceCode" class="btn-open-window" data-url="/Orders/Detail" data-id="" data-name="订单详情-"></a>
             </span>
         </li>
         <li>
@@ -46,14 +43,16 @@
             <span class="column-value" id="infoCreateTime"></span>
         </li>
     </ul>
-    <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navPays">收款记录</li>
-            <li class="" data-id="navInvoices">开票记录</li>
-        </ul>
-        <div id="addPay" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"104010201"))">收款登记</div>
-    </div>
-    <table id="navPays" class="nav-partdiv table-list mTop20">
+</div>
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navPays">收款记录</li>
+        <li class="" data-id="navInvoices">开票记录</li>
+    </ul>
+    <div id="addPay" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"104010201"))">收款登记</div>
+</div>
+<div class="content-body">
+    <table id="navPays" class="nav-partdiv table-list">
         <tr class="tr-header">
             <td class="width150 tLeft">收款日期</td>
             <td class="">类型</td>
@@ -64,7 +63,7 @@
             <td class="width200 tRight">登记时间</td>
         </tr>
     </table>
-    <table id="navInvoices" class="nav-partdiv table-list mTop20 hide">
+    <table id="navInvoices" class="nav-partdiv table-list hide">
        <tr class="tr-header">
             <td class="width100 tLeft">发票类型</td>
             <td class="width50">状态</td>

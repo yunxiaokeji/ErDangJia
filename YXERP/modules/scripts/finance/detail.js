@@ -27,7 +27,7 @@
         var _self = this;
 
         $("#infoBillingCode").html("账单编号：" + model.BillingCode);
-        $("#infoSourceCode").attr("href", $("#infoSourceCode").attr("href") + "/" + model.DocID).html(model.DocCode);
+        $("#infoSourceCode").data("url", $("#infoSourceCode").data("url") + "/" + model.DocID).data("id", model.DocID).data("name", "采购单详情-" + model.DocCode).html(model.DocCode);
         $("#infoTotalMoney").html(model.TotalMoney.toFixed(2));
         $("#infoPayMoney").html(model.PayMoney.toFixed(2));
         $("#infoInvoiceMoney").html(model.InvoiceMoney.toFixed(2));
@@ -99,6 +99,8 @@
         var _self = this;
         if (empty) {
             $("#navPays .tr-header").nextAll().remove();
+        } else {
+            $("#navPays .nodata-tr").remove();
         }
         doT.exec("template/finance/storagebillingpays.html", function (template) {
             var innerhtml = template(items);
@@ -106,6 +108,10 @@
 
             $("#navPays .tr-header").after(innerhtml);
         });
+
+        if (empty && items.length == 0) {
+            $("#navPays .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+        }
     }
 
     //绑定开票列表
@@ -113,6 +119,8 @@
         var _self = this;
         if (empty) {
             $("#navInvoices .tr-header").nextAll().remove();
+        } else {
+            $("#navInvoices .nodata-tr").remove();
         }
         doT.exec("template/finance/storagebillinginvoices.html", function (template) {
             var innerhtml = template(items);
@@ -130,6 +138,9 @@
 
             $("#navInvoices .tr-header").after(innerhtml);
         });
+        if (empty && items.length == 0) {
+            $("#navInvoices .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+        }
     }
 
     //登记付款

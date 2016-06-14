@@ -85,30 +85,34 @@ namespace CloudSalesBusiness
             return ShoppingCartDAL.AddShoppingCartBatchIn(productid, detailsid, quantity, (int)ordertype, remark, guid, userid, operateip);
         }
 
-        public static bool UpdateCartQuantity(EnumDocType ordertype, string productid, string guid, int quantity, string userid)
+        public static bool UpdateCartQuantity(string autoid, string guid, int quantity, string userid)
         {
-            return ShoppingCartDAL.UpdateCartQuantity(productid, quantity, userid);
+            return CommonBusiness.Update("ShoppingCart", "Quantity", quantity, "AutoID=" + autoid + " and [GUID]='" + guid + "'");
         }
 
-        public static bool UpdateCartBatch(EnumDocType ordertype, string productid, string guid, string batch, string userid)
+        public static bool UpdateCartBatch(string autoid, string guid, string batch, string userid)
         {
-            return CommonBusiness.Update("ShoppingCart", "BatchCode", batch, "AutoID=" + productid);
+            return CommonBusiness.Update("ShoppingCart", "BatchCode", batch, "AutoID=" + autoid + " and [GUID]='" + guid + "'");
         }
 
-        public static bool UpdateCartPrice(EnumDocType ordertype, string productid, string guid, decimal price, string userid)
+        public static bool UpdateCartPrice(string autoid, string guid, decimal price, string userid)
         {
-            return ShoppingCartDAL.UpdateCartPrice(productid, price, userid);
+            return CommonBusiness.Update("ShoppingCart", "Price", price, "AutoID=" + autoid + " and [GUID]='" + guid + "'");
         }
 
         public static bool DeleteCart(EnumDocType ordertype, string guid, string productid, string name, string userid, string ip, string agentid, string clientid)
         {
-            bool bl = ShoppingCartDAL.DeleteCart(guid, productid, (int)ordertype);
+            bool bl = ShoppingCartDAL.DeleteCart(guid, productid, (int)ordertype, userid);
             if (bl)
             {
                 string msg = "移除产品：" + name;
                 if (ordertype == EnumDocType.Opportunity)
                 {
                     LogBusiness.AddLog(guid, EnumLogObjectType.Opportunity, msg, userid, ip, userid, agentid, clientid);
+                }
+                else if (ordertype == EnumDocType.Order)
+                {
+                    LogBusiness.AddLog(guid, EnumLogObjectType.Orders, msg, userid, ip, userid, agentid, clientid);
                 }
             }
             return bl;

@@ -27,7 +27,7 @@ namespace YXERP.Controllers
 
         public ActionResult Detail(string id)
         {
-            var model = StockBusiness.GetStorageDetail(id, CurrentUser.ClientID);
+            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
             if (model == null || string.IsNullOrEmpty(model.DocID))
             {
                 return Redirect("/Stock/StorageDoc");
@@ -59,7 +59,7 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Stock/ReturnIn");
             }
-            var model = StockBusiness.GetStorageDetail(id, CurrentUser.ClientID);
+            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
             if (model == null || string.IsNullOrEmpty(model.DocID) || model.Status > 0)
             {
                 return Redirect("/Stock/Detail/" + model.DocID);
@@ -97,7 +97,7 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Stock/Damaged");
             }
-            var model = StockBusiness.GetStorageDetail(id, CurrentUser.ClientID);
+            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
             if (model == null || string.IsNullOrEmpty(model.DocID))
             {
                 return Redirect("/Stock/Damaged");
@@ -138,7 +138,7 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Stock/Overflow");
             }
-            var model = StockBusiness.GetStorageDetail(id, CurrentUser.ClientID);
+            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
             if (model == null || string.IsNullOrEmpty(model.DocID))
             {
                 return Redirect("/Stock/Overflow");
@@ -179,7 +179,7 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Stock/HandOut");
             }
-            var model = StockBusiness.GetStorageDetail(id, CurrentUser.ClientID);
+            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
             if (model == null || string.IsNullOrEmpty(model.DocID))
             {
                 return Redirect("/Stock/HandOut");
@@ -241,7 +241,7 @@ namespace YXERP.Controllers
         public JsonResult GetStorageDocs(string keyWords, int pageIndex, int totalCount, int status = -1, int type = -1, string begintime = "", string endtime = "", string wareid = "")
         {
             int pageCount = 0;
-            List<StorageDoc> list = StockBusiness.GetStorageDocList(string.Empty, (EnumDocType)type, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, "", PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+            List<StorageDoc> list = StockBusiness.GetStorageDocList(string.Empty, (EnumDocType)type, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, "", PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("TotalCount", totalCount);
             JsonDictionary.Add("PageCount", pageCount);

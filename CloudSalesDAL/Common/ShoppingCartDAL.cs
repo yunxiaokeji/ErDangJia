@@ -67,32 +67,13 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddShoppingCartBatchIn", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool UpdateCartQuantity(string autoid, int quantity, string guid)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AutoID",autoid),
-                                     new SqlParameter("@Quantity",quantity),
-                                     new SqlParameter("@GUID" , guid)
-                                   };
-            return ExecuteNonQuery("P_UpdateCartQuantity", paras, CommandType.StoredProcedure) > 0;
-        }
-
-        public static bool UpdateCartPrice(string autoid, decimal price, string guid)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AutoID",autoid),
-                                     new SqlParameter("@Price",price),
-                                     new SqlParameter("@GUID" , guid)
-                                   };
-            return ExecuteNonQuery("P_UpdateCartPrice", paras, CommandType.StoredProcedure) > 0;
-        }
-
-        public static bool DeleteCart(string guid, string productid, int ordertype)
+        public static bool DeleteCart(string guid, string productid, int ordertype, string userid)
         {
             SqlParameter[] paras = {
                                        new SqlParameter("@GUID" , guid),
                                        new SqlParameter("@ProductID",productid),
-                                       new SqlParameter("@Ordertype",ordertype)
+                                       new SqlParameter("@Ordertype",ordertype),
+                                       new SqlParameter("@UserID",userid)
                                    };
             return ExecuteNonQuery("P_DeleteCart", paras, CommandType.StoredProcedure) > 0;
         }

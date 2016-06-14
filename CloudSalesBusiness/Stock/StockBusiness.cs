@@ -17,16 +17,16 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        public static List<StorageDoc> GetStorageDocList(string userid, EnumDocType type, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
+        public static List<StorageDoc> GetPurchases(string userid, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
-            DataSet ds = StockDAL.GetStorageDocList(userid, (int)type, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientID);
+            DataSet ds = StockDAL.GetPurchases(userid, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
 
             List<StorageDoc> list = new List<StorageDoc>();
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 StorageDoc model = new StorageDoc();
                 model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, clientID);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
                 model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
                 model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
 
@@ -35,24 +35,47 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        public static StorageDoc GetStorageDetail(string docid, string clientid)
+        public static List<StorageDoc> GetStorageDocList(string userid, EnumDocType type, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        {
+            DataSet ds = StockDAL.GetStorageDocList(userid, (int)type, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
+
+            List<StorageDoc> list = new List<StorageDoc>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                StorageDoc model = new StorageDoc();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
+                model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+
+                list.Add(model);
+            }
+            return list;
+        }
+
+        public static StorageDoc GetStorageDetail(string docid, string agentid, string clientid)
         {
             DataSet ds = StockDAL.GetStorageDetail(docid, clientid);
             StorageDoc model = new StorageDoc();
             if (ds.Tables.Contains("Doc") && ds.Tables["Doc"].Rows.Count > 0)
             {
                 model.FillData(ds.Tables["Doc"].Rows[0]);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, clientid);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
                 model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
 
                 model.DocTypeStr = CommonBusiness.GetEnumDesc<EnumDocType>((EnumDocType)model.DocType);
 
                 model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+
                 model.Details = new List<StorageDetail>();
                 foreach (DataRow item in ds.Tables["Details"].Rows)
                 {
                     StorageDetail details = new StorageDetail();
                     details.FillData(item);
+                    if (!string.IsNullOrEmpty(details.UnitID))
+                    {
+                        details.UnitName = ProductsBusiness.BaseBusiness.GetUnitByID(details.UnitID, clientid).UnitName;
+                    }
                     model.Details.Add(details);
                 }
             }
@@ -67,16 +90,16 @@ namespace CloudSalesBusiness
             {
                 case 0:
                     str = doctype == 6 ? "待入库"
-                        : doctype == 2 ? "待上架"
+                        : doctype == 2 ? "待审核"
                         : "待审核";
                     break;
                 case 1:
-                    str = doctype == 1 ? "部分上架"
+                    str = doctype == 1 ? "部分入库"
                         : doctype == 2 ? "部分出库"
                         : "部分审核";
                     break;
                 case 2:
-                    str = doctype == 1 ? "已上架"
+                    str = doctype == 1 ? "已入库"
                         : doctype == 2 ? "已出库"
                         : doctype == 6 ? "已入库"
                         : "已审核";

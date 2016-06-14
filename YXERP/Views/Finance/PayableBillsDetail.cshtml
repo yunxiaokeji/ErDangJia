@@ -14,9 +14,6 @@
 }
 <div class="header-box">
     <span id="infoBillingCode" class="header-title left"></span>
-    <a class="btn-back right" href="/Finance/PayableBills" >
-        返回
-    </a>
 </div>
 <div class="content-body mTop20">
     <ul class="content-info">
@@ -27,7 +24,7 @@
         <li>
             <span class="column-title">采购单号：</span>
             <span class="column-value">
-                <a href="/Purchase/DocDetail" target="_blank" id="infoSourceCode"> </a>
+                <a href="javascript:void(0)" id="infoSourceCode" class="btn-open-window" data-url="/Purchase/DocDetail" data-id="" data-name="采购单详情-"></a>
             </span>
         </li>
         <li>
@@ -46,15 +43,17 @@
             <span class="column-value" id="infoCreateTime"></span>
         </li>
     </ul>
-    <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navPays">付款记录</li>
-            <li class="" data-id="navInvoices">开票记录</li>
-        </ul>
-        <div id="addPay" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"104010101"))">付款登记</div>
-        <div id="addInvoice" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"104010102"))">发票登记</div>
-    </div>
-    <table id="navPays" class="nav-partdiv table-list mTop20">
+</div>
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navPays">付款记录</li>
+        <li class="" data-id="navInvoices">开票记录</li>
+    </ul>
+    <div id="addPay" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"104010101"))">付款登记</div>
+    <div id="addInvoice" class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"104010102"))">发票登记</div>
+</div>
+<div class="content-body">
+    <table id="navPays" class="nav-partdiv table-list">
         <tr class="tr-header">
             <td class="width150 tLeft">付款日期</td>
             <td class="">付款金额</td>
@@ -64,7 +63,7 @@
             <td class="width200 tRight">登记时间</td>
         </tr>
     </table>
-    <table id="navInvoices" class="nav-partdiv table-list mTop20 hide">
+    <table id="navInvoices" class="nav-partdiv table-list hide">
         <tr class="tr-header">
             <td class="width100 tLeft">发票类型</td>
             <td class="">开票金额</td>

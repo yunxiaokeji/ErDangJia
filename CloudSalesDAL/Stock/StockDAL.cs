@@ -11,9 +11,35 @@ namespace CloudSalesDAL
     public class StockDAL : BaseDAL
     {
         public static StockDAL BaseProvider = new StockDAL();
+
         #region 查询
 
-        
+        public static DataSet GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@TotalCount",SqlDbType.Int),
+                                       new SqlParameter("@PageCount",SqlDbType.Int),
+                                       new SqlParameter("@UserID", userid),
+                                       new SqlParameter("@Status", status),
+                                       new SqlParameter("@BeginTime", begintime),
+                                       new SqlParameter("@EndTime", endtime),
+                                       new SqlParameter("@KeyWords",keywords),
+                                       new SqlParameter("@WareID", wareid),
+                                       new SqlParameter("@ProviderID", providerid),
+                                       new SqlParameter("@PageSize",pageSize),
+                                       new SqlParameter("@PageIndex",pageIndex),
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+            paras[0].Value = totalCount;
+            paras[1].Value = pageCount;
+
+            paras[0].Direction = ParameterDirection.InputOutput;
+            paras[1].Direction = ParameterDirection.InputOutput;
+            DataSet ds = GetDataSet("P_GetPurchases", paras, CommandType.StoredProcedure, "Doc");
+            totalCount = Convert.ToInt32(paras[0].Value);
+            pageCount = Convert.ToInt32(paras[1].Value);
+            return ds;
+        }
 
         public static DataSet GetStorageDocList(string userid, int type, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
         {
@@ -170,7 +196,6 @@ namespace CloudSalesDAL
                                    };
             return ExecuteNonQuery("P_SubmitOverflowDoc", paras, CommandType.StoredProcedure) > 0;
         }
-
 
         #endregion
 

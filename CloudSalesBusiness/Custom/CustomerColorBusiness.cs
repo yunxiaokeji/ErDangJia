@@ -30,12 +30,7 @@ namespace CloudSalesBusiness.Custom
             foreach (DataRow dr in dt.Rows)
             {
                 CustomerColorEntity model = new CustomerColorEntity();
-                model.FillData(dr);
-                //model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
-                //if (!string.IsNullOrEmpty(model.CreateUserID))
-                //{
-                //    model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
-                //}
+                model.FillData(dr); 
                 list.Add(model);
             }
 

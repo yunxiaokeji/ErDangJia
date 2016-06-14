@@ -383,22 +383,23 @@
         Dialog.open({
             container: {
                 id: "show-customer-export",
-                header: "导入客户信息", 
+                header: "导入客户信息",
                 importUrl: '/Customer/CustomerImport',
-                yesFn: function () { 
+                yesFn: function() {
                     $('#upfileForm').form('submit', {
-                        onSubmit: function () {
+                        onSubmit: function() {
                             Dialog.setOverlay(guid, true);
                         },
-                        success: function (data) {
+                        success: function(data) {
                             Dialog.setOverlay(guid, false);
                             if (data == "操作成功") {
-                                Dialog.close(guid); 
-                            }  
-                            alert(data); 
+                                Dialog.close(guid);
+                            }
+                            alert(data);
                         }
                     });
                 },
+                docWidth: 450,
                 exportUrl: '/Customer/ExportFromCustomer',
                 exportParam: { test: true, model: 'Item|OwnItem' },
                 herf: '/Customer/CustomerImport',

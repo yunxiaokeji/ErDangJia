@@ -2,6 +2,9 @@
     ViewBag.Title = "公司信息";
 }
 
+@section css{
+    <link href="/modules/css/system.css" rel="stylesheet" />
+}
 @section scripts{
 <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
@@ -18,7 +21,7 @@
                 istoday: false,
                 choose: function (datas) {
                     end.min = datas; //开始日选好后，重置结束日的最小日期
-                    end.start = datas //将结束日的初始值设定为开始日
+                    end.start = datas; //将结束日的初始值设定为开始日
                 }
             };
 
@@ -39,144 +42,123 @@
 }
 <div class="header-box">
     <span class="header-title left">公司信息</span>
+     <a class="right btn btn-buy" id="buyClient" href="/Auction/BuyNow" >立即购买</a>
 </div>
-
-<div class="search-box">
-    <div class="search-header">
-        <ul class="search-tab search-stages">
-            <li data-id="0" class="hover">基本信息</li>
-            <li data-id="1">授权信息</li>
-            <li data-id="2">公司密钥</li>
-            <li data-id="3">订单列表</li>
-        </ul>
-    </div>
-</div>
+ 
 
 <div class="content-body">
-    <div name="clientInfo">
-        <ul class="table-add">
-            <li>
-                <span class="width80">公司名称：</span>
-                <input type="text" id="CompanyName" data-empty="* 必填" class="input verify" />
-            </li>
-            <li>
-                <span class="width80">公司Logo：</span>
-                <span id="Logo"></span>
-            </li>
-            <li>
-                <span class="width80">联系人：</span>
-                <span><input type="text" id="ContactName" class="verify" data-empty="联系人不能为空!" /></span>
-            </li>
-            <li>
-                <span class="width80">联系电话：</span>
-                <span><input type="text" id="MobilePhone" class="verify"  maxlength="11" data-empty="电话不能为空!" /></span>
-            </li>
-            <li>
-                <span class="width80">办公电话：</span>
-                <span><input type="text" id="OfficePhone" /></span>
-            </li>
-            <li>
-                <span class="width80">行业：</span>
-                <span>
-                     <select id="Industry">
-                        @foreach (CloudSalesEntity.Industry model in (List<CloudSalesEntity.Industry>)ViewBag.Industry)
-                        {
-                            <option value="@(model.IndustryID)" data-name="@(model.Name)">@(model.Name)</option>
-                        }
-                        <option value="">其他行业</option>
-                    </select>
-                </span>
-            </li>
-            <li>
-                <span class="width80">地址：</span>
-                <span id="citySpan">
-            
-                </span>
-            </li>
-            <li>
-                <span class="width80"></span>
-                <span><input type="text" placeholder="详细地址..." class="width300" id="Address" /></span>
-            </li>
-            <li>
-                <span class="width80">备注：</span>
-                <textarea id="Description" style="max-width:800px;max-height:600px;"></textarea>
-            </li>
-        </ul>
-
-        <img class="brand-img hide" id="PosterDisImg" alt="" />
-
-        <div class="mTop20">
-            <span  class="btn @(ExpandClass.IsLimits(HttpContext.Current,"108020701"))" id="btnSaveClient" >保存</span>
-            <a href="javascript:void(0);" onclick="history.go(-1)"  class="btn mLeft10">返回</a>
-        </div>
-    </div>
-
-    <div class="hide" name="clientInfo">
-        <ul class="table-add">
-            <li>
-                <span class="width100">当前人数上限：</span><span id="UserQuantity"></span>
-            </li>
-            <li>
-                <span class="width100">上限日期：</span><span id="EndTime"></span>
-            </li>
-            <li>
-                <span class="width100">剩余使用还有：</span><span id="agentRemainderDays"></span><span>天</span>
-            </li>
-        </ul>
-
-        <div class="mTop20">
-            <a class="btn btn-buy @(ExpandClass.IsLimits(HttpContext.Current,"108020702"))" href="/Auction/BuyNow" >立即购买</a>
-        </div>
-    </div>
-
-    <div class="hide" name="clientInfo">
-        <ul class="table-add">
-            <li>
-                <span class="width100">公司身份(cid)：</span><span id="cid"></span>
-            </li>
-           @* <li>
-                <span class="red">*您需要输入登录密码才能查看公司密钥</span>
-            </li>*@
-         @*    <li>
-                <span class="width100">登录密码：</span><span><input  type="password" placeholder="请输入密码"/></span>
-                <span><input type="button" id="btn-getKey" class="btn" value="获取key"/></span>
-            </li>*@
-            <li>
-                <span class="width100">公司密钥(key)：</span><span id="ckey"></span>
-            </li>
-        </ul>
-
-      @*  <div class="mTop20">
-            <a class="btn btn-buy @(ExpandClass.IsLimits(HttpContext.Current,"108020702"))" href="/Auction/BuyNow" >立即购买</a>
-        </div>*@
-    </div>
-
-    <div class="hide" name="clientInfo">
-        <div id="OrderTypes" class="left"></div>
-        <div id="OrderStatus" class="left mLeft20"></div>
-
-        <div class="left mLeft20">
-            <span class="width80">订单时间：</span><input type="text" id="orderBeginTime"  class="input"  />
-            <span style="padding:0px 5px 0px 3px;">至</span><input type="text" id="orderEndTime"  class="input"  />
-            <span class="btn mLeft10" id="SearchClientOrders">搜索</span>
-
-        </div>
+   
+    <div class="content-title mTop10">
+        <div class="left titlename bolder" id="divCompanyName"></div>
+        <div class="left iconfont  ico-edit mLeft20" id="updateClient"></div> 
         <div class="clear"></div>
+    </div>
+    <ul class="content-info">
+            <li>
+                <span class="column-title">公司名称：</span>
+                <span id="lblCompanyName"></span>
+            </li>
 
+            <li>
+                <span class="column-title">联系人：</span>
+                <span id="lblContactName" ></span>
+            </li>
+            <li>
+                <span class="column-title">联系电话：</span>
+                <span id="lblMobilePhone"></span>
+            </li>
+            <li>
+                <span class="column-title">办公电话：</span>
+                <span  id="lblOfficePhone"></span>
+            </li>
+            <li>
+                <span class="column-title">行业：</span>
+                <span id ="lblIndustry"> 
+                </span>
+            </li>
+            <li>
+                <span class="column-title">地址：</span>
+                <span id="lblcitySpan"> </span>
+            </li>
+            <li>
+                <span class="column-title">详细地址：</span>
+                <span id="lblAddress"></span>
+            </li>
+            <li>
+                <span class="column-title">当前人数上限：</span><span id="UserQuantity"></span>
+            </li>
+            <li>
+                <span class="column-title">上限日期：</span><span id="EndTime"></span>
+            </li>
+            <li>
+                <span class="column-title">剩余使用还有：</span><span id="agentRemainderDays"></span><span>天</span>
+            </li>
+            <li>
+                <span class="column-title">公司Logo：</span>
+                <img class="brand-img hide" width="60px;" height="60px;" id="PosterDisImg" alt=""/>
+            </li>
+        <li>
+            <span class="column-title">备注：</span>
+            <p id="lblDescription"></p>
+        </li>
+        <li class="hide">
+            <select id="industrytemp">
+                @foreach (CloudSalesEntity.Industry model in (List<CloudSalesEntity.Industry>) ViewBag.Industry)
+                {
+                    <option value="@(model.IndustryID)" data-name="@(model.Name)">@(model.Name)</option>
+                }
+                <option value="">其他行业</option>
+            </select>
+        </li>
+    </ul>
+
+    <div class="search-header" style="margin-left: 0px;">
+        <ul class="search-tab search-stages">
+            <li data-id="0" class="hover">订单列表</li>
+            <li data-id="1">授权记录</li>       
+        </ul>
+    </div>
+    <div name="clientInfo">
+        <div class="mTop20">
+            <div id="OrderTypes" class="left"></div>
+            <div id="OrderStatus" class="left mLeft20"></div>
+
+            <div class="left mLeft20">
+                <span class="width80">订单时间：</span><input type="text" id="orderBeginTime" class="input"/>
+                <span style="padding: 0px 5px 0px 3px;">至</span><input type="text" id="orderEndTime" class="input"/>
+                <span class="btn mLeft10" id="SearchClientOrders">搜索</span>
+
+            </div>
+            <div class="clear"></div>
+        </div>
         <table class="table-list mTop10">
-            <tr class="tr-header">
+            <tr class="tr-header" id="client-order">
                 <td class="tLeft minwidth70">订单时间</td>
                 <td class="width200">购买人数</td>
                 <td class="width150">购买年数</td>
                 <td class="width150">金额</td>
-                <td class="width200">订单类型</td>     
-                <td class="width200">订单状态</td>     
+                <td class="width200">订单类型</td>
+                <td class="width200">订单状态</td>
                 <td class="width150">创建人</td>
                 <td class="width150">操作</td>
             </tr>
         </table>
 
         <div id="pager" class="mTop20"></div>
+    </div>
+
+     <div class="hide" name="clientInfo" style="border-bottom:none;">
+        <table class="table-list" id="tb-clientLog">
+            <tr class="tr-header" id="client-header">
+                <td class="">授权类型</td>
+                <td class="">授权方式</td>
+                <td class="">授权人数</td>
+                <td class="">开始时间</td>
+                <td class="">结束时间</td>
+                <td class="">创建时间</td>
+            </tr>
+        </table>
+        <div id="pager2" class="mTop20"></div>
     </div>
 </div>
 

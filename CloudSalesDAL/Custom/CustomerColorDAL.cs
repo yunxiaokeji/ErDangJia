@@ -11,7 +11,21 @@ namespace CloudSalesDAL.Custom
     public class CustomerColorDAL : BaseDAL
     {
         public static CustomerColorDAL BaseProvider = new CustomerColorDAL();
-        public int InsertCustomerColor(string colorName,  string colorValue, string customerid,string agentid, string clientid, string userid ,int status=0 )
+
+        public DataTable GetCustomerColors(string clientid, int colorid=0)
+        {
+            string sqlText = "select  *  from CustomerColor where status <>9 and ClientID=@ClientID ";
+            SqlParameter[] paras = { new SqlParameter("@ClientID", clientid), };
+            if (colorid>0)
+            {
+                paras.SetValue(new SqlParameter("@ColorID", colorid), paras.Length);
+                sqlText += " and ColorID=@ColorID";
+            }
+            sqlText += "   order by ColorID asc ";
+            return GetDataTable(sqlText, paras, CommandType.Text);
+        }
+
+        public int InsertCustomerColor(string colorName,  string colorValue,string agentid, string clientid, string userid ,int status=0 )
         {
             int result = 0;
             SqlParameter[] paras = {  new SqlParameter("@Result",result),

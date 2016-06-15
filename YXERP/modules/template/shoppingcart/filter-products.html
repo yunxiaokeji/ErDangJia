@@ -13,6 +13,14 @@
         <a class="btn-open-window name" data-url="/Products/ChooseDetail?pid={%=item.ProductID%}&did={%=item.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-id="{%=item.ProductID%}">
             {%=item.ProductName%}
         </a>
+        <div class="sales-stock">
+            <span class="left">
+                销量：{%=item.SaleCount%}
+            </span>
+            <span class="right">
+                逻辑库存：{%=item.StockIn - item.LogicOut%}
+            </span>
+        </div>
         <div class="btnAddCart" data-pid="{%=item.ProductID%}" data-did="{%=item.ProductDetailID%}">
             选择产品
         </div>

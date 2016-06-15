@@ -341,25 +341,17 @@
         var _self = this;
 
         //选择规格
-        $("#saleattr li.cart-value").click(function () {
+        $("#productDetails li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover");
                 _this.siblings().removeClass("hover");
                 for (var i = 0, j = model.ProductDetails.length; i < j; i++) {
-
-                    var bl = true, vales = model.ProductDetails[i].AttrValue, unitid = model.ProductDetails[i].UnitID;
-                    $(".salesattr li.hover").each(function () {
-                        if (vales.indexOf($(this).data("id")) < 0) {
-                            bl = false;
-                        }
-                    });
-
-                    if (bl) {
+                    if (model.ProductDetails[i].ProductDetailID == _this.data("id")) {
                         $("#addcart").prop("disabled", false).removeClass("addcartun");
                         _self.detailid = model.ProductDetails[i].ProductDetailID;
                         $("#price").html("￥" + model.ProductDetails[i].Price.toFixed(2));
-                        $("#productimg").attr("src", model.ProductDetails[i].ImgS);
+                        $("#productimg").attr("src", model.ProductDetails[i].ImgS || model.ProductImage);
                         $("#productStockQuantity").text(model.ProductDetails[i].StockIn - model.ProductDetails[i].LogicOut);
                         return;
                     } else {
@@ -397,11 +389,7 @@
             $("body").append(temp);
             temp.animate({ top: cart.top, left: cart.left }, 500, function () {
                 temp.remove();
-                var remark = "";
-                $("#saleattr ul.salesattr").each(function () {
-                    var _this = $(this);
-                    remark += "[" + _this.find(".cart-attrkey").html() + _this.find("li.hover").html() + "]";
-                });
+
                 Global.post("/ShoppingCart/AddShoppingCart", {
                     ordertype: _self.type,
                     guid: _self.guid,
@@ -410,7 +398,7 @@
                     quantity: $("#quantity").val(),
                     unitid: $("#small").data("id"),
                     name: $("#addcart").data("name"),
-                    remark: remark
+                    remark: $("#productDetails li.hover").data("name")
                 }, function (data) {
                     if (data.Status) {
                         Easydialog.close();
@@ -430,13 +418,9 @@
         //绑定子产品详情
         for (var i = 0, j = model.ProductDetails.length; i < j; i++) {
             if (model.ProductDetails[i].ProductDetailID == did) {
-                var list = model.ProductDetails[i].SaleAttrValue.split(",");
-                for (var ii = 0, jj = list.length; ii < jj; ii++) {
-                    var item = list[ii].split(":");
-                    $(".cart-attr-item[data-id='" + item[0] + "']").find("li[data-id='" + item[1] + "']").addClass("hover");
-                }
+                $("#productDetails li[data-id='" + _self.detailid + "']").addClass("hover");
                 $("#price").html("￥" + model.ProductDetails[i].Price.toFixed(2));
-                $("#productimg").attr("src", model.ProductDetails[i].ImgS);
+                $("#productimg").attr("src", model.ProductDetails[i].ImgS || model.ProductImage);
                 $("#productStockQuantity").text(model.ProductDetails[i].StockIn - model.ProductDetails[i].LogicOut);
                 break;
             }

@@ -68,6 +68,9 @@ define(function (require, exports, module) {
                         bl = true;
                     }
                 });
+                if ($(e.target).data("itemid") == obj.data("itemid") || $(e.target).attr("id") == obj.data("itemid")) {
+                    bl = true;
+                }
                 if (!bl) {
                     obj.removeClass("hover");
                     $("#" + obj.data("itemid")).hide();

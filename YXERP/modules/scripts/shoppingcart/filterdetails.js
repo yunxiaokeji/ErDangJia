@@ -6,6 +6,7 @@ define(function (require, exports, module) {
     require("cart");
 
     var ObjectJS = {};
+
     //添加页初始化
     ObjectJS.init = function (model, detailid, ordertype, guid) {
         var _self = this;
@@ -27,32 +28,27 @@ define(function (require, exports, module) {
         } else {
             $(".choose-div").hide();
         }
+
+        $(".product-info").css("width", $(".content-body").width() - 450);
         
     }
+
     //绑定事件
     ObjectJS.bindEvent = function (model) {
         var _self = this;
 
         //选择规格
-        $("#saleattr li.value").click(function () {
+        $("#productDetails li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover");
                 _this.siblings().removeClass("hover");
                 for (var i = 0, j = model.ProductDetails.length; i < j; i++) {
-
-                    var bl = true, vales = model.ProductDetails[i].AttrValue, unitid = model.ProductDetails[i].UnitID;
-                    $(".salesattr li.hover").each(function () {
-                        if (vales.indexOf($(this).data("id")) < 0) {
-                            bl = false;
-                        }
-                    });
-
-                    if (bl) {
+                    if (model.ProductDetails[i].ProductDetailID == _this.data("id")) {
                         $("#addcart").prop("disabled", false).removeClass("addcartun");
                         _self.detailid = model.ProductDetails[i].ProductDetailID;
-                        $("#price").html("￥" + model.ProductDetails[i].Price.toFixed(2));
-                        $("#productimg").attr("src", model.ProductDetails[i].ImgS);
+                        $("#price").text("￥" + model.ProductDetails[i].Price.toFixed(2));
+                        $("#productimg").attr("src", (model.ProductDetails[i].ImgS || model.ProductImage));
                         $("#productStockQuantity").text(model.ProductDetails[i].StockIn - model.ProductDetails[i].LogicOut);
                         return;
                     } else {
@@ -91,10 +87,6 @@ define(function (require, exports, module) {
             temp.animate({ top: cart.top, left: cart.left }, 500, function () {
                 temp.remove();
                 var remark = "";
-                $("#saleattr ul.salesattr").each(function () {
-                    var _this = $(this);
-                    remark += "[" + _this.find(".attrkey").html() + _this.find("li.hover").html() + "]";
-                });
                 Global.post("/ShoppingCart/AddShoppingCart", {
                     productid: _self.productid,
                     detailsid: _self.detailid,
@@ -103,7 +95,7 @@ define(function (require, exports, module) {
                     isBigUnit: 0,
                     ordertype: _self.ordertype,
                     guid: _self.guid,
-                    remark: remark
+                    remark: $("#productDetails li.hover").data("name")
                 }, function (data) {
                     if (data.Status) {
                         $("#quantity").val("1");
@@ -114,6 +106,7 @@ define(function (require, exports, module) {
         });
 
     }
+
     //绑定信息
     ObjectJS.bindDetail = function (model) {
         var _self = this;
@@ -121,13 +114,9 @@ define(function (require, exports, module) {
         //绑定子产品详情
         for (var i = 0, j = model.ProductDetails.length; i < j; i++) {
             if (model.ProductDetails[i].ProductDetailID == _self.detailid) {
-                var list = model.ProductDetails[i].SaleAttrValue.split(",");
-                for (var ii = 0, jj = list.length; ii < jj; ii++) {
-                    var item = list[ii].split(":");
-                    $(".attr-item[data-id='" + item[0] + "']").find("li[data-id='" + item[1] + "']").addClass("hover");
-                }
-                $("#price").html("￥" + model.ProductDetails[i].Price.toFixed(2));
-                $("#productimg").attr("src", model.ProductDetails[i].ImgS);
+                $("#productDetails li[data-id='" + _self.detailid + "']").addClass("hover");
+                $("#price").text("￥" + model.ProductDetails[i].Price.toFixed(2));
+                $("#productimg").attr("src", model.ProductDetails[i].ImgS || model.ProductImage);
                 $("#productStockQuantity").text(model.ProductDetails[i].StockIn - model.ProductDetails[i].LogicOut);
                 break;
             }

@@ -774,12 +774,7 @@ namespace CloudSalesBusiness
             {
                 model.FillData(ds.Tables["Product"].Rows[0]);
 
-                //单位
-                model.BigUnit = new ProductUnit();
-                model.BigUnit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.BigUnitID + "'").FirstOrDefault());
-
-                model.SmallUnit = new ProductUnit();
-                model.SmallUnit.FillData(ds.Tables["Unit"].Select("UnitID='" + model.UnitID + "'").FirstOrDefault());
+                model.SmallUnit = GetUnitByID(model.UnitID, model.ClientID);
 
                 model.AttrLists = new List<ProductAttr>();
                 model.SaleAttrs = new List<ProductAttr>();
@@ -793,49 +788,25 @@ namespace CloudSalesBusiness
                     //参数
                     if (attrModel.Type == (int)EnumAttrType.Parameter)
                     {
-                        foreach (DataRow valuetr in ds.Tables["Values"].Select("AttrID='" + attrModel.AttrID + "'"))
+                        foreach (var value in GetProductAttrByID(attrModel.AttrID, model.ClientID).AttrValues)
                         {
-                            AttrValue valueModel = new AttrValue();
-                            valueModel.FillData(valuetr);
-                            if (model.AttrValueList.IndexOf(valueModel.ValueID) >= 0)
+                            if (model.AttrValueList.IndexOf(value.ValueID) >= 0)
                             {
-                                attrModel.AttrValues.Add(valueModel);
+                                attrModel.AttrValues.Add(value);
                                 model.AttrLists.Add(attrModel);
                                 break;
                             }
                         }
                        
                     }
-                    else
-                    {
-                        model.SaleAttrs.Add(attrModel);
-                    }
                 }
 
                 model.ProductDetails = new List<ProductDetail>();
                 foreach (DataRow item in ds.Tables["Details"].Rows)
                 {
-
                     ProductDetail detail = new ProductDetail();
                     detail.FillData(item);
 
-                    //填充存在的规格
-                    foreach (var attrModel in model.SaleAttrs)
-                    {
-                        foreach (DataRow valuetr in ds.Tables["Values"].Select("AttrID='" + attrModel.AttrID + "'"))
-                        {
-                            AttrValue valueModel = new AttrValue();
-                            valueModel.FillData(valuetr);
-                            if (detail.AttrValue.IndexOf(valueModel.ValueID) >= 0)
-                            {
-                                if (attrModel.AttrValues.Where(v => v.ValueID == valueModel.ValueID).Count() == 0)
-                                {
-                                    attrModel.AttrValues.Add(valueModel);
-                                }
-                                break;
-                            }
-                        }
-                    }
                     model.ProductDetails.Add(detail);
                 }
             }

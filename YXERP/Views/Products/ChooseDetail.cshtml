@@ -20,41 +20,32 @@
         <div class="image left">
             <img id="productimg" src="@(model.ProductImage)" />
         </div>
-        <div class="product-name left">
+        <div class="product-info left">
             <h1>@(model.ProductName)</h1>
-            <ul class="price">
-                <li class="column">销&nbsp;&nbsp;售&nbsp;&nbsp;价：</li>
-                <li id="price" class="salesprice">￥@(model.Price.ToString("f2"))</li>
-            </ul>
-            <div class="attrs" id="saleattr">
-                @foreach (var attr in model.SaleAttrs)
-                { 
-                    <ul class="attr-item salesattr" data-id="@attr.AttrID">
-                        <li class="attrkey">@attr.AttrName：</li>
-                        <li class="attrValues">
-                            <ul>
-                                @foreach (var value in attr.AttrValues)
-                                { 
-                                    <li class="value" data-id="@value.ValueID">@value.ValueName</li>
-                                }
-                            </ul>
-                        </li>
-                    </ul>
-                }
-                <ul class="attr-item">
-                    <li class="attrkey">单位：</li>
-                    <li class="attrValues">
-                        <label class="mLeft10" id="small" data-id="@(model.SmallUnit.UnitID)">@(model.SmallUnit.UnitName)</label>
-                    </li>
+            <div class="mTop20">
+                <ul class="product-details" id="productDetails">
+                    @foreach (var item in model.ProductDetails)
+                    { 
+                        <li data-id="@item.ProductDetailID" data-name="@(item.Remark)">@(string.IsNullOrEmpty(item.Remark)?"默认规格":item.Remark.Replace('[',' ').Replace(']',' '))</li>
+                    }
                 </ul>
-                <ul class="attr-item">
-                    <li class="attrkey">库存：</li>
-                    <li class="attrValues">
-                        <label class="mLeft10" id="productStockQuantity">0</label>
+                <div class="clear"></div>
+                <ul class="price-unit pTop10">
+                    <li>
+                        <span class="">价格：</span>
+                        <label class="salesprice" id="price">￥@(model.Price.ToString("f2"))</label>
+                    </li>
+                    <li>
+                        <span class="">单位：</span>
+                        <label class="" id="small" data-id="@(model.SmallUnit.UnitID)">@(model.SmallUnit.UnitName)</label>
+                    </li>
+                    <li>
+                        <span class="">库存：</span>
+                        <label class="" id="productStockQuantity">0</label>
                     </li>
                 </ul>
            </div>
-            <div class="choose-div">
+           <div class="choose-div">
                 <div class="choose-quantity left">
                     <input type="text" value="1" id="quantity" />
                     <span class="quantity-add" id="quantityadd">+</span>

@@ -101,12 +101,6 @@ namespace YXERP.Controllers
 
         #region Ajax
 
-        #region 供应商
-
-        
-
-        #endregion
-
         public JsonResult SubmitPurchase(string wareid, string providerid, string remark)
         {
             var bl = StockBusiness.CreateStorageDoc(wareid, providerid, remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
@@ -117,7 +111,6 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
 
         public JsonResult GetPurchases(string keyWords, int pageIndex, int totalCount, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "")
         {

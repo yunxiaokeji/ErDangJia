@@ -6,31 +6,32 @@
         ChooseUser = require("chooseuser"),
         Easydialog = require("easydialog");
     require("pager");
+    require("colormark");
 
     var ObjectJS = {}, CacheIems = [], CacheTypes = [];
+    ObjectJS.ColorList = [];
     //初始化
-    ObjectJS.init = function (customerid, MDToken) {
+    ObjectJS.init = function (customerid, MDToken, colorList) {
         var _self = this;
         _self.customerid = customerid;
+        _self.ColorList=JSON.parse(colorList.replace(/&quot;/g, '"'));
         _self.bindStyle();
 
         if (!MDToken) {
             $("#btnShareMD").hide();
         }
-
+     
         Global.post("/Customer/GetCustomerByID", { customerid: customerid }, function (data) {
             if (data.model.CustomerID) {
+                $('#customercolor').data('value', data.model.Mark); 
                 _self.bindCustomerInfo(data.model);
                 _self.bindEvent(data.model);
             }
         });
-
         _self.initTalk(customerid);
-    }
-
+    } 
     //样式
     ObjectJS.bindStyle = function () {
-
         //隐藏操作按钮
         $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
         $("#recoveryCustomer,#loseCustomer,#closeCustomer").hide();
@@ -39,7 +40,6 @@
 
     //基本信息
     ObjectJS.bindCustomerInfo = function (model) {
-
         var _self = this;
 
         if (model.Status == 2 || model.Status == 3) {
@@ -47,7 +47,7 @@
         } else {
             $("#lblCustomerName").html(model.Name);
         }
-
+       
         $("#lblMobile").text(model.MobilePhone || "--");
         $("#lblEmail").text(model.Email || "--");
         $("#lblIndustry").text(model.Industry ? model.Industry.Name : "--");
@@ -69,7 +69,6 @@
         }
         $("#lblOwner").text(model.Owner ? model.Owner.Name : "--");
         $("#changeOwner").data("userid", model.OwnerID);
-
         $("#lblReamrk").text(model.Description);
 
         if (model.Type == 0) {
@@ -84,17 +83,26 @@
     //绑定事件
     ObjectJS.bindEvent = function (model) {
         var _self = this;
-
-        //$(window).resize(function () {
-        //    _self.bindStyle();
-        //});
+        $('#customercolor').markColor({
+            isAll: false,
+            xRepair:30,
+            data: _self.ColorList,
+            onChange: function (obj, callback) { 
+                if (obj.data("value") < 0) {
+                    alert("不能标记此选项!"); return false;
+                }
+                Global.post("/Customer/UpdateCustomMark", { ids: model.CustomerID, mark: $('#customercolor').data('value') }, function (data) {
+                    callback && callback(data.status);
+                });
+            }
+        }); 
 
         //隐藏下拉
-        $(document).click(function (e) {
+        $(document).click(function(e) {
             if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
                 $(".dropdown-ul").hide();
             }
-        })
+        });
 
         //编辑客户信息
         $("#updateCustomer").click(function () {

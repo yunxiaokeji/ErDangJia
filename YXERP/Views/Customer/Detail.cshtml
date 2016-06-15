@@ -1,6 +1,8 @@
 ﻿@{
     ViewBag.Title = "客户详情";
-}
+    var colorData = (List<CloudSalesEntity.CustomerColorEntity>)ViewBag.ColorData;
+} 
+
 @section css{
     <link href="/modules/css/customer.css" rel="stylesheet" />
 }
@@ -9,17 +11,18 @@
     <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/customer/detail"], function (ObjectJS) {
-            ObjectJS.init('@ViewBag.ID', '@ViewBag.MDToken');
+            ObjectJS.init('@ViewBag.ID', '@ViewBag.MDToken', '@Html.ToJSONString(colorData)');
         });
     </script>
 }
 <div class="header-box">
     <div id="lblType" class="customer-type"></div>
-    <div id="lblCustomerName" class="left header-title mLeft10"></div>
-    <div id="updateCustomer" class="iconfont ico-edit"></div>
-
+    <div id="lblCustomerName" class="left header-title mLeft10"></div> 
+    <div id="customercolor"  class="left mark mTop8 mLeft30" data-id="" data-value=""></div>
+    <div id="updateCustomer"  class=" iconfont ico-edit" style="margin-left: 10px;"></div>
     <div class="btn999 right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" id="closeCustomer">关闭</div>
-    <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current,"101019005"))" id="recoveryCustomer">恢复</div>
+    <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "101019005"))" id="recoveryCustomer">恢复</div>
+   
 
     <div class="right btn-share btn-share-md mRight20" id="btnShareMD">分享到明道</div>
 </div>

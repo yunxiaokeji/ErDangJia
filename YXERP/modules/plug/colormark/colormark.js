@@ -30,11 +30,11 @@ define(function (require, exports, module) {
 
             if (obj.data("value") >= 0) {
                 obj.css("background-color", $.fn.getColor(obj.data("value"), opts));
-                //if (obj.data("value") == 0) {
-                //    obj.css("border", "solid 1px #ccc");
-                //} else { 
-                //    obj.css("border", "solid 1px " + $.fn.getColor(obj.data("value"), opts)); 
-                //}
+                if (obj.data("value") == 0) {
+                    obj.css("border", "solid 1px #ccc");
+                } else { 
+                    obj.css("border", "solid 1px " + $.fn.getColor(obj.data("value"), opts)); 
+                }
             } else {
                 obj.addClass("mark-color-all");
             }

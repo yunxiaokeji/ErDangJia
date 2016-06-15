@@ -34,7 +34,7 @@ namespace YXERP.Controllers
             ViewBag.Title = "我的客户";
             ViewBag.Type = (int)EnumSearchType.Myself;
             ViewBag.ColorData =
-              SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.AgentID, CurrentUser.ClientID).ToList();
+              SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.ClientID).ToList();
             return View("Customers");
         }
         public ActionResult CustomerImport()
@@ -46,7 +46,7 @@ namespace YXERP.Controllers
             ViewBag.Title = "下属客户";
             ViewBag.Type = (int)EnumSearchType.Branch;
             ViewBag.ColorData =
-                SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.AgentID, CurrentUser.ClientID).ToList();
+                SystemBusiness.BaseBusiness.GetCustomerColors( CurrentUser.ClientID).ToList();
             return View("Customers");
         }
 
@@ -55,7 +55,7 @@ namespace YXERP.Controllers
             ViewBag.Title = "所有客户";
             ViewBag.Type = (int)EnumSearchType.All;
             ViewBag.ColorData =
-              SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.AgentID, CurrentUser.ClientID).ToList();
+              SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.ClientID).ToList();
             return View("Customers");
         }
 

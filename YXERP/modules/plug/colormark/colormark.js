@@ -18,7 +18,8 @@ define(function (require, exports, module) {
         }
         $.fn.markColor.defaults = {
             isAll: false,
-            data: [], 
+            data: [],
+            xRepair:0,
             dataValue: "ColorID",
             dataColor: "ColorValue",
             dataText: "ColorName",
@@ -43,9 +44,13 @@ define(function (require, exports, module) {
                 $(".mark-color-list").hide();
                 var _this = $(this); 
                 var position = _this.position();
-                var top = position.top+20;
+                var top = position.top + 20;
+                var left = position.left - 9;
                 if ($(document).height() - position.top < 197) {
                     top = position.top - 217;
+                }
+                if (opts.xRepair != 0) {
+                    left = position.left + opts.xRepair;
                 }
                 if ($("#" + _this.data("itemid")).length == 0) {
                     var _colorBody = $("<ul id='" + _this.data("itemid") + "'  class='mark-color-list'></ul>");
@@ -87,10 +92,10 @@ define(function (require, exports, module) {
                         }
                         _colorBody.hide();
                     }); 
-                    _colorBody.css({ "top": top, "left": position.left - 9 }).show();
+                    _colorBody.css({ "top": top, "left": left }).show();
                     $("body").append(_colorBody);
                 } else {
-                    $("#" + _this.data("itemid")).css({ "top": top, "left": position.left - 9 }).show();
+                    $("#" + _this.data("itemid")).css({ "top": top, "left": left }).show();
                 }
                 return false;
             });

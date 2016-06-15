@@ -156,14 +156,14 @@
             }
         });
         $("#dropdown").click(function () { 
-            var position = $(".ico-dropdown-white").position();  
-            $(".dropdown-ul").css({ "top": position.top + 22, "left": position.left - 80 }).show().mouseleave(function () {
+            var position = $(".dropdown").position();
+            $(".dropdown-ul").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
                 $(this).hide();
             });
         });
          
         $(document).click(function (e) { 
-            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass(".ico-dropdown-white")) {
+            if (!$(e.target).parents().hasClass("dropdown-ul")  && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
                 $(".dropdown-ul").hide();
             }
         });
@@ -222,8 +222,8 @@
         //批量标记
         $("#batchMark").markColor({
             isAll: true,
-            data: _self.ColorList,
-            onChange: function (obj, callback) {
+            data: _self.ColorList, 
+            onChange: function (obj, callback) { 
                 var checks = $(".table-list .ico-checked");
                 if (checks.length > 0) {
                     var ids = "";
@@ -383,22 +383,23 @@
         Dialog.open({
             container: {
                 id: "show-customer-export",
-                header: "导入客户信息", 
+                header: "导入客户信息",
                 importUrl: '/Customer/CustomerImport',
-                yesFn: function () { 
+                yesFn: function() {
                     $('#upfileForm').form('submit', {
-                        onSubmit: function () {
+                        onSubmit: function() {
                             Dialog.setOverlay(guid, true);
                         },
-                        success: function (data) {
+                        success: function(data) {
                             Dialog.setOverlay(guid, false);
                             if (data == "操作成功") {
-                                Dialog.close(guid); 
-                            }  
-                            alert(data); 
+                                Dialog.close(guid);
+                            }
+                            alert(data);
                         }
                     });
                 },
+                docWidth: 450,
                 exportUrl: '/Customer/ExportFromCustomer',
                 exportParam: { test: true, model: 'Item|OwnItem' },
                 herf: '/Customer/CustomerImport',

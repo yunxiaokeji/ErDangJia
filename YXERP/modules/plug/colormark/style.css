@@ -2,7 +2,7 @@
 .mark-color { display: inline-block; cursor:pointer; vertical-align:middle; width:14px; height:14px; border-radius:8px; }
 
 
-.mark-color-list {overflow:auto; position:absolute; padding:10px 0; background-color:#fff; border:solid 1px #eee; border-radius:2px; box-shadow:0 0 3px #999; }
+.mark-color-list {overflow-x:hidden;min-width:90px; height:197px;overflow-y:scroll; position:absolute; padding:10px 0; background-color:#fff; border:solid 1px #eee; border-radius:2px; box-shadow:0 0 3px #999; }
 .mark-color-item {overflow:auto; cursor:pointer; padding:0 15px;line-height:25px;  }
 .mark-color-item:hover { background-color:#eee; }
 

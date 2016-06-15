@@ -167,7 +167,7 @@ namespace CloudSalesBusiness
 
         }
 
-        public List<CustomerColorEntity> GetCustomerColors(string agentid, string clientid)
+        public List<CustomerColorEntity> GetCustomerColors(string clientid)
         {
             if (CustomColor.ContainsKey(clientid))
             {
@@ -504,7 +504,7 @@ namespace CloudSalesBusiness
             return "";
         }
 
-        public int CreateCustomerColor(string colorName, string colorValue, string customerid, string agentid, string clientid, string userid, int status = 0)
+        public int CreateCustomerColor(string colorName, string colorValue, string agentid, string clientid, string userid, int status = 0)
         {
             int result= CustomerColorDAL.BaseProvider.InsertCustomerColor(colorName, colorValue, agentid,
                 clientid, userid, status);

@@ -222,8 +222,8 @@
         //批量标记
         $("#batchMark").markColor({
             isAll: true,
-            data: _self.ColorList,
-            onChange: function (obj, callback) {
+            data: _self.ColorList, 
+            onChange: function (obj, callback) { 
                 var checks = $(".table-list .ico-checked");
                 if (checks.length > 0) {
                     var ids = "";

@@ -18,7 +18,7 @@ define(function (require, exports, module) {
         }
         $.fn.markColor.defaults = {
             isAll: false,
-            data: [],
+            data: [], 
             dataValue: "ColorID",
             dataColor: "ColorValue",
             dataText: "ColorName",
@@ -41,10 +41,14 @@ define(function (require, exports, module) {
             var width = 0;
             obj.click(function() {
                 $(".mark-color-list").hide();
-                var _this = $(this);
+                var _this = $(this); 
                 var position = _this.position();
+                var top = position.top+20;
+                if ($(document).height() - position.top < 197) {
+                    top = position.top - 217;
+                }
                 if ($("#" + _this.data("itemid")).length == 0) {
-                    var _colorBody = $("<ul id='" + _this.data("itemid") + "' class='mark-color-list'></ul>");
+                    var _colorBody = $("<ul id='" + _this.data("itemid") + "'  class='mark-color-list'></ul>");
 
                     if (opts.isAll) {
                         var _all = $("<li data-value='-1' title='全部' class='mark-color-item all'><span></span><div >全部</div></li>");
@@ -82,21 +86,19 @@ define(function (require, exports, module) {
                             });
                         }
                         _colorBody.hide();
-                    });
-                    _colorBody.css({ "top": position.top + 20, "left": position.left - 9 }).show();
+                    }); 
+                    _colorBody.css({ "top": top, "left": position.left - 9 }).show();
                     $("body").append(_colorBody);
                 } else {
-                    $("#" + _this.data("itemid")).css({ "top": position.top + 20, "left": position.left - 9 }).show();
+                    $("#" + _this.data("itemid")).css({ "top": top, "left": position.left - 9 }).show();
                 }
                 return false;
             });
-
             $(document).click(function(e) {
                 if ($(e.target).data("itemid") != obj.data("itemid") && $(e.target).attr("id") != obj.data("itemid")) {
                     $("#" + obj.data("itemid")).hide();
                 }
             });
-
         }
         $.fn.getColor = function(value, opts) {
             var color = "";

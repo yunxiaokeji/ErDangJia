@@ -156,14 +156,14 @@
             }
         });
         $("#dropdown").click(function () { 
-            var position = $(".ico-dropdown-white").position();  
-            $(".dropdown-ul").css({ "top": position.top + 22, "left": position.left - 80 }).show().mouseleave(function () {
+            var position = $(".dropdown").position();
+            $(".dropdown-ul").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
                 $(this).hide();
             });
         });
          
         $(document).click(function (e) { 
-            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass(".ico-dropdown-white")) {
+            if (!$(e.target).parents().hasClass("dropdown-ul")  && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
                 $(".dropdown-ul").hide();
             }
         });

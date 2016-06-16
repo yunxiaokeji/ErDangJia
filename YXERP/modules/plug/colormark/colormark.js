@@ -67,7 +67,12 @@ define(function (require, exports, module) {
                         _color.find("span").css("background-color", tempcolor);
                         _colorBody.append(_color);
                         _color.find("li").mouseover( function() {console.log(1)});
-                    } 
+                    }
+                    if (opts.data.length > 8) {
+                        _colorBody.css("overflow-y", "scroll");
+                    } else {
+                        _colorBody.css("overflow-y", "auto");
+                    }
                     _colorBody.find(".mark-color-item").click(function() {
                         var _changeColor = $(this);
                         //更换才触发 

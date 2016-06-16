@@ -29,6 +29,7 @@
                 $(".dropdown-ul").hide();
             }
         });
+
         //添加
         $("#createModel").click(function () {
             var _this = $(this);
@@ -37,6 +38,7 @@
             Model.SourceCode = "";
             _self.createModel();
         });
+
         //删除来源
         $("#deleteObject").click(function () {
             var _this = $(this);
@@ -48,6 +50,7 @@
                 });
             });
         });
+
         //编辑
         $("#updateObject").click(function () {
             var _this = $(this);
@@ -60,6 +63,7 @@
                 _self.createModel();
             });
         });
+
         $('#createColor').click(function () {
             var _this = $(this);
             ColorModel.ColorID = 0;
@@ -67,6 +71,7 @@
             ColorModel.ColorValue = "";
             _self.createColor();
         });
+
         //删除颜色
         $("#deleteColor").click(function () {
             var _this = $(this); 
@@ -88,6 +93,7 @@
             });
             
         });
+
         //编辑颜色
         $("#updateColor").click(function () {
             var _this = $(this);
@@ -101,34 +107,22 @@
         });
 
         //切换模块
-        $(".sourceul li").click(function () {
+        $(".search-tab li").click(function () {
             var _this = $(this);
-            _this.siblings().removeClass("active");
-            _this.addClass("active");
-            $("#" + _this.data("id")).show();
-            $("#createModel").hide();
-            var c = _self.getLeft(_this.data("index"));
-            $("#movespan").animate({ left: c + "px" }, {
-                queue: false,
-                duration: 300,
-                complete: function () {
-                    $("#movespan").css("left", c + "px");
+
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                $(".nav-part,.btn-add").hide();
+                $("#" + _this.data("id")).show();
+
+                $(".btn-add[data-id='" + _this.data("id") + "']").show();
+
+                if (_this.data("id") == "colorList" && (!_this.data("first") || _this.data("first") == 0)) {
+                    _this.data("first", "1");
+                    _self.bindColorList();
                 }
-            });
-            $('#createModel').hide();
-            $('#createColor').hide();
-            if (_this.data("index") == 1) {
-                $('#colorList').hide();
-                $('#createModel').show();
-                _self.getList();
-            } else if (_this.data("index") == 2) {
-                $('#sourceList').hide();
-                $('#createColor').show();
-                _self.bindColorList();
-            } else {
-                $('#colorList').hide();
-                $('#createModel').show();
-                console.log("error index");
             }
         });
     }
@@ -194,6 +188,7 @@
             });
         });
     }
+
     ObjectJS.saveColorModel = function (model) {
         var _self = this;
         Global.post("/System/SaveCustomerColor", { customercolor: JSON.stringify(model) }, function (data) {
@@ -209,6 +204,7 @@
             }
         });
     }
+
     //添加/编辑弹出层
     ObjectJS.createModel = function () {
         var _self = this;
@@ -253,6 +249,7 @@
             // $("#isChoose").prop("checked", Model.IsChoose == 1);
         }); 
     }
+
     //获取列表
     ObjectJS.getList = function () { 
         var _self = this;
@@ -307,7 +304,7 @@
     //加载列表
     ObjectJS.bindColorList = function () {
         var _self = this;
-        $("#colorItem").html('');
+        $("#colorList").html('');
         var urlItem = "";
         Global.post("/System/GetCustomColor", {}, function (data) {
             if (data.items.length > 0) {
@@ -316,8 +313,8 @@
                     urlItem += '<li data-id="' + item.ColorID + '" data-value="' + item.ColorValue + '" data-name="' + item.ColorName + '"  class="color-item"><div class="left color-leftzuoyou" style=" border-right:18px solid ' + item.ColorValue + '; "></div><div class="left colordiv" style="background-color:' + item.ColorValue + '";>' + item.ColorName + '</div></li>';
                 }
             } 
-            $("#colorItem").html(urlItem);
-            $("#colorItem").find(".color-item").click(function () {
+            $("#colorList").html(urlItem);
+            $("#colorList").find(".color-item").click(function () {
                 var _this = $(this);
                 var position = _this.position(); 
                 $(".colordrop li").data("id", _this.data("id"));

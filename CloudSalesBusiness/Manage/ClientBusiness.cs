@@ -21,6 +21,7 @@ namespace CloudSalesBusiness.Manage
         /// </summary>
         public static string FILEPATH = CloudSalesTool.AppSettings.Settings["UploadFilePath"] + "Logo/" + DateTime.Now.ToString("yyyyMM") + "/";
         public static string TempPath = CloudSalesTool.AppSettings.Settings["UploadTempPath"];
+
         #region Cache
         private static Dictionary<string,Clients> _cacheClients;
 
@@ -43,6 +44,7 @@ namespace CloudSalesBusiness.Manage
             }
         }
         #endregion
+
         #region 查询
 
         /// <summary>
@@ -64,9 +66,9 @@ namespace CloudSalesBusiness.Manage
                 orderBy = orderBy.Replace(" desc", "").Replace(" asc", "");
             }
             string sqlColumn = @" a.AutoID,a.ClientID, a.CompanyName,a.Logo,a.Industry,
-a.CityCode,a.Address,a.PostalCode,a.ContactName,a.MobilePhone,a.OfficePhone,
-a.Status,b.EndTime,b.UserQuantity,a.TotalIn,a.TotalOut,a.FreezeMoney,
-a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID ";
+                                    a.CityCode,a.Address,a.PostalCode,a.ContactName,a.MobilePhone,a.OfficePhone,
+                                    a.Status,b.EndTime,b.UserQuantity,a.TotalIn,a.TotalOut,a.FreezeMoney,
+                                    a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID ";
             DataTable dt = CommonBusiness.GetPagerData("Clients a  join Agents b on a.ClientID=b.ClientID", sqlColumn, sqlWhere, orderBy, pageSize, pageIndex, out totalCount, out pageCount, isAsc);
             List<Clients> list = new List<Clients>();
             Clients model; 
@@ -83,9 +85,6 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
             return list;
         }
 
-        /// <summary>
-        /// 获取客户端详情
-        /// </summary>
         public static Clients GetClientDetail(string clientID)
         {
             if (!Clients.ContainsKey(clientID))
@@ -96,11 +95,14 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
                     Clients.Add(model.ClientID, model);
                 }
                 else
+                {
                     return null;
+                }
             }
 
             return Clients[clientID];
         }
+
         public static Clients GetClientDetailBase(string clientID)
         {
             DataTable dt = ClientDAL.BaseProvider.GetClientDetail(clientID);
@@ -118,9 +120,7 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
             else
                 return null;
         }
-        /// <summary>
-        /// 获取客户端授权日志
-        /// </summary>
+
         public static List<ClientAuthorizeLog> GetClientAuthorizeLogs(string clientID,string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
         {
             string sqlWhere =" Status<>9 and ClientID='" + clientID+"' ";
@@ -137,9 +137,7 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
 
             return list;
         }
-        /// <summary>
-        /// 获取工厂活跃度报表
-        /// </summary>
+
         public static List<ClientVitalityEntity> GetClientsVitalityReport(int type, string begintime, string endtime, string clientId)
         {
             List<ClientVitalityEntity> list = new List<ClientVitalityEntity>();
@@ -172,7 +170,6 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
 
             return list;
         }
-
 
         #endregion
 
@@ -239,13 +236,7 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
         #endregion
 
         #region  编辑
-        /// <summary>
-        /// 更新客户信息
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="userid"></param>
-        /// <param name="result"></param>
-        /// <returns></returns>
+
         public static bool UpdateClient(Clients model, string userid)
         {
             if (!string.IsNullOrEmpty(model.Logo) && model.Logo.IndexOf(TempPath) >= 0)
@@ -276,8 +267,13 @@ a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID 
             if (flag)
             {
                 if (Clients.ContainsKey(model.ClientID))
+                {
                     Clients[model.ClientID] = GetClientDetailBase(model.ClientID);
-                //Clients[model.ClientID]=model;
+                }
+                else
+                {
+                    GetClientDetail(model.ClientID);
+                }
             }
 
             return flag;

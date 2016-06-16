@@ -12,26 +12,16 @@
         });
     </script>
 }
-<div class="header-box">
-    <div class="header-title left">客户配置</div>
-    <div class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" id="createModel">新建来源</div>
-    <div class="btn-add right" style="display:none;" id="createColor">新建标签</div>
-
+<div class="tab-nav">
+    <ul class="search-tab left">
+        <li  class="hover" data-id="sourceList">来源设置</li>
+        <li data-id="colorList">标签配置</li>       
+    </ul>
+    <div class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" data-id="sourceList" id="createModel">新建来源</div>
+    <div class="btn-add right" style="display:none;" data-id="colorList"  id="createColor">新建标签</div>
 </div>
-<div  class="header-mark">
-    <div class="" style="background-color: #fff; width: 100%">
-        <span id="movespan" class="movespan"></span>
-        <ul class="sourceul left">
-            <li data-id="sourceList" data-index="1" class="active left ">
-                <a href="javascript:void(0);">来源设置</a>
-            </li>
-            <li class="left " data-id="colorList" data-index="2"> <a href="javascript:void(0);">标签配置</a> </li>
-        </ul>
-    </div>
-</div>
-<div class="content-body " id="sourceList">
-    
-    <table class="table-list">
+<div class="content-body mTop20">
+    <table class="table-list nav-part" id="sourceList">
         <tr class="tr-header">
             <td class="tLeft">名称</td>
             <td class="tLeft">编码</td>
@@ -41,11 +31,11 @@
             <td class="width80">操作</td>
         </tr>
     </table>
-</div>
-<div class="content-body hide mTop20" id="colorList">
-    <ul class="color-list mTop5" id="colorItem"> 
+
+    <ul class="color-list hide nav-part" id="colorList"> 
     </ul>
 </div>
+
 <ul class="dropdown-ul hide" style="width: 65px;">
     <li class="@(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" id="updateObject">编辑</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current, "108020102"))" id="deleteObject">删除</li>

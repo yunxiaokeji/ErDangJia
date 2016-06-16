@@ -239,17 +239,16 @@
         }
 
         if (_self.actionType == 1) {
-            if (userCount < 5) {
+            if (userCount < 10) {
                 alert("首次购买人数不能少于5人");
                 return false;
             }
         }
         else if (_self.actionType == 2) {
-            if (userCount < 5) {
-                alert("购买人数不能少于5人");
-                return false;
-            }
-
+            //if (userCount < 5) {
+            //    alert("购买人数不能少于5人");
+            //    return false;
+            //}
         }
         else if (_self.actionType == 3) {
             if (userCount < parseInt($("#txt-userCount").val())) {

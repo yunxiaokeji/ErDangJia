@@ -24,11 +24,13 @@
         <li><span class="column-title">创建日期：</span>@(model.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"))</li>
         <li style="width:100%;"><span class="column-title">备注：</span>@(model.Remark)</li>
     </ul>
-    <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navRemark">产品明细</li>
-        </ul>
-    </div>
+</div>
+    <div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navRemark">产品明细</li>
+    </ul>
+</div>
+<div class="content-body">
     <table class="table-list mTop20">
         <tr class="tr-header">
             <td class="tLeft">产品名称</td>
@@ -43,7 +45,9 @@
         @foreach (var item in model.Details)
         { 
             <tr class="item detail-item" data-id="@(item.AutoID)" >
-                <td><a href="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)" target="_blank">@(item.ProductName)</a></td>
+                 <td>
+                    <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(item.ProductName)" data-id="@(item.ProductID)">@(item.ProductName)</a>
+                </td>
                 <td>@(item.Remark)</td>
                 <td class="center">@(item.UnitName)</td>
                 <td><input  type="text" class="batch" data-id="@(item.AutoID)" maxlength="30" value="@(item.BatchCode)" /></td>

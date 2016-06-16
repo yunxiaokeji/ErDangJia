@@ -189,27 +189,7 @@ namespace CloudSalesBusiness
             {
                 ProductStock model = new ProductStock();
                 model.FillData(dr);
-                model.SaleAttrValueString = "";
-                if (!string.IsNullOrEmpty(model.SaleAttrValue))
-                {
-                    string[] attrs = model.SaleAttrValue.Split(',');
-                    foreach (string attrid in attrs)
-                    {
-                        if (!string.IsNullOrEmpty(attrid))
-                        {
-                            var attr = new ProductsBusiness().GetProductAttrByID(attrid.Split(':')[0], clientid);
-                            var value = attr.AttrValues.Where(m => m.ValueID == attrid.Split(':')[1]).FirstOrDefault();
-                            if (attr != null && value != null)
-                            {
-                                model.SaleAttrValueString += attr.AttrName + "：" + value.ValueName + "，";
-                            }
-                        }
-                    }
-                    if (model.SaleAttrValueString.Length > 0)
-                    {
-                        model.SaleAttrValueString = model.SaleAttrValueString.Substring(0, model.SaleAttrValueString.Length - 1);
-                    }
-                }
+
                 list.Add(model);
             }
             return list;
@@ -224,27 +204,6 @@ namespace CloudSalesBusiness
             {
                 ProductStock model = new ProductStock();
                 model.FillData(dr);
-                model.SaleAttrValueString = "";
-                if (!string.IsNullOrEmpty(model.SaleAttrValue))
-                {
-                    string[] attrs = model.SaleAttrValue.Split(',');
-                    foreach (string attrid in attrs)
-                    {
-                        if (!string.IsNullOrEmpty(attrid))
-                        {
-                            var attr = new ProductsBusiness().GetProductAttrByID(attrid.Split(':')[0], clientid);
-                            var value = attr.AttrValues.Where(m => m.ValueID == attrid.Split(':')[1]).FirstOrDefault();
-                            if (attr != null && value != null)
-                            {
-                                model.SaleAttrValueString += attr.AttrName + "：" + value.ValueName + "，";
-                            }
-                        }
-                    }
-                    if (model.SaleAttrValueString.Length > 0)
-                    {
-                        model.SaleAttrValueString = model.SaleAttrValueString.Substring(0, model.SaleAttrValueString.Length - 1);
-                    }
-                }
                 list.Add(model);
             }
             return list;

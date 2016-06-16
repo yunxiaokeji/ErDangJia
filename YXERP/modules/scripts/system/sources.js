@@ -13,7 +13,6 @@
     var ObjectJS = {};
     //初始化
     ObjectJS.init = function () {
-        $('#createColor').hide();
         var _self = this;
         _self.bindEvent();
         _self.getList();
@@ -126,6 +125,7 @@
             }
         });
     }
+
     //添加/编辑弹出层
     ObjectJS.createColor = function () {
         var _self = this;
@@ -259,6 +259,7 @@
             _self.bindList(data.items);
         });
     }
+
     //加载列表
     ObjectJS.bindList = function (items) {
         var _self = this;
@@ -324,6 +325,7 @@
             });  
         });
     }
+
     //更改类型
     ObjectJS.editIsChoose = function (obj, id, status, callback) {
         var _self = this;
@@ -340,6 +342,7 @@
             !!callback && callback(data.status);
         });
     }
+
     //保存实体
     ObjectJS.saveModel = function (model) {
         var _self = this;
@@ -350,19 +353,22 @@
                 alert("保存失败,编码已存在!");
             }
         });
-    } 
+    }
+
     //删除color
     ObjectJS.deleteColor = function (colorid, callback) {
         Global.post("/System/DeleteColor", { colorid: colorid }, function (data) {
             !!callback && callback(data.result);
         });
     }
+
     //删除
     ObjectJS.deleteModel = function (id, callback) {
         Global.post("/System/DeleteCustomSource", { id: id }, function(data) {
             !!callback && callback(data.status);
         });
     }
+
     ObjectJS.getLeft = function (b) {
         return 10 + $(".sourceul li").eq(b - 1).offset().left - $(".sourceul li").eq(0).offset().left;
     }

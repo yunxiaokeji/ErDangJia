@@ -117,6 +117,8 @@ namespace CloudSalesEntity
 
         public string WareName { get; set; }
 
+        public string Remark { get; set; }
+
         public string ProductName { get; set; }
 
         public string ProductCode { get; set; }

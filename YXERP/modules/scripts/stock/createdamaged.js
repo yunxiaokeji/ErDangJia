@@ -60,9 +60,12 @@ define(function (require, exports, module) {
             var _this = $(this);
             confirm("确认删除此产品吗？", function () {
                 Global.post("/ShoppingCart/DeleteCart", {
-                    autoid: _this.data("id")
+                    ordertype: 3,
+                    guid: _self.wareid,
+                    productid: _this.data("id"),
+                    name: ""
                 }, function (data) {
-                    if (!data.Status) {
+                    if (!data.status) {
                         alert("系统异常，请重新操作！");
                     } else {
                         _this.parents("tr.item").remove();
@@ -73,6 +76,10 @@ define(function (require, exports, module) {
 
         //提交订单
         $("#btnconfirm").click(function () {
+            if ($(".cart-item").length == 0) {
+                alert("请选择报损产品！");
+                return;
+            }
             confirm("报损单提交后不可编辑，确认提交吗？", function () {
                 _self.submitOrder();
             });
@@ -84,24 +91,24 @@ define(function (require, exports, module) {
         var _self = this;
         Global.post("/ShoppingCart/UpdateCartQuantity", {
             autoid: ele.data("id"),
-            quantity: ele.val().trim()
+            guid: _self.wareid,
+            quantity: ele.val()
         }, function (data) {
             if (!data.Status) {
                 ele.val(ele.data("value"));
                 alert("系统异常，请重新操作！");
             } else {
+                ele.parent().nextAll(".amount").html((ele.parent().prevAll(".tr-price").find("input").val() * ele.val()).toFixed(2));
                 ele.data("value", ele.val());
             }
         });
     }
+
     //保存
     ObjectJS.submitOrder = function () {
-        var _self = this, bl = false;
-        //单据明细
-        $(".cart-item").each(function () {
-            bl = true;
-        });
-        if (!bl) {
+        var _self = this;
+
+        if ($(".cart-item").length == 0) {
             alert("请选择报损产品！");
             return;
         }

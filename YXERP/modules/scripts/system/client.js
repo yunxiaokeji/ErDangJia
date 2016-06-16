@@ -280,6 +280,7 @@
         $('#Industry').html($('#industrytemp').html());
         $('#Industry').val(model.Industry || '');
     }
+
     //保存实体
     ObjectJS.saveModel = function (model) {
         var _self = this; 

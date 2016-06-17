@@ -25,7 +25,12 @@ seajs.config({
         'daterangepicker': 'plug/daterangepicker/daterangepicker.js',
         //拖动排序
         "sortable": "plug/sortable.js"
-    }
+    },
+    map: [
+        //可配置版本号
+        ['.css', '.css?v=20160617'],
+        ['.js', '.js?v=20160617']
+    ]
 });
 
 

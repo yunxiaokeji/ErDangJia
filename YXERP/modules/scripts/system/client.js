@@ -156,7 +156,7 @@
         $("#CloseClientOrder").click(function () {
             Global.post("/System/CloseClientOrder",{id:$(this).data("id")},function(data){
                 if (data.Result == 1) {
-                    ObjectJS.getClientOrders();
+                    ObjectJS.getClientOrders(1);
                 }
                 else {
                     alert("关闭失败");

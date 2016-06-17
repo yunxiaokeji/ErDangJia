@@ -150,11 +150,16 @@ define(function (require, exports, module) {
                             expressid: $("#expressid").data("id"),
                             expresscode: $("#expressCode").val().trim()
                         };
+
+                        if (!$("#expressid").data("id") || !$("#expressCode").val().trim()) {
+                            alert("请输入快递信息");
+                            return false;
+                        }
                         Global.post("/StorageOut/ConfirmAgentOrderSend", paras, function (data) {
                             if (data.result != 1) {
                                 alert(data.errinfo);
                             } else {
-                                location.href = "/StorageOut/StorageSend";
+                                location.href = "/StorageOut/StorageOut";
                             }
                         });
                         return false;

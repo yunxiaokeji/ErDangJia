@@ -12,8 +12,9 @@
 }
 <div class="header-box">
     <span class="header-title left">订单编号：@(model.OrderCode)</span>
+     <a class="btn-back right" href="/StorageOut/StorageOut">返回</a>
 </div>
-<div class="content-body">
+<div class="content-body mTop10">
     <ul class="content-info">
         <li>
             <span class="column-title">总金额：</span>
@@ -46,11 +47,13 @@
             <label class="column-value">@(model.Remark.Trim())</label>
         </li>
     </ul>
-    <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navProducts">产品明细</li>
-        </ul>
-    </div>
+</div>
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navRemark">产品明细</li>
+    </ul>
+</div>
+<div class="content-body">
     <div id="navProducts" class="nav-partdiv">
         <table class="table-list mTop20">
             <tr class="tr-header">
@@ -64,7 +67,9 @@
             @foreach (var detail in model.Details)
             { 
                 <tr class="item cart-item">
-                    <td><a href="/Products/ChooseDetail?pid=@(detail.ProductID)&did=@(detail.ProductDetailID)" target="_blank">@(detail.ProductName)</a></td>
+                    <td>
+                        <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(detail.ProductID)&did=@(detail.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(detail.ProductName)" data-id="@(detail.ProductID)">@(detail.ProductName)</a>
+                    </td>
                     <td>@(detail.Remark)</td>
                     <td class="center">@(detail.UnitName)</td>
                     <td class="tRight"><label class="quantity">@(detail.Price.ToString("f2"))</label></td>

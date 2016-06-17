@@ -23,26 +23,36 @@
 </div>
 <div class="search-body">
      <div class="search-item">
-        <div class="name">状态</div>
+        <div class="name">出库状态</div>
         <ul class="search-status">
             <li data-id="-1">全部</li>
             <li data-id="0" class="hover">未出库</li>
-            <li data-id="11">已出库</li>
+            <li data-id="1">已出库</li>
+        </ul>
+    </div>
+    <div class="search-item">
+        <div class="name">发货状态</div>
+        <ul class="search-sendstatus">
+            <li data-id="-1" class="hover">全部</li>
+            <li data-id="1">未发货</li>
+            <li data-id="2">已发货</li>
         </ul>
     </div>
 </div>
-<div class="content-body">
+<div class="content-body mTop20">
     <table class="table-list">
         <tr class="tr-header">
-            <td class="width50">出库</td>
             <td class="tLeft">订单编号</td>
             <td class="width100">总金额</td>
             <td class="tLeft">地址</td>
-            <td class="">邮编</td>
             <td class="">收货人</td>
             <td class="width100">联系电话</td>
+            <td class="width100">订单状态</td>
             <td class="width150">出库单号</td>
+            <td class="">快递公司</td>
+            <td class="width150">快递单号</td>
             <td class="width150">订货时间</td>
+            <td class="width50">操作</td>
         </tr>
     </table>
     <div id="pager" class="mTop20"></div>

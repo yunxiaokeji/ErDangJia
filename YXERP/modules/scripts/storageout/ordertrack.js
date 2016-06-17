@@ -12,6 +12,7 @@ define(function (require, exports, module) {
     var Params = {
         keywords: "",
         status: 2,
+        outstatus: -1,
         sendstatus: -1,
         returnstatus: 0,
         agentid: "",
@@ -37,6 +38,16 @@ define(function (require, exports, module) {
             });
         });
         $(".search-status li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.outstatus = _this.data("id");
+                _self.getList();
+            }
+        });
+        $(".search-sendstatus li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");

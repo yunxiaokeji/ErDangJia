@@ -26,8 +26,22 @@ namespace CloudSalesEnum
         [DescriptionAttribute("已删除")]
         Delete = 9
     }
+
     /// <summary>
     /// 出库状态
+    /// </summary>
+    public enum EnumOutStatus
+    {
+        [DescriptionAttribute("全部")]
+        All = -1,
+        [DescriptionAttribute("待出库")]
+        NoOut = 0,
+        [DescriptionAttribute("已出库")]
+        Out = 1
+    }
+
+    /// <summary>
+    /// 发货状态
     /// </summary>
     public enum EnumSendStatus
     {
@@ -36,7 +50,7 @@ namespace CloudSalesEnum
         [DescriptionAttribute("待出库")]
         NoOut = 0,
         [DescriptionAttribute("待发货")]
-        NoSend = 1,
+        Out = 1,
         [DescriptionAttribute("已发货")]
         Send = 2,
         [DescriptionAttribute("已签收")]

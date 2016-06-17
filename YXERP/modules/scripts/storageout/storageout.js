@@ -13,7 +13,8 @@ define(function (require, exports, module) {
     var Params = {
         keywords: "",
         status: 2,
-        sendstatus: 0,
+        outstatus: 0,
+        sendstatus: -1,
         returnstatus: -1,
         agentid: "",
         BeginTime: "",
@@ -38,6 +39,17 @@ define(function (require, exports, module) {
             });
         });
         $(".search-status li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.outstatus = _this.data("id");
+                _self.getList();
+            }
+        });
+
+        $(".search-sendstatus li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
@@ -71,7 +83,7 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='9'><div class='data-loading' ><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='12'><div class='data-loading' ><div></td></tr>");
 
         var url = "/StorageOut/GetAgentOrders",
             template = "template/storageout/storageout.html";
@@ -83,18 +95,11 @@ define(function (require, exports, module) {
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
-
-                    innerText.find(".sendout").each(function () {
-                        if ($(this).data("status") > 0) {
-                            $(this).empty();
-                        }
-                    });
-
                     $(".tr-header").after(innerText);
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='9'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
 
             $("#pager").paginate({

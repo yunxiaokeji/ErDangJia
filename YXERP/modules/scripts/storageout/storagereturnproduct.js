@@ -13,7 +13,8 @@ define(function (require, exports, module) {
     var Params = {
         keywords: "",
         status: -1,
-        sendstatus: 11,
+        outstatus: -1,
+        sendstatus: -1,
         returnstatus: 1,
         agentid: "",
         BeginTime: "",
@@ -84,6 +85,7 @@ define(function (require, exports, module) {
 
     }
 
+    //退货审核
     ObjectJS.initDetail = function (orderid) {
         var _self = this;
         _self.orderid = orderid;
@@ -92,7 +94,22 @@ define(function (require, exports, module) {
         });
 
         $("#btnSubmit").click(function () {
-            _self.changeWare();
+            var _this = $(this);
+            if (_this.data("status") == 0) {
+                confirm("确认审核退单申请吗？", function () {
+                    Global.post("/StorageOut/AuditApplyReturn", { orderid: _this.data("id") }, function (data) {
+                        if (data.result == 1) {
+                            alert("审核成功", function () {
+                                location.href = "/StorageOut/AuditReturnProduct";
+                            });
+                        } else {
+                            alert(data.errinfo);
+                        }
+                    });
+                });
+            } else {
+                _self.changeWare();
+            }
         });
     }
 

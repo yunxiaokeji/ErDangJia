@@ -68,7 +68,7 @@ define(function (require, exports, module) {
                         _colorBody.append(_color);
                         _color.find("li").mouseover( function() {console.log(1)});
                     }
-                    if (opts.data.length > 8) {
+                    if ((opts.isAll && opts.data.length > 7) || (!opts.isAll && opts.data.length > 8)) {
                         _colorBody.css("overflow-y", "scroll");
                     } else {
                         _colorBody.css("overflow-y", "auto");
@@ -118,7 +118,10 @@ define(function (require, exports, module) {
                     color = opts.data[i][opts.dataColor]; 
                     break;
                 }
-            } 
+            }
+            if (!color) {
+                color = "#ccc";
+            }
             return color;
         };
         $.fn.bindmouseover = function (colorvalue, li) { 

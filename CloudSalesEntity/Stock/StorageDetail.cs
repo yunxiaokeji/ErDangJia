@@ -158,6 +158,8 @@ namespace CloudSalesEntity
         public string Imgs { get; set; }
 
 		#endregion Model
+
+        public int Complete { get; set; }
         /// <summary>
         /// 填充数据
         /// </summary>

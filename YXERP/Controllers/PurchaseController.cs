@@ -162,10 +162,12 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult AuditPurchase(string ids)
+        public JsonResult AuditPurchase(string docid, int doctype, int isover, string details, string remark)
         {
-            bool bl = new StockBusiness().AuditStorageIn(ids, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("Status", bl);
+            int result = 0;
+            string errinto = "";
+            bool bl = new StockBusiness().AuditStorageIn(docid, doctype, isover, details, remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID, ref result, ref errinto);
+            JsonDictionary.Add("status", bl);
             return new JsonResult
             {
                 Data = JsonDictionary,

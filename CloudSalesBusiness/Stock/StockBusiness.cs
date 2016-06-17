@@ -278,18 +278,9 @@ namespace CloudSalesBusiness
             return new StockDAL().UpdateStorageDetailBatch(docid, autoid, batch);
         }
 
-        public bool AuditStorageIn(string ids, string userid, string operateip, string agentid, string clientid)
+        public bool AuditStorageIn(string docid, int doctype, int isover, string details, string remark, string userid, string operateip, string agentid, string clientid, ref int result, ref string errinfo)
         {
-            bool bl = false;
-
-            foreach (string autoid in ids.Split(','))
-            {
-                if (new StockDAL().AuditStorageIn(autoid, userid, operateip, agentid, clientid))
-                {
-                    bl = true;
-                }
-            }
-
+            bool bl = new StockDAL().AuditStorageIn(docid, doctype, isover, details, remark, userid, operateip, agentid, clientid, ref result, ref errinfo);
             return bl;
         }
 

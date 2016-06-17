@@ -228,84 +228,103 @@ define(function (require, exports, module) {
     }
 
     //审核页初始化
-    ObjectJS.initDetail = function (docid, wareid) {
+    ObjectJS.initDetail = function (docid, model) {
         var _self = this;
         _self.docid = docid;
-        Global.post("/System/GetDepotSeatsByWareID", { wareid: wareid }, function (data) {
-            CacheDepot[wareid] = data.Items;
-            $(".item").each(function () {
-                var _this = $(this), depotbox = _this.find(".depot-li");
-                _self.bindDepot(depotbox, data.Items, wareid, _this.data("id"));
-            })
-        });        
+        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
 
-        //全部选中
-        $("#checkall").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("ico-checked")) {
-                _this.addClass("ico-checked").removeClass("ico-check");
-                $(".item .check").addClass("ico-checked").removeClass("ico-check");
-            } else {
-                _this.addClass("ico-check").removeClass("ico-checked");
-                $(".item .check").addClass("ico-check").removeClass("ico-checked");
-            }
-        });
-
-        $(".check").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("ico-checked")) {
-                _this.addClass("ico-checked").removeClass("ico-check");
-            } else {
-                _this.addClass("ico-check").removeClass("ico-checked");
-            }
+        Global.post("/System/GetDepotSeatsByWareID", { wareid: _self.model.WareID }, function (data) {
+            CacheDepot = data.Items;
         });
 
         //审核入库
         $("#btnconfirm").click(function () {
-            if ($(".item").find(".ico-checked").length <= 0) {
-                alert("请选择审核上架的产品！");
-                return;
-            }
-            var ids = [];
-            $(".item").find(".ico-checked").each(function () {
-                ids.push($(this).data("id"));
-            });
-            Global.post("/Purchase/AuditPurchase", { ids: ids.join(",") }, function (data) {
-                if (data.Status) {
-                    location.href = location.href;
-                };
-            });
+            _self.auditStorageIn();
         })
     }
 
-    //绑定货位
-    ObjectJS.bindDepot = function (depotbox, depots, wareid, autoid) {
+    //审核入库
+    ObjectJS.auditStorageIn = function () {
         var _self = this;
-        depotbox.empty();
-        var depot = $("<select data-id='" + autoid + "' data-wareid='" + wareid + "'></select>");
-        for (var i = 0, j = depots.length; i < j; i++) {
-            depot.append($("<option value='" + depots[i].DepotID + "' >" + depots[i].DepotCode + "</option>"))
-        }
 
-        depot.val(depotbox.data("id"));
+        doT.exec("template/purchase/audit_storagein.html", function (template) {
+            var innerText = template(_self.model.Details);
 
-        //选择仓库
-        depot.change(function () {
-            Global.post("/Purchase/UpdateStorageDetailWare", {
-                docid: _self.docid,
-                autoid: autoid,
-                wareid: wareid,
-                depotid: depot.val()
-            }, function (data) {
-                if (!data.Status) {
-                    alert("操作失败,请刷新页面重新操作！");
-                };
+            Easydialog.open({
+                container: {
+                    id: "showAuditStorageIn",
+                    header: "采购单入库",
+                    content: innerText,
+                    yesFn: function () {
+                        var details = ""
+                        $("#showAuditStorageIn .list-item").each(function () {
+                            var _this = $(this);
+                            var quantity = _this.find(".quantity").val();
+                            if (quantity > 0) {
+                                details += _this.data("id") + "-" + quantity + ":" + _this.find("select").val() + ",";
+                            }
+                        });
+
+                        if (details.length > 0 || $("#showAuditStorageIn .check").hasClass("ico-checked")) {
+
+                            Global.post("/Purchase/AuditPurchase", {
+                                docid: _self.docid,
+                                doctype: 101,
+                                isover: $("#showAuditStorageIn .check").hasClass("ico-checked") ? 1 : 0,
+                                details: details,
+                                remark: $("#expressRemark").val().trim()
+                            }, function (data) {
+                                if (data.status) {
+                                    alert("入库成功!", function () {
+                                        location.href = location.href;
+                                    });
+                                } else if (data.result == "10001") {
+                                    alert("您没有操作权限!")
+                                } else {
+                                    alert("审核入库失败！");
+                                }
+                            });
+                        } else {
+                            alert("请输入采购入库数量！");
+                            return false;
+                        }
+                    },
+                    callback: function () {
+
+                    }
+                }
+            });
+            $("#showAuditStorageIn .check").click(function () {
+                var _this = $(this);
+                if (!_this.hasClass("ico-checked")) {
+                    _this.addClass("ico-checked").removeClass("ico-check");
+                } else {
+                    _this.addClass("ico-check").removeClass("ico-checked");
+                }
+            });
+            $("#showAuditStorageIn").find(".quantity").change(function () {
+                var _this = $(this);
+                if (!_this.val().isInt() || _this.val() < 0) {
+                    _this.val("0");
+                }
+            });
+
+            $("#showAuditStorageIn").find("select").each(function () {
+                var _this = $(this);
+                _self.bindDepot(_this);
             });
         });
+    };
 
-        depot.prop("disabled", depotbox.data("status") == 1);
+    //绑定货位
+    ObjectJS.bindDepot = function (depotbox) {
+        var _self = this;
 
-        depotbox.append(depot);
+        for (var i = 0, j = CacheDepot.length; i < j; i++) {
+            depotbox.append($("<option value='" + CacheDepot[i].DepotID + "' >" + CacheDepot[i].DepotCode + "</option>"))
+        }
+
+        depotbox.val(depotbox.data("id"));
     }
 
 

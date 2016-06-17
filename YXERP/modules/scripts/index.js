@@ -11,17 +11,20 @@ define(function (require, exports, module) {
     var LayoutObject = {};
     //初始化数据
     LayoutObject.init = function () {
-        
+
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
         LayoutObject.getAgentAuthorizes();
         LayoutObject.bindUpcomings();
+
+        $("#iframeBox").css("height", document.documentElement.clientHeight - 95);
     }
 
     //绑定元素定位和样式
     LayoutObject.bindStyle = function () {
         var height = document.documentElement.clientHeight;
         $(".iframe-window").css("height", height - 95);
+        
 
         //左右滚动
         if ($("#windowItems li.hover").prevAll().length * 127 + 40 > $(".window-box").width()) {

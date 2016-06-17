@@ -639,6 +639,7 @@
     <Content Include="modules\template\myaccount\myfeedback-detail.html" />
     <Content Include="modules\template\myaccount\myfeedback-list.html" />
     <Content Include="modules\template\myaccount\setloginname.html" />
+    <Content Include="modules\template\purchase\audit_storagein.html" />
     <Content Include="modules\template\sales\choose-ordertype.html" />
     <Content Include="modules\template\sales\order-detail.html" />
     <Content Include="modules\template\sales\orders.html" />

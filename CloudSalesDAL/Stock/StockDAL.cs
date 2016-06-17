@@ -237,17 +237,30 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_UpdateStorageStatus", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public bool AuditStorageIn(string autoid, string userid, string operateip, string agentid, string clientid)
+        public bool AuditStorageIn(string docid, int doctype, int isover, string details, string remark, string userid, string operateip, string agentid, string clientid, ref int result, ref string errinfo)
         {
             SqlParameter[] paras = { 
-                                     new SqlParameter("@AutoID",autoid),
+                                     new SqlParameter("@Result",SqlDbType.Int),
+                                     new SqlParameter("@ErrInfo",SqlDbType.NVarChar,500),
+                                     new SqlParameter("@DocID",docid),
                                      new SqlParameter("@BillingCode",DateTime.Now.ToString("yyyyMMddHHmmssfff")),
+                                     new SqlParameter("@DocType",doctype),
+                                     new SqlParameter("@IsOver",isover),
+                                     new SqlParameter("@ProductsDetails",details),
+                                     new SqlParameter("@Remark",remark),
                                      new SqlParameter("@UserID",userid),
                                      new SqlParameter("@OperateIP",operateip),
                                      new SqlParameter("@AgentID",agentid),
                                      new SqlParameter("@ClientID",clientid)
                                    };
-            return ExecuteNonQuery("P_AuditStorageIn", paras, CommandType.StoredProcedure) > 0;
+            paras[0].Value = result;
+            paras[1].Value = errinfo;
+            paras[0].Direction = ParameterDirection.InputOutput;
+            paras[1].Direction = ParameterDirection.InputOutput;
+            var bl = ExecuteNonQuery("P_AuditStorageIn", paras, CommandType.StoredProcedure) > 0;
+            result = Convert.ToInt32(paras[0].Value);
+            errinfo = paras[1].Value.ToString();
+            return bl;
         }
 
         public bool AuditReturnIn(string docid, string userid, string agentid, string clientid, ref int result, ref string errinfo)

@@ -60,6 +60,7 @@ define(function (require, exports, module) {
             var _this = $(this);
             Global.post("/ShoppingCart/UpdateCartBatch", {
                 autoid: _this.data("id"),
+                guid: _self.wareid,
                 batch: _this.val().trim()
             }, function (data) {
                 if (!data.status) {

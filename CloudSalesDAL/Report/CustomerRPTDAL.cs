@@ -52,7 +52,17 @@ namespace CloudSalesDAL
             DataSet ds = GetDataSet("R_GetCustomerStageRate", paras, CommandType.StoredProcedure, "Data");
             return ds;
         }
-
+        public DataSet GetCustomerStageRPT(string begintime, string endtime, int type, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@BeginTime",begintime),
+                                       new SqlParameter("@EndTime",endtime),
+                                       new SqlParameter("@Type", type),
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+            DataSet ds = GetDataSet("R_GetCustomerStageRPT", paras, CommandType.StoredProcedure, "Data|Source");
+            return ds;
+        }
         public DataTable GetCustomerReport(int type, string begintime, string endtime, string UserID, string TeamID, string agentid, string clientid)
         {
             SqlParameter[] paras = { 

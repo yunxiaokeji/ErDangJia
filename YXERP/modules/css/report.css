@@ -1,0 +1,11 @@
+﻿
+.opport-relative {min-height: 300px; min-width: 590px; overflow: auto; position: relative; left: 0;}
+.opport-absolute{position: absolute; left: 30px; bottom: 0;}
+.pauto20{padding: 0 20px;}
+.footertext {height: 30px; line-height: 30px;text-align: center;}
+.opportcontent{min-width:185px;line-height: 170px; }
+.border-bottom{ border-bottom: 30px solid #FFFFFF;}
+.customer-content{}
+.min-height170{min-height: 170px;}
+.min-height150{min-height: 150px;}
+.min-height120{min-height: 120px;}

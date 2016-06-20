@@ -188,6 +188,7 @@
     <Content Include="modules\css\iconfont\demo.html" />
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
+    <Content Include="modules\css\report.css" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
     <Content Include="modules\images\ico-category-close.png" />

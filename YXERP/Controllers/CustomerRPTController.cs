@@ -95,9 +95,9 @@ namespace YXERP.Controllers
 
         public JsonResult GetCustomerStageRate(int type, string beginTime, string endTime)
         {
-            if (type == 1)
+            if (type<2)
             {
-                var list = CustomerRPTBusiness.BaseBusiness.GetCustomerStageRate(beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID);
+                var list = CustomerRPTBusiness.BaseBusiness.GetCustomerStageRate(beginTime, endTime, type, CurrentUser.ClientID);
                 JsonDictionary.Add("items", list);
             }
             else if (type == 2 || type == 3)

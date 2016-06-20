@@ -96,7 +96,7 @@ namespace CloudSalesBusiness
 
                     model.iValue = Convert.ToInt32(dr["Value"]);
                 }
-                total += model.iValue;
+               
                 DataRow[] drRow = ds.Tables["Source"].Select("StageStatus=" + stage);
                 if (stage == 2)
                 {
@@ -130,6 +130,7 @@ namespace CloudSalesBusiness
                     }
                 }
                 else if(stage==1){
+                    total += model.iValue;
                     var customerSouce = SystemBusiness.BaseBusiness.GetCustomSources("", clientid);
                     foreach (var source in customerSouce)
                     {
@@ -182,7 +183,7 @@ namespace CloudSalesBusiness
             } 
             return list;
         }
-
+         
         /// <summary>
         /// 获取客户分布统计
         /// </summary>
@@ -246,10 +247,18 @@ namespace CloudSalesBusiness
             if (!string.IsNullOrEmpty(userid))
             {
                 #region 统计个人
-
+               
                 StageCustomerEntity model = new StageCustomerEntity();
-                model.Name = OrganizationBusiness.GetUserByUserID(userid, agentid).Name;
+                var usertemp = OrganizationBusiness.GetUserByUserID(userid, agentid);
+                model.Name = usertemp.Name;
+                var team = SystemBusiness.BaseBusiness.GetTeamByID(usertemp.TeamID, agentid);
                 model.Stages = new List<StageCustomerItem>();
+                model.PID = usertemp.TeamID;
+                model.PName = team==null ?"暂无团队":team.TeamName;
+                model.SCSRNum = 0;
+                model.TotalNum = 0;
+                model.OCSRNum = 0;
+                model.NCSRNum = 0;
                 foreach (var stage in stages)
                 {
                     StageCustomerItem item = new StageCustomerItem();
@@ -258,11 +267,13 @@ namespace CloudSalesBusiness
                     if (drs.Count() > 0)
                     {
                         item.Count = Convert.ToInt32(drs[0]["Value"]);
-                    }
-                    else
-                    {
+                    } else {
                         item.Count = 0;
                     }
+                    model.SCSRNum += (stage == 3 ? item.Count : 0);
+                    model.OCSRNum += (stage == 2 ? item.Count : 0);
+                    model.NCSRNum += (stage == 1 ? item.Count : 0);
+                    model.TotalNum += item.Count;
                     model.Stages.Add(item);
                 }
                 list.Add(model);
@@ -286,10 +297,14 @@ namespace CloudSalesBusiness
                 {
                     StageCustomerEntity childModel = new StageCustomerEntity();
                     childModel.GUID = user.UserID;
+                    childModel.PName = team.TeamName;
                     childModel.Name = user.Name;
                     childModel.PID = team.TeamID;
+                    childModel.SCSRNum = 0;
+                    childModel.OCSRNum = 0;
+                    childModel.NCSRNum = 0;
+                    childModel.TotalNum = 0;
                     childModel.Stages = new List<StageCustomerItem>();
-
                     //遍历阶段
                     foreach (var stage in stages)
                     {
@@ -297,8 +312,7 @@ namespace CloudSalesBusiness
                         var stageName = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
                         childItem.Name = stageName;
 
-                        var drs = dt.Select("StageID='" + stage + "' and OwnerID='" + user.UserID + "'");
-                        
+                        var drs = dt.Select("StageStatus='" + stage + "' and OwnerID='" + user.UserID + "'");
                         if (drs.Count() > 0)
                         {
                             childItem.Count = Convert.ToInt32(drs[0]["Value"]);
@@ -307,7 +321,10 @@ namespace CloudSalesBusiness
                         {
                             childItem.Count = 0;
                         }
-
+                        childModel.SCSRNum += (stage == 3 ? childItem.Count : 0);
+                        childModel.OCSRNum += (stage == 2 ? childItem.Count : 0);
+                        childModel.NCSRNum += (stage == 1 ? childItem.Count : 0);
+                        childModel.TotalNum += childItem.Count;
                         if (model.Stages.Where(m => m.StageID == stage.ToString()).Count() > 0)
                         {
                             model.Stages.Where(m => m.StageID == stage.ToString()).FirstOrDefault().Count += childItem.Count;
@@ -325,6 +342,10 @@ namespace CloudSalesBusiness
                     }
                     model.ChildItems.Add(childModel);
                 }
+                model.NCSRNum = model.ChildItems.Sum(x => x.NCSRNum);
+                model.OCSRNum = model.ChildItems.Sum(x => x.OCSRNum);
+                model.TotalNum = model.ChildItems.Sum(x => x.TotalNum);
+                model.SCSRNum = model.ChildItems.Sum(x => x.SCSRNum);
                 list.Add(model);
 
                 #endregion
@@ -350,8 +371,12 @@ namespace CloudSalesBusiness
                         childModel.GUID = user.UserID;
                         childModel.Name = user.Name;
                         childModel.PID = team.TeamID;
+                        childModel.PName = team.TeamName;
                         childModel.Stages = new List<StageCustomerItem>();
-
+                        childModel.SCSRNum = 0;
+                        childModel.OCSRNum = 0;
+                        childModel.NCSRNum = 0;
+                        childModel.TotalNum = 0;
                         //遍历阶段
                         foreach (var stage in stages)
                         {
@@ -360,7 +385,6 @@ namespace CloudSalesBusiness
                             childItem.Name = stageName;
 
                             var drs = dt.Select("StageStatus=" + stage + " and OwnerID='" + user.UserID + "'");
-
                             if (drs.Count() > 0)
                             {
                                 childItem.Count = Convert.ToInt32(drs[0]["Value"]);
@@ -369,7 +393,10 @@ namespace CloudSalesBusiness
                             {
                                 childItem.Count = 0;
                             }
-
+                            childModel.SCSRNum += (stage == 3 ? childItem.Count : 0);
+                            childModel.OCSRNum += (stage == 2 ? childItem.Count : 0);
+                            childModel.NCSRNum += (stage == 1 ? childItem.Count : 0);
+                            childModel.TotalNum += childItem.Count;
                             if (model.Stages.Where(m => m.StageID == stage.ToString()).Count() > 0)
                             {
                                 model.Stages.Where(m => m.StageID == stage.ToString()).FirstOrDefault().Count += childItem.Count;
@@ -387,6 +414,10 @@ namespace CloudSalesBusiness
                         }
                         model.ChildItems.Add(childModel);
                     }
+                    model.TotalNum = model.ChildItems.Sum(x => x.TotalNum);
+                    model.SCSRNum = model.ChildItems.Sum(x => x.SCSRNum);
+                    model.NCSRNum = model.ChildItems.Sum(x => x.NCSRNum);
+                    model.OCSRNum = model.ChildItems.Sum(x => x.OCSRNum);
                     list.Add(model);
                 }
 

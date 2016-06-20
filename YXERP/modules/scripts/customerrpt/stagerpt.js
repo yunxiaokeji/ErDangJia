@@ -16,7 +16,7 @@
     //初始化
     ObjectJS.init = function () {
         var _self = this;
-        //_self.myChart = ec.init(document.getElementById('teamChart'));
+        _self.teamChart = ec.init(document.getElementById('teamRPT'));
         _self.bindEvent();
         _self.showChart();
     }
@@ -43,19 +43,17 @@
             }
         });
         $("#iptCreateTime").val(Params.beginTime + ' 至 ' + Params.endTime);
-        $(".search-type li").click(function () {
+        $(".tab-nav-ul li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
                 _this.addClass("hover");
-                $(".source-box").hide();
+                $(".nav-partdiv").hide();
                 $("#" + _this.data("id")).show();
-
                 if (!_self.teamChart) {
                     _self.teamChart = ec.init(document.getElementById('teamRPT'));
                 }
                 Params.type = _this.data("type"); 
-
                 Params.endTime = Date.now().toString().toDate("yyyy-MM-dd");
                 if (Params.type == 3) {
                     Params.beginTime = new Date().setMonth(new Date().getMonth() - 3).toString().toDate("yyyy-MM-dd");
@@ -64,7 +62,7 @@
                     Params.beginTime = new Date().setFullYear(new Date().getFullYear() - 1).toString().toDate("yyyy-MM-dd");
                     _self.showTeamChart();
                 }
-                else if (Params.type<2) {
+                else if (Params.type < 2) {
                     Params.beginTime = new Date().setMonth(new Date().getMonth() - 1).toString().toDate("yyyy-MM-dd");
                     _self.showChart();
                 }
@@ -141,12 +139,12 @@
                     $('#opporcontent').html(html);
                 } else if (i == 2) {
                     $('#ordervalue').html(item.desc + '<br/>转化率(' + item.value + '%)');
-                    $('#ordervaluerate').html(data.items[2].iValue);
+                    $('#ordervaluerate').html('订单 <br/><span class="font16">'+data.items[2].iValue+'</span><br/>');
                     $('#orderrate').html('(' + data.items[2].value + '%)');
                 }
             }
             var diffheight = 0; 
-            if (data.items[1].iValue >= data.items[0].iValue) {
+            if (data.items[1].iValue > data.items[0].iValue) {
                 diffheight = 150;
                 if (data.items[1].iValue < data.items[2].iValue) {
                     diffheight = 110;
@@ -163,10 +161,15 @@
                 $('#opporcontent').css('min-height', '170px');
                 $('#customertooppor').css('min-height', '170px').css('border-top-width', "100px").css('border-left-width', '30px').css('border-left-style', 'solid').css('border-left-color', '#D8D6F1');
             }
-            if (data.items[1].iValue > data.items[2].iValue) {
-                $('#opportoorder').css("border-top-width", 50 + diffheight + "px");
-            }else{
+            if (data.items[1].iValue > data.items[2].iValue ) { 
+                if (data.items[1].iValue > data.items[0].iValue) {
+                    $('#opportoorder').css("min-height", 40 + diffheight + "px").css("border-top-width", "120px").css('border-right-width', "0px").css('border-left-width', "30px");
+                }
+                $('.min-height150').css("min-height", "150px");
+            } else {
+                $('.min-height150').css("min-height", 150 + diffheight + "px");
                 $('.min-height120').css("min-height", 190 + diffheight + "px");
+                $('#opportoorder').css("border-right-width", "0px");
                 $('#opportoorder').css('min-height', 170 + diffheight + "px").css('border-left-width', "0px").css('border-top-width', "20px").css('border-right-width', "30px").css('border-right-style', 'solid').css('border-right-color', '#C3E7F6');
             }
         }); 

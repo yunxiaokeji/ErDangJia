@@ -24,8 +24,7 @@ namespace CloudSalesDAL
                                    };
             DataTable dt = GetDataTable("R_GetCustomerSourceScale", paras, CommandType.StoredProcedure);
             return dt;
-        }
-
+        } 
         public DataSet GetCustomerSourceDate(int type, string begintime, string endtime, string UserID, string TeamID, string agentid, string clientid)
         {
             SqlParameter[] paras = { 

@@ -5,8 +5,8 @@
     require("daterangepicker");
     var Params = {
         type: 1,
-        userid: "",
-        teamid: "",
+        UserID: "",
+        TeamID: "",
         beginTime: "",
         endTime: ""
     };
@@ -147,7 +147,6 @@
             ele.after(innerhtml);
         });
     }
-
     //汇总
     ObjectJS.reportTotal = function () {
         var total = 0;

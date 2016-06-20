@@ -48,7 +48,7 @@
             }
         });
         $("#iptCreateTime").val(Params.beginTime + ' 至 ' + Params.endTime);
-        $(".search-type li").click(function () {
+        $(".tab-nav-ul li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");

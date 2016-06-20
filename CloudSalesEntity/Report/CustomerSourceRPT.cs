@@ -43,7 +43,24 @@ namespace CloudSalesEntity
 
         public int value { get; set; }
     }
+       public class SourceItem
+    {
+        public string Name { get; set; }
 
+        public int Value { get; set; }
+         /// <summary>
+        /// 总转化率
+        /// </summary>
+        public object value { get; set; }
+        /// <summary>
+        /// 子集占比率
+        /// </summary>
+        public object cvalue { get; set; }
+        /// <summary>
+        /// 父转化率
+        /// </summary>
+        public object pvalue { get; set; }
+    }
     public class ReportCommonEntity
     {
         public string name { get; set; }
@@ -53,7 +70,7 @@ namespace CloudSalesEntity
         public decimal dValue { get; set; }
 
         public string desc { get; set; }
-
+        public List<SourceItem> sourceItem;
         public object value { get; set; }
     }
 

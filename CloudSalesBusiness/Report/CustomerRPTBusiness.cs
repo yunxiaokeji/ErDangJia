@@ -74,50 +74,112 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        public List<ReportCommonEntity> GetCustomerStageRate(string begintime, string endtime, string agentid, string clientid)
+        public List<ReportCommonEntity> GetCustomerStageRate(string begintime, string endtime, int type, string clientid)
         {
             List<ReportCommonEntity> list = new List<ReportCommonEntity>();
-            DataSet ds = CustomerRPTDAL.BaseProvider.GetCustomerStageRate(begintime, endtime, agentid, clientid);
+            DataSet ds = CustomerRPTDAL.BaseProvider.GetCustomerStageRPT(begintime, endtime, type, clientid);
+           
 
-            var stages = SystemBusiness.BaseBusiness.GetOpportunityStages(agentid, clientid);
+            int[] stages = { 1, 2, 3 };
             int total = 0, prev = 0;
             foreach (var stage in stages)
             {
                 ReportCommonEntity model = new ReportCommonEntity();
-
-                model.name = stage.StageName;
+                List<SourceItem> sourceItems=new List<SourceItem>();
+                model.name = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
                 model.iValue = 0;
                 model.desc = "";
 
-                foreach (DataRow dr in ds.Tables["Data"].Select("StageID='" + stage.StageID + "'"))
+                foreach (DataRow dr in ds.Tables["Data"].Select("StageStatus=" + stage))
                 {
-                    model.desc += CommonBusiness.GetEnumDesc((EnumCustomStatus)Convert.ToInt32(dr["Status"])) + "：" + dr["Value"].ToString();
+                    model.desc += model.name + ":" + dr["Value"].ToString();
 
-                    model.iValue += Convert.ToInt32(dr["Value"]);
+                    model.iValue = Convert.ToInt32(dr["Value"]);
                 }
                 total += model.iValue;
-
-                list.Add(model);
-            }
-
-
-            if (total > 0)
-            {
-                for (int i = list.Count - 1; i >= 0; i--)
+                DataRow[] drRow = ds.Tables["Source"].Select("StageStatus=" + stage);
+                if (stage == 2)
                 {
-                    list[i].iValue += prev;
-                    prev = list[i].iValue;
-
-                    list[i].value = (Convert.ToDecimal(list[i].iValue) / total * 100).ToString("f2");
-                    list[i].name += list[i].iValue;
-                    if (list[i].desc.Length > 0)
+                    var stageList = SystemBusiness.BaseBusiness.GetOpportunityStages("", clientid);
+                    foreach (var source in stageList)
                     {
-                        list[i].name += " (" + list[i].desc + ") ";
+                        SourceItem item = new SourceItem();
+                        item.Name = source.StageName;
+                        item.Value = 0;
+                        item.value = "0.00";
+                        item.pvalue = "0.00";
+                        item.cvalue = "0.00";
+                        if (drRow.Any())
+                        {
+                            int cvalue = drRow.Sum(x => (int)x["value"]);
+                            DataRow[] row = drRow.Where(x => x["SourceCode"].ToString() == source.StageID).ToArray();
+                            if (row.Any() && row.Length > 0)
+                            {
+                                item.Value = Convert.ToInt32(row[0]["value"]);
+                            }
+                            item.cvalue =
+                                (Convert.ToDecimal(item.Value) / (model.iValue == 0 ? 1 : total) * 100).ToString("f2");
+                            if (list.Count > 0)
+                            {
+                                 
+                                int value = list[0].iValue;
+                                item.value = (Convert.ToDecimal(item.Value) / (value == 0 ? 1 : total) * 100).ToString("f2");
+                            }
+                        }
+                        sourceItems.Add(item);
                     }
                 }
-
-               
+                else if(stage==1){
+                    var customerSouce = SystemBusiness.BaseBusiness.GetCustomSources("", clientid);
+                    foreach (var source in customerSouce)
+                    {
+                        SourceItem item = new SourceItem();
+                        item.Name = source.SourceName;
+                        item.Value = 0;
+                        item.value = "0.00";
+                        item.pvalue = "0.00";
+                        item.cvalue = "0.00";
+                        if (drRow.Any())
+                        {
+                            int cvalue = drRow.Sum(x => (int) x["value"]);
+                            DataRow[] row = drRow.Where(x => x["SourceCode"].ToString() == source.SourceCode).ToArray();
+                            if (row.Any() && row.Length > 0)
+                            {
+                                item.Value = Convert.ToInt32(drRow[0]["value"]);
+                            }
+                            item.cvalue =
+                                (Convert.ToDecimal(item.Value)/(model.iValue == 0 ? 1 : total)*100).ToString("f2");
+                            if (list.Count > 0)
+                            {
+                                int pvalue =
+                                    list[list.Count - 1].sourceItem.Where(x => x.Name == item.Name)
+                                        .FirstOrDefault()
+                                        .Value;
+                                int value = list[0].iValue;
+                                item.pvalue =
+                                    (Convert.ToDecimal(item.Value)/(pvalue == 0 ? 1 : total)*100).ToString("f2");
+                                item.value = (Convert.ToDecimal(item.Value)/(value == 0 ? 1 : total)*100).ToString("f2");
+                            }
+                        }
+                        sourceItems.Add(item);
+                    } 
+                }
+                model.sourceItem = sourceItems;
+                list.Add(model);
             }
+            total = total > 0 ? total : 1; 
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                //list[i].iValue += prev;
+                //prev = list[i].iValue;
+
+                list[i].value = (Convert.ToDecimal(list[i].iValue) / total * 100).ToString("f2");
+                list[i].name += list[i].iValue;
+                if (list[i].desc.Length > 0)
+                {
+                    list[i].name += " (" + list[i].desc + ") ";
+                }
+            } 
             return list;
         }
 
@@ -177,9 +239,9 @@ namespace CloudSalesBusiness
 
             DataTable dt = ds.Tables["Users"];
 
-            var stages = SystemBusiness.BaseBusiness.GetOpportunityStages(agentid, clientid);
+            int[] stages = {1, 2, 3};
 
-            
+
 
             if (!string.IsNullOrEmpty(userid))
             {
@@ -191,9 +253,8 @@ namespace CloudSalesBusiness
                 foreach (var stage in stages)
                 {
                     StageCustomerItem item = new StageCustomerItem();
-                    item.Name = stage.StageName;
-
-                    var drs = dt.Select("StageID='" + item.StageID + "'");  
+                    item.Name = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
+                    var drs = dt.Select("StageStatus='" + stage + "'");  
                     if (drs.Count() > 0)
                     {
                         item.Count = Convert.ToInt32(drs[0]["Value"]);
@@ -233,9 +294,10 @@ namespace CloudSalesBusiness
                     foreach (var stage in stages)
                     {
                         StageCustomerItem childItem = new StageCustomerItem();
-                        childItem.Name = stage.StageName;
+                        var stageName = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
+                        childItem.Name = stageName;
 
-                        var drs = dt.Select("StageID='" + stage.StageID + "' and OwnerID='" + user.UserID + "'");
+                        var drs = dt.Select("StageID='" + stage + "' and OwnerID='" + user.UserID + "'");
                         
                         if (drs.Count() > 0)
                         {
@@ -246,15 +308,15 @@ namespace CloudSalesBusiness
                             childItem.Count = 0;
                         }
 
-                        if (model.Stages.Where(m => m.StageID == stage.StageID).Count() > 0)
+                        if (model.Stages.Where(m => m.StageID == stage.ToString()).Count() > 0)
                         {
-                            model.Stages.Where(m => m.StageID == stage.StageID).FirstOrDefault().Count += childItem.Count;
+                            model.Stages.Where(m => m.StageID == stage.ToString()).FirstOrDefault().Count += childItem.Count;
                         }
                         else 
                         {
                             StageCustomerItem item = new StageCustomerItem();
-                            item.Name = stage.StageName;
-                            item.StageID = stage.StageID;
+                            item.Name = stageName;
+                            item.StageID = stage.ToString();
                             item.Count = childItem.Count;
                             model.Stages.Add(item);
                         }
@@ -294,9 +356,10 @@ namespace CloudSalesBusiness
                         foreach (var stage in stages)
                         {
                             StageCustomerItem childItem = new StageCustomerItem();
-                            childItem.Name = stage.StageName;
+                            var stageName = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
+                            childItem.Name = stageName;
 
-                            var drs = dt.Select("StageID='" + stage.StageID + "' and OwnerID='" + user.UserID + "'");
+                            var drs = dt.Select("StageStatus=" + stage + " and OwnerID='" + user.UserID + "'");
 
                             if (drs.Count() > 0)
                             {
@@ -307,15 +370,15 @@ namespace CloudSalesBusiness
                                 childItem.Count = 0;
                             }
 
-                            if (model.Stages.Where(m => m.StageID == stage.StageID).Count() > 0)
+                            if (model.Stages.Where(m => m.StageID == stage.ToString()).Count() > 0)
                             {
-                                model.Stages.Where(m => m.StageID == stage.StageID).FirstOrDefault().Count += childItem.Count;
+                                model.Stages.Where(m => m.StageID == stage.ToString()).FirstOrDefault().Count += childItem.Count;
                             }
                             else
                             {
                                 StageCustomerItem item = new StageCustomerItem();
-                                item.Name = stage.StageName;
-                                item.StageID = stage.StageID;
+                                item.Name = stageName;
+                                item.StageID = stage.ToString();
                                 item.Count = childItem.Count;
                                 model.Stages.Add(item);
                             }

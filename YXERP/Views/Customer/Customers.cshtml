@@ -15,7 +15,7 @@
 }
 <div class="header-box">
     <span class="header-title left">@ViewBag.Title</span>
-    <div class="right"  >
+    <div class="right @(ExpandClass.IsLimits(HttpContext.Current, "101019001"))"  >
         <span data-url="/Customer/Create" data-id="101019001" data-name="新建客户"  class="pLeft2 btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current, "101019001"))" style="color: #fff;" >新建客户</span>
         <div id="dropdown" class="dropdown rightraduis3 right" style="height:28px;width:20px;background-color: #4A98E7;">
             <span class="mTop8 mRight5 ico-dropdown-white right"></span>

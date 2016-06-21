@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 using CloudSalesBusiness;
+using CloudSalesEntity;
 using CloudSalesEnum;
 
 namespace YXERP.Controllers
@@ -81,7 +83,6 @@ namespace YXERP.Controllers
                 list.Sort( (g1, g2) => { return Comparer<int>.Default.Compare(g2.value, g1.value); });
             else if (type == 3)
                 list.Sort((g1, g2) => { return Comparer<int>.Default.Compare(int.Parse( g2.name),int.Parse( g1.name));});
-
             return new JsonResult()
             {
                 Data = JsonDictionary,
@@ -95,9 +96,9 @@ namespace YXERP.Controllers
 
         public JsonResult GetCustomerStageRate(int type, string beginTime, string endTime)
         {
-            if (type == 1)
+            if (type<2)
             {
-                var list = CustomerRPTBusiness.BaseBusiness.GetCustomerStageRate(beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID);
+                var list = CustomerRPTBusiness.BaseBusiness.GetCustomerStageRate(beginTime, endTime, type, CurrentUser.ClientID);
                 JsonDictionary.Add("items", list);
             }
             else if (type == 2 || type == 3)
@@ -115,11 +116,37 @@ namespace YXERP.Controllers
 
         #region 销售客户统计
 
-        public JsonResult GetUserCustomers(string userid, string teamid, string beginTime, string endTime)
+        public JsonResult GetUserCustomers(string UserID, string TeamID, string beginTime, string endTime,int type=0)
         {
 
-            var list = CustomerRPTBusiness.BaseBusiness.GetUserCustomers(userid, teamid, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("items", list);
+            var list = CustomerRPTBusiness.BaseBusiness.GetUserCustomers(UserID, TeamID, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID);
+
+            if (type == 6)
+            {
+                Dictionary<string, List<StageCustomerEntity>> customerlist =
+                          new Dictionary<string, List<StageCustomerEntity>>();
+                if (!string.IsNullOrEmpty(UserID))
+                {
+                    customerlist.Add("TotalList", list);
+                    customerlist.Add("SCSRList", list);
+                    customerlist.Add("OCSRList", list);
+                    customerlist.Add("NCSRList", list);
+                }
+                else
+                {
+                    List<StageCustomerEntity> listcustomer = new List<StageCustomerEntity>();
+                    list.ForEach(x => listcustomer.AddRange(x.ChildItems));
+                    customerlist.Add("TotalList", listcustomer.OrderByDescending(x => x.TotalNum).Take(15).ToList());
+                    customerlist.Add("SCSRList", listcustomer.OrderByDescending(x => x.SCSRNum).Take(15).ToList());
+                    customerlist.Add("OCSRList", listcustomer.OrderByDescending(x => x.OCSRNum).Take(15).ToList());
+                    customerlist.Add("NCSRList", listcustomer.OrderByDescending(x => x.NCSRNum).Take(15).ToList());
+                } 
+                JsonDictionary.Add("items", customerlist);
+            }
+            else
+            {
+                JsonDictionary.Add("items", list);
+            }
             return new JsonResult()
             {
                 Data = JsonDictionary,

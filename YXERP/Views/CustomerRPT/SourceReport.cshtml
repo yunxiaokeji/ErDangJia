@@ -6,56 +6,31 @@
     .source-box { height:400px; }
 </style>
 
+ <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
 @section scripts{
-    <script src="/Scripts/jquery-1.11.1.js"></script>
-    <script src="/modules/plug/laydate/laydate.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            laydate({
-                elem: '#beginTime',
-                format: 'YYYY-MM-DD',
-                min: '2000-01-01',
-                max: laydate.now(),
-                istime: false,
-                istoday: false
-            });
-            laydate({
-                elem: '#endTime',
-                format: 'YYYY-MM-DD',
-                min: '2000-01-01',
-                max: laydate.now(),
-                istime: false,
-                istoday: true
-            });
-        })
+    <script src="/Scripts/jquery-1.11.1.js"></script> 
+    <script type="text/javascript"> 
 
         seajs.use(["scripts/customerrpt/sourcerpt"], function (obj) {
             obj.init();
         });
     </script>
-}
-<div class="header-box">
-    <span class="header-title left">客户来源统计</span>
-</div>
+} 
 
-<div class="search-header">
-    <ul class="search-tab search-type">
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
         <li data-id="sourceRPT" data-type="" class="hover">客户来源比例</li>
         <li data-id="sourceDateRPT" data-type="3">按月统计</li>
         <li data-id="sourceDateRPT" data-type="4">按周统计</li>
         <li data-id="sourceDateRPT" data-type="5">按日统计</li>
     </ul>
-    <div class="mTop20">
-        <div class="left" id="chooseBranch"></div>
-        <div class="left lineHeight25 mLeft20">日期：</div>
-        <input type="text" class="left" id="beginTime"/>
-        <div class="left lineHeight25">&nbsp;-&nbsp;</div>
-        <input  type="text" class="left" id="endTime"/>
-        <div class="left btn mLeft20" id="btnSearch">查询</div>
-    </div>
+    
 </div>
-
-<div class="content-body">
+<div class="mTop20 mLeft20">
+        <div class="left" id="chooseBranch"></div>
+         <input type="text" id="iptCreateTime" placeholder="客户创建日期" class="ipt-date"  /> 
+    </div> 
+<div class="content-body mTop20">
    
     <div id="sourceRPT" class="source-box">
 

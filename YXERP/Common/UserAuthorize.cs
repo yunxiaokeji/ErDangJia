@@ -64,6 +64,7 @@ namespace YXERP.Common
                     {
                         Dictionary<string, string> result = new Dictionary<string, string>();
                         result.Add("result", "10001");
+                        result.Add("ErrMsg", "你暂无权限操作,请联系管理员.");
                         filterContext.Result = new JsonResult()
                         {
                             Data = result,

@@ -155,7 +155,7 @@ namespace YXERP.Controllers
 
         public JsonResult DeleteColor(int colorid)
         {
-            int result = SystemBusiness.BaseBusiness.DeleteCutomerColor(9, colorid, CurrentUser.AgentID, CurrentUser.ClientID,
+            int result = SystemBusiness.BaseBusiness.DeleteCutomerColor(colorid, CurrentUser.AgentID, CurrentUser.ClientID,
                 CurrentUser.UserID);
             JsonDictionary.Add("result", result);
             return new JsonResult

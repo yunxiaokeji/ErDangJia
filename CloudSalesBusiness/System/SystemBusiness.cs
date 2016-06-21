@@ -756,7 +756,7 @@ namespace CloudSalesBusiness
             return result?1:0;
         }
 
-        public int DeleteCutomerColor(int status,int colorid,  string agentid, string clientid, string updateuserid)
+        public int DeleteCutomerColor(int colorid, string agentid, string clientid, string updateuserid)
         {
             var model = GetCustomerColorsColorID(clientid, colorid);
             if (model == null)
@@ -767,7 +767,7 @@ namespace CloudSalesBusiness
             {
                 return -100;
             }
-            bool result = CustomerColorDAL.BaseProvider.UpdateStatus(status, colorid, agentid, clientid, updateuserid);
+            bool result = CustomerColorDAL.BaseProvider.DeleteCustomColor(colorid, agentid, clientid, updateuserid);
             if (result)
             {
                 if (!CustomColor.ContainsKey(clientid))
@@ -778,7 +778,8 @@ namespace CloudSalesBusiness
                 {
                     CustomColor[clientid].Remove(model);
                 }
-            } return result?1:0;
+            }
+            return result ? 1 : 10002;
         }
 
         public bool UpdateOpportunityStage(string stageid, string stagename, decimal probability, string userid, string ip, string agentid, string clientid)

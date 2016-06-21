@@ -37,8 +37,6 @@ namespace CloudSalesDAL.Custom
                                      new SqlParameter("@ClientID" , clientid)
                                    };
             paras[0].Direction = ParameterDirection.Output;
-//            string insertSql = @"insert into CustomerColor( ColorName,ColorValue,Status,CustomerID,AgentID,ClientID,CreateTime,CreateUserID) 
-//                                values( @ColorName,@ColorValue,@Status,@CustomerID,@AgentID,@ClientID,@CreateTime,@CreateUserID)";
             ExecuteNonQuery("P_InsertCustomerColor", paras, CommandType.StoredProcedure);
             result = Convert.ToInt32(paras[0].Value);
             return result;
@@ -61,20 +59,16 @@ namespace CloudSalesDAL.Custom
             return ExecuteNonQuery(updateSql, paras, CommandType.Text) > 0; 
         }
 
-        public bool UpdateStatus(int status, int colorid,string agentid, string clientid, string updateuserid)
+        public bool DeleteCustomColor(int colorid, string agentid, string clientid, string userid)
         {
             SqlParameter[] paras = {  
                                      new SqlParameter("@ColorID",colorid),
-                                     new SqlParameter("@UpdateTime" , DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")), 
-                                     new SqlParameter("@UpdateUserID" , updateuserid),
-                                     new SqlParameter("@Status" , status),
+                                     new SqlParameter("@UpdateUserID" , userid),
                                      new SqlParameter("@AgentID" , agentid),
                                      new SqlParameter("@ClientID" , clientid)
                                    };
-            string updateSql =
-                @"update CustomerColor set Status=@Status,UpdateUserID=@UpdateUserID,UpdateTime=@UpdateTime
-                   where AgentID=@AgentID and ClientID=@ClientID and ColorID=@ColorID";
-            return ExecuteNonQuery(updateSql, paras, CommandType.Text) > 0; 
+
+            return ExecuteNonQuery("P_DeleteCustomColor", paras, CommandType.StoredProcedure) > 0;
         }
     }
 }

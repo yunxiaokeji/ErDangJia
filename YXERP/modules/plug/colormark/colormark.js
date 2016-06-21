@@ -45,10 +45,8 @@ define(function (require, exports, module) {
                 var _this = $(this); 
                 var position = _this.position();
                 var top = position.top + 20;
-                var left = position.left - 9;
-                if ($(document).height() - position.top < 197) {
-                    top = position.top - 217;
-                }
+                var left = position.left - 9, isBottom = $(document).height() - position.top < 197;
+                
                 if (opts.xRepair != 0) {
                     left = position.left + opts.xRepair;
                 }
@@ -69,9 +67,19 @@ define(function (require, exports, module) {
                         _color.find("li").mouseover( function() {console.log(1)});
                     }
                     if ((opts.isAll && opts.data.length > 7) || (!opts.isAll && opts.data.length > 8)) {
+                        if (isBottom) {
+                            top = position.top - 217;
+                        }
                         _colorBody.css("overflow-y", "scroll");
                     } else {
                         _colorBody.css("overflow-y", "auto");
+                        if (isBottom) {
+                            if (opts.isAll) {
+                                top = position.top - (opts.data.length + 1) * 25 - 20;
+                            } else {
+                                top = position.top - opts.data.length * 25 - 20;
+                            }
+                        }
                     }
                     _colorBody.find(".mark-color-item").click(function() {
                         var _changeColor = $(this);
@@ -100,6 +108,9 @@ define(function (require, exports, module) {
                     _colorBody.css({ "top": top, "left": left }).show();
                     $("body").append(_colorBody);
                 } else {
+                    if ($(document).height() - position.top < 197) {
+                        top = position.top - $("#" + _this.data("itemid")).height() - 20;
+                    }
                     $("#" + _this.data("itemid")).css({ "top": top, "left": left }).show();
                 }
                 return false;

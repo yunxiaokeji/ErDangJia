@@ -525,6 +525,7 @@
     <Content Include="Views\System\RolePermission.cshtml" />
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Detail.cshtml" />
+    <None Include="Properties\PublishProfiles\yunxiaomanage.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

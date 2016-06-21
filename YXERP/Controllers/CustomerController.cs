@@ -256,7 +256,7 @@ namespace YXERP.Controllers
                         }
                         catch (Exception ex)
                         {
-                            mes += k + ",";
+                            mes += k +" 原因:"+ex.Message+ ",";
                         }
                     }
                     try
@@ -266,7 +266,7 @@ namespace YXERP.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return Content("系统异常:请联系管理员,错误原因" + ex.ToString());
+                        return Content("系统异常:请联系管理员,错误原因" + ex.Message);
                     }
 
                 }
@@ -277,7 +277,7 @@ namespace YXERP.Controllers
             }
             catch (Exception ex)
             {
-                return Content("系统异常:请联系管理员,错误原因" + ex.ToString());
+                return Content("系统异常:请联系管理员,错误原因:" + ex.Message.ToString());
             }
             return Content("操作成功");
         }
@@ -303,10 +303,9 @@ namespace YXERP.Controllers
             if (isQiYe)
             {
                 customers.Name = dr["公司名称"].ToString();
-                customers.IndustryID =
-                    CommonBusiness.IndustryList.Where(x => x.Name.Equals(dr["行业"].ToString()))
-                        .FirstOrDefault()
-                        .IndustryID;
+                Industry industry = CommonBusiness.IndustryList.Where(x => x.Name.Equals(dr["行业"].ToString()))
+                    .FirstOrDefault();
+                customers.IndustryID = industry != null ? industry.IndustryID : "";
                 customers.Extent =
                     (int)CommonBusiness.GetEnumindexByDesc<EnumCustomerExtend>(EnumCustomerExtend.Huge, dr["公司规模"].ToString());
             }

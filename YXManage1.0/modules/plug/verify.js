@@ -29,7 +29,9 @@ define(function (require, exports, module) {
     Verify.prototype.initType = function () {
         var _this = this;
         _this.setting.type = [];
-        _this.setting.type["mobile"] = /^1[3|5|6|8]\d{9}$/;
+        _this.setting.type["word"] = /^(\w*[a-zA-Z]+\w*)$/;
+        _this.setting.type["mobilephone"] = /^1[3|5|6|8]\d{9}$/;
+        _this.setting.type["mobile"] = /^(?:\(?[0\+]?\d{1,3}\)?)[\s-]?(?:0|\d{1,4})[\s-]?(?:(?:13\d{9})|(?:\d{7,8}))$/;
         _this.setting.type["email"] = /^\w+(.\w+)+@\w+.\w+$/;
         _this.setting.type["url"] = /^[A-Za-z]+:\/\/[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$/;
         _this.setting.type["number"] =/^[0-9]*$/;

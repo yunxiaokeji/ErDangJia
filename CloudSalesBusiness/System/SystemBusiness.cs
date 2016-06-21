@@ -728,6 +728,7 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
+
         public int UpdateCustomerColor(string agentid, string clientid, int colorid, string colorName, string colorValue, string updateuserid)
         {
             var model = GetCustomerColorsColorID(clientid, colorid);
@@ -754,7 +755,8 @@ namespace CloudSalesBusiness
             }
             return result?1:0;
         }
-        public  int DeleteCutomerColor(int status,int colorid,  string agentid, string clientid, string updateuserid)
+
+        public int DeleteCutomerColor(int status,int colorid,  string agentid, string clientid, string updateuserid)
         {
             var model = GetCustomerColorsColorID(clientid, colorid);
             if (model == null)

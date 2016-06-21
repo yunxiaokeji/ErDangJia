@@ -103,7 +103,7 @@ namespace CloudSalesBusiness
         /// <param name="pwd">密码</param>
         /// <param name="result">1:查询正常；2：用户名不存在；3：用户密码有误</param>
         /// <returns></returns>
-        public static Users GetUserByUserName(string loginname, string pwd,out int result, string operateip)
+        public static Users GetUserByUserName(string loginname, string pwd, out int result, string operateip)
         {
             pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
             DataSet ds = new OrganizationDAL().GetUserByUserName(loginname, pwd, out result);

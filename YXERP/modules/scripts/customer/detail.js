@@ -642,9 +642,13 @@
                 regText: "data-text"
             });
 
-            $("#extent").val(model.Extent);
+            if (model.Extent) {
+                $("#extent").val(model.Extent);
+            }
 
-            $("#industry").val(model.IndustryID);
+            if (model.IndustryID) {
+                $("#industry").val(model.IndustryID);
+            }
 
             if (model.Type == 0) {
                 $(".edit-company").hide();

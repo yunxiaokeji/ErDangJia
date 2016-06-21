@@ -17,15 +17,8 @@
 }
 
 <div class="header-box">
-    <div data-url="/Activity/Create" data-id="101029001" data-name="新建活动" class="btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current,"101029001"))">新建活动</div>
-    <div class="right">
-        <div class="display-tab hand left" data-type="1">
-            <img src="/modules/images/ico-list-blue.png" />
-        </div>
-        <div class="display-tab hand left mLeft15" data-type="2">
-            <img src="/modules/images/ico-card-gray.png" />
-        </div>
-    </div>
+    <div data-url="/Activity/Create" data-id="101029001" data-name="新建活动" class="btn-add btn-open-window right @(ExpandClass.IsLimits(HttpContext.Current,"101029001"))">新建活动</div>
+    
 </div>
 
 <div class="search-header">
@@ -64,6 +57,16 @@
         结束日期
         <span class="asc"></span>
         <span class="desc"></span>
+    </li>
+    <li class="right">
+        <div class="right mTop5">
+            <div class="display-tab hand left" data-type="1">
+                <img src="/modules/images/ico-list-blue.png" />
+            </div>
+            <div class="display-tab hand left mLeft15" data-type="2">
+                <img src="/modules/images/ico-card-gray.png" />
+            </div>
+        </div>
     </li>
 </ul>
 <div class="content-body">

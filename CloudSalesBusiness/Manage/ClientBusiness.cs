@@ -196,12 +196,12 @@ namespace CloudSalesBusiness.Manage
         /// <param name="loginPwd">密码</param>
         /// <param name="userid">操作人</param>
         /// <param name="result">0：失败 1：成功 2：账号已存在 3：模块未选择</param>
-        public static string InsertClient(Clients model, string bindMobilePhone, string loginPwd, string userid, out int result, string email = "", string mduserid = "", string mdprojectid = "",int type=1)
+        public static string InsertClient(Clients model, string loginName, string bindMobilePhone, string loginPwd, string userid, out int result, string email = "", string mduserid = "", string mdprojectid = "")
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, bindMobilePhone);
 
             string clientid = ClientDAL.BaseProvider.InsertClient(model.CompanyName, model.ContactName, model.MobilePhone, model.Industry, model.CityCode,
-                                                             model.Address, model.Description, bindMobilePhone, loginPwd, email, mduserid, mdprojectid, userid, out result,type);
+                                                             model.Address, model.Description, loginName, bindMobilePhone, loginPwd, email, mduserid, mdprojectid, userid, out result);
 
             return clientid;
         }

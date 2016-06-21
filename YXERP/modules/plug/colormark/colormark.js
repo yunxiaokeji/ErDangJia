@@ -119,9 +119,9 @@ define(function (require, exports, module) {
                     break;
                 }
             }
-            if (!color) {
-                color = "#ccc";
-            }
+            //if (!color) {
+            //    color = "#ccc";
+            //}
             return color;
         };
         $.fn.bindmouseover = function (colorvalue, li) { 

@@ -137,7 +137,7 @@ namespace YXERP.Controllers
                             clientModel.CompanyName = user.user.project.name;
                             clientModel.ContactName = user.user.name;
                             clientModel.MobilePhone = user.user.mobile_phone;
-                            var clientid = ClientBusiness.InsertClient(clientModel, "", "", "", out result, user.user.email, user.user.id, user.user.project.id);
+                            var clientid = ClientBusiness.InsertClient(clientModel, "", "", "", "", out result, user.user.email, user.user.id, user.user.project.id);
                             if (!string.IsNullOrEmpty(clientid))
                             {
                                 var current = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip);
@@ -298,7 +298,7 @@ namespace YXERP.Controllers
                 else
                 {
                     Clients client = new Clients() { CompanyName = companyName, ContactName = name, MobilePhone = loginName };
-                    ClientBusiness.InsertClient(client, loginName, loginPWD, string.Empty, out result);
+                    ClientBusiness.InsertClient(client, "", loginName, loginPWD, string.Empty, out result);
 
                     if (result == 1)
                     {

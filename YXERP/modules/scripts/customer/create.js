@@ -25,7 +25,9 @@
             });
             $('#activity').val(_self.activityid);
         } else {
-            $('#activity').show();
+            if ($('#source').children(":selected").data("code") == "Source-Activity") {
+                $('#activity').show();
+            }
         }
         $('#source').bind("change", function () {
             if ($(this).children(":selected").data("code") == "Source-Activity") {

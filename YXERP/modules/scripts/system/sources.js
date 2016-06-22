@@ -278,8 +278,8 @@
                         $("#deleteObject").show();
                     }
                     var position = _this.find(".ico-dropdown").position();
-                    $(".dropdown-ul li").data("id", _this.data("id"));
-                    $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left-55}).show().mouseleave(function () {
+                    $("#ddlSource li").data("id", _this.data("id"));
+                    $("#ddlSource").css({ "top": position.top + 20, "left": position.left - 55 }).show().mouseleave(function () {
                         $(this).hide();
                     }); 
                 });

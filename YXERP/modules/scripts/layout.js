@@ -12,9 +12,9 @@ define(function (require, exports, module) {
     //初始化数据
     LayoutObject.init = function () {
         
-        //if ($(window.parent.document).find("#windowItems").length == 0) {
-        //    location.href = "/Default/Index";
-        //}
+        if ($(window.parent.document).find("#windowItems").length == 0) {
+            location.href = "/Default/Index?href=" + location.href;
+        }
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
     }

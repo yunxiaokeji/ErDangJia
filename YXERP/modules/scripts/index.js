@@ -10,7 +10,17 @@ define(function (require, exports, module) {
 
     var LayoutObject = {};
     //初始化数据
-    LayoutObject.init = function () {
+    LayoutObject.init = function (href) {
+
+        if (href) {
+            $("#windowItems li").removeClass("hover");
+            $("#iframeHome").hide();
+
+            $("#windowItems").append('<li data-id="href" class="hover" title="新页面">新页面<span title="关闭" class="iconfont close">&#xe606;</span>'
+                                   + '</li>');
+            $("#iframeBox").append('<iframe id="iframehref" class="iframe-window" src="' + href + '"></iframe>');
+
+        }
 
         LayoutObject.bindStyle();
         LayoutObject.bindEvent();
@@ -24,7 +34,6 @@ define(function (require, exports, module) {
     LayoutObject.bindStyle = function () {
         var height = document.documentElement.clientHeight;
         $(".iframe-window").css("height", height - 95);
-        
 
         //左右滚动
         if ($("#windowItems li.hover").prevAll().length * 127 + 40 > $(".window-box").width()) {

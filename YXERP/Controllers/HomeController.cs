@@ -382,8 +382,11 @@ namespace YXERP.Controllers
                     bl = OrganizationBusiness.UpdateUserAccountPwd(loginName, loginPwd);
                     result = bl ? 1 : 0;
 
-                    if(bl)
+                    if (bl)
+                    {
+                        Common.Common.CachePwdErrorUsers.Remove(loginName);
                         Common.Common.ClearMobilePhoneCode(loginName);
+                    }
                 }
                 
             }

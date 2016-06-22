@@ -244,8 +244,8 @@
             $("#btnRegister").html("注册");
             if (data.Result == 1) {
                 var html = "<div>您已成功注册,是否立即完善公司信息？</div><div class='pAll20'>";
-                html += "<div class='btn left' onclick='location.href=\"/Home/Index\"'>进入首页</div>";
-                html += "<div class='btn right' onclick='location.href=\"/System/Client/2\"'>立即完善</div>";
+                html += "<div class='btn left' onclick='location.href=\"/Default/Index\"'>进入首页</div>";
+                html += "<div class='btn right' onclick='location.href=\"/Default/Index?href=/System/Client\"'>立即完善</div>";
                 html += "<div class='clear'></div></div>";
                 Easydialog.open({
                     container: {

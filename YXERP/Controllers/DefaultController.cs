@@ -17,8 +17,9 @@ namespace YXERP.Controllers
         //
         // GET: /Default/
 
-        public ActionResult Index()
+        public ActionResult Index(string href = "")
         {
+            ViewBag.Herf = href;
             return View();
         }
 

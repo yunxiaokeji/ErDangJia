@@ -27,7 +27,7 @@
                 }
             </select>
             <select id="activity" class="mLeft20 hide">
-                 @foreach (CloudSalesEntity.ActivityEntity model in (List<CloudSalesEntity.ActivityEntity>)ViewBag.Activity)
+                @foreach (CloudSalesEntity.ActivityEntity model in (List<CloudSalesEntity.ActivityEntity>)ViewBag.Activity)
                 {
                     <option value="@(model.ActivityID)" data-code="@(model.ActivityCode)">@(model.Name)</option>
                 }

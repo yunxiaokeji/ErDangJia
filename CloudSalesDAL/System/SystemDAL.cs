@@ -20,7 +20,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ClientID",clientid)
                                    };
 
-            DataTable dt = GetDataTable("select * from CustomSource where ClientID=@ClientID and Status=1 ", paras, CommandType.Text);
+            DataTable dt = GetDataTable("select * from CustomSource where ClientID=@ClientID and Status=1 order by IsChoose desc,AutoID", paras, CommandType.Text);
 
             return dt;
         }

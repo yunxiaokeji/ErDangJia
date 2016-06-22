@@ -195,6 +195,10 @@ namespace YXERP.Controllers
         public ActionResult CustomerImport(HttpPostedFileBase file, int overType = 0, int type=0)
         {
             if (file == null) { return Content("请选择要导入的文件"); }
+            if (file.ContentLength > 2097152)
+            {
+                return Content("导入文件超过规定（2M )大小,请修改后再操作."); 
+            }
             if (!file.FileName.Contains(".xls") && !file.FileName.Contains(".xlsx")) { return Content("文件格式类型不正确"); }
             string mes = "";
             try
@@ -242,7 +246,7 @@ namespace YXERP.Controllers
                             }
                             else
                             {
-                                if (dr["公司名称"] != null && !string.IsNullOrEmpty(dr["公司名称"].ToString()))
+                                if (dr["客户名称"] != null && !string.IsNullOrEmpty(dr["客户名称"].ToString()))
                                 {
                                     contact = GetContactByDataRow(dr, checkColumn);
                                     contactList.Add(contact);
@@ -297,12 +301,12 @@ namespace YXERP.Controllers
             customers.OwnerID = CurrentUser.UserID;
             customers.CreateTime = DateTime.Now;
             customers.Type = isQiYe?1:0;
-            customers.ContactName = dr["客户名称"].ToString();
+            customers.ContactName = dr["联系人"].ToString();
             customers.CustomerID = Guid.NewGuid().ToString();
             customers.CityCode = GetCityCode(dr);
             if (isQiYe)
             {
-                customers.Name = dr["公司名称"].ToString();
+                customers.Name = dr["客户名称"].ToString();
                 Industry industry = CommonBusiness.IndustryList.Where(x => x.Name.Equals(dr["行业"].ToString()))
                     .FirstOrDefault();
                 customers.IndustryID = industry != null ? industry.IndustryID : "";
@@ -311,7 +315,7 @@ namespace YXERP.Controllers
             }
             else
             {
-                customers.Name = dr["客户名称"].ToString();
+                customers.Name = dr["联系人"].ToString();
             }
             return customers;
         }
@@ -319,7 +323,7 @@ namespace YXERP.Controllers
         {
             ContactEntity contact = new ContactEntity();
             contact.Address = dr["详细地址"].ToString();
-            contact.CompanyName = dr["公司名称"].ToString(); 
+            contact.CompanyName = dr["客户名称"].ToString(); 
             contact.Description = dr["描述"].ToString();
             contact.Email = dr["邮箱"].ToString();
             contact.MobilePhone = dr["联系电话"].ToString();
@@ -330,7 +334,7 @@ namespace YXERP.Controllers
             contact.CreateUserID = CurrentUser.UserID;
             contact.OwnerID = CurrentUser.UserID;
             contact.CustomerID = "";
-            contact.Name = dr["客户名称"].ToString();
+            contact.Name = dr["联系人"].ToString();
             contact.CreateTime = DateTime.Now;
             contact.Type = isQiYe ? 1 : 0;
             contact.ContactID = Guid.NewGuid().ToString();

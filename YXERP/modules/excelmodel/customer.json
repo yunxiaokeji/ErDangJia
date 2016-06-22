@@ -2,7 +2,7 @@
     "Error": "",
     "Item": {
         "Name": {
-            "title": "公司名称",
+            "title": "客户名称",
             "hide": false,
             "format": false,
             "type": -1,
@@ -26,7 +26,7 @@
 			"datasource":"DropSourceList|1"
         },
         "Contcat": {
-            "title": "客户名称",
+            "title": "联系人",
             "hide": false,
             "format": false,
             "type": -1,
@@ -99,7 +99,7 @@
     },
 	 "OwnItem": {
         "Name": {
-            "title": "公司名称",
+            "title": "客户名称",
             "hide": false,
             "format": false,
             "type": -1,
@@ -107,7 +107,7 @@
 			"datasource":""
         }, 
         "Contcat": {
-            "title": "客户名称",
+            "title": "联系人",
             "hide": false,
             "format": false,
             "type": -1,

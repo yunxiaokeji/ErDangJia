@@ -36,7 +36,7 @@ select option{ padding:2px; }
 .hide { display:none; }
 .nolimits { display: none !important; }
 .relative {position:relative;}
-
+.bghulan{background-color: #4A98E7;}
 /*超过长度显示...*/
 .long { display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -156,6 +156,7 @@ select option{ padding:2px; }
 
 .leftraduis3{ -moz-border-radius-topleft: 3px; -webkit-border-top-left-radius: 3px;-moz-border-radius-bottomleft: 3px; -webkit-border-bottom-left-radius:3px; }
 .rightraduis3{ -moz-border-radius-topright: 3px; -webkit-border-top-right-radius: 3px;-moz-border-radius-bottomright: 3px; -webkit-border-bottom-right-radius:3px; }
+.rightraduis3:hover{ background-color:#2F73B8;}
 .btn-open-window { cursor:pointer;}
 
 /*按钮和图标*/

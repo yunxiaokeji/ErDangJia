@@ -114,7 +114,7 @@ define(function (require, exports, module) {
                     else {
                         style.top = '40%';
                     }
-                    style.left = '40%';
+                    style.left = '50%';
                 }
                 else {
                     if (isIE6) {

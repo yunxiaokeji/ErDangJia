@@ -676,11 +676,13 @@ namespace YXERP.Controllers
                 model.SaleAttrValue = model.SaleAttrValue.Substring(0, model.SaleAttrValue.Length - 1);
             }
 
+
+            int result = 0;
             string id = "";
             if (string.IsNullOrEmpty(model.ProductDetailID))
             {
                 id = new ProductsBusiness().AddProductDetails(model.ProductID, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue,
-                                                              model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                                                              model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
             }
             else
             {
@@ -692,6 +694,7 @@ namespace YXERP.Controllers
                 }
             }
             JsonDictionary.Add("ID", id);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,

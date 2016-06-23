@@ -602,10 +602,10 @@ namespace CloudSalesDAL
             return id;
         }
 
-        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string remark, string description, string operateid, string clientid)
+        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string remark, string description, string operateid, string clientid, out int result)
         {
             string id = "";
-            int result = 0;
+            result = 0;
             SqlParameter[] paras = { 
                                        new SqlParameter("@DetailID",SqlDbType.NVarChar,64),
                                        new SqlParameter("@Result",SqlDbType.Int),

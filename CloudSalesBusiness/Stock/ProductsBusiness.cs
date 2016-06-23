@@ -326,9 +326,9 @@ namespace CloudSalesBusiness
         public ProductAttr GetProductAttrByID(string attrid, string clientid)
         {
             var list = GetAttrs(clientid);
-            if (list.Where(m => m.AttrID == attrid).Count() > 0)
+            if (list.Where(m => m.AttrID.ToLower() == attrid.ToLower()).Count() > 0)
             {
-                return list.Where(m => m.AttrID == attrid).FirstOrDefault();
+                return list.Where(m => m.AttrID.ToLower() == attrid.ToLower()).FirstOrDefault();
             }
             var dal = new ProductsDAL();
             DataSet ds = dal.GetProductAttrByID(attrid);
@@ -850,17 +850,17 @@ namespace CloudSalesBusiness
                 {
                     //日志
                     LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Product, EnumLogType.Create, "", operateid, agentid, clientid);
-
+                    int result = 0;
                     foreach (var model in details)
                     {
-                        AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, operateid, clientid);
+                        AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, operateid, clientid, out result);
                     }
                 }
                 return pid;
             }
         }
 
-        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string remark, string description, string operateid, string clientid)
+        public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string remark, string description, string operateid, string clientid, out int result)
         {
             if (!string.IsNullOrEmpty(productImg))
             {
@@ -884,7 +884,7 @@ namespace CloudSalesBusiness
             }
 
             var dal = new ProductsDAL();
-            return dal.AddProductDetails(productid, productCode, shapeCode, attrlist, valuelist, attrvaluelist, price, weight, bigprice, productImg, remark, description, operateid, clientid);
+            return dal.AddProductDetails(productid, productCode, shapeCode, attrlist, valuelist, attrvaluelist, price, weight, bigprice, productImg, remark, description, operateid, clientid, out result);
         }
 
         public bool UpdateProductStatus(string productid, EnumStatus status, string operateIP, string operateID)

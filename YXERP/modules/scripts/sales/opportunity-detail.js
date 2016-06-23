@@ -317,8 +317,8 @@ define(function (require, exports, module) {
                 images: false,
                 mouse: 'slide',
                 float: "left",
-                onChange: function (page) {
-                    _self.getLogs(customerid, page);
+                onChange: function (pager) {
+                    _self.getLogs(pager);
                 }
             });
         });
@@ -477,7 +477,7 @@ define(function (require, exports, module) {
                 mouse: 'slide',
                 float: "left",
                 onChange: function (page) {
-                    _self.getReplys(orderid, page);
+                    _self.getReplys(opportunityid, page);
                 }
             });
         });

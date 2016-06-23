@@ -712,6 +712,8 @@ define(function (require, exports, module) {
                                 }, function (data) {
                                     _self.getChildList(data.Item);
                                 });
+                            } else if (data.result == 2) {
+                                alert("此规格已存在");
                             }
                         });
                     },

@@ -242,9 +242,7 @@
                     }
                 ],
                 noDataLoadingOption: {
-                    text: "暂无数据",
-                    x: "center",
-                    y: "center",
+                    text: "",                   
                     textStyle: {
                         color: "red",
                         fontSize: 14

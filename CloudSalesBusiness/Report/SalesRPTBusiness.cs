@@ -63,10 +63,31 @@ namespace CloudSalesBusiness
 
                 model.Name = team.TeamName;
                 model.GUID = team.TeamID;
-
                 model.Types = new List<TypeOrderItem>();
                 model.ChildItems = new List<TypeOrderEntity>();
-
+                if (team.Users.Count == 0)
+                {
+                    TypeOrderEntity childModel = new TypeOrderEntity();
+                    childModel.GUID = "";
+                    childModel.Name ="";
+                    childModel.PID = team.TeamID;
+                    childModel.Types = new List<TypeOrderItem>();
+                    foreach (var type in types)
+                    {
+                        TypeOrderItem childItem = new TypeOrderItem();
+                        childItem.Name = type.TypeName;
+                        childItem.Money = 0;
+                        childItem.Count = 0;
+                        TypeOrderItem item = new TypeOrderItem();
+                        item.Name = type.TypeName; ;
+                        item.TypeID = type.TypeID;
+                        item.Count = childItem.Count;
+                        item.Money = childItem.Money;
+                        model.Types.Add(item);
+                        childModel.Types.Add(childItem);
+                    }
+                    model.ChildItems.Add(childModel);
+                }
                 //遍历成员
                 foreach (var user in team.Users)
                 {
@@ -75,15 +96,12 @@ namespace CloudSalesBusiness
                     childModel.Name = user.Name;
                     childModel.PID = team.TeamID;
                     childModel.Types = new List<TypeOrderItem>();
-
                     //遍历阶段
                     foreach (var type in types)
                     {
                         TypeOrderItem childItem = new TypeOrderItem();
                         childItem.Name = type.TypeName;
-
                         var drs = dt.Select("TypeID='" + type.TypeID + "' and OwnerID='" + user.UserID + "'");
-
                         if (drs.Count() > 0)
                         {
                             childItem.Money = Convert.ToDecimal(drs[0]["TotalMoney"]);
@@ -94,7 +112,6 @@ namespace CloudSalesBusiness
                             childItem.Money = 0;
                             childItem.Count = 0;
                         }
-
                         if (model.Types.Where(m => m.TypeID == type.TypeID).Count() > 0)
                         {
                             model.Types.Where(m => m.TypeID == type.TypeID).FirstOrDefault().Count += childItem.Count;
@@ -109,7 +126,6 @@ namespace CloudSalesBusiness
                             item.Money = childItem.Money;
                             model.Types.Add(item);
                         }
-
                         childModel.Types.Add(childItem);
                     }
                     model.ChildItems.Add(childModel);
@@ -125,13 +141,33 @@ namespace CloudSalesBusiness
                 foreach (var team in teams)
                 {
                     TypeOrderEntity model = new TypeOrderEntity();
-
                     model.Name = team.TeamName;
                     model.GUID = team.TeamID;
-
                     model.Types = new List<TypeOrderItem>();
                     model.ChildItems = new List<TypeOrderEntity>();
-
+                    if (team.Users.Count == 0)
+                    {
+                        TypeOrderEntity childModel = new TypeOrderEntity();
+                        childModel.GUID = "";
+                        childModel.Name = "";
+                        childModel.PID = team.TeamID;
+                        childModel.Types = new List<TypeOrderItem>();
+                        foreach (var type in types)
+                        {
+                            TypeOrderItem childItem = new TypeOrderItem();
+                            childItem.Name = type.TypeName;
+                            childItem.Money = 0;
+                            childItem.Count = 0;
+                            TypeOrderItem item = new TypeOrderItem();
+                            item.Name = type.TypeName; ;
+                            item.TypeID = type.TypeID;
+                            item.Count = childItem.Count;
+                            item.Money = childItem.Money;
+                            model.Types.Add(item);
+                            childModel.Types.Add(childItem);
+                        }
+                        model.ChildItems.Add(childModel);
+                    }
                     //遍历成员
                     foreach (var user in team.Users)
                     {
@@ -140,15 +176,12 @@ namespace CloudSalesBusiness
                         childModel.Name = user.Name;
                         childModel.PID = team.TeamID;
                         childModel.Types = new List<TypeOrderItem>();
-
                         //遍历阶段
                         foreach (var type in types)
                         {
                             TypeOrderItem childItem = new TypeOrderItem();
                             childItem.Name = type.TypeName;
-
                             var drs = dt.Select("TypeID='" + type.TypeID + "' and OwnerID='" + user.UserID + "'");
-
                             if (drs.Count() > 0)
                             {
                                 childItem.Money = Convert.ToDecimal(drs[0]["TotalMoney"]);
@@ -159,7 +192,6 @@ namespace CloudSalesBusiness
                                 childItem.Money = 0;
                                 childItem.Count = 0;
                             }
-
                             if (model.Types.Where(m => m.TypeID == type.TypeID).Count() > 0)
                             {
                                 model.Types.Where(m => m.TypeID == type.TypeID).FirstOrDefault().Count += childItem.Count;
@@ -174,17 +206,14 @@ namespace CloudSalesBusiness
                                 item.Money = childItem.Money;
                                 model.Types.Add(item);
                             }
-
                             childModel.Types.Add(childItem);
                         }
                         model.ChildItems.Add(childModel);
                     }
                     list.Add(model);
                 }
-
                 #endregion
             }
-
 
             return list;
         }
@@ -264,7 +293,7 @@ namespace CloudSalesBusiness
                 list.Add(model);
             }
 
-
+            total = total > 0 ? total : 1;
             if (total > 0)
             {
                 for (int i = list.Count - 1; i >= 0; i--)
@@ -277,10 +306,10 @@ namespace CloudSalesBusiness
                     //list[i].name += " (" + list[i].desc + ") ";
                 }
             }
-            else 
-            {
-                return new List<ReportCommonEntity>();
-            }
+            //else 
+            //{
+            //    return new List<ReportCommonEntity>();
+            //}
             return list;
         }
 
@@ -305,7 +334,34 @@ namespace CloudSalesBusiness
 
                 model.Stages = new List<StageCustomerItem>();
                 model.ChildItems = new List<StageCustomerEntity>();
-
+                if (team.Users.Count == 0)
+                {
+                    StageCustomerEntity childModel = new StageCustomerEntity();
+                    childModel.GUID = "";
+                    childModel.Name = "";
+                    childModel.PID = team.TeamID;
+                    childModel.PName = team.TeamName;
+                    childModel.Stages = new List<StageCustomerItem>();
+                    childModel.SCSRNum = 0;
+                    childModel.OCSRNum = 0;
+                    childModel.NCSRNum = 0;
+                    childModel.TotalNum = 0;
+                    foreach (var stage in stages)
+                    {
+                        StageCustomerItem childItem = new StageCustomerItem();
+                        childItem.Name = stage.StageName;
+                        childItem.Count = 0;
+                        childItem.Money = 0;
+                        childModel.Stages.Add(childItem);
+                        StageCustomerItem item = new StageCustomerItem();
+                        item.Name = stage.StageName;
+                        item.StageID = stage.StageID;
+                        item.Count = childItem.Count;
+                        item.Money = childItem.Money;
+                        model.Stages.Add(item);
+                    }
+                    model.ChildItems.Add(childModel);
+                }
                 //遍历成员
                 foreach (var user in team.Users)
                 {

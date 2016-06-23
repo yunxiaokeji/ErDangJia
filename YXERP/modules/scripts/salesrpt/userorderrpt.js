@@ -19,16 +19,12 @@
     }
     ObjectJS.bindEvent = function () {
         var _self = this;
-
-        $(".search-type li").click(function () {
+        $(".tab-nav-ul li").click(function () {
             var _this = $(this);
-            
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
                 _this.addClass("hover");
-
                 Params.type = _this.data("type");
-
                 _self.getUserCustomer();
             }
         });
@@ -50,7 +46,6 @@
             Params.endTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getUserCustomer();
         });
-
         _self.getUserCustomer();
 
     }
@@ -59,18 +54,15 @@
         var _self = this;
         $("#tr-header").nextAll().remove();
         Global.post("/SalesRPT/GetUserOrders", Params, function (data) {
-
             var cache = [];
             for (var i = 0; i < data.items.length; i++) {
                 if (data.items[i].ChildItems && data.items[i].ChildItems.length > 0) {
                     cache[data.items[i].GUID] = data.items[i].ChildItems;
                 }
             }
-
             doT.exec("template/report/teamorders.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
-                
                 innerhtml.find(".useritemcounttotal").each(function () {
                     var _this = $(this), total = 0;
                     _this.parent().prevAll().find(".useritemcount[data-typeid='" + _this.data("typeid") + "']").each(function () {

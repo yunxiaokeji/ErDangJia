@@ -20,26 +20,15 @@
     //初始化
     ObjectJS.init = function (types) {
         var _self = this;
-
         _self.ordermapChart = ec.init(document.getElementById('ordermapRPT'));
-
         _self.bindEvent(types);
     }
     ObjectJS.bindEvent = function (types) {
-        var _self = this;
-
-        //types = JSON.parse(types.replace(/&quot;/g, '"'));
+        var _self = this; 
         require.async("dropdown", function () {
-
             var OrderMapType=[
-                {
-                    name: "订单金额",
-                    value:"1"
-                },
-                {
-                    name:"订单数量",
-                    value:"2"
-                }
+                { name: "订单金额", value:"1" },
+                { name:"订单数量", value:"2"  }
             ];
             $("#OrderMapType").dropdown({
                 prevText: "统计类型-",
@@ -52,13 +41,7 @@
                 onChange: function (data)
                 {
                     Params.OrderMapType = data.value;
-
-                    if (Params.type == 1) {
-                        _self.ordermap();
-                    }
-                    else if (Params.type == 2) {
-                        _self.ordertype();
-                    }
+                    ObjectJS.clickli();
                 }
             });
 
@@ -75,35 +58,24 @@
                 onChange: function (data) {
                     Params.UserID = data.userid;
                     Params.TeamID = data.teamid;
-                    $("#btnSearch").click();
+                    ObjectJS.clickli();
                 }
             });
         });
 
-        $(".search-type li").click(function () {
+        $(".tab-nav-ul li").click(function () {
             var _this = $(this);
-
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
                 _this.addClass("hover");
             }
-
             Params.type = _this.data("type");
-
             $(".source-box").hide();
             $("#" + _this.data("id")).show();
-
             if (!_self.ordertypeRPT) {
                 _self.ordertypeRPT = ec.init(document.getElementById('ordertypeRPT'));
             }
-
-            if (Params.type == 1) {
-                _self.ordermap();
-            }
-            else if (Params.type == 2) {
-                _self.ordertype();
-            }
-
+            ObjectJS.clickli();
         });
         //日期插件
         $("#iptCreateTime").daterangepicker({
@@ -119,16 +91,20 @@
         }, function (start, end, label) {
             Params.beginTime = start ? start.format("YYYY-MM-DD") : "";
             Params.endTime = end ? end.format("YYYY-MM-DD") : "";
-            if (Params.type == 1) {
-                _self.ordermap();
-            }
-            else if (Params.type == 2) {
-                _self.ordertype();
-            }
+            ObjectJS.clickli();
         });
 
         ObjectJS.ordermap();
 
+    }
+    ObjectJS.clickli = function () {
+        var _self = this;
+        if (Params.type == 1) {
+            _self.ordermap();
+        }
+        else if (Params.type == 2) {
+            _self.ordertype();
+        }
     }
     //订单地区分布统计
     ObjectJS.ordermap = function () {
@@ -151,7 +127,6 @@
             var selNameItems = [];
             var title = "订单总额";
             var total = 0;
-
             if (Params.OrderMapType == 2)
                 title = "订单数量";
 
@@ -270,12 +245,11 @@
                 color: "red",
                 fontSize: 14
             },
-            effect: "spin"
+            effect: "whirling"
         });
 
         Global.post("/SalesRPT/GetOrderMapReport", Params, function (data) {
-            var title = [], items = [],total=0;
-
+            var title = [], items = [],total=0; 
             for (var i = 0, j = data.items.length; i < j; i++) {
                 if (Params.OrderMapType == 1)
                     data.items[i].value = data.items[i].total_money;
@@ -316,6 +290,16 @@
                         saveAsImage: { show: true }
                     }
                 },
+                noDataLoadingOption:{
+                    text: "暂无数据",
+                    x: "center",
+                    y: "center",
+                    textStyle: {
+                        color: "red",
+                        fontSize: 14
+                    },
+                    effect: "bubble"
+                }, 
                 series: [
                     {
                         name: '订单类型',

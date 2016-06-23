@@ -1,11 +1,19 @@
-﻿
-.opport-relative {min-height: 300px; min-width: 590px; overflow: auto; position: relative; left: 0;}
-.opport-absolute{position: absolute; left: 30px; bottom: 0;}
+﻿/**客户阶段**/
+.opport-relative { overflow: auto; position: relative; left: 0;}
+.opport-absolute{position: absolute;  bottom: 0;}
 .pauto20{padding: 0 20px;}
-.footertext {height: 30px; line-height: 30px;text-align: center;}
-.opportcontent{min-width:185px;line-height: 170px; }
-.border-bottom{ border-bottom: 30px solid #FFFFFF;}
-.customer-content{}
+.footertext {height: 40px; font-size: 9pt;line-height:40px; } 
+.border-bottom{ border-bottom: 40px solid #FFFFFF;}
+.min-width720{ min-width: 720px;}
 .min-height170{min-height: 170px;}
 .min-height150{min-height: 150px;}
 .min-height120{min-height: 120px;}
+.min-height300{min-height: 300px;}
+.min-height350{min-height: 350px;}
+
+/**机会阶段**/
+.cont{width:100%; text-align:center; margin-top:10px;float:left;}
+.taper-right {height: 0px;border-color: lightgray transparent;border-style: solid;border-width: 50px 25px 0 0px;float: left;}
+.taper-left {height: 0px;border-color: lightgray transparent;border-style: solid;border-width: 50px 0px 0px 25px;float: left;}
+.taper-center {vertical-align:middle; width:500px;height: 40px;background-color: lightgray transparent;color: #fff;
+background-color: lightgray;float: left;padding: 5px 0px 5px 0px;overflow: auto;}

@@ -225,7 +225,7 @@
                         type: 'line',
                         stack: '总量',
                         data: _items
-                    })
+                    });
                 }
             }
             
@@ -256,6 +256,16 @@
                         type: 'value'
                     }
                 ],
+                noDataLoadingOption: {
+                    text: "暂无数据",
+                    x: "center",
+                    y: "center",
+                    textStyle: {
+                        color: "red",
+                        fontSize: 14
+                    },
+                    effect: "bubble"
+                },
                 series: items
             };
             _self.teamChart.hideLoading();

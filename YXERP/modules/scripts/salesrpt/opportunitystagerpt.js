@@ -53,10 +53,7 @@
                 _this.addClass("hover");
                 $(".source-box").hide();
                 $("#" + _this.data("id")).show(); 
-                Params.type = _this.data("type");
-                //if (!_self.teamChart) {
-                // _self.teamChart = ec.init(document.getElementById('teamRPT'));
-                //}
+                Params.type = _this.data("type"); 
                 if (_this.data("begintime")) {
                     Params.beginTime= _this.data("begintime"); 
                 }
@@ -72,14 +69,8 @@
 
         require.async("dropdown", function () {
             var OrderMapType = [
-               {
-                   name: "机会金额",
-                   value: "1"
-               },
-               {
-                   name: "机会数量",
-                   value: "2"
-               }
+               { name: "机会金额", value: "1" },
+               { name: "机会数量", value: "2" }
             ];
 
             $("#showType").dropdown({
@@ -92,13 +83,12 @@
                 width: "140",
                 onChange: function (data) {
                     Params.OrderMapType = data.value;
-                    $("#btnSearch").click();
+                    ObjectJS.getRptData();
                 }
             });
         });
 
         require.async("choosebranch", function () {
-
             $("#chooseBranch").chooseBranch({
                 prevText: "人员-",
                 defaultText: "全部",
@@ -109,7 +99,7 @@
                 onChange: function (data) {
                     Params.UserID = data.userid;
                     Params.TeamID = data.teamid;
-                    $("#btnSearch").click();
+                    ObjectJS.getRptData();
                 }
             });
         });
@@ -177,7 +167,7 @@
         _self.teamChart.showLoading({
             text: "数据正在努力加载...",
             x: "center",
-            y: "center",
+            y: "center", 
             textStyle: {
                 color: "red",
                 fontSize: 14
@@ -186,10 +176,8 @@
         });
 
         Global.post("/SalesRPT/GetUserOpportunitys", Params, function (data) {
-
             var title = [], items = [], datanames = [];
             _self.teamChart.clear();
-
             if (Params.OrderMapType == 2) {
                 for (var i = 0, j = data.items.length; i < j; i++) {
                     datanames.push(data.items[i].Name);
@@ -253,6 +241,16 @@
                         type: 'value'
                     }
                 ],
+                noDataLoadingOption: {
+                    text: "暂无数据",
+                    x: "center",
+                    y: "center",
+                    textStyle: {
+                        color: "red",
+                        fontSize: 14
+                    },
+                    effect: "bubble"
+                },
                 series: items
             };
             _self.teamChart.hideLoading();

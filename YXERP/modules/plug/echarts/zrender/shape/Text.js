@@ -80,34 +80,32 @@ define(
                 this.doClip(ctx);
 
                 this.setContext(ctx, style);
+                try {
+                    // 设置transform
+                    this.setTransform(ctx);
 
-                // 设置transform
-                this.setTransform(ctx);
+                    if (style.textFont) {
+                        ctx.font = style.textFont;
+                    }
+                    ctx.textAlign = style.textAlign || 'start';
+                    ctx.textBaseline = style.textBaseline || 'middle';
 
-                if (style.textFont) {
-                    ctx.font = style.textFont;
-                }
-                ctx.textAlign = style.textAlign || 'start';
-                ctx.textBaseline = style.textBaseline || 'middle';
+                    var text = (style.text + '').split('\n');
+                    var lineHeight = area.getTextHeight('国', style.textFont);
+                    var rect = this.getRect(style);
 
-                var text = (style.text + '').split('\n');
-                var lineHeight = area.getTextHeight('国', style.textFont);
-                var rect = this.getRect(style);
-                var x = style.x;
-                var y;
-                if (style.textBaseline == 'top') {
-                    y = rect.y;
-                }
-                else if (style.textBaseline == 'bottom') {
-                    y = rect.y + lineHeight;
-                }
-                else {
-                    y = rect.y + lineHeight / 2;
-                }
-                
-                for (var i = 0, l = text.length; i < l; i++) {
-                    if (style.maxWidth) {
-                        switch (style.brushType) {
+                    var x = style.x;
+                    var y;
+                    if (style.textBaseline == 'top') {
+                        y = rect.y;
+                    } else if (style.textBaseline == 'bottom') {
+                        y = rect.y + lineHeight;
+                    } else {
+                        y = rect.y + lineHeight / 2;
+                    }
+                    for (var i = 0, l = text.length; i < l; i++) {
+                        if (style.maxWidth) {
+                            switch (style.brushType) {
                             case 'fill':
                                 ctx.fillText(
                                     text[i],
@@ -135,10 +133,9 @@ define(
                                     text[i],
                                     x, y, style.maxWidth
                                 );
-                        }
-                    }
-                    else {
-                        switch (style.brushType) {
+                            }
+                        } else {
+                            switch (style.brushType) {
                             case 'fill':
                                 ctx.fillText(text[i], x, y);
                                 break;
@@ -151,13 +148,16 @@ define(
                                 break;
                             default:
                                 ctx.fillText(text[i], x, y);
+                            }
                         }
+                        y += lineHeight;
                     }
-                    y += lineHeight;
+                    ctx.restore();
+                    return;
+                } catch (exper) {
+                     
                 }
 
-                ctx.restore();
-                return;
             },
 
             /**
@@ -174,7 +174,10 @@ define(
                 var height = area.getTextHeight(style.text, style.textFont);
                 
                 var textX = style.x;                 // 默认start == left
-                if (style.textAlign == 'end' || style.textAlign == 'right') {
+                if (typeof (style.x) != "undefined" && style.x == 'center') {
+                    textX = width / 2;
+                }
+                else if (style.textAlign == 'end' || style.textAlign == 'right') {
                     textX -= width;
                 }
                 else if (style.textAlign == 'center') {
@@ -182,7 +185,10 @@ define(
                 }
 
                 var textY;
-                if (style.textBaseline == 'top') {
+                if (typeof (style.y) != "undefined" && style.y == 'center') {
+                    textY = height / 2;
+                }
+                else if (style.textBaseline == 'top') {
                     textY = style.y;
                 }
                 else if (style.textBaseline == 'bottom') {

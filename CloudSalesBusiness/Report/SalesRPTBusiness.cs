@@ -273,8 +273,8 @@ namespace CloudSalesBusiness
                     prev = list[i].dValue;
 
                     list[i].value = (list[i].dValue / total * 100).ToString("f2");
-                    list[i].name += list[i].dValue.ToString("f2");
-                    list[i].name += " (" + list[i].desc + ") ";
+                    //list[i].name += list[i].dValue.ToString("f2");
+                    //list[i].name += " (" + list[i].desc + ") ";
                 }
             }
             else 

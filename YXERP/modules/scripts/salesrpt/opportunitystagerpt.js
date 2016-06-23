@@ -161,7 +161,7 @@
                 innerhtml += '<div class="cont " style="margin-left:' + (i > 0 ? totalleft : 0) + 'px;"  title="' + data.items[i].name + '">';
                 totalleft += marginleft;
                 innerhtml += '<div class="taper-left" style="border-top-width:' + marginleft * 2 + 'px;border-left-width:' + marginleft + 'px;border-top-color:' + colorList[i] + ';"></div>' +
-                    '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + (i > 0 ? totallent - totalleft * 2 : 500) + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].value + '</div>' +
+                    '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + (i > 0 ? totallent - totalleft * 2 : 500) + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].dValue + '</br>' + data.items[i].desc + ' : ' + data.items[i].value + '</div>' +
                     '<div class="taper-right" style="border-top-color:' + colorList[i] + ';border-top-width:' + marginleft * 2 + 'px;border-right-width:' + marginleft + 'px;"></div>' +
                     '</div>';
                 marginleft = 30;

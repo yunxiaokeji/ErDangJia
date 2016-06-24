@@ -148,14 +148,27 @@
                 if (i == 0) {
                     totallent += 2 * marginleft;
                 }
-                innerhtml += '<div class="cont " style="margin-left:' + (i > 0 ? totalleft : 0) + 'px;"  title="' + data.items[i].name + '">';
+                var headerdiv = '<div class="cont mTop10" style=""  title="' + data.items[i].name +' 数量:'+ data.items[i].dValue + '(' + data.items[i].value+ ')">';;
+                
+                var previousleft = totalleft;
                 totalleft += marginleft;
-                innerhtml += '<div class="taper-left" style="border-top-width:' + marginleft * 2 + 'px;border-left-width:' + marginleft + 'px;border-top-color:' + colorList[i] + ';"></div>' +
-                    '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + (i > 0 ? totallent - totalleft * 2 : 500) + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].dValue + '</br>' + data.items[i].desc + ' : ' + data.items[i].value + '</div>' +
-                    '<div class="taper-right" style="border-top-color:' + colorList[i] + ';border-top-width:' + marginleft * 2 + 'px;border-right-width:' + marginleft + 'px;"></div>' +
-                    '</div>';
+                if (i < j - 1) { 
+                    innerhtml += headerdiv.replace('style="', 'style="margin-left:' + (i > 0 ? previousleft : 0) + 'px;"') + '<div class="taper-left" style="border-top-width:' + marginleft * 2 + 'px;border-left-width:' + marginleft + 'px;border-top-color:' + colorList[i] + ';"></div>' +
+                        '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + (i > 0 ? totallent - totalleft * 2 : 500) + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].dValue + '</br>' + data.items[i].desc + ' : ' + data.items[i].value + '</div>' +
+                        '<div class="taper-right" style="border-top-color:' + colorList[i] + ';border-top-width:' + marginleft * 2 + 'px;border-right-width:' + marginleft + 'px;"></div>' +
+                        '</div>';
+                }
+                if (i == j - 1) {
+                    var lastwidth = (i > 0 ? totallent - totalleft * 2 : 500);
+                    var lastheight = marginleft; 
+                    innerhtml += headerdiv.replace('style="', 'style="margin-left:' + (i > 0 ? previousleft : 0) + 'px;"') + '<div class="taper-left" style="border-top-width:' + marginleft * 2 + 'px;border-left-width:' + marginleft + 'px;border-top-color:' + colorList[i] + ';"></div>' +
+                        '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + lastwidth + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].dValue + '</br>' + data.items[i].desc + ' : ' + data.items[i].value + '</div>' +
+                        '<div class="taper-right" style="border-top-color:' + colorList[i] + ';border-top-width:' + marginleft * 2 + 'px;border-right-width:' + marginleft + 'px;"></div>' +
+                        '</div>'; 
+                    innerhtml += headerdiv.replace("cont mTop10", "").replace('style="', 'style="margin-left:' + (i > 0 ? totalleft : 0) + 'px;border-bottom-width: 0px;text-align:center; float:left;border-style: solid;border-color:' + colorList[i] + ' transparent;border-left-width:' + lastwidth / 2 + 'px;border-right-width:' + lastwidth / 2 + 'px;border-top-width:' + lastwidth + 'px;') + '</div>';
+                }
                 marginleft = 30;
-                liList += '<li style="list-style-type: none;overflow: auto"><span class="mTop3 left" style="min-width:11px;min-height:14px;background-color:' + colorList[i] + ';"></span><span class="mLeft10 left">' + data.items[i].name + '</span> </li>';
+                liList += '<li style="list-style-type: none;overflow: auto"><span class="mTop3 left" style="min-width:11px;min-height:14px;background-color:' + colorList[i] + ';"></span><span class="mLeft10 left">' + data.items[i].name + '('+data.items[i].value+')</span> </li>';
             }
             $('#funnelContent').html(innerhtml);
             $('#colorList').html(liList);
@@ -242,9 +255,7 @@
                     }
                 ],
                 noDataLoadingOption: {
-                    text: "暂无数据",
-                    x: "center",
-                    y: "center",
+                    text: "",                   
                     textStyle: {
                         color: "red",
                         fontSize: 14

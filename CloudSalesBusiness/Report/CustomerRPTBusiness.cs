@@ -291,7 +291,33 @@ namespace CloudSalesBusiness
 
                 model.Stages = new List<StageCustomerItem>();
                 model.ChildItems = new List<StageCustomerEntity>();
-
+                if (team.Users.Count == 0)
+                {
+                    StageCustomerEntity childModel = new StageCustomerEntity();
+                    childModel.GUID = "";
+                    childModel.Name = "";
+                    childModel.PID = team.TeamID;
+                    childModel.PName = team.TeamName;
+                    childModel.Stages = new List<StageCustomerItem>();
+                    childModel.SCSRNum = 0;
+                    childModel.OCSRNum = 0;
+                    childModel.NCSRNum = 0;
+                    childModel.TotalNum = 0;
+                    foreach (var stage in stages)
+                    {
+                        StageCustomerItem childItem = new StageCustomerItem();
+                        var stageName = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
+                        childItem.Name = stageName;
+                        childItem.Count = 0;
+                        childModel.Stages.Add(childItem);
+                        StageCustomerItem item = new StageCustomerItem();
+                        item.Name = stageName;
+                        item.StageID = stage.ToString();
+                        item.Count = childItem.Count;
+                        model.Stages.Add(item);
+                    }
+                    model.ChildItems.Add(childModel);
+                }
                 //遍历成员
                 foreach (var user in team.Users)
                 {
@@ -363,7 +389,33 @@ namespace CloudSalesBusiness
 
                     model.Stages = new List<StageCustomerItem>();
                     model.ChildItems = new List<StageCustomerEntity>();
-
+                    if (team.Users.Count == 0)
+                    {
+                        StageCustomerEntity childModel = new StageCustomerEntity();
+                        childModel.GUID = "";
+                        childModel.Name ="";
+                        childModel.PID = team.TeamID;
+                        childModel.PName = team.TeamName;
+                        childModel.Stages = new List<StageCustomerItem>();
+                        childModel.SCSRNum = 0;
+                        childModel.OCSRNum = 0;
+                        childModel.NCSRNum = 0;
+                        childModel.TotalNum = 0;
+                        foreach (var stage in stages)
+                        {
+                            StageCustomerItem childItem = new StageCustomerItem();
+                            var stageName = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
+                            childItem.Name = stageName;
+                            childItem.Count = 0;
+                            childModel.Stages.Add(childItem);
+                            StageCustomerItem item = new StageCustomerItem();
+                            item.Name = stageName;
+                            item.StageID = stage.ToString();
+                            item.Count = childItem.Count;
+                            model.Stages.Add(item);
+                        }
+                        model.ChildItems.Add(childModel);
+                    }
                     //遍历成员
                     foreach (var user in team.Users)
                     {

@@ -200,7 +200,7 @@ namespace CloudSalesBusiness
             if (bl)
             {
                 var model = OrganizationBusiness.GetUserByUserID(userid, agentid);
-                string msg = "拥有者更换为：" + model.Name;
+                string msg = "负责人更换为：" + model.Name;
                 LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, userid, agentid, clientid);
             }
             return bl;

@@ -41,11 +41,9 @@
         </ul>
     </div>
     <div class="search-item">
-        <div class="name">状态</div>
-        <ul class="search-status">
-            <li data-id="-1">全部</li>
-            <li data-id="1" class="hover">正常</li>
-            <li data-id="2">关闭</li>
+        <div class="name">来源</div>
+        <ul id="customerSource">
+            <li data-id="" class="hover">全部</li>
         </ul>
     </div>
     <div class="search-item">
@@ -57,9 +55,11 @@
         </ul>
     </div>
     <div class="search-item">
-        <div class="name">来源</div>
-        <ul id="customerSource">
-            <li data-id="" class="hover">全部</li>
+        <div class="name">状态</div>
+        <ul class="search-status">
+            <li data-id="-1">全部</li>
+            <li data-id="1" class="hover">正常</li>
+            <li data-id="2">关闭</li>
         </ul>
     </div>
     @*<div class="close-filter">
@@ -93,7 +93,7 @@
             <td class="width100">联系人</td>
             <td class="width100">联系电话</td>
             <td class="width80">备忘数</td>
-            <td class="width100">拥有者</td>
+            <td class="width100">负责人</td>
             <td class="width100">创建时间</td>
         </tr>
     </table>
@@ -106,7 +106,7 @@
                 <span class="ico-check pLeft5 mTop5" id="checkAll">批量操作</span>
             </li>
             <li>
-                <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current, "101019002"))" id="batchChangeOwner">更换拥有者</a>
+                <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current, "101019002"))" id="batchChangeOwner">更换负责人</a>
             </li>
             <li>
                 &nbsp;<a href="javascript:void(0);" class="btn" id="batchCustomerExport">导出客户</a>

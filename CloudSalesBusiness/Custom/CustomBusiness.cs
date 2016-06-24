@@ -302,7 +302,7 @@ namespace CloudSalesBusiness
             if (bl)
             {
                 var model = OrganizationBusiness.GetUserByUserID(userid, agentid);
-                string msg = "客户拥有者更换为：" + model.Name;
+                string msg = "客户负责人更换为：" + model.Name;
                 LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, ip, userid, agentid, clientid);
             }
             return bl;

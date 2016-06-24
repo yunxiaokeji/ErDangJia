@@ -146,15 +146,16 @@
         }
         //全部选中
         $("#checkAll").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("ico-checked")) {
-                _this.addClass("ico-checked").removeClass("ico-check");
-                $(".table-list .check").addClass("ico-checked").removeClass("ico-check");
+            var _this = $(this).find(".checkbox");
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+                $(".table-box-list .checkbox").addClass("hover");
             } else {
-                _this.addClass("ico-check").removeClass("ico-checked");
-                $(".table-list .check").addClass("ico-check").removeClass("ico-checked");
+                _this.removeClass("hover");
+                $(".table-box-list .checkbox").removeClass("hover");
             }
         });
+
         $("#dropdown").click(function () { 
             var position = $(".dropdown").position();
             $(".dropdown-ul").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
@@ -170,7 +171,7 @@
 
         //批量转移
         $("#batchChangeOwner").click(function () {
-            var checks = $(".table-list .ico-checked");
+            var checks = $(".table-box-list .checkbox.hover");
             if (checks.length > 0) {
                 ChooseUser.create({
                     title: "批量更换负责人",
@@ -224,7 +225,7 @@
             isAll: true,
             data: _self.ColorList, 
             onChange: function (obj, callback) { 
-                var checks = $(".table-list .ico-checked");
+                var checks = $(".table-box-list .checkbox.hover");
                 if (checks.length > 0) {
                     var ids = "";
                     checks.each(function () {
@@ -286,9 +287,9 @@
     //获取列表
     ObjectJS.getList = function () {
         var _self = this;
-        $("#checkAll").addClass("ico-check").removeClass("ico-checked");
-        $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
+        $("#checkAll").removeClass("hover");
+        $(".box-header").nextAll().remove();
+        $(".box-header").after("<div class='data-loading'><div>");
 
         Global.post("/Customer/GetCustomers", { filter: JSON.stringify(Params) }, function (data) {
             _self.bindList(data);
@@ -297,19 +298,19 @@
     //加载列表
     ObjectJS.bindList = function (data) {
         var _self = this;
-        $(".tr-header").nextAll().remove();
+        $(".box-header").nextAll().remove();
 
         if (data.items.length > 0) {
             doT.exec("template/customer/customers.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 
-                innerhtml.find(".check").click(function () {
+                innerhtml.find(".checkbox").click(function () {
                     var _this = $(this);
-                    if (!_this.hasClass("ico-checked")) {
-                        _this.addClass("ico-checked").removeClass("ico-check");
+                    if (!_this.hasClass("hover")) {
+                        _this.addClass("hover");
                     } else {
-                        _this.addClass("ico-check").removeClass("ico-checked");
+                        _this.removeClass("hover");
                     }
                     return false;
                 });
@@ -323,11 +324,11 @@
                     }
                 });
 
-                $(".tr-header").after(innerhtml);
+                $(".box-header").after(innerhtml);
 
             });
         } else {
-            $(".tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $(".box-header").after("<div class='nodata-box' >暂无数据<div>");
         }
 
         $("#pager").paginate({
@@ -412,6 +413,7 @@
             guid: guid
         }); 
       
-    } 
+    }
+
     module.exports = ObjectJS;
 });

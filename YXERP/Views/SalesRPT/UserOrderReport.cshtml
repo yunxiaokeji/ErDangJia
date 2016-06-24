@@ -1,47 +1,64 @@
-﻿@{
+﻿@using CloudSalesEntity
+@{
     ViewBag.Title = "销售订单统计";
+    List<OrderTypeEntity> types = ViewBag.Types;
 }
  <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/salesrpt/userorderrpt"], function (obj) {
-            obj.init();
+            obj.init('@Html.ToJSONString(types)');
         });
     </script>
 }
 <div class="tab-nav">
     <ul class="tab-nav-ul search-type">
-        <li data-type="1" data-id="userTotalRPT" class="hover">销售订单统计</li>
+        <li data-type="1" data-id="userTotalRPT" class="hover">团队汇总</li>
+        <li data-type="2" data-id="userRPT">员工排行</li>
     </ul>
 </div>
+ 
+<div class="mLeft20  " title="日期">
+    <div class="left hide seachType mRight5" id="seachType"></div>
+    <div class="left hide mRight5 seachType" id="seachOrderType"></div>
+    <input type="text" id="iptCreateTime" placeholder="日期" class="ipt-date"/>
+</div> 
+<div class="content-body mTop10"> 
+        <table id="userTotalRPT" class="table-list-rpt tab-content">
+            <tr class="tr-header">
+                <td class="width50 tLeft"></td>
+                <td class="tLeft">名称</td>
+                @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>) ViewBag.Types)
+                {
+                    <td colspan="2">@(model.TypeName)</td>
+                }
+                <td colspan="2">合计</td>
+            </tr>
+            <tr class="tr-header" id="tr-header">
+                <td class="width50 tLeft"></td>
+                <td class="tLeft"></td>
+                @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>) ViewBag.Types)
+                {
+                    <td>订单数</td>
+                    <td>总金额</td>
+                }
+                <td>订单数</td>
+                <td>总金额</td>
+            </tr>
+        </table>
+ 
+        <ul id="userRPT" class="left tab-content hide">
+            <li  class="left">
+                <table id="TotalList" class="table-list-rpt">
+                    <tr class="tr-header">
+                        <td>团队名称</td>
+                        <td>员工名称</td>
+                        <td class="ordertypetitle">总 计</td>
+                    </tr>
+                </table>
+            </li> 
+        </ul>
+</div>
 
-<div class="search-header">
-     <div class="left" title="日期">
-        <input type="text" id="iptCreateTime" placeholder="日期" class="ipt-date"  />
-    </div>
-</div>
-<div class="content-body">
-    <table id="userTotalRPT" class="table-list-rpt">
-        <tr class="tr-header">
-            <td class="width50 tLeft"></td>
-            <td class="tLeft">名称</td>
-            @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>)ViewBag.Types)
-            {
-                 <td colspan="2">@(model.TypeName)</td>
-            }
-            <td colspan="2">合计</td>
-        </tr>
-        <tr class="tr-header" id="tr-header">
-            <td class="width50 tLeft"></td>
-            <td class="tLeft"></td>
-            @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>)ViewBag.Types)
-            {
-                 <td>订单数</td>
-                 <td>总金额</td>
-            }
-            <td>订单数</td>
-            <td>总金额</td>
-        </tr>
-    </table>
-</div>
+
 

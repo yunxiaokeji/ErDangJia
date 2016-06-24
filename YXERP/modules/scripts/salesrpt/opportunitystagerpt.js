@@ -165,7 +165,7 @@
                         '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + lastwidth + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].dValue + '</br>' + data.items[i].desc + ' : ' + data.items[i].value + '</div>' +
                         '<div class="taper-right" style="border-top-color:' + colorList[i] + ';border-top-width:' + marginleft * 2 + 'px;border-right-width:' + marginleft + 'px;"></div>' +
                         '</div>'; 
-                    innerhtml += headerdiv.replace("cont mTop10", "").replace('style="', 'style="margin-left:' + (i > 0 ? totalleft : 0) + 'px;border-bottom-width: 0px;text-align:center; float:left;border-style: solid;border-color:' + colorList[i] + ' transparent;border-left-width:' + lastwidth / 2 + 'px;border-right-width:' + lastwidth / 2 + 'px;border-top-width:' + lastwidth + 'px;') + '</div>';
+                    innerhtml += headerdiv.replace("cont mTop10", "").replace('style="', 'style="margin-left:' + (i > 0 ? totalleft : 0) + 'px;border-bottom-width: 0px;text-align:center; float:left;border-style: solid;border-color:' + colorList[i] + ' transparent;border-left-width:' + lastwidth / 16 + 'px;border-right-width:' + lastwidth / 16 + 'px;border-top-width:' + lastwidth / 8 + 'px;width:' + lastwidth *7/8+ 'px;') + '</div>';
                 }
                 marginleft = 30;
                 liList += '<li style="list-style-type: none;overflow: auto"><span class="mTop3 left" style="min-width:11px;min-height:14px;background-color:' + colorList[i] + ';"></span><span class="mLeft10 left">' + data.items[i].name + '('+data.items[i].value+')</span> </li>';

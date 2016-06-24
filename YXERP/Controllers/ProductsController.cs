@@ -70,6 +70,10 @@ namespace YXERP.Controllers
         {
             return View();
         }
+        public ActionResult ProductImport()
+        {
+            return View();
+        }
 
         public ActionResult ChooseDetail(string pid, string did, int type = 0, string guid = "")
         {

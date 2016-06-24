@@ -78,6 +78,7 @@
         $('#chartRPT').show();
       
         Global.post("/CustomerRPT/GetCustomerStageRate", Params, function (data) {
+            var colorList = ['#8fedf3', '#02e1ff', '#4ed3ff', '#02bbff', '#4eb6ff', '#229aee', '#0296ff', '#0d84d8', '#1a7bc0', '#o75f9d'];
             for (var i = 0; i < data.items.length; i++) {
                 var html = '';
                 var item = data.items[i];
@@ -124,7 +125,7 @@
                                 } 
                             }
                         }
-                        html += '<li class="left center min-height170" style="min-width:' + width + 'px; background-color:' + (j == 0 ? "#FFF4E1" : j == 1 ? "#FDE6E6" : j == 2 ? "#FFEEED" : j == 3 ? "#CCFFFF" : j == 4 ? "#E0E0E0" : "#CCF8F2") + ';">' +
+                        html += '<li class="left center min-height170" style="min-width:' + width + 'px; background-color:' + (j > colorList.length - 1 ? colorList[colorList.length] : colorList[j] )+ ';">' +
                             '<div class="pTop30"> <span>' + sourceitem.Name + '</span><br/>' +
                             '<p class="mTop20 font16"  title="' + sourceitem.Name + '新增机会数" >' + sourceitem.Value + '</p><br/>' +
                             '<span  title="' + sourceitem.Name + '转化率">' + sourceitem.value + '%</span>' +

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 
 using CloudSalesBusiness;
+using CloudSalesEntity;
 
 namespace YXERP.Controllers
 {
@@ -38,11 +39,24 @@ namespace YXERP.Controllers
 
         #region 销售订单统计
 
-        public JsonResult GetUserOrders(string userid, string teamid, string beginTime, string endTime)
+        public JsonResult GetUserOrders(int type,string userid, string teamid, string beginTime, string endTime,int desctype,string ordertype)
         {
+           
+            var list = SalesRPTBusiness.BaseBusiness.GetUserOrders(userid, teamid, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID,ordertype);
 
-            var list = SalesRPTBusiness.BaseBusiness.GetUserOrders(userid, teamid, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("items", list);
+            if (type == 2)
+            {
+                Dictionary<string, List<TypeOrderEntity>> customerlist =  new Dictionary<string, List<TypeOrderEntity>>(); 
+                
+                List<TypeOrderEntity> listcustomer = new List<TypeOrderEntity>();
+                list.ForEach(x => listcustomer.AddRange(x.ChildItems));
+                customerlist.Add("TotalList", listcustomer.OrderByDescending(x => (desctype > 1 ? x.TCount : x.TMoney)).Take(15).ToList());
+                JsonDictionary.Add("items", customerlist);
+            }
+            else
+            {
+                JsonDictionary.Add("items", list);
+            }
             return new JsonResult()
             {
                 Data = JsonDictionary,

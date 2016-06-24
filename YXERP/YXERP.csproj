@@ -268,6 +268,7 @@
     <Content Include="modules\css\iconfont\iconfont.ttf" />
     <Content Include="modules\css\iconfont\iconfont.woff" />
     <Content Include="modules\excelmodel\customer.json" />
+    <Content Include="modules\excelmodel\product.json" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -797,6 +798,7 @@
     <Content Include="Views\Default\LeftMenu.cshtml" />
     <Content Include="Views\MyAccount\MyFeedBack.cshtml" />
     <Content Include="Views\Customer\CustomerImport.cshtml" />
+    <Content Include="Views\Products\ProductImport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -14,7 +14,7 @@ namespace CloudSalesBusiness
     {
         public static SalesRPTBusiness BaseBusiness = new SalesRPTBusiness();
 
-        public List<TypeOrderEntity> GetUserOrders(string userid, string teamid, string begintime, string endtime, string agentid, string clientid)
+        public List<TypeOrderEntity> GetUserOrders(string userid, string teamid, string begintime, string endtime, string agentid, string clientid,string ordertype)
         {
             List<TypeOrderEntity> list = new List<TypeOrderEntity>();
 
@@ -32,6 +32,10 @@ namespace CloudSalesBusiness
 
                 TypeOrderEntity model = new TypeOrderEntity();
                 model.Name = OrganizationBusiness.GetUserByUserID(userid, agentid).Name;
+                model.TCount = 0;
+                model.TMoney = 0;
+                var team = SystemBusiness.BaseBusiness.GetTeamByID(teamid, agentid);
+                model.PName = (team != null ? team.TeamName : "");
                 model.Types = new List<TypeOrderItem>();
                 foreach (var type in types)
                 {
@@ -49,6 +53,8 @@ namespace CloudSalesBusiness
                         item.Money = 0;
                         item.Count = 0;
                     }
+                    model.TCount += item.Count;
+                    model.TMoney += item.Money;
                     model.Types.Add(item);
                 }
                 list.Add(model);
@@ -65,12 +71,17 @@ namespace CloudSalesBusiness
                 model.GUID = team.TeamID;
                 model.Types = new List<TypeOrderItem>();
                 model.ChildItems = new List<TypeOrderEntity>();
+                model.TCount = 0;
+                model.TMoney = 0;
                 if (team.Users.Count == 0)
                 {
                     TypeOrderEntity childModel = new TypeOrderEntity();
                     childModel.GUID = "";
                     childModel.Name ="";
                     childModel.PID = team.TeamID;
+                    childModel.PName = team.TeamName;
+                    childModel.TCount = 0;
+                    childModel.TMoney = 0;
                     childModel.Types = new List<TypeOrderItem>();
                     foreach (var type in types)
                     {
@@ -95,6 +106,9 @@ namespace CloudSalesBusiness
                     childModel.GUID = user.UserID;
                     childModel.Name = user.Name;
                     childModel.PID = team.TeamID;
+                    childModel.PName = team.TeamName;
+                    childModel.TCount = 0;
+                    childModel.TMoney = 0;
                     childModel.Types = new List<TypeOrderItem>();
                     //遍历阶段
                     foreach (var type in types)
@@ -126,9 +140,17 @@ namespace CloudSalesBusiness
                             item.Money = childItem.Money;
                             model.Types.Add(item);
                         }
+                        childModel.TCount += childItem.Count;
+                        childModel.TMoney += childItem.Money;
                         childModel.Types.Add(childItem);
+                        if (!string.IsNullOrEmpty(ordertype) && type.TypeID == ordertype)
+                        {
+                            break;
+                        }
                     }
                     model.ChildItems.Add(childModel);
+                    model.TCount = model.ChildItems.Sum(x => x.TCount);
+                    model.TMoney = model.ChildItems.Sum(x => x.TMoney);
                 }
                 list.Add(model);
 
@@ -151,6 +173,9 @@ namespace CloudSalesBusiness
                         childModel.GUID = "";
                         childModel.Name = "";
                         childModel.PID = team.TeamID;
+                        childModel.PName = team.TeamName;
+                        childModel.TCount = 0;
+                        childModel.TMoney = 0;
                         childModel.Types = new List<TypeOrderItem>();
                         foreach (var type in types)
                         {
@@ -158,6 +183,7 @@ namespace CloudSalesBusiness
                             childItem.Name = type.TypeName;
                             childItem.Money = 0;
                             childItem.Count = 0;
+                            childItem.Money = 0;
                             TypeOrderItem item = new TypeOrderItem();
                             item.Name = type.TypeName; ;
                             item.TypeID = type.TypeID;
@@ -175,6 +201,9 @@ namespace CloudSalesBusiness
                         childModel.GUID = user.UserID;
                         childModel.Name = user.Name;
                         childModel.PID = team.TeamID;
+                        childModel.PName = team.TeamName;
+                        childModel.TCount = 0;
+                        childModel.TMoney = 0;
                         childModel.Types = new List<TypeOrderItem>();
                         //遍历阶段
                         foreach (var type in types)
@@ -206,9 +235,17 @@ namespace CloudSalesBusiness
                                 item.Money = childItem.Money;
                                 model.Types.Add(item);
                             }
+                            childModel.TCount += childItem.Count;
+                            childModel.TMoney += childItem.Money;
                             childModel.Types.Add(childItem);
+                            if (!string.IsNullOrEmpty(ordertype) && type.TypeID == ordertype)
+                            {
+                                break;
+                            }
                         }
                         model.ChildItems.Add(childModel);
+                        model.TCount = model.ChildItems.Sum(x => x.TCount);
+                        model.TMoney = model.ChildItems.Sum(x => x.TMoney);
                     }
                     list.Add(model);
                 }

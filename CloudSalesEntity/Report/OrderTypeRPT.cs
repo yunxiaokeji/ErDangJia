@@ -13,6 +13,10 @@ namespace CloudSalesEntity
 
         public string PID { get; set; }
 
+        public string PName { get; set; }
+
+        public decimal TMoney { get; set; }
+        public int TCount { get; set; }
         public List<TypeOrderItem> Types { get; set; }
 
         public List<TypeOrderEntity> ChildItems { get; set; }

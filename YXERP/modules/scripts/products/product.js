@@ -4,9 +4,13 @@ define(function (require, exports, module) {
         Global = require("global"),
         Verify = require("verify"), VerifyObject, DetailsVerify, editor,
         doT = require("dot"),
+        Dialog = require("dialog"),
         Easydialog = require("easydialog");
     require("pager");
     require("switch");
+    var $ = require('jquery');
+    require("parser")($);
+    require("form")($);
     var Params = {
         PageIndex: 1,
         keyWords: "",
@@ -59,12 +63,12 @@ define(function (require, exports, module) {
         });
 
         //编码是否重复
-        $("#productCode").blur(function () {
+        $("#productCode").blur(function() {
             var _this = $(this);
             if (_this.val().trim() != "") {
                 Global.post("/Products/IsExistsProductCode", {
                     code: _this.val()
-                }, function (data) {
+                }, function(data) {
                     if (data.Status) {
                         _this.val("");
                         alert("产品编码已存在,请重新输入!");
@@ -72,7 +76,7 @@ define(function (require, exports, module) {
                     }
                 });
             }
-        })
+        });
 
         $("#productName").focus();
 
@@ -185,7 +189,7 @@ define(function (require, exports, module) {
                     });
                 });
             }
-        });
+        }); 
     }
 
     //保存产品
@@ -387,6 +391,22 @@ define(function (require, exports, module) {
             }
             _self.getList();
         });
+
+        $("#exportExcel").click(function () {
+            _self.ShowExportExcel();
+        });
+
+        $("#dropdown").click(function () {
+            var position = $("#dropdown").position(); 
+            $(".dropdown-ul").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+                $(".dropdown-ul").hide();
+            }
+        });
     }
 
     //获取产品列表
@@ -458,7 +478,6 @@ define(function (require, exports, module) {
                 $(".tr-header").after("<tr><td colspan='15'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
             
-
         });
     }
 
@@ -773,5 +792,43 @@ define(function (require, exports, module) {
         });
     }
 
+    //
+
+    Product.ShowExportExcel = function () {
+        $('#show-product-export').empty();
+        var guid = Global.guid() + "_";
+        Dialog.open({
+            container: {
+                id: "show-product-export",
+                header: "导入产品信息",
+                importUrl: '/Products/ProductImport',
+                yesFn: function () {
+                    $('#upfileForm').form('submit', {
+                        onSubmit: function () {
+                            Dialog.setOverlay(guid, true);
+                        },
+                        success: function (data) {
+                            Dialog.setOverlay(guid, false);
+                            if (data == "操作成功") {
+                                Dialog.close(guid);
+                            }
+                            alert(data);
+                        }
+                    });
+                },
+                docWidth: 450,
+                exportUrl: '/Products/ExportFromProduct',
+                exportParam: { test: true, model: 'Item' },
+                herf: '/Products/ProductImport',
+                noFn: true,
+                yesText: '导入',
+                callback: function () {
+
+                }
+            },
+            guid: guid
+        });
+
+    }
     module.exports = Product;
 })

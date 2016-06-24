@@ -675,7 +675,7 @@ define(function (require, exports, module) {
                     if (tempContent != null && typeof (tempContent.exportUrl) != "undefined" && tempContent.exportUrl != "") {
                         var objPara = tempContent.exportParam || {}; 
                         event.bind(dialogExportModel, 'click', function () {
-                            if (typeof (dialogFileName) != "undefined") { 
+                            if (dialogFileName!=null && typeof(dialogFileName) != "undefined") {
                                 objPara.model = dialogFileName.value;
                                 objPara.filleName = dialogFileName.options[dialogFileName.selectedIndex].text;
                             } 

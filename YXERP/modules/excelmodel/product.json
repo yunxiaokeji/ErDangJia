@@ -1,0 +1,122 @@
+﻿{
+    "Error": "",
+    "Item": {
+		"Extent": {
+            "title": "产品类别",
+            "hide": false,
+            "format": true,
+            "type": 8,
+			"testtype": 7,
+			"datasource":"List|0-49,50-99,100-199,200-499,500-999,1000+"
+        },
+        "ProductName": {
+            "title": "产品名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },       
+        "IndustryId": {
+            "title": "行业",
+            "hide": false,
+            "format": true,
+            "type": 9,
+			"testtype": 7,
+			"datasource":"DropSourceList|1"
+        },
+        "ProductCode": {
+            "title": "产品编码",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },
+        "GenneralName": {
+            "title": "常用名",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },
+        "ShapeCode": {
+            "title": "条形码",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },
+        "BrandName": {
+            "title": "品牌",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"datasource":""
+        },
+        "UnitName": {
+            "title": "单位",
+            "hide": false,
+            "format": true,
+            "type": -1,
+			"testtype": 7,
+			"datasource":"DropSourceList|2"
+        },
+        "CommonPrice": {
+            "title": "成本价",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },
+        "Price": {
+            "title": "销售价",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },
+        "Weight": {
+            "title": "重量(kg)",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },
+		"Status":{  "title": "是否销售",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""},
+		"IsAllow":{  "title": "库存不足是否允许下单",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""},
+        "EffectiveDays": {
+            "title": "有效期（天）",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+        },
+		"Description":{
+		 "title": "产品说明",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":""
+		}
+
+		
+    } 
+}

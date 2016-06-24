@@ -307,7 +307,7 @@ namespace CloudSalesBusiness
         /// </summary>
         /// <param name="dropsource">Enum:DropSourceList</param>
         /// <returns></returns>
-        public static string GetDropList(DropSourceList dropsource)
+        public static string GetDropList(DropSourceList dropsource,string clientID="")
         {
             string listStr ="";
             switch (dropsource)
@@ -325,6 +325,21 @@ namespace CloudSalesBusiness
                         IndustryList.ForEach(x => listStr += x.Name + ",");
                         listStr = listStr.TrimEnd(',');
                     }
+                    break;
+                case DropSourceList.ProductBrand:
+                     ProductsBusiness.BaseBusiness.GetBrandList(clientID).ForEach(x => listStr += x.Name + ",");
+                     listStr = listStr.TrimEnd(',');
+                    break;
+                case DropSourceList.ProductCategory:
+                    ProductsBusiness.BaseBusiness.GetCategorys(clientID).ForEach(x =>
+                    {
+                        listStr += x.CategoryName + ","; 
+                    });
+                     listStr = listStr.TrimEnd(',');
+                    break;
+                case DropSourceList.ProductUnit:
+                     ProductsBusiness.BaseBusiness.GetClientUnits(clientID).ForEach(x => listStr += x.UnitName + ",");
+                     listStr = listStr.TrimEnd(',');
                     break;
                 default:
                      listStr="";

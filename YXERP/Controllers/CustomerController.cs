@@ -124,21 +124,21 @@ namespace YXERP.Controllers
         {
             Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
              FilterCustomer qicCustomer =new FilterCustomer();
-            Dictionary<string, string> listColumn =new Dictionary<string, string>();
+             Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
             if (string.IsNullOrEmpty(filter))
             {
-                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "");
+                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "",CurrentUser.ClientID );
             }
             else
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer(); 
                 qicCustomer=serializer.Deserialize<FilterCustomer>(filter);
-                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "");
+                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "", CurrentUser.ClientID);
             }
             var excelWriter = new ExcelWriter();
             foreach (var key in listColumn)
             {
-                excelWriter.Map(key.Key, key.Value);
+                excelWriter.Map(key.Key, key.Value.Title);
             }
             byte[] buffer;
             DataTable dt = new DataTable();
@@ -164,7 +164,7 @@ namespace YXERP.Controllers
                     }
                     else
                     {
-                        dr[key.Key] = key.Value;
+                        dr[key.Key] = key.Value.DefaultText;
                     }
                 }
                 dt.Rows.Add(dr);

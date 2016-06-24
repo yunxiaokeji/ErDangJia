@@ -364,10 +364,18 @@ namespace YXERP.Controllers
             }
             return null;
         }
-
-        public Dictionary<string, string> GetColumnForJson(string modelName, ref Dictionary<string, ExcelFormatter> formatColumn, string key="",string test="")
+        /// <summary>
+        /// 导出模版获取
+        /// </summary>
+        /// <param name="modelName"></param>
+        /// <param name="formatColumn"></param>
+        /// <param name="key"></param>
+        /// <param name="test"></param>
+        /// <param name="clientID"></param>
+        /// <returns></returns>
+        public Dictionary<string, ExcelModel> GetColumnForJson(string modelName, ref Dictionary<string, ExcelFormatter> formatColumn, string key = "", string test = "", string clientID = "")
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
+            Dictionary<string, ExcelModel> dic = new Dictionary<string, ExcelModel>();
             string path = Server.MapPath("~/") + "modules/excelmodel/" + modelName + ".json";
             string jsonStr = "";
             try
@@ -388,13 +396,14 @@ namespace YXERP.Controllers
                 foreach (var keyvalue in jDic)
                 {
                     JObject jChild = (JObject) JsonConvert.DeserializeObject(keyvalue.Value.ToString());
-                    if (!Convert.ToBoolean(jChild["hide"]))
+                    ExcelModel excelModel = GetExcelModel(keyvalue.Key.ToLower(),jChild);
+                    if (!excelModel.IsHide)
                     {
-                        dic.Add(keyvalue.Key.ToLower(), jChild["title"].ToString());
+                        dic.Add(keyvalue.Key.ToLower(), excelModel);
                         int columnType = Convert.ToInt32(jChild[test+"type"]);
-                        if (Convert.ToBoolean(jChild["format"]) && columnType > 0)
+                        if (excelModel.IsfFomat && columnType > 0)
                         {
-                            string dataList = jChild["datasource"].ToString();
+                            string dataList = excelModel.DataSource;
                             string[] distType = dataList.Split('|');
                             string dropSource = "";
                             if (distType.Length > 1)
@@ -409,7 +418,7 @@ namespace YXERP.Controllers
                                     {
                                         dropSource =
                                             CommonBusiness.GetDropList(
-                                                (DropSourceList) Enum.Parse(typeof (DropSourceList), distType[1]));
+                                                (DropSourceList) Enum.Parse(typeof (DropSourceList), distType[1]),clientID);
                                     }
                                 }
                             }
@@ -417,7 +426,7 @@ namespace YXERP.Controllers
                             {
                                 ColumnTrans =
                                     (EnumColumnTrans)
-                                        Enum.Parse(typeof (EnumColumnTrans), columnType.ToString()),
+                                        Enum.Parse(typeof(EnumColumnTrans), columnType.ToString()),
                                 DropSource = dropSource
                             });
                         }
@@ -426,10 +435,29 @@ namespace YXERP.Controllers
             }
             catch (Exception)
             {
-                dic.Add("Error", "未找到模板");
+                dic.Add("Error", new ExcelModel(){Title = "未找到模版"});
                 throw;
             }
             return dic;
+        }
+        /// <summary>
+        /// 导入对比模版获取
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="jChild"></param>
+        /// <returns></returns>
+        public ExcelModel GetExcelModel(string key,JObject jChild)
+        {
+            ExcelModel excelModel = new ExcelModel();
+            excelModel.Title = jChild["title"].ToString();
+            excelModel.ColumnName = key;
+            excelModel.IsHide = Convert.ToBoolean(jChild["hide"]);
+            excelModel.IsfFomat = Convert.ToBoolean(jChild["format"]);
+            excelModel.Type = Convert.ToInt32(jChild["type"]);
+            excelModel.TestType = Convert.ToInt32(jChild["testtype"]);
+            excelModel.DataSource = jChild["datasource"].ToString();
+            excelModel.DefaultText = jChild["defaulttext"].ToString();
+            return excelModel;
         }
 
         public Dictionary<string, string> GetColumnForJson(string modelName, string key = "Item")

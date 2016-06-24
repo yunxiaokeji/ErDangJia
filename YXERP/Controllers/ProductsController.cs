@@ -3,6 +3,7 @@ using CloudSalesEntity;
 using CloudSalesEnum;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -738,6 +739,61 @@ namespace YXERP.Controllers
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
+        }
+
+        #endregion
+
+        #region 产品导入 导出
+
+        public ActionResult ExportFromProduct(bool test = false, string model = "", string filleName = "产品", string filter = "")
+        {
+            JavaScriptSerializer serializer=new JavaScriptSerializer();
+            Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+            FilterProduct qicProduct =  serializer.Deserialize<FilterProduct>(filter);
+            Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
+            if (string.IsNullOrEmpty(filter))
+            {
+                listColumn = GetColumnForJson("product", ref dic, model, test ? "test" : "",CurrentUser.ClientID);
+            }
+            else
+            {  
+                qicProduct = serializer.Deserialize<FilterProduct>(filter);
+                listColumn = GetColumnForJson("product", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "test" : "", CurrentUser.ClientID);
+            }
+            var excelWriter = new ExcelWriter();
+            foreach (var key in listColumn)
+            {
+                excelWriter.Map(key.Key, key.Value.Title);
+            }
+            byte[] buffer;
+            DataTable dt = new DataTable();
+            //模版导出
+            if (test)
+            {
+                DataRow dr = dt.NewRow();
+                foreach (var key in listColumn)
+                {
+                    DataColumn dc1 = new DataColumn(key.Key, Type.GetType("System.String"));
+                    dt.Columns.Add(dc1); 
+                    dr[key.Key] = key.Value.DefaultText; 
+                }
+                dt.Rows.Add(dr);
+            }
+            else
+            {
+                int totalCount = 0;
+                int pageCount = 0;
+                //客户
+                dt = new ProductsBusiness().GetProductListDataTable(qicProduct.CategoryID, qicProduct.BeginPrice, qicProduct.EndPrice, qicProduct.Keywords, qicProduct.OrderBy, qicProduct.IsAsc, PageSize, qicProduct.PageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+
+            }
+            buffer = excelWriter.Write(dt, dic);
+            var fileName = filleName + (test ? "导入模版" : "");
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
+
         }
 
         #endregion

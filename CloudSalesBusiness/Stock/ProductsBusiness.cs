@@ -816,7 +816,7 @@ namespace CloudSalesBusiness
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
-                                 bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, List<ProductDetail> details, string operateid, string agentid, string clientid)
+                                 bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, List<ProductDetail> details, string operateid, string agentid, string clientid)
         {
             lock (SingleLock)
             {
@@ -844,7 +844,7 @@ namespace CloudSalesBusiness
 
                 var dal = new ProductsDAL();
                 string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
-                                        valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, productImg, shapeCode, description, operateid, clientid);
+                                        valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg, shapeCode, description, operateid, clientid);
                 //产品添加成功添加子产品
                 if (!string.IsNullOrEmpty(pid))
                 {
@@ -909,7 +909,7 @@ namespace CloudSalesBusiness
 
         public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
-                         bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
+                         bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
 
             if (!string.IsNullOrEmpty(productImg) && productImg.IndexOf(TempPath) >= 0)
@@ -935,7 +935,7 @@ namespace CloudSalesBusiness
 
             var dal = new ProductsDAL();
             return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid, attrlist,
-                                    valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, productImg, shapeCode, description, operateid, clientid);
+                                    valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg, shapeCode, description, operateid, clientid);
         }
 
         public bool UpdateProductDetailsStatus(string productdetailid, EnumStatus status, string operateIP, string operateID)

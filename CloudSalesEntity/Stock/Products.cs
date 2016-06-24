@@ -438,6 +438,8 @@ namespace CloudSalesEntity
 
         public int HasDetails { get; set; }
 
+        public int WarnCount { get; set; }
+
         public int StockIn { get; set; }
         public int LogicOut { get; set; }
 

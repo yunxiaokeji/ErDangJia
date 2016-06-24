@@ -222,9 +222,10 @@ define(function (require, exports, module) {
             AttrList: attrlist,
             ValueList: valuelist,
             AttrValueList: attrvaluelist,
-            CommonPrice: $("#commonprice").val(),
-            Price: $("#price").val(),
-            Weight: $("#weight").val(),
+            CommonPrice: $("#commonprice").val().trim(),
+            Price: $("#price").val().trim(),
+            Weight: $("#weight").val().trim(),
+            WarnCount: $("#warnCount").val().trim(),
             IsNew: 0,//$("#isNew").prop("checked") ? 1 : 0,
             IsRecommend: 0,//$("#isRecommend").prop("checked") ? 1 : 0,
             IsAllow: $("#isAllow").hasClass("hover") ? 1 : 0,
@@ -232,7 +233,7 @@ define(function (require, exports, module) {
             EffectiveDays: $("#effectiveDays").val(),
             DiscountValue:1,
             ProductImage: _self.ProductImage,
-            ShapeCode: $("#shapeCode").val(),
+            ShapeCode: $("#shapeCode").val().trim(),
             Description: encodeURI(editor.getContent())
         };
 
@@ -528,6 +529,7 @@ define(function (require, exports, module) {
         $("#price").val(model.Price);
         $("#weight").val(model.Weight);
         $("#effectiveDays").val(model.EffectiveDays);
+        $("#warnCount").val(model.WarnCount);
 
         model.Status != 1 || $("#status").addClass("hover");
         model.IsAllow != 1 || $("#isAllow").addClass("hover");

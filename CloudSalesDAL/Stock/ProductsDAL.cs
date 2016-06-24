@@ -556,7 +556,7 @@ namespace CloudSalesDAL
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
-                         decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
+                         decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
             string id = "";
             int result = 0;
@@ -585,6 +585,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@IsAutoSend",isautosend),
                                        new SqlParameter("@EffectiveDays",effectiveDays),
                                        new SqlParameter("@DiscountValue",discountValue),
+                                       new SqlParameter("@WarnCount",warnCount),
                                        new SqlParameter("@ProductImg",productImg),
                                        new SqlParameter("@ShapeCode",shapeCode),
                                        new SqlParameter("@Description",description),
@@ -637,7 +638,7 @@ namespace CloudSalesDAL
 
         public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                             int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
-                            decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, string productImg, string shapeCode, string description, string operateid, string clientid)
+                            decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@ProductID",productid),
@@ -663,6 +664,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@IsAutoSend",isautosend),
                                        new SqlParameter("@EffectiveDays",effectiveDays),
                                        new SqlParameter("@DiscountValue",discountValue),
+                                       new SqlParameter("@WarnCount",warnCount),
                                        new SqlParameter("@ProductImg",productImg),
                                        new SqlParameter("@ShapeCode",shapeCode),
                                        new SqlParameter("@Description",description),

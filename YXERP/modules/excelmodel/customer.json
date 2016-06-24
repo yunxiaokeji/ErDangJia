@@ -60,6 +60,7 @@
             "hide": false,
             "format": false,
             "type": -1,
+			"testtype": -1,
 			"datasource":"",
 			"defaulttext":"test@yunxiaokeji.com"
         },
@@ -143,7 +144,7 @@
             "format": false,
             "type": -1,
 			"testtype": -1,
-			"datasource":""
+			"datasource":"",
 			"defaulttext":"17777777777"
         },
         "Email": {

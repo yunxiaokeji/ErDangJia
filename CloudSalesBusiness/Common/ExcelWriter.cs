@@ -168,6 +168,9 @@ namespace CloudSalesBusiness
                                 CellRangeAddressList regions = new CellRangeAddressList(1, 65535, i, i);
                                 XSSFDataValidation dataValidate = (XSSFDataValidation)dvHelper.CreateValidation(dvConstraint, regions);
                                 sheet.AddValidationData(dataValidate);
+                            }else if (excelFormatter != null && excelFormatter.ColumnTrans == EnumColumnTrans.ConvertImage)
+                            {
+
                             }
                             else
                             {
@@ -296,7 +299,11 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 公司行业
         /// </summary>
-        ConvertIndustry = 9
+        ConvertIndustry = 9,
+        /// <summary>
+        /// 图片
+        /// </summary>
+        ConvertImage = 10,
 
     }
 

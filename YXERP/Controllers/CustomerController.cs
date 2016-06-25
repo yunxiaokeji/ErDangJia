@@ -180,7 +180,28 @@ namespace YXERP.Controllers
                     qicCustomer.BeginTime, qicCustomer.EndTime,
                     qicCustomer.Keywords, qicCustomer.OrderBy, int.MaxValue, 1, ref totalCount, ref pageCount,
                     CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, qicCustomer.ExcelType);
-
+                if (!dt.Columns.Contains("province"))
+                {
+                    dt.Columns.Add("province", Type.GetType("System.String"));
+                }
+                if (!dt.Columns.Contains("citys"))
+                {
+                    dt.Columns.Add("citys", Type.GetType("System.String"));
+                }
+                if (!dt.Columns.Contains("counties"))
+                {
+                    dt.Columns.Add("counties", Type.GetType("System.String"));
+                }
+                foreach (DataRow drRow in dt.Rows)
+                {
+                  var city=  CommonBusiness.GetCityByCode(drRow["CityCode"].ToString());
+                    if (city != null)
+                    {
+                        drRow["province"] = city.Province;
+                        drRow["citys"] = city.City;
+                        drRow["counties"] = city.Counties;
+                    }
+                }
             }
             buffer = excelWriter.Write(dt, dic);
             var fileName = filleName + (test ? "导入模版" : "");

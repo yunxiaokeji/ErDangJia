@@ -58,7 +58,6 @@ define(function (require, exports, module) {
             FeedBack.Params.endDate = end ? end.format("YYYY-MM-DD") : "";
             FeedBack.bindData();
         });
-
     };
 
     //绑定数据列表

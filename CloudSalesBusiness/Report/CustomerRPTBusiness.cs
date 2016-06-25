@@ -81,27 +81,28 @@ namespace CloudSalesBusiness
            
 
             int[] stages = { 1, 2, 3 };
-            int total = 0, prev = 0;
+            int total = 0;
             foreach (var stage in stages)
             {
                 ReportCommonEntity model = new ReportCommonEntity();
-                List<SourceItem> sourceItems=new List<SourceItem>();
-                model.name = stage == 1 ? "客户" : stage == 2 ? "机会客户" : "成交客户";
-                model.iValue = 0;
-                model.desc = "";
-
-                foreach (DataRow dr in ds.Tables["Data"].Select("StageStatus=" + stage))
-                {
-                    model.desc += model.name + ":" + dr["Value"].ToString();
-
-                    model.iValue = Convert.ToInt32(dr["Value"]);
-                }
+                List<SourceItem> sourceItems = new List<SourceItem>();
+                model.name = stage == 1 ? "新客户" : stage == 2 ? "机会客户" : "成交客户";
                
+                if (ds.Tables["Data"].Select("StageStatus=" + stage).Count() > 0)
+                {
+                    model.desc += model.name + ":" + ds.Tables["Data"].Select("StageStatus=" + stage)[0]["Value"].ToString();
+                    model.iValue = Convert.ToInt32(ds.Tables["Data"].Select("StageStatus=" + stage)[0]["Value"]);
+                }
+                else 
+                {
+                    model.iValue = 0;
+                    model.desc = "";
+                }
+
                 DataRow[] drRow = ds.Tables["Source"].Select("StageStatus=" + stage);
                 if (stage == 2)
                 {
-                    var stageList = SystemBusiness.BaseBusiness.GetOpportunityStages("", clientid);
-                    foreach (var source in stageList)
+                    foreach (var source in SystemBusiness.BaseBusiness.GetOpportunityStages("", clientid))
                     {
                         SourceItem item = new SourceItem();
                         item.Name = source.StageName;
@@ -112,27 +113,25 @@ namespace CloudSalesBusiness
                         if (drRow.Any())
                         {
                             int cvalue = drRow.Sum(x => (int)x["value"]);
-                            DataRow[] row = drRow.Where(x => x["SourceCode"].ToString() == source.StageID).ToArray();
+                            DataRow[] row = drRow.Where(x => x["SourceID"].ToString().ToLower() == source.StageID).ToArray();
                             if (row.Any() && row.Length > 0)
                             {
                                 item.Value = Convert.ToInt32(row[0]["value"]);
                             }
-                            item.cvalue =
-                                (Convert.ToDecimal(item.Value) / (model.iValue == 0 ? 1 : total) * 100).ToString("f2");
+                            item.cvalue = (Convert.ToDecimal(item.Value) / (model.iValue == 0 ? 1 : model.iValue) * 100).ToString("f2");
                             if (list.Count > 0)
                             {
-                                 
                                 int value = list[0].iValue;
-                                item.value = (Convert.ToDecimal(item.Value) / (value == 0 ? 1 : total) * 100).ToString("f2");
+                                item.value = (Convert.ToDecimal(item.Value) / (value == 0 ? 1 : model.iValue) * 100).ToString("f2");
                             }
                         }
                         sourceItems.Add(item);
                     }
                 }
-                else if(stage==1){
-                    total += model.iValue;
-                    var customerSouce = SystemBusiness.BaseBusiness.GetCustomSources("", clientid);
-                    foreach (var source in customerSouce)
+                else if (stage == 1)
+                {
+                    total = model.iValue;
+                    foreach (var source in SystemBusiness.BaseBusiness.GetCustomSources("", clientid))
                     {
                         SourceItem item = new SourceItem();
                         item.Name = source.SourceName;
@@ -142,25 +141,12 @@ namespace CloudSalesBusiness
                         item.cvalue = "0.00";
                         if (drRow.Any())
                         {
-                            int cvalue = drRow.Sum(x => (int) x["value"]);
-                            DataRow[] row = drRow.Where(x => x["SourceCode"].ToString() == source.SourceCode).ToArray();
+                            DataRow[] row = drRow.Where(x => x["SourceID"].ToString().ToLower() == source.SourceID).ToArray();
                             if (row.Any() && row.Length > 0)
                             {
-                                item.Value = Convert.ToInt32(drRow[0]["value"]);
+                                item.Value = Convert.ToInt32(row[0]["value"]);
                             }
-                            item.cvalue =
-                                (Convert.ToDecimal(item.Value)/(model.iValue == 0 ? 1 : total)*100).ToString("f2");
-                            if (list.Count > 0)
-                            {
-                                int pvalue =
-                                    list[list.Count - 1].sourceItem.Where(x => x.Name == item.Name)
-                                        .FirstOrDefault()
-                                        .Value;
-                                int value = list[0].iValue;
-                                item.pvalue =
-                                    (Convert.ToDecimal(item.Value)/(pvalue == 0 ? 1 : total)*100).ToString("f2");
-                                item.value = (Convert.ToDecimal(item.Value)/(value == 0 ? 1 : total)*100).ToString("f2");
-                            }
+                            item.cvalue = (Convert.ToDecimal(item.Value) / (model.iValue == 0 ? 1 : model.iValue) * 100).ToString("f2");
                         }
                         sourceItems.Add(item);
                     } 
@@ -168,10 +154,16 @@ namespace CloudSalesBusiness
                 model.sourceItem = sourceItems;
                 list.Add(model);
             }
-            total = total > 0 ? total : 1; 
             for (int i = list.Count - 1; i >= 0; i--)
             {
-                list[i].value = (Convert.ToDecimal(list[i].iValue) / total * 100).ToString("f2");
+                if (total > 0)
+                {
+                    list[i].value = (Convert.ToDecimal(list[i].iValue) / total * 100).ToString("f2");
+                }
+                else 
+                {
+                    list[i].value = "0.00";
+                }
                 list[i].name += list[i].iValue;
                 if (list[i].desc.Length > 0)
                 {

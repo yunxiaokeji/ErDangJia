@@ -110,6 +110,9 @@ namespace CloudSalesEntity
         /// </summary>
         public List<ExtentEntity> Extents { get; set; }
 
+        public int OpportunityCount { get; set; }
+
+        public int OrderCount { get; set; }
 
         public int ReplyTimes { get; set; }
 

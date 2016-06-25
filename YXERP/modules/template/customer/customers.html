@@ -17,7 +17,8 @@
         :"--" %} 
     </li>
     <li class="width100">{%=item.MobilePhone%}</li>
-    <li class="width80">{%=item.ReplyTimes%}</li>
+    <li class="width80">{%=item.OpportunityCount%}</li>
+    <li class="width80">{%=item.OrderCount%}</li>
     <li class="width100">{%=(item.Owner ? item.Owner.Name:"--")%}</li>
     <li class="width100">{%=item.CreateTime.toDate("yyyy-MM-dd")%}</li>
 </ul>

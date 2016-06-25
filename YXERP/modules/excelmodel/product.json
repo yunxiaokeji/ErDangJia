@@ -5,8 +5,8 @@
             "title": "产品类别",
             "hide": false,
             "format": true,
-            "type": 8,
-			"testtype": 7,
+            "type": -1,
+			"testtype": -1,
 			"datasource":"DropSourceList|3",
 			"defaulttext":"裙裤"
         },

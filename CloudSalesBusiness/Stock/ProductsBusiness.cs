@@ -675,17 +675,31 @@ namespace CloudSalesBusiness
 
         public List<Products> GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, bool isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
-            var dal = new ProductsDAL();
-            DataSet ds = dal.GetProductList(categoryid, beginprice, endprice, keyWords, orderby, isasc ? 1 : 0, pageSize, pageIndex, ref totalCount, ref pageCount, clientID);
-
+            DataTable dt = GetProductListDataTable(categoryid, beginprice, endprice, keyWords,
+                orderby, isasc, pageSize, pageIndex, ref totalCount, ref pageCount,
+                clientID);
             List<Products> list = new List<Products>();
-            foreach (DataRow dr in ds.Tables[0].Rows)
+            foreach (DataRow dr in dt.Rows)
             {
                 Products model = new Products();
                 model.FillData(dr);
                 list.Add(model);
             }
             return list;
+        }
+
+        public DataTable GetProductListDataTable(string categoryid, string beginprice, string endprice, string keyWords,
+            string orderby, bool isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount,
+            string clientID)
+        {
+            DataTable dt=new DataTable();
+            var dal = new ProductsDAL();
+            DataSet ds = dal.GetProductList(categoryid, beginprice, endprice, keyWords, orderby, isasc ? 1 : 0, pageSize, pageIndex, ref totalCount, ref pageCount, clientID);
+            if (ds.Tables.Count > 0)
+            {
+                dt = ds.Tables[0];
+            }
+            return dt;
         }
 
         public Products GetProductByID(string productid)

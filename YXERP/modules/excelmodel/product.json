@@ -36,8 +36,8 @@
 			"testtype": 10,
 			"datasource":"",
 			"defaulttext":"C:/Users/admin/Desktop/色卡.png"
-		},
-        "GenneralName": {
+		},		
+        "GeneralName": {
             "title": "常用名",
             "hide": false,
             "format": false,
@@ -64,11 +64,11 @@
 			"datasource":"DropSourceList|4",
 			"defaulttext":"上海云销信息科技有限公司"
         },
-        "UnitName": {
+        "UnitID": {
             "title": "单位",
             "hide": false,
             "format": true,
-            "type": -1,
+            "type": 11,
 			"testtype": 7,
 			"datasource":"DropSourceList|5",
 			"defaulttext":"个"

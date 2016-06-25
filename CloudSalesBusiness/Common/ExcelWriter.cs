@@ -9,6 +9,7 @@ using System.Text;
 using System.Reflection;
 using System.Data;
 using System.Drawing;
+using CloudSalesEntity;
 using CloudSalesEnum;
 //using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
@@ -179,15 +180,25 @@ namespace CloudSalesBusiness
                                 sheet.AddValidationData(dataValidate);
                             }else if (excelFormatter != null && excelFormatter.ColumnTrans == EnumColumnTrans.ConvertImage)
                             {
-                                if (!isimg){sheet.SetColumnWidth(i,256*20);
-                                    isimg = true;
-                                } 
-                                dr.HeightInPoints = 90;   
-                                byte[] bytes = System.IO.File.ReadAllBytes(@""+imgBasepath+drValue);
-                                int pictureIdx = workBook.AddPicture(bytes, XSSFWorkbook.PICTURE_TYPE_PNG);
-                                IClientAnchor anchor = new XSSFClientAnchor(100, 0,0, 0, i, rowIndex, i+1, rowIndex+1);
-                                IPicture pict = patriarch.CreatePicture(anchor, pictureIdx); 
-                                pict.Resize(0.3);
+                                if (File.Exists(@"" + imgBasepath + drValue))
+                                {
+                                    if (!isimg)
+                                    {
+                                        sheet.SetColumnWidth(i, 256*20);
+                                        isimg = true;
+                                    }
+                                    dr.HeightInPoints = 90;
+                                    byte[] bytes = System.IO.File.ReadAllBytes(@"" + imgBasepath + drValue);
+                                    int pictureIdx = workBook.AddPicture(bytes, XSSFWorkbook.PICTURE_TYPE_PNG);
+                                    IClientAnchor anchor = new XSSFClientAnchor(100, 50, 0, 0, i, rowIndex, i + 1,
+                                        rowIndex + 1);
+                                    IPicture pict = patriarch.CreatePicture(anchor, pictureIdx);
+                                    pict.Resize(0.3);
+                                }
+                                else
+                                {
+                                    cell.SetCellValue("");
+                                }
                             }
                             else
                             {
@@ -245,7 +256,7 @@ namespace CloudSalesBusiness
             sw.Stop();
             return buffer;
         }
-        public string FormatterCoulumn(string coulumnValue, EnumColumnTrans eumnType)
+        public string FormatterCoulumn(string coulumnValue, EnumColumnTrans eumnType,string clientID="")
         {
             switch (eumnType)
             {
@@ -265,8 +276,16 @@ namespace CloudSalesBusiness
                     return CommonBusiness.GetEnumDesc<EnumExpressType>((EnumExpressType)Enum.Parse(typeof(EnumExpressType), coulumnValue));
                 case EnumColumnTrans.ConvertCustomerExtent:
                     return  CommonBusiness.GetEnumDesc<EnumCustomerExtend>((EnumCustomerExtend) Enum.Parse(typeof (EnumCustomerExtend), coulumnValue));
-                    case EnumColumnTrans.ConvertIndustry:
+                case EnumColumnTrans.ConvertIndustry:
                     return CommonBusiness.GetIndustryID(coulumnValue);
+                case EnumColumnTrans.ConvertUnitName:
+                    string unitName = "";
+                    ProductUnit unit= ProductsBusiness.BaseBusiness.GetUnitByID(coulumnValue, clientID);
+                    if (unit != null)
+                    {
+                         unitName = unit.UnitName;
+                    }
+                    return unitName;
                 default:
                     return coulumnValue;
             }
@@ -321,6 +340,10 @@ namespace CloudSalesBusiness
         /// 图片
         /// </summary>
         ConvertImage = 10,
+        /// <summary>
+        /// 格式化单位
+        /// </summary>
+        ConvertUnitName=11
 
     }
 

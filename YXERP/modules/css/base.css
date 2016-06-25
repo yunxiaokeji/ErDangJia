@@ -417,16 +417,16 @@ select option{ padding:2px; }
 
 /*盒模型表格样式*/
 .table-box-list { width:100%; }
-.table-box-list ul { width:100%; box-sizing:padding-box; box-sizing:border-box; display: -moz-box; display: -webkit-box; padding:5px 0;}
-.table-box-list ul li{ padding:5px 0; text-align:center; white-space:nowrap; overflow: hidden; text-overflow:ellipsis; height:25px; line-height:25px; }
-.table-box-list ul.box-header li{ color:#999; border-right:solid 1px #fff; }
+.table-box-list ul { width:100%; box-sizing:padding-box; box-sizing:border-box; display: -moz-box; display: -webkit-box; padding:8px 0;}
+.table-box-list ul li{ text-align:center; white-space:nowrap; overflow: hidden; text-overflow:ellipsis; height:25px; line-height:25px; }
+.table-box-list ul.box-header li{ color:#999; border-right:solid 1px #fff;}
 .table-box-list ul.box-item { border:solid 1px #ccc; border-radius:5px; overflow:auto; margin:5px 0; }
 .table-box-list ul.box-item li{ border-right:solid 1px #eee; }
 .table-box-list ul.box-item li:last-child{ border-right:none; }
 
 .table-box-list ul.box-item:hover { border:solid 1px #2F73B8; }
 
-.table-box-list ul .flex1{ -moz-box-flex:1; -webkit-box-flex:1; }
+.table-box-list ul .flex1{ -moz-box-flex:1; -webkit-box-flex:1; padding:0 10px; }
 .table-box-list ul .flex2{ -moz-box-flex:2; -webkit-box-flex:2; }
 .table-box-list ul .flex3{ -moz-box-flex:3; -webkit-box-flex:3; }
 

@@ -298,6 +298,8 @@ namespace CloudSalesEntity
         /// </summary>
         public List<StorageDetail> Details { get; set; }
 
+        public decimal RealMoney { get; set; }
+
         public string Remark { get; set; }
 
         public string DocCode { get; set; }

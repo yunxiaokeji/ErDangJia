@@ -351,7 +351,7 @@ define(function (require, exports, module) {
                         var entity = {
                             BillingID: _self.billingid,
                             Type:1,
-                            CustomerType: $("#invoicetype").val(),
+                            CustomerType: $("#customertype").val(),
                             InvoiceMoney: $("#invoicemoney").val().trim(),
                             InvoiceTitle: $("#invoicetitle").val().trim(),
                             CityCode: CityInvoice.getCityCode(),

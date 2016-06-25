@@ -269,7 +269,7 @@ namespace CloudSalesBusiness
             bool bl = ProductsDAL.BaseProvider.DeleteUnit(unitid, operateID, clientid, out result);
             if (bl)
             {
-                var list = GetClientUnits(unitid);
+                var list = GetClientUnits(clientid);
                 var model = GetUnitByID(unitid, clientid);
                 list.Remove(model);
             }

@@ -1,12 +1,12 @@
 ﻿{
     "Error": "",
     "Item": {
-		"Extent": {
+		"CategoryName": {
             "title": "产品类别",
             "hide": false,
             "format": true,
-            "type": 8,
-			"testtype": 7,
+            "type": -1,
+			"testtype": -1,
 			"datasource":"DropSourceList|3",
 			"defaulttext":"裙裤"
         },
@@ -28,6 +28,15 @@
 			"datasource":"",
 			"defaulttext":"CESHI001"
         },
+		"ProductImage":{
+			"title": "产品图片",
+            "hide": false,
+            "format": true,
+            "type": 10,
+			"testtype": 10,
+			"datasource":"",
+			"defaulttext":"C:/Users/admin/Desktop/色卡.png"
+		},
         "GenneralName": {
             "title": "常用名",
             "hide": false,

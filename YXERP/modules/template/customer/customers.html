@@ -6,7 +6,7 @@
     <li class="width50"><span class="mark mTop3" data-id="{%= item.CustomerID %}" data-value="{%= item.Mark %}"></span></li>
     <li class="width50"><span data-id="{%=item.CustomerID%}" data-userid="{%=item.OwnerID%}" class="checkbox iconfont"></span></li>
     <li class="tLeft flex1">
-        <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">{%=item.Name%}</a> 
+        <a href="javascript:void(0);" class="btn-open-window mLeft10 mRight10" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">{%=item.Name%}</a> 
     </li>
     <li class="width50">{%=item.Type==1?"企业":"个人"%}</li>
     <li class="width150">{%= item.Source?item.Source.SourceName:"--" %}</li>

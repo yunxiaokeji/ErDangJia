@@ -418,8 +418,8 @@ select option{ padding:2px; }
 /*盒模型表格样式*/
 .table-box-list { width:100%; }
 .table-box-list ul { width:100%; box-sizing:padding-box; box-sizing:border-box; display: -moz-box; display: -webkit-box; padding:5px 0;}
-.table-box-list ul li{ padding:5px 10px; text-align:center; white-space:nowrap; overflow: hidden; text-overflow:ellipsis; height:25px; line-height:25px; }
-.table-box-list ul.box-header li{ color:#999; }
+.table-box-list ul li{ padding:5px 0; text-align:center; white-space:nowrap; overflow: hidden; text-overflow:ellipsis; height:25px; line-height:25px; }
+.table-box-list ul.box-header li{ color:#999; border-right:solid 1px #fff; }
 .table-box-list ul.box-item { border:solid 1px #ccc; border-radius:5px; overflow:auto; margin:5px 0; }
 .table-box-list ul.box-item li{ border-right:solid 1px #eee; }
 .table-box-list ul.box-item li:last-child{ border-right:none; }

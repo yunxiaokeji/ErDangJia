@@ -6,7 +6,9 @@ define(function (require, exports, module) {
     require("pager");
     var Global = require("global"),
         Easydialog = require("easydialog"),
-        doT = require("dot");
+        doT = require("dot"),
+        moment = require("moment");
+    require("daterangepicker");
 
     var FeedBack = {};
 
@@ -39,60 +41,22 @@ define(function (require, exports, module) {
             });
         });
 
-        //下拉状态、类型查询
-       /* require.async("dropdown", function () {
-            var Types = [
-                {
-                    ID: "1",
-                    Name: "问题"
-                },
-                {
-                    ID: "2",
-                    Name: "建议"
-                },
-                {
-                    ID: "3",
-                    Name: "需求"
-                }
-            ];
-            $("#FeedTypes").dropdown({
-                prevText: "意见类型-",
-                defaultText: "所有",
-                defaultValue: "-1",
-                data: Types,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "120",
-                onChange: function (data) {
-                    FeedBack.Params.pageIndex = 1;
-                    FeedBack.Params.type = parseInt(data.value);
-                    FeedBack.Params.beginDate = $("#BeginTime").val();
-                    FeedBack.Params.endDate = $("#EndTime").val();
-                    FeedBack.bindData();
-                }
-            });
-
-            $(".search-tab li").click(function () {
-                $(this).addClass("hover").siblings().removeClass("hover");
-                var index = $(this).data("index");
-                $(".content-body div[name='navContent']").hide().eq(parseInt(index)).show();
-                FeedBack.Params.pageIndex = 1;
-                FeedBack.Params.status = index == 0 ? -1 : index;
-                FeedBack.Params.beginDate = $("#BeginTime").val();
-                FeedBack.Params.endDate = $("#EndTime").val();
-                FeedBack.bindData();
-            });
-
-        });
-        */
-        //时间段查询
-        $("#SearchFeedBacks").click(function () {
-            if ($("#BeginTime").val() != '' || $("#EndTime").val() != '') {
-                FeedBack.Params.pageIndex = 1;
-                FeedBack.Params.beginDate = $("#BeginTime").val();
-                FeedBack.Params.endDate = $("#EndTime").val();
-                FeedBack.bindData();
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
             }
+        }, function (start, end, label) {
+            FeedBack.Params.PageIndex = 1;
+            FeedBack.Params.beginDate = start ? start.format("YYYY-MM-DD") : "";
+            FeedBack.Params.endDate = end ? end.format("YYYY-MM-DD") : "";
+            FeedBack.bindData();
         });
 
     };

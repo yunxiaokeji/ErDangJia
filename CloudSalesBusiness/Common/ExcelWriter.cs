@@ -168,6 +168,9 @@ namespace CloudSalesBusiness
                                 CellRangeAddressList regions = new CellRangeAddressList(1, 65535, i, i);
                                 XSSFDataValidation dataValidate = (XSSFDataValidation)dvHelper.CreateValidation(dvConstraint, regions);
                                 sheet.AddValidationData(dataValidate);
+                            }else if (excelFormatter != null && excelFormatter.ColumnTrans == EnumColumnTrans.ConvertImage)
+                            {
+
                             }
                             else
                             {
@@ -294,9 +297,14 @@ namespace CloudSalesBusiness
         /// </summary>
         ConvertCustomerExtent = 8,
         /// <summary>
-        /// 公司规模
+        /// 公司行业
         /// </summary>
-        ConvertIndustry = 9
+        ConvertIndustry = 9,
+        /// <summary>
+        /// 图片
+        /// </summary>
+        ConvertImage = 10,
+
     }
 
     public enum DropSourceList
@@ -308,7 +316,19 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 省
         /// </summary>
-        Province = 2
+        Province = 2,
+        /// <summary>
+        /// 产品类别
+        /// </summary>
+        ProductCategory = 3,
+        /// <summary>
+        /// 产品品牌
+        /// </summary>
+        ProductBrand = 4,
+        /// <summary>
+        /// 产品单位
+        /// </summary>
+        ProductUnit = 5
     }
 
     public class ExcelFormatter
@@ -316,6 +336,19 @@ namespace CloudSalesBusiness
         public EnumColumnTrans ColumnTrans { get; set; }
         public string DropSource { get; set; }
     }
+
+    public class ExcelModel
+    {
+        public string Title { get; set; }
+        public string ColumnName { get; set; }
+        public bool IsHide { get; set; }
+        public bool IsfFomat { get; set; }
+        public int Type { get; set; }
+        public int TestType { get; set; }
+        public string DataSource { get; set; }
+        public string DefaultText { get; set; }
+    }
+
 
     public class ExcelPopertyMap
     {

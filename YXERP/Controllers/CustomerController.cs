@@ -124,21 +124,21 @@ namespace YXERP.Controllers
         {
             Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
              FilterCustomer qicCustomer =new FilterCustomer();
-            Dictionary<string, string> listColumn =new Dictionary<string, string>();
+             Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
             if (string.IsNullOrEmpty(filter))
             {
-                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "");
+                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "",CurrentUser.ClientID );
             }
             else
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer(); 
                 qicCustomer=serializer.Deserialize<FilterCustomer>(filter);
-                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "");
+                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "", CurrentUser.ClientID);
             }
             var excelWriter = new ExcelWriter();
             foreach (var key in listColumn)
             {
-                excelWriter.Map(key.Key, key.Value);
+                excelWriter.Map(key.Key, key.Value.Title);
             }
             byte[] buffer;
             DataTable dt = new DataTable();
@@ -164,7 +164,7 @@ namespace YXERP.Controllers
                     }
                     else
                     {
-                        dr[key.Key] = key.Value;
+                        dr[key.Key] = key.Value.DefaultText;
                     }
                 }
                 dt.Rows.Add(dr);
@@ -180,7 +180,28 @@ namespace YXERP.Controllers
                     qicCustomer.BeginTime, qicCustomer.EndTime,
                     qicCustomer.Keywords, qicCustomer.OrderBy, int.MaxValue, 1, ref totalCount, ref pageCount,
                     CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, qicCustomer.ExcelType);
-
+                if (!dt.Columns.Contains("province"))
+                {
+                    dt.Columns.Add("province", Type.GetType("System.String"));
+                }
+                if (!dt.Columns.Contains("citys"))
+                {
+                    dt.Columns.Add("citys", Type.GetType("System.String"));
+                }
+                if (!dt.Columns.Contains("counties"))
+                {
+                    dt.Columns.Add("counties", Type.GetType("System.String"));
+                }
+                foreach (DataRow drRow in dt.Rows)
+                {
+                  var city=  CommonBusiness.GetCityByCode(drRow["CityCode"].ToString());
+                    if (city != null)
+                    {
+                        drRow["province"] = city.Province;
+                        drRow["citys"] = city.City;
+                        drRow["counties"] = city.Counties;
+                    }
+                }
             }
             buffer = excelWriter.Write(dt, dic);
             var fileName = filleName + (test ? "导入模版" : "");

@@ -78,7 +78,7 @@
         $('#chartRPT').show();
       
         Global.post("/CustomerRPT/GetCustomerStageRate", Params, function (data) {
-            var colorList = ['#8fedf3', '#02e1ff', '#4ed3ff', '#02bbff', '#4eb6ff', '#229aee', '#0296ff', '#0d84d8', '#1a7bc0', '#o75f9d'];
+            var colorList = ['#c3cfdc', '#869fb8', '#688aad', '#587a9d', '#4a7095', '#2a5065', '#104f8f', '#11467c'];
             for (var i = 0; i < data.items.length; i++) {
                 var html = '';
                 var item = data.items[i];
@@ -102,9 +102,9 @@
                                 }
                             }
                         }
-                        html += '<li class="pauto20 center" style="vertical-align:middle;min-height:' + (lineheight - 1) + 'px; border-bottom: 1px solid #fff;">' +
-                            '<div class="pTop20"> ' + sourceitem.Name + '<br/><sapn class=" font16"> ' + sourceitem.Value + '</span><br/>' +
-                            '<span  title="' + sourceitem.Name + '占比率">占比率:' + sourceitem.cvalue + '</span>' +
+                        html += '<li class=" pauto20 center" style="vertical-align:middle;min-height:' + (lineheight - 1) + 'px; border-bottom: 1px solid #fff;" title="' + sourceitem.Name + ' （转化率:' + sourceitem.cvalue + '）">' +
+                            '<div class="pTop20 "> ' + sourceitem.Name + '<br/><sapn class=" font16"> ' + sourceitem.Value + '</span><br/>' +
+                            '<span class="" title="' + sourceitem.Name + '占比率">占比率:' + sourceitem.cvalue + '</span>' +
                             '<div></li>'; 
                     } else if (i == 1) { 
                         var width = 480 / item.sourceItem.length;
@@ -125,10 +125,10 @@
                                 } 
                             }
                         }
-                        html += '<li class="left center min-height170" style="min-width:' + width + 'px; background-color:' + (j > colorList.length - 1 ? colorList[colorList.length] : colorList[j] )+ ';">' +
-                            '<div class="pTop30"> <span>' + sourceitem.Name + '</span><br/>' +
-                            '<p class="mTop20 font16"  title="' + sourceitem.Name + '新增机会数" >' + sourceitem.Value + '</p><br/>' +
-                            '<span  title="' + sourceitem.Name + '转化率">' + sourceitem.value + '%</span>' +
+                        html += '<li class=" left center min-height170" style="min-width:' + width + 'px; background-color:' + (j > colorList.length - 1 ? colorList[colorList.length] : colorList[j]) + ';">' +
+                            '<div class="pTop30 "> <span class="colorfff">' + sourceitem.Name + '</span><br/>' +
+                            '<p class="mTop20 font16 colorfff"  title="' + sourceitem.Name + '新增机会数" >' + sourceitem.Value + '</p><br/>' +
+                            '<span class="colorfff" title="' + sourceitem.Name + '转化率">' + sourceitem.value + '%</span>' +
                             '</div></li>';
                     }
                 }
@@ -140,7 +140,7 @@
                     $('#opporcontent').html(html);
                 } else if (i == 2) {
                     $('#ordervalue').html(item.desc + '<br/>转化率(' + item.value + '%)');
-                    $('#ordervaluerate').html('订单 <br/><span class="font16">'+data.items[2].iValue+'</span><br/>');
+                    $('#ordervaluerate').html('订单 <br/><span class="colorfff font16">' + data.items[2].iValue + '</span><br/>');
                     $('#orderrate').html('(' + data.items[2].value + '%)');
                 }
             }

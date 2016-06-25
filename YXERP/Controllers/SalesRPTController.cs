@@ -41,8 +41,8 @@ namespace YXERP.Controllers
 
         public JsonResult GetUserOrders(int type,string userid, string teamid, string beginTime, string endTime,int desctype,string ordertype)
         {
-           
-            var list = SalesRPTBusiness.BaseBusiness.GetUserOrders(userid, teamid, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID,ordertype);
+
+            var list = SalesRPTBusiness.BaseBusiness.GetUserOrders(userid, teamid, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID, ordertype);
 
             if (type == 2)
             {

@@ -15,6 +15,7 @@ using Xfrog.Net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using System.Web.Services.Description;
 using CloudSalesBusiness.Custom; 
 
 namespace YXERP.Controllers
@@ -101,6 +102,7 @@ namespace YXERP.Controllers
             excelWriter.Map("District", "区");
             excelWriter.Map("Address", "详细地址");
             excelWriter.Map("Description", "描述");
+          
             byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserById(CurrentUser.UserID),
                 new Dictionary<string, ExcelFormatter>()
                 {

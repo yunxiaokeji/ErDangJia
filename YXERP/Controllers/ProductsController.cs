@@ -760,6 +760,7 @@ namespace YXERP.Controllers
                 qicProduct = serializer.Deserialize<FilterProduct>(filter);
                 listColumn = GetColumnForJson("product", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "test" : "", CurrentUser.ClientID);
             }
+            string ipPath = "";
             var excelWriter = new ExcelWriter();
             foreach (var key in listColumn)
             {
@@ -782,13 +783,13 @@ namespace YXERP.Controllers
             else
             {
                 int totalCount = 0;
-                int pageCount = 0;
-                //客户
+                int pageCount = 0; 
+                ipPath= Server.MapPath("~");
                 dt = new ProductsBusiness().GetProductListDataTable(qicProduct.CategoryID, qicProduct.BeginPrice, qicProduct.EndPrice, qicProduct.Keywords, qicProduct.OrderBy, qicProduct.IsAsc, PageSize, qicProduct.PageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
 
             }
-            buffer = excelWriter.Write(dt, dic);
-            var fileName = filleName + (test ? "导入模版" : "");
+            buffer = excelWriter.Write(dt, dic, ipPath);
+            var fileName = filleName + (test ? "导入模版" : "")+DateTime.Now.ToString("yyyyMMdd");
             if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
                 fileName = HttpUtility.UrlEncode(fileName);
             this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");

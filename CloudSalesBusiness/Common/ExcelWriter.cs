@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Data;
+using System.Drawing;
 using CloudSalesEnum;
 //using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
@@ -123,13 +124,14 @@ namespace CloudSalesBusiness
             return buffer;
         }
 
+        
         /// <summary>
         /// 导出Excel DataTable
         /// </summary> 
         /// <param name="records">records必须都为DataTable</param>   
         /// <param name="formatter">Dictionary key:DataTable中的列明此处必须小写 value:EnumColumnTrans</param>
         /// <returns></returns>
-        public byte[] Write(DataTable records, Dictionary<string, ExcelFormatter> formatter = null)
+        public byte[] Write(DataTable records, Dictionary<string, ExcelFormatter> formatter = null,string imgBasepath="")
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -138,20 +140,27 @@ namespace CloudSalesBusiness
             var sheet = workBook.CreateSheet();
             var headerRow = sheet.CreateRow(0);
             var cellIndex = 0;
+            Color lightGrey = Color.FromArgb(221, 221, 221); 
             ICellStyle cstyle = workBook.CreateCellStyle();
-            cstyle.FillForegroundColor = HSSFColor.Grey50Percent.Index;
+            cstyle.Alignment = HorizontalAlignment.Center; 
+            cstyle.IsLocked = true;
+           // cstyle.FillForegroundColor = new XSSFColor(lightGrey).Indexed;
+            cstyle.FillForegroundColor = IndexedColors.Grey25Percent.Index;
             foreach (var map in Maps)
             {
                 var hcell = headerRow.CreateCell(cellIndex, CellType.String);
                 hcell.CellStyle = cstyle;
-                hcell.SetCellValue(map.Name);
+                hcell.SetCellValue(map.Name); 
                 cellIndex++;
             }
             IDataValidationHelper dvHelper = sheet.GetDataValidationHelper();
             var rowIndex = 1;
+            IDrawing patriarch = sheet.CreateDrawingPatriarch();
+            bool isimg = false;
             foreach (DataRow record in records.Rows)
             {
                 var dr = sheet.CreateRow(rowIndex);
+
                 for (int i = 0; i < Maps.Count; i++)
                 {
                     string drValue = record[Maps[i].Info.ToString()].ToString();
@@ -170,7 +179,15 @@ namespace CloudSalesBusiness
                                 sheet.AddValidationData(dataValidate);
                             }else if (excelFormatter != null && excelFormatter.ColumnTrans == EnumColumnTrans.ConvertImage)
                             {
-
+                                if (!isimg){sheet.SetColumnWidth(i,256*20);
+                                    isimg = true;
+                                } 
+                                dr.HeightInPoints = 90;   
+                                byte[] bytes = System.IO.File.ReadAllBytes(@""+imgBasepath+drValue);
+                                int pictureIdx = workBook.AddPicture(bytes, XSSFWorkbook.PICTURE_TYPE_PNG);
+                                IClientAnchor anchor = new XSSFClientAnchor(100, 0,0, 0, i, rowIndex, i+1, rowIndex+1);
+                                IPicture pict = patriarch.CreatePicture(anchor, pictureIdx); 
+                                pict.Resize(0.3);
                             }
                             else
                             {
@@ -376,4 +393,5 @@ namespace CloudSalesBusiness
             return list;
         }
     }
+   
 }

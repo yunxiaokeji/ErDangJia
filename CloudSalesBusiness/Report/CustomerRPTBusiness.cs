@@ -171,9 +171,6 @@ namespace CloudSalesBusiness
             total = total > 0 ? total : 1; 
             for (int i = list.Count - 1; i >= 0; i--)
             {
-                //list[i].iValue += prev;
-                //prev = list[i].iValue;
-
                 list[i].value = (Convert.ToDecimal(list[i].iValue) / total * 100).ToString("f2");
                 list[i].name += list[i].iValue;
                 if (list[i].desc.Length > 0)

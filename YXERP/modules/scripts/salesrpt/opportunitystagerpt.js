@@ -148,13 +148,13 @@
                 if (i == 0) {
                     totallent += 2 * marginleft;
                 }
-                var headerdiv = '<div class="cont mTop10" style=""  title="' + data.items[i].name +' 数量:'+ data.items[i].dValue + '(' + data.items[i].value+ ')">';;
+                var headerdiv = '<div class="cont mTop10" style=""  title="' + data.items[i].name +' 数量:'+ data.items[i].iValue + '(' + data.items[i].value+ ')">';;
                 
                 var previousleft = totalleft;
                 totalleft += marginleft;
                 if (i < j - 1) { 
                     innerhtml += headerdiv.replace('style="', 'style="margin-left:' + (i > 0 ? previousleft : 0) + 'px;"') + '<div class="taper-left" style="border-top-width:' + marginleft * 2 + 'px;border-left-width:' + marginleft + 'px;border-top-color:' + colorList[i] + ';"></div>' +
-                        '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + (i > 0 ? totallent - totalleft * 2 : 500) + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].dValue + '</br>' + data.items[i].desc + ' : ' + data.items[i].value + '</div>' +
+                        '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + (i > 0 ? totallent - totalleft * 2 : 500) + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].iValue + '</br>' + data.items[i].desc + ' 占比率: ' + data.items[i].value + '</div>' +
                         '<div class="taper-right" style="border-top-color:' + colorList[i] + ';border-top-width:' + marginleft * 2 + 'px;border-right-width:' + marginleft + 'px;"></div>' +
                         '</div>';
                 }
@@ -162,7 +162,7 @@
                     var lastwidth = (i > 0 ? totallent - totalleft * 2 : 500);
                     var lastheight = marginleft; 
                     innerhtml += headerdiv.replace('style="', 'style="margin-left:' + (i > 0 ? previousleft : 0) + 'px;"') + '<div class="taper-left" style="border-top-width:' + marginleft * 2 + 'px;border-left-width:' + marginleft + 'px;border-top-color:' + colorList[i] + ';"></div>' +
-                        '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + lastwidth + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].dValue + '</br>' + data.items[i].desc + ' : ' + data.items[i].value + '</div>' +
+                        '<div class="taper-center"  style="background-color:' + colorList[i] + ';width: ' + lastwidth + 'px;height:' + (marginleft * 2 - 10) + 'px; line-height:' + (marginleft - 5) + 'px;">' + data.items[i].name.replace('(', '<br/>(') + ':' + data.items[i].iValue + '</br>' + data.items[i].desc + ' 占比率: ' + data.items[i].value + '</div>' +
                         '<div class="taper-right" style="border-top-color:' + colorList[i] + ';border-top-width:' + marginleft * 2 + 'px;border-right-width:' + marginleft + 'px;"></div>' +
                         '</div>'; 
                     innerhtml += headerdiv.replace("cont mTop10", "").replace('style="', 'style="margin-left:' + (i > 0 ? totalleft : 0) + 'px;border-bottom-width: 0px;text-align:center; float:left;border-style: solid;border-color:' + colorList[i] + ' transparent;border-left-width:' + lastwidth / 16 + 'px;border-right-width:' + lastwidth / 16 + 'px;border-top-width:' + lastwidth / 8 + 'px;width:' + lastwidth *7/8+ 'px;') + '</div>';

@@ -162,7 +162,7 @@
                 $('#opporcontent').css('min-height', '170px');
                 $('#customertooppor').css('min-height', '170px').css('border-top-width', "100px").css('border-left-width', '30px').css('border-left-style', 'solid').css('border-left-color', '#D8D6F1');
             }
-            if (data.items[1].iValue > data.items[2].iValue ) { 
+            if (data.items[1].iValue >= data.items[2].iValue ) { 
                 if (data.items[1].iValue > data.items[0].iValue) {
                     $('#opportoorder').css("min-height", 40 + diffheight + "px").css("border-top-width", "120px").css('border-right-width', "0px").css('border-left-width', "30px");
                 }

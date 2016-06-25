@@ -305,7 +305,7 @@ namespace CloudSalesBusiness
             DataSet ds = SalesRPTDAL.BaseProvider.GetOpportunityStageRate(begintime, endtime, UserID, TeamID, agentid, clientid);
 
             var stages = SystemBusiness.BaseBusiness.GetOpportunityStages(agentid, clientid);
-            decimal total = 0, prev = 0;
+            decimal total = 0;int prev = 0;
             foreach (var stage in stages)
             {
                 ReportCommonEntity model = new ReportCommonEntity();
@@ -315,17 +315,21 @@ namespace CloudSalesBusiness
                 DataRow[] drs = ds.Tables["Data"].Select("StageID='" + stage.StageID + "'");
                 if (drs.Count() > 0)
                 {
-                    model.dValue = Convert.ToDecimal(drs[0]["Value"]);
+                    model.iValue = Convert.ToInt32(drs[0]["Value"]);
+                    model.dValue = Convert.ToDecimal(drs[0]["iValue"]);
+                    
                 }
                 else
                 {
                     model.dValue = 0;
+                    model.iValue = 0;
                 }
-                model.desc = "当前：" + model.dValue.ToString("f2") + "*" + (stage.Probability * 100).ToString("f2") + "%";
+                
+                model.desc = "当前：" + model.iValue.ToString("f2");
 
-                total += model.dValue;
+                total += model.iValue;
 
-                forecast += model.dValue * stage.Probability;
+                forecast += model.iValue * stage.Probability;
 
                 list.Add(model);
             }
@@ -335,10 +339,10 @@ namespace CloudSalesBusiness
             {
                 for (int i = list.Count - 1; i >= 0; i--)
                 {
-                    list[i].dValue += prev;
-                    prev = list[i].dValue;
+                    list[i].iValue += prev;
+                    prev = list[i].iValue;
 
-                    list[i].value = (list[i].dValue / total * 100).ToString("f2");
+                    list[i].value = (list[i].iValue / total * 100).ToString("f2");
                     //list[i].name += list[i].dValue.ToString("f2");
                     //list[i].name += " (" + list[i].desc + ") ";
                 }

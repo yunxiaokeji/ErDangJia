@@ -80,7 +80,7 @@
                     }  else if (result == -100) {
                         alert("标签不能全部删除,操作失败");
                     }  else if (result == -200) {
-                        alert("标签已已被删除,请刷新查看");
+                        alert("标签已经被删除,请刷新查看");
                     } else {
                         alert("删除失败");
                     }

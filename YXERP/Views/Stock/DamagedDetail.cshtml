@@ -11,15 +11,13 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">审核报损单</span>
-    <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current,"103030304"))" id="btnDelete">删除</div>
+    <span class="header-title left">报损单号：@(model.DocCode)</span>
+    <a class="btn-back right" href="/Stock/Damaged">返回</a>
+    <div class="btnccc right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"103030304"))" id="btnDelete">删除</div>
     <div class="btn999 right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"103030303"))" id="btnInvalid">作废</div>
     <div class="btn right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"103030302"))" id="btnAudit">审核</div>
 </div>
-<div class="content-body mTop20">
-    <div class="content-title">
-        <div class="left titlename">报损单号：@(model.DocCode)</div>
-    </div>
+<div class="content-body mTop10">
     <ul class="content-info">
         <li>
             <span class="column-title">总金额：</span>
@@ -42,11 +40,13 @@
             <span class="column-value">@(model.Remark)</span>
         </li>
     </ul>
-     <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navRemark">产品明细</li>
-        </ul>
-    </div>
+</div>
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navRemark">产品明细</li>
+    </ul>
+</div>
+<div class="content-body">
     <table class="table-list mTop20">
         <tr class="tr-header">
             <td class="tLeft">产品名称</td>
@@ -60,7 +60,9 @@
         @foreach (var item in model.Details)
         { 
             <tr class="item" >
-                <td><a href="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)" target="_blank"> @(item.ProductName)</a></td>
+                <td>
+                    <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(item.ProductID)&did=@(item.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(item.ProductName)" data-id="@(item.ProductID)">@(item.ProductName)</a>
+                </td>
                 <td>@(item.Remark)</td>
                 <td class="center">@(item.UnitName)</td>
                 <td>@(item.BatchCode)</td>

@@ -1,6 +1,8 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
-        doT = require("dot");
+        doT = require("dot"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     var Params = {
@@ -43,10 +45,22 @@
                 _self.getList();
             });
         });
-        $("#btnSearch").click(function () {
+        
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
     }
@@ -56,7 +70,7 @@
         var _self = this;
         $("#checkAll").addClass("ico-check").removeClass("ico-checked");
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='6'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='6'><div class='data-loading' ><div></td></tr>");
         Global.post("/Finance/GetAccountBills", Params, function (data) {
             _self.bindList(data);
         });
@@ -87,7 +101,7 @@
             });
         }
         else {
-            $(".tr-header").after("<tr><td colspan='6'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+            $(".tr-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
 
         $("#pager").paginate({

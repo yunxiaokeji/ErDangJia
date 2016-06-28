@@ -1,4 +1,4 @@
-﻿using CloudSalesBusiness;
+﻿using CloudSalesBusiness; 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -42,6 +42,11 @@ namespace YXERP.Controllers
         {
             return View();
         }
+        public ActionResult MyFeedBack()
+        {
+            return View();
+        }
+
         #endregion
 
         #region ajax
@@ -70,6 +75,22 @@ namespace YXERP.Controllers
             };
         }
 
+
+        public ActionResult ExportFromCfg()
+        {
+            var excelWriter = new ExcelWriter();
+            Dictionary<string, object> listColumn = new Dictionary<string, object>();
+            excelWriter.Map("LoginName","登录名");
+            excelWriter.Map("Name", "姓名");
+            excelWriter.Map("MobilePhone", "手机号"); 
+            excelWriter.Map("Birthday", "生日");
+            byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserById(CurrentUser.UserID), new Dictionary<string, ExcelFormatter>() { { "birthday", new ExcelFormatter() { ColumnTrans = EnumColumnTrans.ConvertTime, DropSource = "" } } });
+            var fileName = "用户信息导入";
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
+        }
         /// <summary>
         /// 保存用户基本信息
         /// </summary>
@@ -264,6 +285,35 @@ namespace YXERP.Controllers
         }
         #endregion
 
+        #region 我的反馈
+        public JsonResult GetFeedBacks(int pageIndex, int type, int status, string keyWords, string beginDate, string endDate)
+        {
+            string userID = CurrentUser.UserID;
+            int totalCount = 0, pageCount = 0;
+            var list = CloudSalesBusiness.Manage.FeedBackBusiness.GetFeedBacks(keyWords, beginDate, endDate, type, status,userID, PageSize, pageIndex, out totalCount, out pageCount);
+            JsonDictionary.Add("Items", list);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetFeedBackDetail(string id)
+        {
+            var item = CloudSalesBusiness.Manage.FeedBackBusiness.GetFeedBackDetail(id);
+            JsonDictionary.Add("Item", item);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        #endregion
         #endregion
 
     }

@@ -95,7 +95,7 @@ span.jPag-sprevious-img { background: transparent url(../images/sprevious.png) n
 span.jPag-snext-img { background: transparent url(../images/snext.png) no-repeat center left; }
 
 .jPag-count {color:#333; height:33px; line-height:33px; display:inline-block; position:absolute; top:0; right:0; text-align:right; font-size:13px;}
-.jPag-count input{width:20px; border:solid 1px #ccc; text-align:center;}
+.jPag-count input{width:20px; border:solid 1px #ccc; text-align:center; height:15px; margin-top:-1px;}
 
 .jPag-first { padding: 4px 5px; }
 

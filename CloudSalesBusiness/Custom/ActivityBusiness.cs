@@ -39,10 +39,10 @@ namespace CloudSalesBusiness
         /// <param name="agentid">代理商ID</param>
         /// <param name="clientid">客户端ID</param>
         /// <returns></returns>
-        public static List<ActivityEntity> GetActivitys(string userid, EnumActivityStage stage,int filterType, string keyWords,string beginTime,string endTime, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        public static List<ActivityEntity> GetActivitys(string userid, EnumActivityStage stage, int filterType, string keyWords, string beginTime, string endTime, string orderBy, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
             List<ActivityEntity> list = new List<ActivityEntity>();
-            DataTable dt = ActivityDAL.BaseProvider.GetActivitys(userid, (int)stage,filterType, keyWords,beginTime,endTime, pageSize, pageIndex, ref totalCount, ref pageCount, agentid, clientid);
+            DataTable dt = ActivityDAL.BaseProvider.GetActivitys(userid, (int)stage, filterType, keyWords, beginTime, endTime, orderBy, pageSize, pageIndex, ref totalCount, ref pageCount, agentid, clientid);
             foreach (DataRow dr in dt.Rows)
             {
                 ActivityEntity model = new ActivityEntity();

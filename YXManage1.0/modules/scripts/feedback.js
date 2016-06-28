@@ -65,45 +65,22 @@ define(function (require, exports, module) {
                 onChange: function (data) {
                     FeedBack.Params.pageIndex = 1;
                     FeedBack.Params.type = parseInt(data.value);
+                    FeedBack.Params.beginDate = $("#BeginTime").val();
+                    FeedBack.Params.endDate = $("#EndTime").val();
                     FeedBack.bindData();
                 }
             });
 
-            var Status = [
-                {
-                    ID: "1",
-                    Name: "待解决"
-                },
-                {
-                    ID: "2",
-                    Name: "已解决"
-                },
-                {
-                    ID: "3",
-                    Name: "驳回"
-                },
-                {
-                    ID: "4",
-                    Name: "删除"
-                }
-            ];
-            $("#FeedStatus").dropdown({
-                prevText: "意见状态-",
-                defaultText: "所有",
-                defaultValue: "-1",
-                data: Status,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "120",
-                onChange: function (data) {
-                    FeedBack.Params.pageIndex = 1;
-                    FeedBack.Params.status = parseInt(data.value);
-                    FeedBack.bindData();
-                }
+            $(".search-tab li").click(function () {
+                $(this).addClass("hover").siblings().removeClass("hover");
+                var index = $(this).data("index");
+                $(".content-body div[name='navContent']").hide().eq(parseInt(index)).show();
+                FeedBack.Params.pageIndex = 1;
+                FeedBack.Params.status = index == 0 ? -1 : index;
+                FeedBack.Params.beginDate = $("#BeginTime").val();
+                FeedBack.Params.endDate = $("#EndTime").val();
+                FeedBack.bindData();
             });
-
-
-
         });
 
         //时间段查询
@@ -115,7 +92,6 @@ define(function (require, exports, module) {
                 FeedBack.bindData();
             }
         });
-
     };
 
     //绑定数据列表
@@ -143,13 +119,11 @@ define(function (require, exports, module) {
                     FeedBack.bindData();
                 }
             });
-
         });
     }
 
     FeedBack.detailInit = function (id) {
         FeedBack.Params.id = id;
-
         FeedBack.detailBindEvent();
         FeedBack.getFeedBackDetail();
     }
@@ -158,11 +132,9 @@ define(function (require, exports, module) {
         $("#btn-finish").click(function () {
             FeedBack.updateFeedBackStatus(2);
         });
-
         $("#btn-cancel").click(function () {
             FeedBack.updateFeedBackStatus(3);
         });
-
         $("#btn-delete").click(function () {
             FeedBack.updateFeedBackStatus(9);
         });
@@ -173,7 +145,6 @@ define(function (require, exports, module) {
         Global.post("/FeedBack/GetFeedBackDetail", { id: FeedBack.Params.id }, function (data) {
             if (data.Item) {
                 var item = data.Item;
-
                 $("#Title").html(item.Title);
                 var typeName = "问题";
                 if (item.Type == 2)
@@ -185,16 +156,22 @@ define(function (require, exports, module) {
                 var statusName = "待解决";
                 if (item.Status == 2) {
                     statusName = "已解决";
-                }
-                else if (item.Status == 3)
+                    $('#btn-finish').hide();
+                    $('#btn-cancel').hide();
+                    $('#btn-delete').hide();
+                } else if (item.Status == 3) {
                     statusName = "驳回";
-                else if (item.Status == 9)
+                    $('#btn-finish').hide();
+                    $('#btn-cancel').hide();
+                    $('#btn-delete').hide();
+                } else if (item.Status == 9) {
                     statusName = "删除";
+                }
                 $("#Status").html(statusName);
-
                 $("#ContactName").html(item.ContactName);
                 $("#MobilePhone").html(item.MobilePhone);
                 $("#Remark").html(item.Remark);
+                $("#Content").html(item.Content);
                 $("#CreateTime").html(item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss"));
             } 
         });
@@ -202,12 +179,11 @@ define(function (require, exports, module) {
 
     //更改状态
     FeedBack.updateFeedBackStatus = function (status) {
-        Global.post("/FeedBack/UpdateFeedBackStatus", { id: FeedBack.Params.id, status: status }, function (data) {
+        Global.post("/FeedBack/UpdateFeedBackStatus", { id: FeedBack.Params.id, status: status, content: $('#Content').val() }, function (data) {
             if (data.Result == 1) {
                 alert("保存成功");
                 FeedBack.getFeedBackDetail();
-            }
-            else {
+            } else {
                 alert("保存失败");
             }
         });

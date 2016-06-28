@@ -12,12 +12,13 @@ namespace CloudSalesDAL
     {
         public static AgentOrderDAL BaseProvider = new AgentOrderDAL();
 
-        public DataSet GetAgentOrders(string searchagentid, int status, int sendstatus, int returnstatus, string keywords, string begintime, string endtime, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        public DataSet GetAgentOrders(string searchagentid, int status, int outStatus, int sendstatus, int returnstatus, string keywords, string begintime, string endtime, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@TotalCount",SqlDbType.Int),
                                        new SqlParameter("@PageCount",SqlDbType.Int),
                                        new SqlParameter("@Status",status),
+                                       new SqlParameter("@OutStatus",outStatus),
                                        new SqlParameter("@SendStatus",sendstatus),
                                        new SqlParameter("@ReturnStatus",returnstatus),
                                        new SqlParameter("@KeyWords",keywords),

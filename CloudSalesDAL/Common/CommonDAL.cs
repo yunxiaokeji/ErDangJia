@@ -18,7 +18,15 @@ namespace CloudSalesDAL
             DataTable dt = GetDataTable("select * from Menu where Type=1 and IsHide=0 order by Sort ");
             return dt;
         }
-
+        /// <summary>
+        /// 获取后台菜单
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetManageMenus()
+        {
+            DataTable dt = GetDataTable("select * from Menu where Type=2 and IsHide=0 order by Sort ");
+            return dt;
+        }
         /// <summary>
         /// 获取城市列表
         /// </summary>

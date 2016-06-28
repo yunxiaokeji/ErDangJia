@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
 using CloudSalesBusiness;
+using CloudSalesBusiness.Custom;
 using CloudSalesEntity;
 using CloudSalesBusiness.Manage;
 using CloudSalesEntity.Manage;
@@ -28,7 +29,8 @@ namespace YXERP.Controllers
 
         public ActionResult Stages()
         {
-            ViewBag.Items = new SystemBusiness().GetCustomStages(CurrentUser.AgentID, CurrentUser.ClientID);
+            var list = SystemBusiness.BaseBusiness.GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
+            ViewBag.Items = list;
             return View();
         }
         public ActionResult OpportunityStages()
@@ -89,6 +91,73 @@ namespace YXERP.Controllers
 
             var list = new SystemBusiness().GetCustomSources(CurrentUser.AgentID, CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
             JsonDictionary.Add("items", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        /// <summary>
+        /// 客户颜色标记
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetCustomColor()
+        {
+
+            var list = SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.ClientID).ToList();
+            JsonDictionary.Add("items", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetCustomerColorByColorID(int colorid)
+        {
+            var model = new SystemBusiness().GetCustomerColorsColorID(CurrentUser.ClientID, colorid);
+            JsonDictionary.Add("model", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult SaveCustomerColor(string customercolor)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            CustomerColorEntity model = serializer.Deserialize<CustomerColorEntity>(customercolor);
+            model.CreateUserID = CurrentUser.UserID;
+            model.ClientID = CurrentUser.ClientID;
+            model.AgentID = CurrentUser.AgentID;
+            model.Status = 0;
+            int ColorID =-1;
+            if ( model.ColorID==0)
+            {
+                ColorID = SystemBusiness.BaseBusiness.CreateCustomerColor(model.ColorName, model.ColorValue,
+                    model.AgentID, model.ClientID, model.CreateUserID, model.Status);
+            }
+            else
+            {
+                int bl = SystemBusiness.BaseBusiness.UpdateCustomerColor(model.AgentID, model.ClientID, model.ColorID,
+                    model.ColorName, model.ColorValue, CurrentUser.UserID); 
+                ColorID =bl > 0? model.ColorID:bl;
+              
+            }
+            JsonDictionary.Add("ID", ColorID);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DeleteColor(int colorid)
+        {
+            int result = SystemBusiness.BaseBusiness.DeleteCutomerColor(colorid, CurrentUser.AgentID, CurrentUser.ClientID,
+                CurrentUser.UserID);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -163,22 +232,22 @@ namespace YXERP.Controllers
 
         #endregion
 
-        #region 客户阶段配置
+        #region 机会阶段配置
 
-        public JsonResult SaveCustomStage(string entity)
+        public JsonResult SaveStage(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            CustomStageEntity model = serializer.Deserialize<CustomStageEntity>(entity);
+            OpportunityStageEntity model = serializer.Deserialize<OpportunityStageEntity>(entity);
 
             int result = 0;
 
             if (string.IsNullOrEmpty(model.StageID))
             {
-                model.StageID = new SystemBusiness().CreateCustomStage(model.StageName, model.Sort, "", CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
+                model.StageID = new SystemBusiness().CreateOpportunityStage(model.StageName, model.Probability, model.Sort, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
             }
             else
             {
-                bool bl = new SystemBusiness().UpdateCustomStage(model.StageID, model.StageName, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+                bool bl = new SystemBusiness().UpdateOpportunityStage(model.StageID, model.StageName, model.Probability, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
                 if (bl)
                 {
                     result = 1;
@@ -186,6 +255,17 @@ namespace YXERP.Controllers
             }
             JsonDictionary.Add("status", result);
             JsonDictionary.Add("model", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DeleteStage(string id)
+        {
+            bool bl = new SystemBusiness().DeleteOpportunityStage(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -218,17 +298,6 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult DeleteCustomStage(string id)
-        {
-            bool bl = new SystemBusiness().DeleteCustomStage(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("status", bl);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
         public JsonResult DeleteStageItem(string id, string stageid)
         {
             bool bl = new SystemBusiness().DeleteStageItem(id, stageid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
@@ -239,71 +308,6 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         } 
-
-        #endregion
-
-        #region 机会订单阶段
-
-        public JsonResult GetOpportunityStages()
-        {
-
-            var list = new SystemBusiness().GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID).ToList();
-            JsonDictionary.Add("items", list);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult GetOpportunityStageByID(string id)
-        {
-
-            var model = new SystemBusiness().GetOpportunityStageByID(id, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("model", model);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult SaveOpportunityStage(string entity)
-        {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            OpportunityStageEntity model = serializer.Deserialize<OpportunityStageEntity>(entity);
-
-            if (string.IsNullOrEmpty(model.StageID))
-            {
-                model.StageID = new SystemBusiness().CreateOpportunityStage(model.StageName, model.Probability, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-            }
-            else
-            {
-                bool bl = new SystemBusiness().UpdateOpportunityStage(model.StageID, model.StageName, model.Probability, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-                if (!bl)
-                {
-                    model.StageID = "";
-                }
-                
-            }
-            JsonDictionary.Add("model", model);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult DeleteOpportunityStage(string id)
-        {
-            bool bl = new SystemBusiness().DeleteOpportunityStage(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("status", bl);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
 
         #endregion
 
@@ -701,12 +705,12 @@ namespace YXERP.Controllers
         /// <param name="pageSize"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        public JsonResult GetClientOrders(int status,int type,string beginDate,string endDate,int pageSize, int pageIndex)
+        public JsonResult GetClientOrders(int status, int type, string beginDate, string endDate, int pageSize, int pageIndex, string keyWords="")
         {
             int pageCount = 0;
             int totalCount = 0;
 
-            List<ClientOrder> list = ClientOrderBusiness.GetClientOrders(status, type,beginDate,endDate,CurrentUser.AgentID,CurrentUser.ClientID, pageSize, pageIndex, ref totalCount, ref pageCount);
+            List<ClientOrder> list = ClientOrderBusiness.GetClientOrders(keyWords,status, type, beginDate, endDate, CurrentUser.AgentID, CurrentUser.ClientID, pageSize, pageIndex, ref totalCount, ref pageCount);
             JsonDictionary.Add("Items", list);
             JsonDictionary.Add("TotalCount", totalCount);
             JsonDictionary.Add("PageCount", pageCount);
@@ -780,6 +784,23 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
+        public JsonResult GetClientAuthorizeLogs(int pageIndex)
+        {
+            int pageCount = 0;
+            int totalCount = 0;
+            var list = ClientBusiness.GetClientAuthorizeLogs(CurrentUser.ClientID, "", PageSize, pageIndex, ref totalCount, ref pageCount);
+            JsonDictionary.Add("Items", list);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
+
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
 
         #endregion

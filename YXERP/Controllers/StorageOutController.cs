@@ -14,8 +14,6 @@ namespace YXERP.Controllers
 {
     public class StorageOutController : BaseController
     {
-        //
-        // GET: /StorageOut/
 
         public ActionResult Index()
         {
@@ -74,12 +72,12 @@ namespace YXERP.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Redirect("/StorageOut/StorageSend");
+                return Redirect("/StorageOut/StorageOut");
             }
             var model = AgentOrderBusiness.BaseBusiness.GetAgentOrderByID(id, CurrentUser.AgentID, CurrentUser.ClientID);
             if (model == null || string.IsNullOrEmpty(model.OrderID))
             {
-                return Redirect("/StorageOut/StorageSend");
+                return Redirect("/StorageOut/StorageOut");
             }
             if (model.SendStatus > 1)
             {
@@ -134,7 +132,7 @@ namespace YXERP.Controllers
             int totalCount = 0;
             int pageCount = 0;
 
-            var list = AgentOrderBusiness.BaseBusiness.GetAgentOrders("", model.status, model.sendstatus, model.returnstatus, model.keywords, model.BeginTime, model.EndTime, model.pagesize, model.pageindex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
+            var list = AgentOrderBusiness.BaseBusiness.GetAgentOrders("", model.status, model.outstatus, model.sendstatus, model.returnstatus, model.keywords, model.BeginTime, model.EndTime, model.pagesize, model.pageindex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalcount", totalCount);
             JsonDictionary.Add("pagecount", pageCount);

@@ -17,95 +17,65 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-
-        public List<ProvidersEntity> GetProviders(string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
+        public static List<StorageDoc> GetPurchases(string userid, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
-            var dal = new StockDAL();
-
-            string where = " ClientID='" + clientID + "' and Status<>9";
-
-            DataTable dt = CommonBusiness.GetPagerData("Providers", "*", where, "AutoID", pageSize, pageIndex, out totalCount, out pageCount);
-
-            List<ProvidersEntity> list = new List<ProvidersEntity>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                ProvidersEntity model = new ProvidersEntity();
-                model.FillData(dr);
-                model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
-                list.Add(model);
-            }
-            return list;
-        }
-
-        public List<ProvidersEntity> GetProviders(string clientID)
-        {
-            var dal = new StockDAL();
-            DataTable dt = dal.GetProviders(clientID);
-
-            List<ProvidersEntity> list = new List<ProvidersEntity>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                ProvidersEntity model = new ProvidersEntity();
-                model.FillData(dr);
-                list.Add(model);
-            }
-            return list;
-        }
-
-        public ProvidersEntity GetProviderByID(string providerID)
-        {
-            var dal = new StockDAL();
-            DataTable dt = dal.GetProviderByID(providerID);
-
-            ProvidersEntity model = new ProvidersEntity();
-            if (dt.Rows.Count > 0)
-            {
-                model.FillData(dt.Rows[0]);
-                model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
-            }
-            return model;
-        }
-
-        public static List<StorageDoc> GetStorageDocList(string userid, EnumDocType type, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
-        {
-            DataSet ds = StockDAL.GetStorageDocList(userid, (int)type, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientID);
+            DataSet ds = StockDAL.GetPurchases(userid, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
 
             List<StorageDoc> list = new List<StorageDoc>();
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 StorageDoc model = new StorageDoc();
                 model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, clientID);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
                 model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
                 model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
-                if (!string.IsNullOrEmpty(model.ProviderID))
-                {
-                    model.ProviderName = BaseBusiness.GetProviderByID(model.ProviderID).Name;
-                }
 
                 list.Add(model);
             }
             return list;
         }
 
-        public static StorageDoc GetStorageDetail(string docid, string clientid)
+        public static List<StorageDoc> GetStorageDocList(string userid, EnumDocType type, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        {
+            DataSet ds = StockDAL.GetStorageDocList(userid, (int)type, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
+
+            List<StorageDoc> list = new List<StorageDoc>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                StorageDoc model = new StorageDoc();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
+                model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+
+                list.Add(model);
+            }
+            return list;
+        }
+
+        public static StorageDoc GetStorageDetail(string docid, string agentid, string clientid)
         {
             DataSet ds = StockDAL.GetStorageDetail(docid, clientid);
             StorageDoc model = new StorageDoc();
             if (ds.Tables.Contains("Doc") && ds.Tables["Doc"].Rows.Count > 0)
             {
                 model.FillData(ds.Tables["Doc"].Rows[0]);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, clientid);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
                 model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
 
                 model.DocTypeStr = CommonBusiness.GetEnumDesc<EnumDocType>((EnumDocType)model.DocType);
 
                 model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+
                 model.Details = new List<StorageDetail>();
                 foreach (DataRow item in ds.Tables["Details"].Rows)
                 {
                     StorageDetail details = new StorageDetail();
                     details.FillData(item);
+                    if (!string.IsNullOrEmpty(details.UnitID))
+                    {
+                        details.UnitName = ProductsBusiness.BaseBusiness.GetUnitByID(details.UnitID, clientid).UnitName;
+                    }
                     model.Details.Add(details);
                 }
             }
@@ -120,16 +90,16 @@ namespace CloudSalesBusiness
             {
                 case 0:
                     str = doctype == 6 ? "待入库"
-                        : doctype == 2 ? "待上架"
+                        : doctype == 2 ? "待审核"
                         : "待审核";
                     break;
                 case 1:
-                    str = doctype == 1 ? "部分上架"
+                    str = doctype == 1 ? "部分入库"
                         : doctype == 2 ? "部分出库"
                         : "部分审核";
                     break;
                 case 2:
-                    str = doctype == 1 ? "已上架"
+                    str = doctype == 1 ? "已入库"
                         : doctype == 2 ? "已出库"
                         : doctype == 6 ? "已入库"
                         : "已审核";
@@ -219,27 +189,7 @@ namespace CloudSalesBusiness
             {
                 ProductStock model = new ProductStock();
                 model.FillData(dr);
-                model.SaleAttrValueString = "";
-                if (!string.IsNullOrEmpty(model.SaleAttrValue))
-                {
-                    string[] attrs = model.SaleAttrValue.Split(',');
-                    foreach (string attrid in attrs)
-                    {
-                        if (!string.IsNullOrEmpty(attrid))
-                        {
-                            var attr = new ProductsBusiness().GetProductAttrByID(attrid.Split(':')[0], clientid);
-                            var value = attr.AttrValues.Where(m => m.ValueID == attrid.Split(':')[1]).FirstOrDefault();
-                            if (attr != null && value != null)
-                            {
-                                model.SaleAttrValueString += attr.AttrName + "：" + value.ValueName + "，";
-                            }
-                        }
-                    }
-                    if (model.SaleAttrValueString.Length > 0)
-                    {
-                        model.SaleAttrValueString = model.SaleAttrValueString.Substring(0, model.SaleAttrValueString.Length - 1);
-                    }
-                }
+
                 list.Add(model);
             }
             return list;
@@ -254,42 +204,14 @@ namespace CloudSalesBusiness
             {
                 ProductStock model = new ProductStock();
                 model.FillData(dr);
-                model.SaleAttrValueString = "";
-                if (!string.IsNullOrEmpty(model.SaleAttrValue))
-                {
-                    string[] attrs = model.SaleAttrValue.Split(',');
-                    foreach (string attrid in attrs)
-                    {
-                        if (!string.IsNullOrEmpty(attrid))
-                        {
-                            var attr = new ProductsBusiness().GetProductAttrByID(attrid.Split(':')[0], clientid);
-                            var value = attr.AttrValues.Where(m => m.ValueID == attrid.Split(':')[1]).FirstOrDefault();
-                            if (attr != null && value != null)
-                            {
-                                model.SaleAttrValueString += attr.AttrName + "：" + value.ValueName + "，";
-                            }
-                        }
-                    }
-                    if (model.SaleAttrValueString.Length > 0)
-                    {
-                        model.SaleAttrValueString = model.SaleAttrValueString.Substring(0, model.SaleAttrValueString.Length - 1);
-                    }
-                }
                 list.Add(model);
             }
             return list;
         }
 
-
         #endregion
 
         #region 添加
-
-        public string AddProviders(string name, string contact, string mobile,string email, string cityCode, string address,string remark, string operateID, string agentid, string clientID)
-        {
-            return new StockDAL().AddProviders(name, contact, mobile, email, cityCode, address, remark, operateID, agentid, clientID);
-        }
-
 
         public static bool CreateStorageDoc(string wareid, string providerid, string remark, string userid, string operateip, string agentid, string clientid)
         {
@@ -336,18 +258,6 @@ namespace CloudSalesBusiness
 
         #region 编辑、删除
 
-
-        public bool UpdateProvider(string providerid, string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
-        {
-            var dal = new StockDAL();
-            return dal.UpdateProvider(providerid, name, contact, mobile, email, cityCode, address, remark, operateID, agentid, operateID);
-        }
-
-        public bool UpdateProviderStatus(string providerid, EnumStatus status, string ip, string operateid)
-        {
-            return CommonBusiness.Update("Providers", "Status", (int)status, "ProviderID='" + providerid + "'");
-        }
-
         public bool DeleteDoc(string docid, string userid, string operateip, string clientid)
         {
             return new StockDAL().UpdateStorageStatus(docid, (int)EnumDocStatus.Delete, "删除单据", userid, operateip, clientid);
@@ -368,18 +278,9 @@ namespace CloudSalesBusiness
             return new StockDAL().UpdateStorageDetailBatch(docid, autoid, batch);
         }
 
-        public bool AuditStorageIn(string ids, string userid, string operateip, string agentid, string clientid)
+        public bool AuditStorageIn(string docid, int doctype, int isover, string details, string remark, string userid, string operateip, string agentid, string clientid, ref int result, ref string errinfo)
         {
-            bool bl = false;
-
-            foreach (string autoid in ids.Split(','))
-            {
-                if (new StockDAL().AuditStorageIn(autoid, userid, operateip, agentid, clientid))
-                {
-                    bl = true;
-                }
-            }
-
+            bool bl = new StockDAL().AuditStorageIn(docid, doctype, isover, details, remark, userid, operateip, agentid, clientid, ref result, ref errinfo);
             return bl;
         }
 

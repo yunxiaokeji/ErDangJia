@@ -40,6 +40,8 @@ namespace YXERP.Models
         public int PageSize { get; set; }
 
         public int PageIndex { get; set; }
+        public int ExcelType { get; set; }
+        public string OrderBy { get; set; }
 
     }
 }

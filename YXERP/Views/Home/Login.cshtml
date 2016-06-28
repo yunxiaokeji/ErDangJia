@@ -4,23 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <meta charset="UTF-8">
-    <meta content="二当家，直销平台，企业管理，让营销行云流水" name="keywords">
-    <meta content="中国市场先进的企业供应链SaaS平台系统,提供客户管理,销售管理,进销存管理和分销管理一站式服务。支持第三方应用对接，可针对企业特殊业务流程订制分销模式。" name="description">
-    <meta content="width=device-width,initial-scale=1,maximum-scale=1" name="viewport">
-    <meta content="telephone=no" name="format-detection">
-    <title>二当家-云销科技</title>
-    <link href="/modules/css/layout.css" rel="stylesheet" />
-    <link href="/modules/css/home/login.css" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta content="二当家，直销平台，企业管理，让营销行云流水" name="keywords" />
+    <meta content="中国市场先进的企业供应链SaaS平台系统,提供客户管理,销售管理,进销存管理和分销管理一站式服务。支持第三方应用对接，可针对企业特殊业务流程订制分销模式。" name="description" />
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1" name="viewport" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>云销科技</title>
     <link href="/modules/css/base.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="/modules/images/logo_login.png">
-    <script src="/Scripts/sea.js"></script>
-    <script src="/Scripts/sea-config.js"></script>
+    <link href="/modules/css/home/login.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="/modules/images/logo_login.png" />
+    <script type="text/javascript" src="/Scripts/sea.js"></script>
+    <script type="text/javascript" src="/Scripts/sea-config.js?v=@(ExpandClass.Version)"></script>
     <script type="text/javascript">
-        seajs.use(["scripts/home"], function (home) {
-            home.initLogin('@(ViewBag.Status)');
-
-
+        seajs.use(["scripts/home/login"], function (home) {
+            home.init('@(ViewBag.Status)');
         });
     </script>
 </head>

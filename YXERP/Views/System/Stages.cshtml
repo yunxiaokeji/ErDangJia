@@ -1,10 +1,10 @@
 ﻿@{
-    ViewBag.Title = "客户阶段";
-    var list = (List<CloudSalesEntity.CustomStageEntity>)ViewBag.Items;
+    ViewBag.Title = "机会阶段配置";
+    var list = (List<CloudSalesEntity.OpportunityStageEntity>)ViewBag.Items;
 }
 
 @section css{
-    <link rel="stylesheet" href="/modules/css/system/system.css" />
+    <link rel="stylesheet" href="/modules/css/system.css" />
 }
 @section scripts{
     <script type="text/javascript">
@@ -14,15 +14,20 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">客户阶段设置</span>
+    <span class="header-title left">机会阶段配置</span>
 </div>
 <div class="content-body mTop20">
     <ul class="stages-box">
-        @foreach (var model in list.Where(m => m.PID == "").ToList())
+        @foreach (var model in list)
         { 
             <li class="stages-item">
-                <div class="name"><span class="long">@(model.StageName)</span><input type="text" data-sort="@(model.Sort)" maxlength="50" id="@(model.StageID)" class="hide" /></div>
-                <div class="ico-dropdown operatestage" data-type="@(model.Mark)" data-id="@(model.StageID)"></div>
+                <div class="name" title="@(model.StageName)(成交概率：@((model.Probability*100).ToString("f2"))%)">
+                    <span class="long left" id="@(model.StageID)">@(model.StageName)</span>
+                </div>
+                <div class="ico-dropdown operatestage" data-type="@(model.Mark)" data-sort="@(model.Sort)" data-probability="@((model.Probability*100).ToString("f2"))" data-id="@(model.StageID)"></div>
+                <div class="pLeft5 mTop5">
+                    成交概率：@((model.Probability*100).ToString("f2"))%
+                </div>
                 <ul class="child-items">
                     @foreach (var item in model.StageItem)
                     {

@@ -3,11 +3,14 @@
 	var item = $data[i];
 %}
 <tr class="list-item">
+    <td><img onerror="this.src='/modules/images/default.png'" src="{%=item.ImgS||'/modules/images/default.png'%}" /></td>
     <td>{%=item.DetailsCode%}</td>
-    <td>{%=item.SaleAttrValueString%}</td>
+    <td>{%=item.Remark%}</td>
     <td class="tRight">{%=item.Price.toFixed(2)%}</td>
-    <td class='tRight'>{%=item.BigPrice.toFixed(2)%}</td>
     <td class='center'><div class="status" data-id="{%=item.ProductDetailID%}" data-value="{%=item.Status==1%}"></div></td>
-    <td class="center"><a class="ico-edit" title="编辑" data-id="{%=item.ProductDetailID%}" href="javascript:void(0);"></a></td>
+    <td class="center">
+        <a class="iconfont ico-edit left mLeft3" title="编辑" data-id="{%=item.ProductDetailID%}" href="javascript:void(0);"></a>
+        <span class="iconfont ico-del right mRight3 mTop1" title="删除" data-id="{%=item.ProductDetailID%}"></span>
+    </td>
 </tr>
 {% } %}

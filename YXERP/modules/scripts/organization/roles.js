@@ -57,6 +57,7 @@
             });
         });
     }
+
     //添加/编辑弹出层
     ObjectJS.createModel = function () {
         var _self = this;
@@ -94,15 +95,17 @@
 
         }); 
     }
+
     //获取列表
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='6'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='6'><div class='data-loading' ><div></td></tr>");
         Global.post("/Organization/GetRoles", {}, function (data) {
             _self.bindList(data.items);
         });
     }
+
     //加载列表
     ObjectJS.bindList = function (items) {
         var _self = this;
@@ -135,19 +138,20 @@
             });
         }
         else {
-            $(".tr-header").after("<tr><td colspan='6'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+            $(".tr-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
     }
+
     //保存实体
     ObjectJS.saveModel = function (model) {
         var _self = this;
         Global.post("/Organization/SaveRole", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.RoleID.length > 0) {
                 _self.getList();
-                //_self.bindList([data.model]);
             }
         })
     }
+
     //删除
     ObjectJS.deleteModel = function (id, callback) {
         Global.post("/Organization/DeleteRole", { roleid: id }, function (data) {

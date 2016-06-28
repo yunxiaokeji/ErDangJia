@@ -37,23 +37,36 @@ namespace CloudSalesBusiness
 
 
         public List<CustomerEntity> GetCustomers(EnumSearchType searchtype, int type, string sourceid, string stageid, int status, int mark, string activityid, string searchuserid, string searchteamid, string searchagentid,
-                                                 string begintime, string endtime, string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
+                                                 string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
         {
             List<CustomerEntity> list = new List<CustomerEntity>();
-            DataSet ds = CustomDAL.BaseProvider.GetCustomers((int)searchtype, type, sourceid, stageid, status, mark, activityid, searchuserid, searchteamid, searchagentid, begintime, endtime, keyWords, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
-            foreach (DataRow dr in ds.Tables[0].Rows)
+            DataTable dt = GetCustomersDatable(searchtype, type, sourceid, stageid, status, mark, activityid, searchuserid, searchteamid, searchagentid, begintime, endtime, 
+                                                                keyWords, orderby, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
+            foreach (DataRow dr in dt.Rows)
             {
                 CustomerEntity model = new CustomerEntity();
                 model.FillData(dr);
 
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 list.Add(model);
             }
             return list;
         }
-
+        public DataTable GetCustomersDatable(EnumSearchType searchtype, int type, string sourceid, string stageid, int status, int mark, string activityid, string searchuserid, string searchteamid, string searchagentid,
+                                                string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid,int excelType=0)
+        {
+            DataTable dt=new DataTable();
+            DataSet ds = CustomDAL.BaseProvider.GetCustomers((int)searchtype, type, sourceid, stageid, status, mark, activityid, searchuserid, searchteamid, searchagentid, begintime, endtime,
+                                                                keyWords, orderby, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
+            if (ds.Tables.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            return dt;
+        }
         public List<CustomerEntity> GetCustomersByActivityID(string activityid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
         {
             List<CustomerEntity> list = new List<CustomerEntity>();
@@ -67,7 +80,8 @@ namespace CloudSalesBusiness
 
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 list.Add(model);
             }
             return list;
@@ -83,7 +97,8 @@ namespace CloudSalesBusiness
                 model.FillData(dr);
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 list.Add(model);
             }
             return list;
@@ -98,7 +113,8 @@ namespace CloudSalesBusiness
                 model.FillData(ds.Tables["Customer"].Rows[0]);
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
+                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
                 if (model.Extent > 0)
                 {
                     model.ExtentStr = GetExtents().Where(m => m.ExtentID == model.Extent.ToString()).FirstOrDefault().ExtentName;
@@ -149,7 +165,28 @@ namespace CloudSalesBusiness
 
             return list;
         }
-
+        public List<ContactEntity> GetContactsByCustomerID(string ownerID,string customerid="", string agentid="")
+        {
+            int total = 0;
+            List<ContactEntity> list = new List<ContactEntity>(); 
+            string cloumns = " status<>9 and OwnerID='" + ownerID + "'";
+            if (!string.IsNullOrEmpty(agentid))
+            {
+                cloumns += " and agentid='" + agentid + "'";
+            }
+            if (!string.IsNullOrEmpty(customerid))
+            {
+                cloumns += " and customerid='" + customerid + "'";
+            }
+            DataTable dt = CommonBusiness.GetPagerData("Contact", "*", cloumns, "CustomerID", int.MaxValue, 1, out total, out total);
+            foreach (DataRow dr in dt.Rows)
+            {
+                ContactEntity model = new ContactEntity();
+                model.FillData(dr);
+                list.Add(model);
+            }
+            return list;
+        }
         public ContactEntity GetContactByID(string contactid)
         {
             ContactEntity model = new ContactEntity();
@@ -159,6 +196,30 @@ namespace CloudSalesBusiness
                 model.FillData(dt.Rows[0]);
             }
             return model;
+        }
+
+        public List<CustomerEntity> GetCustomerByOwneID(string ownerID, string agentid="", string clientid="")
+        {
+            int total = 0;
+            List<CustomerEntity> list=new List<CustomerEntity>();
+            string cloumns = " status<>9 and OwnerID='" + ownerID + "'";
+            if (!string.IsNullOrEmpty(agentid))
+            {
+                cloumns += " and agentid='" +agentid+ "'";
+            } 
+            if (!string.IsNullOrEmpty(clientid))
+            {
+                cloumns += " and clientid='" + clientid + "'";
+            }
+
+           DataTable dt = CommonBusiness.GetPagerData("Customer", "*", cloumns, "CustomerID", int.MaxValue, 1, out total, out total);
+           foreach (DataRow dr in dt.Rows)
+           {
+               CustomerEntity model = new CustomerEntity();
+               model.FillData(dr); 
+               list.Add(model);
+           }
+            return list;
         }
 
         public static List<ReplyEntity> GetReplys(string guid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
@@ -235,25 +296,13 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool UpdateCustomerStage(string customerid, string stageid, string operateid, string ip,string agentid, string clientid)
-        {
-            bool bl = CustomDAL.BaseProvider.UpdateCustomerStage(customerid, stageid, operateid, agentid, clientid);
-            if (bl)
-            {
-                var model = SystemBusiness.BaseBusiness.GetCustomStageByID(stageid, agentid, clientid);
-                string msg = "客户阶段更换为：" + model.StageName;
-                LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, ip, stageid, agentid, clientid);
-            }
-            return bl;
-        }
-
         public bool UpdateCustomerOwner(string customerid, string userid, string operateid, string ip, string agentid, string clientid)
         {
             bool bl = CustomDAL.BaseProvider.UpdateCustomerOwner(customerid, userid, operateid, agentid, clientid);
             if (bl)
             {
                 var model = OrganizationBusiness.GetUserByUserID(userid, agentid);
-                string msg = "客户拥有者更换为：" + model.Name;
+                string msg = "客户负责人更换为：" + model.Name;
                 LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, ip, userid, agentid, clientid);
             }
             return bl;

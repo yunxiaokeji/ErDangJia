@@ -2,7 +2,7 @@
     ViewBag.Title = "通用属性设置";
 }
 
-<link href="/modules/css/stock/products.css" rel="stylesheet" />
+<link href="/modules/css/products.css" rel="stylesheet" />
 
 @section scripts{
     <script type="text/javascript">
@@ -12,14 +12,14 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">属性设置</span>
-    <a href="javascript:void(0)" id="addAttr" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103010301"))">新建通用属性</a>
+    <span class="header-title left"></span>
+    <a href="javascript:void(0)" id="addAttr" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103010301"))">新建属性</a>
     
 </div>
-<div class="content-body mTop20">
-    <div class="search-body">
-        <div class="right searth-module"></div>
-    </div>
+<div class="search-header">
+    <div class="right searth-module"></div>
+</div>
+<div class="content-body">
     <table class="table-list">
         <tr class="tr-header" id="attrList">
             <td class="width300 tLeft">属性名称</td>
@@ -27,14 +27,17 @@
             <td class="width100">设置属性值</td>
             <td class="width150">创建时间</td>
             <td class="width150">创建人</td>
-            <td class="width80">操作</td>
+            <td class="width50">操作</td>
         </tr>
     </table>
     <div id="pager" class="mTop20"></div>
     <div class="attr-value-box" id="attrValueBox">
         <div class="title">
             <span class="header-title">颜色</span>
-            <div class="add-value"><input class="value-name" type="text" id="valueName" placeholder="添加属性值" maxlength="20" /><span class="ico-input-add">+</span></div>
+            <div class="add-value">
+                <input class="value-name" type="text" id="valueName" placeholder="添加属性值" maxlength="20" />
+                <span class="ico-input-add">+</span>
+            </div>
         </div>
         
         <ul id="attrValues">
@@ -42,7 +45,3 @@
         </ul>
     </div>
 </div>
-<ul class="dropdown-ul hide"  style="width:65px;">
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current,"103010301"))" id="updateObject">编辑</li>
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current,"103010302"))" id="deleteObject">删除</li>
-</ul>

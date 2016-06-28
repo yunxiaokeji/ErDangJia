@@ -1,15 +1,17 @@
-﻿<li class="category-layer">
-    <div class="category-header long">全部分类</div>
-    <ul class="category-list">
-        {%
-	        for(var i=0, j=$data.length; i < j; i++){
-	        var item = $data[i];
-        %}
-        <li data-id="{%=item.CategoryID%}" title="{%=item.Description%}" data-layer="{%=item.Layers%}">
-            <span class="category-name long left width150 {%=item.Status==1?'':'color999'%}">{%=item.CategoryName%}</span>
-            <span data-id="{%=item.CategoryID%}" class="ddlcategory ico-dropdown right"></span>
-        </li>
-        {% } %}
-    </ul>
-    <div class="create-child" data-id="" data-layer="1">+ 新建分类</div>
-</li>
+﻿
+{%
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+%}
+<div class="category-item">
+    <div class="left-box"></div>
+    <span class="{%=(i==$data.length-1)?'lastline':'leftline'%} left"></span>
+    <span data-id="{%=item.CategoryID%}" data-eq="{%=(i==$data.length-1)?'last':''%}" data-state="close" class="left openspan {%=(item.ChildCategorys&&item.ChildCategorys.length>0)?'icoopen openchild':''%} "></span>
+    <span class="left category {%=item.Status==1?'':'close'%}">{%=item.CategoryName%}</span>
+    <a class="category-edit" data-id="{%=item.CategoryID%}" href="javascript:void(0)">编辑</a>
+    <a class="category-add" data-id="{%=item.CategoryID%}" href="javascript:void(0)">添加子类</a>
+    <a class="btn-open-window" data-id="103010500" data-name="添加产品" data-url="/Products/ProductAdd/{%=item.CategoryID%}" href="javascript:void(0)">添加产品</a>
+    <a class="category-del" data-id="{%=item.CategoryID%}" href="javascript:void(0)">删除</a>
+</div>
+{% } %}
+

@@ -20,17 +20,15 @@ namespace CloudSalesDAL
             return GetDataTable("P_GetShoppingCart", paras, CommandType.StoredProcedure);
         }
 
-        public static bool AddShoppingCart(string productid, string detailsid, int quantity, string unitid, int isBigUnit, int ordertype, string remark, string guid, string userid, string operateip)
+        public static bool AddShoppingCart(int ordertype, string guid, string productid, string detailsid, int quantity, string remark, string userid, string operateip)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@OrderType",ordertype),
+                                     new SqlParameter("@GUID" , guid),
                                      new SqlParameter("@ProductDetailID",detailsid),
                                      new SqlParameter("@ProductID" , productid),
                                      new SqlParameter("@Quantity" , quantity),
-                                     new SqlParameter("@UnitID" , unitid),
-                                     new SqlParameter("@IsBigUnit" , isBigUnit),
                                      new SqlParameter("@Remark" , remark),
-                                     new SqlParameter("@GUID" , guid),
                                      new SqlParameter("@UserID" , userid),
                                      new SqlParameter("@OperateIP" , operateip)
                                    };
@@ -69,31 +67,13 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddShoppingCartBatchIn", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool UpdateCartQuantity(string autoid, int quantity, string guid)
+        public static bool DeleteCart(string guid, string productid, int ordertype, string userid)
         {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AutoID",autoid),
-                                     new SqlParameter("@Quantity",quantity),
-                                     new SqlParameter("@GUID" , guid)
-                                   };
-            return ExecuteNonQuery("P_UpdateCartQuantity", paras, CommandType.StoredProcedure) > 0;
-        }
-
-        public static bool UpdateCartPrice(string autoid, decimal price, string guid)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AutoID",autoid),
-                                     new SqlParameter("@Price",price),
-                                     new SqlParameter("@GUID" , guid)
-                                   };
-            return ExecuteNonQuery("P_UpdateCartPrice", paras, CommandType.StoredProcedure) > 0;
-        }
-
-        public static bool DeleteCart(string autoid, string guid)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@AutoID",autoid),
-                                     new SqlParameter("@GUID" , guid)
+            SqlParameter[] paras = {
+                                       new SqlParameter("@GUID" , guid),
+                                       new SqlParameter("@ProductID",productid),
+                                       new SqlParameter("@Ordertype",ordertype),
+                                       new SqlParameter("@UserID",userid)
                                    };
             return ExecuteNonQuery("P_DeleteCart", paras, CommandType.StoredProcedure) > 0;
         }

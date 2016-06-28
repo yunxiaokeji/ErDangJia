@@ -5,20 +5,18 @@
 
 @section scripts{
     <script type="text/javascript">
-        seajs.use(["scripts/orders/applydetail"], function (obj) {
+        seajs.use(["scripts/sales/applydetail"], function (obj) {
             obj.init('@(model.OrderID)','@(model.Status)','@Html.ToJSONString(model)');
         });
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">申请退货</span>
-    <a class="ico-back right" href="@(Url.RequestContext.HttpContext.Request.UrlReferrer == null ? "/Orders/MyOrder" : "javascript:if(history.length>1){ history.go(-1);} else{ location.href='/Orders/MyOrder'}")">
-        返回订单列表
-    </a>
+    <span class="header-title left">订单编号：@(model.OrderCode)</span>
+    <a class="btn-back right" href="/Orders/Detail/@(model.OrderID)">返回</a>
 </div>
 <div class="content-body mTop20">
     <div class="content-title">
-        <div class="left titlename">订单编号：@(model.OrderCode)</div>
+        <div class="left titlename"></div>
         <span class="right lineHeight25 mRight10 mTop2" id="lblStatus">@(model.StatusStr)</span>
         <span class="right lineHeight25 mTop2">订单状态：</span>
     </div>
@@ -27,7 +25,7 @@
             <span class="column-title">客户名称：</span> 
             <a href="/Customer/Detail/@(model.CustomerID)" target="_blank">@(model.Customer.Name)</a> </li>
         <li>
-            <span class="column-title">拥有者：</span> <label class="left" id="lblOwner">@(model.Owner.Name)</label>
+            <span class="column-title">负责人：</span> <label class="left" id="lblOwner">@(model.Owner.Name)</label>
         </li>
         <li>
             <span class="column-title">总金额：</span>
@@ -68,11 +66,13 @@
             <label>@(model.Remark.Trim())</label>
         </li>
     </ul>
-    <div class="tab-nav mTop30">
-        <ul class="tab-nav-ul left">
-            <li class="hover" data-id="navProducts">产品明细</li>
-        </ul>
-    </div>
+</div>
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li class="hover" data-id="navRemark">产品明细</li>
+    </ul>
+</div>
+<div class="content-body">
     <div id="navProducts" class="nav-partdiv">
         <table class="table-list mTop20">
             <tr class="tr-header">

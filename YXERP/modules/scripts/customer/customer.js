@@ -1,32 +1,42 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
         doT = require("dot"),
-        ChooseUser = require("chooseuser");
+        ChooseUser = require("chooseuser"),
+        Dialog = require("dialog"), 
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
-    require("mark");
+    require("colormark");
+    var $ = require('jquery');
+    require("parser")($);
+    require("form")($);
 
     var Params = {
         SearchType: 1,
         Type: -1,
         SourceID: "",
-        StageID: "",
+        StageID: "-1",
         Status: 1,
         Mark: -1,
+        OrderBy: "cus.CreateTime desc",
         UserID: "",
         AgentID: "",
         TeamID: "",
         Keywords: "",
         BeginTime: "",
         EndTime: "",
+        ExcelType:0,
         PageIndex: 1,
         PageSize: 20
     };
 
     var ObjectJS = {};
+    ObjectJS.ColorList = [];
     //初始化
-    ObjectJS.init = function (type) {
+    ObjectJS.init = function (type,colorList) {
         var _self = this;
         Params.SearchType = type;
+        _self.ColorList = JSON.parse(colorList.replace(/&quot;/g, '"'));
         _self.getList();
         _self.bindEvent(type);
     }
@@ -34,19 +44,9 @@
     ObjectJS.bindEvent = function (type) {
         var _self = this;
         $(document).click(function (e) {
-            //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
-                $(".dropdown-ul").hide();
-            }
-        });
-        $("#btnSearch").click(function () {
-            Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
-            _self.getList();
-        });
 
-        //切换阶段
+        });
+        //客户阶段
         $(".search-stages li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
@@ -57,7 +57,10 @@
                 _self.getList();
             }
         });
-        //切换状态
+        $("#exportExcel").click(function () {
+            ObjectJS.ShowExportExcel();
+        });
+        //客户状态
         $(".search-status li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
@@ -68,6 +71,19 @@
                 _self.getList();
             }
         });
+
+        //客户类型
+        $("#customerType li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.Type = _this.data("id");
+                _self.getList();
+            }
+        });
+
         //关键字搜索
         require.async("search", function () {
             $(".searth-module").searchKeys(function (keyWords) {
@@ -77,38 +93,17 @@
             });
         });
         //客户来源
-        Global.post("/Customer/GetCustomerSources", { }, function (data) {
-            require.async("dropdown", function () {
-                $("#customerSource").dropdown({
-                    prevText: "来源-",
-                    defaultText: "全部",
-                    defaultValue: "",
-                    data: data.items,
-                    dataValue: "SourceID",
-                    dataText: "SourceName",
-                    width: "140",
-                    onChange: function (data) {
-                        Params.PageIndex = 1;
-                        Params.SourceID = data.value;
-                        _self.getList();
-                    }
-                });
-            });
-        });
-        //客户类型
-        require.async("dropdown", function () {
-            var items = [{ ID: 1, Name: "企业客户" }, { ID: 0, Name: "个人客户" }];
-            $("#customerType").dropdown({
-                prevText: "类型-",
-                defaultText: "全部",
-                defaultValue: "-1",
-                data: items,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "120",
-                onChange: function (data) {
+        Global.post("/Customer/GetCustomerSources", {}, function (data) {
+            for (var i = 0; i < data.items.length; i++) {
+                $("#customerSource").append('<li data-id="' + data.items[i].SourceID + '">' + data.items[i].SourceName + '</li>')
+            }
+            $("#customerSource li").click(function () {
+                var _this = $(this);
+                if (!_this.hasClass("hover")) {
+                    _this.siblings().removeClass("hover");
+                    _this.addClass("hover");
                     Params.PageIndex = 1;
-                    Params.Type = data.value;
+                    Params.SourceID = _this.data("id");
                     _self.getList();
                 }
             });
@@ -151,39 +146,35 @@
         }
         //全部选中
         $("#checkAll").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("ico-checked")) {
-                _this.addClass("ico-checked").removeClass("ico-check");
-                $(".table-list .check").addClass("ico-checked").removeClass("ico-check");
+            var _this = $(this).find(".checkbox");
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+                $(".table-box-list .checkbox").addClass("hover");
             } else {
-                _this.addClass("ico-check").removeClass("ico-checked");
-                $(".table-list .check").addClass("ico-check").removeClass("ico-checked");
+                _this.removeClass("hover");
+                $(".table-box-list .checkbox").removeClass("hover");
             }
         });
-        //转移拥有者
-        $("#changeOwner").click(function () {
-            var _this = $(this);
-            ChooseUser.create({
-                title: "更换拥有者",
-                type: 1,
-                single: true,
-                callback: function (items) {
-                    if (items.length > 0) {
-                        if (_this.data("userid") != items[0].id) {
-                            _self.ChangeOwner(_this.data("id"), items[0].id);
-                        } else {
-                            alert("请选择不同人员进行转移!");
-                        }
-                    }
-                }
+
+        $("#dropdown").click(function () { 
+            var position = $(".dropdown").position();
+            $(".dropdown-ul").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
+                $(this).hide();
             });
         });
+         
+        $(document).click(function (e) { 
+            if (!$(e.target).parents().hasClass("dropdown-ul")  && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+                $(".dropdown-ul").hide();
+            }
+        });
+
         //批量转移
         $("#batchChangeOwner").click(function () {
-            var checks = $(".table-list .ico-checked");
+            var checks = $(".table-box-list .checkbox.hover");
             if (checks.length > 0) {
                 ChooseUser.create({
-                    title: "批量更换拥有者",
+                    title: "批量更换负责人",
                     type: 1,
                     single: true,
                     callback: function (items) {
@@ -204,13 +195,24 @@
                     }
                 });
             } else {
-                alert("您尚未选择客户!")
+                alert("您尚未选择客户!");
             }
         });
 
+        ///Excel导出客户
+        $("#batchCustomerExport").click(function () {
+            Params.ExcelType = 0;
+            Dialog.exportModel("/Customer/ExportFromCustomer", { filter: JSON.stringify(Params), filleName: "客户" });
+        });
+        ///Excel导出联系人
+        $("#batchContactExport").click(function () {
+            Params.ExcelType = 1;
+            Dialog.exportModel("/Customer/ExportFromCustomer", { filter: JSON.stringify(Params), filleName: "联系人" });
+        }); 
         //过滤标记
         $("#filterMark").markColor({
             isAll: true,
+            data:_self.ColorList,
             onChange: function (obj, callback) {
                 callback && callback(true);
                 Params.PageIndex = 1;
@@ -221,8 +223,9 @@
         //批量标记
         $("#batchMark").markColor({
             isAll: true,
-            onChange: function (obj, callback) {
-                var checks = $(".table-list .ico-checked");
+            data: _self.ColorList, 
+            onChange: function (obj, callback) { 
+                var checks = $(".table-box-list .checkbox.hover");
                 if (checks.length > 0) {
                     var ids = "";
                     checks.each(function () {
@@ -239,14 +242,54 @@
                 }
             }
         });
-        
+
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
+            Params.PageIndex = 1;
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
+            _self.getList();
+        });
+
+        //排序
+        $(".sort-item").click(function () {
+            var _this = $(this);
+            if (_this.hasClass("hover")) {
+                if (_this.find(".asc").hasClass("hover")) {
+                    _this.find(".asc").removeClass("hover");
+                    _this.find(".desc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " desc ";
+                } else {
+                    _this.find(".desc").removeClass("hover");
+                    _this.find(".asc").addClass("hover");
+                    Params.OrderBy = _this.data("column") + " asc ";
+                }
+            } else {
+                _this.addClass("hover").siblings().removeClass("hover");
+                _this.siblings().find(".hover").removeClass("hover");
+                _this.find(".desc").addClass("hover");
+                Params.OrderBy = _this.data("column") + " desc ";
+            }
+            _self.getList();
+        });
+
     }
     //获取列表
     ObjectJS.getList = function () {
         var _self = this;
-        $("#checkAll").addClass("ico-check").removeClass("ico-checked");
-        $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='12'><div class='dataLoading' ><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $("#checkAll").removeClass("hover");
+        $(".box-header").nextAll().remove();
+        $(".box-header").after("<div class='data-loading'><div>");
 
         Global.post("/Customer/GetCustomers", { filter: JSON.stringify(Params) }, function (data) {
             _self.bindList(data);
@@ -255,58 +298,37 @@
     //加载列表
     ObjectJS.bindList = function (data) {
         var _self = this;
-        $(".tr-header").nextAll().remove();
+        $(".box-header").nextAll().remove();
 
         if (data.items.length > 0) {
             doT.exec("template/customer/customers.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 
-                //下拉事件
-                innerhtml.find(".dropdown").click(function () {
+                innerhtml.find(".checkbox").click(function () {
                     var _this = $(this);
-                    var position = _this.find(".ico-dropdown").position();
-                    $(".dropdown-ul li").data("id", _this.data("id")).data("userid", _this.data("userid"));
-                    $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 80 }).show().mouseleave(function () {
-                        $(this).hide();
-                    });
-                    return false;
-                });
-                innerhtml.find(".check").click(function () {
-                    var _this = $(this);
-                    if (!_this.hasClass("ico-checked")) {
-                        _this.addClass("ico-checked").removeClass("ico-check");
+                    if (!_this.hasClass("hover")) {
+                        _this.addClass("hover");
                     } else {
-                        _this.addClass("ico-check").removeClass("ico-checked");
+                        _this.removeClass("hover");
                     }
                     return false;
                 });
 
-                //innerhtml.click(function () {
-                //    var _this = $(this).find(".check");
-                //    if (!_this.hasClass("ico-checked")) {
-                //        _this.addClass("ico-checked").removeClass("ico-check");
-                //    } else {
-                //        _this.addClass("ico-check").removeClass("ico-checked");
-                //    }
-                //});
-
                 innerhtml.find(".mark").markColor({
                     isAll: false,
+                    data:_self.ColorList,
                     onChange: function (obj, callback) {
-
                         _self.markCustomer(obj.data("id"), obj.data("value"), callback);
 
                     }
                 });
 
-                $(".tr-header").after(innerhtml);
+                $(".box-header").after(innerhtml);
 
             });
-        }
-        else
-        {
-            $(".tr-header").after("<tr><td colspan='12'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+        } else {
+            $(".box-header").after("<div class='nodata-box' >暂无数据<div>");
         }
 
         $("#pager").paginate({
@@ -354,6 +376,43 @@
                 _self.getList();
             }
         });
+    }
+
+    ObjectJS.ShowExportExcel = function () { 
+        $('#show-customer-export').empty();
+        var guid = Global.guid() + "_";
+        Dialog.open({
+            container: {
+                id: "show-customer-export",
+                header: "导入客户信息",
+                importUrl: '/Customer/CustomerImport',
+                yesFn: function() {
+                    $('#upfileForm').form('submit', {
+                        onSubmit: function() {
+                            Dialog.setOverlay(guid, true);
+                        },
+                        success: function(data) {
+                            Dialog.setOverlay(guid, false);
+                            if (data == "操作成功") {
+                                Dialog.close(guid);
+                            }
+                            alert(data);
+                        }
+                    });
+                },
+                docWidth: 450,
+                exportUrl: '/Customer/ExportFromCustomer',
+                exportParam: { test: true, model: 'Item|OwnItem' },
+                herf: '/Customer/CustomerImport',
+                noFn:true,
+                yesText:'导入',
+                callback: function () {
+
+                }
+            },
+            guid: guid
+        }); 
+      
     }
 
     module.exports = ObjectJS;

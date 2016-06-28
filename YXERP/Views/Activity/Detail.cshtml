@@ -3,7 +3,7 @@
 }
 
 @section css{
-<link href="/modules/css/customer/activity.css" rel="stylesheet" />
+<link href="/modules/css/customer.css" rel="stylesheet" />
 <link href="/modules/plug/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
 <style type="text/css">
     /*描述*/
@@ -14,18 +14,20 @@
 @section scripts{
 <script src="/modules/plug/laydate/laydate.js"></script>
 <script type="text/javascript">
-        seajs.use(["scripts/activity/activity"], function (ObjectJS) {
-            ObjectJS.initDetail();
-        });
+    seajs.use(["scripts/customer/activity"], function (ObjectJS) {
+        ObjectJS.initDetail();
+    });
 </script>
 }
 
 <div class="header-box">
     <span class="header-title left">活动详情</span>
-    <a class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"101019001"))" href="/Customer/Create/@ViewBag.ActivityID" target="_blank">新建客户</a>
+    
+
+    <div data-url="/Customer/Create/@ViewBag.ActivityID" data-id="101019001" data-name="新建客户" class="btn-add btn-open-window right @(ExpandClass.IsLimits(HttpContext.Current,"101019001"))">新建客户</div>
 </div>
 
-<div class="content-body mTop20">
+<div class="content-body">
     <table width="100%">
         <tr class="activityListLi">
             <td width="410">
@@ -38,7 +40,8 @@
                     <table width="100%" class="activityInfoTB">
                         <tr>
                             <td colspan="2">
-                                <span style="font-size:20px;color:#666;" id="Name"></span>
+                                <span style="font-size:20px;color:#666;" class="left" id="Name"></span>
+                                <a href="/Activity/Operate/@ViewBag.ActivityID" class="iconfont ico-edit left mTop5 mLeft20"></a>
                             </td>
                         </tr>
                         <tr>
@@ -61,9 +64,9 @@
                             <td valign="top">地址：</td>
                             <td><span id="Address" style="color:#666;"></span></td>
                         </tr>
-                         <tr id="tr_shareMD" class="hide">
+                         <tr>
                             <td colspan="2">
-                                <div style="margin-top:46px;"><img class="hand btn_shareMD" src="/modules/images/btn-share-mingdao.png" id="btn_shareMD"/></div>
+                                <div class="btn-share btn-share-md" id="btn_shareMD">分享到明道</div>
                             </td>
                         </tr>
                     </table>
@@ -81,24 +84,18 @@
             </ul>
         </div>
         
-        <div id="replyList" name="activityDetail">
-            <div class="mTop20">
-                <div class="left">
-                    <textarea id="Msg" class="replyMsg"></textarea>
-                </div>
-                <div class="left mLeft10" style="padding-top:123px;">
-                    <div class="btn" id="btnSaveActivityReply">评论</div>
-                </div>
-                <div class="clear"></div>
+        <div id="replyList" class="talk-body" name="activityDetail">
+            <div class="content-main">
+                <textarea id="Msg" class="txt-content"></textarea>
+                <div class="btn btn-save" id="btnSaveActivityReply">评论</div>
             </div>
+            <div class="clear"></div>
 
             <div class="mTop15" style="border-bottom:solid 1px #06c;padding-bottom:10px;width:657px;">
                 <span style="color:#666;">全部评论</span>
             </div>
 
-            <div class="mBottom50">
-                <table width="657" id="activityReplyList"></table>
-            </div>
+            <table  class="content-list" id="activityReplyList"></table>
 
         </div>
 
@@ -110,7 +107,7 @@
                     <td class="width100">阶段</td>
                     <td class="width100">联系人</td>
                     <td class="width100">联系电话</td>     
-                    <td class="width100">拥有者</td>
+                    <td class="width100">负责人</td>
                     <td class="width150">创建时间</td>
                 </tr>
             </table>

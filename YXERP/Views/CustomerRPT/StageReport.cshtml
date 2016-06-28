@@ -3,61 +3,67 @@
 }
 
 <style type="text/css">
-    .source-box { height:400px; }
+    .source-box { height:400px; } 
 </style>
-
+<link href="/modules/css/report.css" rel="stylesheet" />
+ <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
 @section scripts{
-    <script src="/modules/plug/laydate/laydate.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            laydate({
-                elem: '#beginTime',
-                format: 'YYYY-MM-DD',
-                min: '2000-01-01',
-                max: laydate.now(),
-                istime: false,
-                istoday: false
-            });
-            laydate({
-                elem: '#endTime',
-                format: 'YYYY-MM-DD',
-                min: '2000-01-01',
-                max: laydate.now(),
-                istime: false,
-                istoday: true
-            });
-        })
-
+    <script src="/Scripts/jquery-1.11.1.js"></script> 
+    <script type="text/javascript"> 
         seajs.use(["scripts/customerrpt/stagerpt"], function (obj) {
             obj.init();
         });
     </script>
-}
-<div class="header-box">
-    <span class="header-title left">客户阶段统计</span>
+}  
+<div class="tab-nav">
+    <ul class="tab-nav-ul left">
+        <li data-type="0" data-id="chartRPT" class="hover">新增转化率</li>
+        <li data-type="1" data-id="chartRPT">累积转化率</li>
+        <li data-type="2" data-id="teamRPT">按阶段统计</li>
+        <li data-type="3" data-id="teamRPT">按团队统计</li>
+    </ul>
+
+</div> 
+<div class="mTop20 mLeft20" title="客户创建日期">
+    <input type="text" id="iptCreateTime" placeholder="客户创建日期" class="ipt-date"  /> 
 </div>
-<div class="search-box">
-    <div class="search-header">
-        <ul class="search-tab search-type">
-            <li data-type="1" data-id="chartRPT" class="hover">客户转化率</li>
-            <li data-type="2" data-id="teamRPT">按阶段统计</li>
-            <li data-type="3" data-id="teamRPT">按团队统计</li>
-        </ul>
-    </div>
-</div>
-<div class="content-body">
-    <div class="search-body mBottom10">
-        <div class="left lineHeight25">日期：</div>
-        <input type="text" class="left" id="beginTime"/>
-        <div class="left lineHeight25">&nbsp;-&nbsp;</div>
-        <input  type="text" class="left" id="endTime"/>
-        <div class="left btn mLeft20" id="btnSearch">查询</div>
-    </div>
-    <div id="chartRPT" class="source-box">
+<div>
+    <div class="nav-partdiv mTop20 mLeft30 opport-relative min-height350" id="chartRPT" >
+        <div class="opport-absolute left min-height300" style="min-width: 150px; background-color: #DBE6F0; justify-content: center; align-items: center; overflow: auto;">
+            <ul id="actcontent" class="center" style="overflow: auto;">
+                <li class="pauto20 center" style="vertical-align: middle; min-height: 89px; border-bottom: 1px solid #fff;"><li/>
+                <li class="pauto20 center" style="vertical-align: middle; min-height: 89px; border-bottom: 1px solid #fff;"><li/>
+                <li class="pauto20 center" style="vertical-align: middle; min-height: 89px; border-bottom: 1px solid #fff;"><li/>
+            </ul>
+            <div class="footertext pauto20 center colorfff" style="background-color: #A8A6AF;" id="cunstomervalue"></div>
+        </div>
+        <div class="left opport-absolute opport-relative min-width720 min-height350" style="left: 150px;">
+            <div id="customertooppor" class="left opport-absolute border-bottom" style='min-height: 170px; border-top: 100px solid #FFFFFF; border-left: 30px solid #D8D6F1;'></div>
+            <div class="left opport-absolute" style='min-width: 480px; left: 30px;'>
+
+                <ul class="left min-height170 " id="opporcontent">
+                    <li class="left center min-height170" style="min-width: 160px; background-color: #c3cfdc;">
+                    <li class="left center min-height170" style="min-width: 160px; background-color: #869fb8;">
+                    <li class="left center min-height170" style="min-width: 160px; background-color: #688aad;">
+                </ul>
+                <div id="opporcontentvalue" class="colorfff left pauto20 footertext center" style="min-width: 440px; background-color: #425E7C;"></div>
+            </div>
+            <div class="right opport-absolute" style="min-width: 210px; right: 0;">
+                <div id="opportoorder" class="left border-bottom" style='min-height: 120px; border-top: 50px solid #FFFFFF; border-left: 30px solid #0C4072;'></div>
+                <div class="left min-height150 opport-absolute" style='min-width: 160px; left: 30px;'>
+                    <div class="left pauto20  min-height120" style="min-width: 140px; background-color: #40C35A;">
+                        <div class="center pTop30 colorfff" id="ordervaluerate">
+                        </div>
+                    </div>
+                    <div title="客户转化率" id="ordervalue" class="colorfff left center footertext pLeft20" style="line-height: 20px; min-width: 160px; background-color: #38AF50;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
-    <div id="teamRPT" class="source-box">
+     <div id="teamRPT" class="source-box nav-partdiv">
 
     </div>
 </div>
-

@@ -2,7 +2,9 @@
 define(function (require, exports, module) {
     var Global = require("global"),
         doT = require("dot"),
-        Easydialog = require("easydialog");
+        Easydialog = require("easydialog"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     //缓存货位
@@ -11,7 +13,8 @@ define(function (require, exports, module) {
     var Params = {
         keywords: "",
         status: -1,
-        sendstatus: 11,
+        outstatus: -1,
+        sendstatus: -1,
         returnstatus: 1,
         agentid: "",
         BeginTime: "",
@@ -25,8 +28,6 @@ define(function (require, exports, module) {
         var _self = this;
         _self.bindEvent();
         _self.getList();
-
-       
     }
     //绑定事件
     ObjectJS.bindEvent = function () {
@@ -37,7 +38,7 @@ define(function (require, exports, module) {
                 _self.getList();
             });
         });
-        $(".search-tab li").click(function () {
+        $(".search-status li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
@@ -64,15 +65,27 @@ define(function (require, exports, module) {
             var _this = $(this);
             location.href = "/StorageOut/ReturnDetail/" + _this.data("id");
         });
-        $("#btnSearch").click(function () {
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 
     }
 
+    //退货审核
     ObjectJS.initDetail = function (orderid) {
         var _self = this;
         _self.orderid = orderid;
@@ -81,7 +94,22 @@ define(function (require, exports, module) {
         });
 
         $("#btnSubmit").click(function () {
-            _self.changeWare();
+            var _this = $(this);
+            if (_this.data("status") == 0) {
+                confirm("确认审核退单申请吗？", function () {
+                    Global.post("/StorageOut/AuditApplyReturn", { orderid: _this.data("id") }, function (data) {
+                        if (data.result == 1) {
+                            alert("审核成功", function () {
+                                location.href = "/StorageOut/AuditReturnProduct";
+                            });
+                        } else {
+                            alert(data.errinfo);
+                        }
+                    });
+                });
+            } else {
+                _self.changeWare();
+            }
         });
     }
 
@@ -141,7 +169,7 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='9'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='9'><div class='data-loading' ><div></td></tr>");
         var url = "/StorageOut/GetAgentOrders",
             template = "template/storageout/storagereturnproduct.html";
 
@@ -167,7 +195,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='9'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='9'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
             
             $("#pager").paginate({

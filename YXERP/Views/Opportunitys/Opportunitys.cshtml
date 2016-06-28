@@ -1,48 +1,34 @@
 ﻿@{
     
 }
+@section css{
+    <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
+}
 
 @section scripts{
-    <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
-        seajs.use(["scripts/orders/opportunitys"], function (ObjectJS) {
+        seajs.use(["scripts/sales/opportunitys"], function (ObjectJS) {
             ObjectJS.init('@ViewBag.Type');
-        });
-        $(function () {
-            var begin = {
-                elem: '#BeginTime',
-                format: 'YYYY-MM-DD',
-                max: '2099-06-16',
-                istime: false,
-                istoday: false,
-                choose: function (datas) {
-                    end.min = datas; //开始日选好后，重置结束日的最小日期
-                    end.start = datas //将结束日的初始值设定为开始日
-                }
-            };
-
-            var end = {
-                elem: '#EndTime',
-                format: 'YYYY-MM-DD',
-                max: '2099-06-16',
-                istime: false,
-                istoday: false,
-                choose: function (datas) {
-                    begin.max = datas; //结束日选好后，重置开始日的最大日期
-                }
-            };
-            laydate(begin);
-            laydate(end);
         });
     </script>
 }
 <div class="header-box">
     <span class="header-title left">@ViewBag.Title</span>
-    <a href="javascript:void(0)"  id="createOrder" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"102029001"))">新建销售机会</a>
+    <a href="javascript:void(0)"  id="createOrder" class="btn-add right">新建机会</a>
 </div>
-<div class="search-box">
-    <div class="search-header">
-        <ul class="search-tab search-status">
+<div class="search-header">
+    <div class="left mRight20" id="chooseBranch"></div>
+    <div class="left" title="创建时间">
+        <input type="text" id="iptCreateTime" placeholder="创建时间" class="ipt-date"  />
+    </div>
+    <div class="btn-filter right"></div>
+    <div class="right searth-module mRight20" data-text="关键字搜索..." data-width="160"> </div>
+    
+</div>
+<div class="search-body">
+    <div class="search-item">
+        <div class="name">阶段</div>
+        <ul class="search-stages">
             <li data-id="" class="hover">全部</li>
             @foreach (var model in (List<CloudSalesEntity.OpportunityStageEntity>)ViewBag.Stages)
             {
@@ -50,30 +36,56 @@
             }
         </ul>
     </div>
-</div>
-<div class="content-body">
-    <div class="search-body">
-        <div class="left mRight20" id="chooseBranch"></div>
-        <div class="left">
-            <span class="width80">创建时间：</span><input type="text" id="BeginTime"  class="input width80"  />
-            <span class="pLeft5 pRight5">至</span><input type="text" id="EndTime"  class="input width80"  />
-            <span class="btn mLeft10" id="btnSearch">搜索</span>
-        </div>
-        <div class="right searth-module" data-text="关键字搜索..." data-width="160"> </div>
+    <div class="search-item">
+        <div class="name">状态</div>
+        <ul class="search-status">
+            <li data-id="-1">全部</li>
+            <li data-id="1" class="hover">正常</li>
+            <li data-id="2">转为订单</li>
+            <li data-id="3">关闭</li>
+        </ul>
     </div>
+    <div class="search-item">
+        <div class="name">类型</div>
+        <ul id="orderType">
+            <li data-id="" class="hover">全部</li>
+        </ul>
+    </div>
+</div>
+
+<ul class="search-sort">
+    <li>排序</li>
+    <li class="sort-item hover" data-column="o.CreateTime">
+        创建时间
+        <span class="asc"></span>
+        <span class="desc hover"></span>
+    </li>
+    <li class="sort-item" data-column="o.TotalMoney">
+        意向金额
+        <span class="asc"></span>
+        <span class="desc"></span>
+    </li>
+    <li class="sort-item" data-column="o.ReplyTimes">
+        备忘数
+        <span class="asc"></span>
+        <span class="desc"></span>
+    </li>
+</ul>
+
+<div class="content-body">
     <table class="table-list mTop10">
         <tr class="tr-header">
             <td class="width30"></td>
             <td class="tLeft width150">机会编号</td>
-            <td class="tLeft minwidth70">客户名称</td>
             <td class="width150">阶段</td>
-            <td class="width80 tRight">总金额</td>
+            <td class="width100">类型</td>
+            <td class="width100">意向金额</td>
+            <td class="minwidth70">客户名称</td>
             <td class="width100">联系人</td>
             <td class="width100">联系电话</td> 
             <td class="width80">备忘数</td>    
-            <td class="width100">拥有者</td>
+            <td class="width100">负责人</td>
             <td class="width100">创建时间</td>
-            <td class="width50">操作</td>
         </tr>
     </table>
     <ul class="left batch-operate mTop20">
@@ -81,13 +93,9 @@
             <span class="ico-check pLeft5" id="checkAll">批量操作</span>
         </li>
         <li>
-            <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current,"102029002"))" id="batchChangeOwner">更换拥有者</a>
+            <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current,"102029002"))" id="batchChangeOwner">更换负责人</a>
         </li>
     </ul>
     <div id="pager" class="mTop20"></div>
 </div>
-<ul class="dropdown-ul hide" style="width:105px;">
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current,"102029002"))" id="changeOwner">更换拥有者</li>
-    <li class="" id="auditOrReturn">转为订单</li>
-</ul>
 

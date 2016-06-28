@@ -20,12 +20,22 @@ namespace CloudSalesDAL.Manage
                                    };
             return GetDataTable("select * from Clients where ClientID=@ClientID", paras, CommandType.Text);
         }
+        public DataSet GetClientsVitalityReport(int type, string begintime, string endtime, string clientId)
+        {
+            SqlParameter[] paras = { 
+                                    new SqlParameter("@DateType",type), 
+                                    new SqlParameter("@BeginTime",begintime),
+                                    new SqlParameter("@EndTime",endtime),
+                                    new SqlParameter("@ClientID",clientId)
+                                   };
+            return GetDataSet("R_GetClientsActiveReprot", paras, CommandType.StoredProcedure, "ClientReport|SystemReport");
+        }
         #endregion
 
         #region 添加
 
         public string InsertClient(string companyName, string contactName, string mobilePhone, string industry, string cityCode, string address,
-                                   string description, string bindMobilePhone, string loginPwd, string email, string mduserid, string mdprojectid, string userid, out int result)
+                                   string description, string loginName, string bindMobilePhone, string loginPwd, string email, string mduserid, string mdprojectid, string userid, out int result)
         {
             string clientid = Guid.NewGuid().ToString();
             result = 0;
@@ -39,6 +49,7 @@ namespace CloudSalesDAL.Manage
                                        new SqlParameter("@Address",address),
                                        new SqlParameter("@Description",description),
                                        new SqlParameter("@ContactName",contactName),
+                                       new SqlParameter("@LoginName",loginName),
                                        new SqlParameter("@BindMobilePhone",bindMobilePhone),
                                        new SqlParameter("@LoginPWD",loginPwd),
                                        new SqlParameter("@Email",email),

@@ -1,22 +1,23 @@
 ﻿<!DOCTYPE html>
-
+   @{
+       CloudSalesEntity.Manage.M_Users CurrentUser = (CloudSalesEntity.Manage.M_Users)Session["Manager"];
+        string controller =  Url.RequestContext.RouteData.Values["controller"].ToString().ToLower();
+        string action = Url.RequestContext.RouteData.Values["action"].ToString().ToLower();
+        CloudSalesEntity.Menu controllerMenu = ExpandClass.GetController(HttpContext.Current, controller);
+        var logo = "/modules/images/logo.png";
+    }
 <html>
 <head>
     <title>@ViewBag.Title</title>
     <link href="/modules/css/base.css" rel="stylesheet" />
     <link href="/modules/css/layout.css" rel="stylesheet" />
     <link href="/modules/css/default/detail.css" rel="stylesheet" />
+    <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
     <link href="/modules/css/default/list.css" rel="stylesheet" />
     @RenderSection("css", false)
 </head>
 
-<body>
-    @{
-        CloudSalesEntity.Manage.M_Users CurrentUser = (CloudSalesEntity.Manage.M_Users)Session["Manager"];
-        string controller =  Url.RequestContext.RouteData.Values["controller"].ToString().ToLower();
-        string action = Url.RequestContext.RouteData.Values["action"].ToString().ToLower();
-        var logo = "/modules/images/logo.png";
-    }
+<body> 
 
     <header>
         <div class="logo left">
@@ -32,7 +33,17 @@
                         <span class="cursor"></span>
                     </a> 
                 </li>
-                <li class="left" BindController="client">
+             @foreach (CloudSalesEntity.Menu model in ExpandClass.GetChildMenuByCode(HttpContext.Current, ExpandClass.CLIENT_TOP_CODE))
+            {                   
+                <li class="@(model.MenuCode.ToUpper()==(controllerMenu!=null?controllerMenu.PCode.ToUpper():"") ? "select left" : "left")"  BindController="@(model.Controller.ToLower())"  data-code="@(model.MenuCode)">            
+                    <a  href="/@(model.Controller)/@(model.View)">
+                        <span class="name">@(model.Name)</span>
+                        <span class="cursor"></span>
+                    </a> 
+                </li>
+                  
+            }
+                @*<li class="left" BindController="client">
                     <a href="/Client/index" >
                         <span class="name">客户</span>
                         <span class="cursor"></span>
@@ -43,31 +54,7 @@
                         <span class="name">产品</span>
                         <span class="cursor"></span>
                     </a> 
-                </li>
-                <li class="left" BindController="expresscompany">
-                    <a href="/ExpressCompany/index" >
-                        <span class="name">快递公司</span>
-                        <span class="cursor"></span>
-                    </a> 
-                </li>
-                <li class="left" BindController="industry">
-                    <a href="/Industry/index" >
-                        <span class="name">公司行业</span>
-                        <span class="cursor"></span>
-                    </a> 
-                </li>
-                <li class="left" BindController="feedback">
-                    <a href="/FeedBack/index" >
-                        <span class="name">意见反馈</span>
-                        <span class="cursor"></span>
-                    </a> 
-                </li>
-                <li class="left" BindController="order">
-                    <a href="/Order/index" >
-                        <span class="name">订单</span>
-                        <span class="cursor"></span>
-                    </a> 
-                </li>
+                </li> 
                 <li class="left" BindController="report">
                     <a href="/Report/AgentActionReport" >
                         <span class="name">统计</span>
@@ -79,7 +66,13 @@
                         <span class="name">系统</span>
                         <span class="cursor"></span>
                     </a> 
-            </li>
+                </li>
+                <li class="left" BindController="feedback">
+                    <a href="/FeedBack/index" >
+                        <span class="name">服务支持</span>
+                        <span class="cursor"></span>
+                    </a> 
+                </li>*@
         </ul>
         <div id="currentUser" class="currentuser right">
             <span>
@@ -97,7 +90,29 @@
 
     <div class="main-body">
         <nav> 
-            <div class="controller" BindController="client">
+              @if(controllerMenu!=null)
+            {
+                foreach (CloudSalesEntity.Menu model in ExpandClass.GetChildMenuByCode(HttpContext.Current, controllerMenu.PCode))
+                { 
+                    <div class="controller @(model.Controller.ToLower()==controller ? "select" : "")" data-code="@(model.MenuCode)" BindController="@(model.Controller.ToLower())">
+                        <div class="controller-box">
+                            <div class="controller-name">
+                                <span class="open left @(model.Controller.ToLower()==controller ? "rotate" : "")"></span>
+                                <span class="name left">@(model.Name)</span>
+                            </div>
+                        </div>
+                        <ul class="action-box">   @*@(model.Controller.ToLower()==controller ? "" : "hide")*@
+                            @foreach (CloudSalesEntity.Menu view in ExpandClass.GetChildMenuByCode(HttpContext.Current, model.MenuCode))
+                            {
+                                <li class="action @(view.View.ToLower()==action ? "select" : "")" BindAction="@(model.Controller.ToLower())" data-code="@(view.MenuCode)">
+                                    <a href="/@(view.Controller + "/" + view.View)" ><span class="name" style="font-size:12px;">@(view.Name)</span></a>
+                                </li>
+                            }
+                         </ul>
+                    </div>
+                }
+            }
+            @*<div class="controller" BindController="client">
                 <div class="controller-box">
                     <div class="controller-name">
                         <span class="open left"></span>
@@ -105,9 +120,9 @@
                     </div>
                 </div>
 
-                <ul class="action-box">
-                    <li class="action" BindAction="create"><a href="/Client/Create" >添加客户</a></li>
+                <ul class="action-box"> 
                     <li class="action" BindAction="index"><a href="/Client/index" >客户列表</a></li>
+                    <li class="action" BindAction="orderindex"><a href="/Client/OrderIndex" >客户订单</a></li>
                 </ul>
             </div>
 
@@ -119,66 +134,10 @@
                     </div>
                 </div>
 
-                <ul class="action-box">
-                    <li class="action " BindAction="detail"><a href="/ModulesProduct/Detail" >添加产品</a></li>
+                <ul class="action-box"> 
                     <li class="action " BindAction="index"><a href="/ModulesProduct/index" >产品列表</a></li>
                 </ul>
-            </div>
-
-            <div class="controller" BindController="expresscompany">
-                <div class="controller-box">
-                    <div class="controller-name">
-                        <span class="open left"></span>
-                        <span class="name left">快递公司管理</span>
-                    </div>
-                </div>
-
-                <ul class="action-box">
-                    <li class="action " BindAction="detail"><a href="/ExpressCompany/Detail" >添加快递公司</a></li>
-                    <li class="action " BindAction="index"><a href="/ExpressCompany/index" >快递公司列表</a></li>
-                </ul>
-            </div>
-
-            <div class="controller" BindController="industry">
-                <div class="controller-box">
-                    <div class="controller-name">
-                        <span class="open left"></span>
-                        <span class="name left">公司行业管理</span>
-                    </div>
-                </div>
-
-                <ul class="action-box">
-                     <li class="action " BindAction="detail"><a href="/Industry/Detail" >添加公司行业</a></li>
-                     <li class="action " BindAction="index"><a href="/Industry/index" >公司行业列表</a></li>
-                </ul>
-            </div>
-
-            <div class="controller" BindController="feedback">
-                <div class="controller-box">
-                    <div class="controller-name">
-                        <span class="open left"></span>
-                        <span class="name left">意见反馈管理</span>
-                    </div>
-                </div>
-
-                <ul class="action-box">
-                     <li class="action " BindAction="index"><a href="/FeedBack/index" >意见反馈列表</a></li>
-                </ul>
-            </div>
-
-            <div class="controller" BindController="order">
-                <div class="controller-box">
-                    <div class="controller-name">
-                        <span class="open left"></span>
-                        <span class="name left">订单</span>
-                    </div>
-                </div>
-
-                <ul class="action-box">
-                     <li class="action " BindAction="index"><a href="/Order/Index" >客户订单列表</a></li>
-                </ul>
-            </div>
-
+            </div> 
             <div class="controller" BindController="report">
                 <div class="controller-box">
                     <div class="controller-name">
@@ -193,18 +152,42 @@
             </div>
 
             <div class="controller" BindController="system">
+                  <div class="controller-box">
+                    <div class="controller-name">
+                        <span class="open left"></span>
+                        <span class="name left">系统设置</span>
+                    </div>                  
+                </div>
+                  <ul class="action-box">
+                        <li class="action " BindAction="expressindex"><a href="/System/ExpressIndex" >快递公司列表</a></li>
+                        <li class="action " BindAction="industryindex"><a href="/System/IndustryIndex" >公司行业列表</a></li>
+                    </ul>
                 <div class="controller-box">
                     <div class="controller-name">
                         <span class="open left"></span>
-                        <span class="name left">系统信息</span>
+                        <span class="name left">用户管理</span>
                     </div>
                 </div>
 
                 <ul class="action-box">
                      <li class="action " BindAction="admin"><a href="/System/admin" >管理员设置</a></li>
+                     <li class="action " BindAction="users"><a href="/System/users" >员工管理</a></li>
+                     <li class="action " BindAction="roles"><a href="/System/roles" >角色管理</a></li> 
                 </ul>
             </div>
 
+            <div class="controller" BindController="feedback">
+                <div class="controller-box">
+                    <div class="controller-name">
+                        <span class="open left"></span>
+                        <span class="name left">意见反馈管理</span>
+                    </div>
+                </div>
+
+                <ul class="action-box">
+                     <li class="action " BindAction="index"><a href="/FeedBack/index" >意见反馈列表</a></li>
+                </ul>
+            </div>*@
 
         </nav>
 

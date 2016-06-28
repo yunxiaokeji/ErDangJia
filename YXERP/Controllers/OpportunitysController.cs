@@ -48,60 +48,51 @@ namespace YXERP.Controllers
 
         public ActionResult ChooseProducts(string id)
         {
-            ViewBag.Type = (int)EnumDocType.Order;
+            ViewBag.Type = (int)EnumDocType.Opportunity;
             ViewBag.GUID = id;
-            ViewBag.Title = "销售机会选择产品";
+            ViewBag.Title = "添加意向产品";
             return View("FilterProducts");
         }
 
         public ActionResult Detail(string id)
         {
-            var model = OrdersBusiness.BaseBusiness.GetOrderByID(id, CurrentUser.AgentID, CurrentUser.ClientID);
+            var model = OpportunityBusiness.BaseBusiness.GetOpportunityByID(id, CurrentUser.AgentID, CurrentUser.ClientID);
 
-            if (model == null || string.IsNullOrEmpty(model.OrderID))
+            if (model == null || string.IsNullOrEmpty(model.OpportunityID))
             {
                 return Redirect("/Opportunitys/MyOpportunity");
             }
-
 
             ViewBag.Model = model;
-            if (model.Status == 0)
-            {
-                ViewBag.Stages = SystemBusiness.BaseBusiness.GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
-                ViewBag.OrderTypes = SystemBusiness.BaseBusiness.GetOrderTypes(CurrentUser.AgentID, CurrentUser.ClientID);
-                return View("ConfirmOrder");
-            }
-            else
-            {
-                return Redirect("/Orders/Detail/" + model.OrderID);
-            }
+            ViewBag.Stages = SystemBusiness.BaseBusiness.GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
+            ViewBag.OrderTypes = SystemBusiness.BaseBusiness.GetOrderTypes(CurrentUser.AgentID, CurrentUser.ClientID);
+            return View();
         }
 
-        public ActionResult Create(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return Redirect("/Opportunitys/MyOpportunity");
-            }
-            string orderid = OrdersBusiness.BaseBusiness.CreateOrder(id, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
-            if (string.IsNullOrEmpty(orderid))
-            {
-                return Redirect("/Opportunitys/MyOpportunity");
-            }
-            return Redirect("/Opportunitys/ChooseProducts/" + orderid);
-        }
+        
 
 
         #region Ajax
 
+        public JsonResult Create(string customerid, string typeid)
+        {
+            string id = OpportunityBusiness.BaseBusiness.CreateOpportunity(customerid, typeid, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("id", id);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public JsonResult GetOpportunitys(string filter)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            FilterOrders model = serializer.Deserialize<FilterOrders>(filter);
+            FilterOpportunity model = serializer.Deserialize<FilterOpportunity>(filter);
             int totalCount = 0;
             int pageCount = 0;
 
-            var list = OrdersBusiness.BaseBusiness.GetOpportunitys(model.SearchType, model.TypeID, model.StageID, model.UserID, model.TeamID, model.AgentID, model.BeginTime, model.EndTime, model.Keywords, model.PageSize, model.PageIndex, ref totalCount, ref pageCount, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            var list = OpportunityBusiness.BaseBusiness.GetOpportunitys(model.SearchType, model.TypeID, model.Status, model.StageID, model.UserID, model.TeamID, model.AgentID, model.BeginTime, model.EndTime, model.Keywords, model.OrderBy, model.PageSize, model.PageIndex, ref totalCount, ref pageCount, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
@@ -112,13 +103,29 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateOrderOwner(string ids, string userid)
+        public JsonResult GetOpportunityByCustomerID(string customerid, int pagesize, int pageindex)
+        {
+            int totalCount = 0;
+            int pageCount = 0;
+
+            var list = OpportunityBusiness.BaseBusiness.GetOpportunityaByCustomerID(customerid, pagesize, pageindex, ref totalCount, ref pageCount, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
+            JsonDictionary.Add("totalCount", totalCount);
+            JsonDictionary.Add("pageCount", pageCount);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult UpdateOpportunityOwner(string ids, string userid)
         {
             bool bl = false;
             string[] list = ids.Split(',');
             foreach (var id in list)
             {
-                if (!string.IsNullOrEmpty(id) && OrdersBusiness.BaseBusiness.UpdateOrderOwner(id, userid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
+                if (!string.IsNullOrEmpty(id) && OpportunityBusiness.BaseBusiness.UpdateOpportunityOwner(id, userid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
                 {
                     bl = true;
                 }
@@ -132,9 +139,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult SubmitOrder(string orderid)
+        public JsonResult SubmitOrder(string opportunityid)
         {
-            var bl = OrdersBusiness.BaseBusiness.SubmitOrder(orderid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var bl = OpportunityBusiness.BaseBusiness.SubmitOrder(opportunityid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
 
             return new JsonResult
@@ -144,13 +151,13 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult EditOrder(string entity)
+        public JsonResult UpdateOpportunity(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            OrderEntity model = serializer.Deserialize<OrderEntity>(entity);
+            OpportunityEntity model = serializer.Deserialize<OpportunityEntity>(entity);
 
 
-            var bl = OrdersBusiness.BaseBusiness.EditOrder(model.OrderID, model.PersonName, model.MobileTele, model.CityCode, model.Address, model.PostalCode, model.TypeID, model.ExpressType, model.Remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var bl = OpportunityBusiness.BaseBusiness.UpdateOpportunity(model.OpportunityID, model.PersonName, model.MobileTele, model.CityCode, model.Address, model.PostalCode, model.TypeID, model.Remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
 
             return new JsonResult
@@ -160,10 +167,10 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateOrderPrice(string orderid, string autoid, string name, decimal price)
+        public JsonResult GetStageItems(string stageid)
         {
-            var bl = OrdersBusiness.BaseBusiness.UpdateOrderPrice(orderid, autoid, name, price, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("status", bl);
+            var list = SystemBusiness.BaseBusiness.GetOpportunityStageByID(stageid, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list.StageItem);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -171,9 +178,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult DeleteOrder(string orderid)
+        public JsonResult UpdateOpportunityProductPrice(string opportunityid, string productid, string name, decimal price)
         {
-            var bl = OrdersBusiness.BaseBusiness.DeleteOrder(orderid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var bl = OpportunityBusiness.BaseBusiness.UpdateOpportunityProductPrice(opportunityid, productid, name, price, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {
@@ -182,12 +189,34 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetOrderLogs(string orderid, int pageindex)
+        public JsonResult UpdateOpportunityProductQuantity(string opportunityid, string productid, string name, int quantity)
+        {
+            var bl = OpportunityBusiness.BaseBusiness.UpdateOpportunityProductQuantity(opportunityid, productid, name, quantity, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult CloseOpportunity(string opportunityid)
+        {
+            var bl = OpportunityBusiness.BaseBusiness.CloseOpportunity(opportunityid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetOpportunityLogs(string opportunityid, int pageindex)
         {
             int totalCount = 0;
             int pageCount = 0;
 
-            var list = LogBusiness.GetLogs(orderid, EnumLogObjectType.Orders, 10, pageindex, ref totalCount, ref pageCount, CurrentUser.AgentID);
+            var list = LogBusiness.GetLogs(opportunityid, EnumLogObjectType.Opportunity, 10, pageindex, ref totalCount, ref pageCount, CurrentUser.AgentID);
 
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
@@ -206,7 +235,7 @@ namespace YXERP.Controllers
             string[] list = ids.Split(',');
             foreach (var id in list)
             {
-                if (!string.IsNullOrEmpty(id) && OrdersBusiness.BaseBusiness.UpdateOpportunityStage(id, stageid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
+                if (!string.IsNullOrEmpty(id) && OpportunityBusiness.BaseBusiness.UpdateOpportunityStage(id, stageid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
                 {
                     bl = true;
                 }
@@ -225,7 +254,7 @@ namespace YXERP.Controllers
             int pageCount = 0;
             int totalCount = 0;
 
-            var list = OrdersBusiness.GetReplys(guid, pageSize, pageIndex, ref totalCount, ref pageCount);
+            var list = OpportunityBusiness.GetReplys(guid, pageSize, pageIndex, ref totalCount, ref pageCount);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
@@ -242,7 +271,7 @@ namespace YXERP.Controllers
             ReplyEntity model = serializer.Deserialize<ReplyEntity>(entity);
 
             string replyID = "";
-            replyID = OrdersBusiness.CreateReply(model.GUID, model.Content, CurrentUser.UserID, CurrentUser.AgentID, model.FromReplyID, model.FromReplyUserID, model.FromReplyAgentID);
+            replyID = OpportunityBusiness.CreateReply(model.GUID, model.Content, CurrentUser.UserID, CurrentUser.AgentID, model.FromReplyID, model.FromReplyUserID, model.FromReplyAgentID);
 
             List<ReplyEntity> list = new List<ReplyEntity>();
             if (!string.IsNullOrEmpty(replyID))

@@ -7,7 +7,7 @@
     var ObjectJS = {};
 
     //初始化
-    ObjectJS.init = function (departs,option) {
+    ObjectJS.init = function () {
         var _self = this;
 
         _self.bindEvent();

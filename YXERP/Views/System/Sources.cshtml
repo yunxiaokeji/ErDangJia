@@ -1,7 +1,10 @@
 ﻿@{
-    ViewBag.Title = "客户来源";
+    ViewBag.Title = "客户配置";
 }
-
+@section css{
+    <link href="/modules/css/system.css" rel="stylesheet"/> 
+    <link href="/modules/plug/choosecolor/spectrum.css" rel="stylesheet" />
+}
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/system/sources"], function (obj) {
@@ -9,25 +12,35 @@
         });
     </script>
 }
-<div class="header-box">
-    <span class="header-title left">客户来源设置</span>
-    <div class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"108020101"))" id="createModel">新建来源</div>
+<div class="tab-nav">
+    <ul class="search-tab left">
+        <li  class="hover" data-id="sourceList">来源设置</li>
+        <li data-id="colorList">标签配置</li>       
+    </ul>
+    <div class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" data-id="sourceList" id="createModel">新建来源</div>
+    <div class="btn-add right" style="display:none;" data-id="colorList"  id="createColor">新建标签</div>
 </div>
 <div class="content-body mTop20">
-    <table class="table-list">
+    <table class="table-list nav-part" id="sourceList">
         <tr class="tr-header">
             <td class="tLeft">名称</td>
             <td class="tLeft">编码</td>
-            <td class="width150">是否允许选择</td>
+            @*<td class="width150">是否允许选择</td>*@
             <td class="width150">创建时间</td>
             <td class="width150">创建人</td>
             <td class="width80">操作</td>
         </tr>
     </table>
+
+    <ul class="color-list hide nav-part" id="colorList"> 
+    </ul>
 </div>
-<ul class="dropdown-ul hide"  style="width:65px;">
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current,"108020101"))" id="updateObject">编辑</li>
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current,"108020102"))" id="deleteObject">删除</li>
+
+<ul class="dropdown-ul hide" id="ddlSource" style="width: 65px;">
+    <li class="@(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" id="updateObject">编辑</li>
+    <li class="@(ExpandClass.IsLimits(HttpContext.Current, "108020102"))" id="deleteObject">删除</li>
 </ul>
-
-
+<ul class="colordrop dropdown-ul hide"  style="width:65px;">
+    <li  id="updateColor">编辑</li>
+    <li  id="deleteColor">删除</li>
+</ul>

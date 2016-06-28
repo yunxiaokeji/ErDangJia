@@ -3,7 +3,7 @@
     var model = (CloudSalesEntity.Products)ViewBag.Model;
 }
 @section css{
-   <link href="/modules/css/stock/products.css" rel="stylesheet" />
+   <link href="/modules/css/products.css" rel="stylesheet" />
    <link href="/modules/plug/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
 }
 
@@ -21,19 +21,19 @@
         });
     </script>
 }
-
-<div class="header-box">
-    <span class="header-title left">产品详情页</span>
-    <a class="ico-back left mLeft5" title="返回" href="/Products/ProductList">返回</a>
-    <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
-</div>
-<div class="search-box">
-    <div class="search-header ">
-        <ul class="search-tab ">
-            <li class="hover" data-id="productinfo">产品信息</li>
+<div class="tab-nav">
+    <a class="btn-back right mLeft5" title="返回" href="/Products/ProductList">返回</a>
+    @if (model.HasDetails==1)
+    {
+       <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
+    }
+    <ul class="search-tab">
+        <li class="hover" data-id="productinfo">产品信息</li>
+         @if (model.HasDetails==1)
+        {
             <li class="" data-id="childproduct">子产品管理</li>
-        </ul>
-    </div>
+         }
+    </ul>
 </div>
 <div class="content-body">
     <div id="productinfo">
@@ -87,7 +87,7 @@
                 }
                 </select>
             </li>
-            <li>
+           @* <li>
                 <span class="column-name">大单位：</span>
            
                 <select id="bigUnit">
@@ -96,17 +96,17 @@
                     <option value="@unit.UnitID">@unit.UnitName</option> 
                 }
                 </select>
-            </li>
+            </li>*@
 
-            <li>
+           @* <li>
                  <span class="column-name">大小单位比：</span>
                 <input type="text" maxlength="3" id="bigSmallMultiple" value="1" data-empty="*" data-type="int"  class="input verify width30" />
+            </li>*@
+            <li>
+                <span class="column-name">成本价：</span><input type="text" maxlength="10" data-empty="*" data-type="double" data-text="请输入数字!"  id="commonprice" class="input verify width80" />
             </li>
             <li>
-                <span class="column-name">正常价：</span><input type="text" maxlength="10" data-empty="*" data-type="double" data-text="请输入数字!"  id="commonprice" class="input verify width80" />
-            </li>
-            <li>
-                <span class="column-name">优惠价：</span><input type="text" maxlength="10" data-empty="*" data-type="double" data-text="请输入数字!"  id="price" class="input verify width80" />
+                <span class="column-name">销售价：</span><input type="text" maxlength="10" data-empty="*" data-type="double" data-text="请输入数字!"  id="price" class="input verify width80" />
             </li>
             <li>
                 <span class="column-name">缩略图：</span><span id="productIco"></span>
@@ -117,17 +117,20 @@
             <li>
                 <span class="column-name">有效期（天）：</span><input type="text" maxlength="10" value="0" data-empty="*" data-type="int" data-text="请输入数字!" id="effectiveDays" class="input verify width50" />
             </li>
-            <li>
-                <span class="column-name">是否上架：</span><label><input type="checkbox" checked="checked" id="status" />是</label> 
+             <li>
+                <span class="column-name">预警数量：</span><input type="text" maxlength="10" value="0" data-empty="必填" data-type="int" data-text="请输入数字!" id="warnCount" class="input verify width50" />
             </li>
             <li>
+                <span class="column-name">允许销售：</span><span class="checked hand"><span class="iconfont checkbox mTop3" id="status"></span>&nbsp;允许</span>
+            </li>
+            @*<li>
                 <span class="column-name">是否新品：</span><label><input type="checkbox" id="isNew" />是</label> 
             </li>
             <li>
                 <span class="column-name">是否推荐：</span><label><input type="checkbox" id="isRecommend" />是</label> 
-            </li>
+            </li>*@
              <li>
-                <span class="column-name">限制：</span><label><input type="checkbox" id="isAllow" />库存不足允许下单</label> 
+                <span class="column-name">限制：</span><span class="checked hand"><span class="iconfont checkbox mTop3" id="isAllow"></span>&nbsp;库存不足允许下单</span> 
             </li>
 @*            <li>
                 <span class="column-name">自动发货：</span><label><input type="checkbox" id="isAutoSend" />订单生效自动出库发货（例：虚拟产品）</label> 
@@ -140,18 +143,17 @@
         <img class="product-img" id="productImg" alt="" src="/modules/images/default.png" />
         <div class="mTop20">
             <div class="btn left" id="btnSaveProduct">保存</div>
-            <a class="btn left mLeft10" title="返回" href="/Products/ProductList">返回</a>
         </div>
     </div>
     <div id="childproduct" class="hide mTop20">
         <table class="table-list child-table-list clear">
             <tr class="tr-header" id="header-items">
+                <td class="width100 tLeft">图片</td>
                 <td class="tLeft">编码</td>
                 <td class="tLeft">规格</td>
-                <td class="m-len tRight">价格/@(model.SmallUnit.UnitName)</td>
-                <td class="s-len tRight">价格/@(model.BigUnit.UnitName)</td>
-                <td class="m-len">启用/禁用</td>
-                <td class="s-len">编辑</td>
+                <td class="width150 tRight">销售价格</td>
+                <td class="width200">启用/禁用</td>
+                <td class="width50">操作</td>
             </tr>
         </table>
     </div>

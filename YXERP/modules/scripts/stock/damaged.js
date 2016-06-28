@@ -2,7 +2,9 @@
 define(function (require, exports, module) {
     var Global = require("global"),
         Easydialog = require("easydialog"),
-        doT = require("dot");
+        doT = require("dot"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     var Params = {
@@ -34,28 +36,34 @@ define(function (require, exports, module) {
             }
         });
 
-        $("#btnSearch").click(function () {
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.pageIndex = 1;
-            Params.begintime = $("#BeginTime").val().trim();
-            Params.endtime = $("#EndTime").val().trim();
+            Params.begintime = start ? start.format("YYYY-MM-DD") : "";
+            Params.endtime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 
-        require.async("dropdown", function () {
-            $("#wares").dropdown({
-                prevText: "仓库-",
-                defaultText: "全部",
-                defaultValue: "",
-                data: wares,
-                dataValue: "WareID",
-                dataText: "Name",
-                width: "180",
-                onChange: function (data) {
-                    Params.pageIndex = 1;
-                    Params.wareid = data.value;
-                    _self.getList();
-                }
-            });
+        //仓库
+        $(".search-wares li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.pageIndex = 1;
+                Params.wareid = _this.data("id");
+                _self.getList();
+            }
         });
 
         require.async("search", function () {
@@ -127,7 +135,7 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='7'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='7'><div class='data-loading' ><div></td></tr>");
         var url = "/Stock/GetStorageDocs",
             template = "template/stock/storagedocs.html";
 
@@ -159,7 +167,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='7'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='7'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
 
             $("#pager").paginate({

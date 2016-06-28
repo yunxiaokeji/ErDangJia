@@ -1,0 +1,120 @@
+﻿@{
+    Layout = null;
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@CurrentUser.Client.CompanyName</title>
+    <meta name="robots" content="noindex,nofollow">
+
+    <link href="/modules/css/base.css" rel="stylesheet" />
+    <link href="/modules/css/index.css" rel="stylesheet" />
+    <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
+
+    <link rel="shortcut icon" href="/modules/images/logo_login.png">
+</head>
+<body>
+    <header>
+        <div class="company-logo left">
+            <img id="companyLogo" src="@(string.IsNullOrEmpty(CurrentUser.Client.Logo) ? "/modules/images/ico-home.png" : CurrentUser.Client.Logo)"/>
+            <div class="long" id="companyName" title="@CurrentUser.Client.CompanyName">@CurrentUser.Client.CompanyName</div>
+        </div>
+        <ul id="modulesMenu" class="menu left">
+            @foreach (CloudSalesEntity.Menu model in ExpandClass.GetChildMenuByCode(HttpContext.Current, ExpandClass.CLIENT_TOP_CODE))
+            { 
+                <li class="left" data-code="@(model.MenuCode)">
+                    <img class="ico" data-ico="@(model.IcoPath)" data-hover="@(model.IcoHover)" src="@(model.IcoPath)" /> 
+                    <span class="name">@(model.Name)</span>
+                    <span class="cursor"></span>
+                </li>
+            }
+        </ul>
+        <div id="currentUser" class="currentuser right">
+            <span>
+                <img src="@(string.IsNullOrEmpty(CurrentUser.Avatar)?"/modules/images/defaultavatar.png":CurrentUser.Avatar)" class="avatar" />
+            </span>
+            <span class="username">
+                @(CurrentUser.Name)
+            </span>
+            <span class="dropdown">
+                <span class="dropdown-top"></span>
+                <span class="dropdown-bottom"></span>
+            </span>
+        </div>
+    </header>
+
+    <nav id="leftNav">
+        
+    </nav>
+    <div class="main-content">
+        <div class="window-box">
+            <ul id="windowItems" class="window-items">
+                <li class="hover" data-id="Home" draggable="false"><i class="iconfont">&#xe62a;</i> 主页</li>
+            </ul>
+            @*左滑动*@
+            <div class="left-btn">
+                <span></span>
+            </div>
+            @*右滑动*@
+            <div class="right-btn">
+                <span></span>
+            </div>
+        </div>
+        <div id="iframeBox" class="iframe-box">
+            <iframe id="iframeHome" class="iframe-window" src="/Default/Home"></iframe>
+        </div>
+    </div>
+
+    @*<div class="feedback">意见反馈</div>*@
+    <input id="feedback-filepath" type="hidden" />
+    <input id="txt_username" value="@CurrentUser.Name" type="hidden" />
+    <input id="txt_usermobilephone" value="@CurrentUser.MobilePhone" type="hidden" />
+
+    <ul class="help-feedback">
+        <li class="ico-help" title="帮助中心"><a target="_blank" href="http://www.yunxiaokeji.com/help.html"></a></li>
+        <li class="ico-contact" title="联系我们"><a target="_blank" href="http://www.yunxiaokeji.com/about.html"></a></li>
+        <li class="ico-feedback" title="意见反馈"></li>
+        <li class="ico-open" title="展开"></li>
+    </ul>
+
+    @*点击公司名称展开下拉列表*@
+    <div class="dropdown-companyinfo hide">
+        <div class="top-lump"></div>
+        <ul class="items-list">
+            <li>授权天数剩余&nbsp;<span id="remainderDays" class="blue"></span>&nbsp;天</li>
+            <li><a href="javascript:void(0);" data-url="/Auction/BuyNow" data-name="购买服务" data-id="auction" class="btn btn-buy btn-open-window">立即购买</a></li>
+        </ul>
+    </div>
+    @*点击头像展开下拉列表*@
+    <div class="dropdown-userinfo hide">
+        <div class="top-lump"></div>
+        <ul class="items-list">
+            <li class="item"><a href="javascript:void(0);" class="btn-open-window" data-id="myAccount"  data-name="个人中心" data-url="/MyAccount/Index">个人中心</a></li>
+            <li class="item"><a href="/Home/Logout">安全退出</a></li>
+        </ul>
+    </div>
+
+    <ul class="dropdown-ul hide" id="contentMenu"  style="width:115px;">
+        <li id="refreshThis">刷新窗口</li>
+        <li id="closeThis">关闭窗口</li>
+        <li id="closeOthers">关闭其他窗口</li>
+        <li id="closeAll">关闭所有窗口</li>
+    </ul>
+    
+    <script type="text/javascript" src="/Scripts/sea.js"></script>
+    <script type="text/javascript" src="/Scripts/sea-config.js?v=@(ExpandClass.Version)"></script>
+    <script type="text/javascript">
+        seajs.use(["scripts/index"], function(layout) {
+            layout.init('@ViewBag.Herf');
+        });
+    </script>
+ 
+</body>
+</html>
+
+
+
+
+

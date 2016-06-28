@@ -103,7 +103,7 @@ namespace CloudSalesBusiness
         /// <param name="pwd">密码</param>
         /// <param name="result">1:查询正常；2：用户名不存在；3：用户密码有误</param>
         /// <returns></returns>
-        public static Users GetUserByUserName(string loginname, string pwd,out int result, string operateip)
+        public static Users GetUserByUserName(string loginname, string pwd, out int result, string operateip)
         {
             pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
             DataSet ds = new OrganizationDAL().GetUserByUserName(loginname, pwd, out result);
@@ -133,8 +133,10 @@ namespace CloudSalesBusiness
                     user.LogGUID = model.LogGUID;
                 }
 
-                model.Client = Manage.ClientBusiness.GetClientDetail(model.ClientID);
+                model.Agents = AgentsBusiness.GetAgentDetail(model.AgentID);
 
+                model.Client = Manage.ClientBusiness.GetClientDetail(model.ClientID);
+                
                 //权限
                 if (model.Role != null && model.Role.IsDefault == 1)
                 {
@@ -203,7 +205,10 @@ namespace CloudSalesBusiness
 
                 model.Department = GetDepartmentByID(model.DepartID, model.AgentID);
                 model.Role = GetRoleByIDCache(model.RoleID, model.AgentID);
+
+                model.Agents = AgentsBusiness.GetAgentDetail(model.AgentID);
                 model.Client = Manage.ClientBusiness.GetClientDetail(model.ClientID);
+
                 //处理缓存
                 if (!Users.ContainsKey(model.AgentID))
                 {
@@ -586,7 +591,9 @@ namespace CloudSalesBusiness
             }
             return user;
         }
-
+        public static DataTable GetUserById(string userID) {
+            return OrganizationDAL.BaseProvider.GetUserByUserID(userID);
+        }
         #endregion
 
         #region 编辑/删除

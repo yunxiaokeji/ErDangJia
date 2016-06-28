@@ -18,30 +18,11 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        public List<OrderEntity> GetOpportunitys(EnumSearchType searchtype, string typeid, string stageid, string searchuserid, string searchteamid, string searchagentid,
-                                  string begintime, string endtime, string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
-        {
-            List<OrderEntity> list = new List<OrderEntity>();
-            DataSet ds = OrdersDAL.BaseProvider.GetOpportunitys((int)searchtype, typeid, stageid, searchuserid, searchteamid, searchagentid, begintime, endtime, keyWords, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
-            foreach (DataRow dr in ds.Tables[0].Rows)
-            {
-                OrderEntity model = new OrderEntity();
-                model.FillData(dr);
-                model.OrderType = SystemBusiness.BaseBusiness.GetOrderTypeByID(model.TypeID, model.AgentID, model.ClientID);
-                model.Stage = SystemBusiness.BaseBusiness.GetOpportunityStageByID(model.StageID, model.AgentID, model.ClientID);
-                model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
-
-                list.Add(model);
-            }
-            return list;
-        }
-
-
         public List<OrderEntity> GetOrders(EnumSearchType searchtype, string typeid, int status, int paystatus, int invoicestatus, int returnstatus, string searchuserid, string searchteamid, string searchagentid,
-                                                string begintime, string endtime, string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
+                                                string begintime, string endtime, string keyWords, string orderBy, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
         {
             List<OrderEntity> list = new List<OrderEntity>();
-            DataSet ds = OrdersDAL.BaseProvider.GetOrders((int)searchtype, typeid, status, paystatus, invoicestatus, returnstatus, searchuserid, searchteamid, searchagentid, begintime, endtime, keyWords, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
+            DataSet ds = OrdersDAL.BaseProvider.GetOrders((int)searchtype, typeid, status, paystatus, invoicestatus, returnstatus, searchuserid, searchteamid, searchagentid, begintime, endtime, keyWords, orderBy, pageSize, pageIndex, ref totalCount, ref pageCount, userid, agentid, clientid);
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 OrderEntity model = new OrderEntity();
@@ -67,7 +48,7 @@ namespace CloudSalesBusiness
         public List<OrderEntity> GetOrdersByCustomerID(string customerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
         {
             List<OrderEntity> list = new List<OrderEntity>();
-            DataTable dt = CommonBusiness.GetPagerData("Orders", "*", "CustomerID='" + customerid + "' and Status between 1 and 3", "AutoID", pageSize, pageIndex, out totalCount, out pageCount, false);
+            DataTable dt = CommonBusiness.GetPagerData("Orders", "*", "CustomerID='" + customerid + "' and Status<>9 ", "AutoID", pageSize, pageIndex, out totalCount, out pageCount, false);
             foreach (DataRow dr in dt.Rows)
             {
                 OrderEntity model = new OrderEntity();
@@ -76,22 +57,6 @@ namespace CloudSalesBusiness
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
 
                 model.StatusStr = CommonBusiness.GetEnumDesc((EnumOrderStatus)model.Status);
-
-                list.Add(model);
-            }
-            return list;
-        }
-
-        public List<OrderEntity> GetOpportunityaByCustomerID(string customerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
-        {
-            List<OrderEntity> list = new List<OrderEntity>();
-            DataTable dt = CommonBusiness.GetPagerData("Orders", "*", "CustomerID='" + customerid + "' and Status =0 ", "AutoID", pageSize, pageIndex, out totalCount, out pageCount, false);
-            foreach (DataRow dr in dt.Rows)
-            {
-                OrderEntity model = new OrderEntity();
-                model.FillData(dr);
-                model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
-                model.Stage = SystemBusiness.BaseBusiness.GetOpportunityStageByID(model.StageID, model.AgentID, model.ClientID);
 
                 list.Add(model);
             }
@@ -169,12 +134,12 @@ namespace CloudSalesBusiness
 
         #region 添加
 
-        public string CreateOrder(string customerid, string operateid, string agentid, string clientid)
+        public string CreateOrder(string customerid, string typeid, string operateid, string agentid, string clientid)
         {
             string id = Guid.NewGuid().ToString();
             string code = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
-            bool bl = OrdersDAL.BaseProvider.CreateOrder(id, code, customerid, operateid, agentid, clientid);
+            bool bl = OrdersDAL.BaseProvider.CreateOrder(id, code, customerid, typeid, operateid, agentid, clientid);
             if (!bl)
             {
                 return "";
@@ -182,7 +147,7 @@ namespace CloudSalesBusiness
             else
             {
                 //日志
-                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Opportunity, EnumLogType.Create, "", operateid, agentid, clientid);
+                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Orders, EnumLogType.Create, "", operateid, agentid, clientid);
             }
             return id;
         }
@@ -196,13 +161,24 @@ namespace CloudSalesBusiness
 
         #region 编辑、删除
 
-        public bool UpdateOrderPrice(string orderid, string autoid, string name, decimal price, string operateid, string ip, string agentid, string clientid)
+        public bool UpdateOrderProductPrice(string orderid, string productid, string name, decimal price, string operateid, string ip, string agentid, string clientid)
         {
-            bool bl = OrdersDAL.BaseProvider.UpdateOrderPrice(orderid, autoid, price, operateid, agentid, clientid);
+            bool bl = OrdersDAL.BaseProvider.UpdateOrderProductPrice(orderid, productid, price, operateid, agentid, clientid);
             if (bl)
             {
-                string msg = "修改产品" + name + "价格：" + price;
-                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, autoid, agentid, clientid);
+                string msg = name + "的价格调整为：" + price;
+                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, productid, agentid, clientid);
+            }
+            return bl;
+        }
+
+        public bool UpdateOrderProductQuantity(string orderid, string productid, string name, int quantity, string operateid, string ip, string agentid, string clientid)
+        {
+            bool bl = OrdersDAL.BaseProvider.UpdateOrderProductQuantity(orderid, productid, quantity, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = name + "的数量调整为：" + quantity;
+                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, productid, agentid, clientid);
             }
             return bl;
         }
@@ -224,22 +200,8 @@ namespace CloudSalesBusiness
             if (bl)
             {
                 var model = OrganizationBusiness.GetUserByUserID(userid, agentid);
-                string msg = "拥有者更换为：" + model.Name;
+                string msg = "负责人更换为：" + model.Name;
                 LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, userid, agentid, clientid);
-            }
-            return bl;
-        }
-
-        public bool SubmitOrder(string orderid, string operateid, string ip, string agentid, string clientid)
-        {
-            bool bl = OrdersDAL.BaseProvider.SubmitOrder(orderid, operateid, agentid, clientid);
-            if (bl)
-            {
-                string msg = "提交订单";
-                LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, operateid, agentid, clientid);
-
-                //日志
-                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Orders, EnumLogType.Create, ip, operateid, agentid, clientid);
             }
             return bl;
         }
@@ -249,7 +211,7 @@ namespace CloudSalesBusiness
             bool bl = OrdersDAL.BaseProvider.EditOrder(orderid, personName, mobileTele, cityCode, address, postalcode, typeid, expresstype, remark, operateid, agentid, clientid);
             if (bl)
             {
-                string msg = "编辑收货信息";
+                string msg = "编辑订单信息";
                 LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, operateid, agentid, clientid);
             }
             return bl;
@@ -295,18 +257,6 @@ namespace CloudSalesBusiness
             {
                 string msg = "申请退货";
                 LogBusiness.AddLog(orderid, EnumLogObjectType.Orders, msg, operateid, ip, "", agentid, clientid);
-            }
-            return bl;
-        }
-
-        public bool UpdateOpportunityStage(string opportunityid, string stageid, string operateid, string ip, string agentid, string clientid)
-        {
-            bool bl = OrdersDAL.BaseProvider.UpdateOpportunityStage(opportunityid, stageid, operateid, agentid, clientid);
-            if (bl)
-            {
-                var model = SystemBusiness.BaseBusiness.GetOpportunityStageByID(stageid, agentid, clientid);
-                string msg = "机会阶段更换为：" + model.StageName;
-                LogBusiness.AddLog(opportunityid, EnumLogObjectType.Orders, msg, operateid, ip, stageid, agentid, clientid);
             }
             return bl;
         }

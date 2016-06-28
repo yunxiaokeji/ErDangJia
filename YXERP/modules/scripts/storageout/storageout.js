@@ -2,7 +2,9 @@
 define(function (require, exports, module) {
     var Global = require("global"),
         doT = require("dot"),
-        Easydialog = require("easydialog");
+        Easydialog = require("easydialog"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     //缓存货位
@@ -11,7 +13,8 @@ define(function (require, exports, module) {
     var Params = {
         keywords: "",
         status: 2,
-        sendstatus: 0,
+        outstatus: 0,
+        sendstatus: -1,
         returnstatus: -1,
         agentid: "",
         BeginTime: "",
@@ -35,7 +38,18 @@ define(function (require, exports, module) {
                 _self.getList();
             });
         });
-        $(".search-tab li").click(function () {
+        $(".search-status li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.outstatus = _this.data("id");
+                _self.getList();
+            }
+        });
+
+        $(".search-sendstatus li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
@@ -46,10 +60,21 @@ define(function (require, exports, module) {
             }
         });
 
-        $("#btnSearch").click(function () {
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 
@@ -58,7 +83,7 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='9'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='12'><div class='data-loading' ><div></td></tr>");
 
         var url = "/StorageOut/GetAgentOrders",
             template = "template/storageout/storageout.html";
@@ -70,18 +95,11 @@ define(function (require, exports, module) {
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
-
-                    innerText.find(".sendout").each(function () {
-                        if ($(this).data("status") > 0) {
-                            $(this).empty();
-                        }
-                    });
-
                     $(".tr-header").after(innerText);
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='9'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
 
             $("#pager").paginate({

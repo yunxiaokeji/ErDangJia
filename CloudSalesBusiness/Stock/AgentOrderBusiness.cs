@@ -18,9 +18,9 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        public List<AgentOrderEntity> GetAgentOrders(string searchagentid, EnumOrderStatus status, EnumSendStatus sendstatus, EnumReturnStatus returnstatus, string keywords, string begintime, string endtime, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        public List<AgentOrderEntity> GetAgentOrders(string searchagentid, EnumOrderStatus status, EnumOutStatus outStatus, EnumSendStatus sendstatus, EnumReturnStatus returnstatus, string keywords, string begintime, string endtime, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
-            DataSet ds = AgentOrderDAL.BaseProvider.GetAgentOrders(searchagentid, (int)status, (int)sendstatus, (int)returnstatus, keywords, begintime, endtime, pageSize, pageIndex, ref totalCount, ref pageCount, agentid, clientid);
+            DataSet ds = AgentOrderDAL.BaseProvider.GetAgentOrders(searchagentid, (int)status, (int)outStatus, (int)sendstatus, (int)returnstatus, keywords, begintime, endtime, pageSize, pageIndex, ref totalCount, ref pageCount, agentid, clientid);
 
             List<AgentOrderEntity> list = new List<AgentOrderEntity>();
             foreach (DataRow dr in ds.Tables[0].Rows)

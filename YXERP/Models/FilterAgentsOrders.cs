@@ -13,6 +13,8 @@ namespace YXERP.Models
     {
         public EnumOrderStatus status { get; set; }
 
+        public EnumOutStatus outstatus { get; set; }
+
         public EnumSendStatus sendstatus { get; set; }
 
         public EnumReturnStatus returnstatus { get; set; }

@@ -314,6 +314,8 @@ namespace CloudSalesEntity
 
         public string LogGUID { get; set; }
 
+        public Agents Agents { get; set; }
+
         public Manage.Clients Client { get; set; }
         /// <summary>
         /// 填充数据

@@ -42,6 +42,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="JsonObject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\JsonObject.dll</HintPath>
@@ -49,6 +52,22 @@
     <Reference Include="Net.Sourceforge.Pinyin4j, Version=2.5.4923.25935, Culture=neutral, PublicKeyToken=cca84b18351af388, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\Net.Sourceforge.Pinyin4j.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
@@ -120,7 +139,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CustomerRPTController.cs" />
-    <Compile Include="Controllers\FeedBackController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InfomationController.cs" />
@@ -149,30 +168,65 @@
     <Content Include="Content\homeico\login.png" />
     <Content Include="Content\homeico\oppor.png" />
     <Content Include="Content\homeico\order.png" />
+    <Content Include="Content\menuico\accountManage.png" />
+    <Content Include="Content\menuico\activity.png" />
+    <Content Include="Content\menuico\customer.png" />
+    <Content Include="Content\menuico\customerRPT.png" />
+    <Content Include="Content\menuico\default-menu.png" />
+    <Content Include="Content\menuico\organization.png" />
+    <Content Include="Content\menuico\productBuy.png" />
+    <Content Include="Content\menuico\productDeliver.png" />
+    <Content Include="Content\menuico\productManage.png" />
+    <Content Include="Content\menuico\productStock.png" />
+    <Content Include="Content\menuico\salesChance.png" />
+    <Content Include="Content\menuico\salesOrder.png" />
+    <Content Include="Content\menuico\salesRPT.png" />
+    <Content Include="Content\menuico\stockmanage.png" />
+    <Content Include="Content\menuico\systemSet.png" />
     <Content Include="DLL\JsonObject.dll" />
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
-    <Content Include="modules\css\opportunitys.css" />
-    <Content Include="modules\css\stock\stock.css" />
+    <Content Include="modules\css\sales.css" />
+    <Content Include="modules\css\report.css" />
+    <Content Include="modules\css\stock.css" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
+    <Content Include="modules\images\ico-category-close.png" />
+    <Content Include="modules\images\ico-category.png" />
     <Content Include="modules\images\ico-company.png" />
-    <Content Include="modules\images\ico-contact-hover.png" />
     <Content Include="modules\images\ico-contact.png" />
-    <Content Include="modules\images\ico-feedback-hover.png" />
     <Content Include="modules\images\ico-feedback.png" />
+    <Content Include="modules\images\iconfilter-close.png" />
+    <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\ico-goregister-hover.png" />
     <Content Include="modules\images\ico-goregister.png" />
-    <Content Include="modules\images\ico-help-hover.png" />
     <Content Include="modules\images\ico-loading.jpg" />
     <Content Include="modules\images\ico-mobilecode.png" />
+    <Content Include="modules\images\ico-operate-open.png" />
     <Content Include="modules\images\ico-surepwd.png" />
     <Content Include="modules\images\ico-username.png" />
+    <Content Include="modules\images\iconback.png" />
+    <Content Include="modules\images\icondate.png" />
+    <Content Include="modules\images\iconfilter.png" />
+    <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\loginBackground.png" />
+    <Content Include="modules\images\none-img.png" />
+    <Content Include="modules\plug\choosecolor\spectrum.css" />
+    <Content Include="modules\plug\choosecolor\spectrum.js" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />
     <Content Include="modules\plug\chooseproduct\productin.html" />
+    <Content Include="modules\plug\daterangepicker\daterangepicker.css" />
+    <Content Include="modules\plug\daterangepicker\daterangepicker.js" />
+    <Content Include="modules\plug\daterangepicker\moment.js" />
+    <Content Include="modules\plug\dialog\dialog.css" />
+    <Content Include="modules\plug\dialog\dialog.js" />
+    <Content Include="modules\plug\dialog\ico-close-hover.png" />
+    <Content Include="modules\plug\dialog\ico-close.png" />
+    <Content Include="modules\plug\colormark\colormark.js" />
+    <Content Include="modules\plug\colormark\ico-ball.png" />
+    <Content Include="modules\plug\colormark\style.css" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\an_hui_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\ao_men_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\bei_jing_geo.json" />
@@ -213,6 +267,8 @@
     <Content Include="modules\css\iconfont\iconfont.eot" />
     <Content Include="modules\css\iconfont\iconfont.ttf" />
     <Content Include="modules\css\iconfont\iconfont.woff" />
+    <Content Include="modules\excelmodel\customer.json" />
+    <Content Include="modules\excelmodel\product.json" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -220,6 +276,7 @@
     <Compile Include="Models\FilterBills.cs" />
     <Compile Include="Models\FilterAgentsOrders.cs" />
     <Compile Include="Models\ShoppingCartProduct.cs" />
+    <Compile Include="Models\FilterOpportunity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\homeico\mingdao-hover.png" />
     <Content Include="Content\homeico\mingdao.png" />
@@ -242,32 +299,23 @@
     <Content Include="Content\menuico\customhover.png" />
     <Content Include="Content\menuico\custom.png" />
     <Content Include="DLL\Net.Sourceforge.Pinyin4j.dll" />
-    <Content Include="modules\css\default\detail.css" />
-    <Content Include="modules\css\default\list.css" />
     <Content Include="modules\css\auction\buynow.css" />
-    <Content Include="modules\css\customer\activity.css" />
-    <Content Include="modules\css\customer\customer.css" />
-    <Content Include="modules\css\home\home.css" />
+    <Content Include="modules\css\customer.css" />
+    <Content Include="modules\css\default\home.css" />
     <Content Include="modules\css\myaccount\myaccount.css" />
     <Content Include="modules\css\myaccount\cropbox.css" />
-    <Content Include="modules\css\shoppingcart\confirmcart.css" />
     <Content Include="modules\css\base.css" />
-    <Content Include="modules\css\stock\products.css" />
-    <Content Include="modules\css\system\system.css" />
+    <Content Include="modules\css\products.css" />
+    <Content Include="modules\css\system.css" />
     <Content Include="modules\images\auction\bg-pay-order-active.png" />
     <Content Include="modules\images\auction\bg-pay-order.png" />
     <Content Include="modules\images\auction\bg-select-product-active.png" />
     <Content Include="modules\images\auction\bg-select-product.png" />
     <Content Include="modules\images\auction\bg-sure-order-active.png" />
     <Content Include="modules\images\auction\bg-sure-order.png" />
-    <Content Include="modules\images\btn-share-mingdao.png" />
     <Content Include="modules\images\defaultactivity.jpg" />
     <Content Include="modules\images\defaultavatar.png" />
-    <Content Include="modules\images\ico-add-fff.png" />
-    <Content Include="modules\images\ico-addhover.png" />
     <Content Include="modules\images\ico-btnadd.png" />
-    <Content Include="modules\images\ico-change.png" />
-    <Content Include="modules\images\ico-changehover.png" />
     <Content Include="modules\images\ico-check.png" />
     <Content Include="modules\images\ico-checked.png" />
     <Content Include="modules\images\ico-dropdown-white.png" />
@@ -480,7 +528,6 @@
     <Content Include="modules\plug\echarts\zrender\tool\util.js" />
     <Content Include="modules\plug\echarts\zrender\tool\vector.js" />
     <Content Include="modules\plug\echarts\zrender\zrender.js" />
-    <Content Include="modules\plug\laydate\demo.html" />
     <Content Include="modules\plug\laydate\laydate.js" />
     <Content Include="modules\plug\laydate\need\laydate.css" />
     <Content Include="modules\plug\laydate\skins\dahong\icon.png" />
@@ -490,8 +537,6 @@
     <Content Include="modules\plug\laydate\skins\molv\icon.png" />
     <Content Include="modules\plug\laydate\skins\molv\laydate.css" />
     <Content Include="modules\plug\mark\ico-ball.png" />
-    <Content Include="modules\plug\seach_keys\demo.html" />
-    <Content Include="modules\plug\sharemingdao\demo.html" />
     <Content Include="modules\plug\sharemingdao\images\Ico_Eye.gif" />
     <Content Include="modules\plug\sharemingdao\sharemingdao.js" />
     <Content Include="modules\plug\sharemingdao\style.css" />
@@ -508,9 +553,10 @@
     <Content Include="modules\plug\chooseproduct\chooseproduct.js" />
     <Content Include="modules\plug\chooseproduct\productout.html" />
     <Content Include="modules\plug\chooseproduct\style.css" />
+    <Content Include="modules\plug\Sortable.js" />
     <Content Include="modules\plug\upload\jquery.form.js" />
     <Content Include="modules\plug\upload\upload.js" />
-    <Content Include="modules\scripts\activity\activity.js" />
+    <Content Include="modules\scripts\customer\activity.js" />
     <Content Include="modules\scripts\auction\buynow.js" />
     <Content Include="modules\scripts\customerrpt\customermaprpt.js" />
     <Content Include="modules\scripts\customerrpt\stagerpt.js" />
@@ -523,22 +569,25 @@
     <Content Include="modules\scripts\finance\orderbills.js" />
     <Content Include="modules\scripts\finance\orderdetail.js" />
     <Content Include="modules\scripts\finance\accountbills.js" />
+    <Content Include="modules\scripts\home\login.js" />
     <Content Include="modules\scripts\home\register.js" />
     <Content Include="modules\scripts\home\findpassword.js" />
+    <Content Include="modules\images\icon-close-filter.png" />
     <Content Include="modules\scripts\myaccount\cropbox.js" />
     <Content Include="modules\scripts\myaccount\myaccount.js" />
+    <Content Include="modules\scripts\myaccount\myfeedback.js" />
     <Content Include="modules\scripts\myaccount\setavatar.js" />
     <Content Include="modules\scripts\myaccount\setpassword.js" />
     <Content Include="modules\scripts\myaccount\account.js" />
-    <Content Include="modules\scripts\orders\confirmorder.js" />
-    <Content Include="modules\scripts\orders\orders.js" />
-    <Content Include="modules\scripts\orders\detail.js" />
-    <Content Include="modules\scripts\orders\applydetail.js" />
-    <Content Include="modules\scripts\orders\opportunitys.js" />
+    <Content Include="modules\scripts\sales\opportunity-detail.js" />
+    <Content Include="modules\scripts\sales\orders.js" />
+    <Content Include="modules\scripts\sales\detail.js" />
+    <Content Include="modules\scripts\sales\applydetail.js" />
+    <Content Include="modules\scripts\sales\opportunitys.js" />
     <Content Include="modules\scripts\organization\roles.js" />
     <Content Include="modules\scripts\organization\users.js" />
     <Content Include="modules\scripts\organization\structure.js" />
-    <Content Include="modules\scripts\purchase\providers.js" />
+    <Content Include="modules\scripts\products\providers.js" />
     <Content Include="modules\scripts\purchase\purchases.js" />
     <Content Include="modules\scripts\purchase\confirmpurchase.js" />
     <Content Include="modules\scripts\purchase\docdetail.js" />
@@ -566,6 +615,7 @@
     <Content Include="modules\scripts\system\teams.js" />
     <Content Include="modules\scripts\system\client.js" />
     <Content Include="modules\scripts\system\opportunitystage.js" />
+    <Content Include="modules\scripts\layout.js" />
     <Content Include="modules\template\activity\activity_list.html" />
     <Content Include="modules\template\activity\activity_card_list.html" />
     <Content Include="modules\template\activity\activity_reply_list.html" />
@@ -577,7 +627,7 @@
     <Content Include="modules\template\common\logs.html" />
     <Content Include="modules\template\customer\contacts.html" />
     <Content Include="modules\template\customer\contact-detail.html" />
-    <Content Include="modules\template\feedback\feedback_add.html" />
+    <Content Include="modules\template\default\feedback-add.html" />
     <Content Include="modules\template\finance\payable-detail.html" />
     <Content Include="modules\template\finance\payablebills.html" />
     <Content Include="modules\template\finance\storagebillingpays.html" />
@@ -590,21 +640,25 @@
     <Content Include="modules\template\finance\accountbills.html" />
     <Content Include="modules\template\finance\billingpays.html" />
     <Content Include="modules\template\finance\orderpay-detail.html" />
+    <Content Include="modules\template\myaccount\myfeedback-detail.html" />
+    <Content Include="modules\template\myaccount\myfeedback-list.html" />
     <Content Include="modules\template\myaccount\setloginname.html" />
-    <Content Include="modules\template\orders\order-detail.html" />
-    <Content Include="modules\template\orders\orders.html" />
-    <Content Include="modules\template\orders\cuatomerorders.html" />
-    <Content Include="modules\plug\sharemingdao\demo.js" />
-    <Content Include="modules\template\orders\opportunitys.html" />
-    <Content Include="modules\template\orders\customeroppors.html" />
-    <Content Include="modules\template\purchase\provider-detail.html" />
-    <Content Include="modules\template\purchase\providers.html" />
+    <Content Include="modules\template\purchase\audit_storagein.html" />
+    <Content Include="modules\template\sales\choose-ordertype.html" />
+    <Content Include="modules\template\sales\order-detail.html" />
+    <Content Include="modules\template\sales\orders.html" />
+    <Content Include="modules\template\sales\cuatomerorders.html" />
+    <Content Include="modules\template\sales\opportunitys.html" />
+    <Content Include="modules\template\sales\customeroppors.html" />
+    <Content Include="modules\template\products\provider-detail.html" />
+    <Content Include="modules\template\products\providers.html" />
     <Content Include="modules\template\report\teamcustomers.html" />
     <Content Include="modules\template\report\usercustomers.html" />
     <Content Include="modules\template\report\teamorders.html" />
     <Content Include="modules\template\report\userorders.html" />
-    <Content Include="modules\template\sharemingdao\sharetype.html" />
-    <Content Include="modules\template\sharemingdao\share_mingdao_post.html" />
+    <Content Include="modules\plug\sharemingdao\sharetype.html" />
+    <Content Include="modules\plug\sharemingdao\share_mingdao_post.html" />
+    <Content Include="modules\template\sales\opportunity-detail.html" />
     <Content Include="modules\template\shoppingcart\product-detail.html" />
     <Content Include="modules\template\organization\departments.html" />
     <Content Include="modules\template\organization\department-detail.html" />
@@ -633,7 +687,10 @@
     <Content Include="modules\template\storageout\storagereturnproduct.html" />
     <Content Include="modules\template\storageout\auditreturn.html" />
     <Content Include="modules\template\storageout\ordertrack.html" />
+    <Content Include="modules\template\system\client-authorizelog.html" />
+    <Content Include="modules\template\system\client-detail.html" />
     <Content Include="modules\template\system\client-orders.html" />
+    <Content Include="modules\template\system\sources-color.html" />
     <Content Include="modules\template\system\sources.html" />
     <Content Include="modules\template\system\sources-detail.html" />
     <Content Include="modules\template\system\teamuser.html" />
@@ -644,18 +701,19 @@
     <Content Include="modules\template\system\team-detail.html" />
     <Content Include="modules\template\system\opportunitystages.html" />
     <Content Include="modules\template\system\opportunitystage-detail.html" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.parser.js" />
     <Content Include="Views\Purchase\ConfirmPurchase.cshtml" />
     <Content Include="Views\Purchase\Purchases.cshtml" />
     <Content Include="Views\CustomerRPT\Index.cshtml" />
     <Content Include="Views\Purchase\DocDetail.cshtml" />
     <Content Include="Views\Purchase\AuditDetail.cshtml" />
-    <Content Include="Views\Home\InfoPage.cshtml" />
     <Content Include="Views\Organization\RolePermission.cshtml" />
     <Content Include="Views\Organization\Structure.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Activity\MyActivity.cshtml" />
     <Content Include="Views\System\Sources.cshtml" />
-    <Content Include="Views\Activity\Operate.cshtml" />
+    <Content Include="Views\Activity\Create.cshtml" />
     <Content Include="Views\System\Teams.cshtml" />
     <Content Include="Views\System\Stages.cshtml" />
     <Content Include="Views\System\Warehouse.cshtml" />
@@ -670,7 +728,7 @@
     <Content Include="Views\Orders\Orders.cshtml" />
     <Content Include="Views\System\Client.cshtml" />
     <Content Include="Views\Orders\Detail.cshtml" />
-    <Content Include="Views\Opportunitys\ConfirmOrder.cshtml" />
+    <Content Include="Views\Opportunitys\Detail.cshtml" />
     <Content Include="Views\Finance\Index.cshtml" />
     <Content Include="Views\Finance\PayableBills.cshtml" />
     <Content Include="Views\Agents\Index.cshtml" />
@@ -683,8 +741,8 @@
     <Content Include="Views\StorageOut\StorageOut.cshtml" />
     <Content Include="Views\StorageOut\Detail.cshtml" />
     <Content Include="Views\StorageOut\OrderOut.cshtml" />
-    <Content Include="modules\template\sharemingdao\share_mingdao_task.html" />
-    <Content Include="modules\template\sharemingdao\share_mingdao_schedule.html" />
+    <Content Include="modules\plug\sharemingdao\share_mingdao_task.html" />
+    <Content Include="modules\plug\sharemingdao\share_mingdao_schedule.html" />
     <Content Include="Views\Stock\Detail.cshtml" />
     <Content Include="Views\Stock\StorageDoc.cshtml" />
     <Content Include="Views\StorageOut\StorageSend.cshtml" />
@@ -698,7 +756,6 @@
     <Content Include="Views\MyAccount\Index.cshtml" />
     <Content Include="Views\Stock\ReturnIn.cshtml" />
     <Content Include="Views\Stock\ReturnInDetail.cshtml" />
-    <Content Include="Views\Shared\_LayoutNoLeft.cshtml" />
     <Content Include="Views\CustomerRPT\SourceReport.cshtml" />
     <Content Include="Views\CustomerRPT\StageReport.cshtml" />
     <Content Include="Views\CustomerRPT\CustomerReport.cshtml" />
@@ -724,7 +781,7 @@
     <Content Include="Views\Organization\CreateUser.cshtml" />
     <Content Include="Views\Home\FindPassword.cshtml" />
     <Content Include="Views\Opportunitys\Opportunitys.cshtml" />
-    <Content Include="Views\Purchase\Providers.cshtml" />
+    <Content Include="Views\Products\Providers.cshtml" />
     <Content Include="Views\Home\Terms.cshtml" />
     <Content Include="Views\Auction\GoAlipayPay.cshtml" />
     <None Include="Properties\PublishProfiles\yunxiaoweb.pubxml" />
@@ -733,7 +790,15 @@
     <Content Include="Views\MyAccount\SetPassWord.cshtml" />
     <Content Include="Views\MyAccount\Account.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Views\Default\Home.cshtml" />
+    <Content Include="Views\Default\LeftMenu.cshtml" />
+    <Content Include="Views\MyAccount\MyFeedBack.cshtml" />
+    <Content Include="Views\Customer\CustomerImport.cshtml" />
+    <Content Include="Views\Products\ProductImport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -743,21 +808,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="modules\css\layout.css" />
+    <Content Include="modules\css\index.css" />
     <Content Include="modules\css\home\login.css" />
-    <Content Include="modules\css\system\organization.css" />
-    <Content Include="modules\css\stock\category.css" />
-    <Content Include="modules\css\stock\attrplug.css" />
-    <Content Include="modules\css\shoppingcart\filterproducts.css" />
-    <Content Include="modules\css\shoppingcart\filterdetails.css" />
+    <Content Include="modules\css\organization.css" />
+    <Content Include="modules\css\shoppingcart.css" />
     <Content Include="modules\images\default.png" />
-    <Content Include="modules\images\ico-add.png" />
     <Content Include="modules\images\ico-back.png" />
-    <Content Include="modules\images\ico-del-deep.png" />
-    <Content Include="modules\images\ico-del-light.png" />
     <Content Include="modules\images\ico-delete.png" />
-    <Content Include="modules\images\ico-edit-deep.png" />
-    <Content Include="modules\images\ico-edit-light.png" />
     <Content Include="modules\images\ico-goback.png" />
     <Content Include="modules\images\ico-gonext.png" />
     <Content Include="modules\images\ico-gouwuche.png" />
@@ -784,8 +841,8 @@
     <Content Include="modules\plug\doT.js" />
     <Content Include="modules\plug\easydialog\easydialog.css" />
     <Content Include="modules\plug\easydialog\easydialog.js" />
-    <Content Include="modules\plug\seach_keys\seach_keys.js" />
-    <Content Include="modules\plug\seach_keys\style.css" />
+    <Content Include="modules\plug\seachkeys\seachkeys.js" />
+    <Content Include="modules\plug\seachkeys\style.css" />
     <Content Include="modules\plug\shoppingcart\shoppingcart.html" />
     <Content Include="modules\plug\switch\style.css" />
     <Content Include="modules\plug\switch\switch.js" />
@@ -870,8 +927,8 @@
     <Content Include="modules\plug\shoppingcart\shoppingcart.js" />
     <Content Include="modules\plug\shoppingcart\style.css" />
     <Content Include="modules\scripts\global.js" />
-    <Content Include="modules\scripts\home.js" />
-    <Content Include="modules\scripts\layout.js" />
+    <Content Include="modules\scripts\default\home.js" />
+    <Content Include="modules\scripts\index.js" />
     <Content Include="modules\scripts\organization\department.js" />
     <Content Include="modules\scripts\products\attr.js" />
     <Content Include="modules\scripts\products\brand.js" />
@@ -913,9 +970,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Login.cshtml" />
@@ -962,9 +1016,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Products\ProductList.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Products\ChooseCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Products\ProductDetail.cshtml" />

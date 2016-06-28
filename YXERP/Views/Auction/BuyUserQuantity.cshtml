@@ -1,6 +1,5 @@
 ﻿@{
     ViewBag.Title = "购买用户人数";
-    Layout = "/Views/Shared/_LayoutNoLeft.cshtml";
     var IsOrder = string.IsNullOrEmpty(ViewBag.OrderID) ? false : true;
 }
 
@@ -108,9 +107,9 @@
         <div class="buy-product-select">
             <div class="select-notice">
                 授权信息：
-                <span>上限人数 :</span><span class="mLeft5">@ViewBag.CurrentAgent.UserQuantity 人</span>
-                <span class="mLeft20">上限日期 :</span><span class="mLeft5">@ViewBag.CurrentAgent.EndTime.ToString("yyyy-MM-dd")</span>
-                <span class="mLeft20 font16 blue">剩余还能使用 :</span>
+                <span>授权人数 :</span><span class="mLeft5">@ViewBag.CurrentAgent.UserQuantity 人</span>
+                <span class="mLeft20">到期时间 :</span><span class="mLeft5">@ViewBag.CurrentAgent.EndTime.ToString("yyyy-MM-dd")</span>
+                <span class="mLeft20 font16 blue">剩余时间 :</span>
                 <span class="mLeft5 blue font16">@ViewBag.remainderMonths 个月</span>
             </div>
 
@@ -236,7 +235,7 @@
                 </ul>
                 <div class="mTop10"><span style="color:#666">您可能需要联系:</span><a>管理员处理</a></div>
             </div>
-            <div class="btn-pre mTop50" onclick="location.href='/Home/Index'" style="margin-left:auto;margin-right:auto;">返回首页</div>
+            <div class="btn-pre mTop50" onclick="location.href='/System/Client'" style="margin-left:auto;margin-right:auto;">返回</div>
 
         </div>
      </div>

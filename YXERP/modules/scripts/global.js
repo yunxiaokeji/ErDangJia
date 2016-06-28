@@ -10,10 +10,14 @@
             async: !anync,
             cache: false,
             success: function (data) {
-                if (data.error) {
-                    return;
+                if (typeof (data.ErrMsg) != "undefined") {
+                    alert(data.ErrMsg);
                 } else {
-                    !!callback && callback(data);
+                    if (data.error) {
+                        return;
+                    } else {
+                        !!callback && callback(data);
+                    }
                 }
             }
         });
@@ -64,7 +68,7 @@
     }
 
     /*重写alert*/
-    window.alert = function (msg) {
+    window.alert = function (msg, callback) {
         $("#window_alert").remove();
 
         var _alter = $("<div id='window_alert' class='alert'></div>");
@@ -78,8 +82,26 @@
 
         var left = $(window).width() / 2 - (_alter.width() / 2);
         _alter.offset({ left: left });
-        _close.click(function () { _alter.remove() });
-        setTimeout(function () { _alter.remove(); }, 5000);
+        _close.click(function () {
+            _alter.remove();
+            if (callback) {
+                if (typeof callback === "function") {
+                    callback();
+                } else {
+                    location.href = url;
+                }
+            }
+        });
+        setTimeout(function () {
+            _alter.remove();
+            if (callback) {
+                if (typeof callback === "function") {
+                    callback();
+                } else {
+                    location.href = url;
+                }
+            }
+        }, 10000);
     }
 
     /*重写confirm*/

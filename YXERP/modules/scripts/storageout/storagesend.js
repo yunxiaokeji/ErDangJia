@@ -2,7 +2,9 @@
 define(function (require, exports, module) {
     var Global = require("global"),
         doT = require("dot"),
-        Easydialog = require("easydialog");
+        Easydialog = require("easydialog"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     //缓存货位
@@ -35,7 +37,7 @@ define(function (require, exports, module) {
                 _self.getList();
             });
         });
-        $(".search-tab li").click(function () {
+        $(".search-status li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
@@ -45,10 +47,22 @@ define(function (require, exports, module) {
                 _self.getList();
             }
         });
-        $("#btnSearch").click(function () {
+
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.PageIndex = 1;
-            Params.BeginTime = $("#BeginTime").val().trim();
-            Params.EndTime = $("#EndTime").val().trim();
+            Params.BeginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 
@@ -57,7 +71,7 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='9'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='9'><div class='data-loading' ><div></td></tr>");
         var url = "/StorageOut/GetAgentOrders",
             template = "template/storageout/storagesend.html";
 
@@ -79,7 +93,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='9'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='9'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
             
             $("#pager").paginate({
@@ -136,11 +150,16 @@ define(function (require, exports, module) {
                             expressid: $("#expressid").data("id"),
                             expresscode: $("#expressCode").val().trim()
                         };
+
+                        if (!$("#expressid").data("id") || !$("#expressCode").val().trim()) {
+                            alert("请输入快递信息");
+                            return false;
+                        }
                         Global.post("/StorageOut/ConfirmAgentOrderSend", paras, function (data) {
                             if (data.result != 1) {
                                 alert(data.errinfo);
                             } else {
-                                location.href = "/StorageOut/StorageSend";
+                                location.href = "/StorageOut/StorageOut";
                             }
                         });
                         return false;

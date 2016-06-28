@@ -22,6 +22,7 @@ define(function (require, exports, module) {
         _self.getList();
         _self.bindEvent();
     }
+
     //绑定列表页事件
     ObjectJS.bindEvent = function () {
         var _self = this;
@@ -41,29 +42,6 @@ define(function (require, exports, module) {
         //添加
         $("#addBrand").click(function () {
             _self.createModel();
-        });
-
-        //删除
-        $("#deleteObject").click(function () {
-            var _this = $(this);
-            confirm("品牌删除后不可恢复,确认删除吗？", function () {
-                Global.post("/Products/DeleteBrand", { brandID: _this.data("id") }, function (data) {
-                    if (data.Status) {
-                        _self.getList();
-                    } else {
-                        alert("删除失败！");
-                    }
-                });
-            });
-        });
-        //编辑
-        $("#updateObject").click(function () {
-            var _this = $(this);
-
-            Global.post("/Products/GetBrandDetail", { id: _this.data("id") }, function (data) {
-                var model = data.model;
-                _self.createModel(model);
-            });
         });
     }
 
@@ -86,7 +64,7 @@ define(function (require, exports, module) {
                             BrandID: model ? model.BrandID : "",
                             Name: $("#brandName").val().trim(),
                             AnotherName: $("#anotherName").val().trim(),
-                            IcoPath: _self.IcoPath,
+                            IcoPath: $("#brandImg").data("src"),
                             CountryCode: "0086",
                             CityCode: BrandCity.getCityCode(),
                             Status: $("#brandStatus").prop("checked") ? 1 : 0,
@@ -114,15 +92,12 @@ define(function (require, exports, module) {
             $("#brandName").focus();
 
             if (model) {
-
                 $("#brandName").val(model.Name);
                 $("#anotherName").val(model.AnotherName);
                 $("#brandStyle").val(model.BrandStyle);
                 $("#brandStatus").prop("checked", model.Status == 1);
                 $("#description").val(model.Remark);
-                $("#brandImg").attr("src", model.IcoPath);
-
-                _self.IcoPath = model.IcoPath;
+                model.IcoPath && $("#brandImg").attr("src", model.IcoPath).data("src", model.IcoPath);
 
                 BrandCity = City.createCity({
                     elementID: "brandCity",
@@ -136,7 +111,7 @@ define(function (require, exports, module) {
                     data: { folder: '', action: 'edit', oldPath: model.IcoPath },
                     success: function (data, status) {
                         if (data.Items.length > 0) {
-                            _self.IcoPath = data.Items[0];
+                            $("#brandImg").data("src", data.Items[0]);
                             $("#brandImg").attr("src", data.Items[0] + "?" + Global.guid());
                         } else {
                             alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
@@ -144,7 +119,6 @@ define(function (require, exports, module) {
                     }
                 });
             } else {
-                _self.IcoPath = "";
                 BrandCity = City.createCity({
                     elementID: "brandCity"
                 });
@@ -155,8 +129,8 @@ define(function (require, exports, module) {
                     data: { folder: '', action: 'add', oldPath: "" },
                     success: function (data, status) {
                         if (data.Items.length > 0) {
-                            _self.IcoPath = data.Items[0];
-                            $("#brandImg").attr("src", data.Items[0]);
+                            $("#brandImg").data("src", data.Items[0]);
+                            $("#brandImg").attr("src", data.Items[0] + "?" + Global.guid());
                         } else {
                             alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
                         }
@@ -170,7 +144,7 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='8'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='8'><div class='data-loading' ><div></td></tr>");
 
         Global.post("/Products/GetBrandList", Params, function (data) {
             $(".tr-header").nextAll().remove();
@@ -180,16 +154,33 @@ define(function (require, exports, module) {
                     innerText = $(innerText);
                     $("#brand-items").after(innerText);
 
-                    //下拉事件
-                    innerText.find(".dropdown").click(function () {
+                    //删除
+                    innerText.find(".ico-del").click(function () {
                         var _this = $(this);
-
-                        var position = _this.find(".ico-dropdown").position();
-                        $(".dropdown-ul li").data("id", _this.data("id"));
-                        $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 55 }).show().mouseleave(function () {
-                            $(this).hide();
+                        confirm("品牌删除后不可恢复,确认删除吗？", function () {
+                            Global.post("/Products/DeleteBrand", { brandid: _this.data("id") }, function (data) {
+                                if (data.result == 1) {
+                                    alert("品牌删除成功");
+                                    _self.getList();
+                                } else if (data.result == 10002) {
+                                    alert("品牌存在关联产品，删除失败");
+                                } else {
+                                    alert("删除失败！");
+                                }
+                            });
                         });
                     });
+
+                    //编辑
+                    innerText.find(".ico-edit").click(function () {
+                        var _this = $(this);
+
+                        Global.post("/Products/GetBrandDetail", { id: _this.data("id") }, function (data) {
+                            var model = data.model;
+                            _self.createModel(model);
+                        });
+                    });
+
                     //绑定启用插件
                     innerText.find(".status").switch({
                         open_title: "点击启用",
@@ -202,7 +193,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='8'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
 
             $("#pager").paginate({
@@ -227,6 +218,7 @@ define(function (require, exports, module) {
             });
         });
     }
+
     //更改品牌状态
     ObjectJS.editStatus = function (obj, id, status, callback) {
         var _self = this;

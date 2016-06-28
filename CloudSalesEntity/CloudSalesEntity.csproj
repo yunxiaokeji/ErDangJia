@@ -48,6 +48,7 @@
     <Compile Include="Custom\ActivityEntity.cs" />
     <Compile Include="Custom\ActivityReplyEntity.cs" />
     <Compile Include="Custom\ContactEntity.cs" />
+    <Compile Include="Custom\CustomerColorEntity.cs" />
     <Compile Include="Custom\CustomerEntity.cs" />
     <Compile Include="Custom\ExtentEntity.cs" />
     <Compile Include="Custom\ReplyEntity.cs" />
@@ -62,13 +63,19 @@
     <Compile Include="Log\AgentLogEntity.cs" />
     <Compile Include="Log\UpcomingsEntity.cs" />
     <Compile Include="Manage\ClientOrder.cs" />
+    <Compile Include="Manage\ClientOrderAccount.cs" />
     <Compile Include="Manage\FeedBack.cs" />
+    <Compile Include="Manage\M_Role.cs" />
+    <Compile Include="Manage\M_RolePermission.cs" />
+    <Compile Include="Manage\Report\ClientsDateEntity.cs" />
+    <Compile Include="Manage\SystemMenu.cs" />
     <Compile Include="Report\CustomerSourceRPT.cs" />
     <Compile Include="Report\CustomerStageRPT.cs" />
     <Compile Include="Report\OrderTypeRPT.cs" />
     <Compile Include="Report\OrderMapRPT.cs" />
     <Compile Include="Sales\OrderEntity.cs" />
     <Compile Include="Sales\OrderDetail.cs" />
+    <Compile Include="Sales\OpportunityEntity.cs" />
     <Compile Include="Stock\ProvidersEntity.cs" />
     <Compile Include="System\CustomSourceEntity.cs" />
     <Compile Include="System\CustomStageEntity.cs" />

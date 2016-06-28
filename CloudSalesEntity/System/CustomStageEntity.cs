@@ -39,29 +39,5 @@ namespace CloudSalesEntity
 
     }
 
-    [Serializable]
-    public class StageItemEntity
-    {
-        [Property("Lower")]
-        public string ItemID { get; set; }
 
-        public string ItemName { get; set; }
-
-        [Property("Lower")]
-        public string StageID { get; set; }
-
-        public DateTime CreateTime { get; set; }
-
-        [Property("Lower")]
-        public string CreateUserID { get; set; }
-
-        [Property("Lower")]
-        public string ClientID { get; set; }
-
-        public void FillData(System.Data.DataRow dr)
-        {
-            dr.FillData(this);
-        }
-
-    }
 }

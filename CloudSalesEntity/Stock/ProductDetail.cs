@@ -235,6 +235,8 @@ namespace CloudSalesEntity
 
         public string DepotCode { get; set; }
 
+        public string Remark { get; set; }
+
         /// <summary>
         /// 填充数据
         /// </summary>

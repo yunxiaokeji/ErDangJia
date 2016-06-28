@@ -178,7 +178,7 @@
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='8'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='8'><div class='data-loading' ><div></td></tr>");
         Global.post("/Organization/GetUsers", { filter: JSON.stringify(ObjectJS.Params) }, function (data) {
             _self.bindList(data.items);
 
@@ -230,7 +230,7 @@
             });
         }
         else {
-            $(".tr-header").after("<tr><td colspan='8'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+            $(".tr-header").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
     }
 
@@ -352,12 +352,9 @@
         };
         Global.post("/Organization/SaveUser", { entity: JSON.stringify(model) }, function (data) {
             if (data.model && data.model.UserID) {
-                confirm("员工保存成功,初始密码为登录账号,是否继续添加员工?", function () {
+                alert("员工保存成功,初始密码为登录账号", function () {
                     location.href = location.href;
-                }, function () {
-                    location.href = "/Organization/Users";
                 });
-
             } else if (data.result == 2) {
                 alert("员工保存失败，登录账号已存在！");
             } else if (data.result == 3) {

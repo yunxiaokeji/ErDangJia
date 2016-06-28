@@ -21,12 +21,14 @@ namespace YXERP.Controllers
 
         public ActionResult MyActivity()
         {
+            ViewBag.Title = "我的活动";
             ViewBag.Option = 0;
             return View();
         }
 
         public ActionResult Activitys()
         {
+            ViewBag.Title = "所有活动";
             ViewBag.Option = 1;
             return View("MyActivity");
         }
@@ -34,7 +36,7 @@ namespace YXERP.Controllers
         public ActionResult Create()
         {
             ViewBag.ActivityID = "";
-            return View("Operate");
+            return View();
         }
 
         public ActionResult Operate(string id)
@@ -44,7 +46,7 @@ namespace YXERP.Controllers
                 return Redirect("/Activity/MyActivity");
             }
             ViewBag.ActivityID = id;
-            return View();
+            return View("Create");
         }
 
         public ActionResult Detail(string id)
@@ -62,7 +64,7 @@ namespace YXERP.Controllers
         /// 获取活动列表
         /// </summary>
         /// <returns></returns>
-        public JsonResult GetActivityList(string keyWords, int pageSize, int pageIndex, int isAll, string beginTime, string endTime, int stage, int filterType, string userID)
+        public JsonResult GetActivityList(string keyWords, int pageSize, int pageIndex, int isAll, string beginTime, string endTime, string orderBy, int stage, int filterType, string userID)
         {
             int pageCount = 0;
             int totalCount = 0;
@@ -76,7 +78,7 @@ namespace YXERP.Controllers
 
             }
 
-            List<ActivityEntity> list = ActivityBusiness.GetActivitys(ownerID, (EnumActivityStage)stage, filterType, keyWords, beginTime, endTime, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
+            List<ActivityEntity> list = ActivityBusiness.GetActivitys(ownerID, (EnumActivityStage)stage, filterType, keyWords, beginTime, endTime, orderBy, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("Items", list);
             JsonDictionary.Add("TotalCount", totalCount);
             JsonDictionary.Add("PageCount", pageCount);

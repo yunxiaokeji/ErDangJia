@@ -2,7 +2,9 @@
 define(function (require, exports, module) {
     var Global = require("global"),
         Easydialog = require("easydialog"),
-        doT = require("dot");
+        doT = require("dot"),
+        moment = require("moment");
+    require("daterangepicker");
     require("pager");
 
     //缓存货位
@@ -21,16 +23,15 @@ define(function (require, exports, module) {
     };
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (type, wares, providers) {
+    ObjectJS.init = function (type, wares) {
         var _self = this;
-        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
-        providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         Params.type = type;
-        _self.bindEvent(wares, providers);
+        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
+        _self.bindEvent(wares);
         _self.getList();
     }
     //绑定事件
-    ObjectJS.bindEvent = function (wares, providers) {
+    ObjectJS.bindEvent = function (wares) {
         var _self = this;
 
         $(document).click(function (e) {
@@ -59,46 +60,46 @@ define(function (require, exports, module) {
             }
         });
 
-
-        $("#btnSearch").click(function () {
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
             Params.pageIndex = 1;
-            Params.begintime = $("#BeginTime").val().trim();
-            Params.endtime = $("#EndTime").val().trim();
+            Params.begintime = start ? start.format("YYYY-MM-DD") : "";
+            Params.endtime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
 
-        require.async("dropdown", function () {
-            $("#wares").dropdown({
-                prevText: "仓库-",
-                defaultText: "全部",
-                defaultValue: "",
-                data: wares,
-                dataValue: "WareID",
-                dataText: "Name",
-                width: "180",
-                onChange: function (data) {
-                    Params.pageIndex = 1;
-                    Params.wareid = data.value;
-                    _self.getList();
-                }
-            });
+        //供应商
+        $(".search-providers li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.pageIndex = 1;
+                Params.providerid = _this.data("id");
+                _self.getList();
+            }
         });
 
-        require.async("dropdown", function () {
-            $("#providers").dropdown({
-                prevText: "供应商-",
-                defaultText: "全部",
-                defaultValue: "",
-                data: providers,
-                dataValue: "ProviderID",
-                dataText: "Name",
-                width: "180",
-                onChange: function (data) {
-                    Params.pageIndex = 1;
-                    Params.providerid = data.value;
-                    _self.getList();
-                }
-            });
+        //仓库
+        $(".search-wares li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.pageIndex = 1;
+                Params.wareid = _this.data("id");
+                _self.getList();
+            }
         });
 
         //新建采购
@@ -133,7 +134,6 @@ define(function (require, exports, module) {
             });
         });
 
-        
         //审核
         $("#audit").click(function () {
             location.href = "/Purchase/AuditDetail/" + _self.docid;
@@ -143,11 +143,11 @@ define(function (require, exports, module) {
             confirm("采购单作废后不可恢复,确认作废吗？", function () {
                 Global.post("/Purchase/InvalidPurchase", { docid: _self.docid }, function (data) {
                     if (data.Status) {
-                        Params.pageIndex = 1;
-                        _self.getList();
+                        alert("采购单作废成功");
                     } else {
-                        alert("作废失败！");
+                        alert("采购单作废失败");
                     }
+                    _self.getList();
                 });
             });
         });
@@ -156,11 +156,11 @@ define(function (require, exports, module) {
             confirm("采购单删除后不可恢复,确认删除吗？", function () {
                 Global.post("/Purchase/DeletePurchase", { docid: _self.docid }, function (data) {
                     if (data.Status) {
-                        Params.pageIndex = 1;
-                        _self.getList();
+                        alert("采购单删除成功");
                     } else {
-                        alert("删除失败！");
+                        alert("采购单删除失败");
                     }
+                    _self.getList();
                 });
             });
         });
@@ -170,11 +170,9 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='8'><div class='dataLoading'><img src='/modules/images/ico-loading.jpg'/><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='8'><div class='data-loading' ><div></td></tr>");
         var url = "/Purchase/GetPurchases",
             template = "template/purchase/purchases.html";
-        console.log(Params);
-
         Global.post(url, Params, function (data) {
             $(".tr-header").nextAll().remove();
 
@@ -203,7 +201,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='8'><div class='noDataTxt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!<div></td></tr>");
             }
 
             $("#pager").paginate({
@@ -230,84 +228,103 @@ define(function (require, exports, module) {
     }
 
     //审核页初始化
-    ObjectJS.initDetail = function (docid, wareid) {
+    ObjectJS.initDetail = function (docid, model) {
         var _self = this;
         _self.docid = docid;
-        Global.post("/System/GetDepotSeatsByWareID", { wareid: wareid }, function (data) {
-            CacheDepot[wareid] = data.Items;
-            $(".item").each(function () {
-                var _this = $(this), depotbox = _this.find(".depot-li");
-                _self.bindDepot(depotbox, data.Items, wareid, _this.data("id"));
-            })
-        });        
+        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
 
-        //全部选中
-        $("#checkall").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("ico-checked")) {
-                _this.addClass("ico-checked").removeClass("ico-check");
-                $(".item .check").addClass("ico-checked").removeClass("ico-check");
-            } else {
-                _this.addClass("ico-check").removeClass("ico-checked");
-                $(".item .check").addClass("ico-check").removeClass("ico-checked");
-            }
-        });
-
-        $(".check").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("ico-checked")) {
-                _this.addClass("ico-checked").removeClass("ico-check");
-            } else {
-                _this.addClass("ico-check").removeClass("ico-checked");
-            }
+        Global.post("/System/GetDepotSeatsByWareID", { wareid: _self.model.WareID }, function (data) {
+            CacheDepot = data.Items;
         });
 
         //审核入库
         $("#btnconfirm").click(function () {
-            if ($(".item").find(".ico-checked").length <= 0) {
-                alert("请选择审核上架的产品！");
-                return;
-            }
-            var ids = [];
-            $(".item").find(".ico-checked").each(function () {
-                ids.push($(this).data("id"));
-            });
-            Global.post("/Purchase/AuditPurchase", { ids: ids.join(",") }, function (data) {
-                if (data.Status) {
-                    location.href = location.href;
-                };
-            });
+            _self.auditStorageIn();
         })
     }
 
-    //绑定货位
-    ObjectJS.bindDepot = function (depotbox, depots, wareid, autoid) {
+    //审核入库
+    ObjectJS.auditStorageIn = function () {
         var _self = this;
-        depotbox.empty();
-        var depot = $("<select data-id='" + autoid + "' data-wareid='" + wareid + "'></select>");
-        for (var i = 0, j = depots.length; i < j; i++) {
-            depot.append($("<option value='" + depots[i].DepotID + "' >" + depots[i].DepotCode + "</option>"))
-        }
 
-        depot.val(depotbox.data("id"));
+        doT.exec("template/purchase/audit_storagein.html", function (template) {
+            var innerText = template(_self.model.Details);
 
-        //选择仓库
-        depot.change(function () {
-            Global.post("/Purchase/UpdateStorageDetailWare", {
-                docid: _self.docid,
-                autoid: autoid,
-                wareid: wareid,
-                depotid: depot.val()
-            }, function (data) {
-                if (!data.Status) {
-                    alert("操作失败,请刷新页面重新操作！");
-                };
+            Easydialog.open({
+                container: {
+                    id: "showAuditStorageIn",
+                    header: "采购单入库",
+                    content: innerText,
+                    yesFn: function () {
+                        var details = ""
+                        $("#showAuditStorageIn .list-item").each(function () {
+                            var _this = $(this);
+                            var quantity = _this.find(".quantity").val();
+                            if (quantity > 0) {
+                                details += _this.data("id") + "-" + quantity + ":" + _this.find("select").val() + ",";
+                            }
+                        });
+
+                        if (details.length > 0 || $("#showAuditStorageIn .check").hasClass("ico-checked")) {
+
+                            Global.post("/Purchase/AuditPurchase", {
+                                docid: _self.docid,
+                                doctype: 101,
+                                isover: $("#showAuditStorageIn .check").hasClass("ico-checked") ? 1 : 0,
+                                details: details,
+                                remark: $("#expressRemark").val().trim()
+                            }, function (data) {
+                                if (data.status) {
+                                    alert("入库成功!", function () {
+                                        location.href = location.href;
+                                    });
+                                } else if (data.result == "10001") {
+                                    alert("您没有操作权限!")
+                                } else {
+                                    alert("审核入库失败！");
+                                }
+                            });
+                        } else {
+                            alert("请输入采购入库数量！");
+                            return false;
+                        }
+                    },
+                    callback: function () {
+
+                    }
+                }
+            });
+            $("#showAuditStorageIn .check").click(function () {
+                var _this = $(this);
+                if (!_this.hasClass("ico-checked")) {
+                    _this.addClass("ico-checked").removeClass("ico-check");
+                } else {
+                    _this.addClass("ico-check").removeClass("ico-checked");
+                }
+            });
+            $("#showAuditStorageIn").find(".quantity").change(function () {
+                var _this = $(this);
+                if (!_this.val().isInt() || _this.val() < 0) {
+                    _this.val("0");
+                }
+            });
+
+            $("#showAuditStorageIn").find("select").each(function () {
+                var _this = $(this);
+                _self.bindDepot(_this);
             });
         });
+    };
 
-        depot.prop("disabled", depotbox.data("status") == 1);
+    //绑定货位
+    ObjectJS.bindDepot = function (depotbox) {
+        var _self = this;
 
-        depotbox.append(depot);
+        for (var i = 0, j = CacheDepot.length; i < j; i++) {
+            depotbox.append($("<option value='" + CacheDepot[i].DepotID + "' >" + CacheDepot[i].DepotCode + "</option>"))
+        }
+
+        depotbox.val(depotbox.data("id"));
     }
 
 

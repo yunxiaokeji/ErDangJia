@@ -23,11 +23,6 @@ namespace YXERP.Controllers
 
         #region Ajax 订单和购物车相关
 
-        /// <summary>
-        /// 过滤产品
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
         public JsonResult GetProductListForShopping(string filter)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -46,17 +41,9 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 加入到购物车
-        /// </summary>
-        /// <param name="productid"></param>
-        /// <param name="detailsid"></param>
-        /// <param name="quantity"></param>
-        /// <param name="ordertype"></param>
-        /// <returns></returns>
-        public JsonResult AddShoppingCart(string productid, string detailsid, int quantity, string unitid, int isBigUnit, EnumDocType ordertype, string remark = "", string guid = "")
+        public JsonResult AddShoppingCart(EnumDocType ordertype, string productid, string detailsid, int quantity, string unitid, string name, string remark = "", string guid = "")
         {
-            var bl = ShoppingCartBusiness.AddShoppingCart(productid, detailsid, quantity, unitid, isBigUnit, ordertype, remark, guid, CurrentUser.UserID, OperateIP);
+            var bl = ShoppingCartBusiness.AddShoppingCart(ordertype, guid, productid, detailsid, name, unitid, quantity, remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("Status", bl);
             return new JsonResult
             {
@@ -65,7 +52,6 @@ namespace YXERP.Controllers
             };
         }
 
-        //批量加入购物车
         public JsonResult AddShoppingCartBatchOut(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -108,11 +94,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取购物车产品数
-        /// </summary>
-        /// <param name="ordertype"></param>
-        /// <returns></returns>
         public JsonResult GetShoppingCartCount(EnumDocType ordertype, string guid = "")
         {
             if (string.IsNullOrEmpty(guid))
@@ -127,11 +108,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 获取购物车产品
-        /// </summary>
-        /// <param name="ordertype"></param>
-        /// <returns></returns>
+
         public JsonResult GetShoppingCart(EnumDocType ordertype, string guid = "")
         {
             if (string.IsNullOrEmpty(guid))
@@ -148,15 +125,9 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 编辑购物车产品数量
-        /// </summary>
-        /// <param name="autoid"></param>
-        /// <param name="quantity"></param>
-        /// <returns></returns>
-        public JsonResult UpdateCartQuantity(string autoid, int quantity)
+        public JsonResult UpdateCartQuantity(string autoid, string guid, int quantity)
         {
-            var bl = ShoppingCartBusiness.UpdateCartQuantity(autoid, quantity, CurrentUser.UserID);
+            var bl = ShoppingCartBusiness.UpdateCartQuantity(autoid, guid, quantity, CurrentUser.UserID);
             JsonDictionary.Add("Status", bl);
             return new JsonResult
             {
@@ -165,9 +136,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateCartBatch(string autoid, string batch)
+        public JsonResult UpdateCartBatch(string autoid, string guid, string batch)
         {
-            var bl = ShoppingCartBusiness.UpdateCartBatch(autoid, batch, CurrentUser.UserID);
+            var bl = ShoppingCartBusiness.UpdateCartBatch(autoid, guid, batch, CurrentUser.UserID);
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {
@@ -176,9 +147,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateCartPrice(string autoid, decimal price)
+        public JsonResult UpdateCartPrice(string autoid, string guid, decimal price)
         {
-            var bl = ShoppingCartBusiness.UpdateCartPrice(autoid, price, CurrentUser.UserID);
+            var bl = ShoppingCartBusiness.UpdateCartPrice(autoid, guid, price, CurrentUser.UserID);
             JsonDictionary.Add("Status", bl);
             return new JsonResult
             {
@@ -186,15 +157,11 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 删除购物车产品
-        /// </summary>
-        /// <param name="autoid"></param>
-        /// <returns></returns>
-        public JsonResult DeleteCart(string autoid)
+
+        public JsonResult DeleteCart(EnumDocType ordertype, string guid, string productid, string name)
         {
-            var bl = ShoppingCartBusiness.DeleteCart(autoid, CurrentUser.UserID);
-            JsonDictionary.Add("Status", bl);
+            var bl = ShoppingCartBusiness.DeleteCart(ordertype, guid, productid, name, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
             return new JsonResult
             {
                 Data = JsonDictionary,

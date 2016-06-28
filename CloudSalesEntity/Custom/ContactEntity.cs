@@ -10,7 +10,7 @@ namespace CloudSalesEntity
         [Property("Lower")]
         public string ContactID { get; set; }
 
-        
+        public string CompanyName { get; set; }
 
         public string Name { get; set; }
 

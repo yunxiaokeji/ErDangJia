@@ -38,8 +38,15 @@
 
             $(".content-body div[name='accountInfo']").hide().eq( parseInt(_this.data("id")) ).show();
         });
-
-
+        $("#btnExportExcel").click(function () {
+            var form = $("<form>");//定义一个form表单
+            form.attr("style", "display:none");
+            form.attr("target", "");
+            form.attr("method", "post");
+            form.attr("action", "/MyAccount/ExportFromCfg");
+            $("body").append(form);
+            form.submit();//表单提交 
+        });
         //用户基本信息
         $("#btnSaveAccountInfo").click(function () {
             if (!VerifyObject.isPass("#accountInfo")) {
@@ -58,8 +65,9 @@
                 var item = data;
                 //基本信息
                 $("#Name").val(item.Name);
-                $("#Jobs").val(item.Jobs);
-                $("#Birthday").val(item.Birthday.toDate("yyyy-MM-dd"));
+                $("#Jobs").val(item.Jobs); 
+                var birthday = item.Birthday.toDate("yyyy-MM-dd");
+                $("#Birthday").val(birthday != "3939-01-01" ?  birthday:"");
                 $("#Age").val(item.Age);
                 //部门
                 $("#DepartmentName").val(item.DepartmentName);
@@ -73,6 +81,7 @@
                         dataValue: "DepartID",
                         dataText: "Name",
                         width: "157",
+                        isposition:true,
                         onChange: function (data) {
                             $("#DepartID").val(data.value);
                         }

@@ -51,13 +51,13 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 获取代理商详情
         /// </summary>
-        /// <param name="agentID"></param>
+        /// <param name="agentid"></param>
         /// <returns></returns>
-        public static Agents GetAgentDetail(string agentID)
+        public static Agents GetAgentDetail(string agentid)
         {
-            if (!Agents.ContainsKey(agentID))
+            if (!Agents.ContainsKey(agentid))
             {
-                DataTable dt = AgentsDAL.BaseProvider.GetAgentDetail(agentID);
+                DataTable dt = AgentsDAL.BaseProvider.GetAgentDetail(agentid);
                 Agents model = new Agents();
                 if (dt.Rows.Count == 1)
                 {
@@ -65,16 +65,20 @@ namespace CloudSalesBusiness
                     model.FillData(row);
 
                     if (!Agents.ContainsKey(model.AgentID))
-                        Agents.Add(model.AgentID,model);
-
-                    return Agents[agentID];
+                    {
+                        Agents.Add(model.AgentID, model);
+                    }
+                    return Agents[agentid];
                 }
                 else
+                {
                     return null;
+                }
             }
             else
-                return Agents[agentID];
-
+            {
+                return Agents[agentid];
+            }
             
         }
 
@@ -97,6 +101,7 @@ namespace CloudSalesBusiness
 
             return list;
         }
+
         #endregion
 
         #region  编辑

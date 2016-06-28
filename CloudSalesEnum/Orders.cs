@@ -13,7 +13,7 @@ namespace CloudSalesEnum
     {
         [DescriptionAttribute("全部")]
         All = -1,
-        [DescriptionAttribute("机会订单")]
+        [DescriptionAttribute("草案订单")]
         Normal = 0,
         [DescriptionAttribute("待审核")]
         New = 1,
@@ -22,10 +22,26 @@ namespace CloudSalesEnum
         [DescriptionAttribute("已退单")]
         Return = 3,
         [DescriptionAttribute("作废")]
-        Invalid = 4
+        Invalid = 4,
+        [DescriptionAttribute("已删除")]
+        Delete = 9
     }
+
     /// <summary>
     /// 出库状态
+    /// </summary>
+    public enum EnumOutStatus
+    {
+        [DescriptionAttribute("全部")]
+        All = -1,
+        [DescriptionAttribute("待出库")]
+        NoOut = 0,
+        [DescriptionAttribute("已出库")]
+        Out = 1
+    }
+
+    /// <summary>
+    /// 发货状态
     /// </summary>
     public enum EnumSendStatus
     {
@@ -34,7 +50,7 @@ namespace CloudSalesEnum
         [DescriptionAttribute("待出库")]
         NoOut = 0,
         [DescriptionAttribute("待发货")]
-        NoSend = 1,
+        Out = 1,
         [DescriptionAttribute("已发货")]
         Send = 2,
         [DescriptionAttribute("已签收")]
@@ -72,12 +88,30 @@ namespace CloudSalesEnum
     {
         [DescriptionAttribute("全部")]
         All = -1,
+        [DescriptionAttribute("未审核")]
+        NoPay = 0,
+        [DescriptionAttribute("已审核")]
+        Pay = 1,
+        [DescriptionAttribute("删除")]
+        Delete = 9
+    }
+    /// <summary>
+    /// 后台订单支付状态
+    /// </summary>
+    public enum EnumClientOrderPay
+    {
+        [DescriptionAttribute("全部")]
+        All = -1,
         [DescriptionAttribute("未支付")]
         NoPay = 0,
         [DescriptionAttribute("已支付")]
         Pay = 1,
-        [DescriptionAttribute("删除")]
-        Delete = 9
+        [DescriptionAttribute("部分付款")]
+        PartPay = 2,
+        [DescriptionAttribute("部分退款")]
+        PartReturn = 3,
+        [DescriptionAttribute("全额退款")]
+        Return = 4
     }
     public enum EnumReturnStatus
     {

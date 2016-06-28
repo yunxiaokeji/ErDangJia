@@ -1,0 +1,140 @@
+﻿{
+    "Error": "",
+    "Item": {
+		"CategoryName": {
+            "title": "产品类别",
+            "hide": false,
+            "format": true,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"DropSourceList|3",
+			"defaulttext":"裙裤"
+        },
+        "ProductName": {
+            "title": "产品名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"二当家--上海云销科技有限公司"
+        },   
+        "ProductCode": {
+            "title": "产品编码",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"CESHI001"
+        },
+		"ProductImage":{
+			"title": "产品图片",
+            "hide": false,
+            "format": true,
+            "type": 10,
+			"testtype": 10,
+			"datasource":"",
+			"defaulttext":"C:/Users/admin/Desktop/色卡.png"
+		},
+        "GenneralName": {
+            "title": "常用名",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"田园风 裙仔"
+        },
+        "ShapeCode": {
+            "title": "条形码",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"99999999"
+        },
+        "BrandName": {
+            "title": "品牌",
+            "hide": false,
+            "format": true,
+            "type": -1,
+			"testtype": 7,
+			"datasource":"DropSourceList|4",
+			"defaulttext":"上海云销信息科技有限公司"
+        },
+        "UnitName": {
+            "title": "单位",
+            "hide": false,
+            "format": true,
+            "type": -1,
+			"testtype": 7,
+			"datasource":"DropSourceList|5",
+			"defaulttext":"个"
+        },
+        "CommonPrice": {
+            "title": "成本价",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"120.00"
+        },
+        "Price": {
+            "title": "销售价",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"120.00"
+        },
+        "Weight": {
+            "title": "重量(kg)",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"1.0"
+        },
+		"Status":{  "title": "是否销售",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"是"
+		},
+		"IsAllow":{  "title": "库存不足是否允许下单",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"是"
+		},
+        "EffectiveDays": {
+            "title": "有效期（天）",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":120
+        },
+		"Description":{
+			"title": "产品说明",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"为不同行业领域的企业打造一个共同的企业供应链管理平台"
+		}
+
+		
+    } 
+}

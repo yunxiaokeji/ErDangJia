@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "供应商管理";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        seajs.use(["scripts/products/providers"], function (obj) {
+            obj.init();
+        });
+    </script>
+}
+<div class="header-box">
+    <span class="header-title left"></span>
+    <div  class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103020301"))" id="addObject">新建供应商</div>
+    
+</div>
+<div class="search-header">
+    <div class="right searth-module"> </div> 
+</div>
+<div class="content-body">
+    <table class="table-list">
+        <tr class="tr-header">
+            <td class="tLeft">名称</td>
+            <td class="width100 tLeft">联系人</td>
+            <td class="width100 tLeft">联系方式</td>
+            <td class="width200 tLeft">城市</td>
+            <td class="tLeft">详细地址</td>
+            <td class="width150">添加时间</td>
+            <td class="width50">操作</td>
+        </tr>
+    </table>
+    <div id="pager" class="mTop20"></div>
+</div>

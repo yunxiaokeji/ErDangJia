@@ -2,10 +2,9 @@
     ViewBag.Title = "产品列表";
 }
 
-<link rel="stylesheet" href="/modules/css/shoppingcart/filterproducts.css" />
+<link rel="stylesheet" href="/modules/css/shoppingcart.css" />
 
 @section scripts{
-    <script src="/modules/plug/kindeditor-4.1.7/kindeditor.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/products/product"], function (obj) {
             obj.initList();
@@ -15,65 +14,72 @@
 
 <div class="header-box">
     <span class="header-title left">产品列表</span>
-    <a href="ProductAdd" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103010500"))">添加新品</a> 
-</div>
-<div class="content-body mTop20">
-    <div class="top-div">
-        <ul class="category-map left">
-            <li data-id="">全部分类 <span>></span></li>
-        </ul>
-        <div class="right searth-module" data-text="输入产品编码/名称/助记码" data-width="300"> </div>
-    </div>
-    <div class="attr-filter">
-        <ul class="category-child attr-item">
-            <li class="attrkey">分类：</li>
-            <li class="attrValues">
-                <ul id="category-child">
+    <a href="javascript:void(0);" data-url="/Products/Category" data-id="103010400" data-name="添加产品" class="btn-add right btn-open-window @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))">添加产品</a>
+   @* <div class="right @(ExpandClass.IsLimits(HttpContext.Current, "101019001"))"  >
+        <span data-url="/Products/Category" data-id="103010400" data-name="添加产品"  class="pLeft2 btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current, "101019001"))" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >添加产品</span>
+        <div id="dropdown" class="bghulan dropdown rightraduis3 right " style="height:28px;width:20px;">
+            <span class="mTop8 mRight5 ico-dropdown-white right"></span>
+        </div>
+    </div>*@
 
-                </ul>
-            </li>
-        </ul>
-        <ul class="attr-item" id="attr-price">
-            <li class="attrkey">价格：</li>
-            <li class="attrValues">
-                <ul>
-                    <li class="hover price" data-begin="" data-end="">不限</li>
-                    <li class="price" data-begin="0" data-end="499">0-499</li>
-                    <li class="price" data-begin="500" data-end="999">500-999</li>
-                    <li class="price" data-begin="1000" data-end="1999">1000-1999</li>
-                    <li class="price" data-begin="2000" data-end="3499">2000-3499</li>
-                    <li class="price" data-begin="3500" data-end="4999">3500-4999</li>
-                    <li class="price" data-begin="5000" data-end="">5000以上</li>
-                    <li>
-                        <input type="text" id="beginprice" />&nbsp;-&nbsp;
-                        <input type="text" id="endprice" />
-                    </li>
-                    <li class="search-btn">
-                        <span class="btn" id="searchprice">搜索</span>
-                    </li>
-                </ul>
-            </li>
+</div>
+ <div class="search-header">
+    <ul class="category-map">
+        <li data-id=""><a href="javascript:void(0);">全部分类</a></li>
+    </ul>
+    <div class="right searth-module" data-text="输入产品编码/名称/助记码" data-width="300"> </div>
+</div>
+<div class="search-body">
+    <div class="search-item">
+        <div class="name">分类</div>
+        <ul class="search-stages" id="category-child">
+            
         </ul>
     </div>
-    <div class="filter-orderby">
-        <ul class="orderby">
-            <li class="orderby-new hover">新品<span class="shang"></span><span class="xia"></span></li>
-            <li class="orderby-sales">销量<span class="shang"></span><span class="xia"></span></li>
-            <li class="orderby-price">价格<span class="shang"></span><span class="xia"></span></li>
-        </ul>
-    </div>
-    <table class="table-list mTop20">
+</div>
+<ul class="search-sort">
+    <li>排序</li>
+    <li class="sort-item hover" data-column="p.CreateTime">
+        上架日期
+        <span class="asc"></span>
+        <span class="desc hover"></span>
+    </li>
+    <li class="sort-item" data-column="p.SaleCount">
+        销量
+        <span class="asc"></span>
+        <span class="desc"></span>
+    </li>
+    <li class="sort-item" data-column="p.Price">
+        销售价格
+        <span class="asc"></span>
+        <span class="desc"></span>
+    </li>
+    <li class="mLeft20">
+        销售价：
+        <input type="text" class="width60" id="beginprice" />&nbsp;-&nbsp;
+        <input type="text" class="width60" id="endprice" />
+        <span class="btn" id="searchprice">搜索</span>
+    </li>
+</ul>
+<div class="content-body mTop20">
+    <table class="table-list">
         <tr class="tr-header" id="product-items">
-            <td class="m-len tLeft">产品编码</td>
+            <td class="tLeft">产品编码</td>
             <td class="tLeft">产品名称</td>
-            <td class="m-len tLeft">分类名称</td>
-            <td class="m-len tLeft">品牌</td>
-            <td class="m-len tRight">优惠价</td>
-            <td class="m-len">是否上架</td>
-            <td class="m-len">是否新品</td>
-            <td class="m-len">是否推荐</td>
-            <td class="s-len">编辑</td>
+            <td class="width100 tLeft">分类名称</td>
+            <td class="width100 tLeft">品牌</td>
+            <td class="width100 tRight">成本价</td>
+            <td class="width100 tRight">销售价</td>
+            <td class="width80">销量</td>
+            <td class="width80">逻辑库存</td>
+            <td class="width80">实际库存</td>
+            <td class="width80">是否销售</td>
+            <td class="width100">上架日期</td>
+            <td class="width50">操作</td>
         </tr>
     </table>
     <div id="pager" class="mTop20"></div>
 </div>
+<ul class="dropdown-ul hide" style="width: 100px;">
+    <li class="" id="exportExcel">导入产品</li> 
+</ul>

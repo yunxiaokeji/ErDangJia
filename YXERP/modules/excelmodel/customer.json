@@ -1,0 +1,205 @@
+﻿{
+    "Error": "",
+    "Item": {
+        "Name": {
+            "title": "客户名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"上海云销信息科技有限公司"
+        },
+        "Extent": {
+            "title": "公司规模",
+            "hide": false,
+            "format": true,
+            "type": 8,
+			"testtype": 7,
+			"datasource":"List|0-49,50-99,100-199,200-499,500-999,1000+",
+			"defaulttext":"0-49"
+        },
+        "IndustryId": {
+            "title": "行业",
+            "hide": false,
+            "format": true,
+            "type": 9,
+			"testtype": 7,
+			"datasource":"DropSourceList|1",
+			"defaulttext":"信息技术业"
+        },
+        "Contcat": {
+            "title": "联系人",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"云销001"
+        },
+        "Jobs": {
+            "title": "职位",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"销售大使"
+        },
+        "MobilePhone": {
+            "title": "联系电话",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"17777777777"
+        },
+        "Email": {
+            "title": "邮箱",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"test@yunxiaokeji.com"
+        },
+        "Province": {
+            "title": "省",
+            "hide": false,
+            "format": true,
+            "type": -1,
+			"testtype": 7,
+			"datasource":"DropSourceList|2",
+			"defaulttext":"上海"
+        },
+        "Citys": {
+            "title": "市",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"市辖区"
+        },
+        "Counties": {
+            "title": "区",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"徐汇区"
+        },
+        "Address": {
+            "title": "详细地址",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"国峰大厦6楼"
+        },
+        "Description": {
+            "title": "描述",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"为不同行业领域的企业打造一个共同的企业供应链管理平台"
+        }
+    },
+	 "OwnItem": {
+        "Name": {
+            "title": "客户名称",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"上海云销信息科技有限公司"
+        }, 
+        "Contcat": {
+            "title": "联系人",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"test"
+        },
+        "Jobs": {
+            "title": "职位",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"销售大使"
+        },
+        "MobilePhone": {
+            "title": "联系电话",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"17777777777"
+        },
+        "Email": {
+            "title": "邮箱",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"test@yunxiaokeji.com"
+        },
+        "Province": {
+            "title": "省",
+            "hide": false,
+            "format": true,
+            "type": -1,
+			"testtype": 7,
+			"datasource":"DropSourceList|2",
+			"defaulttext":"上海"
+        },
+        "Citys": {
+            "title": "市",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"市辖区"
+        },
+        "Counties": {
+            "title": "区",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"徐汇区"
+        },
+        "Address": {
+            "title": "详细地址",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":"国峰大厦6楼"
+        },
+        "Description": {
+            "title": "描述",
+            "hide": false,
+            "format": false,
+            "type": -1,
+			"testtype": -1,
+			"datasource":"",
+			"defaulttext":" 业绩突出 "
+        }
+    }
+}

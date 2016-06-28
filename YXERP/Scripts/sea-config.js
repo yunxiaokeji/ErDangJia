@@ -8,14 +8,29 @@ seajs.config({
     },
     alias: {
         "jquery": "/Scripts/jquery-1.11.1.js",
+        "form": "/Scripts/jquery.form.js",
+        "parser": "/Scripts/jquery.parser.js",
+        //颜色选择器
+        "color": "plug/choosecolor/spectrum.js",
+        //全局JS
         "global": "scripts/global.js",
         //HTML模板引擎
         "dot": "plug/doT.js",
         //分页控件
         "pager": "plug/datapager/paginate.js",
         //报表底层
-        'zrender': 'plug/echarts/zrender/zrender.js'
-    }
+        'zrender': 'plug/echarts/zrender/zrender.js',
+        //日期控件
+        'moment': 'plug/daterangepicker/moment.js',
+        'daterangepicker': 'plug/daterangepicker/daterangepicker.js',
+        //拖动排序
+        "sortable": "plug/sortable.js"
+    },
+    map: [
+        //可配置版本号
+        ['.css', '.css?v=20160625'],
+        ['.js', '.js?v=20160625']
+    ]
 });
 
 
@@ -31,10 +46,14 @@ seajs.config({
         "switch": "plug/switch/switch.js",
         //标签插件
         "mark": "plug/mark/mark.js",
+        //标签插件(取配系统置)
+        "colormark": "plug/colormark/colormark.js",
         //弹出层插件
         "easydialog": "plug/easydialog/easydialog.js",
+        //导入弹出层插件
+        "dialog": "plug/dialog/dialog.js",
         //搜索插件
-        "search": "plug/seach_keys/seach_keys.js",
+        "search": "plug/seachkeys/seachkeys.js",
         //购物车
         "cart": "plug/shoppingcart/shoppingcart.js",
         //选择员工

@@ -11,14 +11,17 @@
             <div class="left">
                 <div class="pTop5" >
                     <span style="color:#2f73b8;">{%=item.CreateUser.Name%}{%=item.FromReplyUser!=null?" 回复 "+item.FromReplyUser.Name:""%}:</span>
-                    <span style="color:#777;">{%=decodeURI(item.Content)%}</span>
+                    <span class="reply-content wordbreak" style="color:#777;">{%=decodeURI(item.Content)%}</span>
                 </div>
-                <div class="pTop5" style="color:#999;">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss") %}</div>
             </div>
-            <div class="right mTop15 hand btn-reply">
-                <div class="left" style="padding-top:3px;"><img src="/modules/images/ico-reply-gray.png"/></div>
-                <div class="left mLeft5" style="color:#777;font-size:14px;">回复</div>
-                <div class="clear"></div>
+            <div class="clear"></div>
+            <div  class="pTop5">
+                <div class="left" style="color:#999;">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss") %}</div>
+                <div class="right hand btn-reply">
+                    <div class="left" style="padding-top:3px;"><img src="/modules/images/ico-reply-gray.png"/></div>
+                    <div class="left mLeft5" style="color:#777;font-size:14px;">回复</div>
+                    <div class="clear"></div>
+                </div>
             </div>
             <div class="clear"></div>
             <div class="mTop10 hide reply-box">

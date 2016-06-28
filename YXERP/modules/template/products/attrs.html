@@ -9,8 +9,9 @@
     <td class="center attr-values" data-id="{%=item.AttrID%}"><a href="javascript:void(0);">设置属性值</a></td>
     <td class='center'>{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
     <td class='center'>{%=(item.CreateUser ? item.CreateUser.Name:"--")%}</td>
-    <td class="center dropdown" data-id="{%=item.AttrID%}">
-        <span class="ico-dropdown"></span>
+    <td class="center" data-id="{%=item.AttrID%}">
+        <span title="编辑" class="iconfont ico-edit left mLeft3" data-id="{%=item.AttrID%}"></span>
+        <span title="删除" class="iconfont ico-del right mTop1 mRight3" data-id="{%=item.AttrID%}"></span>
     </td>
 </tr>
 {% } %}

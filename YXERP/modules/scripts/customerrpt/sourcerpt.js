@@ -1,15 +1,17 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
         ChooseUser = require("chooseuser"),
-        ec = require("echarts/echarts");
+        ec = require("echarts/echarts"),
+        moment = require("moment");
+    require("daterangepicker");
     require("echarts/chart/pie");
     require("echarts/chart/line");
     require("echarts/chart/bar");
     var Params = {
         searchType: "sourceRPT",
         dateType: 3,
-        beginTime: "",
-        endTime: "",
+        beginTime:new Date().setMonth(new Date().getMonth() - 1).toString().toDate("yyyy-MM-dd") ,
+        endTime: Date.now().toString().toDate("yyyy-MM-dd"),
         UserID: "",
         TeamID: "",
         AgentID: ""
@@ -19,53 +21,66 @@
     //初始化
     ObjectJS.init = function () {
         var _self = this;
-        
         _self.scaleChart = ec.init(document.getElementById('sourceRPT'));
-
         _self.bindEvent();
+        _self.sourceScale();
     }
     ObjectJS.bindEvent = function () {
         var _self = this;
-
-        $("#beginTime").val(new Date().setMonth(new Date().getMonth() - 1).toString().toDate("yyyy-MM-dd"));
-        $("#endTime").val(Date.now().toString().toDate("yyyy-MM-dd"));
-
-        $(".search-type li").click(function () {
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
+            Params.pageIndex = 1;
+            Params.beginTime = start ? start.format("YYYY-MM-DD") : "";
+            Params.endTime = end ? end.format("YYYY-MM-DD") : "";
+            if (Params.searchType == "sourceRPT") {
+                _self.sourceScale();
+            } else {
+                _self.sourceDate();
+            }
+        });
+        $("#iptCreateTime").val(Params.beginTime + ' 至 ' + Params.endTime);
+        $(".tab-nav-ul li").click(function () {
             var _this = $(this);
-            
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
                 _this.addClass("hover");
-
                 Params.searchType = _this.data("id");
                 Params.dateType = _this.data("type");
-
                 $(".source-box").hide();
                 $("#" + _this.data("id")).show();
-                
                 if (!_self.dateChart) {
                     _self.dateChart = ec.init(document.getElementById('sourceDateRPT'));
                 }
-
-                if (_this.data("begintime")) {
-                    $("#beginTime").val(_this.data("begintime"));
-                } else {
-                    if (Params.dateType == 3) {
-                        $("#beginTime").val(new Date().setFullYear(new Date().getFullYear() - 1).toString().toDate("yyyy-MM-dd"));
-                    } else if (Params.dateType == 4) {
-                        $("#beginTime").val(new Date().setMonth(new Date().getMonth() - 3).toString().toDate("yyyy-MM-dd"));
-                    }
-                    else if (Params.dateType == 5) {
-                        $("#beginTime").val(new Date().setDate(new Date().getDay() - 15).toString().toDate("yyyy-MM-dd"));
-                    }
+                 
+                if (Params.dateType == 3) {
+                    Params.beginTime = new Date().setFullYear(new Date().getFullYear() - 1).toString().toDate("yyyy-MM-dd");
+                } else if (Params.dateType == 4) {
+                    Params.beginTime = new Date().setMonth(new Date().getMonth() - 3).toString().toDate("yyyy-MM-dd");
                 }
+                else if (Params.dateType == 5) {
+                    Params.beginTime = new Date().setMonth(new Date().getMonth() - 1).toString().toDate("yyyy-MM-dd");
+                } 
                 if (_this.data("endtime")) {
-                    $("#endTime").val(_this.data("endtime"));
+                    Params.endTime = _this.data("endtime");
                 } else {
-                    $("#endTime").val(Date.now().toString().toDate("yyyy-MM-dd"));
+                    Params.endTime = Date.now().toString().toDate("yyyy-MM-dd");
                 }
-
-                $("#btnSearch").click();
+                $("#iptCreateTime").val(Params.beginTime + ' 至 ' + Params.endTime);
+                if (Params.searchType == "sourceRPT") {
+                    _self.sourceScale();
+                } else {
+                    _self.sourceDate();
+                }
+                $(".search-type .hover").data("endtime", Params.endTime);
             }
 
         });
@@ -84,35 +99,7 @@
                     $("#btnSearch").click();
                 }
             });
-        });
-
-        $("#btnSearch").click(function () {
-            Params.beginTime = $("#beginTime").val().trim();
-            Params.endTime = $("#endTime").val().trim();
-            if (Params.searchType == "sourceRPT") {
-                if (Params.beginTime && Params.endTime && Params.beginTime > Params.endTime) {
-                    alert("开始日期不能大于结束日期！");
-                    return;
-                }
-                _self.sourceScale()
-            } else {
-                
-                if (!Params.beginTime || !Params.endTime) {
-                    alert("开始日期与结束日期不能为空！");
-                    return;
-                }
-                if (Params.beginTime > Params.endTime) {
-                    alert("开始日期不能大于结束日期！");
-                    return;
-                }
-                _self.sourceDate()
-            }
-
-            $(".search-type .hover").data("begintime", Params.beginTime).data("endtime", Params.endTime);
-        });
-
-        $("#btnSearch").click();
-
+        }); 
     }
     //客户来源比例
     ObjectJS.sourceScale = function () {
@@ -130,7 +117,6 @@
 
         Global.post("/CustomerRPT/GetCustomerSourceScale", Params, function (data) {
             var title = [], items = [], name = "", total = 0;
-
             for (var i = 0, j = data.items.length; i < j; i++) {
                 total += data.items[i].Value;
                 name = data.items[i].Name + "：" + data.items[i].Value + "(" + data.items[i].Scale + ")";
@@ -138,7 +124,7 @@
                 items.push({
                     value: data.items[i].Value,
                     name: name
-                })
+                });
             }
             option = {
                 title: {

@@ -15,22 +15,13 @@ namespace YXERP.Controllers
 {
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
-
         public ActionResult Index()
         {
             if (Session["ClientManager"] == null)
             {
                 return Redirect("/Home/Login");
             }
-
-            CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
-            ViewBag.UserCount = OrganizationBusiness.GetUsers(CurrentUser.AgentID).Count;
-            var agent = AgentsBusiness.GetAgentDetail(CurrentUser.AgentID);
-            ViewBag.RemainderDays = (agent.EndTime - DateTime.Now).Days;
-            ViewBag.UserQuantity = agent.UserQuantity;
-            return View();
+            return Redirect("/Default/Index");
         }
 
         public ActionResult Register()
@@ -47,9 +38,9 @@ namespace YXERP.Controllers
         {
             if (Session["ClientManager"] != null)
             {
-                return Redirect("/Home/Index");
+                return Redirect("/Default/Index");
             }
-            HttpCookie cook = Request.Cookies["cloudsales"];
+            HttpCookie cook = Request.Cookies["yunxiao_erp_user"];
             if (cook != null)
             {
                 if (cook["status"] == "1")
@@ -59,8 +50,9 @@ namespace YXERP.Controllers
                     CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(cook["username"], cook["pwd"],out result, operateip);
                     if (model != null)
                     {
+
                         Session["ClientManager"] = model;
-                        return Redirect("/Home/Index");
+                        return Redirect("/Default/Index");
                     }
                 }
                 else
@@ -75,21 +67,15 @@ namespace YXERP.Controllers
         
         public ActionResult Logout(int Status = 0)
         {
-            HttpCookie cook = Request.Cookies["cloudsales"];
+            HttpCookie cook = Request.Cookies["yunxiao_erp_user"];
             if (cook != null)
             {
                 cook["status"] = "0";
                 Response.Cookies.Add(cook);
             }
-            
 
             Session["ClientManager"] = null;
             return Redirect("/Home/Login?Status=" + Status);
-        }
-
-        public ActionResult InfoPage() 
-        {
-            return View();
         }
 
         public ActionResult Terms() 
@@ -97,35 +83,18 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public JsonResult GetAgentActions()
-        {
-            CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
-            var model = LogBusiness.BaseBusiness.GetAgentActions(CurrentUser.AgentID);
-
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
-            JsonDictionary.Add("model", model);
-
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-
-        /// <summary>
-        /// 明道登录
-        /// </summary>
-        /// <returns></returns>
         public ActionResult MDLogin(string ReturnUrl)
         {
-            if(string.IsNullOrEmpty(ReturnUrl))
-            return Redirect(OauthBusiness.GetAuthorizeUrl());
+            if (string.IsNullOrEmpty(ReturnUrl))
+            {
+                return Redirect(OauthBusiness.GetAuthorizeUrl());
+            }
             else
+            {
                 return Redirect(OauthBusiness.GetAuthorizeUrl() + "&state=" + ReturnUrl);
+            }
         }
 
-        //明道登录回掉
         public ActionResult MDCallBack(string code, string state)
         {
             string operateip = Common.Common.GetRequestIP();
@@ -144,9 +113,13 @@ namespace YXERP.Controllers
 
                         Session["ClientManager"] = model;
                         if (string.IsNullOrEmpty(state))
-                            return Redirect("/Home/Index");
+                        {
+                            return Redirect("/Default/Index");
+                        }
                         else
+                        {
                             return Redirect(state);
+                        }
                     }
                 }
                 else
@@ -164,7 +137,7 @@ namespace YXERP.Controllers
                             clientModel.CompanyName = user.user.project.name;
                             clientModel.ContactName = user.user.name;
                             clientModel.MobilePhone = user.user.mobile_phone;
-                            var clientid = ClientBusiness.InsertClient(clientModel, "", "", "", out result, user.user.email, user.user.id, user.user.project.id);
+                            var clientid = ClientBusiness.InsertClient(clientModel, "", "", "", "", out result, user.user.email, user.user.id, user.user.project.id);
                             if (!string.IsNullOrEmpty(clientid))
                             {
                                 var current = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip);
@@ -173,10 +146,14 @@ namespace YXERP.Controllers
                                 if (string.IsNullOrEmpty(current.Avatar)) current.Avatar = user.user.avatar;
                                 Session["ClientManager"] = current;
 
-                                if(string.IsNullOrEmpty(state))
-                                return Redirect("/Home/Index");
+                                if (string.IsNullOrEmpty(state))
+                                {
+                                    return Redirect("/Default/Index");
+                                }
                                 else
+                                {
                                     return Redirect(state);
+                                }
                             }
 
                         }
@@ -193,9 +170,13 @@ namespace YXERP.Controllers
                                 Session["ClientManager"] = current;
 
                                 if (string.IsNullOrEmpty(state))
-                                    return Redirect("/Home/Index");
+                                {
+                                    return Redirect("/Default/Index");
+                                }
                                 else
+                                {
                                     return Redirect(state);
+                                }
                             }
                         }
                     }
@@ -208,12 +189,9 @@ namespace YXERP.Controllers
             return Redirect("/Home/Login");
         }
 
-        /// <summary>
-        /// 员工登录
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="pwd"></param>
-        /// <returns></returns>
+        #region Ajax
+
+        //员工登录
         public JsonResult UserLogin(string userName, string pwd, string remember)
         {
             int result = 0;
@@ -230,7 +208,7 @@ namespace YXERP.Controllers
                 if (model != null)
                 {
                     //保持登录状态
-                    HttpCookie cook = new HttpCookie("cloudsales");
+                    HttpCookie cook = new HttpCookie("yunxiao_erp_user");
                     cook["username"] = userName;
                     cook["pwd"] = pwd;
                     cook["status"] = remember;
@@ -287,12 +265,7 @@ namespace YXERP.Controllers
             };
         }
 
-
-        /// <summary>
-        /// 账号是否存在
-        /// </summary>
-        /// <param name="loginName"></param>
-        /// <returns></returns>
+        //账号是否存在
         public JsonResult IsExistLoginName(string loginName)
         {
             bool bl = OrganizationBusiness.IsExistLoginName(loginName);
@@ -306,14 +279,7 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 主动注册客户端
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="companyName"></param>
-        /// <param name="loginName"></param>
-        /// <param name="loginPWD"></param>
-        /// <returns></returns>
+        //主动注册客户端
         public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD,string code)
         {
             int result = 0;
@@ -332,7 +298,7 @@ namespace YXERP.Controllers
                 else
                 {
                     Clients client = new Clients() { CompanyName = companyName, ContactName = name, MobilePhone = loginName };
-                    ClientBusiness.InsertClient(client, loginName, loginPWD, string.Empty, out result);
+                    ClientBusiness.InsertClient(client, "", loginName, loginPWD, string.Empty, out result);
 
                     if (result == 1)
                     {
@@ -358,11 +324,7 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 发送手机验证码
-        /// </summary>
-        /// <param name="mobilePhone"></param>
-        /// <returns></returns>
+        //发送手机验证码
         public JsonResult SendMobileMessage(string mobilePhone)
         {
             Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
@@ -387,12 +349,7 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 验证手机验证码
-        /// </summary>
-        /// <param name="mobilePhone"></param>
-        /// <param name="code"></param>
-        /// <returns></returns>
+        //验证手机验证码
         public JsonResult ValidateMobilePhoneCode(string mobilePhone, string code)
         {
             bool bl = Common.Common.ValidateMobilePhoneCode(mobilePhone, code);
@@ -406,12 +363,7 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 重置用户密码
-        /// </summary>
-        /// <param name="loginName"></param>
-        /// <param name="loginPwd"></param>
-        /// <returns></returns>
+        //重置用户密码
         public JsonResult UpdateUserPwd(string loginName, string loginPwd, string code)
         {
             int result = 0;
@@ -430,8 +382,11 @@ namespace YXERP.Controllers
                     bl = OrganizationBusiness.UpdateUserAccountPwd(loginName, loginPwd);
                     result = bl ? 1 : 0;
 
-                    if(bl)
+                    if (bl)
+                    {
+                        Common.Common.CachePwdErrorUsers.Remove(loginName);
                         Common.Common.ClearMobilePhoneCode(loginName);
+                    }
                 }
                 
             }
@@ -448,33 +403,7 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetAgentInfo()
-        {
-
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
-            int remainderDays = 0;
-            int authorizeType = 0;
-
-            if (Session["ClientManager"] != null)
-            {
-                var CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
-                var agent = AgentsBusiness.GetAgentDetail(CurrentUser.AgentID);
-
-                remainderDays = (agent.EndTime - DateTime.Now).Days;
-                authorizeType = agent.AuthorizeType;
-
-            }
-
-            JsonDictionary.Add("remainderDays", remainderDays);
-            JsonDictionary.Add("authorizeType", authorizeType);
-
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-
-        }
+        #endregion
 
     }
 }

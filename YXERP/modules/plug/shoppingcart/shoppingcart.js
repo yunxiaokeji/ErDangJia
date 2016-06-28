@@ -64,20 +64,18 @@ define(function (require, exports, module) {
                         var innerText = templateFun(data.Items);
                         innerText = $(innerText);
 
-                        //详情页增加单据类型
-                        innerText.find(".productname").each(function () {
-                            $(this).attr("href", $(this).attr("href") + "&type=" + opts.ordertype + "&guid=" + opts.guid);
-                        });
-
                         //删除产品
                         innerText.find(".ico-del").click(function () {
                             var _this = $(this);
-                            confirm("确认从购物车移除此产品吗？", function () {
+                            confirm("确认从已选中移除此产品吗？", function () {
                                 Global.post("/ShoppingCart/DeleteCart", {
-                                    autoid: _this.data("id")
+                                    ordertype: opts.ordertype,
+                                    guid: opts.guid,
+                                    productid: _this.data("id"),
+                                    name: _this.data("name")
                                 }, function (data) {
-                                    if (!data.Status) {
-                                        alert("系统异常，请重新操作！");
+                                    if (!data.status) {
+                                        alert("网络异常或数据状态有变更，请重新操作！");
                                     } else {
                                         _this.parents("tr.item").remove();
                                         obj.find(".totalcount").html(obj.find(".totalcount").html() - 1);
@@ -89,8 +87,10 @@ define(function (require, exports, module) {
                         //入库单
                         if (opts.ordertype == 1) {
                             obj.find(".btnconfirm").attr("href", "/Purchase/ConfirmPurchase");
-                        }else if (opts.ordertype == 11) {
-                            obj.find(".btnconfirm").attr("href", "/Opportunitys/Detail/" + opts.guid);
+                        } else if (opts.ordertype == 10) {
+                            obj.find(".btnconfirm").attr("href", "/Opportunitys/Detail/" + opts.guid).html("返回机会详情");
+                        } else if (opts.ordertype == 11) {
+                            obj.find(".btnconfirm").attr("href", "/Orders/Detail/" + opts.guid).html("返回订单详情");
                         }
                         obj.find(".cart-product-list").append(innerText);
                     } else {

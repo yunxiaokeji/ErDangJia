@@ -105,6 +105,9 @@ namespace CloudSalesBusiness
                 case EnumLogObjectType.Customer:
                     tablename = "CustomerLog";
                     break;
+                case EnumLogObjectType.Opportunity:
+                    tablename = "OpportunityLog";
+                    break;
                 case EnumLogObjectType.Orders:
                     tablename = "OrdersLog";
                     break;
@@ -166,6 +169,9 @@ namespace CloudSalesBusiness
             {
                 case EnumLogObjectType.Customer:
                     tablename = "CustomerLog";
+                    break;
+                case EnumLogObjectType.Opportunity:
+                    tablename = "OpportunityLog";
                     break;
                 case EnumLogObjectType.Orders:
                     tablename = "OrdersLog";

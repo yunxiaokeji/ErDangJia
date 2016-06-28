@@ -47,11 +47,13 @@ define(function (require, exports, module) {
                 }
             });
         });
+
         //编辑批次
         $(".batch").change(function () {
             var _this = $(this);
             Global.post("/ShoppingCart/UpdateCartBatch", {
                 autoid: _this.data("id"),
+                guid: _self.wareid,
                 batch: _this.val().trim()
             }, function (data) {
                 if (!data.status) {
@@ -71,6 +73,7 @@ define(function (require, exports, module) {
                 $(this).val($(this).data("value"));
             }
         });
+
         //编辑单价
         $(".price").change(function () {
             var _this = $(this);
@@ -78,6 +81,7 @@ define(function (require, exports, module) {
 
                 Global.post("/ShoppingCart/UpdateCartPrice", {
                     autoid: _this.data("id"),
+                    guid: _self.wareid,
                     price: _this.val()
                 }, function (data) {
                     if (!data.Status) {
@@ -95,14 +99,18 @@ define(function (require, exports, module) {
                 _this.val(_this.data("value"));
             }
         });
+
         //删除产品
         $(".ico-del").click(function () {
             var _this = $(this);
-            confirm("确认从购物车移除此产品吗？", function () {
+            confirm("确认移除此产品吗？", function () {
                 Global.post("/ShoppingCart/DeleteCart", {
-                    autoid: _this.data("id")
+                    ordertype: 1,
+                    guid: _self.wareid,
+                    productid: _this.data("id"),
+                    name:""
                 }, function (data) {
-                    if (!data.Status) {
+                    if (!data.status) {
                         alert("系统异常，请重新操作！");
                     } else {
                         _this.parents("tr.item").remove();
@@ -113,12 +121,21 @@ define(function (require, exports, module) {
         });
 
         $("#btnconfirm").click(function () {
+            var bl = false;
+            $(".cart-item").each(function () {
+                bl = true;
+            });
+            if (!bl) {
+                alert("请选择采购产品！");
+                return;
+            }
             confirm("采购单提交后不可编辑，确认提交吗？", function () {
                 _self.submitOrder();
             });
         });
 
     }
+
     //计算总金额
     ObjectJS.getAmount = function () {
         var amount = 0;
@@ -129,11 +146,13 @@ define(function (require, exports, module) {
         });
         $("#amount").text(amount.toFixed(2));
     }
+
     //更改数量
     ObjectJS.editQuantity = function (ele) {
         var _self = this;
         Global.post("/ShoppingCart/UpdateCartQuantity", {
             autoid: ele.data("id"),
+            guid: _self.wareid,
             quantity: ele.val()
         }, function (data) {
             if (!data.Status) {

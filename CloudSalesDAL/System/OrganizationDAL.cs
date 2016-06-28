@@ -227,12 +227,11 @@ namespace CloudSalesDAL
         public bool UpdateUserInfo(string userid, string name, string jobs, DateTime birthday, int age, string departID, string email, string mobilePhone, string officePhone)
         {
             string sql = "update users set Name=@Name,Jobs=@Jobs, Birthday=@Birthday, Age=@Age,DepartID=@DepartID,Email=@Email,MobilePhone=@MobilePhone, OfficePhone=@OfficePhone where UserID=@UserID";
-
             SqlParameter[] paras = { 
                                        new SqlParameter("@UserID",userid),
                                        new SqlParameter("@Name",name),
                                        new SqlParameter("@Jobs",jobs),
-                                       new SqlParameter("@Birthday",birthday),
+                                       new SqlParameter("@Birthday",(birthday==null|| DateTime.MinValue.Equals(birthday)) ?(object)DBNull.Value : birthday),
                                        new SqlParameter("@Age",age),
                                        new SqlParameter("@DepartID",departID),
                                        new SqlParameter("@Email",email),

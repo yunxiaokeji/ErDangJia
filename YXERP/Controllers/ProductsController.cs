@@ -522,6 +522,7 @@ namespace YXERP.Controllers
         #region 产品
 
         [ValidateInput(false)]
+        [ValidateInput(false)]
         public JsonResult SavaProduct(string product)
         {
             int result = 0;

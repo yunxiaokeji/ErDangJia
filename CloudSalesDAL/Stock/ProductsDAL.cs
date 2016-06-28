@@ -556,10 +556,11 @@ namespace CloudSalesDAL
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
-                         decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid)
+                         decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount,
+                         string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
         {
             string id = "";
-            int result = 0;
+            result = 0;
             SqlParameter[] paras = { 
                                        new SqlParameter("@ProductID",SqlDbType.NVarChar,64),
                                        new SqlParameter("@Result",SqlDbType.Int),
@@ -638,9 +639,12 @@ namespace CloudSalesDAL
 
         public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                             int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
-                            decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid)
+                            decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, 
+                            string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
         {
+            result = 0;
             SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",result),
                                        new SqlParameter("@ProductID",productid),
                                        new SqlParameter("@ProductCode",productCode),
                                        new SqlParameter("@ProductName",productName),
@@ -671,8 +675,10 @@ namespace CloudSalesDAL
                                        new SqlParameter("@CreateUserID",operateid),
                                        new SqlParameter("@ClientID",clientid)
                                    };
-
-            return ExecuteNonQuery("P_UpdateProduct", paras, CommandType.StoredProcedure) > 0;
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_UpdateProduct", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
 
         }
 
@@ -691,9 +697,9 @@ namespace CloudSalesDAL
         }
 
         public bool UpdateProductDetails(string detailid, string productid, string productCode, string shapeCode, decimal bigPrice, string attrlist, string valuelist, string attrvaluelist,
-                                         decimal price, decimal weight, string remark, string description, string image)
+                                         decimal price, decimal weight, string remark, string description, string image, out int result)
         {
-            int result = 0;
+            result = 0;
             SqlParameter[] paras = { 
                                        new SqlParameter("@Result",SqlDbType.Int),
                                        new SqlParameter("@DetailID",detailid),

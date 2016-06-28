@@ -524,6 +524,7 @@ namespace YXERP.Controllers
         [ValidateInput(false)]
         public JsonResult SavaProduct(string product)
         {
+            int result = 0;
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             Products model = serializer.Deserialize<Products>(product);
 
@@ -546,20 +547,21 @@ namespace YXERP.Controllers
                 id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
-                                                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+                                                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
             }
             else
             {
                 bool bl = new ProductsBusiness().UpdateProduct(model.ProductID,model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.Status.Value, model.CategoryID, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
-                                                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                                                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
                 if (bl)
                 {
                     id = model.ProductID;
                 }
             }
             JsonDictionary.Add("ID", id);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -652,10 +654,21 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult IsExistsProductCode(string code)
+        public JsonResult IsExistsProductCode(string code, string productid)
         {
-            bool bl = new ProductsBusiness().IsExistProductCode(code, CurrentUser.ClientID);
+            bool bl = new ProductsBusiness().IsExistProductCode(code,productid, CurrentUser.ClientID);
             JsonDictionary.Add("Status", bl);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult IsExistsShapeCode(string code, string productid)
+        {
+            bool bl = new ProductsBusiness().IsExistShapeCode(code, productid, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -692,7 +705,7 @@ namespace YXERP.Controllers
             else
             {
                 bool bl = new ProductsBusiness().UpdateProductDetails(model.ProductDetailID, model.ProductID, model.DetailsCode, model.ShapeCode, model.BigPrice, model.SaleAttr, model.AttrValue, model.SaleAttrValue,
-                                                              model.Price, model.Weight, model.Remark, model.Description, model.ImgS, CurrentUser.UserID, CurrentUser.ClientID); 
+                                                              model.Price, model.Weight, model.Remark, model.Description, model.ImgS, CurrentUser.UserID, CurrentUser.ClientID, out result); 
                 if (bl)
                 {
                     id = model.ProductDetailID;

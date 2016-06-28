@@ -67,11 +67,29 @@ define(function (require, exports, module) {
             var _this = $(this);
             if (_this.val().trim() != "") {
                 Global.post("/Products/IsExistsProductCode", {
-                    code: _this.val()
+                    code: _this.val(),
+                    productid: ""
                 }, function(data) {
                     if (data.Status) {
                         _this.val("");
-                        alert("产品编码已存在,请重新输入!");
+                        alert("产品编码已存在,请重新输入");
+                        _this.focus();
+                    }
+                });
+            }
+        });
+
+        //条形码是否重复
+        $("#shapeCode").blur(function () {
+            var _this = $(this);
+            if (_this.val().trim() != "") {
+                Global.post("/Products/IsExistsShapeCode", {
+                    code: _this.val(),
+                    productid: ""
+                }, function (data) {
+                    if (data.status) {
+                        _this.val("");
+                        alert("条形码已存在,请重新输入");
                         _this.focus();
                     }
                 });
@@ -266,7 +284,7 @@ define(function (require, exports, module) {
         Global.post("/Products/SavaProduct", {
             product: JSON.stringify(Product)
         }, function (data) {
-            if (data.ID.length > 0) {
+            if (data.result == 1) {
                 if (!_self.ProductID) {
                     alert("产品保存成功", function () {
                         location.href = location.href;
@@ -276,6 +294,10 @@ define(function (require, exports, module) {
                         location.href = location.href;
                     });
                 }
+            } else if (data.result == 2) {
+                alert("条形码已存在，保存失败");
+            } else if (data.result == 3) {
+                alert("产品编码已存在，保存失败");
             } else {
                 alert("网络异常，操作失败");
             }
@@ -598,6 +620,38 @@ define(function (require, exports, module) {
             }
         });
 
+        //编码是否重复
+        $("#productCode").blur(function () {
+            var _this = $(this);
+            if (_this.val().trim() != "") {
+                Global.post("/Products/IsExistsProductCode", {
+                    code: _this.val(),
+                    productid: model.ProductID
+                }, function (data) {
+                    if (data.Status) {
+                        _this.val(model.ProductCode);
+                        alert("产品编码已存在,请重新输入");
+                    }
+                });
+            }
+        });
+
+        //条形码是否重复
+        $("#shapeCode").blur(function () {
+            var _this = $(this);
+            if (_this.val().trim() != "") {
+                Global.post("/Products/IsExistsShapeCode", {
+                    code: _this.val(),
+                    productid: model.ProductID
+                }, function (data) {
+                    if (data.status) {
+                        _this.val(model.ShapeCode);
+                        alert("条形码已存在,请重新输入");
+                    }
+                });
+            }
+        });
+
         //checkbox
         $(".checked").click(function () {
             var _this = $(this);
@@ -728,6 +782,7 @@ define(function (require, exports, module) {
                             product: JSON.stringify(Model)
                         }, function (data) {
                             if (data.ID.length > 0) {
+                                Easydialog.close();
                                 Global.post("/Products/GetProductByID", {
                                     productid: model.ProductID,
                                 }, function (data) {
@@ -735,8 +790,11 @@ define(function (require, exports, module) {
                                 });
                             } else if (data.result == 2) {
                                 alert("此规格已存在");
+                            } else if (data.result == 3) {
+                                alert("子产品编码已存在");
                             }
                         });
+                        return false;
                     },
                     callback: function () {
 
@@ -793,7 +851,6 @@ define(function (require, exports, module) {
     }
 
     //
-
     Product.ShowExportExcel = function () {
         $('#show-product-export').empty();
         var guid = Global.guid() + "_";

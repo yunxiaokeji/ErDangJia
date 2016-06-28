@@ -729,10 +729,32 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public bool IsExistProductCode(string code, string clientid)
+        public bool IsExistProductCode(string code, string productid, string clientid)
         {
-            object obj = CommonBusiness.Select("Products", " Count(0) ", "ClientID='" + clientid + "' and ProductCode='" + code + "'");
-            return Convert.ToInt32(obj) > 0;
+            if (string.IsNullOrEmpty(productid))
+            {
+                object obj = CommonBusiness.Select("Products", " Count(0) ", "ClientID='" + clientid + "' and ProductCode='" + code + "' and Status<>9");
+                return Convert.ToInt32(obj) > 0;
+            }
+            else
+            {
+                object obj = CommonBusiness.Select("Products", " Count(0) ", "ClientID='" + clientid + "' and ProductCode='" + code + "' and Status<>9 and ProductID<>'" + productid + "'");
+                return Convert.ToInt32(obj) > 0;
+            }
+        }
+
+        public bool IsExistShapeCode(string code, string productid, string clientid)
+        {
+            if (string.IsNullOrEmpty(productid))
+            {
+                object obj = CommonBusiness.Select("Products", " Count(0) ", "ClientID='" + clientid + "' and ShapeCode='" + code + "' and Status<>9");
+                return Convert.ToInt32(obj) > 0;
+            }
+            else
+            {
+                object obj = CommonBusiness.Select("Products", " Count(0) ", "ClientID='" + clientid + "' and ShapeCode='" + code + "' and Status<>9 and ProductID<>'" + productid + "'");
+                return Convert.ToInt32(obj) > 0;
+            }
         }
 
         public List<Products> GetFilterProducts(string categoryid, List<FilterAttr> Attrs, int doctype, string beginprice, string endprice, string keyWords, string orderby, bool isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
@@ -830,7 +852,8 @@ namespace CloudSalesBusiness
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
-                                 bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, List<ProductDetail> details, string operateid, string agentid, string clientid)
+                                 bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description,
+                                 List<ProductDetail> details, string operateid, string agentid, string clientid, out int result)
         {
             lock (SingleLock)
             {
@@ -858,16 +881,17 @@ namespace CloudSalesBusiness
 
                 var dal = new ProductsDAL();
                 string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
-                                        valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg, shapeCode, description, operateid, clientid);
+                                        valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
+                                        productImg, shapeCode, description, operateid, clientid, out result);
                 //产品添加成功添加子产品
                 if (!string.IsNullOrEmpty(pid))
                 {
                     //日志
                     LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Product, EnumLogType.Create, "", operateid, agentid, clientid);
-                    int result = 0;
+                    int r = 0;
                     foreach (var model in details)
                     {
-                        AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, operateid, clientid, out result);
+                        AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, operateid, clientid, out r);
                     }
                 }
                 return pid;
@@ -923,7 +947,7 @@ namespace CloudSalesBusiness
 
         public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
-                         bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid)
+                         bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
         {
 
             if (!string.IsNullOrEmpty(productImg) && productImg.IndexOf(TempPath) >= 0)
@@ -949,7 +973,8 @@ namespace CloudSalesBusiness
 
             var dal = new ProductsDAL();
             return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid, attrlist,
-                                    valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg, shapeCode, description, operateid, clientid);
+                                    valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg,
+                                    shapeCode, description, operateid, clientid, out result);
         }
 
         public bool UpdateProductDetailsStatus(string productdetailid, EnumStatus status, string operateIP, string operateID)
@@ -958,7 +983,7 @@ namespace CloudSalesBusiness
         }
 
         public bool UpdateProductDetails(string detailid, string productid, string productCode, string shapeCode, decimal bigPrice, string attrlist, string valuelist, string attrvaluelist, decimal price,
-                                         decimal weight, string remark, string description, string productImg, string operateid, string clientid)
+                                         decimal weight, string remark, string description, string productImg, string operateid, string clientid, out int result)
         {
             lock (SingleLock)
             {
@@ -983,7 +1008,7 @@ namespace CloudSalesBusiness
                     }
                 }
                 var dal = new ProductsDAL();
-                return dal.UpdateProductDetails(detailid, productid, productCode, shapeCode, bigPrice, attrlist, valuelist, attrvaluelist, price, weight, remark, description, productImg);
+                return dal.UpdateProductDetails(detailid, productid, productCode, shapeCode, bigPrice, attrlist, valuelist, attrvaluelist, price, weight, remark, description, productImg, out result);
             }
         }
 

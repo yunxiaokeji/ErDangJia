@@ -280,16 +280,125 @@ namespace CloudSalesBusiness
                     return CommonBusiness.GetIndustryID(coulumnValue);
                 case EnumColumnTrans.ConvertUnitName:
                     string unitName = "";
-                    ProductUnit unit= ProductsBusiness.BaseBusiness.GetUnitByID(coulumnValue, clientID);
-                    if (unit != null)
+                    ProductUnit punit= ProductsBusiness.BaseBusiness.GetUnitByID(coulumnValue, clientID);
+                    if (punit != null)
                     {
-                         unitName = unit.UnitName;
+                         unitName = punit.UnitName;
                     }
                     return unitName;
+                case EnumColumnTrans.ConvertUnitID:
+                    string unitID = "";
+                    if (!string.IsNullOrEmpty(coulumnValue))
+                    {
+                        ProductUnit unit = ProductsBusiness.BaseBusiness.GetClientUnits(clientID).Where(x => x.UnitName == coulumnValue).FirstOrDefault();
+                        if (unit != null)
+                        {
+                            unitID = unit.UnitID;
+                        }
+                    }
+                    return unitID;
+                case EnumColumnTrans.ConvertBrandID:
+                    string brandID = "";
+                    if (!string.IsNullOrEmpty(coulumnValue))
+                    {
+                        var brand = ProductsBusiness.BaseBusiness.GetBrandList(clientID).Where(x=>x.Name==coulumnValue.Trim()).FirstOrDefault();
+                        if (brand != null)
+                        {
+                            brandID = brand.BrandID;
+                        }
+                    }
+                    return brandID;
+                case EnumColumnTrans.ConvertCategoryID:
+                    string categoryID = "";
+                    if (!string.IsNullOrEmpty(coulumnValue))
+                    {
+                        var category = ProductsBusiness.BaseBusiness.GetCategorys(clientID).Where(x => x.CategoryName == coulumnValue.Trim()).FirstOrDefault();
+                        if (category != null)
+                        {
+                            categoryID = category.CategoryID;
+                        }
+                    }
+                    return categoryID;
                 default:
                     return coulumnValue;
             }
+        } 
+
+
+        public T GetProductByDataRow<T>(DataRow dr, Dictionary<string, ExcelModel> listColumn, T entity,Dictionary<string,ExcelFormatter> formatters,string clientID="")
+        {
+            
+            foreach (var property in entity.GetType().GetProperties())
+            {
+                var propertyname = property.Name.ToLower();
+                var defaulvalue = listColumn.FirstOrDefault(q => q.Value.ColumnName.ToLower() == propertyname);
+                if (default(KeyValuePair<string, ExcelModel>).Equals(defaulvalue))
+                {
+                    defaulvalue = listColumn.FirstOrDefault(q => q.Value.ImportColumn.ToLower() == propertyname);
+                }
+                if (!default(KeyValuePair<string, ExcelModel>).Equals(defaulvalue))
+                {
+                    var propname = defaulvalue.Value.Title;
+                    var drvalue = dr[propname] != null && dr[propname] != DBNull.Value ? dr[propname].ToString() : "";
+                    if (formatters != null && formatters.Count > 0 && formatters.ContainsKey(defaulvalue.Value.ColumnName))
+                    {
+                        ExcelFormatter excelFormatter = formatters[defaulvalue.Value.ColumnName];
+                        drvalue = FormatterCoulumn(drvalue, excelFormatter.ColumnTrans,clientID);
+                    }
+                    switch (defaulvalue.Value.DataType)
+                    {
+                        case "int":
+                            property.SetValue(entity,string.IsNullOrEmpty(drvalue)?-1: drvalue == "是" ? 1 : drvalue == "否" ? 0 : Convert.ToInt32(dr[propname]),
+                                null);
+                            break;
+                        case "string":
+                            object[] objArray = property.GetCustomAttributes(false);
+                            if (objArray.Length > 0)
+                            {
+                                if ((objArray[0] as Property).Value.ToLower() == "lower")
+                                {
+                                    property.SetValue(entity,
+                                       string.IsNullOrEmpty(drvalue) ? "" : drvalue.ToString().ToLower().Replace("\"", "“"),
+                                        null);
+                                }
+                                else if ((objArray[0] as Property).Value.ToLower() == "upper")
+                                {
+                                    property.SetValue(entity,
+                                       string.IsNullOrEmpty(drvalue) ? "" : drvalue.ToString().ToUpper().Replace("\"", "“"),
+                                        null);
+                                }
+                            }
+                            else
+                            {
+                                property.SetValue(entity,
+                                     string.IsNullOrEmpty(drvalue) ? "" : drvalue.ToString().Replace("\"", "“"),
+                                    null);
+                            }
+                            break;
+                        case "decimal":
+                            property.SetValue(entity,
+                               !string.IsNullOrEmpty(drvalue) ? Convert.ToDecimal(drvalue): 0,
+                                null);
+                            break;
+                        case "datetime":
+                            property.SetValue(entity,
+                                !string.IsNullOrEmpty(drvalue) ? Convert.ToDateTime(drvalue) : DateTime.MinValue,
+                                null);
+                            break;
+                        case "bool":
+                            property.SetValue(entity,
+                                 !string.IsNullOrEmpty(drvalue) ? Convert.ToBoolean(drvalue)  : false,
+                               null);
+                            break;
+                        default:
+                            property.SetValue(entity, drvalue, null);
+                            break;
+                    }
+                }
+            }
+            return entity; ;
         }
+
     }
     /// <summary>
     /// Column特殊列格式化方法选择 Status PayStatus OrderStatus CreateTime 等
@@ -343,7 +452,19 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 格式化单位
         /// </summary>
-        ConvertUnitName=11
+        ConvertUnitName=11,
+        /// <summary>
+        /// 格式化单位ID
+        /// </summary>
+        ConvertUnitID=12,
+        /// <summary>
+        /// 格式化品牌ID
+        /// </summary>
+        ConvertBrandID=13,
+        /// <summary>
+        /// 格式化分类ID
+        /// </summary>
+        ConvertCategoryID = 14
 
     }
 
@@ -385,7 +506,10 @@ namespace CloudSalesBusiness
         public bool IsfFomat { get; set; }
         public int Type { get; set; }
         public int TestType { get; set; }
+        public int ImportType { get; set; }
+        public string ImportColumn { get; set; }
         public string DataSource { get; set; }
+        public string DataType { get; set; }
         public string DefaultText { get; set; }
     }
 

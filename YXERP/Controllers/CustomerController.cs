@@ -129,13 +129,13 @@ namespace YXERP.Controllers
              Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
             if (string.IsNullOrEmpty(filter))
             {
-                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "",CurrentUser.ClientID );
+                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "export",CurrentUser.ClientID );
             }
             else
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer(); 
                 qicCustomer=serializer.Deserialize<FilterCustomer>(filter);
-                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "", CurrentUser.ClientID);
+                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "export", CurrentUser.ClientID);
             }
             var excelWriter = new ExcelWriter();
             foreach (var key in listColumn)

@@ -417,7 +417,9 @@ define(function (require, exports, module) {
         $("#exportExcel").click(function () {
             _self.ShowExportExcel();
         });
-
+        $('#exportProduct').click(function () {
+            Dialog.exportModel("/Products/ExportFromProduct", { filter: JSON.stringify(Params), filleName: "产品导出" });
+        });
         $("#dropdown").click(function () {
             var position = $("#dropdown").position(); 
             $(".dropdown-ul").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
@@ -850,7 +852,7 @@ define(function (require, exports, module) {
         });
     }
 
-    //
+    //  
     Product.ShowExportExcel = function () {
         $('#show-product-export').empty();
         var guid = Global.guid() + "_";

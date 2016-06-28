@@ -767,13 +767,14 @@ namespace YXERP.Controllers
             Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
             if (string.IsNullOrEmpty(filter))
             {
-                listColumn = GetColumnForJson("product", ref dic, model, test ? "test" : "",CurrentUser.ClientID);
+                listColumn = GetColumnForJson("product", ref dic, model, test ? "test" : "export", CurrentUser.ClientID);
             }
             else
             {  
                 qicProduct = serializer.Deserialize<FilterProduct>(filter);
-                listColumn = GetColumnForJson("product", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "test" : "", CurrentUser.ClientID);
+                listColumn = GetColumnForJson("product", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "test" : "export", CurrentUser.ClientID);
             }
+            string ipPath = "";
             var excelWriter = new ExcelWriter();
             foreach (var key in listColumn)
             {
@@ -796,19 +797,107 @@ namespace YXERP.Controllers
             else
             {
                 int totalCount = 0;
-                int pageCount = 0;
-                //客户
+                int pageCount = 0; 
+                ipPath= Server.MapPath("~");
                 dt = new ProductsBusiness().GetProductListDataTable(qicProduct.CategoryID, qicProduct.BeginPrice, qicProduct.EndPrice, qicProduct.Keywords, qicProduct.OrderBy, qicProduct.IsAsc, PageSize, qicProduct.PageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
 
             }
-            buffer = excelWriter.Write(dt, dic);
-            var fileName = filleName + (test ? "导入模版" : "");
+            buffer = excelWriter.Write(dt, dic, ipPath);
+            var fileName = filleName + (test ? "导入模版" : "")+DateTime.Now.ToString("yyyyMMdd");
             if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
                 fileName = HttpUtility.UrlEncode(fileName);
             this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
             return File(buffer, "application/ms-excel");
 
         }
+
+        [HttpPost]
+        public ActionResult ProductImport(HttpPostedFileBase file)
+        {
+            string mes = "";
+            if (file == null) { return Content("请选择要导入的文件"); }
+            if (file.ContentLength > 2097152)
+            {
+                return Content("导入文件超过规定（2M )大小,请修改后再操作.");
+            }
+            if (!file.FileName.Contains(".xls") && !file.FileName.Contains(".xlsx"))
+            {
+                return Content("文件格式类型不正确");
+            }
+            try
+            {
+                DataTable dt = ImportExcelToDataTable(file);
+                if (dt.Columns.Count > 0)
+                {
+                    ///1.获取系统模版列 
+                    Dictionary<string, ExcelFormatter> dic=new Dictionary<string, ExcelFormatter>();
+                    Dictionary<string, ExcelModel> listColumn = GetColumnForJson("product", ref dic, "",  "import", CurrentUser.ClientID);
+                    ;//GetColumnForJson("product", "Item");
+                    ///2.上传Excel 与模板中列是否一致 不一致返回提示
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        if (default(KeyValuePair<string, ExcelModel>).Equals(listColumn.FirstOrDefault(x => x.Value.Title == dc.ColumnName)))
+                        {
+                            mes += dc.ColumnName + ",";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(mes))
+                    {
+                        return Content("Excel模版与系统模版不一致,请重新下载模板,编辑后再上传.错误:缺少列 " + mes);
+                    }
+                    ///3.开始处理
+                    int k = 1;
+                    var excelWriter = new ExcelWriter();
+                    List<Products> list = new List<Products>();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        try
+                        {
+                            Products product=new Products();
+                            excelWriter.GetProductByDataRow(dr, listColumn, product,dic,CurrentUser.ClientID);
+                            product.CreateUserID = CurrentUser.UserID;
+                            product.ClientID = CurrentUser.ClientID;
+                            product.BigUnitID = "";
+                            list.Add(product);
+                        }
+                        catch (Exception ex)
+                        {
+                            mes += k +" 原因:"+ex.Message+ ",";
+                        }
+                    }
+                    try
+                    {
+                        if (list.Count > 0)
+                        {
+                          mes= ExcelImportBusiness.InsertProduct(list);
+
+                        }
+                        if (!string.IsNullOrEmpty(mes))
+                        {
+                            return Content("部分数据未导入成功,原因如下 ：" + mes);
+                        }
+                        else
+                        {
+                            return Content("操作成功");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content("系统异常:请联系管理员,错误原因" + ex.Message);
+                    }
+
+                }
+                if (!string.IsNullOrEmpty(mes))
+                {
+                    return Content("部分数据未导入成功,Excel行位置" + mes);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Content("系统异常:请联系管理员,错误原因:" + ex.Message.ToString());
+            }
+            return Content(mes);
+        } 
 
         #endregion
 

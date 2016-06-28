@@ -15,6 +15,7 @@ using Xfrog.Net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using System.Web.Services.Description;
 using CloudSalesBusiness.Custom; 
 
 namespace YXERP.Controllers
@@ -101,6 +102,7 @@ namespace YXERP.Controllers
             excelWriter.Map("District", "区");
             excelWriter.Map("Address", "详细地址");
             excelWriter.Map("Description", "描述");
+          
             byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserById(CurrentUser.UserID),
                 new Dictionary<string, ExcelFormatter>()
                 {
@@ -127,13 +129,13 @@ namespace YXERP.Controllers
              Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
             if (string.IsNullOrEmpty(filter))
             {
-                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "",CurrentUser.ClientID );
+                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "export",CurrentUser.ClientID );
             }
             else
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer(); 
                 qicCustomer=serializer.Deserialize<FilterCustomer>(filter);
-                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "", CurrentUser.ClientID);
+                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "export", CurrentUser.ClientID);
             }
             var excelWriter = new ExcelWriter();
             foreach (var key in listColumn)

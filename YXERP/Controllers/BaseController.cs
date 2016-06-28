@@ -453,10 +453,13 @@ namespace YXERP.Controllers
             excelModel.ColumnName = key;
             excelModel.IsHide = Convert.ToBoolean(jChild["hide"]);
             excelModel.IsfFomat = Convert.ToBoolean(jChild["format"]);
-            excelModel.Type = Convert.ToInt32(jChild["type"]);
-            excelModel.TestType = Convert.ToInt32(jChild["testtype"]);
+            excelModel.Type = Convert.ToInt32(jChild["exporttype"]);
+            excelModel.TestType = Convert.ToInt32(jChild["testexporttype"]);
             excelModel.DataSource = jChild["datasource"].ToString();
             excelModel.DefaultText = jChild["defaulttext"].ToString();
+            excelModel.DataType = jChild["datatype"].ToString();
+            excelModel.ImportType = Convert.ToInt32(jChild["importtype"]);
+            excelModel.ImportColumn = jChild["importcolumn"].ToString();
             return excelModel;
         }
 
@@ -496,5 +499,6 @@ namespace YXERP.Controllers
             }
             return dic;
         }
+      
     }
 }

@@ -71,6 +71,7 @@ namespace YXERP.Controllers
         {
             return View();
         }
+
         public ActionResult ProductImport()
         {
             return View();
@@ -521,7 +522,6 @@ namespace YXERP.Controllers
 
         #region 产品
 
-        [ValidateInput(false)]
         [ValidateInput(false)]
         public JsonResult SavaProduct(string product)
         {

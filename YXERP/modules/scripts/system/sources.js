@@ -3,7 +3,7 @@
         doT = require("dot"),
         Verify = require("verify"), VerifyObject,
         Easydialog = require("easydialog");
-   
+
     require("switch");
     var $ = require('jquery');
     require("color")($);
@@ -319,6 +319,7 @@
             $("#colorItem").html(urlItem);
             $("#colorItem").find(".color-item").click(function () {
                 var _this = $(this);
+
                 var position = _this.position(); 
                 $(".colordrop li").data("id", _this.data("id"));
                 $(".colordrop").css({ "top": position.top+45, "left": position.left+30 }).show().mouseleave(function () {

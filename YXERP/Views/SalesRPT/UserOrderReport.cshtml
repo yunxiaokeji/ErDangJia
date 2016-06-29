@@ -18,46 +18,57 @@
     </ul>
 </div>
  
-<div class="mLeft20  " title="日期">
-    <div class="left hide seachType mRight5" id="seachType"></div>
+<div class="mLeft20  " title="日期"> 
     <div class="left hide mRight5 seachType" id="seachOrderType"></div>
     <input type="text" id="iptCreateTime" placeholder="日期" class="ipt-date"/>
 </div> 
 <div class="content-body mTop10"> 
-        <table id="userTotalRPT" class="table-list-rpt tab-content">
-            <tr class="tr-header">
-                <td class="width50 tLeft"></td>
-                <td class="tLeft">名称</td>
-                @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>) ViewBag.Types)
-                {
-                    <td colspan="2">@(model.TypeName)</td>
-                }
-                <td colspan="2">合计</td>
-            </tr>
-            <tr class="tr-header" id="tr-header">
-                <td class="width50 tLeft"></td>
-                <td class="tLeft"></td>
-                @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>) ViewBag.Types)
-                {
-                    <td>订单数</td>
-                    <td>总金额</td>
-                }
+    <table id="userTotalRPT" class="table-list-rpt tab-content">
+        <tr class="tr-header">
+            <td class="width50 tLeft"></td>
+            <td class="tLeft">名称</td>
+            @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>) ViewBag.Types)
+            {
+                <td colspan="2">@(model.TypeName)</td>
+            }
+            <td colspan="2">合计</td>
+        </tr>
+        <tr class="tr-header" id="tr-header">
+            <td class="width50 tLeft"></td>
+            <td class="tLeft"></td>
+            @foreach (var model in (List<CloudSalesEntity.OrderTypeEntity>) ViewBag.Types)
+            {
                 <td>订单数</td>
                 <td>总金额</td>
-            </tr>
-        </table>
- 
-        <ul id="userRPT" class="left tab-content hide">
-            <li  class="left">
+            }
+            <td>订单数</td>
+            <td>总金额</td>
+        </tr>
+    </table>
+    <div id="userRPT" class="tab-content hide" >
+        <ul class="left ">
+            <li class="left">
                 <table id="TotalList" class="table-list-rpt">
                     <tr class="tr-header">
                         <td>团队名称</td>
                         <td>员工名称</td>
-                        <td class="ordertypetitle">总 计</td>
+                        <td class="ordertypetitle" data-name="数量总计">数量总计</td>
                     </tr>
                 </table>
-            </li> 
+            </li>
         </ul>
+        <ul class="left mLeft20">
+            <li class="left">
+                <table id="MoneyList" class="table-list-rpt">
+                    <tr class="tr-header">
+                        <td>团队名称</td>
+                        <td>员工名称</td>
+                        <td class="ordertypetitle" data-name="金额总计">金额总计</td>
+                    </tr>
+                </table>
+            </li>
+        </ul>
+    </div>
 </div>
 
 

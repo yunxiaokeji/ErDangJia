@@ -35,10 +35,12 @@ namespace YXERP.Controllers
             ViewBag.ColorData = SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.ClientID).ToList();
             return View("Customers");
         }
+
         public ActionResult CustomerImport()
         { 
             return View();
         }
+
         public ActionResult BranchCustomer()
         {
             ViewBag.Title = "下属客户";

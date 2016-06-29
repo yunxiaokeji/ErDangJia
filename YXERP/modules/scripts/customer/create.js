@@ -1,9 +1,7 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
         City = require("city"), CityObject,
-        Verify = require("verify"), VerifyObject;
-
-
+        Verify = require("verify"), VerifyObject; 
     var ObjectJS = {};
     //初始化
     ObjectJS.init = function (activityid) {
@@ -47,10 +45,7 @@
             }
             _self.isLoading = true;
             _self.saveModel();
-        });
-
-       
-
+        }); 
         VerifyObject = Verify.createVerify({
             element: ".verify",
             emptyAttr: "data-empty",
@@ -68,7 +63,6 @@
                 _this.addClass("ico-checked").removeClass("ico-check");
             }
         });
-
         $("#name").focus();
     }
 
@@ -102,7 +96,6 @@
                 alert("客户创建失败,请稍后重试!");
                 _self.isLoading = false;
             }
-            
         });
     }
 

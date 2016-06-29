@@ -65,8 +65,7 @@
                     Params.beginTime = new Date().setFullYear(new Date().getFullYear() - 1).toString().toDate("yyyy-MM-dd");
                 } else if (Params.dateType == 4) {
                     Params.beginTime = new Date().setMonth(new Date().getMonth() - 3).toString().toDate("yyyy-MM-dd");
-                }
-                else if (Params.dateType == 5) {
+                } else if (Params.dateType == 5) {
                     Params.beginTime = new Date().setMonth(new Date().getMonth() - 1).toString().toDate("yyyy-MM-dd");
                 } 
                 if (_this.data("endtime")) {
@@ -82,7 +81,6 @@
                 }
                 $(".search-type .hover").data("endtime", Params.endTime);
             }
-
         });
 
         require.async("choosebranch", function () {
@@ -195,7 +193,7 @@
                     type: 'line',
                     stack: '总量',
                     data: _items
-                })
+                });
             }
 
             option = {

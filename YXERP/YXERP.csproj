@@ -563,6 +563,7 @@
     <Content Include="modules\scripts\customerrpt\userrpt.js" />
     <Content Include="modules\scripts\customer\customer.js" />
     <Content Include="modules\scripts\customer\create.js" />
+    <Content Include="modules\scripts\customer\customerownrpt.js" />
     <Content Include="modules\scripts\customer\detail.js" />
     <Content Include="modules\scripts\finance\detail.js" />
     <Content Include="modules\scripts\finance\payablebills.js" />
@@ -800,6 +801,7 @@
     <Content Include="Views\MyAccount\MyFeedBack.cshtml" />
     <Content Include="Views\Customer\CustomerImport.cshtml" />
     <Content Include="Views\Products\ProductImport.cshtml" />
+    <Content Include="Views\Customer\CustomerOwnRPT.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

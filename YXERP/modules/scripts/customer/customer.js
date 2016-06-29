@@ -42,10 +42,7 @@
     }
     //绑定事件
     ObjectJS.bindEvent = function (type) {
-        var _self = this;
-        $(document).click(function (e) {
-
-        });
+        var _self = this; 
         //客户阶段
         $(".search-stages li").click(function () {
             var _this = $(this);
@@ -246,7 +243,7 @@
                     });
                     
                 } else {
-                    alert("您尚未选择客户!")
+                    alert("您尚未选择客户!");
                 }
             }
         });
@@ -334,9 +331,7 @@
 
                     }
                 });
-
                 $(".customer-list").append(innerhtml);
-
             });
         } else {
             $(".customer-list").append("<div class='nodata-box' >暂无客户<div>");
@@ -424,8 +419,7 @@
                 }
             },
             guid: guid
-        }); 
-      
+        });  
     }
 
     module.exports = ObjectJS;

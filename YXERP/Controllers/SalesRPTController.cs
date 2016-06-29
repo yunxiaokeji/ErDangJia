@@ -39,10 +39,10 @@ namespace YXERP.Controllers
 
         #region 销售订单统计
 
-        public JsonResult GetUserOrders(int type,string userid, string teamid, string beginTime, string endTime,int desctype,string ordertype)
+        public JsonResult GetUserOrders(int type,string userid, string teamid, string beginTime, string endTime,string ordertype)
         {
-           
-            var list = SalesRPTBusiness.BaseBusiness.GetUserOrders(userid, teamid, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID,ordertype);
+
+            var list = SalesRPTBusiness.BaseBusiness.GetUserOrders(userid, teamid, beginTime, endTime, CurrentUser.AgentID, CurrentUser.ClientID, ordertype);
 
             if (type == 2)
             {
@@ -50,7 +50,8 @@ namespace YXERP.Controllers
                 
                 List<TypeOrderEntity> listcustomer = new List<TypeOrderEntity>();
                 list.ForEach(x => listcustomer.AddRange(x.ChildItems));
-                customerlist.Add("TotalList", listcustomer.OrderByDescending(x => (desctype > 1 ? x.TCount : x.TMoney)).Take(15).ToList());
+                customerlist.Add("TotalList", listcustomer.OrderByDescending(x =>  x.TCount).Take(15).ToList());
+                customerlist.Add("MoneyList", listcustomer.OrderByDescending(x =>  x.TMoney).Take(15).ToList());
                 JsonDictionary.Add("items", customerlist);
             }
             else

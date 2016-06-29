@@ -8,13 +8,12 @@
         userid: "",
         teamid: "",
         beginTime: "",
-        endTime: "",
-        desctype: 1,
+        endTime: "", 
         ordertype:""
-};
+    };
 
     var ObjectJS = {};
-    //初始化
+ 
     ObjectJS.init = function (types) {
         var _self = this;
         _self.typeList = JSON.parse(types.replace(/&quot;/g, '"'));
@@ -50,27 +49,7 @@
             Params.beginTime = start ? start.format("YYYY-MM-DD") : "";
             Params.endTime = end ? end.format("YYYY-MM-DD") : "";
             _self.clicktab();
-        });
-        require.async("dropdown", function() {
-            var seachType = [
-                { name: "按数量", value: "1" },
-                { name: "按金额", value: "2" }
-            ];
-
-            $("#seachType").dropdown({
-                prevText: "排序-",
-                defaultText: "按数量",
-                defaultValue: "1",
-                data: seachType,
-                dataValue: "value",
-                dataText: "name",
-                width: "140",
-                onChange: function(data) {
-                    Params.desctype = data.value;
-                    _self.clicktab();
-                }
-            });
-        });
+        }); 
         require.async("dropdown", function () { 
             $("#seachOrderType").dropdown({
                 prevText: "",
@@ -104,8 +83,10 @@
         $("#tr-header").nextAll().remove();
         Global.post("/SalesRPT/GetUserOrders", Params, function (data) {
             if (Params.type == 2) {
-                $('.ordertypetitle').html($('#seachOrderType div').eq(0).html()+'总计');
-                var crslist = ['TotalList'];
+                $('.ordertypetitle').each(function (i, v) { 
+                    $(v).html($('#seachOrderType div').eq(0).html() + $(this).data('name'));
+                }); 
+                var crslist = ['TotalList', 'MoneyList'];
                 for (var j = 0; j < crslist.length; j++) {
                     $("#" + crslist[j] + " .tr-header").nextAll().remove();
                     var innerhtml = '';
@@ -113,7 +94,7 @@
                         for (var i = 0; i < data.items[crslist[j]].length; i++) {
                             innerhtml += '<tr class="item-tr"><td class="center">' + data.items[crslist[j]][i].PName + '</td>' +
                                 '<td class="center">' + data.items[crslist[j]][i].Name + '</td>' +
-                                '<td class="center">' + (Params.desctype == 1 ? data.items[crslist[j]][i].TCount : data.items[crslist[j]][i].TMoney) + '</td>' +
+                                '<td class="center">' + (crslist[j] == "TotalList" ? data.items[crslist[j]][i].TCount : data.items[crslist[j]][i].TMoney) + '</td>' +
                                 '</tr>';
                         }
                     } else {
@@ -181,12 +162,10 @@
                             }
                             _this.addClass("ico-check").removeClass("ico-checked");
                         }
-
                         _self.reportTotal();
-
                     });
 
-                    //展开
+                    /*展开*/
                     innerhtml.find(".open-child").click(function() {
                         var _this = $(this);
                         if (!_this.data("first") || _this.data("first") == 0) {
@@ -233,7 +212,7 @@
         });
     }
 
-    //汇总
+    /*汇总*/ 
     ObjectJS.reportTotal = function () {
         var total = 0, money = 0;
         $("#userTotalRPT").find(".useritemcounttotal").each(function () {

@@ -83,7 +83,7 @@
         var _self = this;
         if (Params.type == 1) {
             _self.customermap();
-        }else if (Params.type == 2 || Params.type == 3 || Params.type == 4) {
+        } else if (Params.type == 2 || Params.type == 3 || Params.type == 4) {
             _self.customerindustry();
         } else if (Params.type == 5 || Params.type == 6) {
             if (Params.type == 5) {
@@ -114,12 +114,10 @@
             var selDataItems = [];
             var selNameItems = [];
             var total = 0;
-            for (var i = 0; len = data.items.length, i < len; i++)
-            {
+            for (var i = 0; len = data.items.length, i < len; i++) {
                 maxCount = parseInt(data.items[0].value);
                 total += data.items[i].value;
-                if (i < 3)
-                {
+                if (i < 3) {
                     selDataItems.push({name: data.items[i].name,value:data.items[i].value });
                     selNameItems.push(data.items[i].name);
                     data.items[i].selected = true;
@@ -190,7 +188,7 @@
                 ]
             };
             var ecConfig = require('echarts/config');
-            _self.customermapChart.on(ecConfig.EVENT.MAP_SELECTED, function (param) {
+            _self.customermapChart.on(ecConfig.EVENT.MAP_SELECTED, function(param) {
                 var selected = param.selected;
                 var mapSeries = option.series[0];
                 var data = [];
@@ -209,7 +207,7 @@
                 option.legend.data = legendData;
                 option.series[1].data = data;
                 _self.customermapChart.setOption(option, true);
-            })
+            });
             _self.customermapChart.hideLoading();
             _self.customermapChart.setOption(option);
         });
@@ -236,8 +234,11 @@
 
             var ExtentArr = ["0-49人", "50-99人", "100-199人", "200-499人", "500-999人", "1000+人"];
             titleRPT = "客户行业占比";
-            if (Params.type == 3){titleRPT = "客户规模占比";}
-            else if (Params.type == 4) { titleRPT = "客户标签占比"; }
+            if (Params.type == 3) {
+                titleRPT = "客户规模占比";
+            } else if (Params.type == 4) {
+                titleRPT = "客户标签占比";
+            }
             for (var i = 0, j = data.items.length; i < j; i++) {
                 total += data.items[i].value;
                 if (Params.type == 3) {
@@ -250,7 +251,6 @@
                 title.push(data.items[i2].name);
                 items.push(data.items[i2]);
             }
-
 
             option = {
                 title: {
@@ -289,13 +289,9 @@
                         data: items
                     }
                 ]
-            };
-
-
+            }; 
             _self.customerindustryRPT.hideLoading();
             _self.customerindustryRPT.setOption(option);
-            title = []; items = [];
-
         });
     }
     ///团队汇总
@@ -361,8 +357,7 @@
                                 innerhtml.find(".check").addClass("ico-check").removeClass("ico-checked");
                             }
                             _this.addClass("ico-check").removeClass("ico-checked");
-                        }
-
+                        } 
                         _self.reportTotal();
 
                     });

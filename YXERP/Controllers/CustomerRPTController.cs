@@ -94,11 +94,11 @@ namespace YXERP.Controllers
 
         #region 客户转化率
 
-        public JsonResult GetCustomerStageRate(int type, string beginTime, string endTime)
+        public JsonResult GetCustomerStageRate(int type, string beginTime, string endTime,string ownerid)
         {
             if (type<2)
             {
-                var list = CustomerRPTBusiness.BaseBusiness.GetCustomerStageRate(beginTime, endTime, type, CurrentUser.ClientID);
+                var list = CustomerRPTBusiness.BaseBusiness.GetCustomerStageRate(beginTime, endTime, type, CurrentUser.ClientID, ownerid);
                 JsonDictionary.Add("items", list);
             }
             else if (type == 2 || type == 3)

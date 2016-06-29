@@ -219,7 +219,7 @@ namespace CloudSalesDAL
 
         #region 编辑/删除
 
-        public bool UpdateCustomer(string customerid, string name, int type, string industryid, int extent, string citycode, string address,
+        public bool UpdateCustomer(string customerid, string name, int type, string industryid, int extent, string citycode, string address, string contactName,
                                    string mobile, string officephone, string email, string jobs, string desc, string operateid, string agentid, string clientid)
         {
             SqlParameter[] paras = { 
@@ -233,6 +233,7 @@ namespace CloudSalesDAL
                                      new SqlParameter("@MobilePhone" , mobile),
                                      new SqlParameter("@OfficePhone" , officephone),
                                      new SqlParameter("@Email" , email),
+                                     new SqlParameter("@ContactName" , contactName),
                                      new SqlParameter("@Jobs" , jobs),
                                      new SqlParameter("@Description" , desc),
                                      new SqlParameter("@CreateUserID" , operateid),

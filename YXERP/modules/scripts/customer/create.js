@@ -66,11 +66,6 @@
             if (!_this.hasClass("ico-checked")) {
                 $(".customtype").removeClass("ico-checked").addClass("ico-check");
                 _this.addClass("ico-checked").removeClass("ico-check");
-                if (_this.data("type") == 1) {
-                    $(".company").show();
-                } else {
-                    $(".company").hide();
-                }
             }
         });
 

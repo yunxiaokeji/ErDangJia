@@ -54,7 +54,8 @@
         $("#lblExtent").text(model.ExtentStr || "--");
         $("#lblCity").text(model.City ? model.City.Description : "--");
         $("#lblAddress").text(model.Address || "--");
-        $("#lblTime").text(model.CreateTime.toDate("yyyy-MM-dd hh:mm:ss"));
+        $("#lblContactName").text(model.ContactName || "--");
+        $("#lblJobs").text(model.Jobs || "--");
         $("#lblUser").text(model.CreateUser ? model.CreateUser.Name : "--");
 
         $("#lblSource").text(model.Source ? model.Source.SourceName : "--");
@@ -71,13 +72,9 @@
         $("#changeOwner").data("userid", model.OwnerID);
         $("#lblReamrk").text(model.Description);
 
-        if (model.Type == 0) {
-            $("#lblType").html("人")
-            $(".companyinfo").hide();
-        } else {
-            $("#lblType").html("企")
-            $(".companyinfo").show();
-        }
+        if (model.Type == 1) {
+            $("#lblType").html("企");
+        } 
     }
 
     //绑定事件
@@ -614,6 +611,8 @@
                         var entity = {
                             CustomerID: model.CustomerID,
                             Name: $("#name").val().trim(),
+                            Jobs: $("#jobs").val().trim(),
+                            ContactName: $("#contactName").val().trim(),
                             Type: $("#companyCustom").hasClass("ico-checked") ? 1 : 0,
                             IndustryID: $("#industry").val().trim(),
                             Extent: $("#extent").val().trim(),
@@ -649,21 +648,12 @@
             if (model.IndustryID) {
                 $("#industry").val(model.IndustryID);
             }
-
-            if (model.Type == 0) {
-                $(".edit-company").hide();
-            }
             //切换类型
             $(".customtype").click(function () {
                 var _this = $(this);
                 if (!_this.hasClass("ico-checked")) {
                     $(".customtype").removeClass("ico-checked").addClass("ico-check");
                     _this.addClass("ico-checked").removeClass("ico-check");
-                    if (_this.data("type") == 1) {
-                        $(".edit-company").show();
-                    } else {
-                        $(".edit-company").hide();
-                    }
                 }
             });
         });

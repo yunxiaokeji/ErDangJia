@@ -1,35 +1,38 @@
 ﻿
+/*客户列表卡片样式*/
+.customer-list { overflow:auto; }
+.customer-list .hover{border:1px solid #007aff;}
+.customer-list .hover .check {display:inline-block;}
 
-/*客户详情页*/
-.header-box .customer-type { background-color:#4a98e7; float:left; height:22px; width:22px; border-radius:11px; line-height:18px; text-align:center; 
-                             font-size:14px; color:#fff; margin-top:5px;}
+.customer-card { width:248px; border-spacing:0px; border:1px solid #ccc; float:left; margin-bottom:20px;}
+.customer-card:hover{ border:1px solid #007aff; }
+.customer-card:hover .check{ display:block;cursor:pointer; }
+.customer-card .check{ float:right;width:20px;height:20px;border:1px solid #007aff;margin-top:-1px;margin-right:-1px;border-radius:0 3px 0 0;
+                    box-shadow:0 0 2px #4a98e7 inset;color:#fff;display:none;}
+.customer-card .check.hover{background-color:#4a98e7;color:#fff;font-size:18px;}
 
+.customer-card .customer-name{ height:25px; line-height:25px; margin:5px 0 10px 5px;}
+.customer-card .customer-name .name{ width:180px; margin-left:5px;}
+.customer-card .customer-name .name a{ font-size:15px;line-height:26px;color:#2162A5; }
+
+
+.customer-card .info li{ margin-left:5px;height:25px; cursor:pointer; margin-top:5px; color:#333;}
+.customer-card .info .iconfont { font-size:14px;color:#888;margin-right:10px;}
+.customer-card .info .photo{width:20px;height:20px;border-radius:10px; float:left;}
+.customer-card .info span { display:inline-block; line-height:25px;}
+
+.customer-card .order-count { border-top:solid 1px #ccc; height:30px; background-color:#f9f9f9; margin-top:5px; }
+.customer-card .order-count li { float:left; height:30px; line-height:30px; }
+.customer-card .order-count a {text-decoration:underline;}
+.customer-card .order-count a:hover { color:red; }
+
+.customer-type { background-color:#4a98e7; float:left; height:20px; width:20px; border-radius:10px; line-height:16px; text-align:center; 
+                  font-size:14px; color:#fff;}
+
+/*客户详情页*/                            
 .header-box .ico-edit { margin-top:7px; margin-left:30px; float:left; }
 
-/*阶段*/
-.stage-items { height:40px; width:80%; }
-.stage-items  li{ float:left; height:40px; position:relative; cursor:pointer;  margin-right:5px;}
-.stage-items  li { background-color:#4a98e7;}
-.stage-items  li:hover{ background-color:#2F73B8;}
-.stage-items  li.hover{ background-color:#174A7F;}
-.stage-items  li span{ float:left; display:inline-block;}
-
-.stage-items  li .bg { position:absolute;border-bottom:solid 20px transparent; border-top:solid 20px transparent; }
-.stage-items  li .leftbg{ left:0px; z-index:101; border-left:solid 15px #fff;}
-.stage-items  li .name{ height:40px; line-height:40px; text-align:center; color:#eee; width:100%;}
-.stage-items  li .rightbg{ right:-15px; z-index:102; border-left:solid 15px #4a98e7;}
-
-.stage-items  li:hover .name{ color:#fff; }
-.stage-items  li:hover .rightbg{ border-left:solid 15px #2F73B8; }
-.stage-items  li.hover .rightbg{ border-left:solid 15px #174A7F; }
-.stage-items  .hover .name{ color:#fff; }
-
-/*阶段行为项*/
-.stageitems { width:100%; overflow:auto; }
-.stageitems li{ width:33%; height:25px; min-width:200px; line-height:25px; float:left; color:#666; text-indent:5px; }
-
-
-/*选择仓库*/
+/*选择订单类型*/
 .ordertype-items { width:336px; overflow:auto; }
 .ordertype-items li{ width:100px; height:35px; float:left; line-height:35px; border:solid 1px #ccc; margin:10px 5px; text-align:center; cursor:pointer; }
 .ordertype-items li:hover{ border-color:#2F73B8; color:#2F73B8;}
@@ -90,6 +93,7 @@
 #CardMemberList li { float: left; color: #666; margin-right: 8px; }
 
 .cardActivityAddress { width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 
 
 

@@ -28,7 +28,7 @@
 			"datasource":"DropSourceList|1",
 			"defaulttext":"信息技术业"
         },
-        "Contcat": {
+        "ContactName": {
             "title": "联系人",
             "hide": false,
             "format": false,
@@ -120,7 +120,7 @@
 			"datasource":"",
 			"defaulttext":"上海云销信息科技有限公司"
         }, 
-        "Contcat": {
+        "ContactName": {
             "title": "联系人",
             "hide": false,
             "format": false,

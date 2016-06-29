@@ -3,6 +3,7 @@
 }
 
 @section css{
+    <link href="/modules/css/customer.css" rel="stylesheet" />
     <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
 }
 
@@ -17,7 +18,7 @@
     <span class="header-title left">@ViewBag.Title</span>
     <div class="right @(ExpandClass.IsLimits(HttpContext.Current, "101019001"))"  >
         <span data-url="/Customer/Create" data-id="101019001" data-name="新建客户"  class="pLeft2 btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current, "101019001"))" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >新建客户</span>
-        <div id="dropdown" class="bghulan dropdown rightraduis3 right " style="height:28px;width:20px;">
+        <div id="dropdown" class="bghulan dropdown rightraduis3 right " title="导入导出" style="height:28px;width:20px;">
             <span class="mTop8 mRight5 ico-dropdown-white right"></span>
         </div>
     </div>
@@ -68,7 +69,9 @@
 </div>  
  
 <ul class="search-sort">
-    <li>排序</li>
+    <li>
+        <div id="filterMark" style="margin-top:13px;"></div>
+    </li>
     <li class="sort-item hover" data-column="cus.CreateTime">
         创建日期
         <span class="asc"></span>
@@ -87,38 +90,19 @@
 </ul>
 
 <div class="content-body">
-    <div class="table-box-list">
-        <ul class="box-header">
-            <li class="width50"><span id="filterMark" class="mTop3"></span></li>
-            <li class="width50"></li>
-            <li class="tLeft flex1">客户名称</li>
-            <li class="width50">类型</li>
-            <li class="width150">来源</li>
-            <li class="width100">阶段</li>
-            <li class="width100">联系人</li>
-            <li class="width100">联系电话</li>
-            <li class="width80">机会数</li>
-            <li class="width80">订单数</li>
-            <li class="width100">负责人</li>
-            <li class="width100">创建时间</li>
-        </ul>
+    <div class="customer-list">
+
     </div>
     <div class="mTop20">
         <ul class="left batch-operate">
-            <li class="width50">
+            <li class="hand" id="checkAll">
+                <span class="checkbox iconfont mTop5 mRight5"></span>全选
+            </li>
+            <li class="mLeft20" title="批量标记">
                 <span data-value="-1" class="mTop5 mLeft10" id="batchMark"></span>
             </li>
-            <li class="width100 mLeft10 hand" id="checkAll">
-                <span class="checkbox iconfont mTop5 mRight5"></span>批量操作
-            </li>
-            <li>
+            <li class="mLeft20">
                 <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current, "101019002"))" id="batchChangeOwner">更换负责人</a>
-            </li>
-            <li>
-                &nbsp;<a href="javascript:void(0);" class="btn" id="batchCustomerExport">导出客户</a>
-            </li>
-            <li>
-                &nbsp;<a href="javascript:void(0);" class="btn" id="batchContactExport">导出联系人</a>
             </li>
         </ul>
         <div id="pager"></div>
@@ -126,5 +110,7 @@
 </div>
 <ul class="dropdown-ul hide" style="width: 100px;">
     <li class="" id="exportExcel">导入客户</li> 
+    <li class="" id="batchCustomerExport">导出客户</li> 
+    <li class="" id="batchContactExport">导出联系人</li> 
 </ul>
 

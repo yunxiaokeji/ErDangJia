@@ -1,0 +1,53 @@
+﻿{%
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+%}
+<div class="customer-card mRight15">
+    <div class="check iconfont" data-id="{%=item.CustomerID%}" data-userid="{%=item.OwnerID%}">&#xe626;</div>
+    <div class="customer-name">
+         {% if(item.Type==1){%}
+               <div class="left mTop3 mRight5">
+                   <div class="customer-type">企</div>
+               </div>
+         {% } %}
+        
+        <div class="name long">
+            <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">{%=item.Name%}</a> 
+        </div>
+    </div>
+    <ul class="info mTop5">
+        <li><span class="iconfont">&#xe64f;</span>{%=item.MobilePhone ? item.MobilePhone:"--"%}</li>
+        <li><span class="iconfont">&#xe657;</span>{%=item.City ? item.City.Description:"--"%}</li>
+        <li>
+            <div class="left" title="创建日期"><span class="iconfont">&#xe639;</span>{%=item.CreateTime.toDate("yyyy-MM-dd")%}</div>
+            <div class="right mRight10" title="负责人">
+                <img class="photo mTop2" onerror="$(this).attr('src','/modules/images/defaultavatar.png');" src="{%=item.Owner&&item.Owner.Avatar?item.Owner.Avatar:'/modules/images/defaultavatar.png'%}" />
+                <span class="left mLeft5">{%=(item.Owner ? item.Owner.Name:"--")%}</span>
+            </div>
+        </li>
+    </ul>
+    <ul class="order-count">
+        <li style="width:48px;">
+            <span class="mark mLeft5" style="margin-top:7px;" data-id="{%= item.CustomerID %}" data-value="{%= item.Mark%}"></span>
+        </li>
+        <li class="width100 center">
+            机会数：
+            {% if(item.OpportunityCount>0){%}
+            <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" 
+                data-url="/Customer/Detail?id={%=item.CustomerID%}&nav=navOppor">{%=item.OpportunityCount%}</a> 
+            {% } else{ %}
+                0
+            {% } %}
+        </li>
+        <li  class="width100 center">
+            订单数：
+            {% if(item.OrderCount>0){%}
+                <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" 
+                    data-url="/Customer/Detail?id={%=item.CustomerID%}&nav=navOrder">{%=item.OrderCount%}</a> 
+            {% } else{ %}
+                0
+            {% } %}
+        </li>
+    </ul>
+</div>
+{% } %}

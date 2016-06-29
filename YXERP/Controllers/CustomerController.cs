@@ -15,7 +15,6 @@ using Xfrog.Net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
-using CloudSalesBusiness.Custom; 
 
 namespace YXERP.Controllers
 {
@@ -87,6 +86,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         public ActionResult ExportFromCfg()
         {
             var excelWriter = new ExcelWriter();
@@ -307,7 +307,6 @@ namespace YXERP.Controllers
             return Content("操作成功");
         }
          
-
         public CustomerEntity GetCustomerByDataRow(DataRow dr ,bool isQiYe=false)
         {
             CustomerEntity customers = new CustomerEntity();
@@ -340,6 +339,7 @@ namespace YXERP.Controllers
             }
             return customers;
         }
+
         public ContactEntity GetContactByDataRow(DataRow dr, bool isQiYe = false)
         {
             ContactEntity contact = new ContactEntity();
@@ -361,6 +361,7 @@ namespace YXERP.Controllers
             contact.ContactID = Guid.NewGuid().ToString();
             return contact;
         } 
+
         public JsonResult SaveCustomer(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -373,7 +374,7 @@ namespace YXERP.Controllers
             }
             else
             {
-                bool bl = new CustomBusiness().UpdateCustomer(model.CustomerID, model.Name, model.Type, model.IndustryID, model.Extent, model.CityCode, model.Address, model.MobilePhone, model.OfficePhone,
+                bool bl = new CustomBusiness().UpdateCustomer(model.CustomerID, model.Name, model.Type, model.IndustryID, model.Extent, model.CityCode, model.Address, model.ContactName, model.MobilePhone, model.OfficePhone,
                                                 model.Email, model.Jobs, model.Description, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
                 if (!bl)
                 {

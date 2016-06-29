@@ -50,7 +50,7 @@ namespace CloudSalesBusiness
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
                 model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
-                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.City = CommonBusiness.GetCityByCode(model.CityCode);
                 list.Add(model);
             }
             return list;
@@ -285,9 +285,9 @@ namespace CloudSalesBusiness
 
         #region 编辑/删除
 
-        public bool UpdateCustomer(string customerid, string name, int type, string industryid, int extent, string citycode, string address, string mobile, string officephone, string email, string jobs, string desc, string operateid, string ip, string agentid, string clientid)
+        public bool UpdateCustomer(string customerid, string name, int type, string industryid, int extent, string citycode, string address, string contactName, string mobile, string officephone, string email, string jobs, string desc, string operateid, string ip, string agentid, string clientid)
         {
-            bool bl = CustomDAL.BaseProvider.UpdateCustomer(customerid, name, type, industryid, extent, citycode, address, mobile, officephone, email, jobs, desc, operateid, agentid, clientid);
+            bool bl = CustomDAL.BaseProvider.UpdateCustomer(customerid, name, type, industryid, extent, citycode, address, contactName, mobile, officephone, email, jobs, desc, operateid, agentid, clientid);
             if (!bl)
             {
                 string msg = "编辑客户信息";

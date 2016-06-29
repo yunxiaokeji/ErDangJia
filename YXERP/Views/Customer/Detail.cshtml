@@ -16,13 +16,12 @@
     </script>
 }
 <div class="header-box">
-    <div id="lblType" class="customer-type"></div>
+    <div id="lblType" class="customer-type mTop5"></div>
     <div id="lblCustomerName" class="left header-title mLeft10"></div> 
     <div id="customercolor"  class="left mark mTop8 mLeft10" data-id="" data-value=""></div>
     <div id="updateCustomer"  class=" iconfont ico-edit mLeft50"></div>
     <div class="btn999 right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" id="closeCustomer">关闭</div>
     <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "101019005"))" id="recoveryCustomer">恢复</div>
-   
 
     <div class="right btn-share btn-share-md mRight20" id="btnShareMD">分享到明道</div>
 </div>
@@ -39,6 +38,10 @@
             <span title="更换负责人" class="iconfont ico-change left mLeft5 @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="changeOwner"></span>
         </li>
         <li>
+            <span class="column-title">联系人：</span>
+            <label id="lblContactName"></label>
+        </li>
+        <li>
             <span class="column-title">联系电话：</span>
             <label id="lblMobile"></label>
         </li>
@@ -46,11 +49,15 @@
             <span class="column-title">Email：</span>
             <label id="lblEmail"></label> 
         </li>
-        <li class="companyinfo hide">
+         <li>
+            <span class="column-title">职位：</span>
+            <label id="lblJobs"></label> 
+        </li>
+        <li>
             <span class="column-title">行业：</span>
             <label id="lblIndustry"></label>
         </li>
-        <li class="companyinfo hide">
+        <li>
             <span class="column-title">规模：</span>
             <label id="lblExtent"></label>
         </li>
@@ -59,17 +66,14 @@
             <label id="lblCity"></label>
         </li>
         <li>
-            <span class="column-title">详细地址：</span>
-            <label id="lblAddress"></label>
-        </li>
-        <li>
             <span class="column-title">创建时间：</span>
             <label id="lblTime"></label>
         </li>
         <li>
-            <span class="column-title">创建人：</span>
-            <label id="lblUser"></label>
+            <span class="column-title">详细地址：</span>
+            <label id="lblAddress"></label>
         </li>
+        
         <li style="width:100%;">
             <span class="column-title">备注：</span> 
             <label id="lblReamrk"></label>

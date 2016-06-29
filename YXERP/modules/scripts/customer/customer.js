@@ -57,9 +57,12 @@
                 _self.getList();
             }
         });
+
+        //导入导出excel
         $("#exportExcel").click(function () {
             ObjectJS.ShowExportExcel();
         });
+
         //客户状态
         $(".search-status li").click(function () {
             var _this = $(this);
@@ -92,6 +95,7 @@
                 _self.getList();
             });
         });
+
         //客户来源
         Global.post("/Customer/GetCustomerSources", {}, function (data) {
             for (var i = 0; i < data.items.length; i++) {
@@ -149,10 +153,12 @@
             var _this = $(this).find(".checkbox");
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover");
-                $(".table-box-list .checkbox").addClass("hover");
+                $(".customer-list .check").addClass("hover");
+                $(".customer-list .customer-card").addClass("hover");
             } else {
                 _this.removeClass("hover");
-                $(".table-box-list .checkbox").removeClass("hover");
+                $(".customer-list .check").removeClass("hover");
+                $(".customer-list .customer-card").removeClass("hover");
             }
         });
 
@@ -171,7 +177,7 @@
 
         //批量转移
         $("#batchChangeOwner").click(function () {
-            var checks = $(".table-box-list .checkbox.hover");
+            var checks = $(".customer-list .check.hover");
             if (checks.length > 0) {
                 ChooseUser.create({
                     title: "批量更换负责人",
@@ -204,11 +210,13 @@
             Params.ExcelType = 0;
             Dialog.exportModel("/Customer/ExportFromCustomer", { filter: JSON.stringify(Params), filleName: "客户" });
         });
+
         ///Excel导出联系人
         $("#batchContactExport").click(function () {
             Params.ExcelType = 1;
             Dialog.exportModel("/Customer/ExportFromCustomer", { filter: JSON.stringify(Params), filleName: "联系人" });
-        }); 
+        });
+
         //过滤标记
         $("#filterMark").markColor({
             isAll: true,
@@ -225,7 +233,7 @@
             isAll: true,
             data: _self.ColorList, 
             onChange: function (obj, callback) { 
-                var checks = $(".table-box-list .checkbox.hover");
+                var checks = $(".customer-list .check.hover");
                 if (checks.length > 0) {
                     var ids = "";
                     checks.each(function () {
@@ -288,28 +296,31 @@
     ObjectJS.getList = function () {
         var _self = this;
         $("#checkAll").removeClass("hover");
-        $(".box-header").nextAll().remove();
-        $(".box-header").after("<div class='data-loading'><div>");
+        $(".customer-list").empty();
+        $(".customer-list").append("<div class='data-loading'><div>");
 
         Global.post("/Customer/GetCustomers", { filter: JSON.stringify(Params) }, function (data) {
             _self.bindList(data);
         });
     }
+
     //加载列表
     ObjectJS.bindList = function (data) {
         var _self = this;
-        $(".box-header").nextAll().remove();
+        $(".customer-list").empty();
 
         if (data.items.length > 0) {
-            doT.exec("template/customer/customers.html", function (template) {
+            doT.exec("template/customer/customers-card.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 
-                innerhtml.find(".checkbox").click(function () {
+                innerhtml.find(".check").click(function () {
                     var _this = $(this);
                     if (!_this.hasClass("hover")) {
+                        _this.parent().addClass("hover");
                         _this.addClass("hover");
                     } else {
+                        _this.parent().removeClass("hover");
                         _this.removeClass("hover");
                     }
                     return false;
@@ -324,11 +335,11 @@
                     }
                 });
 
-                $(".box-header").after(innerhtml);
+                $(".customer-list").append(innerhtml);
 
             });
         } else {
-            $(".box-header").after("<div class='nodata-box' >暂无数据<div>");
+            $(".customer-list").append("<div class='nodata-box' >暂无客户<div>");
         }
 
         $("#pager").paginate({
@@ -352,6 +363,7 @@
             }
         });
     }
+
     //标记客户
     ObjectJS.markCustomer = function (ids, mark, callback) {
         if (mark < 0) {
@@ -365,6 +377,7 @@
             callback && callback(data.status);
         });
     }
+
     //转移客户
     ObjectJS.ChangeOwner = function (ids, userid) {
         var _self = this;

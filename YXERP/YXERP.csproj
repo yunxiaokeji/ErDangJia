@@ -627,6 +627,7 @@
     <Content Include="modules\template\common\logs.html" />
     <Content Include="modules\template\customer\contacts.html" />
     <Content Include="modules\template\customer\contact-detail.html" />
+    <Content Include="modules\template\customer\customers-card.html" />
     <Content Include="modules\template\default\feedback-add.html" />
     <Content Include="modules\template\finance\payable-detail.html" />
     <Content Include="modules\template\finance\payablebills.html" />

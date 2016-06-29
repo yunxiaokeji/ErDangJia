@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CloudSalesEntity;
-using System.Data;
-using CloudSalesBusiness.Custom;
+using System.Data; 
 using CloudSalesDAL;
 using CloudSalesDAL.Custom;
 using CloudSalesEnum;

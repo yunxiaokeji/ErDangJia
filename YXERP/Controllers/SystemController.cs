@@ -5,8 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
-using CloudSalesBusiness;
-using CloudSalesBusiness.Custom;
+using CloudSalesBusiness; 
 using CloudSalesEntity;
 using CloudSalesBusiness.Manage;
 using CloudSalesEntity.Manage;

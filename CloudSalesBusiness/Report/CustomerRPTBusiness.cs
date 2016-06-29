@@ -74,10 +74,10 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        public List<ReportCommonEntity> GetCustomerStageRate(string begintime, string endtime, int type, string clientid)
+        public List<ReportCommonEntity> GetCustomerStageRate(string begintime, string endtime, int type, string clientid,string ownerid)
         {
             List<ReportCommonEntity> list = new List<ReportCommonEntity>();
-            DataSet ds = CustomerRPTDAL.BaseProvider.GetCustomerStageRPT(begintime, endtime, type, clientid);
+            DataSet ds = CustomerRPTDAL.BaseProvider.GetCustomerStageRPT(begintime, endtime, type, clientid, ownerid);
            
 
             int[] stages = { 1, 2, 3 };
@@ -102,6 +102,7 @@ namespace CloudSalesBusiness
                 DataRow[] drRow = ds.Tables["Source"].Select("StageStatus=" + stage);
                 if (stage == 2)
                 {
+                    DataTable opstage = CustomerRPTDAL.BaseProvider.GetOpportunityStage(clientid, begintime, endtime, type, ownerid);
                     foreach (var source in SystemBusiness.BaseBusiness.GetOpportunityStages("", clientid))
                     {
                         SourceItem item = new SourceItem();
@@ -110,9 +111,23 @@ namespace CloudSalesBusiness
                         item.value = "0.00";
                         item.pvalue = "0.00";
                         item.cvalue = "0.00";
-                        if (drRow.Any())
+                        item.desc = "";
+                        int[] oppstatus = { 1, 2, 3 };
+                        foreach (var opstatus in oppstatus)
                         {
-                            int cvalue = drRow.Sum(x => (int)x["value"]);
+                            DataRow[] oppdr = opstage.Select("(StageID='" + source.StageID + "' or StageID='' ) and Status=" + opstatus);
+                            if (oppdr.Any())
+                            {
+                                int sumvalue = oppdr.Sum(x => (int) x["value"]);
+                                item.desc = item.desc + (opstatus == 1 ? "正常" : opstatus == 2 ? "已成单" : "已关闭") + "<br/>" + sumvalue.ToString() + "<br/>";
+                            }
+                            else
+                            {
+                                item.desc = item.desc + (opstatus == 1 ? "正常" : opstatus == 2 ? "已成单" : "已关闭") + "<br/>0 <br/>";
+                            }
+                        }
+                        if (drRow.Any())
+                        { 
                             DataRow[] row = drRow.Where(x => x["SourceID"].ToString().ToLower() == source.StageID).ToArray();
                             if (row.Any() && row.Length > 0)
                             {
@@ -131,6 +146,11 @@ namespace CloudSalesBusiness
                 else if (stage == 1)
                 {
                     total = model.iValue;
+                    if (type == 1)
+                    {
+                        model.dValue = CustomerRPTDAL.BaseProvider.GetCustomerCountByTime(begintime, endtime, clientid, ownerid);
+                        model.desc = model.name + ":" +  model.dValue;
+                    }
                     foreach (var source in SystemBusiness.BaseBusiness.GetCustomSources("", clientid))
                     {
                         SourceItem item = new SourceItem();

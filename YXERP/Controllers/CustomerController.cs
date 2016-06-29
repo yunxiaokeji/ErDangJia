@@ -16,7 +16,8 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using System.Web.Services.Description;
-using CloudSalesBusiness.Custom; 
+using CloudSalesBusiness.Custom;
+using NPOI.SS.Formula;
 
 namespace YXERP.Controllers
 {
@@ -41,6 +42,13 @@ namespace YXERP.Controllers
         { 
             return View();
         }
+
+        public ActionResult CustomerOwnRPT()
+        {
+            ViewBag.UserID = CurrentUser.UserID;
+            return View();
+        }
+
         public ActionResult BranchCustomer()
         {
             ViewBag.Title = "下属客户";

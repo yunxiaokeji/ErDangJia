@@ -31,7 +31,6 @@
 
                 _self.getUserCustomer();
             }
-
         });
 
         //日期插件
@@ -103,7 +102,6 @@
                         }
                         _this.addClass("ico-check").removeClass("ico-checked");
                     }
-
                     _self.reportTotal();
 
                 });

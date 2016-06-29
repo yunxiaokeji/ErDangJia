@@ -46,7 +46,7 @@ namespace CloudSalesEntity
        public class SourceItem
     {
         public string Name { get; set; }
-
+        public string desc { get; set; }
         public int Value { get; set; }
          /// <summary>
         /// 总转化率

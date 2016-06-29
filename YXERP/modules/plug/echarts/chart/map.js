@@ -595,7 +595,7 @@ define(function (require) {
                 textPosition[1] += textFixed[1];
             }
 
-            //console.log(textPosition)
+          //  console.log(textPosition) 
             path.name = this._nameChange(mapType, name);
             path.position = position;
             path.textX = textPosition[0];

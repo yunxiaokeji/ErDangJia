@@ -140,13 +140,13 @@ namespace YXERP.Controllers
              Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
             if (string.IsNullOrEmpty(filter))
             {
-                listColumn = GetColumnForJson("customer", ref dic, model, test ? "test" : "export",CurrentUser.ClientID );
+                listColumn = GetColumnForJson("customer", ref dic, model, test ? "testexport" : "export", CurrentUser.ClientID);
             }
             else
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer(); 
                 qicCustomer=serializer.Deserialize<FilterCustomer>(filter);
-                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "test" : "export", CurrentUser.ClientID);
+                listColumn = GetColumnForJson("customer", ref dic, !string.IsNullOrEmpty(model) ? model : qicCustomer.ExcelType == 0 ? "Item" : "OwnItem", test ? "testexport" : "export", CurrentUser.ClientID);
             }
             var excelWriter = new ExcelWriter();
             foreach (var key in listColumn)
@@ -207,7 +207,7 @@ namespace YXERP.Controllers
                 }
                 foreach (DataRow drRow in dt.Rows)
                 {
-                  var city=  CommonBusiness.GetCityByCode(drRow["CityCode"].ToString());
+                    var city=  CommonBusiness.GetCityByCode(drRow["CityCode"].ToString());
                     if (city != null)
                     {
                         drRow["province"] = city.Province;
@@ -217,7 +217,7 @@ namespace YXERP.Controllers
                 }
             }
             buffer = excelWriter.Write(dt, dic);
-            var fileName = filleName + (test ? "导入模版" : "");
+            var fileName = filleName + (test ? "导入模版" : "") + DateTime.Now.ToString("yyyyMMdd");
             if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
                 fileName = HttpUtility.UrlEncode(fileName);
             this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
@@ -241,7 +241,7 @@ namespace YXERP.Controllers
                 if (dt.Columns.Count > 0)
                 {
                     ///1.获取系统模版列
-                    var checkColumn = dt.Columns.Contains("公司规模");
+                    var checkColumn = dt.Columns.Contains("客户类型");
                     Dictionary<string, string> listColumn;
                     if (checkColumn)
                     {
@@ -275,21 +275,21 @@ namespace YXERP.Controllers
                             ContactEntity contact;
                             if (checkColumn)
                             {
-                                customers = GetCustomerByDataRow(dr, checkColumn);
+                                customers = GetCustomerByDataRow(dr);
                                 list.Add(customers);
                             }
                             else
                             {
-                                if (dr["客户名称"] != null && !string.IsNullOrEmpty(dr["客户名称"].ToString()))
-                                {
-                                    contact = GetContactByDataRow(dr, checkColumn);
-                                    contactList.Add(contact);
-                                }
-                                else
-                                {
-                                    customers = GetCustomerByDataRow(dr, checkColumn);
-                                    list.Add(customers);
-                                }
+                                //if (dr["客户名称"] != null && !string.IsNullOrEmpty(dr["客户名称"].ToString()))
+                                //{
+                            contact = GetContactByDataRow(dr, checkColumn);
+                            contactList.Add(contact);
+                                //}
+                                //else
+                                //{
+                                //    customers = GetCustomerByDataRow(dr, checkColumn);
+                                //    list.Add(customers);
+                                //}
                             }
                         }
                         catch (Exception ex)
@@ -333,23 +333,19 @@ namespace YXERP.Controllers
             customers.CreateUserID = CurrentUser.UserID;
             customers.OwnerID = CurrentUser.UserID;
             customers.CreateTime = DateTime.Now;
-            customers.Type = isQiYe?1:0;
+            customers.Type = dr["客户类型"].ToString() =="企业"? 1 : 0;
             customers.ContactName = dr["联系人"].ToString();
             customers.CustomerID = Guid.NewGuid().ToString();
             customers.CityCode = GetCityCode(dr);
-            if (isQiYe)
-            {
-                customers.Name = dr["客户名称"].ToString();
+            customers.Name = dr["客户名称"].ToString();
+            //if (customers.Type==1)
+            //{
                 Industry industry = CommonBusiness.IndustryList.Where(x => x.Name.Equals(dr["行业"].ToString()))
                     .FirstOrDefault();
                 customers.IndustryID = industry != null ? industry.IndustryID : "";
                 customers.Extent =
                     (int)CommonBusiness.GetEnumindexByDesc<EnumCustomerExtend>(EnumCustomerExtend.Huge, dr["公司规模"].ToString());
-            }
-            else
-            {
-                customers.Name = dr["联系人"].ToString();
-            }
+            //}
             return customers;
         }
 

@@ -3,6 +3,7 @@
  */
 define(function (require, exports, module) {
     require("plug/dialog/dialog.css");
+    var jquery = require("jquery");
     var Global = require("global");
     var win = window, doc = win.document,
 	docElem = doc.documentElement;
@@ -657,7 +658,7 @@ define(function (require, exports, module) {
                     dialogNoBtn = doc.getElementById(options.guid + 'dialogNoBtn'),
                     overlayer = doc.getElementById(options.guid + 'overlay'),
                     dialogSpanWare = doc.getElementById('spanWare'),
-                    dialogExportModel = doc.getElementById('exportModel'),
+                    dialogExportModel = jquery('.exportModel');//doc.getElementsByClassName('exportModel'),
                     dialogFileName=doc.getElementById('modelName');
                 // 绑定确定按钮的回调函数
                 if (dialogYesBtn) {
@@ -670,17 +671,27 @@ define(function (require, exports, module) {
                 if (dialogSpanWare) {
                     event.bind(dialogSpanWare, 'click', function() { self.infoShow() });
                 }
+
+               
+
                 if (dialogExportModel) {
                     var tempContent = options.container || {};
                     if (tempContent != null && typeof (tempContent.exportUrl) != "undefined" && tempContent.exportUrl != "") {
-                        var objPara = tempContent.exportParam || {}; 
-                        event.bind(dialogExportModel, 'click', function () {
-                            if (dialogFileName!=null && typeof(dialogFileName) != "undefined") {
-                                objPara.model = dialogFileName.value;
-                                objPara.filleName = dialogFileName.options[dialogFileName.selectedIndex].text;
-                            } 
-                            self.exportModel(tempContent.exportUrl, objPara); 
-                        });
+                        var objPara = tempContent.exportParam || {};
+
+                        dialogExportModel.each(function (i, v) {
+                            console.log(jquery(v).data("model"));
+                            jquery(v).bind("click", function() {
+                                if (dialogFileName != null && typeof (dialogFileName) != "undefined") {
+                                    objPara.model = dialogFileName.value;
+                                    objPara.filleName = dialogFileName.options[dialogFileName.selectedIndex].text;
+                                } else if (typeof (jquery(v).data("model")) != "undefined") {
+                                    objPara.model = jquery(v).data("model");
+                                    objPara.filleName = typeof (jquery(v).data("modelName")) != "undefined" ? jquery(v).data("modelName") : "";
+                                }
+                                self.exportModel(tempContent.exportUrl, objPara);
+                            });
+                        }); 
                     }
                 } 
                 // 绑定取消按钮的回调函数

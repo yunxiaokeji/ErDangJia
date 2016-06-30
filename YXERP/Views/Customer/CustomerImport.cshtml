@@ -8,17 +8,14 @@
 
      <div class="mLeft20 mTop10" style="height: 360px; overflow-y: scroll; overflow-x: hidden;">
          <div>
-             <span> 请按照数据模板的格式准备要导入的数据。</span> <br/>
-             <div class="mLeft20">
-                 <a href="javascript:void(0);" id="exportModel" class="exportModel" style="margin-top: 5px; font-size: 10pt;"> 下载数据模板</a>
-                 <select id="modelName" style="height: 20px;line-height: 20px;">
-                         <option value="Item">企业</option>
-                         <option value="OwnItem">联系人</option> 
-                     </select>
-                 <br/><br/>
+             <div class="boder"> 请按照数据模板的格式准备要导入的数据 </div>
+             <div class="mLeft20 mTop5">
+                 <a href="javascript:void(0);"  class="exportModel" data-modelName="企业客户" data-model="Item" style=" font-size: 10pt;"> 下载客户数据模板</a>
+                 <a href="javascript:void(0);"  class="exportModel mLeft10" data-modelName="联系人" data-model="OwnItem" style="font-size: 10pt;"> 下载联系人数据模板</a>
+                 <br/> 
                  <span id="spanWare" class="spanWare hide">     
                 查看注意事项>></span> 
-                 <div id="divInfo" class="divInfo">
+                 <div id="divInfo" class="divInfo mTop5">
                      <p class="mLeft5 red">注意事项：</p>
                      <ul class="mLeft5 red">
                          <li class="red">1、模板中的表头名称不可更改，表头行不能删除</li>
@@ -31,23 +28,19 @@
              </div>
          </div>
          <div class="mTop20">
-             <span> 请选择数据重复时的操作方式：</span> <br/>
-             <div class="mLeft20 mTop5">
-                 <div>
-                     <select name="overType" class="div-select">
-                         <option value="0">不导入</option>
-                         <option value="1">覆盖导入</option>
-                         <option value="2">不导入新数据, 仅覆盖重复数据</option>
-                     </select>
-                 </div>
-                 <div class="mTop5 bolder">查重规则:
+             <span class="bolder"> 查重规则：</span> <br/>
+             <div class="mLeft20 mTop5">  
                      <select name="type" class="div-select bolder">
                          <option value="0">客户名称</option>
                          <option value="1">手机号码</option>
                          <option value="2">客户名称和手机号码</option>
                      </select>
-                 </div>
-             </div>
+                       <select name="overType" class="div-select bolder">
+                         <option value="0">不导入</option>
+                         <option value="1">覆盖导入</option>
+                         <option value="2">不导入新数据, 仅覆盖重复数据</option>
+                     </select>
+            </div> 
          </div>
          <div class="mTop20">
              <span> 请选择需要导入的Excel文件。</span> <br/>

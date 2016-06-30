@@ -13,6 +13,18 @@
 			"datatype":"string",
 			"defaulttext":"上海云销信息科技有限公司"
         },
+		"Type": {
+            "title": "客户类型",
+            "hide": false,
+            "format": true,
+            "exporttype": 16,
+			"testexporttype": -1,
+			"datasource":"",
+			"importtype":-1,
+			"importcolumn":"",		
+			"datatype":"int",
+			"defaulttext":"企业/个人"
+        },
         "Extent": {
             "title": "公司规模",
             "hide": false,
@@ -29,9 +41,9 @@
             "title": "行业",
             "hide": false,
             "format": true,
-            "exporttype": 9,
+            "exporttype": 15,
 			"testexporttype": 7,
-			"datasource":"DropSourceList|1",
+			"datasource":"DropSourceList|6",
 			"importtype":-1,
 			"importcolumn":"",		
 			"datatype":"string",

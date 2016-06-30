@@ -767,12 +767,12 @@ namespace YXERP.Controllers
             Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
             if (string.IsNullOrEmpty(filter))
             {
-                listColumn = GetColumnForJson("product", ref dic, model, test ? "test" : "export", CurrentUser.ClientID);
+                listColumn = GetColumnForJson("product", ref dic, model, test ? "testexport" : "export", CurrentUser.ClientID);
             }
             else
             {  
                 qicProduct = serializer.Deserialize<FilterProduct>(filter);
-                listColumn = GetColumnForJson("product", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "test" : "export", CurrentUser.ClientID);
+                listColumn = GetColumnForJson("product", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "testexport" : "export", CurrentUser.ClientID);
             }
             string ipPath = "";
             var excelWriter = new ExcelWriter();

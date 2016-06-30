@@ -278,6 +278,16 @@ namespace CloudSalesBusiness
                     return  CommonBusiness.GetEnumDesc<EnumCustomerExtend>((EnumCustomerExtend) Enum.Parse(typeof (EnumCustomerExtend), coulumnValue));
                 case EnumColumnTrans.ConvertIndustry:
                     return CommonBusiness.GetIndustryID(coulumnValue);
+                case EnumColumnTrans.ConvertCustomerType:
+                    return coulumnValue == "1" ? "企业" : "个人";
+                case EnumColumnTrans.ConvertClientIndustry:
+                       string IndustryName = "";
+                       ClientsIndustry clientsIndustry= SystemBusiness.BaseBusiness.GetClientIndustryByID(coulumnValue, "", clientID);
+                       if (clientsIndustry!=null)
+                       {
+                           IndustryName = clientsIndustry.Name;
+                       }
+                   return IndustryName;
                 case EnumColumnTrans.ConvertUnitName:
                     string unitName = "";
                     ProductUnit punit= ProductsBusiness.BaseBusiness.GetUnitByID(coulumnValue, clientID);
@@ -464,14 +474,22 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 格式化分类ID
         /// </summary>
-        ConvertCategoryID = 14
+        ConvertCategoryID = 14,
+        /// <summary>
+        /// 客户行业
+        /// </summary>
+        ConvertClientIndustry = 15, 
+        /// <summary>
+        /// 客户类型
+        /// </summary>
+        ConvertCustomerType= 16
 
     }
 
     public enum DropSourceList
     {
         /// <summary>
-        /// 行业
+        /// 公司行业
         /// </summary>
         Industry = 1,
         /// <summary>
@@ -489,7 +507,11 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 产品单位
         /// </summary>
-        ProductUnit = 5
+        ProductUnit = 5,
+        /// <summary>
+        /// 客户行业
+        /// </summary>
+        ClientIndustry = 6
     }
 
     public class ExcelFormatter

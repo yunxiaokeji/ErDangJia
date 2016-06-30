@@ -1,0 +1,14 @@
+﻿{%
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+%}
+<tr class="list-item">
+    <td class="name">{%=item.Name%}</td>
+    <td class="name">{%=item.Description%}</td> 
+    <td class='center'>{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
+    <td class='center'>{%=(item.CreateUser ? item.CreateUser.Name:"--")%}</td>
+    <td class="center dropdown" data-id="{%=item.ClientIndustryID%}"  data-name="{%=item.Name%}" data-description="{%=item.Description%}">
+        <span  class="ico-dropdown"></span>
+    </td>
+</tr>
+{% } %}

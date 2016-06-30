@@ -67,9 +67,9 @@
         <li>
             <span class="column-title">行业：</span>
             <select id="industry">
-            @foreach (CloudSalesEntity.Industry model in (List<CloudSalesEntity.Industry>)ViewBag.Industrys)
+            @foreach (CloudSalesEntity.ClientsIndustry model in (List<CloudSalesEntity.ClientsIndustry>)ViewBag.Industrys)
             {
-                <option value="@(model.IndustryID)">@(model.Name)</option> 
+                <option value="@(model.ClientIndustryID)">@(model.Name)</option> 
             }
             </select>
         </li>

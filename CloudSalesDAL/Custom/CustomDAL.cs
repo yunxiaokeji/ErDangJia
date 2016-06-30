@@ -304,6 +304,18 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_UpdateContact", paras, CommandType.StoredProcedure) > 0;
         }
 
+        public bool UpdateContactDefault(string contactid, string userid, string agentid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ContactID",contactid),
+                                     new SqlParameter("@CreateUserID" , userid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            return ExecuteNonQuery("P_UpdateContactDefault", paras, CommandType.StoredProcedure) > 0;
+        }
+
         #endregion
     }
 }

@@ -341,13 +341,28 @@ namespace CloudSalesBusiness
         public bool UpdateContact(string contactid, string customerid, string name, string citycode, string address, string mobile, string officephone, string email, string jobs, string desc, string operateid, string agentid, string clientid)
         {
             bool bl = CustomDAL.BaseProvider.UpdateContact(contactid, customerid, name, citycode, address, mobile, officephone, email, jobs, desc, operateid, agentid, clientid);
-
             return bl;
         }
 
-        public bool DeleteContact(string contactid, string ip, string userid, string agentid)
+        public bool UpdateContactDefault(string contactid, string customerid, string name, string operateid, string ip, string agentid, string clientid)
         {
-            bool bl = CommonBusiness.Update("Contact", "Status", 9, "ContactID='" + contactid + "'");
+            bool bl = CustomDAL.BaseProvider.UpdateContactDefault(contactid, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = "设为默认联系人：" + name;
+                LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, ip, contactid, agentid, clientid);
+            }
+            return bl;
+        }
+
+        public bool DeleteContact(string contactid, string name, string customerid, string ip, string userid, string agentid, string clientid)
+        {
+            bool bl = CommonBusiness.Update("Contact", "Status", 9, "ContactID='" + contactid + "' and [Type]<>1");
+            if (bl)
+            {
+                string msg = "删除联系人：" + name;
+                LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, userid, ip, contactid, agentid, clientid);
+            }
             return bl;
         }
 

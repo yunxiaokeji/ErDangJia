@@ -72,7 +72,6 @@
         $("#lblReamrk").text(model.Description);
 
         if (model.Type == 1) {
-            $(".tab-nav-ul li[data-id='navContact']").show();
             $("#lblType").html("企业客户");
         } else {
             $("#lblType").html("个人客户");
@@ -153,10 +152,6 @@
             });
         }
 
-        //个人客户
-        if (model.Type != 1) {
-            $(".tab-nav-ul li[data-id='navContact']").remove();
-        }
         //添加联系人
         $("#btnCreateContact").click(function () {
             _self.addContact();
@@ -227,13 +222,34 @@
         $("#deleteContact").click(function () {
             var _this = $(this);
             confirm("确认删除此联系人吗？", function () {
-                Global.post("/Customer/DeleteContact", { id: _this.data("id") }, function (data) {
+                Global.post("/Customer/DeleteContact", {
+                    id: _this.data("id"),
+                    name: _this.data("name"),
+                    customerid: _self.customerid
+                }, function (data) {
                     if (data.status) {
                         _self.getContacts(_self.customerid);
                     } else {
-                        alert("网络异常,请稍后重试!");
+                        alert("默认联系人不能删除");
                     }
                 });
+            });
+        });
+
+        //联系人设为默认
+        $("#editContactDefault").click(function () {
+            var _this = $(this);
+            Global.post("/Customer/UpdateContactDefault", {
+                id: _this.data("id"),
+                name: _this.data("name"),
+                customerid: _self.customerid
+            }, function (data) {
+                if (data.status) {
+                    _self.getContacts(_self.customerid);
+                    $("#lblContactName").text(_this.data("name"));
+                } else {
+                    alert("操作失败");
+                }
             });
         });
 
@@ -517,9 +533,14 @@
 
                     innerhtml.find(".dropdown").click(function () {
                         var _this = $(this);
+                        if (_this.data("type") == 1) {
+                            $("#editContactDefault,#deleteContact").hide();
+                        } else {
+                            $("#editContactDefault,#deleteContact").show();
+                        }
                         var position = _this.find(".ico-dropdown").position();
-                        $("#ddlContact li").data("id", _this.data("id"));
-                        $("#ddlContact").css({ "top": position.top + 20, "left": position.left - 40 }).show().mouseleave(function () {
+                        $("#ddlContact li").data("id", _this.data("id")).data("name", _this.data("name"));
+                        $("#ddlContact").css({ "top": position.top + 20, "left": position.left - 65 }).show().mouseleave(function () {
                             $(this).hide();
                         });
                         return false;
@@ -557,6 +578,7 @@
                             MobilePhone: $("#contactMobile").val().trim(),
                             Email: $("#email").val().trim(),
                             Jobs: $("#jobs").val().trim(),
+                            Type: model ? model.Type : 0,
                             Description: $("#remark").val().trim()
                         };
                         _self.saveContact(entity);
@@ -596,9 +618,14 @@
         var _self = this;
         Global.post("/Customer/SaveContact", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.ContactID) {
+                /*处理客户联系人*/
+                if (model.Type == 1 || $("#navContact ul").length <= 2) {
+                    $("#lblContactName").text(model.Name);
+                }
                 _self.getContacts(model.CustomerID);
+                
             } else {
-                alert("网络异常,请稍后重试!");
+                alert("操作失败");
             }
         });
     }
@@ -622,7 +649,6 @@
                             CustomerID: model.CustomerID,
                             Name: $("#name").val().trim(),
                             Jobs: $("#jobs").val().trim(),
-                            ContactName: $("#contactName").val().trim(),
                             Type: $("#companyCustom").hasClass("ico-checked") ? 1 : 0,
                             IndustryID: $("#industry").val().trim(),
                             Extent: $("#extent").val().trim(),

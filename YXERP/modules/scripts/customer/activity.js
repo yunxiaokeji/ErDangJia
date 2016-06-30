@@ -35,6 +35,7 @@ define(function (require, exports, module) {
     ObjectJS.init = function (isAll) {
         var _self = this;
         _self.Params.IsAll = isAll;
+        _self.Params.PageSize = Math.floor(($(".activityList").width() - 20) / 290) * 3;
         _self.getList();
         _self.bindEvent();
     }
@@ -88,33 +89,18 @@ define(function (require, exports, module) {
                 });
             });
         }
-        //参与类型
-        require.async("dropdown", function () {
-            var Types = [
-                {
-                    ID: "1",
-                    Name: "我负责的"
-                },
-                {
-                    ID: "2",
-                    Name: "我参与的"
-                }
-            ];
-            $("#ActivityType").dropdown({
-                prevText: "活动过滤-",
-                defaultText: "所有",
-                defaultValue: "-1",
-                data: Types,
-                dataValue: "ID",
-                dataText: "Name",
-                width: "120",
-                onChange: function (data) {
-                    ObjectJS.Params.PageIndex = 1;
-                    ObjectJS.Params.FilterType = data.value;
-                    ObjectJS.getList();
-                }
-            });
 
+        //切换阶段
+        $(".search-type li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+
+                ObjectJS.Params.PageIndex = 1;
+                ObjectJS.Params.FilterType = _this.data("id");
+                ObjectJS.getList();
+            }
         });
 
         //删除活动

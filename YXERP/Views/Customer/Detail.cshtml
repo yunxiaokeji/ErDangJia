@@ -88,7 +88,7 @@
 <div class="tab-nav">
     <ul class="tab-nav-ul left">
         <li data-id="navRemark">备忘</li>
-        <li data-id="navContact" class="hide">联系人</li>
+        <li data-id="navContact">联系人</li>
         <li data-id="navOppor">销售机会（0）</li>
         <li data-id="navOrder">销售订单（0）</li>
         <li data-id="navLog">日志</li>
@@ -104,6 +104,7 @@
             <li class="tLeft width200">邮箱</li>
             <li class="tLeft flex1">地址</li>
             <li class="width150">创建时间</li>
+            <li class="width50"></li>
             <li class="width50">操作</li>
         </ul>
     </div>
@@ -160,7 +161,8 @@
     </div>
 </div>
 
-<ul class="dropdown-ul hide" id="ddlContact" style="width:65px;">
+<ul class="dropdown-ul hide" id="ddlContact" style="width:90px;">
+    <li id="editContactDefault">设为默认</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"101019006"))" id="editContact">编辑</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"101019007"))" id="deleteContact">删除</li>
 </ul>

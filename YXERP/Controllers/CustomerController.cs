@@ -616,9 +616,20 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult DeleteContact(string id)
+        public JsonResult UpdateContactDefault(string id, string name, string customerid)
         {
-            bool bl = CustomBusiness.BaseBusiness.DeleteContact(id, OperateIP, CurrentUser.UserID, CurrentUser.AgentID);
+            bool bl = CustomBusiness.BaseBusiness.UpdateContactDefault(id, name, customerid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("status", bl);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DeleteContact(string id, string name, string customerid)
+        {
+            bool bl = CustomBusiness.BaseBusiness.DeleteContact(id, name, customerid, OperateIP, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl );
             return new JsonResult
             {

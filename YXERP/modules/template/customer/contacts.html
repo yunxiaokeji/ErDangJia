@@ -7,9 +7,10 @@
     <li class="width100">{%=item.MobilePhone||"--"%}</li>
     <li class="width100">{%=item.Jobs||"--"%}</li>         
     <li class="tLeft width200">{%=item.Email||"--"%}</li>
-    <li class="tLeft flex1">{%=item.City ? item.City.Description : ""%} {%=item.Address%}</li>
+    <li class="tLeft">{%=((item.City ? item.City.Description+item.Address : item.Address))||"--"%}</li>
     <li class="width150">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</li>
-    <li class="width50 dropdown" data-id="{%=item.ContactID%}">
+    <li class="width50 red">{%=item.Type==1?"默认":"&nbsp;"%}</li>
+    <li class="width50 dropdown" data-id="{%=item.ContactID%}" data-name="{%=item.Name%}" data-type="{%=item.Type%}">
         <span class="ico-dropdown"></span>
     </li>
 </ul>

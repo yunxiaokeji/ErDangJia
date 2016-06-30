@@ -46,6 +46,7 @@ namespace CloudSalesBusiness
                 model.FillData(dr);
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Stage = SystemBusiness.BaseBusiness.GetOpportunityStageByID(model.StageID, model.AgentID, model.ClientID);
+                model.StatusStr = CommonBusiness.GetEnumDesc((EnumOpportunityStatus)model.Status);
 
                 list.Add(model);
             }

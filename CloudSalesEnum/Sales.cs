@@ -7,6 +7,24 @@ using System.Text;
 namespace CloudSalesEnum
 {
     /// <summary>
+    /// 机会状态
+    /// </summary>
+    public enum EnumOpportunityStatus
+    {
+        [DescriptionAttribute("全部")]
+        All = -1,
+        [DescriptionAttribute("正常")]
+        New = 0,
+        [DescriptionAttribute("正常")]
+        Normal = 1,
+        [DescriptionAttribute("转为订单")]
+        Success = 2,
+        [DescriptionAttribute("已关闭")]
+        Close = 3,
+        [DescriptionAttribute("已删除")]
+        Delete = 9
+    }
+    /// <summary>
     /// 订单状态
     /// </summary>
     public enum EnumOrderStatus

@@ -10,6 +10,7 @@
 
     var ObjectJS = {}, CacheIems = [], CacheTypes = [];
     ObjectJS.ColorList = [];
+
     //初始化
     ObjectJS.init = function (customerid, colorList, navid) {
         var _self = this;
@@ -53,7 +54,7 @@
         $("#lblContactName").text(model.ContactName || "--");
         $("#lblJobs").text(model.Jobs || "--");
         $("#lblUser").text(model.CreateUser ? model.CreateUser.Name : "--");
-
+        $("#lblTime").text(model.CreateTime.toDate("yyyy-MM-dd hh:mm:ss"));
         if (model.Activity) {
             if (model.Source.SourceCode == "Source-Activity") {
                 $("#aSource").data("url", "/Activity/Detail/" + model.ActivityID);
@@ -86,7 +87,7 @@
         var _self = this;
         $('#customercolor').markColor({
             isAll: false,
-            xRepair:30,
+            top: 25,
             data: _self.ColorList,
             onChange: function (obj, callback) { 
                 if (obj.data("value") < 0) {
@@ -101,7 +102,10 @@
         //隐藏下拉
         $(document).click(function(e) {
             if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
-                $(".dropdown-ul").hide();
+                $("#ddlContact").hide();
+            }
+            if (!$(e.target).hasClass("btn-dropdown")) {
+                $("#ddlOperate").hide();
             }
         });
 
@@ -111,7 +115,6 @@
         });
 
         if (model.Status == 1) {
-
             $("#closeCustomer").show();
 
             //丢失客户
@@ -135,7 +138,6 @@
                     });
                 });
             });
-
         } else if (model.Status == 2 || model.Status == 3) {
 
             $("#recoveryCustomer").show();
@@ -149,7 +151,6 @@
                     });
                 });
             });
-
         }
 
         //个人客户
@@ -196,32 +197,21 @@
             $(".nav-partdiv").hide();
             $("#" + _this.data("id")).show();
 
-            $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
-
-            if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) { 
+            if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {  /*日志*/
                 _this.data("first", "1");
                 _self.getLogs(model.CustomerID, 1);
-            } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) { //备忘
+            } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) { /*备忘*/
                 _this.data("first", "1");
                 _self.initTalk(model.CustomerID);
-            } else if (_this.data("id") == "navContact") {
-                $("#btnCreateContact").show();
-                if ((!_this.data("first") || _this.data("first") == 0)) {
-                    _this.data("first", "1");
-                    _self.getContacts(model.CustomerID);
-                }
-            } else if (_this.data("id") == "navOrder") {
-                $("#btnCreateOrder").show();
-                if (!_this.data("first") || _this.data("first") == 0) {
-                    _this.data("first", "1");
-                    _self.getOrders(model.CustomerID, 1);
-                }
-            } else if (_this.data("id") == "navOppor") {
-                $("#btnCreateOpportunity").show();
-                if (!_this.data("first") || _this.data("first") == 0) {
-                    _this.data("first", "1");
-                    _self.getOpportunitys(model.CustomerID, 1);
-                }
+            } else if (_this.data("id") == "navContact" && (!_this.data("first") || _this.data("first") == 0)) { /*联系人*/
+                _this.data("first", "1");
+                _self.getContacts();
+            } else if (_this.data("id") == "navOrder" && (!_this.data("first") || _this.data("first") == 0)) { /*订单*/
+                _this.data("first", "1");
+                _self.getOrders(model.CustomerID, 1);
+            } else if (_this.data("id") == "navOppor" && (!_this.data("first") || _this.data("first") == 0)) { /*机会*/
+                _this.data("first", "1");
+                _self.getOpportunitys(model.CustomerID, 1);
             }
         });
 
@@ -316,6 +306,15 @@
             }
         });
 
+        /*展开操作项*/
+        $("#btnOperate").click(function () {
+            var _this = $(this);
+            var position = _this.position();
+            $("#ddlOperate").css({ "top": position.top + 24, "left": position.left - 40 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+
         //默认选中标签页
         if (navid) {
             $(".tab-nav-ul li[data-id='" + navid + "']").click();
@@ -326,7 +325,7 @@
     ObjectJS.createOpporOrOrder = function (items, type) {
         var _self = this;
         var url = type == 1 ? "/Opportunitys/Create" : "/Orders/Create";
-        doT.exec("template/sales/choose-ordertype.html", function (template) {
+        doT.exec("template/customer/choose-ordertype.html", function (template) {
             var innerHtml = template(items);
             Easydialog.open({
                 container: {
@@ -418,23 +417,23 @@
     //获取订单
     ObjectJS.getOrders = function (customerid, page) {
         var _self = this;
-        $("#navOrder .tr-header").nextAll().remove();
-        $("#navOrder .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
+        $("#navOrder .box-header").nextAll().remove();
+        $("#navOrder .box-header").after("<div class='data-loading'><div>");
         Global.post("/Orders/GetOrdersByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page
         }, function (data) {
-            $("#navOrder .tr-header").nextAll().remove();
+            $("#navOrder .box-header").nextAll().remove();
             if (data.items.length > 0) {
-                doT.exec("template/sales/cuatomerorders.html", function (template) {
+                doT.exec("template/customer/customerorders.html", function (template) {
                     var innerhtml = template(data.items);
 
                     innerhtml = $(innerhtml);
-                    $("#navOrder .tr-header").after(innerhtml);
+                    $("#navOrder .box-header").after(innerhtml);
                 });
             } else {
-                $("#navOrder .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#navOrder .box-header").after("<div class='nodata-box' >暂无数据!<div>");
             }
             $("#pagerOrders").paginate({
                 total_count: data.totalCount,
@@ -462,22 +461,22 @@
     //获取订单
     ObjectJS.getOpportunitys = function (customerid, page) {
         var _self = this;
-        $("#navOppor .tr-header").nextAll().remove();
-        $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
+        $("#navOppor .box-header").nextAll().remove();
+        $("#navOppor .box-header").after("<div class='data-loading'><div>");
         Global.post("/Opportunitys/GetOpportunityByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page
         }, function (data) {
-            $("#navOppor .tr-header").nextAll().remove();
+            $("#navOppor .box-header").nextAll().remove();
             if (data.items.length > 0) {
-                doT.exec("template/sales/customeroppors.html", function (template) {
+                doT.exec("template/customer/customeroppors.html", function (template) {
                     var innerhtml = template(data.items);
                     innerhtml = $(innerhtml);
-                    $("#navOppor .tr-header").after(innerhtml);
+                    $("#navOppor .box-header").after(innerhtml);
                 });
             } else {
-                $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#navOppor .box-header").after("<div class='nodata-box' >暂无数据!<div>");
             }
             $("#pagerOppors").paginate({
                 total_count: data.totalCount,
@@ -503,14 +502,14 @@
     }
 
     //获取联系人
-    ObjectJS.getContacts = function (customerid) {
+    ObjectJS.getContacts = function () {
         var _self = this;
-        $("#navContact .tr-header").nextAll().remove();
-        $("#navContact .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
+        $("#navContact .box-header").nextAll().remove();
+        $("#navContact .box-header").after("<div class='data-loading'><div>");
         Global.post("/Customer/GetContacts", {
-            customerid: customerid
+            customerid: _self.customerid
         }, function (data) {
-            $("#navContact .tr-header").nextAll().remove();
+            $("#navContact .box-header").nextAll().remove();
             if (data.items.length > 0) {
                 doT.exec("template/customer/contacts.html", function (template) {
                     var innerhtml = template(data.items);
@@ -519,17 +518,17 @@
                     innerhtml.find(".dropdown").click(function () {
                         var _this = $(this);
                         var position = _this.find(".ico-dropdown").position();
-                        $(".dropdown-ul li").data("id", _this.data("id"));
-                        $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 40 }).show().mouseleave(function () {
+                        $("#ddlContact li").data("id", _this.data("id"));
+                        $("#ddlContact").css({ "top": position.top + 20, "left": position.left - 40 }).show().mouseleave(function () {
                             $(this).hide();
                         });
                         return false;
                     });
 
-                    $("#navContact .tr-header").after(innerhtml);
+                    $("#navContact .box-header").after(innerhtml);
                 });
             } else {
-                $("#navContact .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#navContact .box-header").after("<div class='nodata-box' >暂无数据!<div>");
             }
         });
     }

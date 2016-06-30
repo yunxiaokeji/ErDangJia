@@ -2,15 +2,15 @@
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
 %}
-<tr class="list-item">
-    <td>{%=item.Name%}</td>
-    <td class="center">{%=item.MobilePhone%}</td>
-    <td class='center'>{%=item.Jobs%}</td>
-    <td>{%=item.Email%}</td>
-    <td>{%=item.City ? item.City.Description : ""%} {%=item.Address%}</td>
-    <td class='center'>{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
-    <td class="center dropdown" data-id="{%=item.ContactID%}">
+<ul class="box-item">
+    <li class="tLeft width150">{%=item.Name%}</li>
+    <li class="width100">{%=item.MobilePhone||"--"%}</li>
+    <li class="width100">{%=item.Jobs||"--"%}</li>         
+    <li class="tLeft width200">{%=item.Email||"--"%}</li>
+    <li class="tLeft flex1">{%=item.City ? item.City.Description : ""%} {%=item.Address%}</li>
+    <li class="width150">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</li>
+    <li class="width50 dropdown" data-id="{%=item.ContactID%}">
         <span class="ico-dropdown"></span>
-    </td>
-</tr>
+    </li>
+</ul>
 {% } %}

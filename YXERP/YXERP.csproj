@@ -646,12 +646,12 @@
     <Content Include="modules\template\myaccount\myfeedback-list.html" />
     <Content Include="modules\template\myaccount\setloginname.html" />
     <Content Include="modules\template\purchase\audit_storagein.html" />
-    <Content Include="modules\template\sales\choose-ordertype.html" />
+    <Content Include="modules\template\customer\choose-ordertype.html" />
     <Content Include="modules\template\sales\order-detail.html" />
     <Content Include="modules\template\sales\orders.html" />
-    <Content Include="modules\template\sales\cuatomerorders.html" />
+    <Content Include="modules\template\customer\customerorders.html" />
     <Content Include="modules\template\sales\opportunitys.html" />
-    <Content Include="modules\template\sales\customeroppors.html" />
+    <Content Include="modules\template\customer\customeroppors.html" />
     <Content Include="modules\template\products\provider-detail.html" />
     <Content Include="modules\template\products\providers.html" />
     <Content Include="modules\template\report\teamcustomers.html" />

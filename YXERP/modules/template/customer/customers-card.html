@@ -11,11 +11,9 @@
                </div>
          {% } %}
         
-        <div class="name long">
-            <a href="javascript:void(0);" title="{%=item.Name%}" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">
-                {%=item.Name%}
-            </a> 
-        </div>
+        <a href="javascript:void(0);" title="{%=item.Name%}" class="btn-open-window name long" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">
+            {%=item.Name%}
+        </a> 
     </div>
     <ul class="info mTop5">
         <li><span class="iconfont">&#xe64f;</span>{%=item.MobilePhone || "--"%}</li>

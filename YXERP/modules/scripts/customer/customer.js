@@ -36,7 +36,7 @@
     ObjectJS.init = function (type,colorList) {
         var _self = this;
         Params.SearchType = type;
-        Params.PageSize = (($(".customer-list").width() - 20) / 270).toFixed(0) * 4;
+        Params.PageSize = Math.floor(($(".customer-list").width() - 20) / 270) * 4;
         _self.ColorList = JSON.parse(colorList.replace(/&quot;/g, '"'));
         _self.getList();
         _self.bindEvent(type);

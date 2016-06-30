@@ -99,8 +99,7 @@ namespace CloudSalesBusiness
                 }
                 DataRow[] drRow = ds.Tables["Source"].Select("StageStatus=" + stage);
                 if (stage == 2)
-                {
-                    DataTable opstage = CustomerRPTDAL.BaseProvider.GetOpportunityStage(clientid, begintime, endtime, type, ownerid);
+                { 
                     foreach (var source in SystemBusiness.BaseBusiness.GetOpportunityStages("", clientid))
                     {
                         SourceItem item = new SourceItem();

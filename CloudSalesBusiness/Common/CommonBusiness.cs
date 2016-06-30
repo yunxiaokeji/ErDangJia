@@ -119,7 +119,6 @@ namespace CloudSalesBusiness
                 _manageMenus = value;
             }
         }
-
         #endregion
 
 

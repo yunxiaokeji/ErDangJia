@@ -38,7 +38,7 @@
         {% for(var i=0, j=item.Industrys.length; i < j; i++){
 	        var industry = item.Industrys[i];
         %}
-            <option value="{%=industry.IndustryID%}">{%=industry.Name%}</option> 
+            <option value="{%=industry.ClientIndustryID%}">{%=industry.Name%}</option> 
         {% } %}
         </select>
     </li>

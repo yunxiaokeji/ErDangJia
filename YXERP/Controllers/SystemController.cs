@@ -204,7 +204,7 @@ namespace YXERP.Controllers
                     result = 1;
                 }
             }
-            JsonDictionary.Add("status", result);
+            JsonDictionary.Add("result", result);
             JsonDictionary.Add("model", model);
             return new JsonResult
             {
@@ -221,7 +221,7 @@ namespace YXERP.Controllers
         public JsonResult DeleteCustomSource(string id)
         {
             bool bl = new SystemBusiness().DeleteCustomSource(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("status", bl);
+            JsonDictionary.Add("result", bl);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -802,6 +802,75 @@ namespace YXERP.Controllers
 
         #endregion
 
+        #region 客户行业
+        /// <summary>
+        /// 获取客户来源列表
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetClientIndustry()
+        {
+
+            var list = new SystemBusiness().GetClientIndustry(CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult SaveClientIndustry( string clientindustry)
+        { 
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ClientsIndustry model = serializer.Deserialize<ClientsIndustry>(clientindustry);
+            model.CreateUserID = CurrentUser.UserID;
+            model.ClientID = CurrentUser.ClientID;
+            model.AgentID = CurrentUser.AgentID;
+            model.Status = 1;
+            string result ="操作成功";
+            if (string.IsNullOrEmpty(model.ClientIndustryID))
+            {
+                if (
+                    SystemBusiness.BaseBusiness.GetClientIndustryByName(model.Name, CurrentUser.AgentID,
+                        CurrentUser.ClientID) == null)
+                {
+                    string mes = SystemBusiness.BaseBusiness.CreateClientIndustry(Guid.NewGuid().ToString(),
+                        model.Name.Trim(),
+                        model.AgentID, model.ClientID, model.CreateUserID, model.Description, model.Status);
+                    result = string.IsNullOrEmpty(mes) ?result: mes;
+                }
+                else
+                {
+                    result = "行业名称已存在，不能重复添加";
+                }
+            }
+            else
+            {
+                int bl = SystemBusiness.BaseBusiness.UpdateClientIndustry(model.AgentID, model.ClientID, model.ClientIndustryID,model.Name);
+                result = bl > 0 ? result :"修改失败";
+              
+            }
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            }; 
+
+        }
+
+        public JsonResult DeleteClientIndustry(string clientindustryid)
+        {
+            bool result = SystemBusiness.BaseBusiness.DeleteClientIndustry(CurrentUser.ClientID,CurrentUser.AgentID, clientindustryid); 
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        #endregion
         #endregion
 
     }

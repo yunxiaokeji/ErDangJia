@@ -27,6 +27,21 @@ namespace CloudSalesBusiness
 
         private static Dictionary<string, List<WareHouse>> _wares;
 
+        private static Dictionary<string, List<ClientsIndustry>> _clientInsdutryList;
+        /// <summary>
+        /// 客户行业配置
+        /// </summary>
+        public static Dictionary<string, List<ClientsIndustry>> ClientIndustryList
+        {
+            get
+            {
+                if (_clientInsdutryList == null)
+                {
+                    _clientInsdutryList = new Dictionary<string, List<ClientsIndustry>>(); 
+                }
+                return _clientInsdutryList;
+            }
+        }
         /// <summary>
         /// 客户来源
         /// </summary>
@@ -182,6 +197,73 @@ namespace CloudSalesBusiness
             }
             CustomColor.Add(clientid, list);
             return list;
+        }
+        public List<ClientsIndustry> GetClientIndustry(string agentid,string clientid)
+        {
+            if (ClientIndustryList.ContainsKey(clientid))
+            {
+                return ClientIndustryList[clientid];
+            }
+
+            List<ClientsIndustry> list = new List<ClientsIndustry>();
+            DataTable dt = SystemDAL.BaseProvider.GetClientIndustry(clientid);
+            foreach (DataRow dr in dt.Rows)
+            {
+                ClientsIndustry model = new ClientsIndustry();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                list.Add(model);
+            }
+            ClientIndustryList.Add(clientid, list);
+            return list;
+
+        }
+
+        public ClientsIndustry GetClientIndustryByName(string name, string agentid,string clientid)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+            if (ClientIndustryList.ContainsKey(clientid))
+            {
+                return ClientIndustryList[clientid].Where(x => x.Name == name.Trim()).FirstOrDefault();
+            }
+
+            List<ClientsIndustry> list = new List<ClientsIndustry>();
+            DataTable dt = SystemDAL.BaseProvider.GetClientIndustry(clientid);
+            foreach (DataRow dr in dt.Rows)
+            {
+                ClientsIndustry model = new ClientsIndustry();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                list.Add(model);
+            }
+            ClientIndustryList.Add(clientid, list);
+            return list.Where(x => x.Name == name.Trim()).FirstOrDefault();
+
+        }
+
+        public ClientsIndustry GetClientIndustryByID(string clientIndustryID, string agentid, string clientid)
+        {
+            if (string.IsNullOrEmpty(clientIndustryID))
+            {
+                return null;
+            }
+            var list = GetClientIndustry(agentid, clientid);
+            if (list.Where(m => m.ClientIndustryID == clientIndustryID).Count() > 0)
+            {
+                return list.Where(m => m.ClientIndustryID == clientIndustryID).FirstOrDefault();
+            }
+
+            ClientsIndustry model = new ClientsIndustry();
+            DataTable dt = SystemDAL.BaseProvider.GetClientIndustryByID(clientIndustryID);
+            if (dt.Rows.Count > 0)
+            {
+                model.FillData(dt.Rows[0]);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+            }
+            return model;
         }
 
         public CustomerColorEntity GetCustomerColorsColorID(string clientid, int colorid = 0)
@@ -530,7 +612,33 @@ namespace CloudSalesBusiness
             }
             return result;
         }
-
+        public string CreateClientIndustry(string clientindustryid, string name, string agentid, string clientid, string userid, string description, int status = 1)
+        {
+            bool result = SystemDAL.BaseProvider.InsertClientIndustry(clientindustryid, name, clientid,agentid,
+                userid, description, status);
+            if (result)
+            {
+                if (!ClientIndustryList.ContainsKey(clientid))
+                {
+                    GetClientIndustry(agentid,clientid);
+                }
+                else
+                {
+                    ClientIndustryList[clientid].Add(new ClientsIndustry()
+                    {
+                        AgentID = agentid,
+                        ClientIndustryID = clientindustryid,
+                        Description = description,
+                        Name = name,
+                        ClientID = clientid,
+                        CreateUserID = userid,
+                        CreateTime = DateTime.Now,
+                        Status = 0
+                    });
+                }
+            }
+            return "";
+        }
         public string CreateStageItem(string name, string stageid, string userid, string agentid, string clientid)
         {
             string itemid = Guid.NewGuid().ToString().ToLower();
@@ -727,6 +835,46 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
+        /// <summary>
+        /// 修改客户行业
+        /// </summary>
+        /// <param name="agentid"></param>
+        /// <param name="clientid"></param>
+        /// <param name="clientindustryid"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public int UpdateClientIndustry(string agentid, string clientid, string clientindustryid, string name)
+        {
+            var model = GetClientIndustryByID(clientindustryid,agentid, clientid);
+            if (model == null)
+            {
+                return -200;
+            }
+            bool result = SystemDAL.BaseProvider.UpdateClientIndustry(clientid, clientindustryid, name);
+            if (result)
+            {
+                if (!CustomColor.ContainsKey(clientid))
+                {
+                    GetCustomerColors(clientid);
+                }
+                else
+                {
+                    model.Name = name;  
+                }
+            }
+            return result ? 1 : 0;
+        }
+
+        public bool DeleteClientIndustry(string clientid,string agentid, string clientindustryid)
+        {
+            var model = GetClientIndustryByID(clientindustryid,agentid, clientid);
+            bool bl = SystemDAL.BaseProvider.DeleteClientIndustry(clientid,clientindustryid);
+            if (bl)
+            {
+                ClientIndustryList[clientid].Remove(model);
+            }
+            return bl;
+        }
 
         public int UpdateCustomerColor(string agentid, string clientid, int colorid, string colorName, string colorValue, string updateuserid)
         {
@@ -743,13 +891,11 @@ namespace CloudSalesBusiness
                     GetCustomerColors( clientid);
                 }
                 else
-                {
-                  //  CustomColor[clientid].Remove(model);
+                { 
                     model.ColorValue = colorValue;
                     model.ColorName = colorName;
                     model.UpdateTime = DateTime.Now;
-                    model.UpdateUserID = updateuserid;
-                   // CustomColor[clientid].Add(model);
+                    model.UpdateUserID = updateuserid; 
                 }
             }
             return result?1:0;

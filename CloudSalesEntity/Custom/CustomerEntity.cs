@@ -101,10 +101,15 @@ namespace CloudSalesEntity
             }
         }
 
+        ///// <summary>
+        ///// 编辑加载列表用
+        ///// </summary>
+        //public List<Industry> Industrys { get; set; }
+
         /// <summary>
         /// 编辑加载列表用
         /// </summary>
-        public List<Industry> Industrys { get; set; }
+        public List<ClientsIndustry> Industrys { get; set; }
         /// <summary>
         /// 编辑加载列表用
         /// </summary>

@@ -70,7 +70,8 @@ namespace YXERP.Controllers
             int total = 0;
             ViewBag.ActivityID = id;
             ViewBag.Sources = new SystemBusiness().GetCustomSources(CurrentUser.AgentID, CurrentUser.ClientID);
-            ViewBag.Industrys = CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
+            //ViewBag.Industrys = CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
+            ViewBag.Industrys = SystemBusiness.BaseBusiness.GetClientIndustry(CurrentUser.AgentID,CurrentUser.ClientID);
             ViewBag.Activity = ActivityBusiness.GetActivitys("", EnumActivityStage.All, 0, "", "", "", "", int.MaxValue, 1, ref total, ref total, CurrentUser.AgentID, CurrentUser.ClientID);
             ViewBag.Extents = CustomBusiness.GetExtents();
             return View();
@@ -434,7 +435,7 @@ namespace YXERP.Controllers
         public JsonResult GetCustomerByID(string customerid)
         {
             var model = CustomBusiness.BaseBusiness.GetCustomerByID(customerid, CurrentUser.AgentID, CurrentUser.ClientID);
-            model.Industrys = CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
+            model.Industrys = SystemBusiness.BaseBusiness.GetClientIndustry(CurrentUser.AgentID,CurrentUser.ClientID);
             model.Extents = CustomBusiness.GetExtents();
             JsonDictionary.Add("model", model);
             return new JsonResult

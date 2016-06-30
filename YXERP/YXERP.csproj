@@ -692,6 +692,8 @@
     <Content Include="modules\template\system\client-authorizelog.html" />
     <Content Include="modules\template\system\client-detail.html" />
     <Content Include="modules\template\system\client-orders.html" />
+    <Content Include="modules\template\system\clientindustry.html" />
+    <Content Include="modules\template\system\clientindustry-detail.html" />
     <Content Include="modules\template\system\sources-color.html" />
     <Content Include="modules\template\system\sources.html" />
     <Content Include="modules\template\system\sources-detail.html" />

@@ -11,32 +11,28 @@
     var ObjectJS = {}, CacheIems = [], CacheTypes = [];
     ObjectJS.ColorList = [];
     //初始化
-    ObjectJS.init = function (customerid, MDToken, colorList) {
+    ObjectJS.init = function (customerid, colorList, navid) {
         var _self = this;
         _self.customerid = customerid;
         _self.ColorList=JSON.parse(colorList.replace(/&quot;/g, '"'));
-        _self.bindStyle();
 
-        if (!MDToken) {
-            $("#btnShareMD").hide();
+        var nav = $(".tab-nav-ul li[data-id='" + navid + "']");
+        if (nav.length > 0) {
+            nav.addClass("hover");
+        } else {
+            $(".tab-nav-ul li").first().addClass("hover").data("first", "1");
+            $("#taskReplys").show();
+            _self.initTalk(customerid);
         }
-     
+
         Global.post("/Customer/GetCustomerByID", { customerid: customerid }, function (data) {
             if (data.model.CustomerID) {
                 $('#customercolor').data('value', data.model.Mark); 
                 _self.bindCustomerInfo(data.model);
-                _self.bindEvent(data.model);
+                _self.bindEvent(data.model, navid);
             }
         });
-        _self.initTalk(customerid);
     } 
-    //样式
-    ObjectJS.bindStyle = function () {
-        //隐藏操作按钮
-        $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
-        $("#recoveryCustomer,#loseCustomer,#closeCustomer").hide();
-
-    }
 
     //基本信息
     ObjectJS.bindCustomerInfo = function (model) {
@@ -58,27 +54,35 @@
         $("#lblJobs").text(model.Jobs || "--");
         $("#lblUser").text(model.CreateUser ? model.CreateUser.Name : "--");
 
-        $("#lblSource").text(model.Source ? model.Source.SourceName : "--");
-        if (model.Activity != null) {
-            if (model.Source.SourceCode == "Source-Activity") { 
+        if (model.Activity) {
+            if (model.Source.SourceCode == "Source-Activity") {
                 $("#aSource").data("url", "/Activity/Detail/" + model.ActivityID);
                 $("#aSource").data("id", Global.guid());
                 $("#aSource").data("name", "活动详情-" + model.Activity.Name);
-                $("#aSource").html(model.Activity ? " 活动名称: "+ model.Activity.Name : "--");
+                $("#aSource").html(model.Activity.Name);
                 $("#aSource").show();
+                $("#lblSource").hide();
             }
+        } else {
+            $("#lblSource").text(model.Source ? model.Source.SourceName : "--");
         }
         $("#lblOwner").text(model.Owner ? model.Owner.Name : "--");
         $("#changeOwner").data("userid", model.OwnerID);
         $("#lblReamrk").text(model.Description);
 
         if (model.Type == 1) {
-            $("#lblType").html("企");
-        } 
+            $(".tab-nav-ul li[data-id='navContact']").show();
+            $("#lblType").html("企业客户");
+        } else {
+            $("#lblType").html("个人客户");
+        }
+
+        $(".tab-nav-ul li[data-id='navOrder']").html("销售订单（" + model.OrderCount + "）");
+        $(".tab-nav-ul li[data-id='navOppor']").html("销售机会（" + model.OpportunityCount + "）");
     }
 
     //绑定事件
-    ObjectJS.bindEvent = function (model) {
+    ObjectJS.bindEvent = function (model, navid) {
         var _self = this;
         $('#customercolor').markColor({
             isAll: false,
@@ -194,9 +198,12 @@
 
             $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
 
-            if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
+            if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) { 
                 _this.data("first", "1");
                 _self.getLogs(model.CustomerID, 1);
+            } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) { //备忘
+                _this.data("first", "1");
+                _self.initTalk(model.CustomerID);
             } else if (_this.data("id") == "navContact") {
                 $("#btnCreateContact").show();
                 if ((!_this.data("first") || _this.data("first") == 0)) {
@@ -309,6 +316,10 @@
             }
         });
 
+        //默认选中标签页
+        if (navid) {
+            $(".tab-nav-ul li[data-id='" + navid + "']").click();
+        }
     }
 
     //创建机会或者订单 type 1 机会 2订单

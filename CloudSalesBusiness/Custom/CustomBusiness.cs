@@ -332,7 +332,7 @@ namespace CloudSalesBusiness
             bool bl = CommonBusiness.Update("Customer", "Mark", mark, "CustomerID='" + customerid + "'");
             if (bl)
             {
-                string msg = "标记客户颜色";
+                string msg = "客户标记为：" + SystemBusiness.BaseBusiness.GetCustomerColorsColorID(clientid, mark).ColorName;
                 LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, ip, mark.ToString(), agentid, clientid);
             }
             return bl;

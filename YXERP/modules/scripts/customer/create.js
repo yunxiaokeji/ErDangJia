@@ -88,7 +88,9 @@
         };
         Global.post("/Customer/SaveCustomer", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.CustomerID) {
-                alert("客户创建成功", function () {
+                confirm("客户创建成功,是否继续新建客户？", function () {
+                    location.href = location.href;
+                }, function () {
                     location.href = "/Customer/Detail/" + data.model.CustomerID;
                     _self.isLoading = false;
                 });

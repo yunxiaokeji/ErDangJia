@@ -76,11 +76,12 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult Detail(string id)
+        public ActionResult Detail(string id, string nav)
         {
             ViewBag.MDToken = CurrentUser.MDToken;
+            ViewBag.NavID = nav;
             ViewBag.ID = id;
-            ViewBag.ColorData = SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.ClientID).ToList();
+            ViewBag.ColorData = SystemBusiness.BaseBusiness.GetCustomerColors(CurrentUser.ClientID);
             return View();
         }
 

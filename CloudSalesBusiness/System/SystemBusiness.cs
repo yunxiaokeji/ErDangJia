@@ -187,7 +187,7 @@ namespace CloudSalesBusiness
         public CustomerColorEntity GetCustomerColorsColorID(string clientid, int colorid = 0)
         {
             var list = GetCustomerColors(clientid);
-            return list.Where(x =>x.Status!=9 && x.ColorID == colorid).FirstOrDefault();
+            return list.Where(x => x.ColorID == colorid).FirstOrDefault();
         }
 
         public CustomSourceEntity GetCustomSourcesByID(string sourceid, string agentid, string clientid)

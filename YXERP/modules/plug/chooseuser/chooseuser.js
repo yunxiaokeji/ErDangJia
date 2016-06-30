@@ -115,7 +115,7 @@ define(function (require, exports, module) {
             }
         });
         //选中成员
-        $(".useradd").click(function () {
+        $(".userlist-items li").click(function () {
             
             if (_self.setting.single && $("#userlistChoose li").length > 0) {
                 return;
@@ -126,13 +126,13 @@ define(function (require, exports, module) {
             if ($("#userlistChoose li[data-id=" + id + "]").length > 0) {
                 alert("此用户已在选中列表中！")
             } else {
-
-                var ele = $(this).parent().clone();
+                var ele = $(this).clone();
 
                 ele.find(".mobile").remove();
-                ele.find("a").html("移除").click(function () {
+                ele.find("a").html("移除");
+                ele.click(function () {
                     ele.remove();
-                });
+                })
                 $("#userlistChoose").append(ele);
             }
         });

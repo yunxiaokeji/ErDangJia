@@ -1,6 +1,5 @@
 ﻿@{
     ViewBag.Title = "客户详情";
-    var colorData = (List<CloudSalesEntity.CustomerColorEntity>)ViewBag.ColorData;
 } 
 
 @section css{
@@ -11,31 +10,36 @@
     <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/customer/detail"], function (ObjectJS) {
-            ObjectJS.init('@ViewBag.ID', '@ViewBag.MDToken', '@Html.ToJSONString(colorData)');
+            ObjectJS.init('@ViewBag.ID', '@Html.ToJSONString((List<CloudSalesEntity.CustomerColorEntity>)ViewBag.ColorData)', '@ViewBag.NavID');
         });
     </script>
 }
 <div class="header-box">
-    <div id="lblType" class="customer-type mTop5"></div>
+    <div id="customercolor"  class="left mark mTop8" data-id="" data-value=""></div>
     <div id="lblCustomerName" class="left header-title mLeft10"></div> 
-    <div id="customercolor"  class="left mark mTop8 mLeft10" data-id="" data-value=""></div>
     <div id="updateCustomer"  class=" iconfont ico-edit mLeft50"></div>
-    <div class="btn999 right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" id="closeCustomer">关闭</div>
-    <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "101019005"))" id="recoveryCustomer">恢复</div>
-
-    <div class="right btn-share btn-share-md mRight20" id="btnShareMD">分享到明道</div>
+    <div class="btn999 right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" style="display:none;" id="closeCustomer">关闭</div>
+    <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "101019005"))"  style="display:none;" id="recoveryCustomer">恢复</div>
+     @if (!string.IsNullOrEmpty(ViewBag.MDToken))
+     {
+        <div class="right btn-share btn-share-md mRight20" id="btnShareMD">分享到明道</div>
+     }
 </div>
 <div class="content-body pTop10">
     <ul class="content-info">
         <li>
             <span class="column-title">来源：</span>
-            <label id="lblSource"></label>  &nbsp; &nbsp;
-            <a id="aSource" class="btn-open-window hide mLeft15" style="" ></a>
+            <label id="lblSource"></label>
+            <a id="aSource" class="btn-open-window hide" ></a>
         </li>
         <li>
             <span class="column-title">负责人：</span> 
             <label class="left" id="lblOwner"></label>
             <span title="更换负责人" class="iconfont ico-change left mLeft5 @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="changeOwner"></span>
+        </li>
+        <li>
+            <span class="column-title">客户类型：</span>
+            <label id="lblType"></label>
         </li>
         <li>
             <span class="column-title">联系人：</span>
@@ -83,10 +87,10 @@
 </div>
 <div class="tab-nav">
     <ul class="tab-nav-ul left">
-        <li class="hover" data-id="navRemark">备忘</li>
-        <li data-id="navContact">联系人</li>
-        <li data-id="navOppor">销售机会</li>
-        <li data-id="navOrder">销售订单</li>
+        <li data-id="navRemark">备忘</li>
+        <li data-id="navContact" class="hide">联系人</li>
+        <li data-id="navOppor">销售机会（0）</li>
+        <li data-id="navOrder">销售订单（0）</li>
         <li data-id="navLog">日志</li>
     </ul>
     <div id="btnCreateContact" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"101019006"))">添加联系人</div>

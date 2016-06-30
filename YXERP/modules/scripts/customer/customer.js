@@ -36,10 +36,12 @@
     ObjectJS.init = function (type,colorList) {
         var _self = this;
         Params.SearchType = type;
+        Params.PageSize = (($(".customer-list").width() - 20) / 270).toFixed(0) * 4;
         _self.ColorList = JSON.parse(colorList.replace(/&quot;/g, '"'));
         _self.getList();
         _self.bindEvent(type);
     }
+
     //绑定事件
     ObjectJS.bindEvent = function (type) {
         var _self = this; 
@@ -198,7 +200,7 @@
                     }
                 });
             } else {
-                alert("您尚未选择客户!");
+                alert("您尚未选择客户");
             }
         });
 
@@ -217,6 +219,8 @@
         //过滤标记
         $("#filterMark").markColor({
             isAll: true,
+            top: 30,
+            left: 5,
             data:_self.ColorList,
             onChange: function (obj, callback) {
                 callback && callback(true);
@@ -228,6 +232,7 @@
         //批量标记
         $("#batchMark").markColor({
             isAll: true,
+            left: 10,
             data: _self.ColorList, 
             onChange: function (obj, callback) { 
                 var checks = $(".customer-list .check.hover");
@@ -243,7 +248,7 @@
                     });
                     
                 } else {
-                    alert("您尚未选择客户!");
+                    alert("您尚未选择客户");
                 }
             }
         });
@@ -289,6 +294,7 @@
         });
 
     }
+
     //获取列表
     ObjectJS.getList = function () {
         var _self = this;
@@ -325,10 +331,11 @@
 
                 innerhtml.find(".mark").markColor({
                     isAll: false,
+                    top: 25,
+                    left: 5,
                     data:_self.ColorList,
                     onChange: function (obj, callback) {
                         _self.markCustomer(obj.data("id"), obj.data("value"), callback);
-
                     }
                 });
                 $(".customer-list").append(innerhtml);

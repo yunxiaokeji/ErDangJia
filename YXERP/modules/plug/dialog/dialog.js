@@ -63,10 +63,7 @@ define(function (require, exports, module) {
 
                 for (i in defaults) {
                     options[i] = arg[i] !== undefined ? arg[i] : defaults[i];
-                }
-                //var guid = Global.guid() + "_";
-                //options.container.guid = guid;
-                //options.guid = guid; 
+                } 
                 options.container.guid = options.guid;
                 Dialog.data(options.guid + 'options', options);
                 return options;
@@ -658,7 +655,7 @@ define(function (require, exports, module) {
                     dialogNoBtn = doc.getElementById(options.guid + 'dialogNoBtn'),
                     overlayer = doc.getElementById(options.guid + 'overlay'),
                     dialogSpanWare = doc.getElementById('spanWare'),
-                    dialogExportModel = jquery('.exportModel');//doc.getElementsByClassName('exportModel'),
+                    dialogExportModel = jquery('.exportModel'); 
                     dialogFileName=doc.getElementById('modelName');
                 // 绑定确定按钮的回调函数
                 if (dialogYesBtn) {
@@ -679,8 +676,7 @@ define(function (require, exports, module) {
                     if (tempContent != null && typeof (tempContent.exportUrl) != "undefined" && tempContent.exportUrl != "") {
                         var objPara = tempContent.exportParam || {};
 
-                        dialogExportModel.each(function (i, v) {
-                            console.log(jquery(v).data("model"));
+                        dialogExportModel.each(function (i, v) { 
                             jquery(v).bind("click", function() {
                                 if (dialogFileName != null && typeof (dialogFileName) != "undefined") {
                                     objPara.model = dialogFileName.value;
@@ -894,29 +890,7 @@ define(function (require, exports, module) {
         }); 
         return textcontent; //html 
     };
-    //var exportModel = function (path,qic) {
-    //    var form = $("<form>");//定义一个form表单
-    //    form.attr("style", "display:none");
-    //    form.attr("target", "");
-    //    form.attr("method", "post");
-    //    form.attr("action", path);
-    //    for (var i in qic) {
-    //        if (qic.hasOwnProperty(i)) {
-    //            var input = $("<input>");
-    //            input.attr("hide", "hide");
-    //            input.attr("value", qic[i]);
-    //            input.attr("name",i);
-    //            form.append(input);
-    //            console.log(i, ":", qic[i]);
-    //        };
-    //    } 
-    //    $("body").append(form);
-    //    form.submit();//表单提交 
-    //};
-    //var infoShow = function () {
-    //    $('.spanWare').hide();
-    //    $('.divInfo').show();
-    //};
+   
     // ------------------------------------------------------
     // ---------------------DOM加载模块----------------------
     // ------------------------------------------------------

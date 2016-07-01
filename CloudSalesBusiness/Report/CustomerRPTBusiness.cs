@@ -139,8 +139,9 @@ namespace CloudSalesBusiness
                         if (list.Count > 0)
                         {
                             int value = list[0].iValue;
+                            int tempivalue = model.iValue == 0 ? 1 : model.iValue;
                             item.value =
-                                (Convert.ToDecimal(item.Value) / (value == 0 ? 1 : model.iValue) * 100).ToString(
+                                (Convert.ToDecimal(item.Value) / (value == 0 ? 1 : tempivalue) * 100).ToString(
                                     "f2");
                         }
                         sourceItems.Add(item);

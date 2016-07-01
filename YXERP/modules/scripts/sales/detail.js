@@ -7,7 +7,6 @@ define(function (require, exports, module) {
         ChooseUser = require("chooseuser"),
         Easydialog = require("easydialog");
     require("pager");
-    require("logs");
     var ObjectJS = {};
 
     ObjectJS.init = function (orderid, status, model) {
@@ -201,14 +200,23 @@ define(function (require, exports, module) {
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                $("#navLog").getObjectLogs({
-                    guid: _self.orderid,
-                    type: 2, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-                    pageSize: 10
+                require.async("logs", function () {
+                    $("#navLog").getObjectLogs({
+                        guid: _self.orderid,
+                        type: 2, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
                 });
+                
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                _self.initTalk(_self.orderid);
+                require.async("replys", function () {
+                    $("#navRemark").getObjectReplys({
+                        guid: _self.orderid,
+                        type: 2, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
+                });
             } 
         });
 

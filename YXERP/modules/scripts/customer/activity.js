@@ -595,7 +595,6 @@ define(function (require, exports, module) {
         _self.activityid = activityid;
         _self.bindDetailEvent();
         _self.getDetail(2);
-        _self.initTalk(activityid);
     }
 
     //绑定事件
@@ -614,155 +613,12 @@ define(function (require, exports, module) {
                 _self.getCustomersByActivityID();
             }
         });
-    }
 
-    //讨论备忘
-    ObjectJS.initTalk = function (guid) {
-        var _self = this;
-
-        $("#btnSaveTalk").click(function () {
-            var txt = $("#txtContent");
-            if (txt.val().trim()) {
-                var model = {
-                    GUID: guid,
-                    Content: txt.val().trim(),
-                    FromReplyID: "",
-                    FromReplyUserID: "",
-                    FromReplyAgentID: ""
-                };
-                _self.saveReply(model);
-
-                txt.val("");
-            }
-
-        });
-        _self.getReplys(guid, 1);
-    }
-
-    //获取备忘
-    ObjectJS.getReplys = function (guid, page) {
-        var _self = this;
-        $("#replyList").empty();
-        $("#replyList").append("<div class='data-loading'><div>");
-        Global.post("/Plug/GetReplys", {
-            guid: guid,
-            type: 3, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-            pageSize: 10,
-            pageIndex: page
-        }, function (data) {
-            $("#replyList").empty();
-
-            if (data.items.length > 0) {
-                doT.exec("template/common/replys.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-
-                    $("#replyList").append(innerhtml);
-
-                    innerhtml.find(".btn-reply").click(function () {
-                        var _this = $(this), reply = _this.parent().nextAll(".reply-box");
-                        reply.slideDown(500);
-                        reply.find("textarea").focus();
-                        reply.find("textarea").blur(function () {
-                            if (!$(this).val().trim()) {
-                                reply.slideUp(200);
-                            }
-                        });
-                    });
-                    innerhtml.find(".save-reply").click(function () {
-                        var _this = $(this);
-                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                            var entity = {
-                                GUID: _this.data("id"),
-                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                                FromReplyID: _this.data("replyid"),
-                                FromReplyUserID: _this.data("createuserid"),
-                                FromReplyAgentID: _this.data("agentid")
-                            };
-
-                            _self.saveReply(entity);
-                        }
-
-                        $("#Msg_" + _this.data("replyid")).val('');
-                        $(this).parent().slideUp(100);
-                    });
-
-                    //require.async("businesscard", function () {
-                    //    innerhtml.find(".user-avatar").businessCard();
-                    //});
-                });
-            } else {
-                $("#replyList").append("<div class='nodata-txt'>暂无数据<div>");
-            }
-
-            $("#pagerReply").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (page) {
-                    _self.getReplys(guid, page);
-                }
-            });
-        });
-    }
-
-    ObjectJS.saveReply = function (model) {
-        var _self = this;
-
-        Global.post("/Plug/SavaReply", {
-            type: 3, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-            entity: JSON.stringify(model)
-        }, function (data) {
-
-            $("#replyList .nodata-txt").remove();
-
-            doT.exec("template/common/replys.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
-
-                $("#replyList").prepend(innerhtml);
-
-                innerhtml.find(".btn-reply").click(function () {
-                    var _this = $(this), reply = _this.parent().nextAll(".reply-box");
-                    reply.slideDown(500);
-                    reply.find("textarea").focus();
-                    reply.find("textarea").blur(function () {
-                        if (!$(this).val().trim()) {
-                            reply.slideUp(200);
-                        }
-                    });
-                });
-                innerhtml.find(".save-reply").click(function () {
-                    var _this = $(this);
-                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                        var entity = {
-                            GUID: _this.data("id"),
-                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                            FromReplyID: _this.data("replyid"),
-                            FromReplyUserID: _this.data("createuserid"),
-                            FromReplyAgentID: _this.data("agentid")
-                        };
-                        _self.saveReply(entity);
-                    }
-                    $("#Msg_" + _this.data("replyid")).val('');
-                    $(this).parent().slideUp(100);
-                });
-
-                require.async("businesscard", function () {
-                    innerhtml.find("img").businessCard();
-                });
+        require.async("replys", function () {
+            $("#navRemark").getObjectReplys({
+                guid: _self.activityid,
+                type: 3, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                pageSize: 10
             });
         });
     }

@@ -43,6 +43,8 @@ seajs.config({
         "upload": "plug/upload/upload.js",
         //日志
         "logs": "plug/logs/logs.js",
+        //备忘
+        "replys": "plug/replys/replys.js",
         //开关插件
         "switch": "plug/switch/switch.js",
         //标签插件(取配系统置)

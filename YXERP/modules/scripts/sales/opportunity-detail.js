@@ -6,7 +6,6 @@ define(function (require, exports, module) {
         ChooseUser = require("chooseuser"),
         Easydialog = require("easydialog");
     require("pager");
-    require("logs");
     var ObjectJS = {};
 
     //初始化
@@ -182,14 +181,23 @@ define(function (require, exports, module) {
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                $("#navLog").getObjectLogs({
-                    guid: _self.opportunityid,
-                    type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-                    pageSize: 10
+                require.async("logs", function () {
+                    $("#navLog").getObjectLogs({
+                        guid: _self.opportunityid,
+                        type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
                 });
+                
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                _self.initTalk(_self.opportunityid);
+                require.async("replys", function () {
+                    $("#navRemark").getObjectReplys({
+                        guid: _self.opportunityid,
+                        type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
+                });
             } else if (_this.data("id") == "navProducts") {
                 $("#addProduct").show();
             }
@@ -345,157 +353,6 @@ define(function (require, exports, module) {
             } else {
                 alert("机会关闭失败，可能因为机会状态已改变，请刷新页面后重试！");
             }
-        });
-    }
-
-    //讨论备忘
-    ObjectJS.initTalk = function (guid) {
-        var _self = this;
-
-        $("#btnSaveTalk").click(function () {
-            var txt = $("#txtContent");
-            if (txt.val().trim()) {
-                var model = {
-                    GUID: guid,
-                    Content: txt.val().trim(),
-                    FromReplyID: "",
-                    FromReplyUserID: "",
-                    FromReplyAgentID: ""
-                };
-                _self.saveReply(model);
-
-                txt.val("");
-            }
-
-        });
-        _self.getReplys(guid, 1);
-    }
-
-    //获取备忘
-    ObjectJS.getReplys = function (guid, page) {
-        var _self = this;
-        $("#replyList").empty();
-        $("#replyList").append("<div class='data-loading'><div>");
-        Global.post("/Plug/GetReplys", {
-            guid: guid,
-            type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-            pageSize: 10,
-            pageIndex: page
-        }, function (data) {
-            $("#replyList").empty();
-
-            if (data.items.length > 0) {
-                doT.exec("template/common/replys.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-
-                    $("#replyList").append(innerhtml);
-
-                    innerhtml.find(".btn-reply").click(function () {
-                        var _this = $(this), reply = _this.parent().nextAll(".reply-box");
-                        reply.slideDown(500);
-                        reply.find("textarea").focus();
-                        reply.find("textarea").blur(function () {
-                            if (!$(this).val().trim()) {
-                                reply.slideUp(200);
-                            }
-                        });
-                    });
-                    innerhtml.find(".save-reply").click(function () {
-                        var _this = $(this);
-                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                            var entity = {
-                                GUID: _this.data("id"),
-                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                                FromReplyID: _this.data("replyid"),
-                                FromReplyUserID: _this.data("createuserid"),
-                                FromReplyAgentID: _this.data("agentid")
-                            };
-
-                            _self.saveReply(entity);
-                        }
-
-                        $("#Msg_" + _this.data("replyid")).val('');
-                        $(this).parent().slideUp(100);
-                    });
-
-                    //require.async("businesscard", function () {
-                    //    innerhtml.find(".user-avatar").businessCard();
-                    //});
-                });
-            } else {
-                $("#replyList").append("<div class='nodata-txt'>暂无数据<div>");
-            }
-
-            $("#pagerReply").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (page) {
-                    _self.getReplys(guid, page);
-                }
-            });
-        });
-    }
-
-    ObjectJS.saveReply = function (model) {
-        var _self = this;
-
-        Global.post("/Plug/SavaReply", {
-            type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-            entity: JSON.stringify(model)
-        }, function (data) {
-
-            $("#replyList .nodata-txt").remove();
-
-            doT.exec("template/common/replys.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
-
-                $("#replyList").prepend(innerhtml);
-
-                innerhtml.find(".btn-reply").click(function () {
-                    var _this = $(this), reply = _this.parent().nextAll(".reply-box");
-                    reply.slideDown(500);
-                    reply.find("textarea").focus();
-                    reply.find("textarea").blur(function () {
-                        if (!$(this).val().trim()) {
-                            reply.slideUp(200);
-                        }
-                    });
-                });
-                innerhtml.find(".save-reply").click(function () {
-                    var _this = $(this);
-                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                        var entity = {
-                            GUID: _this.data("id"),
-                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                            FromReplyID: _this.data("replyid"),
-                            FromReplyUserID: _this.data("createuserid"),
-                            FromReplyAgentID: _this.data("agentid")
-                        };
-                        _self.saveReply(entity);
-                    }
-                    $("#Msg_" + _this.data("replyid")).val('');
-                    $(this).parent().slideUp(100);
-                });
-
-                require.async("businesscard", function () {
-                    innerhtml.find("img").businessCard();
-                });
-            });
         });
     }
 

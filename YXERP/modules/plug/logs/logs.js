@@ -32,7 +32,6 @@ define(function (require, exports, module) {
             doT.exec("plug/logs/logs.html", function (template) {
                 var innerhtml = template([]);
                 innerhtml = $(innerhtml);
-                innerhtml.find("");
                 obj.append(innerhtml);
                 opts.pageIndex = 1;
                 $.fn.drawLogsItems(obj, opts);

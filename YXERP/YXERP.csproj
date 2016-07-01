@@ -557,6 +557,10 @@
     <Content Include="modules\plug\Sortable.js" />
     <Content Include="modules\plug\upload\jquery.form.js" />
     <Content Include="modules\plug\upload\upload.js" />
+    <Content Include="modules\plug\replys\replysitem.html" />
+    <Content Include="modules\plug\replys\replys.html" />
+    <Content Include="modules\plug\replys\replys.js" />
+    <Content Include="modules\plug\replys\style.css" />
     <Content Include="modules\scripts\customer\activity.js" />
     <Content Include="modules\scripts\auction\buynow.js" />
     <Content Include="modules\scripts\customerrpt\customermaprpt.js" />
@@ -620,12 +624,9 @@
     <Content Include="modules\scripts\layout.js" />
     <Content Include="modules\template\activity\activity_list.html" />
     <Content Include="modules\template\activity\activity_card_list.html" />
-    <Content Include="modules\template\activity\activity_reply_list.html" />
     <Content Include="modules\template\activity\activity_customers.html" />
     <Content Include="modules\template\common\choosemodules.html" />
     <Content Include="modules\plug\logs\logs.html" />
-    <Content Include="modules\template\common\replys.html" />
-    <Content Include="modules\template\customer\replys.html" />
     <Content Include="modules\template\customer\customers.html" />
     <Content Include="modules\template\customer\customer-detail.html" />
     <Content Include="modules\plug\logs\logitem.html" />

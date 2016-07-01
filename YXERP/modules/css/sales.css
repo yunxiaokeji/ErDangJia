@@ -22,20 +22,3 @@
 .stageitems { width:100%; overflow:auto; }
 .stageitems li{ width:33%; height:25px; min-width:200px; line-height:25px; float:left; color:#666; text-indent:5px; }
 
-
-/*讨论备忘*/
-.talk-body { }
-.talk-body .content-main { height:150px; position:relative; width:700px; }
-.talk-body .content-main .txt-content { height:148px; width:640px; background-color:#f7f7f7; border:solid 1px #eee; }
-.talk-body .content-main .txt-content:focus { border:solid 1px #318ae4;}
-.talk-body .content-main .btn-save { position:absolute; right:0; bottom:0px; }
-
-.talk-body .talk-title { border-bottom: solid 1px #4a98e7; height:40px; line-height:40px; width: 700px; color:#666; }
-.talk-body .content-list { width: 700px; }
-.talk-body .content-list td{ border-bottom:dashed 1px #ccc; }
-.talk-body .content-list .user-avatar { width:35px; padding-top:20px; vertical-align:top; }
-.talk-body .content-list .user-avatar img{ width:24px; height:24px; border-radius:12px;  vertical-align:top; }
-
-
-
-

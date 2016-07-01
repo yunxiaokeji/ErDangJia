@@ -551,24 +551,6 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetCustomerLogs(string customerid, int pageindex)
-        {
-            int totalCount = 0;
-            int pageCount = 0;
-
-            var list = LogBusiness.GetLogs(customerid, EnumLogObjectType.Customer, 10, pageindex, ref totalCount, ref pageCount, CurrentUser.AgentID);
-
-            JsonDictionary.Add("items", list);
-            JsonDictionary.Add("totalCount", totalCount);
-            JsonDictionary.Add("pageCount", pageCount);
-
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
         public JsonResult GetContacts(string customerid)
         {
             var list = CustomBusiness.BaseBusiness.GetContactsByCustomerID(customerid, CurrentUser.AgentID);
@@ -618,7 +600,7 @@ namespace YXERP.Controllers
 
         public JsonResult UpdateContactDefault(string id, string name, string customerid)
         {
-            bool bl = CustomBusiness.BaseBusiness.UpdateContactDefault(id, name, customerid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            bool bl = CustomBusiness.BaseBusiness.UpdateContactDefault(id, customerid, name, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {

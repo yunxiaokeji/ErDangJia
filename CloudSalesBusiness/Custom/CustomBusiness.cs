@@ -349,7 +349,7 @@ namespace CloudSalesBusiness
             bool bl = CustomDAL.BaseProvider.UpdateContactDefault(contactid, operateid, agentid, clientid);
             if (bl)
             {
-                string msg = "设为默认联系人：" + name;
+                string msg = name + "设为默认联系人";
                 LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, ip, contactid, agentid, clientid);
             }
             return bl;

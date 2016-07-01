@@ -6,6 +6,7 @@ define(function (require, exports, module) {
         ChooseUser = require("chooseuser"),
         Easydialog = require("easydialog");
     require("pager");
+    require("logs");
     var ObjectJS = {};
 
     //初始化
@@ -181,7 +182,11 @@ define(function (require, exports, module) {
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                _self.getLogs(1);
+                $("#navLog").getObjectLogs({
+                    guid: _self.opportunityid,
+                    type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                    pageSize: 10
+                });
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
                 _self.initTalk(_self.opportunityid);
@@ -279,48 +284,6 @@ define(function (require, exports, module) {
             });
 
             $("#orderType").val(model.TypeID);
-        });
-    }
-
-    //获取日志
-    ObjectJS.getLogs = function (page) {
-        var _self = this;
-        $("#opportunityLog").empty();
-        $("#opportunityLog").append("<div class='data-loading'><div>");
-        Global.post("/Opportunitys/GetOpportunityLogs", {
-            opportunityid: _self.opportunityid,
-            pageindex: page
-        }, function (data) {
-            $("#opportunityLog").empty();
-            if (data.items.length > 0) {
-                doT.exec("template/common/logs.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-                    $("#opportunityLog").append(innerhtml);
-                });
-            } else {
-                $("#opportunityLog").append("<div class='nodata-txt'>暂无日志<div>");
-            }
-            $("#pagerLogs").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (pager) {
-                    _self.getLogs(pager);
-                }
-            });
         });
     }
 

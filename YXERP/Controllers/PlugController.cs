@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 using CloudSalesBusiness;
 using System.IO;
+using CloudSalesEnum;
 
 namespace YXERP.Controllers
 {
@@ -152,6 +153,32 @@ namespace YXERP.Controllers
             var list = CloudSalesBusiness.Manage.ExpressCompanyBusiness.GetExpressCompanys();
             JsonDictionary.Add("items", list);
             return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        /// <summary>
+        /// 获取日志
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="type"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        public JsonResult GetObjectLogs(string guid, EnumLogObjectType type, int pageSize, int pageIndex)
+        {
+            int totalCount = 0;
+            int pageCount = 0;
+
+            var list = LogBusiness.GetLogs(guid, type, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID);
+
+            JsonDictionary.Add("items", list);
+            JsonDictionary.Add("totalCount", totalCount);
+            JsonDictionary.Add("pageCount", pageCount);
+
+            return new JsonResult
             {
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet

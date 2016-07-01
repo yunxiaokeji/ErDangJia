@@ -211,24 +211,6 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetOpportunityLogs(string opportunityid, int pageindex)
-        {
-            int totalCount = 0;
-            int pageCount = 0;
-
-            var list = LogBusiness.GetLogs(opportunityid, EnumLogObjectType.Opportunity, 10, pageindex, ref totalCount, ref pageCount, CurrentUser.AgentID);
-
-            JsonDictionary.Add("items", list);
-            JsonDictionary.Add("totalCount", totalCount);
-            JsonDictionary.Add("pageCount", pageCount);
-
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
         public JsonResult UpdateOpportunityStage(string ids, string stageid)
         {
             bool bl = false;

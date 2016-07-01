@@ -33,7 +33,6 @@ seajs.config({
     ]
 });
 
-
 seajs.config({
     alias: {
         //数据验证
@@ -42,10 +41,10 @@ seajs.config({
         "city": "plug/city.js",
         //上传
         "upload": "plug/upload/upload.js",
+        //日志
+        "logs": "plug/logs/logs.js",
         //开关插件
         "switch": "plug/switch/switch.js",
-        //标签插件
-        "mark": "plug/mark/mark.js",
         //标签插件(取配系统置)
         "colormark": "plug/colormark/colormark.js",
         //弹出层插件

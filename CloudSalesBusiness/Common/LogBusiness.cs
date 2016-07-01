@@ -93,10 +93,6 @@ namespace CloudSalesBusiness
 
         }
 
-        /// <summary>
-        /// 获取日志
-        /// </summary>
-        /// <returns></returns>
         public static List<LogEntity> GetLogs(string guid, EnumLogObjectType type, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid)
         {
             string tablename = "";
@@ -121,7 +117,6 @@ namespace CloudSalesBusiness
                 LogEntity model = new LogEntity();
                 model.FillData(dr);
                 model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
-
                 list.Add(model);
             }
             return list;

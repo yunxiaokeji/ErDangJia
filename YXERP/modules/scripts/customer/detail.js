@@ -6,6 +6,7 @@
         ChooseUser = require("chooseuser"),
         Easydialog = require("easydialog");
     require("pager");
+    require("logs");
     require("colormark");
 
     var ObjectJS = {}, CacheIems = [], CacheTypes = [];
@@ -194,7 +195,11 @@
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {  /*日志*/
                 _this.data("first", "1");
-                _self.getLogs(model.CustomerID, 1);
+                $("#navLog").getObjectLogs({
+                    guid: _self.customerid,
+                    type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                    pageSize: 10
+                });
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) { /*备忘*/
                 _this.data("first", "1");
                 _self.initTalk(model.CustomerID);
@@ -388,48 +393,6 @@
         });
     }
 
-    //获取日志
-    ObjectJS.getLogs = function (customerid, page) {
-        var _self = this;
-        $("#customerLog").empty();
-        $("#customerLog").append("<div class='data-loading'><div>");
-        Global.post("/Customer/GetCustomerLogs", {
-            customerid: customerid,
-            pageindex: page
-        }, function (data) {
-            $("#customerLog").empty();
-            if (data.items.length > 0) {
-                doT.exec("template/common/logs.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-                    $("#customerLog").append(innerhtml);
-                });
-            } else {
-                $("#customerLog").append("<div class='nodata-txt'>暂无日志<div>");
-            }
-            $("#pagerLogs").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (page) {
-                    _self.getLogs(customerid, page);
-                }
-            });
-        });
-    }
-
     //获取订单
     ObjectJS.getOrders = function (customerid, page) {
         var _self = this;
@@ -619,7 +582,7 @@
         Global.post("/Customer/SaveContact", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.ContactID) {
                 /*处理客户联系人*/
-                if (model.Type == 1 || $("#navContact ul").length <= 2) {
+                if (model.Type == 1 || $("#navContact ul").length < 2) {
                     $("#lblContactName").text(model.Name);
                 }
                 _self.getContacts(model.CustomerID);

@@ -241,20 +241,13 @@ namespace YXERP.Controllers
                 if (dt.Columns.Count > 0)
                 {
                     ///1.获取系统模版列
-                    var checkColumn = dt.Columns.Contains("客户类型");
-                    Dictionary<string, string> listColumn;
-                    if (checkColumn)
-                    {
-                        listColumn = GetColumnForJson("customer", "Item");
-                    }
-                    else
-                    {
-                        listColumn = GetColumnForJson("customer", "OwnItem");
-                    }
+                    var checkColumn = dt.Columns.Contains("是否企业客户");
+                    Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+                    Dictionary<string, ExcelModel> listColumn = GetColumnForJson("customer", ref dic, checkColumn ? "Item" : "OwnItem", "import", CurrentUser.ClientID);
                     ///2.上传Excel 与模板中列是否一致 不一致返回提示
                     foreach (DataColumn dc in dt.Columns)
                     {
-                        if (!listColumn.ContainsKey(dc.ColumnName))
+                        if (default(KeyValuePair<string, ExcelModel>).Equals(listColumn.FirstOrDefault(x => x.Value.Title == dc.ColumnName)))
                         {
                             mes += dc.ColumnName + ",";
                         }
@@ -262,34 +255,46 @@ namespace YXERP.Controllers
                     if (!string.IsNullOrEmpty(mes))
                     {
                         return Content("Excel模版与系统模版不一致,请重新下载模板,编辑后再上传.错误:缺少列 " + mes);
-                    }
+                    } 
                     ///3.开始处理
                     int k = 1;
                     List<CustomerEntity> list = new List<CustomerEntity>();
                     List<ContactEntity> contactList = new List<ContactEntity>();
+                    var excelWriter = new ExcelWriter();
                     foreach (DataRow dr in dt.Rows)
                     {
                         try
                         {
-                            CustomerEntity customers;
-                            ContactEntity contact;
                             if (checkColumn)
                             {
-                                customers = GetCustomerByDataRow(dr);
-                                list.Add(customers);
+                                CustomerEntity customer = new CustomerEntity();
+                                excelWriter.GetProductByDataRow(dr, listColumn, customer, dic, CurrentUser.ClientID);
+                                customer.ClientID = CurrentUser.ClientID;
+                                customer.AgentID = CurrentUser.AgentID;
+                                customer.CreateUserID = CurrentUser.UserID;
+                                customer.CreateTime = DateTime.Now;
+                                customer.CustomerID = Guid.NewGuid().ToString();
+                                customer.CityCode = GetCityCode(dr);
+                                customer.OwnerID = customer.OwnerID.Trim() == "是" ? CurrentUser.UserID : "";
+                                list.Add(customer);
+                                //上面出问题的话请注释以上 使用下面
+                                //list.Add(GetCustomerByDataRow(dr));
                             }
                             else
                             {
-                                //if (dr["客户名称"] != null && !string.IsNullOrEmpty(dr["客户名称"].ToString()))
-                                //{
-                            contact = GetContactByDataRow(dr, checkColumn);
-                            contactList.Add(contact);
-                                //}
-                                //else
-                                //{
-                                //    customers = GetCustomerByDataRow(dr, checkColumn);
-                                //    list.Add(customers);
-                                //}
+                                ContactEntity contact = new ContactEntity();
+                                excelWriter.GetProductByDataRow(dr, listColumn, contact, dic, CurrentUser.ClientID);
+                                contact.CityCode = GetCityCode(dr);
+                                contact.ClientID = CurrentUser.ClientID;
+                                contact.AgentID = CurrentUser.AgentID;
+                                contact.CreateUserID = CurrentUser.UserID;
+                                contact.OwnerID = CurrentUser.UserID;
+                                contact.CustomerID = ""; 
+                                contact.CreateTime = DateTime.Now;
+                                contact.Type = 0;
+                                contact.ContactID = Guid.NewGuid().ToString();
+                                contactList.Add(contact);
+                                //contactList.Add( GetContactByDataRow(dr, checkColumn));
                             }
                         }
                         catch (Exception ex)
@@ -306,7 +311,6 @@ namespace YXERP.Controllers
                     {
                         return Content("系统异常:请联系管理员,错误原因" + ex.Message);
                     }
-
                 }
                 if (!string.IsNullOrEmpty(mes))
                 {
@@ -319,7 +323,7 @@ namespace YXERP.Controllers
             }
             return Content("操作成功");
         }
-         
+        #region 运行一段时间无错误以下方法可删除
         public CustomerEntity GetCustomerByDataRow(DataRow dr ,bool isQiYe=false)
         {
             CustomerEntity customers = new CustomerEntity();
@@ -331,21 +335,17 @@ namespace YXERP.Controllers
             customers.ClientID = CurrentUser.ClientID;
             customers.AgentID = CurrentUser.AgentID;
             customers.CreateUserID = CurrentUser.UserID;
-            customers.OwnerID = CurrentUser.UserID;
+            customers.OwnerID = dr["是否属于我的客户"].ToString() == "是" ? CurrentUser.UserID : "";
             customers.CreateTime = DateTime.Now;
-            customers.Type = dr["客户类型"].ToString() =="企业"? 1 : 0;
+            customers.Type = dr["是否企业客户"].ToString() == "是" ? 1 : 0;
             customers.ContactName = dr["联系人"].ToString();
             customers.CustomerID = Guid.NewGuid().ToString();
             customers.CityCode = GetCityCode(dr);
-            customers.Name = dr["客户名称"].ToString();
-            //if (customers.Type==1)
-            //{
-                Industry industry = CommonBusiness.IndustryList.Where(x => x.Name.Equals(dr["行业"].ToString()))
-                    .FirstOrDefault();
-                customers.IndustryID = industry != null ? industry.IndustryID : "";
-                customers.Extent =
-                    (int)CommonBusiness.GetEnumindexByDesc<EnumCustomerExtend>(EnumCustomerExtend.Huge, dr["公司规模"].ToString());
-            //}
+            customers.Name = dr["客户名称"].ToString(); 
+            ClientsIndustry industry = SystemBusiness.BaseBusiness.GetClientIndustryByName(dr["行业"].ToString(),CurrentUser.AgentID,CurrentUser.ClientID);
+            customers.IndustryID = industry != null ? industry.ClientIndustryID : "";
+            customers.Extent =
+                (int)CommonBusiness.GetEnumindexByDesc<EnumCustomerExtend>(EnumCustomerExtend.Huge, dr["公司规模"].ToString());
             return customers;
         }
 
@@ -370,7 +370,7 @@ namespace YXERP.Controllers
             contact.ContactID = Guid.NewGuid().ToString();
             return contact;
         } 
-
+        #endregion
         public JsonResult SaveCustomer(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();

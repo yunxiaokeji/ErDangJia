@@ -19,10 +19,6 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        /// <summary>
-        /// 公司规模
-        /// </summary>
-        /// <returns></returns>
         public static List<ExtentEntity> GetExtents()
         {
             List<ExtentEntity> list = new List<ExtentEntity>();
@@ -34,7 +30,6 @@ namespace CloudSalesBusiness
             list.Add(new ExtentEntity() { ExtentID = "6", ExtentName = "1000人以上" });
             return list;
         }
-
 
         public List<CustomerEntity> GetCustomers(EnumSearchType searchtype, int type, string sourceid, string stageid, int status, int mark, string activityid, string searchuserid, string searchteamid, string searchagentid,
                                                  string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid)
@@ -55,6 +50,7 @@ namespace CloudSalesBusiness
             }
             return list;
         }
+        
         public DataTable GetCustomersDatable(EnumSearchType searchtype, int type, string sourceid, string stageid, int status, int mark, string activityid, string searchuserid, string searchteamid, string searchagentid,
                                                 string begintime, string endtime, string keyWords, string orderby, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string userid, string agentid, string clientid,int excelType=0)
         {
@@ -67,6 +63,7 @@ namespace CloudSalesBusiness
             }
             return dt;
         }
+        
         public List<CustomerEntity> GetCustomersByActivityID(string activityid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
         {
             List<CustomerEntity> list = new List<CustomerEntity>();
@@ -114,7 +111,7 @@ namespace CloudSalesBusiness
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
                 model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);
-                //model.Stage = SystemBusiness.BaseBusiness.GetCustomStageByID(model.StageID, model.AgentID, model.ClientID);
+
                 if (model.Extent > 0)
                 {
                     model.ExtentStr = GetExtents().Where(m => m.ExtentID == model.Extent.ToString()).FirstOrDefault().ExtentName;
@@ -126,7 +123,7 @@ namespace CloudSalesBusiness
 
                 if (!string.IsNullOrEmpty(model.IndustryID))
                 {
-                    model.Industry = Manage.IndustryBusiness.GetIndustryDetail(model.IndustryID);
+                    model.Industry = SystemBusiness.BaseBusiness.GetClientIndustryByID(model.IndustryID, model.AgentID, model.ClientID);
                 }
                 if (ds.Tables["Activity"].Rows.Count > 0)
                 {
@@ -165,7 +162,8 @@ namespace CloudSalesBusiness
 
             return list;
         }
-        public List<ContactEntity> GetContactsByCustomerID(string ownerID,string customerid="", string agentid="")
+
+        public List<ContactEntity> GetContactsByCustomerID(string ownerID, string customerid = "", string agentid = "")
         {
             int total = 0;
             List<ContactEntity> list = new List<ContactEntity>(); 
@@ -187,6 +185,7 @@ namespace CloudSalesBusiness
             }
             return list;
         }
+
         public ContactEntity GetContactByID(string contactid)
         {
             ContactEntity model = new ContactEntity();
@@ -222,28 +221,6 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        public static List<ReplyEntity> GetReplys(string guid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
-        {
-            List<ReplyEntity> list = new List<ReplyEntity>();
-            string whereSql = " Status<>9 and GUID='" + guid + "' ";
-            DataTable dt = CommonBusiness.GetPagerData("CustomerReply", "*", whereSql, "AutoID", "CreateTime desc ", pageSize, pageIndex, out totalCount, out pageCount, false);
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                ReplyEntity model = new ReplyEntity();
-                model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
-                if (!string.IsNullOrEmpty(model.FromReplyID))
-                {
-                    model.FromReplyUser = OrganizationBusiness.GetUserByUserID(model.FromReplyUserID, model.FromReplyAgentID);
-                }
-                list.Add(model);
-            }
-
-            return list;
-
-        }
-
         #endregion
 
         #region 添加
@@ -263,11 +240,6 @@ namespace CloudSalesBusiness
                 LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Customer, EnumLogType.Create, "", operateid, agentid, clientid);
             }
             return id;
-        }
-
-        public static string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
-        {
-            return CustomDAL.BaseProvider.CreateReply(guid, content, userID, agentID, fromReplyID, fromReplyUserID, fromReplyAgentID);
         }
 
         public string CreateContact(string customerid,string name, string citycode, string address, string mobile, string officephone, string email, string jobs, string desc, string operateid, string agentid, string clientid)
@@ -341,6 +313,11 @@ namespace CloudSalesBusiness
         public bool UpdateContact(string contactid, string customerid, string name, string citycode, string address, string mobile, string officephone, string email, string jobs, string desc, string operateid, string agentid, string clientid)
         {
             bool bl = CustomDAL.BaseProvider.UpdateContact(contactid, customerid, name, citycode, address, mobile, officephone, email, jobs, desc, operateid, agentid, clientid);
+            if (bl)
+            {
+                string msg = "联系人名称变更为：" + name + "，联系电话：" + mobile;
+                LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, operateid, "", contactid, agentid, clientid);
+            }
             return bl;
         }
 
@@ -363,12 +340,6 @@ namespace CloudSalesBusiness
                 string msg = "删除联系人：" + name;
                 LogBusiness.AddLog(customerid, EnumLogObjectType.Customer, msg, userid, ip, contactid, agentid, clientid);
             }
-            return bl;
-        }
-
-        public bool DeleteReply(string replyid)
-        {
-            bool bl = CommonBusiness.Update("CustomerReply", "Status", 9, "ReplyID='" + replyid + "'");
             return bl;
         }
 

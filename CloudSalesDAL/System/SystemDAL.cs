@@ -358,12 +358,13 @@ namespace CloudSalesDAL
             return bl;
         }
 
-        public bool UpdateClientIndustry(string clientid, string clientindustryid, string name)
+        public bool UpdateClientIndustry(string clientid, string clientindustryid, string name, string desc)
         {
-            string sqltext = "update ClientsIndustry set Name=@Name where ClientIndustryID=@ClientIndustryID and ClientID=@ClientID";
+            string sqltext = "update ClientsIndustry set Name=@Name,Description=@Desc where ClientIndustryID=@ClientIndustryID and ClientID=@ClientID";
             SqlParameter[] paras = { 
                                      new SqlParameter("@ClientIndustryID",clientindustryid),
                                      new SqlParameter("@Name",name), 
+                                     new SqlParameter("@Desc",desc), 
                                      new SqlParameter("@ClientID" , clientid)
                                    };
             bool bl = ExecuteNonQuery(sqltext, paras, CommandType.Text) > 0;
@@ -372,13 +373,11 @@ namespace CloudSalesDAL
 
         public bool DeleteClientIndustry(string clientid, string clientindustryid)
         {
-            string sqltext = "update ClientsIndustry set Status=9 where ClientIndustryID=@ClientIndustryID and ClientID=@ClientID";
-
             SqlParameter[] paras = { 
                                      new SqlParameter("@ClientIndustryID",clientindustryid),
                                      new SqlParameter("@ClientID" , clientid)
                                    };
-            bool bl = ExecuteNonQuery(sqltext, paras, CommandType.Text) > 0;
+            bool bl = ExecuteNonQuery("P_DeleteClientIndustry", paras, CommandType.StoredProcedure) > 0;
             return bl;
         } 
 

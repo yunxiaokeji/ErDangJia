@@ -90,28 +90,6 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public static List<ReplyEntity> GetReplys(string guid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
-        {
-            List<ReplyEntity> list = new List<ReplyEntity>();
-            string whereSql = " Status<>9 and GUID='" + guid + "' ";
-            DataTable dt = CommonBusiness.GetPagerData("OpportunityReply", "*", whereSql, "AutoID", "CreateTime desc ", pageSize, pageIndex, out totalCount, out pageCount, false);
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                ReplyEntity model = new ReplyEntity();
-                model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
-                if (!string.IsNullOrEmpty(model.FromReplyID))
-                {
-                    model.FromReplyUser = OrganizationBusiness.GetUserByUserID(model.FromReplyUserID, model.FromReplyAgentID);
-                }
-                list.Add(model);
-            }
-
-            return list;
-
-        }
-
         #endregion
 
         #region 添加、编辑、删除
@@ -132,11 +110,6 @@ namespace CloudSalesBusiness
                 LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.Opportunity, EnumLogType.Create, "", operateid, agentid, clientid);
             }
             return id;
-        }
-
-        public static string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
-        {
-            return OpportunityDAL.BaseProvider.CreateReply(guid, content, userID, agentID, fromReplyID, fromReplyUserID, fromReplyAgentID);
         }
 
         public bool UpdateOpportunity(string opportunityid, string personName, string mobileTele, string cityCode, string address, string postalcode, string typeid, string remark, string operateid, string ip, string agentid, string clientid)

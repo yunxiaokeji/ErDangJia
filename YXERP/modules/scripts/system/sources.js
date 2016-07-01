@@ -37,6 +37,7 @@
             Model.SourceCode = "";
             _self.createModel();
         });
+
         /*添加行业*/
         $("#createIndustry").click(function () {
             _self.Industry = {};
@@ -45,6 +46,7 @@
             _self.Industry.Name = ""; 
             _self.createIndustry();
         });
+
         //删除来源
         $("#deleteObject").click(function () { 
             ObjectJS.deleteModel($(this));
@@ -115,23 +117,24 @@
                     _this.data("first", "1");
                     _self.getIndustryList();
                 }
-                /* 修改 删除时间重新绑定 */
-                $("#deleteObject").unbind().click(function() {
-                    var _thisnow = $(this); 
+
+                $("#deleteObject").unbind().click(function () {
+                    var _thisnow = $(this);
                     if (_this.data("id") == "industryList") {
-                        confirm("客户行业删除后不可恢复,确认删除吗？", function() {
-                            Global.post("/System/DeleteClientIndustry", { clientindustryid: _thisnow.data("id") }, function(data) {
-                                if (data.result == "操作成功") {
+                        confirm("客户删除后不可恢复,确认删除吗？", function () {
+                            Global.post("/System/DeleteClientIndustry", { clientindustryid: _thisnow.data("id") }, function (data) {
+                                if (data.result) {
                                     _self.getIndustryList();
                                 } else {
-                                    alert(data.result);
+                                    alert("行业存在关联数据，删除失败");
                                 }
                             });
                         });
                     } else if (_this.data("id") == "sourceList") {
-                        ObjectJS.deleteModel(_thisnow); 
+                        ObjectJS.deleteModel(_thisnow);
                     }
                 });
+
                 $("#updateObject").unbind().click(function () {
                     var _thisnow = $(this);
                     if (_this.data("id") == "sourceList") {
@@ -141,13 +144,13 @@
                         _self.Industry.ClientIndustryID = _thisnow.data('id');
                         _self.Industry.Name = _thisnow.data('name');
                         _self.Industry.Description = _thisnow.data('description');
-                        _self.createIndustry(); 
+                        _self.createIndustry();
                     }
                 });
-
             }
         });
     }
+
     ObjectJS.SourceEdit = function (obj) {
         var _self = this;
         Global.post("/System/GetCustomSourceByID", { id: obj.data("id") }, function (data) {
@@ -159,6 +162,7 @@
             _self.createModel();
         });
     }
+
     /*客户标签弹窗*/
     ObjectJS.createColor = function () {
         var _self = this;
@@ -345,6 +349,7 @@
             });
         });
     }
+
     /*客户来源类型修改*/
     ObjectJS.editIsChoose = function (obj, id, status, callback) {
         var _self = this;
@@ -403,14 +408,14 @@
             !!callback && callback(data.result);
         });
     }
+
     /* 位置计算*/
     ObjectJS.getLeft = function (b) {
         return 10 + $(".sourceul li").eq(b - 1).offset().left - $(".sourceul li").eq(0).offset().left;
     }
 
-
     /*客户行业列表*/
-    ObjectJS.getIndustryList = function (items) { 
+    ObjectJS.getIndustryList = function () { 
         $("#industryList .tr-header").nextAll().remove();
         $("#industryList .tr-header").after("<tr><td colspan='5'><div class='data-loading' ><div></td></tr>");
         Global.post("/System/GetClientIndustry", {}, function (data) {
@@ -447,7 +452,7 @@
             Easydialog.open({
                 container: {
                     id: "show-model-detail",
-                    header: !_self.Industry.ClientIndustryID ? "新建客户行业" : "编辑客户行业",
+                    header: !_self.Industry.ClientIndustryID ? "新建行业" : "编辑行业",
                     content: html,
                     yesFn: function () {
                         if (!VerifyObject.isPass()) {
@@ -473,7 +478,8 @@
             $("#Description").val(_self.Industry.Description);
         });
     }
-    /*客户来源保存*/
+
+    /*客户行业保存*/
     ObjectJS.saveIndustry = function () {
         var _self = this;
         Global.post("/System/SaveClientIndustry", { clientindustry: JSON.stringify(_self.Industry) }, function (data) {
@@ -483,6 +489,7 @@
                 alert("保存失败,行业已存在!");
             }
         });
-    } 
+    }
+
     module.exports = ObjectJS;
 });

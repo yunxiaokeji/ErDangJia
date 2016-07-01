@@ -323,6 +323,7 @@ namespace YXERP.Controllers
             }
             return Content("操作成功");
         }
+
         #region 运行一段时间无错误以下方法可删除
         public CustomerEntity GetCustomerByDataRow(DataRow dr ,bool isQiYe=false)
         {
@@ -370,7 +371,9 @@ namespace YXERP.Controllers
             contact.ContactID = Guid.NewGuid().ToString();
             return contact;
         } 
+
         #endregion
+
         public JsonResult SaveCustomer(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -619,68 +622,6 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
-        #region 讨论
-
-        public JsonResult SavaReply(string entity)
-        {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            ReplyEntity model = serializer.Deserialize<ReplyEntity>(entity);
-
-            string replyID = "";
-            replyID = CustomBusiness.CreateReply(model.GUID, model.Content, CurrentUser.UserID, CurrentUser.AgentID, model.FromReplyID, model.FromReplyUserID, model.FromReplyAgentID);
-
-            List<ReplyEntity> list = new List<ReplyEntity>();
-            if (!string.IsNullOrEmpty(replyID))
-            {
-                model.ReplyID = replyID;
-                model.CreateTime = DateTime.Now;
-                model.CreateUser = CurrentUser;
-                model.CreateUserID = CurrentUser.UserID;
-                model.AgentID = CurrentUser.AgentID;
-                if (!string.IsNullOrEmpty(model.FromReplyUserID) && !string.IsNullOrEmpty(model.FromReplyAgentID))
-                {
-                    model.FromReplyUser = OrganizationBusiness.GetUserByUserID(model.FromReplyUserID, model.FromReplyAgentID);
-                }
-                list.Add(model);
-            }
-            JsonDictionary.Add("items", list);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult GetReplys(string guid, int pageSize, int pageIndex)
-        {
-            int pageCount = 0;
-            int totalCount = 0;
-
-            var list = CustomBusiness.GetReplys(guid, pageSize, pageIndex, ref totalCount, ref pageCount);
-            JsonDictionary.Add("items", list);
-            JsonDictionary.Add("totalCount", totalCount);
-            JsonDictionary.Add("pageCount", pageCount);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult DeleteReply(string replyid)
-        {
-            bool bl = CustomBusiness.BaseBusiness.DeleteReply(replyid);
-            JsonDictionary.Add("status", bl ? 1 : 0);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-
-        }
-
-        #endregion
 
         #endregion
 

@@ -10,10 +10,13 @@ namespace CloudSalesEntity
     {
         public int AutoID { get; set; }
 
+        [Property("Lower")] 
         public string ClientIndustryID { get; set; }
-        
+
+        [Property("Lower")] 
         public string AgentID { get; set; }
 
+        [Property("Lower")] 
         public string ClientID { get; set; }
 
         public string Name { get; set; }
@@ -26,6 +29,7 @@ namespace CloudSalesEntity
 
         public Users CreateUser { get; set; }
 
+        [Property("Lower")] 
         public string CreateUserID { get; set; }
 
         /// <summary>

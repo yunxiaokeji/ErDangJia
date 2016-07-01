@@ -819,7 +819,7 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult SaveClientIndustry( string clientindustry)
+        public JsonResult SaveClientIndustry(string clientindustry)
         { 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             ClientsIndustry model = serializer.Deserialize<ClientsIndustry>(clientindustry);
@@ -827,17 +827,15 @@ namespace YXERP.Controllers
             model.ClientID = CurrentUser.ClientID;
             model.AgentID = CurrentUser.AgentID;
             model.Status = 1;
-            string result ="操作成功";
+            string result = "1";
             if (string.IsNullOrEmpty(model.ClientIndustryID))
             {
-                if (
-                    SystemBusiness.BaseBusiness.GetClientIndustryByName(model.Name, CurrentUser.AgentID,
-                        CurrentUser.ClientID) == null)
+                if (SystemBusiness.BaseBusiness.GetClientIndustryByName(model.Name, CurrentUser.AgentID, CurrentUser.ClientID) == null)
                 {
                     string mes = SystemBusiness.BaseBusiness.CreateClientIndustry(Guid.NewGuid().ToString(),
                         model.Name.Trim(),
                         model.AgentID, model.ClientID, model.CreateUserID, model.Description, model.Status);
-                    result = string.IsNullOrEmpty(mes) ?result: mes;
+                    result = string.IsNullOrEmpty(mes) ? result : mes;
                 }
                 else
                 {
@@ -846,7 +844,7 @@ namespace YXERP.Controllers
             }
             else
             {
-                int bl = SystemBusiness.BaseBusiness.UpdateClientIndustry(model.AgentID, model.ClientID, model.ClientIndustryID,model.Name);
+                int bl = SystemBusiness.BaseBusiness.UpdateClientIndustry(model.AgentID, model.ClientID, model.ClientIndustryID, model.Name, model.Description);
                 result = bl > 0 ? result :"修改失败";
               
             }

@@ -59,11 +59,6 @@ namespace YXERP.Controllers
 
         #region ajax
 
-        #region 活动
-        /// <summary>
-        /// 获取活动列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetActivityList(string keyWords, int pageSize, int pageIndex, int isAll, string beginTime, string endTime, string orderBy, int stage, int filterType, string userID)
         {
             int pageCount = 0;
@@ -90,10 +85,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取活动详细信息
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetActivityDetail(string activityID)
         {
             ActivityEntity model = ActivityBusiness.GetActivityByID(activityID, CurrentUser.AgentID, CurrentUser.ClientID);
@@ -106,9 +97,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取用户详情
-        /// </summary>
         public JsonResult GetUserDetail(string id)
         {
             Users model = null;
@@ -125,10 +113,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取活动对应的客户列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetCustomersByActivityID(string activityID,int pageSize,int pageIndex)
         {
             int pageCount = 0;
@@ -146,9 +130,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存活动
-        /// </summary>
         public JsonResult SavaActivity(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -181,11 +162,6 @@ namespace YXERP.Controllers
             };
         }
 
-        
-        /// <summary>
-        /// 删除活动
-        /// </summary>
-        /// <returns></returns>
         public JsonResult DeleteActivity(string activityID)
         {
             bool bl = new ActivityBusiness().DeleteActivity(activityID);
@@ -197,81 +173,6 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        #endregion
-
-        #region 活动讨论
-        /// <summary>
-        /// 保存活动讨论
-        /// </summary>
-        public JsonResult SavaActivityReply(string entity)
-        {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            ActivityReplyEntity model = serializer.Deserialize<ActivityReplyEntity>(entity);
-
-            string replyID =string.Empty;
-            replyID = ActivityBusiness.CreateActivityReply(model.ActivityID, model.Msg, CurrentUser.UserID, CurrentUser.AgentID, model.FromReplyID, model.FromReplyUserID, model.FromReplyAgentID);
-
-            List<ActivityReplyEntity> list = new List<ActivityReplyEntity>();
-            if (!string.IsNullOrEmpty(replyID))
-            {
-                model.ReplyID = replyID;
-                model.CreateTime = DateTime.Now;
-                model.CreateUser = CurrentUser;
-                model.CreateUserID = CurrentUser.UserID;
-                model.AgentID = CurrentUser.AgentID;
-                if(!string.IsNullOrEmpty(model.FromReplyID))
-                {
-                    model.FromReplyUser = OrganizationBusiness.GetUserByUserID(model.FromReplyUserID, model.FromReplyAgentID);
-                }
-                list.Add(model);
-            }
-            JsonDictionary.Add("Items", list);
-
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        /// <summary>
-        /// 获取活动讨论列表
-        /// </summary>
-        public JsonResult GetActivityReplys(string activityID, int pageSize, int pageIndex)
-        {
-            int pageCount = 0;
-            int totalCount = 0;
-
-            List<ActivityReplyEntity> list = ActivityBusiness.GetActivityReplys(activityID, pageSize, pageIndex, ref totalCount, ref pageCount);
-            JsonDictionary.Add("Items", list);
-            JsonDictionary.Add("TotalCount", totalCount);
-            JsonDictionary.Add("PageCount", pageCount);
-
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        /// <summary>
-        /// 删除活动讨论
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult DeleteActivityReply(string activityID)
-        {
-            bool bl =ActivityBusiness.DeleteActivityReply(activityID);
-
-            JsonDictionary.Add("Result", bl ? 1 : 0);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-
-        }
-
-        #endregion
 
         #endregion
 

@@ -21,16 +21,11 @@ namespace CloudSalesBusiness
         private static Dictionary<string, List<CustomSourceEntity>> _source;
         private static Dictionary<string, List<CustomerColorEntity>> _color;
         private static Dictionary<string, List<OpportunityStageEntity>> _opportunitystages;
-
         private static Dictionary<string, List<OrderTypeEntity>> _ordertypes;
         private static Dictionary<string, List<TeamEntity>> _teams;
-
         private static Dictionary<string, List<WareHouse>> _wares;
-
         private static Dictionary<string, List<ClientsIndustry>> _clientInsdutryList;
-        /// <summary>
-        /// 客户行业配置
-        /// </summary>
+
         public static Dictionary<string, List<ClientsIndustry>> ClientIndustryList
         {
             get
@@ -42,9 +37,7 @@ namespace CloudSalesBusiness
                 return _clientInsdutryList;
             }
         }
-        /// <summary>
-        /// 客户来源
-        /// </summary>
+
         private static Dictionary<string, List<CustomSourceEntity>> CustomSources
         {
             get
@@ -60,9 +53,7 @@ namespace CloudSalesBusiness
                 _source = value;
             }
         }
-        /// <summary>
-        /// 客户标签
-        /// </summary>
+
         private static Dictionary<string, List<CustomerColorEntity>> CustomColor
         {
             get
@@ -79,9 +70,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 机会阶段
-        /// </summary>
         private static Dictionary<string, List<OpportunityStageEntity>> OpportunityStages
         {
             get
@@ -98,9 +86,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 订单类型
-        /// </summary>
         private static Dictionary<string, List<OrderTypeEntity>> OrderTypes
         {
             get
@@ -117,9 +102,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 销售团队
-        /// </summary>
         private static Dictionary<string, List<TeamEntity>> Teams
         {
             get
@@ -136,9 +118,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 仓库
-        /// </summary>
         private static Dictionary<string, List<WareHouse>> WareHouses
         {
             get
@@ -198,7 +177,8 @@ namespace CloudSalesBusiness
             CustomColor.Add(clientid, list);
             return list;
         }
-        public List<ClientsIndustry> GetClientIndustry(string agentid,string clientid)
+
+        public List<ClientsIndustry> GetClientIndustry(string agentid, string clientid)
         {
             if (ClientIndustryList.ContainsKey(clientid))
             {
@@ -225,23 +205,8 @@ namespace CloudSalesBusiness
             {
                 return null;
             }
-            if (ClientIndustryList.ContainsKey(clientid))
-            {
-                return ClientIndustryList[clientid].Where(x => x.Name == name.Trim()).FirstOrDefault();
-            }
-
-            List<ClientsIndustry> list = new List<ClientsIndustry>();
-            DataTable dt = SystemDAL.BaseProvider.GetClientIndustry(clientid);
-            foreach (DataRow dr in dt.Rows)
-            {
-                ClientsIndustry model = new ClientsIndustry();
-                model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
-                list.Add(model);
-            }
-            ClientIndustryList.Add(clientid, list);
+            var list = GetClientIndustry(agentid, clientid);
             return list.Where(x => x.Name == name.Trim()).FirstOrDefault();
-
         }
 
         public ClientsIndustry GetClientIndustryByID(string clientIndustryID, string agentid, string clientid)
@@ -262,6 +227,7 @@ namespace CloudSalesBusiness
             {
                 model.FillData(dt.Rows[0]);
                 model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                list.Add(model);
             }
             return model;
         }
@@ -612,33 +578,28 @@ namespace CloudSalesBusiness
             }
             return result;
         }
+        
         public string CreateClientIndustry(string clientindustryid, string name, string agentid, string clientid, string userid, string description, int status = 1)
         {
-            bool result = SystemDAL.BaseProvider.InsertClientIndustry(clientindustryid, name, clientid,agentid,
-                userid, description, status);
+            bool result = SystemDAL.BaseProvider.InsertClientIndustry(clientindustryid, name, clientid, agentid, userid, description, status);
             if (result)
             {
-                if (!ClientIndustryList.ContainsKey(clientid))
+                var list = GetClientIndustry(agentid, clientid);
+                list.Add(new ClientsIndustry()
                 {
-                    GetClientIndustry(agentid,clientid);
-                }
-                else
-                {
-                    ClientIndustryList[clientid].Add(new ClientsIndustry()
-                    {
-                        AgentID = agentid,
-                        ClientIndustryID = clientindustryid,
-                        Description = description,
-                        Name = name,
-                        ClientID = clientid,
-                        CreateUserID = userid,
-                        CreateTime = DateTime.Now,
-                        Status = 0
-                    });
-                }
+                    AgentID = agentid,
+                    ClientIndustryID = clientindustryid,
+                    Description = description,
+                    Name = name,
+                    ClientID = clientid,
+                    CreateUserID = userid,
+                    CreateTime = DateTime.Now,
+                    Status = 0
+                });
             }
             return "";
         }
+        
         public string CreateStageItem(string name, string stageid, string userid, string agentid, string clientid)
         {
             string itemid = Guid.NewGuid().ToString().ToLower();
@@ -835,40 +796,27 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
-        /// <summary>
-        /// 修改客户行业
-        /// </summary>
-        /// <param name="agentid"></param>
-        /// <param name="clientid"></param>
-        /// <param name="clientindustryid"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public int UpdateClientIndustry(string agentid, string clientid, string clientindustryid, string name)
+
+        public int UpdateClientIndustry(string agentid, string clientid, string clientindustryid, string name, string desc)
         {
-            var model = GetClientIndustryByID(clientindustryid,agentid, clientid);
+            var model = GetClientIndustryByID(clientindustryid, agentid, clientid);
             if (model == null)
             {
                 return -200;
             }
-            bool result = SystemDAL.BaseProvider.UpdateClientIndustry(clientid, clientindustryid, name);
+            bool result = SystemDAL.BaseProvider.UpdateClientIndustry(clientid, clientindustryid, name, desc);
             if (result)
             {
-                if (!CustomColor.ContainsKey(clientid))
-                {
-                    GetCustomerColors(clientid);
-                }
-                else
-                {
-                    model.Name = name;  
-                }
+                model.Name = name;
+                model.Description = desc;
             }
             return result ? 1 : 0;
         }
 
         public bool DeleteClientIndustry(string clientid,string agentid, string clientindustryid)
         {
-            var model = GetClientIndustryByID(clientindustryid,agentid, clientid);
-            bool bl = SystemDAL.BaseProvider.DeleteClientIndustry(clientid,clientindustryid);
+            var model = GetClientIndustryByID(clientindustryid, agentid, clientid);
+            bool bl = SystemDAL.BaseProvider.DeleteClientIndustry(clientid, clientindustryid);
             if (bl)
             {
                 ClientIndustryList[clientid].Remove(model);

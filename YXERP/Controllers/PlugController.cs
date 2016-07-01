@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using CloudSalesBusiness;
 using System.IO;
 using CloudSalesEnum;
+using System.Web.Script.Serialization;
+using CloudSalesEntity;
 
 namespace YXERP.Controllers
 {
@@ -178,6 +180,62 @@ namespace YXERP.Controllers
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
 
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        /// <summary>
+        /// 获取评论备忘
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="type"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        public JsonResult GetReplys(string guid, EnumLogObjectType type, int pageSize, int pageIndex)
+        {
+            int totalCount = 0;
+            int pageCount = 0;
+
+            var list = ReplyBusiness.GetReplys(guid, type, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID);
+
+            JsonDictionary.Add("items", list);
+            JsonDictionary.Add("totalCount", totalCount);
+            JsonDictionary.Add("pageCount", pageCount);
+
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult SavaReply(EnumLogObjectType type, string entity)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ReplyEntity model = serializer.Deserialize<ReplyEntity>(entity);
+
+            string replyID = "";
+            replyID = ReplyBusiness.CreateReply(type, model.GUID, model.Content, CurrentUser.UserID, CurrentUser.AgentID, model.FromReplyID, model.FromReplyUserID, model.FromReplyAgentID);
+
+            List<ReplyEntity> list = new List<ReplyEntity>();
+            if (!string.IsNullOrEmpty(replyID))
+            {
+                model.ReplyID = replyID;
+                model.CreateTime = DateTime.Now;
+                model.CreateUser = CurrentUser;
+                model.CreateUserID = CurrentUser.UserID;
+                model.AgentID = CurrentUser.AgentID;
+                if (!string.IsNullOrEmpty(model.FromReplyUserID) && !string.IsNullOrEmpty(model.FromReplyAgentID))
+                {
+                    model.FromReplyUser = OrganizationBusiness.GetUserByUserID(model.FromReplyUserID, model.FromReplyAgentID);
+                }
+                list.Add(model);
+            }
+            JsonDictionary.Add("items", list);
             return new JsonResult
             {
                 Data = JsonDictionary,

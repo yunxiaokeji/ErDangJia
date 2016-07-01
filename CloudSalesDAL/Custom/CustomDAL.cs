@@ -153,23 +153,6 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("E_ImportCustomer", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
-        {
-            string replyID = Guid.NewGuid().ToString();
-
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ReplyID",replyID),
-                                     new SqlParameter("@GUID",guid),
-                                     new SqlParameter("@Content",content),
-                                     new SqlParameter("@FromReplyID",fromReplyID),
-                                     new SqlParameter("@CreateUserID" , userID),
-                                     new SqlParameter("@AgentID" , agentID),
-                                     new SqlParameter("@FromReplyUserID" , fromReplyUserID),
-                                     new SqlParameter("@FromReplyAgentID" , fromReplyAgentID),
-                                   };
-
-            return ExecuteNonQuery("P_CreateCustomerReply", paras, CommandType.StoredProcedure) > 0 ? replyID : string.Empty;
-        }
 
         public bool CreateContact(string contactid, string customerid, string name, string citycode, string address, string mobile, string officephone, string email, string jobs, string desc, string userid, string agentid, string clientid)
         {

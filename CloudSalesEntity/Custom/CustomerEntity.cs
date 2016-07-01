@@ -17,7 +17,7 @@ namespace CloudSalesEntity
         [Property("Lower")]
         public string IndustryID { get; set; }
 
-        public Industry Industry { get; set; }
+        public ClientsIndustry Industry { get; set; }
 
         public int Extent { get; set; }
         public string ExtentStr { get; set; }

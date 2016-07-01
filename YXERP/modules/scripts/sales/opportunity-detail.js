@@ -349,14 +349,14 @@ define(function (require, exports, module) {
     }
 
     //讨论备忘
-    ObjectJS.initTalk = function (opportunityid) {
+    ObjectJS.initTalk = function (guid) {
         var _self = this;
 
         $("#btnSaveTalk").click(function () {
             var txt = $("#txtContent");
             if (txt.val().trim()) {
                 var model = {
-                    GUID: opportunityid,
+                    GUID: guid,
                     Content: txt.val().trim(),
                     FromReplyID: "",
                     FromReplyUserID: "",
@@ -368,30 +368,31 @@ define(function (require, exports, module) {
             }
 
         });
-        _self.getReplys(opportunityid, 1);
-
+        _self.getReplys(guid, 1);
     }
 
     //获取备忘
-    ObjectJS.getReplys = function (opportunityid, page) {
+    ObjectJS.getReplys = function (guid, page) {
         var _self = this;
         $("#replyList").empty();
         $("#replyList").append("<div class='data-loading'><div>");
-        Global.post("/Opportunitys/GetReplys", {
-            guid: opportunityid,
+        Global.post("/Plug/GetReplys", {
+            guid: guid,
+            type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
             pageSize: 10,
             pageIndex: page
         }, function (data) {
             $("#replyList").empty();
+
             if (data.items.length > 0) {
-                doT.exec("template/customer/replys.html", function (template) {
+                doT.exec("template/common/replys.html", function (template) {
                     var innerhtml = template(data.items);
                     innerhtml = $(innerhtml);
 
                     $("#replyList").append(innerhtml);
 
                     innerhtml.find(".btn-reply").click(function () {
-                        var _this = $(this), reply = _this.nextAll(".reply-box");
+                        var _this = $(this), reply = _this.parent().nextAll(".reply-box");
                         reply.slideDown(500);
                         reply.find("textarea").focus();
                         reply.find("textarea").blur(function () {
@@ -418,9 +419,12 @@ define(function (require, exports, module) {
                         $(this).parent().slideUp(100);
                     });
 
+                    //require.async("businesscard", function () {
+                    //    innerhtml.find(".user-avatar").businessCard();
+                    //});
                 });
             } else {
-                $("#replyList").append("<div class='nodata-txt'>暂无备忘<div>");
+                $("#replyList").append("<div class='nodata-txt'>暂无数据<div>");
             }
 
             $("#pagerReply").paginate({
@@ -440,7 +444,7 @@ define(function (require, exports, module) {
                 mouse: 'slide',
                 float: "left",
                 onChange: function (page) {
-                    _self.getReplys(opportunityid, page);
+                    _self.getReplys(guid, page);
                 }
             });
         });
@@ -448,16 +452,22 @@ define(function (require, exports, module) {
 
     ObjectJS.saveReply = function (model) {
         var _self = this;
-        $("#replyList .nodata-txt").remove();
-        Global.post("/Opportunitys/SavaReply", { entity: JSON.stringify(model) }, function (data) {
-            doT.exec("template/customer/replys.html", function (template) {
+
+        Global.post("/Plug/SavaReply", {
+            type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+            entity: JSON.stringify(model)
+        }, function (data) {
+
+            $("#replyList .nodata-txt").remove();
+
+            doT.exec("template/common/replys.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 
                 $("#replyList").prepend(innerhtml);
 
                 innerhtml.find(".btn-reply").click(function () {
-                    var _this = $(this), reply = _this.nextAll(".reply-box");
+                    var _this = $(this), reply = _this.parent().nextAll(".reply-box");
                     reply.slideDown(500);
                     reply.find("textarea").focus();
                     reply.find("textarea").blur(function () {
@@ -480,6 +490,10 @@ define(function (require, exports, module) {
                     }
                     $("#Msg_" + _this.data("replyid")).val('');
                     $(this).parent().slideUp(100);
+                });
+
+                require.async("businesscard", function () {
+                    innerhtml.find("img").businessCard();
                 });
             });
         });

@@ -431,117 +431,105 @@ define(function (require, exports, module) {
         
     }
 
-    //获取详情
-    ObjectJS.getDetail = function (option)//option=1 编辑页；option=2 详情页
-    {
+    //获取详情//option=1 编辑页；option=2 详情页
+    ObjectJS.getDetail = function (option) {
         var _self = this;
-        Global.post("/Activity/GetActivityDetail",
-            { activityID: $("#ActivityID").val() },
-            function (data) {
-                if (data.Item) {
-                    var item = data.Item;
+        Global.post("/Activity/GetActivityDetail", { activityID: $("#ActivityID").val() }, function (data) {
+            if (data.Item) {
+                var item = data.Item;
 
-                    if (option == 1) {
-                        $("#Name").val(item.Name);
-                        $("#EndTime").val(item.EndTime.toDate("yyyy-MM-dd"));
-                        $("#BeginTime").val(item.BeginTime.toDate("yyyy-MM-dd"));
-                        $("#Address").val(item.Address);
-                        $("#PosterImg").val(item.Poster);
-                        if (item.Poster != '')
-                            $("#PosterDisImg").attr("src", item.Poster).show();
-
-                        ObjectJS.createMemberDetail(item.Owner, "OwnerIDs");
-                        for (var i = 0; i < item.Members.length; i++)
-                        {
-                            ObjectJS.createMemberDetail(item.Members[i], "MemberIDs");
-                        }
-
-                        editor.ready(function () {
-                            editor.setContent(decodeURI(item.Remark));
-                        });
-  
+                if (option == 1) {
+                    $("#Name").val(item.Name);
+                    $("#EndTime").val(item.EndTime.toDate("yyyy-MM-dd"));
+                    $("#BeginTime").val(item.BeginTime.toDate("yyyy-MM-dd"));
+                    $("#Address").val(item.Address);
+                    $("#PosterImg").val(item.Poster);
+                    if (item.Poster != '') {
+                        $("#PosterDisImg").attr("src", item.Poster).show();
                     }
-                    else
-                    {
-                        $("#Name").html(item.Name);
-                        if (item.Owner) {
-                            $("#OwnerName").html(item.Owner.Name);
-                            $("#OwnerName").data("id", item.Owner.UserID);
+
+                    ObjectJS.createMemberDetail(item.Owner, "OwnerIDs");
+                    for (var i = 0; i < item.Members.length; i++) {
+                        ObjectJS.createMemberDetail(item.Members[i], "MemberIDs");
+                    }
+
+                    editor.ready(function () {
+                        editor.setContent(decodeURI(item.Remark));
+                    });
+
+                } else {
+                    $("#Name").html(item.Name);
+                    if (item.Owner) {
+                        $("#OwnerName").html(item.Owner.Name);
+                        $("#OwnerName").data("id", item.Owner.UserID);
+                    }
+                    $("#EndTime").html(item.EndTime.toDate("yyyy-MM-dd"));
+                    $("#BeginTime").html(item.BeginTime.toDate("yyyy-MM-dd"));
+                    $("#Address").html(item.Address);
+                    $("#Remark").html(decodeURI(item.Remark));
+
+                    if (item.Poster != '') {
+                        $("#Poster").attr("src", item.Poster);
+                    }
+
+                    if (item.Members) {
+                        for (var i = 0; i < item.Members.length; i++) {
+                            var m = item.Members[i];
+                            $("#MemberList").append("<li class='member' data-id='" + m.UserID + "'>" + m.Name + "</li>");
                         }
-                        $("#EndTime").html(item.EndTime.toDate("yyyy-MM-dd"));
-                        $("#BeginTime").html(item.BeginTime.toDate("yyyy-MM-dd"));
-                        $("#Address").html(item.Address);
-                        $("#Remark").html(decodeURI(item.Remark));
+                    }
+                    require.async("sharemingdao", function () {
+                        $("#btn_shareMD").sharemingdao({
+                            post_pars: {
+                                content: $("#Name").html(),
+                                groups: [],
+                                share_type: 0
+                            },
+                            task_pars: {
+                                name: $("#Name").html(),
+                                end_date: $("#EndTime").html(),
+                                charger: item.Owner,
+                                members: item.Members,
+                                des: '',
+                                url: "/Activity/Detail?id=" + $("#ActivityID").val() + "&source=md"
+                            },
+                            schedule_pars: {
+                                name: $("#Name").html(),
+                                start_date: $("#BeginTime").html(),
+                                end_date: $("#EndTime").html(),
+                                members: item.Members,
+                                address: $("#Address").html(),
+                                des: '',
+                                url: "/Activity/Detail?id=" + $("#ActivityID").val() + "&source=md"
+                            },
+                            callback: function (type, url) {
+                                if (type == "Calendar") {
+                                    url = "<a href='" + url + "' target='_blank'>分享明道日程，点击查看详情</a>";
+                                } else if (type == "Task") {
+                                    url = "<a href='" + url + "' target='_blank'>分享明道任务，点击查看详情</a>";
+                                }
+                                var entity = {
+                                    ActivityID: $("#ActivityID").val(),
+                                    Msg: encodeURI(url),
+                                    FromReplyID: "",
+                                    FromReplyUserID: "",
+                                    FromReplyAgentID: ""
+                                };
 
-                        if (item.Poster != '')
-                            $("#Poster").attr("src", item.Poster);
-
-                        if (item.Members)
-                        {
-                            for (var i = 0; i < item.Members.length; i++) {
-                                var m = item.Members[i];
-                                $("#MemberList").append("<li class='member' data-id='" + m.UserID + "'>" + m.Name + "</li>");
+                                ObjectJS.SaveActivityReply(entity);
                             }
-                        }
-
-                        if ($("#MDUserID").val() != "") {
-                            require.async("sharemingdao", function () {
-                                $("#btn_shareMD").sharemingdao({
-                                    post_pars: {
-                                        content: $("#Name").html(),
-                                        groups: [],
-                                        share_type: 0
-                                    },
-                                    task_pars: {
-                                        name: $("#Name").html(),
-                                        end_date: $("#EndTime").html(),
-                                        charger: item.Owner,
-                                        members: item.Members,
-                                        des: '',
-                                        url: "/Activity/Detail?id=" + $("#ActivityID").val() + "&source=md"
-                                    },
-                                    schedule_pars: {
-                                        name: $("#Name").html(),
-                                        start_date: $("#BeginTime").html(),
-                                        end_date: $("#EndTime").html(),
-                                        members: item.Members,
-                                        address: $("#Address").html(),
-                                        des: '',
-                                        url: "/Activity/Detail?id=" + $("#ActivityID").val() + "&source=md"
-                                    },
-                                    callback: function (type, url) {
-                                        if (type == "Calendar") {
-                                            url = "<a href='" + url + "' target='_blank'>分享明道日程，点击查看详情</a>";
-                                        } else if (type == "Task") {
-                                            url = "<a href='" + url + "' target='_blank'>分享明道任务，点击查看详情</a>";
-                                        }
-                                        var entity = {
-                                            ActivityID: $("#ActivityID").val(),
-                                            Msg: encodeURI(url),
-                                            FromReplyID: "",
-                                            FromReplyUserID: "",
-                                            FromReplyAgentID: ""
-                                        };
-
-                                        ObjectJS.SaveActivityReply(entity);
-                                    }
-                                });
-                            });
-                        } else {
-                            $("#btn_shareMD").show();
-                        }
-
-                    }
-
-                    $("#OwnerID").val(item.OwnerID);
-                    $("#MemberID").val(item.MemberID);
-
-                    //require.async("businesscard", function () {
-                    //    $(".member").businessCard();
-                    //});
-
+                        });
+                    });
                 }
-            });
+
+                $("#OwnerID").val(item.OwnerID);
+                $("#MemberID").val(item.MemberID);
+
+                //require.async("businesscard", function () {
+                //    $(".member").businessCard();
+                //});
+            }
+        });
     }
 
     //获取当前用户实体
@@ -569,9 +557,9 @@ define(function (require, exports, module) {
         else
             $("#" + id).append(html);
 
-        require.async("businesscard", function () {
-            $("div.member").businessCard();
-        });
+        //require.async("businesscard", function () {
+        //    $("div.member").businessCard();
+        //});
     }
 
     //拼接一个用户成员
@@ -600,185 +588,223 @@ define(function (require, exports, module) {
         })
     }
 
-
     ////初始化 详情
-    ObjectJS.initDetail = function () {
+    ObjectJS.initDetail = function (activityid) {
+
         var _self = this;
+        _self.activityid = activityid;
         _self.bindDetailEvent();
-
         _self.getDetail(2);
-
-        ObjectJS.GetActivityReplys();
+        _self.initTalk(activityid);
     }
 
     //绑定事件
     ObjectJS.bindDetailEvent = function () {
         var _self = this;
       
-        $(".tab-nav .tab-nav-ul li").click(function () {
-            $(".tab-nav .tab-nav-ul li").removeClass("hover");
+        $(".tab-nav-ul li").click(function () {
+            var _this = $(this);
+            _this.siblings().removeClass("hover");
+            _this.addClass("hover");
+            $(".nav-partdiv").hide();
+            $("#" + _this.data("id")).show();
 
-            $(this).addClass("hover");
-            $("div[name='activityDetail']").hide();
-            $("#" + $(this).data("id")).show();
-
-            if ($(this).data("id") == "activityCustoms" && (!$(this).data("first") || $(this).data("first") == 0))
-            {
+            if ($(this).data("id") == "activityCustoms" && (!$(this).data("first") || $(this).data("first") == 0)){
                 $(this).data("first", "1");
-                ObjectJS.getCustomersByActivityID();
+                _self.getCustomersByActivityID();
             }
-
-        });
-
-        $("#btnSaveActivityReply").click(function () {
-            var entity =
-           {
-               ActivityID: $("#ActivityID").val(),
-                Msg: $("#Msg").val(),
-                FromReplyID: "",
-                FromReplyUserID: "",
-                FromReplyAgentID:""
-            }
-
-            ObjectJS.SaveActivityReply(entity);
-            $("#Msg").val('');
         });
     }
 
-    //保存活动评论
-    ObjectJS.SaveActivityReply = function (entity) {
-        if (!entity.Msg)
-        {
-            alert("内容不能为空");
-            return false;
-        }
-        Global.post("/Activity/SavaActivityReply",
-            {
-                entity: JSON.stringify(entity)
-            },
-            function (data) {
-                if (data.Items.length > 0) {
-                    doT.exec("template/activity/activity_reply_list.html", function (template) {
-                        var innerhtml = template(data.Items);
-                        innerhtml = $(innerhtml);
-                        var innerhtml = template(data.Items);
-                        innerhtml = $(innerhtml).hide();
+    //讨论备忘
+    ObjectJS.initTalk = function (guid) {
+        var _self = this;
 
-                        $("#activityReplyList").prepend(innerhtml);
-                        innerhtml.fadeIn(1000);
+        $("#btnSaveTalk").click(function () {
+            var txt = $("#txtContent");
+            if (txt.val().trim()) {
+                var model = {
+                    GUID: guid,
+                    Content: txt.val().trim(),
+                    FromReplyID: "",
+                    FromReplyUserID: "",
+                    FromReplyAgentID: ""
+                };
+                _self.saveReply(model);
 
-                        innerhtml.find("div[name='btn_replyByReply']").unbind("click").click(function () {
-                            var entity =
-                           {
-                               ActivityID: $("#ActivityID").val(),
-                               Msg: $("#Msg_" + $(this).data("replyid")).val(),
-                               FromReplyID: $(this).data("replyid"),
-                               FromReplyUserID: $(this).data("createuserid"),
-                               FromReplyAgentID: $(this).data("agentid")
-                           }
-                            ObjectJS.SaveActivityReply(entity);
+                txt.val("");
+            }
 
-                            $("#Msg_" + $(this).data("replyid")).val('');
-                            $(this).parent().parent().slideUp(100);
+        });
+        _self.getReplys(guid, 1);
+    }
+
+    //获取备忘
+    ObjectJS.getReplys = function (guid, page) {
+        var _self = this;
+        $("#replyList").empty();
+        $("#replyList").append("<div class='data-loading'><div>");
+        Global.post("/Plug/GetReplys", {
+            guid: guid,
+            type: 3, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+            pageSize: 10,
+            pageIndex: page
+        }, function (data) {
+            $("#replyList").empty();
+
+            if (data.items.length > 0) {
+                doT.exec("template/common/replys.html", function (template) {
+                    var innerhtml = template(data.items);
+                    innerhtml = $(innerhtml);
+
+                    $("#replyList").append(innerhtml);
+
+                    innerhtml.find(".btn-reply").click(function () {
+                        var _this = $(this), reply = _this.parent().nextAll(".reply-box");
+                        reply.slideDown(500);
+                        reply.find("textarea").focus();
+                        reply.find("textarea").blur(function () {
+                            if (!$(this).val().trim()) {
+                                reply.slideUp(200);
+                            }
                         });
-
                     });
-                }
-                else {
-                    alert("评论失败");
+                    innerhtml.find(".save-reply").click(function () {
+                        var _this = $(this);
+                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
+                            var entity = {
+                                GUID: _this.data("id"),
+                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
+                                FromReplyID: _this.data("replyid"),
+                                FromReplyUserID: _this.data("createuserid"),
+                                FromReplyAgentID: _this.data("agentid")
+                            };
+
+                            _self.saveReply(entity);
+                        }
+
+                        $("#Msg_" + _this.data("replyid")).val('');
+                        $(this).parent().slideUp(100);
+                    });
+
+                    //require.async("businesscard", function () {
+                    //    innerhtml.find(".user-avatar").businessCard();
+                    //});
+                });
+            } else {
+                $("#replyList").append("<div class='nodata-txt'>暂无数据<div>");
+            }
+
+            $("#pagerReply").paginate({
+                total_count: data.totalCount,
+                count: data.pageCount,
+                start: page,
+                display: 5,
+                border: true,
+                border_color: '#fff',
+                text_color: '#333',
+                background_color: '#fff',
+                border_hover_color: '#ccc',
+                text_hover_color: '#000',
+                background_hover_color: '#efefef',
+                rotate: true,
+                images: false,
+                mouse: 'slide',
+                float: "left",
+                onChange: function (page) {
+                    _self.getReplys(guid, page);
                 }
             });
+        });
     }
 
-    //获取活动讨论列表
-    ObjectJS.GetActivityReplys = function () {
+    ObjectJS.saveReply = function (model) {
         var _self = this;
-        
-        Global.post("/Activity/GetActivityReplys",
-            {
-                activityID:$("#ActivityID").val(),
-                pageSize: ObjectJS.Params.PageSize,
-                pageIndex: ObjectJS.Params.PageIndex
-            },
-            function (data) {
-                if (data.Items.length > 0)
-                    {
-                        doT.exec("template/activity/activity_reply_list.html", function (template) {
-                        var innerhtml = template(data.Items);
-                        innerhtml = $(innerhtml);
 
-                        $("#activityReplyList").html(innerhtml);
-                        $("div[name='btn_replyByReply']").unbind("click").click(function () {
-                            var entity =
-                           {
-                               ActivityID: $("#ActivityID").val(),
-                               Msg: $("#Msg_" + $(this).data("replyid")).val(),
-                               FromReplyID: $(this).data("replyid"),
-                               FromReplyUserID: $(this).data("createuserid"),
-                               FromReplyAgentID: $(this).data("agentid")
-                           }
+        Global.post("/Plug/SavaReply", {
+            type: 3, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+            entity: JSON.stringify(model)
+        }, function (data) {
 
-                            ObjectJS.SaveActivityReply(entity);
-                            $("#Msg_" + $(this).data("replyid")).val('');
-                            $(this).parent().parent().slideUp(100);
-                        });
+            $("#replyList .nodata-txt").remove();
 
+            doT.exec("template/common/replys.html", function (template) {
+                var innerhtml = template(data.items);
+                innerhtml = $(innerhtml);
 
-                        require.async("businesscard", function () {
-                            $(".activitymember").businessCard();
-                        });
+                $("#replyList").prepend(innerhtml);
 
+                innerhtml.find(".btn-reply").click(function () {
+                    var _this = $(this), reply = _this.parent().nextAll(".reply-box");
+                    reply.slideDown(500);
+                    reply.find("textarea").focus();
+                    reply.find("textarea").blur(function () {
+                        if (!$(this).val().trim()) {
+                            reply.slideUp(200);
+                        }
                     });
-                }
+                });
+                innerhtml.find(".save-reply").click(function () {
+                    var _this = $(this);
+                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
+                        var entity = {
+                            GUID: _this.data("id"),
+                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
+                            FromReplyID: _this.data("replyid"),
+                            FromReplyUserID: _this.data("createuserid"),
+                            FromReplyAgentID: _this.data("agentid")
+                        };
+                        _self.saveReply(entity);
+                    }
+                    $("#Msg_" + _this.data("replyid")).val('');
+                    $(this).parent().slideUp(100);
+                });
 
-            }
-        );
+                require.async("businesscard", function () {
+                    innerhtml.find("img").businessCard();
+                });
+            });
+        });
     }
 
     //获取活动对应客户列表
     ObjectJS.getCustomersByActivityID = function () {
         var _self = this;
-        $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='7'><div class='data-loading' ><div></td></tr>");
+        $(".box-header").nextAll().remove();
+        $(".box-header").after("<div class='data-loading' ><div>");
 
-        Global.post("/Activity/GetCustomersByActivityID",
-            {
-                pageSize: ObjectJS.Params.PageSize,
-                pageIndex: ObjectJS.Params.PageIndex,
-                activityID: $("#ActivityID").val()
-            },
-            function (data) {
-                $(".tr-header").nextAll().remove();
+        Global.post("/Activity/GetCustomersByActivityID", {
+            pageSize: ObjectJS.Params.PageSize,
+            pageIndex: ObjectJS.Params.PageIndex,
+            activityID: $("#ActivityID").val()
+        }, function (data) {
+            $(".box-header").nextAll().remove();
 
-                if (data.Items.length > 0)
-                {
-                    doT.exec("template/activity/activity_customers.html", function (template) {
-                        var innerhtml = template(data.Items);
-                        innerhtml = $(innerhtml);
+            if (data.Items.length > 0) {
+                doT.exec("template/activity/activity_customers.html", function (template) {
+                    var innerhtml = template(data.Items);
+                    innerhtml = $(innerhtml);
 
-                        $(".tr-header").after(innerhtml);
-                    });
-                }
-                else {
-                    $(".tr-header").after("<tr><td colspan='7'><div class='nodata-txt' >暂无数据!<div></td></tr>");
-                }
- 
-                $("#pager").paginate({
-                    total_count: data.TotalCount,
-                    count: data.PageCount,
-                    start: _self.Params.PageIndex,
-                    display: 5,
-                    images: false,
-                    mouse: 'slide',
-                    onChange: function (page) {
-                        $(".tr-header").nextAll().remove();
-                        _self.Params.PageIndex = page;
-                        _self.getCustomersByActivityID();
-                    }
+                    $(".box-header").after(innerhtml);
                 });
-
+            } else {
+                $(".box-header").after("<div class='nodata-box' >暂无数据!<div>");
             }
-        );
+
+            $("#pager").paginate({
+                total_count: data.TotalCount,
+                count: data.PageCount,
+                start: _self.Params.PageIndex,
+                display: 5,
+                images: false,
+                mouse: 'slide',
+                onChange: function (page) {
+                    $(".tr-header").nextAll().remove();
+                    _self.Params.PageIndex = page;
+                    _self.getCustomersByActivityID();
+                }
+            });
+        });
     }
 
     module.exports = ObjectJS;

@@ -869,8 +869,7 @@ namespace YXERP.Controllers
                     {
                         if (list.Count > 0)
                         {
-                          mes= ExcelImportBusiness.InsertProduct(list);
-
+                            mes= ExcelImportBusiness.InsertProduct(list);
                         }
                         if (!string.IsNullOrEmpty(mes))
                         {

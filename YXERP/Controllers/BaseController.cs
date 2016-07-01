@@ -397,11 +397,11 @@ namespace YXERP.Controllers
                 {
                     JObject jChild = (JObject) JsonConvert.DeserializeObject(keyvalue.Value.ToString());
                     ExcelModel excelModel = GetExcelModel(keyvalue.Key.ToLower(),jChild);
-                    if (!excelModel.IsHide)
+                    if (!excelModel.IsHide || (!string.IsNullOrEmpty(test) && test!="export"))
                     {
                         dic.Add(keyvalue.Key.ToLower(), excelModel);
-                        int columnType = Convert.ToInt32(jChild[test+"type"]);
-                        if (excelModel.IsfFomat && columnType > 0)
+                        int columnType = Convert.ToInt32(jChild[test + "type"]);
+                        if (excelModel.IsFomat && columnType > 0)
                         {
                             string dataList = excelModel.DataSource;
                             string[] distType = dataList.Split('|');
@@ -452,7 +452,7 @@ namespace YXERP.Controllers
             excelModel.Title = jChild["title"].ToString();
             excelModel.ColumnName = key;
             excelModel.IsHide = Convert.ToBoolean(jChild["hide"]);
-            excelModel.IsfFomat = Convert.ToBoolean(jChild["format"]);
+            excelModel.IsFomat = Convert.ToBoolean(jChild["format"]);
             excelModel.Type = Convert.ToInt32(jChild["exporttype"]);
             excelModel.TestType = Convert.ToInt32(jChild["testexporttype"]);
             excelModel.DataSource = jChild["datasource"].ToString();

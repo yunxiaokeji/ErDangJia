@@ -3,23 +3,20 @@
 	var item = $data[i];
 %}
 <ul class="box-item">
-    <li class="width50"><span class="mark mTop3" data-id="{%= item.CustomerID %}" data-value="{%= item.Mark %}"></span></li>
-    <li class="width50"><span data-id="{%=item.CustomerID%}" data-userid="{%=item.OwnerID%}" class="checkbox iconfont"></span></li>
-    <li class="tLeft flex1">
-        <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">{%=item.Name%}</a> 
+    <li class="width30">
+        <span class="mark mTop3" data-id="{%= item.CustomerID %}" data-value="{%= item.Mark %}"></span>
     </li>
-    <li class="width50">{%=item.Type==1?"企业":"个人"%}</li>
-    <li class="width150">{%= item.Source?item.Source.SourceName:"--" %}</li>
-    <li class="width100">{%= item.StageStatusStr %}</li>
-    <li class="width100">
-        {%= item.ContactName
-        ?(item.ContactName + (item.Jobs?"("+item.Jobs+")":"") )
-        :"--" %} 
+    <li class="width30">
+        <span data-id="{%=item.CustomerID%}" data-userid="{%=item.OwnerID%}" class="checkbox iconfont"></span>
     </li>
-    <li class="width100">{%=item.MobilePhone%}</li>
+    <li class="tLeft width300" title="{%=item.Name%}">
+        <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">{%=item.Name.subString(20)%}</a> 
+    </li>
+    <li class="width100">{%=item.ContactName||"--"%}</li>
+    <li class="width100">{%=item.MobilePhone||"--"%}</li>
     <li class="width80">{%=item.OpportunityCount%}</li>
     <li class="width80">{%=item.OrderCount%}</li>
-    <li class="width100">{%=(item.Owner ? item.Owner.Name:"--")%}</li>
+    <li class="width80">{%=(item.Owner ? item.Owner.Name:"--")%}</li>
     <li class="width100">{%=item.CreateTime.toDate("yyyy-MM-dd")%}</li>
 </ul>
 {% } %}

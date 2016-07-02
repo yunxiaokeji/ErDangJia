@@ -79,7 +79,8 @@
  
 <ul class="search-sort">
     <li>
-        <div id="filterMark" style="margin-top:13px;"></div>
+       @* <div id="filterMark" style="margin-top:13px;"></div>*@
+        排序
     </li>
     <li class="sort-item hover" data-column="cus.CreateTime">
         创建日期
@@ -99,18 +100,28 @@
 </ul>
 
 <div class="content-body">
-    <div class="customer-list">
-
+    <div class="table-box-list">
+        <ul class="box-header">
+            <li class="width30"><span id="filterMark" class="mTop3"></span></li>
+            <li class="width30">全选</li>
+            <li class="tLeft width300">客户名称</li>
+            <li class="width100">联系人</li>
+            <li class="width100">联系电话</li>
+            <li class="width80">机会数</li>
+            <li class="width80">订单数</li>
+            <li class="width80">负责人</li>
+            <li class="width100">创建时间</li>
+        </ul>
     </div>
-    <div>
-        <ul class="left batch-operate">
-            <li class="hand" id="checkAll">
+    <div class="mTop20">
+        <ul class="left">
+            <li class="width50 center left" title="批量标记">
+                <span data-value="-1" class="mTop5" id="batchMark"></span>
+            </li>
+            <li class="hand left width80" style="margin-left:18px;" id="checkAll">
                 <span class="checkbox iconfont mTop5 mRight5"></span>全选
             </li>
-            <li class="mLeft20" title="批量标记">
-                <span data-value="-1" class="mTop5 mLeft10" id="batchMark"></span>
-            </li>
-            <li class="mLeft20">
+            <li class="left">
                 <a href="javascript:void(0);" class="btn @(ExpandClass.IsLimits(HttpContext.Current, "101019002"))" id="batchChangeOwner">更换负责人</a>
             </li>
         </ul>

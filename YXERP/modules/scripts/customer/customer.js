@@ -36,7 +36,6 @@
     ObjectJS.init = function (type,colorList) {
         var _self = this;
         Params.SearchType = type;
-        Params.PageSize = Math.floor(($(".customer-list").width() - 20) / 270) * 4;
         _self.ColorList = JSON.parse(colorList.replace(/&quot;/g, '"'));
         _self.getList();
         _self.bindEvent(type);
@@ -152,12 +151,10 @@
             var _this = $(this).find(".checkbox");
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover");
-                $(".customer-list .check").addClass("hover");
-                $(".customer-list .customer-card").addClass("hover");
+                $(".table-box-list .checkbox").addClass("hover");
             } else {
                 _this.removeClass("hover");
-                $(".customer-list .check").removeClass("hover");
-                $(".customer-list .customer-card").removeClass("hover");
+                $(".table-box-list .checkbox").removeClass("hover");
             }
         });
 
@@ -176,7 +173,7 @@
 
         //批量转移
         $("#batchChangeOwner").click(function () {
-            var checks = $(".customer-list .check.hover");
+            var checks = $(".table-box-list .checkbox.hover");
             if (checks.length > 0) {
                 ChooseUser.create({
                     title: "批量更换负责人",
@@ -235,7 +232,7 @@
             left: 10,
             data: _self.ColorList, 
             onChange: function (obj, callback) { 
-                var checks = $(".customer-list .check.hover");
+                var checks = $(".table-box-list .checkbox.hover");
                 if (checks.length > 0) {
                     var ids = "";
                     checks.each(function () {
@@ -299,8 +296,8 @@
     ObjectJS.getList = function () {
         var _self = this;
         $("#checkAll").removeClass("hover");
-        $(".customer-list").empty();
-        $(".customer-list").append("<div class='data-loading'><div>");
+        $(".box-header").nextAll().remove();
+        $(".box-header").after("<div class='data-loading'><div>");
 
         Global.post("/Customer/GetCustomers", { filter: JSON.stringify(Params) }, function (data) {
             _self.bindList(data);
@@ -310,20 +307,18 @@
     //加载列表
     ObjectJS.bindList = function (data) {
         var _self = this;
-        $(".customer-list").empty();
+        $(".box-header").nextAll().remove();
 
         if (data.items.length > 0) {
-            doT.exec("template/customer/customers-card.html", function (template) {
+            doT.exec("template/customer/customers.html", function (template) {
                 var innerhtml = template(data.items);
                 innerhtml = $(innerhtml);
 
-                innerhtml.find(".check").click(function () {
+                innerhtml.find(".checkbox").click(function () {
                     var _this = $(this);
                     if (!_this.hasClass("hover")) {
-                        _this.parent().addClass("hover");
                         _this.addClass("hover");
                     } else {
-                        _this.parent().removeClass("hover");
                         _this.removeClass("hover");
                     }
                     return false;
@@ -338,10 +333,10 @@
                         _self.markCustomer(obj.data("id"), obj.data("value"), callback);
                     }
                 });
-                $(".customer-list").append(innerhtml);
+                $(".box-header").after(innerhtml);
             });
         } else {
-            $(".customer-list").append("<div class='nodata-box' >暂无客户<div>");
+            $(".box-header").after("<div class='nodata-box' >暂无数据<div>");
         }
 
         $("#pager").paginate({

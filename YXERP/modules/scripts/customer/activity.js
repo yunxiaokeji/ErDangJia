@@ -456,6 +456,7 @@ define(function (require, exports, module) {
                     editor.ready(function () {
                         editor.setContent(decodeURI(item.Remark));
                     });
+                    console.log(editor);
 
                 } else {
                     $("#Name").html(item.Name);
@@ -564,9 +565,12 @@ define(function (require, exports, module) {
 
     //拼接一个用户成员
     ObjectJS.createMemberDetail = function (item, id) {
-        if (item.Avatar == '')
+        if (!item) {
+            return;
+        }
+        if (item.Avatar == '') {
             item.Avatar = "/modules/images/defaultavatar.png";
-
+        }
         var html = '<div class="member left" data-id="' + item.UserID + '">';
         html += '    <div class="left pRight5">';
         html += '          <span>' + item.Name + '</span>';

@@ -14,8 +14,22 @@
     </li>
     <li class="width100">{%=item.ContactName||"--"%}</li>
     <li class="width100">{%=item.MobilePhone||"--"%}</li>
-    <li class="width80">{%=item.OpportunityCount%}</li>
-    <li class="width80">{%=item.OrderCount%}</li>
+    <li class="width80">
+        {% if(item.OpportunityCount>0){%}
+            <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" 
+                data-url="/Customer/Detail?id={%=item.CustomerID%}&nav=navOppor">{%=item.OpportunityCount%}</a> 
+        {% } else{ %}
+            0
+        {% } %}
+    </li>
+    <li class="width80">
+        {% if(item.OrderCount>0){%}
+            <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" 
+                data-url="/Customer/Detail?id={%=item.CustomerID%}&nav=navOrder">{%=item.OrderCount%}</a> 
+        {% } else{ %}
+            0
+        {% } %}
+    </li>
     <li class="width80">{%=(item.Owner ? item.Owner.Name:"--")%}</li>
     <li class="width100">{%=item.CreateTime.toDate("yyyy-MM-dd")%}</li>
 </ul>

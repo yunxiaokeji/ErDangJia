@@ -83,11 +83,6 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        /// <summary>
-        /// 账号是否存在
-        /// </summary>
-        /// <param name="loginName">账号</param>
-        /// <returns></returns>
         public static bool IsExistLoginName(string loginName)
         {
             if (string.IsNullOrEmpty(loginName)) return false;
@@ -96,13 +91,6 @@ namespace CloudSalesBusiness
             return Convert.ToInt32(count) > 0;
         }
 
-        /// <summary>
-        /// 根据用户名密码获取会员信息（登录）
-        /// </summary>
-        /// <param name="loginname">用户名</param>
-        /// <param name="pwd">密码</param>
-        /// <param name="result">1:查询正常；2：用户名不存在；3：用户密码有误</param>
-        /// <returns></returns>
         public static Users GetUserByUserName(string loginname, string pwd, out int result, string operateip)
         {
             pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
@@ -167,12 +155,6 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        /// <summary>
-        /// 验证账号密码是否正确
-        /// </summary>
-        /// <param name="loginname"></param>
-        /// <param name="pwd"></param>
-        /// <returns></returns>
         public static bool ConfirmLoginPwd(string loginname, string pwd)
         {
             pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
@@ -186,12 +168,7 @@ namespace CloudSalesBusiness
 
             return false;
         }
-        /// <summary>
-        /// 根据明道用户ID和网络ID获取云销用户信息（登录）
-        /// </summary>
-        /// <param name="mduserid"></param>
-        /// <param name="mdprojectid"></param>
-        /// <returns></returns>
+
         public static Users GetUserByMDUserID(string mduserid, string mdprojectid, string operateip)
         {
             DataSet ds = new OrganizationDAL().GetUserByMDUserID(mduserid,mdprojectid);
@@ -257,12 +234,6 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        /// <summary>
-        /// 获取用户信息
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
         public static Users GetUserByUserID(string userid, string agentid)
         {
             if (string.IsNullOrEmpty(userid) || string.IsNullOrEmpty(agentid))
@@ -293,14 +264,14 @@ namespace CloudSalesBusiness
         }
 
         /// <summary>
-        /// 获取用户列表
+        /// 非缓存
         /// </summary>
-        /// <param name="keyWords"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="totalCount"></param>
-        /// <param name="pageCount"></param>
         /// <returns></returns>
+        public static DataTable GetUserById(string userID)
+        {
+            return OrganizationDAL.BaseProvider.GetUserByUserID(userID);
+        }
+
         public static List<Users> GetUsers(string keyWords, string departID, string roleID, string agentid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount)
         {
             string whereSql = "AgentID='" + agentid + "' and Status<>9";
@@ -332,11 +303,6 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        /// <summary>
-        /// 根据代理商ID获取员工列表（缓存,包含已注销）
-        /// </summary>
-        /// <param name="agentid">代理商ID</param>
-        /// <returns></returns>
         public static List<Users> GetUsers(string agentid)
         {
             if (string.IsNullOrEmpty(agentid))
@@ -363,23 +329,12 @@ namespace CloudSalesBusiness
             return Users[agentid].ToList();
         }
 
-        /// <summary>
-        /// 获取下级列表
-        /// </summary>
-        /// <param name="parentid"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
         public static List<Users> GetUsersByParentID(string parentid, string agentid)
         {
             var users = GetUsers(agentid).Where(m => m.ParentID == parentid && m.Status == 1).ToList();
             return users;
         }
-        /// <summary>
-        /// 获取PID获取组织架构
-        /// </summary>
-        /// <param name="parentid"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
+
         public static List<Users> GetStructureByParentID(string parentid, string agentid)
         {
             var users = GetUsersByParentID(parentid, agentid);
@@ -390,11 +345,6 @@ namespace CloudSalesBusiness
             return users;
         }
 
-        /// <summary>
-        /// 获取部门列表
-        /// </summary>
-        /// <param name="agentid">代理商ID</param>
-        /// <returns></returns>
         public static List<Department> GetDepartments(string agentid)
         {
             if (!Departments.ContainsKey(agentid))
@@ -412,22 +362,12 @@ namespace CloudSalesBusiness
             }
             return Departments[agentid].Where(m => m.Status == 1).ToList();
         }
-        /// <summary>
-        /// 根据ID获取部门
-        /// </summary>
-        /// <param name="departid"></param>
-        /// <param name="agendid"></param>
-        /// <returns></returns>
+
         public static Department GetDepartmentByID(string departid, string agendid)
         {
             return GetDepartments(agendid).Where(d => d.DepartID == departid).FirstOrDefault();
         }
 
-        /// <summary>
-        /// 获取角色列表
-        /// </summary>
-        /// <param name="agentid">代理商ID</param>
-        /// <returns></returns>
         public static List<Role> GetRoles(string agentid)
         {
             if (!Roles.ContainsKey(agentid))
@@ -446,23 +386,11 @@ namespace CloudSalesBusiness
             return Roles[agentid].Where(m => m.Status == 1).ToList();
         }
 
-        /// <summary>
-        /// 根据ID获取角色
-        /// </summary>
-        /// <param name="roleid"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
         public static Role GetRoleByIDCache(string roleid, string agentid)
         {
             return GetRoles(agentid).Where(r => r.RoleID == roleid).FirstOrDefault();
         }
 
-        /// <summary>
-        /// 获取角色详情（权限明细）
-        /// </summary>
-        /// <param name="roleid"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
         public static Role GetRoleByID(string roleid, string agentid)
         {
             Role model = null;
@@ -591,9 +519,8 @@ namespace CloudSalesBusiness
             }
             return user;
         }
-        public static DataTable GetUserById(string userID) {
-            return OrganizationDAL.BaseProvider.GetUserByUserID(userID);
-        }
+        
+
         #endregion
 
         #region 编辑/删除

@@ -95,7 +95,7 @@ define(function (require, exports, module) {
 
         //审核订单
         $("#btnconfirm").click(function () {
-            confirm("确认审核订单吗？", function () {
+            confirm("订单审核后产品信息和收货人信息不可编辑，请检查信息是否正确，确认继续审核订单吗？", function () {
                 Global.post("/Orders/EffectiveOrder", { orderid: _self.orderid }, function (data) {
                     if (data.status) {
                         location.href = location.href;

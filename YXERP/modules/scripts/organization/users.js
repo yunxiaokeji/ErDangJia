@@ -219,6 +219,7 @@
 
         });
     }
+
     //加载列表
     ObjectJS.bindList = function (items) {
         var _self = this;
@@ -285,6 +286,7 @@
 
         });
     }
+
     //保存实体
     ObjectJS.saveModel = function (model) {
         var _self = this;

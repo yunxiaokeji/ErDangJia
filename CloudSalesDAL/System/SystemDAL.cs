@@ -472,6 +472,20 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
+        public bool DeleteWareHouse(string wareid, string userid, string clientid, out int result)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",SqlDbType.Int),
+                                     new SqlParameter("@WareID",wareid),
+                                     new SqlParameter("@UserID",userid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteWareHouse", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
+        }
+
         public bool UpdateDepotSeat(string id, string depotcode, string name, int status, string description)
         {
             string sqlText = "Update DepotSeat set DepotCode=@DepotCode,Name=@Name,Status=@Status,Description=@Description,UpdateTime=getdate() " +
@@ -484,6 +498,20 @@ namespace CloudSalesDAL
                                      new SqlParameter("@Description" , description)
                                    };
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool DeleteDepotSeat(string depotid, string userid, string clientid, out int result)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",SqlDbType.Int),
+                                     new SqlParameter("@DepotID",depotid),
+                                     new SqlParameter("@UserID",userid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteDepotSeat", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
         }
 
         #endregion

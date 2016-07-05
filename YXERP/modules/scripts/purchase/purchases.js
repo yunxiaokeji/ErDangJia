@@ -260,7 +260,7 @@ define(function (require, exports, module) {
                         $("#showAuditStorageIn .list-item").each(function () {
                             var _this = $(this);
                             var quantity = _this.find(".quantity").val();
-                            if (quantity > 0) {
+                            if (quantity > 0 && _this.find("select").val()) {
                                 details += _this.data("id") + "-" + quantity + ":" + _this.find("select").val() + ",";
                             }
                         });
@@ -285,7 +285,7 @@ define(function (require, exports, module) {
                                 }
                             });
                         } else {
-                            alert("请输入采购入库数量！");
+                            alert("请正确填写入库数量和货位！");
                             return false;
                         }
                     },
@@ -321,7 +321,9 @@ define(function (require, exports, module) {
         var _self = this;
 
         for (var i = 0, j = CacheDepot.length; i < j; i++) {
-            depotbox.append($("<option value='" + CacheDepot[i].DepotID + "' >" + CacheDepot[i].DepotCode + "</option>"))
+            if (CacheDepot[i].Status == 1) {
+                depotbox.append($("<option value='" + CacheDepot[i].DepotID + "' >" + CacheDepot[i].DepotCode + "</option>"));
+            }
         }
 
         depotbox.val(depotbox.data("id"));

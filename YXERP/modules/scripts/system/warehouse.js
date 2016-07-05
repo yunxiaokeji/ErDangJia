@@ -47,14 +47,17 @@ define(function (require, exports, module) {
             var _this = $(this);
             confirm("仓库删除后不可恢复,确认删除吗？", function () {
                 Global.post("/System/DeleteWareHouse", { id: _this.data("id") }, function (data) {
-                    if (data.Status) {
+                    if (data.status) {
                         _self.getList();
+                    } else if (data.result==2) {
+                        alert("仓库已产生业务，不能删除");
                     } else {
-                        alert("删除失败！");
+                        alert("删除失败");
                     }
                 });
             });
         });
+
         //编辑
         $("#updateObject").click(function () {
             var _this = $(this);

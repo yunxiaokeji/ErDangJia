@@ -25,7 +25,7 @@ define(function (require, exports, module) {
 
         stages.find("li .leftbg").first().removeClass("leftbg");
         stages.find("li .rightbg").last().removeClass("rightbg");
-        stages.find("li").width(width / stages.find("li").length - 20);
+        //stages.find("li").width(width / stages.find("li").length - 20);
 
         //处理阶段
         var stage = $(".stage-items li[data-id='" + model.StageID + "']");

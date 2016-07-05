@@ -379,7 +379,7 @@ select option{ padding:2px; }
 
 
 /*弹出层-新建*/
-.easydialog-create { min-width:400px; max-width:800px; max-height:500px; overflow:auto;  }
+.easydialog-create { min-width:400px; max-width:800px; max-height:500px; overflow:auto; min-height:50px;  }
 .easydialog-create li{ margin-top:10px; }
 .easydialog-create li span{ display:inline-block; vertical-align:top;}
 .easydialog-create li input[type="text"]{ width:180px; }

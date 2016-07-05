@@ -430,6 +430,8 @@ namespace CloudSalesBusiness
 
         public List<WareHouse> GetWareHouses(string clientID)
         {
+            clientID = clientID.ToLower();
+
             if (WareHouses.ContainsKey(clientID))
             {
                 return WareHouses[clientID];
@@ -455,6 +457,9 @@ namespace CloudSalesBusiness
                 return null;
             }
 
+            wareid = wareid.ToLower();
+            clientid = clientid.ToLower();
+
             var list = GetWareHouses(clientid);
 
             if (list.Where(m => m.WareID == wareid).Count() > 0)
@@ -469,10 +474,8 @@ namespace CloudSalesBusiness
             {
                 model.FillData(dt.Rows[0]);
                 model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
-                WareHouses[clientid].Add(model);
+                list.Add(model);
             }
-
-           
             return model;
         }
 
@@ -594,6 +597,7 @@ namespace CloudSalesBusiness
                     ClientID = clientid,
                     CreateUserID = userid,
                     CreateTime = DateTime.Now,
+                    CreateUser = OrganizationBusiness.GetUserByUserID(userid, agentid),
                     Status = 0
                 });
             }
@@ -1031,20 +1035,24 @@ namespace CloudSalesBusiness
             return bl;
         }
 
+        public bool DeleteWareHouse(string wareid, string userid, string clientid, out int result)
+        {
+            bool bl = SystemDAL.BaseProvider.DeleteWareHouse(wareid, userid, clientid, out result);
+            if (bl)
+            {
+                var model = GetWareByID(wareid, clientid);
+                WareHouses[clientid.ToLower()].Remove(model);
+            }
+            return bl;
+        }
+
         public bool UpdateWareHouseStatus(string id, EnumStatus status, string operateid, string clientid)
         {
             bool bl= CommonBusiness.Update("WareHouse", "Status", (int)status, " WareID='" + id + "'");
             if (bl)
             {
                 var model = GetWareByID(id, clientid);
-                if (status == EnumStatus.Delete)
-                {
-                    WareHouses[clientid].Remove(model);
-                }
-                else
-                {
-                    model.Status = (int)status;
-                }
+                model.Status = (int)status;
             }
             return bl;
         }
@@ -1057,6 +1065,13 @@ namespace CloudSalesBusiness
         public bool UpdateDepotSeatStatus(string id, EnumStatus status, string operateid, string clientid)
         {
             return CommonBusiness.Update("DepotSeat", "Status", (int)status, " DepotID='" + id + "'");
+        }
+
+        public bool DeleteDepotSeat(string depotid, string userid, string clientid, out int result)
+        {
+            bool bl = SystemDAL.BaseProvider.DeleteDepotSeat(depotid, userid, clientid, out result);
+            
+            return bl;
         }
 
         #endregion

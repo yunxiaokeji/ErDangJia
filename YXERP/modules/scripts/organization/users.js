@@ -32,6 +32,7 @@
         _self.bindEvent(roles, departs);
         _self.getList();
     }
+
     //绑定事件
     ObjectJS.bindEvent = function (roles, departs) {
         var _self = this;
@@ -113,6 +114,7 @@
                 }
             });
         });
+
         //注销员工
         $("#deleteObject").click(function () {
             var _this = $(this);
@@ -121,11 +123,23 @@
                     userid: _this.data("id")
                 }, function (data) {
                     if (data.status) {
+                        alert("员工注销成功");
                         _self.getList();
+                    } else if (data.result == 2) {
+                        alert("员工负责有活动，不能注销，请先完成工作交接");
+                    } else if (data.result == 3) {
+                        alert("员工负责有客户，不能注销，请先完成工作交接");
+                    } else if (data.result == 4) {
+                        alert("员工负责有机会，不能注销，请先完成工作交接");
+                    } else if (data.result == 5) {
+                        alert("员工负责有订单，不能注销，请先完成工作交接");
+                    } else {
+                        alert("员工注销失败");
                     }
                 });
             });
         });
+
         //设置角色
         $("#setObjectRole").click(function () {
             var _this = $(this);

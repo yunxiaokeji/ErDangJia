@@ -456,7 +456,6 @@ define(function (require, exports, module) {
                     editor.ready(function () {
                         editor.setContent(decodeURI(item.Remark));
                     });
-                    console.log(editor);
 
                 } else {
                     $("#Name").html(item.Name);

@@ -83,7 +83,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ClientID",clientid)
                                    };
 
-            return GetDataSet("select * from OrderType where ClientID=@ClientID and Status=1 ", paras, CommandType.Text);
+            return GetDataSet("select * from OrderType where ClientID=@ClientID and Status=1 Order by AutoID", paras, CommandType.Text);
 
         }
 

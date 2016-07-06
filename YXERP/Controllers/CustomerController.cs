@@ -445,6 +445,17 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult GetCustomerAndContactByID(string customerid)
+        {
+            var model = CustomBusiness.BaseBusiness.GetCustomerByID(customerid, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("model", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public JsonResult GetActivityBaseInfoByID(string activityid)
         {
             var model = ActivityBusiness.GetActivityBaseInfoByID(activityid, CurrentUser.AgentID, CurrentUser.ClientID);

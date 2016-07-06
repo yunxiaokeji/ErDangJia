@@ -66,13 +66,18 @@ namespace CloudSalesDAL
 
         #region 添加
 
-        public bool CreateOrder(string orderid, string ordercode, string customerid, string typeid, string operateid, string agentid, string clientid)
+        public bool CreateOrder(string orderid, string ordercode, string customerid, string typeid, string name, string mobile, string cityCode, string address, string remark, string operateid, string agentid, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@OrderID",orderid),
                                      new SqlParameter("@OrderCode",ordercode),
                                      new SqlParameter("@CustomerID" , customerid),
                                      new SqlParameter("@TypeID" , typeid),
+                                     new SqlParameter("@Name",name),
+                                     new SqlParameter("@Mobile",mobile),
+                                     new SqlParameter("@CityCode",cityCode),
+                                     new SqlParameter("@Address",address),
+                                     new SqlParameter("@Remark",remark),
                                      new SqlParameter("@UserID" , operateid),
                                      new SqlParameter("@AgentID" , agentid),
                                      new SqlParameter("@ClientID" , clientid)

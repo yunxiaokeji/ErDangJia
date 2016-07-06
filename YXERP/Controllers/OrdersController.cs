@@ -98,9 +98,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult Create(string customerid, string typeid)
+        public JsonResult Create(string customerid, string typeid, string name, string mobile, string cityCode, string address, string remark)
         {
-            string orderid = OrdersBusiness.BaseBusiness.CreateOrder(customerid, typeid, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            string orderid = OrdersBusiness.BaseBusiness.CreateOrder(customerid, typeid, name, mobile, cityCode, address, remark, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("id", orderid);
             return new JsonResult
             {

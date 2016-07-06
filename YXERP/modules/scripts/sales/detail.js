@@ -439,7 +439,7 @@ define(function (require, exports, module) {
                 $("#navPays .tr-header").after(innerhtml);
             });
         } else {
-            $("#navPays .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $("#navPays .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!</div></td></tr>");
         }
     }
 
@@ -476,7 +476,7 @@ define(function (require, exports, module) {
                 $("#navInvoices .tr-header").after(innerhtml);
             });
         } else {
-            $("#navInvoices .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $("#navInvoices .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!</div></td></tr>");
         }
     }
 

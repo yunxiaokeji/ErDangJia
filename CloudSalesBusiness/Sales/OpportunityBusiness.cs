@@ -94,12 +94,12 @@ namespace CloudSalesBusiness
 
         #region 添加、编辑、删除
 
-        public string CreateOpportunity(string customerid, string typeid, string operateid, string agentid, string clientid)
+        public string CreateOpportunity(string customerid, string typeid, string name, string mobile, string cityCode, string address, string remark, string operateid, string agentid, string clientid)
         {
             string id = Guid.NewGuid().ToString();
             string code = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
-            bool bl = OpportunityDAL.BaseProvider.CreateOpportunity(id, code, customerid, typeid, operateid, agentid, clientid);
+            bool bl = OpportunityDAL.BaseProvider.CreateOpportunity(id, code, customerid, typeid, name, mobile, cityCode, address, remark, operateid, agentid, clientid);
             if (!bl)
             {
                 return "";

@@ -215,6 +215,8 @@
     <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\images\none-img.png" />
+    <Content Include="modules\plug\autocomplete\autocomplete.js" />
+    <Content Include="modules\plug\autocomplete\style.css" />
     <Content Include="modules\plug\choosecolor\spectrum.css" />
     <Content Include="modules\plug\choosecolor\spectrum.js" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />
@@ -881,7 +883,7 @@
     <Content Include="modules\template\myaccount\myfeedback-list.html" />
     <Content Include="modules\template\myaccount\setloginname.html" />
     <Content Include="modules\template\purchase\audit_storagein.html" />
-    <Content Include="modules\template\customer\choose-ordertype.html" />
+    <Content Include="modules\template\customer\create-order.html" />
     <Content Include="modules\template\sales\order-detail.html" />
     <Content Include="modules\template\sales\orders.html" />
     <Content Include="modules\template\customer\customerorders.html" />

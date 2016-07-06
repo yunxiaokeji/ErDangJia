@@ -2,8 +2,8 @@
 /*
     --选择客户插件--
     --引用
-    choosecustomer = require("choosecustomer");
-    choosecustomer.create({});
+    chooseproduct = require("chooseproduct");
+    chooseproduct.create({});
 */
 define(function (require, exports, module) {
     var $ = require("jquery"),

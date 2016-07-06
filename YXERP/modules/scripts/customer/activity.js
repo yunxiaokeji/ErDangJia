@@ -303,7 +303,7 @@ define(function (require, exports, module) {
         {
             if (ObjectJS.Params.DisplayType == 1)
             {
-                $(".activityList").html("<tr><td><div class='nodata-txt'>暂无数据!<div></td></tr>");
+                $(".activityList").html("<tr><td><div class='nodata-txt'>暂无数据!</div></td></tr>");
             }
             else 
             {
@@ -647,7 +647,7 @@ define(function (require, exports, module) {
                     $(".box-header").after(innerhtml);
                 });
             } else {
-                $(".box-header").after("<div class='nodata-box' >暂无数据!<div>");
+                $(".box-header").after("<div class='nodata-box' >暂无数据!</div>");
             }
 
             $("#pager").paginate({

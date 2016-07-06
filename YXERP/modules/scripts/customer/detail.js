@@ -1,6 +1,6 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
-        City = require("city"), CityObject, CityContact,
+        City = require("city"), CityObject, CityContact, CityOrder,
         Verify = require("verify"), VerifyObject, VerifyContact,
         doT = require("dot"),
         ChooseUser = require("chooseuser"),
@@ -15,6 +15,7 @@
     //初始化
     ObjectJS.init = function (customerid, colorList, navid) {
         var _self = this;
+        _self.isLoading = true;
         _self.customerid = customerid;
         _self.ColorList=JSON.parse(colorList.replace(/&quot;/g, '"'));
 
@@ -33,6 +34,7 @@
 
         Global.post("/Customer/GetCustomerByID", { customerid: customerid }, function (data) {
             if (data.model.CustomerID) {
+                _self.isLoading = false;
                 $('#customercolor').data('value', data.model.Mark); 
                 _self.bindCustomerInfo(data.model);
                 _self.bindEvent(data.model, navid);
@@ -315,6 +317,11 @@
 
         //新建机会,新建订单
         $("#btnCreateOpportunity,#btnCreateOrder").click(function () {
+            if (_self.isLoading) {
+                alert("数据加载中，请稍后重试");
+                return;
+            }
+            _self.isLoading = true;
             var _this = $(this);
             if (model.CacheTypes && model.CacheTypes.length > 0) {
                 if (CacheContacts) {
@@ -358,42 +365,42 @@
     }
 
     //创建机会或者订单 type 1 机会 2订单
-    ObjectJS.createOpporOrOrder = function (items, type) {
+    ObjectJS.createOpporOrOrder = function (model, type) {
         var _self = this;
+        _self.isLoading = false;
         var url = type == 1 ? "/Opportunitys/Create" : "/Orders/Create";
-        doT.exec("template/customer/choose-ordertype.html", function (template) {
-            var innerHtml = template(items);
+        doT.exec("template/customer/create-order.html", function (template) {
+            var innerHtml = template(model);
             Easydialog.open({
                 container: {
                     id: "show-model-choosetype",
                     header: type == 1 ? "新建机会" : "新建订单",
                     content: innerHtml,
                     yesFn: function () {
-                        var typeid = $(".ordertype-items .hover").data("id");
-                        if (!typeid) {
-                            alert("请选择订单类型！");
-                            return false;
-                        } else {
-                            Global.post(url, {
-                                customerid: _self.customerid,
-                                typeid: typeid
-                            }, function (data) {
-                                if (data.id && data.id.length > 0) {
-                                    if (type == 1) {
-                                        alert("机会创建成功", function () {
-                                            _self.getOpportunitys(_self.customerid, 1);
-                                        });
-                                    } else {
-                                        alert("订单创建成功", function () {
-                                            _self.getOrders(_self.customerid, 1);
-                                        });
-                                    }
-                                    
+                        Global.post(url, {
+                            customerid: _self.customerid,
+                            typeid: $("#orderTypes").data("id"),
+                            name: $("#orderContact").val().trim(),
+                            mobile: $("#orderMobile").val().trim(),
+                            address: $("#orderAddress").val().trim(),
+                            remark: $("#orderRemark").val().trim(),
+                            cityCode: CityOrder.getCityCode()
+                        }, function (data) {
+                            if (data.id && data.id.length > 0) {
+                                if (type == 1) {
+                                    alert("机会创建成功", function () {
+                                        _self.getOpportunitys(_self.customerid, 1);
+                                    });
                                 } else {
-                                    alert((type == 1 ? "机会" : "订单") + "创建失败");
+                                    alert("订单创建成功", function () {
+                                        _self.getOrders(_self.customerid, 1);
+                                    });
                                 }
-                            });
-                        }
+
+                            } else {
+                                alert((type == 1 ? "机会" : "订单") + "创建失败");
+                            }
+                        });
                     },
                     callback: function () {
 
@@ -401,9 +408,45 @@
                 }
             });
 
-            $(".ordertype-items .item").click(function () {
-                $(this).siblings().removeClass("hover");
-                $(this).addClass("hover");
+            require.async("dropdown", function () {
+                $("#orderTypes").dropdown({
+                    prevText: "",//文本前缀
+                    defaultText: model.CacheTypes[0] && model.CacheTypes[0].TypeName,
+                    defaultValue: model.CacheTypes[0] && model.CacheTypes[0].TypeID,
+                    data: model.CacheTypes,
+                    dataValue: "TypeID",
+                    dataText: "TypeName",
+                    width: "180",
+                    isposition: true,
+                    onChange: function () { }
+                });
+                $("#orderContacts").dropdown({
+                    prevText: "",//文本前缀
+                    defaultText: "选择联系人",
+                    defaultValue: "",
+                    data: model.Contacts,
+                    dataValue: "ContactID",
+                    dataText: "Name",
+                    width: "180",
+                    isposition: true,
+                    onChange: function (contact) {
+                        for (var i = 0; i < model.Contacts.length; i++) {
+                            if (model.Contacts[i].ContactID == contact.value) {
+                                var item = model.Contacts[i];
+                                $("#orderContact").val(item.Name || $("#orderContact").val());
+                                $("#orderMobile").val(item.MobilePhone || $("#orderMobile").val());
+                                $("#orderAddress").val(item.Address || $("#orderAddress").val());
+                                CityOrder.setValue(item.CityCode || CityOrder.getCityCode());
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
+
+            CityOrder = City.createCity({
+                cityCode: model.CityCode,
+                elementID: "orderCity"
             });
         });
     }
@@ -427,7 +470,7 @@
                     $("#navOrder .box-header").after(innerhtml);
                 });
             } else {
-                $("#navOrder .box-header").after("<div class='nodata-box' >暂无数据!<div>");
+                $("#navOrder .box-header").after("<div class='nodata-box' >暂无数据!</div>");
             }
             $("#pagerOrders").paginate({
                 total_count: data.totalCount,
@@ -470,7 +513,7 @@
                     $("#navOppor .box-header").after(innerhtml);
                 });
             } else {
-                $("#navOppor .box-header").after("<div class='nodata-box' >暂无数据!<div>");
+                $("#navOppor .box-header").after("<div class='nodata-box' >暂无数据!</div>");
             }
             $("#pagerOppors").paginate({
                 total_count: data.totalCount,
@@ -505,8 +548,10 @@
         }, function (data) {
             $("#navContact .box-header").nextAll().remove();
             if (data.items.length > 0) {
+
                 callback && callback(data.items);
                 CacheContacts = data.items;
+
                 doT.exec("template/customer/contacts.html", function (template) {
                     var innerhtml = template(data.items);
                     innerhtml = $(innerhtml);
@@ -529,7 +574,7 @@
                     $("#navContact .box-header").after(innerhtml);
                 });
             } else {
-                $("#navContact .box-header").after("<div class='nodata-box' >暂无数据!<div>");
+                $("#navContact .box-header").after("<div class='nodata-box' >暂无数据!</div>");
             }
         });
     }
@@ -602,7 +647,7 @@
                 if (model.Type == 1 || $("#navContact ul").length < 2) {
                     $("#lblContactName").text(model.Name);
                 }
-                _self.getContacts(model.CustomerID);
+                _self.getContacts();
                 
             } else {
                 alert("操作失败");

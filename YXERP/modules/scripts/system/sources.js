@@ -334,7 +334,7 @@
                 $("#sourceList .tr-header").after(innerhtml);
             });
         } else {
-            $("#sourceList .tr-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $("#sourceList .tr-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!</div></td></tr>");
         }
     }
 
@@ -439,7 +439,7 @@
                     $("#industryList .tr-header").after(innerhtml);
                 }); 
             } else {
-                $("#industryList .tr-header").after("<tr><td colspan='5'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#industryList .tr-header").after("<tr><td colspan='5'><div class='nodata-txt' >暂无数据!</div></td></tr>");
             }
         });
     }

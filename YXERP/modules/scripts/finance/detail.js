@@ -110,7 +110,7 @@
         });
 
         if (empty && items.length == 0) {
-            $("#navPays .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $("#navPays .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!</div></td></tr>");
         }
     }
 
@@ -139,7 +139,7 @@
             $("#navInvoices .tr-header").after(innerhtml);
         });
         if (empty && items.length == 0) {
-            $("#navInvoices .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $("#navInvoices .tr-header").after("<tr class='nodata-tr'><td colspan='12'><div class='nodata-txt' >暂无数据!</div></td></tr>");
         }
     }
 

@@ -131,17 +131,16 @@ namespace CloudSalesBusiness
                     model.Activity.FillData(ds.Tables["Activity"].Rows[0]);
                 }
 
-                //if (ds.Tables["Contact"].Rows.Count > 0)
-                //{
-                //    model.Contacts = new List<ContactEntity>();
-                //    foreach (DataRow dr in ds.Tables["Contact"].Rows)
-                //    {
-                //        ContactEntity con = new ContactEntity();
-                //        con.FillData(dr);
-                //        model.Contacts.Add(con);
-                //    }
-                    
-                //}
+                if (ds.Tables["Contact"].Rows.Count > 0)
+                {
+                    model.Contacts = new List<ContactEntity>();
+                    foreach (DataRow dr in ds.Tables["Contact"].Rows)
+                    {
+                        ContactEntity con = new ContactEntity();
+                        con.FillData(dr);
+                        model.Contacts.Add(con);
+                    }
+                }
             }
             return model;
         }

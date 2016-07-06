@@ -324,7 +324,7 @@
                         });
                     });
                 } else {
-                    $("#client-order").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                    $("#client-order").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!</div></td></tr>");
                 }
                 $("#pager").paginate({
                     total_count: data.TotalCount,
@@ -354,7 +354,7 @@
                     $("#client-header").after(innerText);
                 });
             } else {
-                $("#client-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#client-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!</div></td></tr>");
             }
             $("#pager2").paginate({
                 total_count: data.TotalCount,

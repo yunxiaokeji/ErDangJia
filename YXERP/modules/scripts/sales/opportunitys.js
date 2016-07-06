@@ -44,26 +44,6 @@
             }
         });
 
-        //新建销售机会
-        $("#createOrder").click(function () {
-            ChooseCustomer.create({
-                title: "选择客户",
-                isAll: true,
-                callback: function (items) {
-                    if (items.length > 0) {
-                        Global.post("/Opportunitys/Create", {
-                            customerid: items[0].id,
-                            typeid: ""
-                        }, function (data) {
-                            if (data.id) {
-                                location.href = "/Opportunitys/Detail/" + data.id;
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
         //日期插件
         $("#iptCreateTime").daterangepicker({
             showDropdowns: true,
@@ -109,7 +89,7 @@
         //订单类型
         Global.post("/System/GetOrderTypes", {}, function (data) {
             for (var i = 0; i < data.items.length; i++) {
-                $("#orderType").append('<li data-id="' + data.items[i].TypeID + '">' + data.items[i].TypeName + '</li>')
+                $("#orderType").append('<li data-id="' + data.items[i].TypeID + '">' + data.items[i].TypeName + '</li>');
             }
             $("#orderType li").click(function () {
                 var _this = $(this);
@@ -120,6 +100,22 @@
                     Params.TypeID = _this.data("id");
                     _self.getList();
                 }
+            });
+
+            //新建销售机会
+            $("#createOrder").click(function () {
+                ChooseCustomer.create({
+                    title: "新建机会-选择客户",
+                    isAll: true,
+                    cacheTypes: data.items,
+                    callback: function (params) {
+                        Global.post("/Opportunitys/Create", params, function (data) {
+                            if (data.id) {
+                                location.href = "/Opportunitys/Detail/" + data.id;
+                            }
+                        });
+                    }
+                });
             });
         });
 
@@ -272,7 +268,7 @@
 
             });
         } else {
-            $(".tr-header").after("<tr><td colspan='11'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $(".tr-header").after("<tr><td colspan='11'><div class='nodata-txt' >暂无数据!</div></td></tr>");
         }
 
         $("#pager").paginate({

@@ -60,6 +60,7 @@ define(function (require, exports, module) {
     //获取下级区域列表
     City.prototype.getChildren = function (element, cityCode, callback) {
         var _self = this;
+        element.find("option[value!='']").remove();
         Global.post(_self.setting.dataUrl, { cityCode: cityCode }, function (data) {
             var _length = data.Items.length;
             for (var i = 0; i < _length; i++) {

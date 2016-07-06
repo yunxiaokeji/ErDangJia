@@ -30,12 +30,6 @@
 /*客户详情页*/                            
 .header-box .ico-edit { margin-top:7px; margin-left:30px; float:left; }
 
-/*选择订单类型*/
-.ordertype-items { width:336px; overflow:auto; }
-.ordertype-items li{ width:100px; height:35px; float:left; line-height:35px; border:solid 1px #ccc; margin:10px 5px; text-align:center; cursor:pointer; }
-.ordertype-items li:hover{ border-color:#2F73B8; color:#2F73B8;}
-.ordertype-items li.hover{ border-color:#2F73B8; color:#fff; background-color:#2F73B8;}
-
 /*活动列表*/
 .activityListLi { margin:20px 0; }
 .activityListLi .activityTD { border: solid 1px #ccc; border-radius: 2px; padding: 10px; }

@@ -40,25 +40,6 @@
     ObjectJS.bindEvent = function (type) {
         var _self = this;
 
-        $("#createOrder").click(function () {
-            ChooseCustomer.create({
-                title: "选择客户",
-                isAll: true,
-                callback: function (items) {
-                    if (items.length > 0) {
-                        Global.post("/Orders/Create", {
-                            customerid: items[0].id,
-                            typeid: ""
-                        }, function (data) {
-                            if (data.id) {
-                                location.href = "/Orders/Detail/" + data.id;
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
         //日期插件
         $("#iptCreateTime").daterangepicker({
             showDropdowns: true,
@@ -124,6 +105,22 @@
                     Params.TypeID = _this.data("id");
                     _self.getList();
                 }
+            });
+
+            //新建订单
+            $("#createOrder").click(function () {
+                ChooseCustomer.create({
+                    title: "新建订单-选择客户",
+                    isAll: true,
+                    cacheTypes: data.items,
+                    callback: function (params) {
+                        Global.post("/Orders/Create", params, function (data) {
+                            if (data.id) {
+                                location.href = "/Orders/Detail/" + data.id;
+                            }
+                        });
+                    }
+                });
             });
         });
 
@@ -332,7 +329,7 @@
         }
         else
         {
-            $(".tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            $(".tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!</div></td></tr>");
         }
 
         $("#pager").paginate({

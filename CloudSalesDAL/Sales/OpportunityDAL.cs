@@ -58,12 +58,17 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public bool CreateOpportunity(string opportunityid, string opportunitycode, string customerid, string typeid, string operateid, string agentid, string clientid)
+        public bool CreateOpportunity(string opportunityid, string opportunitycode, string customerid, string typeid, string name, string mobile, string cityCode, string address, string remark, string operateid, string agentid, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@OpportunityID",opportunityid),
                                      new SqlParameter("@OpportunityCode",opportunitycode),
                                      new SqlParameter("@TypeID",typeid),
+                                     new SqlParameter("@Name",name),
+                                     new SqlParameter("@Mobile",mobile),
+                                     new SqlParameter("@CityCode",cityCode),
+                                     new SqlParameter("@Address",address),
+                                     new SqlParameter("@Remark",remark),
                                      new SqlParameter("@CustomerID" , customerid),
                                      new SqlParameter("@UserID" , operateid),
                                      new SqlParameter("@AgentID" , agentid),

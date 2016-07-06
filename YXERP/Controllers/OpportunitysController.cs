@@ -74,9 +74,9 @@ namespace YXERP.Controllers
 
         #region Ajax
 
-        public JsonResult Create(string customerid, string typeid)
+        public JsonResult Create(string customerid, string typeid, string name, string mobile, string cityCode, string address, string remark)
         {
-            string id = OpportunityBusiness.BaseBusiness.CreateOpportunity(customerid, typeid, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            string id = OpportunityBusiness.BaseBusiness.CreateOpportunity(customerid, typeid, name, mobile, cityCode, address, remark, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("id", id);
             return new JsonResult
             {

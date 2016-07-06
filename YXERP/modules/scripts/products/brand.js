@@ -193,7 +193,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!</div></td></tr>");
             }
 
             $("#pager").paginate({

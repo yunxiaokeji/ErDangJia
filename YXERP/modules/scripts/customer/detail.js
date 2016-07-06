@@ -9,7 +9,7 @@
     require("replys");
     require("colormark");
 
-    var ObjectJS = {}, CacheIems = [], CacheTypes = [];
+    var ObjectJS = {}, CacheContacts = null;
     ObjectJS.ColorList = [];
 
     //初始化
@@ -313,27 +313,31 @@
             });
         });
 
-        //新建机会
-        $("#btnCreateOpportunity").click(function () {
-            if (CacheTypes && CacheTypes.length > 0) {
-                _self.createOpporOrOrder(CacheTypes, 1);
+        //新建机会,新建订单
+        $("#btnCreateOpportunity,#btnCreateOrder").click(function () {
+            var _this = $(this);
+            if (model.CacheTypes && model.CacheTypes.length > 0) {
+                if (CacheContacts) {
+                    model.Contacts = CacheContacts;
+                    _self.createOpporOrOrder(model, _this.data("id"));
+                } else {
+                    _self.getContacts(function (contacts) {
+                        model.Contacts = contacts;
+                        _self.createOpporOrOrder(model, _this.data("id"));
+                    })
+                }
             } else {
                 Global.post("/System/GetOrderTypes", {}, function (data) {
-                    CacheTypes = data.items;
-                    _self.createOpporOrOrder(CacheTypes, 1);
-                });
-            }
-           
-        });
-
-        //新建订单
-        $("#btnCreateOrder").click(function () {
-            if (CacheTypes && CacheTypes.length > 0) {
-                _self.createOpporOrOrder(CacheTypes, 2);
-            } else {
-                Global.post("/System/GetOrderTypes", {}, function (data) {
-                    CacheTypes = data.items;
-                    _self.createOpporOrOrder(CacheTypes, 2);
+                    model.CacheTypes = data.items;
+                    if (CacheContacts) {
+                        model.Contacts = CacheContacts;
+                        _self.createOpporOrOrder(model, _this.data("id"));
+                    } else {
+                        _self.getContacts(function (contacts) {
+                            model.Contacts = contacts;
+                            _self.createOpporOrOrder(model, _this.data("id"));
+                        })
+                    }
                 });
             }
         });
@@ -492,7 +496,7 @@
     }
 
     //获取联系人
-    ObjectJS.getContacts = function () {
+    ObjectJS.getContacts = function (callback) {
         var _self = this;
         $("#navContact .box-header").nextAll().remove();
         $("#navContact .box-header").after("<div class='data-loading'><div>");
@@ -501,6 +505,8 @@
         }, function (data) {
             $("#navContact .box-header").nextAll().remove();
             if (data.items.length > 0) {
+                callback && callback(data.items);
+                CacheContacts = data.items;
                 doT.exec("template/customer/contacts.html", function (template) {
                     var innerhtml = template(data.items);
                     innerhtml = $(innerhtml);

@@ -2,7 +2,7 @@
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
 %}
-<div class="customer-card mRight15">
+<div class="customer-card mRight20">
     <div class="check iconfont" data-id="{%=item.CustomerID%}" data-userid="{%=item.OwnerID%}">&#xe626;</div>
     <div class="customer-name">
          {% if(item.Type==1){%}
@@ -11,12 +11,12 @@
                </div>
          {% } %}
         
-        <div class="name long">
-            <a href="javascript:void(0);" class="btn-open-window" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">{%=item.Name%}</a> 
-        </div>
+        <a href="javascript:void(0);" title="{%=item.Name%}" class="btn-open-window name long" data-id="{%= item.CustomerID %}" data-name="客户详情-{%=item.Name%}" data-url="/Customer/Detail/{%=item.CustomerID%}">
+            {%=item.Name%}
+        </a> 
     </div>
     <ul class="info mTop5">
-        <li><span class="iconfont">&#xe64f;</span>{%=item.MobilePhone ? item.MobilePhone:"--"%}</li>
+        <li><span class="iconfont">&#xe64f;</span>{%=item.MobilePhone || "--"%}</li>
         <li><span class="iconfont">&#xe657;</span>{%=item.City ? item.City.Description:"--"%}</li>
         <li>
             <div class="left" title="创建日期"><span class="iconfont">&#xe639;</span>{%=item.CreateTime.toDate("yyyy-MM-dd")%}</div>
@@ -27,7 +27,7 @@
         </li>
     </ul>
     <ul class="order-count">
-        <li style="width:48px;">
+        <li style="width:48px;" title="客户标签">
             <span class="mark mLeft5" style="margin-top:7px;" data-id="{%= item.CustomerID %}" data-value="{%= item.Mark%}"></span>
         </li>
         <li class="width100 center">

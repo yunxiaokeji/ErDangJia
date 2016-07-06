@@ -17,7 +17,7 @@ namespace CloudSalesEntity
         [Property("Lower")]
         public string IndustryID { get; set; }
 
-        public Industry Industry { get; set; }
+        public ClientsIndustry Industry { get; set; }
 
         public int Extent { get; set; }
         public string ExtentStr { get; set; }
@@ -101,10 +101,15 @@ namespace CloudSalesEntity
             }
         }
 
+        ///// <summary>
+        ///// 编辑加载列表用
+        ///// </summary>
+        //public List<Industry> Industrys { get; set; }
+
         /// <summary>
         /// 编辑加载列表用
         /// </summary>
-        public List<Industry> Industrys { get; set; }
+        public List<ClientsIndustry> Industrys { get; set; }
         /// <summary>
         /// 编辑加载列表用
         /// </summary>

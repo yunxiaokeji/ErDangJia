@@ -87,6 +87,7 @@ select option{ padding:2px; }
 .pBottom20 {padding-bottom:10px;}
 .pBottom20 {padding-bottom:20px;}
 .pBottom50 {padding-bottom:50px;}
+.pBottom100 {padding-bottom:100px;}
 
 .pAll10 {padding:10px;}
 .pAll20 {padding:20px;}
@@ -172,9 +173,15 @@ select option{ padding:2px; }
 .btn999 {  padding:5px 10px; background-color:#999; color:#fff; border:none; cursor:pointer; display:inline-block; border-radius:2px; line-height:18px; }
 .btn999:hover { background-color:#666; color:#fff; }
 
+/*添加按钮*/
 .btn-add { background: url(/modules/images/ico-btnadd.png) no-repeat 6px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
            -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
 .btn-add:hover{ background-color:#2F73B8;}
+
+/*下拉按钮*/
+.btn-dropdown { background: url(/modules/images/ico-dropdown-white.png) no-repeat right 10px center; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-right: 23px; color: #fff; background-color: #4a98e7; 
+           -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
+.btn-dropdown:hover{ background-color:#2F73B8;}
 
 /*筛选*/
 .btn-filter:before { content:"收起筛选";}
@@ -190,6 +197,16 @@ select option{ padding:2px; }
 .btn-share { background: url(/modules/images/iconshare.png) no-repeat 5px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
            -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
 .btn-share:hover{ background-color:#2F73B8;}
+
+/*设置*/
+.btn-setting { background: url(/modules/images/iconsetting.png) no-repeat 5px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
+           -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
+.btn-setting:hover{ background-color:#2F73B8;}
+
+/*统计*/
+.btn-report { background: url(/modules/images/iconreport.png) no-repeat 5px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
+           -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
+.btn-report:hover{ background-color:#2F73B8;}
 
 /*返回*/
 .btn-back { background: url(/modules/images/iconback.png) no-repeat 5px 7px; line-height: 18px; padding: 5px 10px; border-radius: 2px; display: inline-block; cursor: pointer; padding-left: 23px; color: #fff; background-color: #4a98e7; 
@@ -362,7 +379,7 @@ select option{ padding:2px; }
 
 
 /*弹出层-新建*/
-.easydialog-create { min-width:400px;  }
+.easydialog-create { min-width:400px; max-width:800px; max-height:500px; overflow:auto; min-height:50px;  }
 .easydialog-create li{ margin-top:10px; }
 .easydialog-create li span{ display:inline-block; vertical-align:top;}
 .easydialog-create li input[type="text"]{ width:180px; }
@@ -375,8 +392,8 @@ select option{ padding:2px; }
 .content-info { width:80%; min-width:600px; overflow:auto; }
 .content-info li{ width:50%; float:left;  line-height:35px; }
 .content-info li .column-title{ width:100px; float:left; color:#666; }
-.content-info li .column-value{ max-width:300px; float:left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:#666;}
-.content-info li label{ color:#666; float:left;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  max-width:300px;}
+.content-info li .column-value{ max-width:300px; float:left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:#333;}
+.content-info li label{ color:#333; float:left;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  max-width:300px;}
 
 /*alert 弹出层样式*/
 .alert-layer {position: fixed; z-index:99998; top:0; left:0;right:0; bottom:0; background-color:rgb(242, 244, 248); opacity:0.8;}
@@ -406,28 +423,15 @@ select option{ padding:2px; }
 .ico-upload {  padding:5px 10px; background-color:#4a98e7; color:#fff; border:none; cursor:pointer; display:inline-block; border-radius:2px; }
 .ico-upload:hover { background-color:#2F73B8; }
 
-
-/*日志样式*/
-.log-body { width:99%; }
-.log-body .log-item {width:99%; line-height:30px; overflow:auto; border-bottom:dashed 1px #eee; margin-top:10px; }
-.log-body .createuser { vertical-align:middle; }
-.log-body .createuser img { float:left; height:30px; width:30px; border-radius:15px; margin-top:15px; }
-.log-body .createuser h2 { float:left; vertical-align:middle; line-height:60px; width:60px; margin-left:10px; }
-.log-body .createtime { color:#999; }
-
 /*盒模型表格样式*/
 .table-box-list { width:100%; }
-.table-box-list ul { width:100%;  box-sizing:border-box; display: -moz-box; display: -webkit-box; padding:8px 0;}
-.table-box-list ul li{ text-align:center; white-space:nowrap; overflow: hidden; text-overflow:ellipsis; height:25px; line-height:25px; }
-.table-box-list ul.box-header li{ color:#999; border-right:solid 1px #fff;}
-.table-box-list ul.box-item { border:solid 1px #ccc; border-radius:5px; overflow:auto; margin:5px 0; }
+.table-box-list ul { width:100%;  box-sizing:border-box; height:25px; display: table; padding:8px 0;}
+.table-box-list ul li{ text-align:center; padding:0 10px; vertical-align:middle; display:table-cell; white-space:nowrap; overflow: hidden; text-overflow:ellipsis; height:25px; }
+.table-box-list ul.box-header li{ color:#999;  border-right:solid 1px #fff;}
+.table-box-list ul.box-item { border:solid 1px #ccc; border-radius:5px; overflow:auto; margin:10px 0; }
 .table-box-list ul.box-item li{ border-right:solid 1px #eee; }
 .table-box-list ul.box-item li:last-child{ border-right:none; }
 
 .table-box-list ul.box-item:hover { border:solid 1px #2F73B8; }
-
-.table-box-list ul .flex1{ -moz-box-flex:1; -webkit-box-flex:1; padding:0 10px; }
-.table-box-list ul .flex2{ -moz-box-flex:2; -webkit-box-flex:2; }
-.table-box-list ul .flex3{ -moz-box-flex:3; -webkit-box-flex:3; }
 
 .nodata-box { padding: 30px 0px; font-size: 16px; text-align: center; color: #666; border:solid 1px #ccc; border-radius:10px; }

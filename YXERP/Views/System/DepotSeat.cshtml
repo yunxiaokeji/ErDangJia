@@ -14,7 +14,7 @@
 }
 <div class="header-box">
     <span class="header-title left">@(model.Name)-货位设置</span>
-    <a href="javascript:void(0);" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"108020604"))">新建货位</a>
+    <a href="javascript:void(0);" class="btn-add right">新建货位</a>
     <a href="/System/Warehouse" class="btn-back right mRight20">返回仓库设置</a> 
 </div>
 <div class="search-header">
@@ -34,6 +34,6 @@
     <div id="pager" class="mTop20"></div>
 </div>
 <ul class="dropdown-ul hide"  style="width:65px;">
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current,"108020604"))" id="updateObject">编辑</li>
+    <li id="updateObject">编辑</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"108020606"))" id="deleteObject">删除</li>
 </ul>

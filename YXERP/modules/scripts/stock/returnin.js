@@ -181,6 +181,18 @@ define(function (require, exports, module) {
 
         //审核入库
         $("#btnconfirm").click(function () {
+
+            var bl = true;
+            $(".detail-item select").each(function () {
+                var _this = $(this);
+                if (!_this.val()) {
+                    bl = false;
+                }
+            });
+            if (!bl) {
+                alert("请选择退入货位");
+                return;
+            }
             confirm("确认审核退货单入库吗？", function () {
                 Global.post("/Stock/AuditReturnIn", { docid: docid }, function (data) {
                     if (data.result == 1) {
@@ -199,7 +211,9 @@ define(function (require, exports, module) {
         depotbox.empty();
         var depot = $("<select data-id='" + autoid + "' data-wareid='" + wareid + "'></select>");
         for (var i = 0, j = depots.length; i < j; i++) {
-            depot.append($("<option value='" + depots[i].DepotID + "' >" + depots[i].DepotCode + "</option>"))
+            if (depots[i].Status == 1) {
+                depot.append($("<option value='" + depots[i].DepotID + "' >" + depots[i].DepotCode + "</option>"));
+            }
         }
 
         if (depotbox.data("id")) {
@@ -228,6 +242,7 @@ define(function (require, exports, module) {
                 };
             });
         });
+
         depotbox.append(depot);
     }
 

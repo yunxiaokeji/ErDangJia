@@ -87,7 +87,6 @@ namespace CloudSalesBusiness
                 ReportCommonEntity model = new ReportCommonEntity();
                 List<SourceItem> sourceItems = new List<SourceItem>();
                 model.name = stage == 1 ? "新客户" : stage == 2 ? "机会客户" : "成交客户";
-               
                 if (ds.Tables["Data"].Select("StageStatus=" + stage).Count() > 0)
                 {
                     model.desc += model.name + ":" + ds.Tables["Data"].Select("StageStatus=" + stage)[0]["Value"].ToString();
@@ -98,11 +97,9 @@ namespace CloudSalesBusiness
                     model.iValue = 0;
                     model.desc = "";
                 }
-
                 DataRow[] drRow = ds.Tables["Source"].Select("StageStatus=" + stage);
                 if (stage == 2)
-                {
-                    DataTable opstage = CustomerRPTDAL.BaseProvider.GetOpportunityStage(clientid, begintime, endtime, type, ownerid);
+                { 
                     foreach (var source in SystemBusiness.BaseBusiness.GetOpportunityStages("", clientid))
                     {
                         SourceItem item = new SourceItem();
@@ -115,30 +112,37 @@ namespace CloudSalesBusiness
                         int[] oppstatus = { 1, 2, 3 };
                         foreach (var opstatus in oppstatus)
                         {
-                            DataRow[] oppdr = opstage.Select("(StageID='" + source.StageID + "' or StageID='' ) and Status=" + opstatus);
-                            if (oppdr.Any())
+                            if (drRow.Any())
                             {
-                                int sumvalue = oppdr.Sum(x => (int) x["value"]);
-                                item.desc = item.desc + (opstatus == 1 ? "正常" : opstatus == 2 ? "已成单" : "已关闭") + "<br/>" + sumvalue.ToString() + "<br/>";
+                                DataRow[] row =
+                                    drRow.Where(x => (x["SourceID"].ToString().ToLower() == source.StageID || string.IsNullOrEmpty(x["SourceID"].ToString())) && Convert.ToInt32(x["SourceName"]) == opstatus).ToArray();
+                                if (row.Any() && row.Length > 0)
+                                {
+                                    item.Value += Convert.ToInt32(row[0]["value"]);
+                                    item.desc = item.desc + (opstatus == 1 ? "正常" : opstatus == 2 ? "已成单" : "已关闭") + "<br/>" + row[0]["value"].ToString() + "<br/>";
+                                }
+                                else
+                                {
+                                    item.desc = item.desc + (opstatus == 1 ? "正常" : opstatus == 2 ? "已成单" : "已关闭") +
+                                                "<br/>0 <br/>";
+                                }
                             }
                             else
                             {
-                                item.desc = item.desc + (opstatus == 1 ? "正常" : opstatus == 2 ? "已成单" : "已关闭") + "<br/>0 <br/>";
+                                item.desc = item.desc + (opstatus == 1 ? "正常" : opstatus == 2 ? "已成单" : "已关闭") +
+                                            "<br/>0 <br/>";
                             }
                         }
-                        if (drRow.Any())
-                        { 
-                            DataRow[] row = drRow.Where(x => x["SourceID"].ToString().ToLower() == source.StageID).ToArray();
-                            if (row.Any() && row.Length > 0)
-                            {
-                                item.Value = Convert.ToInt32(row[0]["value"]);
-                            }
-                            item.cvalue = (Convert.ToDecimal(item.Value) / (model.iValue == 0 ? 1 : model.iValue) * 100).ToString("f2");
-                            if (list.Count > 0)
-                            {
-                                int value = list[0].iValue;
-                                item.value = (Convert.ToDecimal(item.Value) / (value == 0 ? 1 : model.iValue) * 100).ToString("f2");
-                            }
+                        item.cvalue =
+                                 (Convert.ToDecimal(item.Value) / (model.iValue == 0 ? 1 : model.iValue) * 100).ToString(
+                                     "f2");
+                        if (list.Count > 0)
+                        {
+                            int value = list[0].iValue;
+                            int tempivalue = model.iValue == 0 ? 1 : model.iValue;
+                            item.value =
+                                (Convert.ToDecimal(item.Value) / (value == 0 ? 1 : tempivalue) * 100).ToString(
+                                    "f2");
                         }
                         sourceItems.Add(item);
                     }

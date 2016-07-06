@@ -72,24 +72,6 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_CreateOpportunity", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
-        {
-            string replyID = Guid.NewGuid().ToString();
-
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ReplyID",replyID),
-                                     new SqlParameter("@GUID",guid),
-                                     new SqlParameter("@Content",content),
-                                     new SqlParameter("@FromReplyID",fromReplyID),
-                                     new SqlParameter("@CreateUserID" , userID),
-                                     new SqlParameter("@AgentID" , agentID),
-                                     new SqlParameter("@FromReplyUserID" , fromReplyUserID),
-                                     new SqlParameter("@FromReplyAgentID" , fromReplyAgentID),
-                                   };
-
-            return ExecuteNonQuery("P_CreateOpportunityReply", paras, CommandType.StoredProcedure) > 0 ? replyID : string.Empty;
-        }
-
         public bool UpdateOpportunity(string opportunityid, string personName, string mobileTele, string cityCode, string address, string postalcode, string typeid, string remark, string operateid, string agentid, string clientid)
         {
             int result = 0;

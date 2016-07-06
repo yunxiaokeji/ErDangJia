@@ -117,18 +117,5 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public DataTable GetOpportunityStage(string clientID,string beginTime,string endTime,int  type,string ownerID)
-        {
-            SqlParameter[] paras = { 
-                                       new SqlParameter("@ClientID",clientID), 
-                                       new SqlParameter("@BeginTime",beginTime),
-                                       new SqlParameter("@EndTime",endTime),
-                                       new SqlParameter("@Type",type),
-                                       new SqlParameter("@OwnerID",ownerID), 
-                                   };
-            DataTable ds = GetDataTable("R_GetOpportunityStateRPT", paras, CommandType.StoredProcedure);
-            return ds;
-            
-        }
     }
 }

@@ -278,6 +278,16 @@ namespace CloudSalesBusiness
                     return  CommonBusiness.GetEnumDesc<EnumCustomerExtend>((EnumCustomerExtend) Enum.Parse(typeof (EnumCustomerExtend), coulumnValue));
                 case EnumColumnTrans.ConvertIndustry:
                     return CommonBusiness.GetIndustryID(coulumnValue);
+                case EnumColumnTrans.ConvertCustomerType:
+                    return coulumnValue == "1" ? "企业" : "个人";
+                case EnumColumnTrans.ConvertClientIndustry:
+                       string IndustryName = "";
+                       ClientsIndustry clientsIndustry= SystemBusiness.BaseBusiness.GetClientIndustryByID(coulumnValue, "", clientID);
+                       if (clientsIndustry!=null)
+                       {
+                           IndustryName = clientsIndustry.Name;
+                       }
+                   return IndustryName;
                 case EnumColumnTrans.ConvertUnitName:
                     string unitName = "";
                     ProductUnit punit= ProductsBusiness.BaseBusiness.GetUnitByID(coulumnValue, clientID);
@@ -319,11 +329,27 @@ namespace CloudSalesBusiness
                         }
                     }
                     return categoryID;
+                case EnumColumnTrans.ConvertClientIndustryID:
+                    ClientsIndustry industry = SystemBusiness.BaseBusiness.GetClientIndustryByName(coulumnValue,"",clientID);
+                    return industry != null ? industry.ClientIndustryID : "";
+                case EnumColumnTrans.ConvertCustomerExtentType:
+                    return CommonBusiness.GetEnumindexByDesc<EnumCustomerExtend>(EnumCustomerExtend.Huge, coulumnValue).ToString();
                 default:
                     return coulumnValue;
             }
-        } 
+        }
 
+        public int PaserByValueOrName(string dvalue,object propname )
+        {   
+            try
+            {
+                return Convert.ToInt32(propname);
+                
+            }catch
+            {
+                return Convert.ToInt32(dvalue);
+            }
+        }
 
         public T GetProductByDataRow<T>(DataRow dr, Dictionary<string, ExcelModel> listColumn, T entity,Dictionary<string,ExcelFormatter> formatters,string clientID="")
         {
@@ -331,10 +357,10 @@ namespace CloudSalesBusiness
             foreach (var property in entity.GetType().GetProperties())
             {
                 var propertyname = property.Name.ToLower();
-                var defaulvalue = listColumn.FirstOrDefault(q => q.Value.ColumnName.ToLower() == propertyname);
+                var defaulvalue = listColumn.FirstOrDefault(q => q.Value.ImportColumn.ToLower() == propertyname); 
                 if (default(KeyValuePair<string, ExcelModel>).Equals(defaulvalue))
                 {
-                    defaulvalue = listColumn.FirstOrDefault(q => q.Value.ImportColumn.ToLower() == propertyname);
+                    defaulvalue = listColumn.FirstOrDefault(q => q.Value.ColumnName.ToLower() == propertyname);
                 }
                 if (!default(KeyValuePair<string, ExcelModel>).Equals(defaulvalue))
                 {
@@ -348,7 +374,8 @@ namespace CloudSalesBusiness
                     switch (defaulvalue.Value.DataType)
                     {
                         case "int":
-                            property.SetValue(entity,string.IsNullOrEmpty(drvalue)?-1: drvalue == "是" ? 1 : drvalue == "否" ? 0 : Convert.ToInt32(dr[propname]),
+                            property.SetValue(entity,string.IsNullOrEmpty(drvalue)?-1: drvalue == "是" ? 1 : drvalue == "否" ? 0 :
+                            PaserByValueOrName(drvalue, dr[propname]),
                                 null);
                             break;
                         case "string":
@@ -464,14 +491,30 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 格式化分类ID
         /// </summary>
-        ConvertCategoryID = 14
+        ConvertCategoryID = 14,
+        /// <summary>
+        /// 客户行业
+        /// </summary>
+        ConvertClientIndustry = 15, 
+        /// <summary>
+        /// 客户类型
+        /// </summary>
+        ConvertCustomerType= 16,
+        /// <summary>
+        /// 格式化客户行业
+        /// </summary>
+        ConvertClientIndustryID = 17,
+        /// <summary>
+        /// 格式化品牌ID
+        /// </summary>
+        ConvertCustomerExtentType = 18
 
     }
 
     public enum DropSourceList
     {
         /// <summary>
-        /// 行业
+        /// 公司行业
         /// </summary>
         Industry = 1,
         /// <summary>
@@ -489,7 +532,11 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 产品单位
         /// </summary>
-        ProductUnit = 5
+        ProductUnit = 5,
+        /// <summary>
+        /// 客户行业
+        /// </summary>
+        ClientIndustry = 6
     }
 
     public class ExcelFormatter
@@ -500,16 +547,49 @@ namespace CloudSalesBusiness
 
     public class ExcelModel
     {
+        /// <summary>
+        /// Excel列名
+        /// </summary>
         public string Title { get; set; }
+        /// <summary>
+        /// 对应数据库列名
+        /// </summary>
         public string ColumnName { get; set; }
+        /// <summary>
+        /// 导出是否隐藏 对于模版下载此列开关无效
+        /// </summary>
         public bool IsHide { get; set; }
-        public bool IsfFomat { get; set; }
+        /// <summary>
+        /// 是否格式化  为true时 下面Type才生效
+        /// </summary>
+        public bool IsFomat { get; set; }
+        /// <summary>
+        /// 导出时格式化类型 参考EnumColumnTrans
+        /// </summary>
         public int Type { get; set; }
+        /// <summary>
+        /// 模版下载时对应格式化类型 参考EnumColumnTrans
+        /// </summary>
         public int TestType { get; set; }
+        /// <summary>
+        /// 导入Excel对应格式化类型
+        /// </summary>
         public int ImportType { get; set; }
+        /// <summary>
+        /// 导入时此列实际指向的列  默认为空
+        /// </summary>
         public string ImportColumn { get; set; }
+        /// <summary>
+        /// 格式化类型 为下拉框时  默认的数据源 类型{"List|数据1,数据2,数据3,..." ,"DropSourceList| 枚举DropSourceList的枚举值"}
+        /// </summary>
         public string DataSource { get; set; }
+        /// <summary>
+        /// 导入时列的类型  int string boole datetime decimal
+        /// </summary>
         public string DataType { get; set; }
+        /// <summary>
+        /// 模版下载 此列默认的文本
+        /// </summary>
         public string DefaultText { get; set; }
     }
 

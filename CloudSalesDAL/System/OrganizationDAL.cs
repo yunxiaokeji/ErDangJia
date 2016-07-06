@@ -359,9 +359,9 @@ namespace CloudSalesDAL
                                        new SqlParameter("@AgentID",agentid)
                                    };
             paras[0].Direction = ParameterDirection.Output;
-            bool bl = ExecuteNonQuery("P_DeleteUserByID", paras, CommandType.StoredProcedure) > 0;
+            ExecuteNonQuery("P_DeleteUserByID", paras, CommandType.StoredProcedure);
             result = Convert.ToInt32(paras[0].Value);
-            return bl;
+            return result == 1;
         }
 
         public bool UpdateUserRole(string userid, string roleid, string agentid,string operateid)

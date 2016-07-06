@@ -14,11 +14,15 @@
 }
 <div class="tab-nav">
     <ul class="search-tab left">
-        <li  class="hover" data-id="sourceList">来源设置</li>
-        <li data-id="colorList">标签配置</li>       
+        <li  class="hover" data-id="sourceList">来源配置</li>
+        <li data-id="colorList">标签配置</li>
+        <li data-id="industryList">行业配置</li>
+        <li data-id="memberList" class="hide">会员配置</li>  
     </ul>
-    <div class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" data-id="sourceList" id="createModel">新建来源</div>
-    <div class="btn-add right" style="display:none;" data-id="colorList"  id="createColor">新建标签</div>
+    <div class="btn-add right" data-id="sourceList" id="createModel">新建来源</div>
+    <div class="btn-add right" style="display: none;" data-id="colorList" id="createColor">新建标签</div>
+    <div class="btn-add right" style="display: none;" data-id="industryList" id="createIndustry">新建行业</div>
+    <div class="btn-add right" style="display:none;" data-id="memberList"  id="createMeber">新建设置</div>
 </div>
 <div class="content-body mTop20">
     <table class="table-list nav-part" id="sourceList">
@@ -32,15 +36,37 @@
         </tr>
     </table>
 
-    <ul class="color-list hide nav-part" id="colorList"> 
+    <ul class="color-list hide nav-part" id="colorList">
     </ul>
+
+    <div class="hide nav-part" id="industryList">
+        <table class="table-list">
+            <tr class="tr-header">
+                <td class="tLeft">行业名称</td>
+                <td class="tLeft">说明</td>
+                <td class="center">创建时间</td>
+                <td class="center">创建人</td>
+                <td class="center">操作</td>
+            </tr>
+        </table>
+    </div>
+    <div class="hide nav-part" id="memberList">
+        <table class="table-list" >
+            <tr class="tr-header">
+                <td class="tLeft">名称</td>
+                <td class="center">创建时间</td>
+                <td class="center">创建人</td>
+                <td class="center">操作</td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <ul class="dropdown-ul hide" id="ddlSource" style="width: 65px;">
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current, "108020101"))" id="updateObject">编辑</li>
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current, "108020102"))" id="deleteObject">删除</li>
+    <li id="updateObject">编辑</li>
+    <li id="deleteObject">删除</li>
 </ul>
 <ul class="colordrop dropdown-ul hide"  style="width:65px;">
-    <li  id="updateColor">编辑</li>
-    <li  id="deleteColor">删除</li>
+    <li id="updateColor">编辑</li>
+    <li id="deleteColor">删除</li>
 </ul>

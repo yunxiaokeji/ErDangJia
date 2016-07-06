@@ -3,6 +3,7 @@
  */
 define(function (require, exports, module) {
     require("plug/dialog/dialog.css");
+    var jquery = require("jquery");
     var Global = require("global");
     var win = window, doc = win.document,
 	docElem = doc.documentElement;
@@ -62,10 +63,7 @@ define(function (require, exports, module) {
 
                 for (i in defaults) {
                     options[i] = arg[i] !== undefined ? arg[i] : defaults[i];
-                }
-                //var guid = Global.guid() + "_";
-                //options.container.guid = guid;
-                //options.guid = guid; 
+                } 
                 options.container.guid = options.guid;
                 Dialog.data(options.guid + 'options', options);
                 return options;
@@ -657,7 +655,7 @@ define(function (require, exports, module) {
                     dialogNoBtn = doc.getElementById(options.guid + 'dialogNoBtn'),
                     overlayer = doc.getElementById(options.guid + 'overlay'),
                     dialogSpanWare = doc.getElementById('spanWare'),
-                    dialogExportModel = doc.getElementById('exportModel'),
+                    dialogExportModel = jquery('.exportModel'); 
                     dialogFileName=doc.getElementById('modelName');
                 // 绑定确定按钮的回调函数
                 if (dialogYesBtn) {
@@ -670,17 +668,26 @@ define(function (require, exports, module) {
                 if (dialogSpanWare) {
                     event.bind(dialogSpanWare, 'click', function() { self.infoShow() });
                 }
+
+               
+
                 if (dialogExportModel) {
                     var tempContent = options.container || {};
                     if (tempContent != null && typeof (tempContent.exportUrl) != "undefined" && tempContent.exportUrl != "") {
-                        var objPara = tempContent.exportParam || {}; 
-                        event.bind(dialogExportModel, 'click', function () {
-                            if (dialogFileName!=null && typeof(dialogFileName) != "undefined") {
-                                objPara.model = dialogFileName.value;
-                                objPara.filleName = dialogFileName.options[dialogFileName.selectedIndex].text;
-                            } 
-                            self.exportModel(tempContent.exportUrl, objPara); 
-                        });
+                        var objPara = tempContent.exportParam || {};
+
+                        dialogExportModel.each(function (i, v) { 
+                            jquery(v).bind("click", function() {
+                                if (dialogFileName != null && typeof (dialogFileName) != "undefined") {
+                                    objPara.model = dialogFileName.value;
+                                    objPara.filleName = dialogFileName.options[dialogFileName.selectedIndex].text;
+                                } else if (typeof (jquery(v).data("model")) != "undefined") {
+                                    objPara.model = jquery(v).data("model");
+                                    objPara.filleName = typeof (jquery(v).data("modelName")) != "undefined" ? jquery(v).data("modelName") : "";
+                                }
+                                self.exportModel(tempContent.exportUrl, objPara);
+                            });
+                        }); 
                     }
                 } 
                 // 绑定取消按钮的回调函数
@@ -883,29 +890,7 @@ define(function (require, exports, module) {
         }); 
         return textcontent; //html 
     };
-    //var exportModel = function (path,qic) {
-    //    var form = $("<form>");//定义一个form表单
-    //    form.attr("style", "display:none");
-    //    form.attr("target", "");
-    //    form.attr("method", "post");
-    //    form.attr("action", path);
-    //    for (var i in qic) {
-    //        if (qic.hasOwnProperty(i)) {
-    //            var input = $("<input>");
-    //            input.attr("hide", "hide");
-    //            input.attr("value", qic[i]);
-    //            input.attr("name",i);
-    //            form.append(input);
-    //            console.log(i, ":", qic[i]);
-    //        };
-    //    } 
-    //    $("body").append(form);
-    //    form.submit();//表单提交 
-    //};
-    //var infoShow = function () {
-    //    $('.spanWare').hide();
-    //    $('.divInfo').show();
-    //};
+   
     // ------------------------------------------------------
     // ---------------------DOM加载模块----------------------
     // ------------------------------------------------------

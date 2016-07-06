@@ -6,37 +6,39 @@
         ChooseUser = require("chooseuser"),
         Easydialog = require("easydialog");
     require("pager");
+    require("replys");
     require("colormark");
 
     var ObjectJS = {}, CacheIems = [], CacheTypes = [];
     ObjectJS.ColorList = [];
+
     //初始化
-    ObjectJS.init = function (customerid, MDToken, colorList) {
+    ObjectJS.init = function (customerid, colorList, navid) {
         var _self = this;
         _self.customerid = customerid;
         _self.ColorList=JSON.parse(colorList.replace(/&quot;/g, '"'));
-        _self.bindStyle();
 
-        if (!MDToken) {
-            $("#btnShareMD").hide();
+        var nav = $(".tab-nav-ul li[data-id='" + navid + "']");
+        if (nav.length > 0) {
+            nav.addClass("hover");
+        } else {
+            $(".tab-nav-ul li").first().addClass("hover").data("first", "1");
+            $("#navRemark").show();
+            $("#navRemark").getObjectReplys({
+                guid: _self.customerid,
+                type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                pageSize: 10
+            });
         }
-     
+
         Global.post("/Customer/GetCustomerByID", { customerid: customerid }, function (data) {
             if (data.model.CustomerID) {
                 $('#customercolor').data('value', data.model.Mark); 
                 _self.bindCustomerInfo(data.model);
-                _self.bindEvent(data.model);
+                _self.bindEvent(data.model, navid);
             }
         });
-        _self.initTalk(customerid);
     } 
-    //样式
-    ObjectJS.bindStyle = function () {
-        //隐藏操作按钮
-        $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
-        $("#recoveryCustomer,#loseCustomer,#closeCustomer").hide();
-
-    }
 
     //基本信息
     ObjectJS.bindCustomerInfo = function (model) {
@@ -57,32 +59,39 @@
         $("#lblContactName").text(model.ContactName || "--");
         $("#lblJobs").text(model.Jobs || "--");
         $("#lblUser").text(model.CreateUser ? model.CreateUser.Name : "--");
-
-        $("#lblSource").text(model.Source ? model.Source.SourceName : "--");
-        if (model.Activity != null) {
-            if (model.Source.SourceCode == "Source-Activity") { 
+        $("#lblTime").text(model.CreateTime.toDate("yyyy-MM-dd hh:mm:ss"));
+        if (model.Activity) {
+            if (model.Source.SourceCode == "Source-Activity") {
                 $("#aSource").data("url", "/Activity/Detail/" + model.ActivityID);
                 $("#aSource").data("id", Global.guid());
                 $("#aSource").data("name", "活动详情-" + model.Activity.Name);
-                $("#aSource").html(model.Activity ? " 活动名称: "+ model.Activity.Name : "--");
+                $("#aSource").html(model.Activity.Name);
                 $("#aSource").show();
+                $("#lblSource").hide();
             }
+        } else {
+            $("#lblSource").text(model.Source ? model.Source.SourceName : "--");
         }
         $("#lblOwner").text(model.Owner ? model.Owner.Name : "--");
         $("#changeOwner").data("userid", model.OwnerID);
         $("#lblReamrk").text(model.Description);
 
         if (model.Type == 1) {
-            $("#lblType").html("企");
-        } 
+            $("#lblType").html("企业客户");
+        } else {
+            $("#lblType").html("个人客户");
+        }
+
+        $(".tab-nav-ul li[data-id='navOrder']").html("销售订单（" + model.OrderCount + "）");
+        $(".tab-nav-ul li[data-id='navOppor']").html("销售机会（" + model.OpportunityCount + "）");
     }
 
     //绑定事件
-    ObjectJS.bindEvent = function (model) {
+    ObjectJS.bindEvent = function (model, navid) {
         var _self = this;
         $('#customercolor').markColor({
             isAll: false,
-            xRepair:30,
+            top: 25,
             data: _self.ColorList,
             onChange: function (obj, callback) { 
                 if (obj.data("value") < 0) {
@@ -97,7 +106,10 @@
         //隐藏下拉
         $(document).click(function(e) {
             if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
-                $(".dropdown-ul").hide();
+                $("#ddlContact").hide();
+            }
+            if (!$(e.target).hasClass("btn-dropdown")) {
+                $("#ddlOperate").hide();
             }
         });
 
@@ -107,7 +119,6 @@
         });
 
         if (model.Status == 1) {
-
             $("#closeCustomer").show();
 
             //丢失客户
@@ -131,7 +142,6 @@
                     });
                 });
             });
-
         } else if (model.Status == 2 || model.Status == 3) {
 
             $("#recoveryCustomer").show();
@@ -145,13 +155,8 @@
                     });
                 });
             });
-
         }
 
-        //个人客户
-        if (model.Type != 1) {
-            $(".tab-nav-ul li[data-id='navContact']").remove();
-        }
         //添加联系人
         $("#btnCreateContact").click(function () {
             _self.addContact();
@@ -192,29 +197,32 @@
             $(".nav-partdiv").hide();
             $("#" + _this.data("id")).show();
 
-            $("#btnCreateContact,#btnCreateOpportunity,#btnCreateOrder").hide();
-
-            if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
+            if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {  /*日志*/
                 _this.data("first", "1");
-                _self.getLogs(model.CustomerID, 1);
-            } else if (_this.data("id") == "navContact") {
-                $("#btnCreateContact").show();
-                if ((!_this.data("first") || _this.data("first") == 0)) {
-                    _this.data("first", "1");
-                    _self.getContacts(model.CustomerID);
-                }
-            } else if (_this.data("id") == "navOrder") {
-                $("#btnCreateOrder").show();
-                if (!_this.data("first") || _this.data("first") == 0) {
-                    _this.data("first", "1");
-                    _self.getOrders(model.CustomerID, 1);
-                }
-            } else if (_this.data("id") == "navOppor") {
-                $("#btnCreateOpportunity").show();
-                if (!_this.data("first") || _this.data("first") == 0) {
-                    _this.data("first", "1");
-                    _self.getOpportunitys(model.CustomerID, 1);
-                }
+                require.async("logs", function () {
+                    $("#navLog").getObjectLogs({
+                        guid: _self.customerid,
+                        type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
+                });
+                
+            } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) { /*备忘*/
+                _this.data("first", "1");
+                $("#navRemark").getObjectReplys({
+                    guid: _self.customerid,
+                    type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                    pageSize: 10
+                });
+            } else if (_this.data("id") == "navContact" && (!_this.data("first") || _this.data("first") == 0)) { /*联系人*/
+                _this.data("first", "1");
+                _self.getContacts();
+            } else if (_this.data("id") == "navOrder" && (!_this.data("first") || _this.data("first") == 0)) { /*订单*/
+                _this.data("first", "1");
+                _self.getOrders(model.CustomerID, 1);
+            } else if (_this.data("id") == "navOppor" && (!_this.data("first") || _this.data("first") == 0)) { /*机会*/
+                _this.data("first", "1");
+                _self.getOpportunitys(model.CustomerID, 1);
             }
         });
 
@@ -230,13 +238,34 @@
         $("#deleteContact").click(function () {
             var _this = $(this);
             confirm("确认删除此联系人吗？", function () {
-                Global.post("/Customer/DeleteContact", { id: _this.data("id") }, function (data) {
+                Global.post("/Customer/DeleteContact", {
+                    id: _this.data("id"),
+                    name: _this.data("name"),
+                    customerid: _self.customerid
+                }, function (data) {
                     if (data.status) {
                         _self.getContacts(_self.customerid);
                     } else {
-                        alert("网络异常,请稍后重试!");
+                        alert("默认联系人不能删除");
                     }
                 });
+            });
+        });
+
+        //联系人设为默认
+        $("#editContactDefault").click(function () {
+            var _this = $(this);
+            Global.post("/Customer/UpdateContactDefault", {
+                id: _this.data("id"),
+                name: _this.data("name"),
+                customerid: _self.customerid
+            }, function (data) {
+                if (data.status) {
+                    _self.getContacts(_self.customerid);
+                    $("#lblContactName").text(_this.data("name"));
+                } else {
+                    alert("操作失败");
+                }
             });
         });
 
@@ -309,13 +338,26 @@
             }
         });
 
+        /*展开操作项*/
+        $("#btnOperate").click(function () {
+            var _this = $(this);
+            var position = _this.position();
+            $("#ddlOperate").css({ "top": position.top + 24, "left": position.left - 40 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+
+        //默认选中标签页
+        if (navid) {
+            $(".tab-nav-ul li[data-id='" + navid + "']").click();
+        }
     }
 
     //创建机会或者订单 type 1 机会 2订单
     ObjectJS.createOpporOrOrder = function (items, type) {
         var _self = this;
         var url = type == 1 ? "/Opportunitys/Create" : "/Orders/Create";
-        doT.exec("template/sales/choose-ordertype.html", function (template) {
+        doT.exec("template/customer/choose-ordertype.html", function (template) {
             var innerHtml = template(items);
             Easydialog.open({
                 container: {
@@ -362,68 +404,26 @@
         });
     }
 
-    //获取日志
-    ObjectJS.getLogs = function (customerid, page) {
-        var _self = this;
-        $("#customerLog").empty();
-        $("#customerLog").append("<div class='data-loading'><div>");
-        Global.post("/Customer/GetCustomerLogs", {
-            customerid: customerid,
-            pageindex: page
-        }, function (data) {
-            $("#customerLog").empty();
-            if (data.items.length > 0) {
-                doT.exec("template/common/logs.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-                    $("#customerLog").append(innerhtml);
-                });
-            } else {
-                $("#customerLog").append("<div class='nodata-txt'>暂无日志<div>");
-            }
-            $("#pagerLogs").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (page) {
-                    _self.getLogs(customerid, page);
-                }
-            });
-        });
-    }
-
     //获取订单
     ObjectJS.getOrders = function (customerid, page) {
         var _self = this;
-        $("#navOrder .tr-header").nextAll().remove();
-        $("#navOrder .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
+        $("#navOrder .box-header").nextAll().remove();
+        $("#navOrder .box-header").after("<div class='data-loading'><div>");
         Global.post("/Orders/GetOrdersByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page
         }, function (data) {
-            $("#navOrder .tr-header").nextAll().remove();
+            $("#navOrder .box-header").nextAll().remove();
             if (data.items.length > 0) {
-                doT.exec("template/sales/cuatomerorders.html", function (template) {
+                doT.exec("template/customer/customerorders.html", function (template) {
                     var innerhtml = template(data.items);
 
                     innerhtml = $(innerhtml);
-                    $("#navOrder .tr-header").after(innerhtml);
+                    $("#navOrder .box-header").after(innerhtml);
                 });
             } else {
-                $("#navOrder .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#navOrder .box-header").after("<div class='nodata-box' >暂无数据!<div>");
             }
             $("#pagerOrders").paginate({
                 total_count: data.totalCount,
@@ -451,22 +451,22 @@
     //获取订单
     ObjectJS.getOpportunitys = function (customerid, page) {
         var _self = this;
-        $("#navOppor .tr-header").nextAll().remove();
-        $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
+        $("#navOppor .box-header").nextAll().remove();
+        $("#navOppor .box-header").after("<div class='data-loading'><div>");
         Global.post("/Opportunitys/GetOpportunityByCustomerID", {
             customerid: customerid,
             pagesize: 10,
             pageindex: page
         }, function (data) {
-            $("#navOppor .tr-header").nextAll().remove();
+            $("#navOppor .box-header").nextAll().remove();
             if (data.items.length > 0) {
-                doT.exec("template/sales/customeroppors.html", function (template) {
+                doT.exec("template/customer/customeroppors.html", function (template) {
                     var innerhtml = template(data.items);
                     innerhtml = $(innerhtml);
-                    $("#navOppor .tr-header").after(innerhtml);
+                    $("#navOppor .box-header").after(innerhtml);
                 });
             } else {
-                $("#navOppor .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#navOppor .box-header").after("<div class='nodata-box' >暂无数据!<div>");
             }
             $("#pagerOppors").paginate({
                 total_count: data.totalCount,
@@ -492,14 +492,14 @@
     }
 
     //获取联系人
-    ObjectJS.getContacts = function (customerid) {
+    ObjectJS.getContacts = function () {
         var _self = this;
-        $("#navContact .tr-header").nextAll().remove();
-        $("#navContact .tr-header").after("<tr><td colspan='12'><div class='data-loading'><div></td></tr>");
+        $("#navContact .box-header").nextAll().remove();
+        $("#navContact .box-header").after("<div class='data-loading'><div>");
         Global.post("/Customer/GetContacts", {
-            customerid: customerid
+            customerid: _self.customerid
         }, function (data) {
-            $("#navContact .tr-header").nextAll().remove();
+            $("#navContact .box-header").nextAll().remove();
             if (data.items.length > 0) {
                 doT.exec("template/customer/contacts.html", function (template) {
                     var innerhtml = template(data.items);
@@ -507,18 +507,23 @@
 
                     innerhtml.find(".dropdown").click(function () {
                         var _this = $(this);
+                        if (_this.data("type") == 1) {
+                            $("#editContactDefault,#deleteContact").hide();
+                        } else {
+                            $("#editContactDefault,#deleteContact").show();
+                        }
                         var position = _this.find(".ico-dropdown").position();
-                        $(".dropdown-ul li").data("id", _this.data("id"));
-                        $(".dropdown-ul").css({ "top": position.top + 20, "left": position.left - 40 }).show().mouseleave(function () {
+                        $("#ddlContact li").data("id", _this.data("id")).data("name", _this.data("name"));
+                        $("#ddlContact").css({ "top": position.top + 20, "left": position.left - 65 }).show().mouseleave(function () {
                             $(this).hide();
                         });
                         return false;
                     });
 
-                    $("#navContact .tr-header").after(innerhtml);
+                    $("#navContact .box-header").after(innerhtml);
                 });
             } else {
-                $("#navContact .tr-header").after("<tr><td colspan='12'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+                $("#navContact .box-header").after("<div class='nodata-box' >暂无数据!<div>");
             }
         });
     }
@@ -547,6 +552,7 @@
                             MobilePhone: $("#contactMobile").val().trim(),
                             Email: $("#email").val().trim(),
                             Jobs: $("#jobs").val().trim(),
+                            Type: model ? model.Type : 0,
                             Description: $("#remark").val().trim()
                         };
                         _self.saveContact(entity);
@@ -586,9 +592,14 @@
         var _self = this;
         Global.post("/Customer/SaveContact", { entity: JSON.stringify(model) }, function (data) {
             if (data.model.ContactID) {
+                /*处理客户联系人*/
+                if (model.Type == 1 || $("#navContact ul").length < 2) {
+                    $("#lblContactName").text(model.Name);
+                }
                 _self.getContacts(model.CustomerID);
+                
             } else {
-                alert("网络异常,请稍后重试!");
+                alert("操作失败");
             }
         });
     }
@@ -612,7 +623,6 @@
                             CustomerID: model.CustomerID,
                             Name: $("#name").val().trim(),
                             Jobs: $("#jobs").val().trim(),
-                            ContactName: $("#contactName").val().trim(),
                             Type: $("#companyCustom").hasClass("ico-checked") ? 1 : 0,
                             IndustryID: $("#industry").val().trim(),
                             Extent: $("#extent").val().trim(),
@@ -670,154 +680,6 @@
             } else {
                 alert("网络异常,请稍后重试!");
             }
-        });
-    }
-
-    //讨论备忘
-    ObjectJS.initTalk = function (customerid) {
-        var _self = this;
-
-        $("#btnSaveTalk").click(function () {
-            var txt = $("#txtContent");
-            if (txt.val().trim()) {
-                var model = {
-                    GUID: customerid,
-                    Content: txt.val().trim(),
-                    FromReplyID: "",
-                    FromReplyUserID: "",
-                    FromReplyAgentID: ""
-                };
-                _self.saveReply(model);
-
-                txt.val("");
-            }
-            
-        });
-        _self.getReplys(customerid, 1);
-
-    }
-
-    //获取备忘
-    ObjectJS.getReplys = function (customerid, page) {
-        var _self = this;
-        $("#replyList").empty();
-        $("#replyList").append("<div class='data-loading'><div>");
-        Global.post("/Customer/GetReplys", {
-            guid: customerid,
-            pageSize: 10,
-            pageIndex: page
-        }, function (data) {
-            $("#replyList").empty();
-
-            if (data.items.length > 0) {
-                doT.exec("template/customer/replys.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-
-                    $("#replyList").append(innerhtml);
-
-                    innerhtml.find(".btn-reply").click(function () {
-                        var _this = $(this), reply = _this.nextAll(".reply-box");
-                        reply.slideDown(500);
-                        reply.find("textarea").focus();
-                        reply.find("textarea").blur(function () {
-                            if (!$(this).val().trim()) {
-                                reply.slideUp(200);
-                            }
-                        });
-                    });
-                    innerhtml.find(".save-reply").click(function () {
-                        var _this = $(this);
-                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                            var entity = {
-                                GUID: _this.data("id"),
-                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                                FromReplyID: _this.data("replyid"),
-                                FromReplyUserID: _this.data("createuserid"),
-                                FromReplyAgentID: _this.data("agentid")
-                            };
-
-                            _self.saveReply(entity);
-                        }
-
-                        $("#Msg_" + _this.data("replyid")).val('');
-                        $(this).parent().slideUp(100);
-                    });
-
-                    require.async("businesscard", function () {
-                        innerhtml.find("img").businessCard();
-                    });
-                });
-            } else {
-                $("#replyList").append("<div class='nodata-txt'>暂无备忘<div>");
-            }
-
-            $("#pagerReply").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (page) {
-                    _self.getReplys(customerid, page);
-                }
-            });
-        });
-    }
-
-    ObjectJS.saveReply = function (model) {
-        var _self = this;
-
-        Global.post("/Customer/SavaReply", { entity: JSON.stringify(model) }, function (data) {
-
-            $("#replyList .nodata-txt").remove();
-
-            doT.exec("template/customer/replys.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
-
-                $("#replyList").prepend(innerhtml);
-
-                innerhtml.find(".btn-reply").click(function () {
-                    var _this = $(this), reply = _this.nextAll(".reply-box");
-                    reply.slideDown(500);
-                    reply.find("textarea").focus();
-                    reply.find("textarea").blur(function () {
-                        if (!$(this).val().trim()) {
-                            reply.slideUp(200);
-                        }
-                    });
-                });
-                innerhtml.find(".save-reply").click(function () {
-                    var _this = $(this);
-                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                        var entity = {
-                            GUID: _this.data("id"),
-                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                            FromReplyID: _this.data("replyid"),
-                            FromReplyUserID: _this.data("createuserid"),
-                            FromReplyAgentID: _this.data("agentid")
-                        };
-                        _self.saveReply(entity);
-                    }
-                    $("#Msg_" + _this.data("replyid")).val('');
-                    $(this).parent().slideUp(100);
-                });
-
-                require.async("businesscard", function () {
-                    innerhtml.find("img").businessCard();
-                });
-            });
         });
     }
 

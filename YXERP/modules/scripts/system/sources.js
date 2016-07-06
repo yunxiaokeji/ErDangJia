@@ -22,14 +22,14 @@
     ObjectJS.bindEvent = function () {
         var _self = this;
         $(document).click(function (e) {
-            //隐藏下拉  
+            /*隐藏下拉*/
             if ((!$(e.target).parents().hasClass("dropdown-ul") &&  !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) 
                 && (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("color-item") && !$(e.target).hasClass("color-item"))) {
                 $(".dropdown-ul").hide();
             }
         });
 
-        //添加
+        //添加来源
         $("#createModel").click(function () {
             var _this = $(this);
             Model.SourceID = "";
@@ -38,29 +38,23 @@
             _self.createModel();
         });
 
+        /*添加行业*/
+        $("#createIndustry").click(function () {
+            _self.Industry = {};
+            _self.Industry.ClientIndustryID = "";
+            _self.Industry.Description = "";
+            _self.Industry.Name = ""; 
+            _self.createIndustry();
+        });
+
         //删除来源
-        $("#deleteObject").click(function () {
-            var _this = $(this);
-            confirm("客户来源删除后不可恢复,确认删除吗？",function(){
-                _self.deleteModel(_this.data("id"), function (status) {
-                    if (status == 1) {
-                        _self.getList();
-                    } 
-                });
-            });
+        $("#deleteObject").click(function () { 
+            ObjectJS.deleteModel($(this));
         });
 
         //编辑
         $("#updateObject").click(function () {
-            var _this = $(this);
-            Global.post("/System/GetCustomSourceByID", { id: _this.data("id") }, function (data) {
-                var model = data.model;
-                Model.SourceID = model.SourceID;
-                Model.SourceName = model.SourceName;
-                Model.SourceCode = model.SourceCode;
-                Model.IsChoose = model.IsChoose;
-                _self.createModel();
-            });
+            ObjectJS.SourceEdit($(this));
         });
 
         $('#createColor').click(function () {
@@ -93,7 +87,7 @@
             
         });
 
-        //编辑颜色
+        /*编辑颜色*/
         $("#updateColor").click(function () {
             var _this = $(this);
             Global.post("/System/GetCustomerColorByColorID", { colorid: _this.data("id") }, function (data) {
@@ -105,10 +99,8 @@
             });
         });
 
-        //切换模块
-        $(".search-tab li").click(function () {
-            var _this = $(this);
-
+        /*切换模块*/
+        $(".search-tab li").click(function () { 
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.siblings().removeClass("hover");
@@ -117,16 +109,61 @@
                 $("#" + _this.data("id")).show();
 
                 $(".btn-add[data-id='" + _this.data("id") + "']").show();
-
+                
                 if (_this.data("id") == "colorList" && (!_this.data("first") || _this.data("first") == 0)) {
                     _this.data("first", "1");
                     _self.bindColorList();
+                } else if (_this.data("id") == "industryList" && (!_this.data("first") || _this.data("first") == 0)) {
+                    _this.data("first", "1");
+                    _self.getIndustryList();
                 }
+
+                $("#deleteObject").unbind().click(function () {
+                    var _thisnow = $(this);
+                    if (_this.data("id") == "industryList") {
+                        confirm("客户删除后不可恢复,确认删除吗？", function () {
+                            Global.post("/System/DeleteClientIndustry", { clientindustryid: _thisnow.data("id") }, function (data) {
+                                if (data.result) {
+                                    _self.getIndustryList();
+                                } else {
+                                    alert("行业存在关联数据，删除失败");
+                                }
+                            });
+                        });
+                    } else if (_this.data("id") == "sourceList") {
+                        ObjectJS.deleteModel(_thisnow);
+                    }
+                });
+
+                $("#updateObject").unbind().click(function () {
+                    var _thisnow = $(this);
+                    if (_this.data("id") == "sourceList") {
+                        ObjectJS.SourceEdit($(this));
+                    } else if (_this.data("id") == "industryList") {
+                        _self.Industry = {};
+                        _self.Industry.ClientIndustryID = _thisnow.data('id');
+                        _self.Industry.Name = _thisnow.data('name');
+                        _self.Industry.Description = _thisnow.data('description');
+                        _self.createIndustry();
+                    }
+                });
             }
         });
     }
 
-    //添加/编辑弹出层
+    ObjectJS.SourceEdit = function (obj) {
+        var _self = this;
+        Global.post("/System/GetCustomSourceByID", { id: obj.data("id") }, function (data) {
+            var model = data.model;
+            Model.SourceID = model.SourceID;
+            Model.SourceName = model.SourceName;
+            Model.SourceCode = model.SourceCode;
+            Model.IsChoose = model.IsChoose;
+            _self.createModel();
+        });
+    }
+
+    /*客户标签弹窗*/
     ObjectJS.createColor = function () {
         var _self = this;
         doT.exec("template/system/sources-color.html", function (template) {
@@ -189,6 +226,7 @@
         });
     }
 
+    /*客户标签保存*/
     ObjectJS.saveColorModel = function (model) {
         var _self = this;
         Global.post("/System/SaveCustomerColor", { customercolor: JSON.stringify(model) }, function (data) {
@@ -205,10 +243,9 @@
         });
     }
 
-    //添加/编辑弹出层
+    /*客户来源弹窗*/
     ObjectJS.createModel = function () {
         var _self = this;
-
         doT.exec("template/system/sources-detail.html", function (template) {
             var html = template([]);
             Easydialog.open({
@@ -250,20 +287,20 @@
         }); 
     }
 
-    //获取列表
+    /*客户来源列表获取*/
     ObjectJS.getList = function () { 
         var _self = this;
-        $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='6'><div class='data-loading' ><div></td></tr>");
+        $("#sourceList .tr-header").nextAll().remove();
+        $("#sourceList .tr-header").after("<tr><td colspan='6'><div class='data-loading' ><div></td></tr>");
         Global.post("/System/GetCustomSources", {}, function (data) {
             _self.bindList(data.items);
         });
     }
 
-    //加载列表
+    /*客户来源列表填充*/
     ObjectJS.bindList = function (items) {
-        var _self = this;
-        $(".tr-header").nextAll().remove();
+        $("#sourceList .tr-header").nextAll().remove();
+        var _self = this; 
         if (items.length > 0) {
             doT.exec("template/system/sources.html", function (template) {
                 var innerhtml = template(items);
@@ -294,17 +331,56 @@
                     }
                 });
 
-                $(".tr-header").after(innerhtml);
+                $("#sourceList .tr-header").after(innerhtml);
             });
-        }
-        else {
-            $(".tr-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+        } else {
+            $("#sourceList .tr-header").after("<tr><td colspan='6'><div class='nodata-txt' >暂无数据!<div></td></tr>");
         }
     }
 
-    //加载列表
-    ObjectJS.bindColorList = function () {
+    /*客户来源删除*/
+    ObjectJS.deleteModel = function (obj) {
         var _self = this;
+        confirm("客户来源删除后不可恢复,确认删除吗？", function () {
+            Global.post("/System/DeleteCustomSource", { id: obj.data("id") }, function (data) {
+                if (data.result) {
+                    _self.getList();
+                }
+            });
+        });
+    }
+
+    /*客户来源类型修改*/
+    ObjectJS.editIsChoose = function (obj, id, status, callback) {
+        var _self = this;
+        var model = {};
+        model.SourceID = id;
+        model.IsChoose = status ? 0 : 1;
+        Global.post("/System/SaveCustomSource", {
+            entity: JSON.stringify(model)
+        }, function (data) {
+            if (data.result == "10001") {
+                alert("您没有此操作权限，请联系管理员帮您添加权限！");
+                return;
+            }
+            !!callback && callback(data.result);
+        });
+    }
+
+    /*客户来源保存*/
+    ObjectJS.saveModel = function (model) {
+        var _self = this;
+        Global.post("/System/SaveCustomSource", { entity: JSON.stringify(model) }, function (data) {
+            if (data.result == 1) {
+                _self.getList();
+            } else if (data.result == 2) {
+                alert("保存失败,编码已存在!");
+            }
+        });
+    }
+
+    /* 客户标签配置*/
+    ObjectJS.bindColorList = function () { 
         $("#colorList").html('');
         var urlItem = "";
         Global.post("/System/GetCustomColor", {}, function (data) {
@@ -325,52 +401,94 @@
             });  
         });
     }
-
-    //更改类型
-    ObjectJS.editIsChoose = function (obj, id, status, callback) {
-        var _self = this;
-        var model = {};
-        model.SourceID = id;
-        model.IsChoose = status ? 0 : 1;
-        Global.post("/System/SaveCustomSource", {
-            entity: JSON.stringify(model)
-        }, function (data) {
-            if (data.result == "10001") {
-                alert("您没有此操作权限，请联系管理员帮您添加权限！");
-                return;
-            }
-            !!callback && callback(data.status);
-        });
-    }
-
-    //保存实体
-    ObjectJS.saveModel = function (model) {
-        var _self = this;
-        Global.post("/System/SaveCustomSource", { entity: JSON.stringify(model) }, function(data) {
-            if (data.status == 1) {
-                _self.getList();
-            } else if (data.status == 2) {
-                alert("保存失败,编码已存在!");
-            }
-        });
-    }
-
-    //删除color
+ 
+    /* 客户标签删除*/
     ObjectJS.deleteColor = function (colorid, callback) {
         Global.post("/System/DeleteColor", { colorid: colorid }, function (data) {
             !!callback && callback(data.result);
         });
     }
 
-    //删除
-    ObjectJS.deleteModel = function (id, callback) {
-        Global.post("/System/DeleteCustomSource", { id: id }, function(data) {
-            !!callback && callback(data.status);
+    /* 位置计算*/
+    ObjectJS.getLeft = function (b) {
+        return 10 + $(".sourceul li").eq(b - 1).offset().left - $(".sourceul li").eq(0).offset().left;
+    }
+
+    /*客户行业列表*/
+    ObjectJS.getIndustryList = function () { 
+        $("#industryList .tr-header").nextAll().remove();
+        $("#industryList .tr-header").after("<tr><td colspan='5'><div class='data-loading' ><div></td></tr>");
+        Global.post("/System/GetClientIndustry", {}, function (data) {
+            $("#industryList .tr-header").nextAll().remove();
+            var items = data.items;
+            if (items.length > 0) {
+                doT.exec("template/system/clientindustry.html", function(template) {
+                    var innerhtml = template(items);
+                    innerhtml = $(innerhtml);
+                    //下拉事件
+                    innerhtml.find(".dropdown").click(function() {
+                        var _this = $(this);
+                        var position = _this.find(".ico-dropdown").position();
+                        $("#ddlSource li").data("id", _this.data("id"));
+                        $("#ddlSource li").data("name", _this.data("name"));
+                        $("#ddlSource li").data("description", _this.data("description"));
+                        $("#ddlSource").css({ "top": position.top + 20, "left": position.left - 55 }).show().mouseleave(function() {
+                            $(this).hide();
+                        });
+                    });
+                    $("#industryList .tr-header").after(innerhtml);
+                }); 
+            } else {
+                $("#industryList .tr-header").after("<tr><td colspan='5'><div class='nodata-txt' >暂无数据!<div></td></tr>");
+            }
         });
     }
 
-    ObjectJS.getLeft = function (b) {
-        return 10 + $(".sourceul li").eq(b - 1).offset().left - $(".sourceul li").eq(0).offset().left;
+    /*客户行业弹窗*/
+    ObjectJS.createIndustry = function () {
+        var _self = this;
+        doT.exec("template/system/clientindustry-detail.html", function (template) {
+            var html = template([]);
+            Easydialog.open({
+                container: {
+                    id: "show-model-detail",
+                    header: !_self.Industry.ClientIndustryID ? "新建行业" : "编辑行业",
+                    content: html,
+                    yesFn: function () {
+                        if (!VerifyObject.isPass()) {
+                            return false;
+                        }
+                        _self.Industry.Name = $("#Name").val();
+                        _self.Industry.Description = $("#Description").val();
+                        _self.saveIndustry();
+                    },
+                    callback: function () {
+
+                    }
+                }
+            });
+            VerifyObject = Verify.createVerify({
+                element: ".verify",
+                emptyAttr: "data-empty",
+                verifyType: "data-type",
+                regText: "data-text"
+            });  
+            $("#Name").focus();
+            $("#Name").val(_self.Industry.Name);
+            $("#Description").val(_self.Industry.Description);
+        });
+    }
+
+    /*客户行业保存*/
+    ObjectJS.saveIndustry = function () {
+        var _self = this;
+        Global.post("/System/SaveClientIndustry", { clientindustry: JSON.stringify(_self.Industry) }, function (data) {
+            if (data.result == 1) {
+                _self.getIndustryList();
+            } else if (data.result == 2) {
+                alert("保存失败,行业已存在!");
+            }
+        });
     }
 
     module.exports = ObjectJS;

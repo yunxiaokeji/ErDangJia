@@ -28,11 +28,10 @@ seajs.config({
     },
     map: [
         //可配置版本号
-        ['.css', '.css?v=20160625'],
-        ['.js', '.js?v=20160625']
+        ['.css', '.css?v=20160705'],
+        ['.js', '.js?v=20160705']
     ]
 });
-
 
 seajs.config({
     alias: {
@@ -42,10 +41,12 @@ seajs.config({
         "city": "plug/city.js",
         //上传
         "upload": "plug/upload/upload.js",
+        //日志
+        "logs": "plug/logs/logs.js",
+        //备忘
+        "replys": "plug/replys/replys.js",
         //开关插件
         "switch": "plug/switch/switch.js",
-        //标签插件
-        "mark": "plug/mark/mark.js",
         //标签插件(取配系统置)
         "colormark": "plug/colormark/colormark.js",
         //弹出层插件

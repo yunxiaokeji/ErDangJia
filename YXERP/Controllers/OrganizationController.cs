@@ -68,10 +68,6 @@ namespace YXERP.Controllers
 
         #region Ajax
 
-        /// <summary>
-        /// 获取部门列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetDepartments()
         {
             var list = OrganizationBusiness.GetDepartments(CurrentUser.AgentID);
@@ -102,11 +98,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存部门
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
         public JsonResult SaveDepartment(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -132,11 +123,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 删除部门
-        /// </summary>
-        /// <param name="departid"></param>
-        /// <returns></returns>
         public JsonResult DeleteDepartment(string departid)
         {
             var status = new OrganizationBusiness().UpdateDepartmentStatus(departid, CloudSalesEnum.EnumStatus.Delete, CurrentUser.UserID, OperateIP, CurrentUser.AgentID);
@@ -148,10 +134,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取角色列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetRoles()
         {
             var list = OrganizationBusiness.GetRoles(CurrentUser.AgentID);
@@ -182,11 +164,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存角色
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
         public JsonResult SaveRole(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -212,11 +189,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 删除角色
-        /// </summary>
-        /// <param name="roleid"></param>
-        /// <returns></returns>
         public JsonResult DeleteRole(string roleid)
         {
             int result = 0;
@@ -229,12 +201,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存角色权限
-        /// </summary>
-        /// <param name="roleid"></param>
-        /// <param name="permissions"></param>
-        /// <returns></returns>
         public JsonResult SaveRolePermission(string roleid, string permissions)
         {
             if (permissions.Length > 0)
@@ -251,10 +217,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取明道用户列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetMDUsers()
         {
             if (!string.IsNullOrEmpty(CurrentUser.MDToken))
@@ -274,12 +236,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 添加明道用户
-        /// </summary>
-        /// <param name="parentid">上级ID</param>
-        /// <param name="mduserids">明道Id列表</param>
-        /// <returns></returns>
         public JsonResult SaveMDUser(string parentid, string mduserids)
         {
             bool bl = false;
@@ -345,11 +301,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 根据上级获取用户列表
-        /// </summary>
-        /// <param name="parentid"></param>
-        /// <returns></returns>
         public JsonResult GetUsersByParentID(string parentid = "")
         {
             var list = OrganizationBusiness.GetUsersByParentID(parentid, CurrentUser.AgentID).OrderBy(m => m.FirstName).ToList();
@@ -361,10 +312,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取用户列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetUsers(string filter)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -406,13 +353,6 @@ namespace YXERP.Controllers
             };
         }
 
-
-        /// <summary>
-        /// 编辑组织架构上级
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="parentid"></param>
-        /// <returns></returns>
         public JsonResult UpdateUserParentID(string ids, string parentid)
         {
             bool bl = false;//
@@ -457,12 +397,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 组织架构替换人员
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="olduserid"></param>
-        /// <returns></returns>
         public JsonResult ChangeUsersParentID(string userid, string olduserid)
         {
 
@@ -475,17 +409,14 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 删除员工
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <returns></returns>
+
         public JsonResult DeleteUserByID(string userid)
         {
             int result = 0;
             bool bl = new OrganizationBusiness().DeleteUserByID(userid, CurrentUser.AgentID, CurrentUser.UserID, OperateIP, out result);
 
             JsonDictionary.Add("status", bl);
+            JsonDictionary.Add("result", result);
             return new JsonResult()
             {
                 Data = JsonDictionary,
@@ -493,7 +424,6 @@ namespace YXERP.Controllers
             };
         }
 
-        //编辑员工角色
         public JsonResult UpdateUserRole(string userid,string roleid)
         {
             bool bl = new OrganizationBusiness().UpdateUserRole(userid, roleid, CurrentUser.AgentID, CurrentUser.UserID, OperateIP);

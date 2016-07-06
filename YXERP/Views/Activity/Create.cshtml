@@ -10,13 +10,13 @@
 @section scripts{
 <script src="/Scripts/jquery-1.11.1.js"></script>
 <script src="/modules/plug/laydate/laydate.js"></script>
+<script src="/modules/plug/umeditor/ueditor.config.js"></script>
 <script src="/modules/plug/umeditor/umeditor.min.js"></script>
-<script src="/modules/plug/umeditor/umeditor.config.js"></script>
 
     <script type="text/javascript">
         $(function () {
             seajs.use(["scripts/customer/activity"], function (ObjectJS) {
-                var um = UM.getEditor('Remark');
+                var um = UE.getEditor('Remark');
                 ObjectJS.initOperate(um, '@ViewBag.ActivityID');
             });
         });
@@ -88,7 +88,7 @@
             <span class="width80">活动地址：</span><textarea id="Address"></textarea>
         </li>
         <li>
-            <span class="width80 left">活动详情：</span><div id="Remark"  style="max-width:800px;max-height:600px;"></div> 
+            <span class="width80 left">活动详情：</span><div id="Remark" class="left"></div> 
         </li>
     </ul>
     

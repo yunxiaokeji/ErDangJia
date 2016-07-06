@@ -90,7 +90,12 @@ define(function (require, exports, module) {
         var _self = this;
         _self.orderid = orderid;
         Global.post("/System/GetAllWareHouses", {}, function (data) {
-            _self.wares = data.items;
+            _self.wares = [];
+            for (var i = 0; i < data.items.length; i++) {
+                if (data.items[i] && data.items[i].Status == 1) {
+                    _self.wares.push(data.items[i]);
+                }
+            }
         });
 
         $("#btnSubmit").click(function () {

@@ -41,6 +41,7 @@ namespace CloudSalesDAL.Custom
             result = Convert.ToInt32(paras[0].Value);
             return result;
         }
+        
 
         public bool UpdateCustomerColor (string agentid, string clientid, int colorid, string colorName, string colorValue,string updateUserId)
         {

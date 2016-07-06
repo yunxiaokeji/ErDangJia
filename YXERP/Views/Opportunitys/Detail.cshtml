@@ -81,7 +81,7 @@
         { 
             <li data-id="@(stage.StageID)" data-mark="@(stage.Mark)">
                 <span class="leftbg bg"></span>
-                <span class="name">@(stage.StageName)(@((stage.Probability * 100).ToString("f2"))%)</span>
+                <span title="@(stage.StageName)(@((stage.Probability * 100).ToString("f2"))%)" class="name long">@(stage.StageName)(@((stage.Probability * 100).ToString("f2"))%)</span>
                 <span class="rightbg bg"></span>
             </li>
         }

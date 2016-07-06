@@ -15,8 +15,8 @@
 </div>
 <div class="content-body mTop10">
     <ul class="content-info">
-        <li><span class="column-title">总金额：</span>@(model.TotalMoney.ToString("f2"))</li>
-        <li><span class="column-title">总金额：</span>@(model.RealMoney.ToString("f2"))</li>
+        <li><span class="column-title">采购总额：</span>@(model.TotalMoney.ToString("f2"))</li>
+        <li><span class="column-title">已采购金额：</span>@(model.RealMoney.ToString("f2"))</li>
         <li><span class="column-title">创建人：</span>@(model.CreateUser.Name)</li>
         <li><span class="column-title">状态：</span>@(model.StatusStr)</li>
         <li><span class="column-title">创建日期：</span>@(model.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"))</li>
@@ -27,7 +27,6 @@
 <div class="tab-nav">
     <ul class="tab-nav-ul left">
         <li class="hover " data-id="navProduct">产品明细</li>
-        <li data-id="navLog">操作日志</li>
     </ul>
 </div>
 <div class="content-body">
@@ -68,11 +67,4 @@
             <td class="tRight">@(model.TotalMoney.ToString("f2"))</td>
         </tr>
     </table>
-    <div id="navLog" class="hide nav-partdiv">
-        <div class="log-body">
-
-        </div>
-        <div class="mTop20" id="pager"></div>
-    </div>
-    
 </div>

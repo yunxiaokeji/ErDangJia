@@ -19,7 +19,8 @@ define(function (require, exports, module) {
         $.fn.markColor.defaults = {
             isAll: false,
             data: [],
-            xRepair:0,
+            top: 20,
+            left: 0,
             dataValue: "ColorID",
             dataColor: "ColorValue",
             dataText: "ColorName",
@@ -44,12 +45,9 @@ define(function (require, exports, module) {
                 $(".mark-color-list").hide();
                 var _this = $(this); 
                 var position = _this.position();
-                var top = position.top + 20;
-                var left = position.left - 9, isBottom = $(document).height() - position.top < 197;
+                var top = position.top + opts.top;
+                var left = position.left + opts.left, isBottom = $(document).height() - position.top < 197;
                 
-                if (opts.xRepair != 0) {
-                    left = position.left + opts.xRepair;
-                }
                 if ($("#" + _this.data("itemid")).length == 0) {
                     var _colorBody = $("<ul id='" + _this.data("itemid") + "'  class='mark-color-list'></ul>");
 

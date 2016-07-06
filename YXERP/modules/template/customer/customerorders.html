@@ -1,0 +1,17 @@
+﻿{%
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+%}
+<ul class="box-item">
+    <li class="tLeft width150">
+         <a href="javascript:void(0);" class="btn-open-window" data-id="{%=item.OrderID%}" data-name="订单详情-{%=item.OrderCode%}" data-url="/Orders/Detail/{%=item.OrderID%}">{%=item.OrderCode%} </a>
+    </li>
+    <li class="width100">{%= (item.OrderType&&item.OrderType.TypeName)?item.OrderType.TypeName:"--" %}</li>
+    <li class="width80">{%=item.StatusStr%}</li>
+    <li class="width100 tRight">{%=item.TotalMoney.toFixed(2)%}</li>
+    <li class="width150">{%= item.PersonName ||"--"%}</li>
+    <li class="width100">{%=item.MobileTele||"--"%}</li>     
+    <li class="width100">{%=(item.Owner ? item.Owner.Name:"--")%}</li>
+    <li class="width150">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</li>
+</ul>
+{% } %}

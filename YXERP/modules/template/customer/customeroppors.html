@@ -1,0 +1,17 @@
+﻿{%
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+%}
+<ul class="box-item">
+    <li class="tLeft width150">
+        <a data-id="{%=item.OpportunityID%}" class="btn-open-window" data-name="机会详情-{%=item.OpportunityCode%}" data-url="/Opportunitys/Detail/{%=item.OpportunityID%}" href="javascript:void(0);">{%=item.OpportunityCode%}</a>
+    </li>
+    <li class="width150">{%=item.Stage && item.Stage.StageName%}</li>
+    <li class="width100">{%=item.StatusStr%}</li>
+    <li class="width100 tRight">{%=item.TotalMoney.toFixed(2)%}</li>
+    <li class="width150">{%= item.PersonName ||"--"%}</li>
+    <li class="width100">{%=item.MobileTele||"--"%}</li>     
+    <li class="width100">{%=(item.Owner ? item.Owner.Name:"--")%}</li>
+    <li class="width150">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</li>
+</ul>
+{% } %}

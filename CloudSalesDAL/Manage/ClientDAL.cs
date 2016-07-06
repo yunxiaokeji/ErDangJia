@@ -44,6 +44,7 @@ namespace CloudSalesDAL.Manage
                                        new SqlParameter("@ClientID",clientid),
                                        new SqlParameter("@CompanyName",companyName),
                                        new SqlParameter("@MobilePhone",mobilePhone),
+                                       new SqlParameter("@ClientCode",GetCode(8)),
                                        new SqlParameter("@Industry",industry),
                                        new SqlParameter("@CityCode",cityCode),
                                        new SqlParameter("@Address",address),

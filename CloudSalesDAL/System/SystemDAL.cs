@@ -35,6 +35,28 @@ namespace CloudSalesDAL
             return GetDataTable(sqlText, paras, CommandType.Text);
         }
 
+        public DataTable GetClientIndustry(string clientid)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+
+            DataTable dt = GetDataTable("select * from ClientsIndustry where ClientID=@ClientID and Status=1 order by AutoID", paras, CommandType.Text);
+
+            return dt;
+        }
+
+        public DataTable GetClientIndustryByID(string clientIndustryID)
+        {
+            string sqlText = "select * from ClientsIndustry where ClientIndustryID=@clientIndustryID and Status=1";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ClientIndustryID",clientIndustryID)
+                                   };
+
+            return GetDataTable(sqlText, paras, CommandType.Text);
+        }
+
+
         public DataSet GetOpportunityStages(string clientid)
         {
             SqlParameter[] paras = { 
@@ -289,6 +311,23 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
+        public bool InsertClientIndustry(string clientindustryid, string name, string clientid, string agentid,
+            string userid, string description, int status = 1)
+        {
+            string sqlText = "insert into ClientsIndustry(ClientIndustryID,Name,ClientID,AgentID,Description,Status,CreateUserID) " +
+                                           " values(@ClientIndustryID,@Name,@ClientID,@AgentID,@Description,@Status,@CreateUserID) ";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ClientIndustryID" , clientindustryid),
+                                     new SqlParameter("@Name" , name),
+                                     new SqlParameter("@ClientID" , clientid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@Description" , description),
+                                     new SqlParameter("@Status" , status),
+                                     new SqlParameter("@CreateUserID" , userid)
+                                   };
+            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
         #endregion
 
         #region 编辑/删除
@@ -318,6 +357,29 @@ namespace CloudSalesDAL
             bool bl = ExecuteNonQuery(sqltext, paras, CommandType.Text) > 0;
             return bl;
         }
+
+        public bool UpdateClientIndustry(string clientid, string clientindustryid, string name, string desc)
+        {
+            string sqltext = "update ClientsIndustry set Name=@Name,Description=@Desc where ClientIndustryID=@ClientIndustryID and ClientID=@ClientID";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ClientIndustryID",clientindustryid),
+                                     new SqlParameter("@Name",name), 
+                                     new SqlParameter("@Desc",desc), 
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            bool bl = ExecuteNonQuery(sqltext, paras, CommandType.Text) > 0;
+            return bl;
+        }
+
+        public bool DeleteClientIndustry(string clientid, string clientindustryid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@ClientIndustryID",clientindustryid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            bool bl = ExecuteNonQuery("P_DeleteClientIndustry", paras, CommandType.StoredProcedure) > 0;
+            return bl;
+        } 
 
         public bool UpdateCustomStage(string stageid, string stagename, string clientid)
         {
@@ -410,6 +472,20 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
+        public bool DeleteWareHouse(string wareid, string userid, string clientid, out int result)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",SqlDbType.Int),
+                                     new SqlParameter("@WareID",wareid),
+                                     new SqlParameter("@UserID",userid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteWareHouse", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
+        }
+
         public bool UpdateDepotSeat(string id, string depotcode, string name, int status, string description)
         {
             string sqlText = "Update DepotSeat set DepotCode=@DepotCode,Name=@Name,Status=@Status,Description=@Description,UpdateTime=getdate() " +
@@ -422,6 +498,20 @@ namespace CloudSalesDAL
                                      new SqlParameter("@Description" , description)
                                    };
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
+        }
+
+        public bool DeleteDepotSeat(string depotid, string userid, string clientid, out int result)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Result",SqlDbType.Int),
+                                     new SqlParameter("@DepotID",depotid),
+                                     new SqlParameter("@UserID",userid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteDepotSeat", paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
         }
 
         #endregion

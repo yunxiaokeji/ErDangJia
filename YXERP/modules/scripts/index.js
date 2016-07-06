@@ -147,10 +147,13 @@ define(function (require, exports, module) {
         $("#windowItems").delegate("li", "contextmenu", function (e) {
             var _this = $(this);
             if (e.clientX < $(".window-box").width()) {
-                $("#contentMenu").css({ left: e.clientX, top: e.clientY }).show();
-
+                $("#contentMenu").css({ left: e.clientX, top: e.clientY }).show().mouseleave(function () {
+                    $(this).hide();
+                });
             } else {
-                $("#contentMenu").css({ left: e.clientX - 130, top: e.clientY }).show();
+                $("#contentMenu").css({ left: e.clientX - 130, top: e.clientY }).show().mouseleave(function () {
+                    $(this).hide();
+                });
             }
             $("#contentMenu li").data("id", _this.data("id"));
 

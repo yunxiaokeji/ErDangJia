@@ -102,26 +102,6 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
-
-        public string CreateActivityReply(string activityID, string msg, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
-        {
-            string replyID = Guid.NewGuid().ToString();
-
-            string sqlText = @"insert into ActivityReply(ReplyID,ActivityID,Msg,CreateUserID,AgentID,FromReplyID,FromReplyUserID,FromReplyAgentID)
-                                values(@ReplyID,@ActivityID,@Msg,@CreateUserID,@AgentID,@FromReplyID,@FromReplyUserID,@FromReplyAgentID)";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ActivityID",activityID),
-                                     new SqlParameter("@ReplyID",replyID),
-                                     new SqlParameter("@Msg",msg),
-                                     new SqlParameter("@FromReplyID",fromReplyID),
-                                     new SqlParameter("@CreateUserID" , userID),
-                                     new SqlParameter("@AgentID" , agentID),
-                                     new SqlParameter("@FromReplyUserID" , fromReplyUserID),
-                                     new SqlParameter("@FromReplyAgentID" , fromReplyAgentID),
-                                   };
-
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0?replyID:string.Empty;
-        }
         #endregion
 
         #region 编辑/删除
@@ -156,16 +136,6 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
-        public bool DeleteActivityReply(string replyID)
-        {
-            string sqlText = @"update ActivityReply set status=9
-                               where ActivityID=@ActivityID ";
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ReplyID",replyID),
-                                   };
-
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
-        }
         #endregion
     }
 }

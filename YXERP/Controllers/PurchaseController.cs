@@ -34,21 +34,12 @@ namespace YXERP.Controllers
             return View("FilterProducts");
         }
 
-        public ActionResult MyPurchase()
-        {
-            ViewBag.Title = "我的采购";
-            ViewBag.Type = (int)EnumSearchType.Myself;
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
-            ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
-            return View("Purchases");
-        }
-
         public ActionResult Purchases()
         {
             ViewBag.Title = "所有采购";
             ViewBag.Type = (int)EnumSearchType.All;
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
-            ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
+            ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
             return View("Purchases");
         }
 

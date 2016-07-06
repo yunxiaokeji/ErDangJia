@@ -119,7 +119,6 @@ namespace CloudSalesBusiness
                 _manageMenus = value;
             }
         }
-
         #endregion
 
 
@@ -145,7 +144,7 @@ namespace CloudSalesBusiness
             }
             return "个人";
         }
-
+       
         /// <summary>
         /// 修改表中某字段值
         /// </summary>
@@ -340,6 +339,10 @@ namespace CloudSalesBusiness
                 case DropSourceList.ProductUnit:
                      ProductsBusiness.BaseBusiness.GetClientUnits(clientID).ForEach(x => listStr += x.UnitName + ",");
                      listStr = listStr.TrimEnd(',');
+                    break;
+                case DropSourceList.ClientIndustry:
+                    SystemBusiness.BaseBusiness.GetClientIndustry("",clientID).ForEach(x => listStr += x.Name + ",");
+                    listStr = listStr.TrimEnd(',');
                     break;
                 default:
                      listStr="";

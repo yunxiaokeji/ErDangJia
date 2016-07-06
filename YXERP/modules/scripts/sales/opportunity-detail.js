@@ -25,7 +25,7 @@ define(function (require, exports, module) {
 
         stages.find("li .leftbg").first().removeClass("leftbg");
         stages.find("li .rightbg").last().removeClass("rightbg");
-        stages.find("li").width(width / stages.find("li").length - 20);
+        //stages.find("li").width(width / stages.find("li").length - 20);
 
         //处理阶段
         var stage = $(".stage-items li[data-id='" + model.StageID + "']");
@@ -181,10 +181,23 @@ define(function (require, exports, module) {
 
             if (_this.data("id") == "navLog" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                _self.getLogs(1);
+                require.async("logs", function () {
+                    $("#navLog").getObjectLogs({
+                        guid: _self.opportunityid,
+                        type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
+                });
+                
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) {
                 _this.data("first", "1");
-                _self.initTalk(_self.opportunityid);
+                require.async("replys", function () {
+                    $("#navRemark").getObjectReplys({
+                        guid: _self.opportunityid,
+                        type: 7, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
+                });
             } else if (_this.data("id") == "navProducts") {
                 $("#addProduct").show();
             }
@@ -282,48 +295,6 @@ define(function (require, exports, module) {
         });
     }
 
-    //获取日志
-    ObjectJS.getLogs = function (page) {
-        var _self = this;
-        $("#opportunityLog").empty();
-        $("#opportunityLog").append("<div class='data-loading'><div>");
-        Global.post("/Opportunitys/GetOpportunityLogs", {
-            opportunityid: _self.opportunityid,
-            pageindex: page
-        }, function (data) {
-            $("#opportunityLog").empty();
-            if (data.items.length > 0) {
-                doT.exec("template/common/logs.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-                    $("#opportunityLog").append(innerhtml);
-                });
-            } else {
-                $("#opportunityLog").append("<div class='nodata-txt'>暂无日志<div>");
-            }
-            $("#pagerLogs").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (pager) {
-                    _self.getLogs(pager);
-                }
-            });
-        });
-    }
-
     //计算总金额
     ObjectJS.getAmount = function () {
         var amount = 0;
@@ -382,143 +353,6 @@ define(function (require, exports, module) {
             } else {
                 alert("机会关闭失败，可能因为机会状态已改变，请刷新页面后重试！");
             }
-        });
-    }
-
-    //讨论备忘
-    ObjectJS.initTalk = function (opportunityid) {
-        var _self = this;
-
-        $("#btnSaveTalk").click(function () {
-            var txt = $("#txtContent");
-            if (txt.val().trim()) {
-                var model = {
-                    GUID: opportunityid,
-                    Content: txt.val().trim(),
-                    FromReplyID: "",
-                    FromReplyUserID: "",
-                    FromReplyAgentID: ""
-                };
-                _self.saveReply(model);
-
-                txt.val("");
-            }
-
-        });
-        _self.getReplys(opportunityid, 1);
-
-    }
-
-    //获取备忘
-    ObjectJS.getReplys = function (opportunityid, page) {
-        var _self = this;
-        $("#replyList").empty();
-        $("#replyList").append("<div class='data-loading'><div>");
-        Global.post("/Opportunitys/GetReplys", {
-            guid: opportunityid,
-            pageSize: 10,
-            pageIndex: page
-        }, function (data) {
-            $("#replyList").empty();
-            if (data.items.length > 0) {
-                doT.exec("template/customer/replys.html", function (template) {
-                    var innerhtml = template(data.items);
-                    innerhtml = $(innerhtml);
-
-                    $("#replyList").append(innerhtml);
-
-                    innerhtml.find(".btn-reply").click(function () {
-                        var _this = $(this), reply = _this.nextAll(".reply-box");
-                        reply.slideDown(500);
-                        reply.find("textarea").focus();
-                        reply.find("textarea").blur(function () {
-                            if (!$(this).val().trim()) {
-                                reply.slideUp(200);
-                            }
-                        });
-                    });
-                    innerhtml.find(".save-reply").click(function () {
-                        var _this = $(this);
-                        if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                            var entity = {
-                                GUID: _this.data("id"),
-                                Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                                FromReplyID: _this.data("replyid"),
-                                FromReplyUserID: _this.data("createuserid"),
-                                FromReplyAgentID: _this.data("agentid")
-                            };
-
-                            _self.saveReply(entity);
-                        }
-
-                        $("#Msg_" + _this.data("replyid")).val('');
-                        $(this).parent().slideUp(100);
-                    });
-
-                });
-            } else {
-                $("#replyList").append("<div class='nodata-txt'>暂无备忘<div>");
-            }
-
-            $("#pagerReply").paginate({
-                total_count: data.totalCount,
-                count: data.pageCount,
-                start: page,
-                display: 5,
-                border: true,
-                border_color: '#fff',
-                text_color: '#333',
-                background_color: '#fff',
-                border_hover_color: '#ccc',
-                text_hover_color: '#000',
-                background_hover_color: '#efefef',
-                rotate: true,
-                images: false,
-                mouse: 'slide',
-                float: "left",
-                onChange: function (page) {
-                    _self.getReplys(opportunityid, page);
-                }
-            });
-        });
-    }
-
-    ObjectJS.saveReply = function (model) {
-        var _self = this;
-        $("#replyList .nodata-txt").remove();
-        Global.post("/Opportunitys/SavaReply", { entity: JSON.stringify(model) }, function (data) {
-            doT.exec("template/customer/replys.html", function (template) {
-                var innerhtml = template(data.items);
-                innerhtml = $(innerhtml);
-
-                $("#replyList").prepend(innerhtml);
-
-                innerhtml.find(".btn-reply").click(function () {
-                    var _this = $(this), reply = _this.nextAll(".reply-box");
-                    reply.slideDown(500);
-                    reply.find("textarea").focus();
-                    reply.find("textarea").blur(function () {
-                        if (!$(this).val().trim()) {
-                            reply.slideUp(200);
-                        }
-                    });
-                });
-                innerhtml.find(".save-reply").click(function () {
-                    var _this = $(this);
-                    if ($("#Msg_" + _this.data("replyid")).val().trim()) {
-                        var entity = {
-                            GUID: _this.data("id"),
-                            Content: $("#Msg_" + _this.data("replyid")).val().trim(),
-                            FromReplyID: _this.data("replyid"),
-                            FromReplyUserID: _this.data("createuserid"),
-                            FromReplyAgentID: _this.data("agentid")
-                        };
-                        _self.saveReply(entity);
-                    }
-                    $("#Msg_" + _this.data("replyid")).val('');
-                    $(this).parent().slideUp(100);
-                });
-            });
         });
     }
 

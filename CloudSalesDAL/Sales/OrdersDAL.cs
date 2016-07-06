@@ -80,25 +80,6 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_CreateOrder", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public string CreateReply(string guid, string content, string userID, string agentID, string fromReplyID, string fromReplyUserID, string fromReplyAgentID)
-        {
-            string replyID = Guid.NewGuid().ToString();
-
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@ReplyID",replyID),
-                                     new SqlParameter("@GUID",guid),
-                                     new SqlParameter("@Content",content),
-                                     new SqlParameter("@FromReplyID",fromReplyID),
-                                     new SqlParameter("@CreateUserID" , userID),
-                                     new SqlParameter("@AgentID" , agentID),
-                                     new SqlParameter("@FromReplyUserID" , fromReplyUserID),
-                                     new SqlParameter("@FromReplyAgentID" , fromReplyAgentID),
-                                   };
-
-            return ExecuteNonQuery("P_CreateOrderReply", paras, CommandType.StoredProcedure) > 0 ? replyID : string.Empty;
-        }
-
-
         #endregion
 
         #region 编辑、删除

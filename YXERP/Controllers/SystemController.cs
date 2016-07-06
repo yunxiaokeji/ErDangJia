@@ -32,10 +32,12 @@ namespace YXERP.Controllers
             ViewBag.Items = list;
             return View();
         }
+
         public ActionResult OpportunityStages()
         {
             return View();
         }
+
         public ActionResult Teams()
         {
             return View();
@@ -204,7 +206,7 @@ namespace YXERP.Controllers
                     result = 1;
                 }
             }
-            JsonDictionary.Add("status", result);
+            JsonDictionary.Add("result", result);
             JsonDictionary.Add("model", model);
             return new JsonResult
             {
@@ -221,7 +223,7 @@ namespace YXERP.Controllers
         public JsonResult DeleteCustomSource(string id)
         {
             bool bl = new SystemBusiness().DeleteCustomSource(id, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
-            JsonDictionary.Add("status", bl);
+            JsonDictionary.Add("result", bl);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -463,10 +465,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取仓库列表
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GetWareHouses(string keyWords, int pageSize, int pageIndex, int totalCount)
         {
             int pageCount = 0;
@@ -480,11 +478,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 根据ID获取仓库
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+
         public JsonResult GetWareHouseByID(string id)
         {
             WareHouse model = new SystemBusiness().GetWareByID(id, CurrentUser.ClientID);
@@ -496,11 +490,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 保存仓库
-        /// </summary>
-        /// <param name="ware"></param>
-        /// <returns></returns>
         public JsonResult SaveWareHouse(string ware)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -525,12 +514,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 编辑仓库状态
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
         public JsonResult UpdateWareHouseStatus(string id, int status)
         {
             bool bl = new SystemBusiness().UpdateWareHouseStatus(id, (CloudSalesEnum.EnumStatus)status, CurrentUser.UserID, CurrentUser.ClientID);
@@ -541,26 +524,20 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 删除仓库
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+
         public JsonResult DeleteWareHouse(string id)
         {
-            bool bl = new SystemBusiness().UpdateWareHouseStatus(id, CloudSalesEnum.EnumStatus.Delete, CurrentUser.UserID, CurrentUser.ClientID);
-            JsonDictionary.Add("Status", bl);
+            int result = 0;
+            bool bl = new SystemBusiness().DeleteWareHouse(id, CurrentUser.UserID, CurrentUser.ClientID, out result);
+            JsonDictionary.Add("status", bl);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        /// <summary>
-        /// 保存货位
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+
         public JsonResult SaveDepotSeat(string obj)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -585,14 +562,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取货位列表
-        /// </summary>
-        /// <param name="keyWords"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="totalCount"></param>
-        /// <returns></returns>
         public JsonResult GetDepotSeats(string wareid, string keyWords, int pageSize, int pageIndex, int totalCount)
         {
             int pageCount = 0;
@@ -607,11 +576,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 根据仓库获取货位
-        /// </summary>
-        /// <param name="wareid"></param>
-        /// <returns></returns>
         public JsonResult GetDepotSeatsByWareID(string wareid)
         {
             List<DepotSeat> list = new SystemBusiness().GetDepotSeatsByWareID(wareid, CurrentUser.ClientID);
@@ -623,11 +587,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 获取货位详情
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public JsonResult GetDepotByID(string id = "")
         {
             var model = new SystemBusiness().GetDepotByID(id);
@@ -640,15 +599,12 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 删除货位
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public JsonResult DeleteDepotSeat(string id)
         {
-            bool bl = new SystemBusiness().UpdateDepotSeatStatus(id, CloudSalesEnum.EnumStatus.Delete, CurrentUser.UserID, CurrentUser.ClientID);
-            JsonDictionary.Add("Status", bl);
+            int result = 0;
+            bool bl = new SystemBusiness().DeleteDepotSeat(id, CurrentUser.UserID, CurrentUser.ClientID, out result);
+            JsonDictionary.Add("status", bl);
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -656,12 +612,6 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 编辑货位状态
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
         public JsonResult UpdateDepotSeatStatus(string id, int status)
         {
             bool bl = new SystemBusiness().UpdateDepotSeatStatus(id, (CloudSalesEnum.EnumStatus)status, CurrentUser.UserID, CurrentUser.ClientID);
@@ -802,6 +752,73 @@ namespace YXERP.Controllers
 
         #endregion
 
+        #region 客户行业
+        /// <summary>
+        /// 获取客户来源列表
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetClientIndustry()
+        {
+
+            var list = new SystemBusiness().GetClientIndustry(CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult SaveClientIndustry(string clientindustry)
+        { 
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ClientsIndustry model = serializer.Deserialize<ClientsIndustry>(clientindustry);
+            model.CreateUserID = CurrentUser.UserID;
+            model.ClientID = CurrentUser.ClientID;
+            model.AgentID = CurrentUser.AgentID;
+            model.Status = 1;
+            string result = "1";
+            if (string.IsNullOrEmpty(model.ClientIndustryID))
+            {
+                if (SystemBusiness.BaseBusiness.GetClientIndustryByName(model.Name, CurrentUser.AgentID, CurrentUser.ClientID) == null)
+                {
+                    string mes = SystemBusiness.BaseBusiness.CreateClientIndustry(Guid.NewGuid().ToString(),
+                        model.Name.Trim(),
+                        model.AgentID, model.ClientID, model.CreateUserID, model.Description, model.Status);
+                    result = string.IsNullOrEmpty(mes) ? result : mes;
+                }
+                else
+                {
+                    result = "行业名称已存在，不能重复添加";
+                }
+            }
+            else
+            {
+                int bl = SystemBusiness.BaseBusiness.UpdateClientIndustry(model.AgentID, model.ClientID, model.ClientIndustryID, model.Name, model.Description);
+                result = bl > 0 ? result :"修改失败";
+              
+            }
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            }; 
+
+        }
+
+        public JsonResult DeleteClientIndustry(string clientindustryid)
+        {
+            bool result = SystemBusiness.BaseBusiness.DeleteClientIndustry(CurrentUser.ClientID,CurrentUser.AgentID, clientindustryid); 
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        #endregion
         #endregion
 
     }

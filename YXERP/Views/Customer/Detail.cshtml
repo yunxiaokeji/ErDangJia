@@ -1,6 +1,5 @@
 ﻿@{
     ViewBag.Title = "客户详情";
-    var colorData = (List<CloudSalesEntity.CustomerColorEntity>)ViewBag.ColorData;
 } 
 
 @section css{
@@ -11,31 +10,36 @@
     <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
         seajs.use(["scripts/customer/detail"], function (ObjectJS) {
-            ObjectJS.init('@ViewBag.ID', '@ViewBag.MDToken', '@Html.ToJSONString(colorData)');
+            ObjectJS.init('@ViewBag.ID', '@Html.ToJSONString((List<CloudSalesEntity.CustomerColorEntity>)ViewBag.ColorData)', '@ViewBag.NavID');
         });
     </script>
 }
 <div class="header-box">
-    <div id="lblType" class="customer-type mTop5"></div>
+    <div id="customercolor"  class="left mark mTop8" data-id="" data-value=""></div>
     <div id="lblCustomerName" class="left header-title mLeft10"></div> 
-    <div id="customercolor"  class="left mark mTop8 mLeft10" data-id="" data-value=""></div>
     <div id="updateCustomer"  class=" iconfont ico-edit mLeft50"></div>
-    <div class="btn999 right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" id="closeCustomer">关闭</div>
-    <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "101019005"))" id="recoveryCustomer">恢复</div>
-
-    <div class="right btn-share btn-share-md mRight20" id="btnShareMD">分享到明道</div>
+    <div class="btn999 right @(ExpandClass.IsLimits(HttpContext.Current,"101019004"))" style="display:none;" id="closeCustomer">关闭</div>
+    <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "101019005"))"  style="display:none;" id="recoveryCustomer">恢复</div>
+     @if (!string.IsNullOrEmpty(ViewBag.MDToken))
+     {
+        <div class="right btn-share btn-share-md mRight20" id="btnShareMD">分享到明道</div>
+     }
 </div>
 <div class="content-body pTop10">
     <ul class="content-info">
         <li>
             <span class="column-title">来源：</span>
-            <label id="lblSource"></label>  &nbsp; &nbsp;
-            <a id="aSource" class="btn-open-window hide mLeft15" style="" ></a>
+            <label id="lblSource"></label>
+            <a id="aSource" class="btn-open-window hide" ></a>
         </li>
         <li>
             <span class="column-title">负责人：</span> 
             <label class="left" id="lblOwner"></label>
             <span title="更换负责人" class="iconfont ico-change left mLeft5 @(ExpandClass.IsLimits(HttpContext.Current,"101019002"))" id="changeOwner"></span>
+        </li>
+        <li>
+            <span class="column-title">客户类型：</span>
+            <label id="lblType"></label>
         </li>
         <li>
             <span class="column-title">联系人：</span>
@@ -83,81 +87,75 @@
 </div>
 <div class="tab-nav">
     <ul class="tab-nav-ul left">
-        <li class="hover" data-id="navRemark">备忘</li>
+        <li data-id="navRemark">备忘</li>
         <li data-id="navContact">联系人</li>
-        <li data-id="navOppor">销售机会</li>
-        <li data-id="navOrder">销售订单</li>
+        <li data-id="navOppor">销售机会（0）</li>
+        <li data-id="navOrder">销售订单（0）</li>
         <li data-id="navLog">日志</li>
     </ul>
-    <div id="btnCreateContact" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"101019006"))">添加联系人</div>
-    <div id="btnCreateOpportunity" class="btn-add right">新建机会</div>
-    <div id="btnCreateOrder" class="btn-add right">新建订单</div>
+    <div id="btnOperate" class="btn-dropdown right ">操作</div>
 </div>
 <div class="content-body">
-    <table id="navContact" class="nav-partdiv table-list mTop20 hide">
-        <tr class="tr-header">
-            <td class="tLeft">姓名</td>
-            <td class="width150">联系电话</td>
-            <td class="width150">职位</td>         
-            <td class="tLeft">邮箱</td>
-            <td class="tLeft">地址</td>
-            <td class="width200">创建时间</td>
-            <td class="width50">操作</td>
-        </tr>
-    </table>
-    <div id="navRemark" class="mTop20 talk-body nav-partdiv">
-        <div class="content-main">
-            <textarea id="txtContent" class="txt-content left"></textarea>
-            <span class="btn btn-save" id="btnSaveTalk">提交</span>
-        </div>
-        <div class="talk-title"> 全部备忘 </div>
-         <table class="content-list" id="replyList">
-
-         </table>
-        <div id="pagerReply" class="mTop10"></div>
+    <div id="navContact" class="table-box-list nav-partdiv hide">
+        <ul class="box-header">
+            <li class="tLeft width150">姓名</li>
+            <li class="width100">联系电话</li>
+            <li class="width100">职位</li>         
+            <li class="tLeft width200">邮箱</li>
+            <li class="tLeft flex1">地址</li>
+            <li class="width150">创建时间</li>
+            <li class="width50"></li>
+            <li class="width50">操作</li>
+        </ul>
+    </div>
+    <div id="navRemark" class="mTop20 hide nav-partdiv">
+        
     </div>
     @*日志*@
     <div class="nav-partdiv hide" id="navLog">
-        <div class="log-body" id="customerLog">
-
-        </div>
-        <div id="pagerLogs" class="mTop10">
-
-        </div>
+        
     </div>
 
     <div class="nav-partdiv hide" id="navOrder">
-         <table class="table-list mTop10">
-            <tr class="tr-header">
-                <td class="tLeft width150">订单编号</td>
-                <td class="width100">订单类型</td>
-                <td class="width80">状态</td>
-                <td class="width80 tRight">总金额</td>
-                <td class="width100">联系人</td>
-                <td class="width100">联系电话</td>     
-                <td class="width100">负责人</td>
-                <td class="width150">创建时间</td>
-            </tr>
-        </table>
+        <div class="table-box-list">
+            <ul class="box-header">
+                <li class="tLeft width150">订单编号</li>
+                <li class="width100">订单类型</li>
+                <li class="width80">状态</li>
+                <li class="width100 tRight">总金额</li>
+                <li class="width150">联系人</li>
+                <li class="width100">联系电话</li>     
+                <li class="width100">负责人</li>
+                <li class="width150">创建时间</li>
+            </ul>
+        </div>
         <div id="pagerOrders" class="mTop10"></div>
     </div>
      <div class="nav-partdiv hide" id="navOppor">
-         <table class="table-list mTop10">
-            <tr class="tr-header">
-                <td class="tLeft width150">机会编号</td>
-                <td class="width100">阶段</td>
-                <td class="width80 tRight">总金额</td>
-                <td class="width100">联系人</td>
-                <td class="width100">联系电话</td>     
-                <td class="width100">负责人</td>
-                <td class="width150">创建时间</td>
-            </tr>
-        </table>
+         <div class="table-box-list">
+            <ul class="box-header">
+                <li class="tLeft width150">机会编号</li>
+                <li class="width150">阶段</li>
+                <li class="width100">状态</li>
+                <li class="width100 tRight">总金额</li>
+                <li class="width150">联系人</li>
+                <li class="width100">联系电话</li>     
+                <li class="width100">负责人</li>
+                <li class="width150">创建时间</li>
+            </ul>
+        </div>
         <div id="pagerOppors" class="mTop10"></div>
     </div>
+    <div class="clear"></div>
 </div>
 
-<ul class="dropdown-ul hide" style="width:65px;">
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current,"101019006"))" id="editContact">编辑</li>
+<ul class="dropdown-ul hide" id="ddlContact" style="width:90px;">
+    <li id="editContactDefault">设为默认</li>
+    <li id="editContact">编辑</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"101019007"))" id="deleteContact">删除</li>
+</ul>
+<ul class="dropdown-ul hide"  id="ddlOperate" style="width: 100px;">
+    <li id="btnCreateContact" >新建联系人</li> 
+    <li id="btnCreateOpportunity">新建机会</li> 
+    <li id="btnCreateOrder">新建订单</li> 
 </ul>

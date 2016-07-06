@@ -13,6 +13,18 @@
 			"datatype":"string",
 			"defaulttext":"上海云销信息科技有限公司"
         },
+		"Type": {
+            "title": "是否企业客户",
+            "hide": false,
+            "format": true,
+            "exporttype": 16,
+			"testexporttype": -1,
+			"datasource":"",
+			"importtype":-1,
+			"importcolumn":"",		
+			"datatype":"int",
+			"defaulttext":"是"
+        },
         "Extent": {
             "title": "公司规模",
             "hide": false,
@@ -20,7 +32,7 @@
             "exporttype": 8,
 			"testexporttype": 7,
 			"datasource":"List|0-49,50-99,100-199,200-499,500-999,1000+",
-			"importtype":-1,
+			"importtype":18,
 			"importcolumn":"",		
 			"datatype":"int",
 			"defaulttext":"0-49"
@@ -29,10 +41,10 @@
             "title": "行业",
             "hide": false,
             "format": true,
-            "exporttype": 9,
+            "exporttype": 15,
 			"testexporttype": 7,
-			"datasource":"DropSourceList|1",
-			"importtype":-1,
+			"datasource":"DropSourceList|6",
+			"importtype":17,
 			"importcolumn":"",		
 			"datatype":"string",
 			"defaulttext":"信息技术业"
@@ -133,6 +145,18 @@
 			"datatype":"string",
 			"defaulttext":"国峰大厦6楼"
         },
+		"OwnerID": {
+            "title": "是否属于我的客户",
+            "hide": true,
+            "format": false,
+            "exporttype": -1,
+			"testexporttype": -1,
+			"datasource":"",
+			"importtype":-1,
+			"importcolumn":"",		
+			"datatype":"string",
+			"defaulttext":"是"
+        },
         "Description": {
             "title": "描述",
             "hide": false,
@@ -155,7 +179,7 @@
 			"testexporttype": -1,
 			"datasource":"",
 			"importtype":-1,
-			"importcolumn":"",		
+			"importcolumn":"CompanyName",		
 			"datatype":"string",
 			"defaulttext":"上海云销信息科技有限公司"
         }, 
@@ -167,7 +191,7 @@
 			"testexporttype": -1,
 			"datasource":"",
 			"importtype":-1,
-			"importcolumn":"",		
+			"importcolumn":"Name",		
 			"datatype":"string",
 			"defaulttext":"test"
         },

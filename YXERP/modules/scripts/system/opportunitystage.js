@@ -49,6 +49,7 @@
         });
 
     }
+
     //添加/编辑弹出层
     ObjectJS.createModel = function (model) {
         var _self = this;
@@ -95,6 +96,7 @@
 
         }); 
     }
+
     //获取列表
     ObjectJS.getList = function () {
         var _self = this;
@@ -104,6 +106,7 @@
             _self.bindList(data.items);
         });
     }
+
     //加载列表
     ObjectJS.bindList = function (items) {
         var _self = this;
@@ -150,6 +153,7 @@
             }
         })
     }
+
     //删除
     ObjectJS.deleteModel = function (id, callback) {
         Global.post("/System/DeleteOpportunityStage", { id: id }, function (data) {

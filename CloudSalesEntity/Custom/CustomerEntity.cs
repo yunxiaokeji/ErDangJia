@@ -79,6 +79,10 @@ namespace CloudSalesEntity
 
         public DateTime CreateTime { get; set; }
 
+        public string MemberLevelID { get; set; }
+
+        public ClientMemberLevel ClientMemberLevel { get; set; }
+
         [Property("Lower")]
         public string CreateUserID { get; set; }
 

@@ -41,7 +41,8 @@ namespace CloudSalesBusiness
             {
                 CustomerEntity model = new CustomerEntity();
                 model.FillData(dr);
-
+                model.ClientMemberLevel = SystemBusiness.BaseBusiness.GetClientMemberLevelByID(model.MemberLevelID,
+                    model.AgentID, model.ClientID);
                 model.Owner = OrganizationBusiness.GetUserByUserID(model.OwnerID, model.AgentID);
                 model.Source = SystemBusiness.BaseBusiness.GetCustomSourcesByID(model.SourceID, model.AgentID, model.ClientID);
                 model.StageStatusStr = CommonBusiness.GetEnumDesc<EnumCustomStageStatus>((EnumCustomStageStatus)model.StageStatus);

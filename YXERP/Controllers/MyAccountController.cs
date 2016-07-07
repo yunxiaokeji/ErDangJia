@@ -34,14 +34,17 @@ namespace YXERP.Controllers
         {
             return View();
         }
+
         public ActionResult SetPassWord()
         {
             return View();
         }
+
         public ActionResult Account()
         {
             return View();
         }
+
         public ActionResult MyFeedBack()
         {
             return View();
@@ -84,7 +87,7 @@ namespace YXERP.Controllers
             excelWriter.Map("Name", "姓名");
             excelWriter.Map("MobilePhone", "手机号"); 
             excelWriter.Map("Birthday", "生日");
-            byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserById(CurrentUser.UserID), new Dictionary<string, ExcelFormatter>() { { "birthday", new ExcelFormatter() { ColumnTrans = EnumColumnTrans.ConvertTime, DropSource = "" } } });
+            byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserByIDNoCache(CurrentUser.UserID), new Dictionary<string, ExcelFormatter>() { { "birthday", new ExcelFormatter() { ColumnTrans = EnumColumnTrans.ConvertTime, DropSource = "" } } });
             var fileName = "用户信息导入";
             if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
                 fileName = HttpUtility.UrlEncode(fileName);
@@ -170,11 +173,7 @@ namespace YXERP.Controllers
         #endregion
 
         #region 账户管理
-        /// <summary>
-        /// 账号是否存在
-        /// </summary>
-        /// <param name="loginName"></param>
-        /// <returns></returns>
+
         public JsonResult IsExistLoginName(string loginName)
         {
             bool bl = OrganizationBusiness.IsExistLoginName(loginName);
@@ -187,19 +186,13 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        /// 验证账号密码是否正确
-        /// </summary>
-        /// <param name="loginName"></param>
-        /// <param name="loginPwd"></param>
-        /// <returns></returns>
-        public JsonResult ConfirmLoginPwd(string loginName, string loginPwd)
+        public JsonResult ConfirmLoginPwd(string userid, string loginName, string loginPwd)
         {
-            if (string.IsNullOrEmpty(loginName)) 
+            if (string.IsNullOrEmpty(userid)) 
             {
-                loginName = CurrentUser.LoginName;
+                userid = CurrentUser.UserID;
             }
-            bool bl = OrganizationBusiness.ConfirmLoginPwd(loginName, loginPwd);
+            bool bl = OrganizationBusiness.ConfirmLoginPwd(userid, loginName, loginPwd);
             JsonDictionary.Add("Result", bl);
 
             return new JsonResult()
@@ -209,15 +202,9 @@ namespace YXERP.Controllers
             };
         }
 
-        /// <summary>
-        ///编辑用户账户
-        /// </summary>
-        /// <param name="loginName"></param>
-        /// <param name="loginPwd"></param>
-        /// <returns></returns>
         public JsonResult UpdateUserAccount(string loginName, string loginPwd)
         {
-            bool bl = OrganizationBusiness.UpdateUserAccount(CurrentUser.UserID, loginName, loginPwd, CurrentUser.AgentID);
+            bool bl = OrganizationBusiness.UpdateUserAccount(CurrentUser.UserID, loginName, loginPwd, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("Result", bl);
 
             if (bl) {
@@ -247,6 +234,7 @@ namespace YXERP.Controllers
         #endregion
 
         #region 绑定手机
+
         public JsonResult SaveAccountBindMobile(string bindMobile, int option,string code)
         {
             bool flag = false;
@@ -259,16 +247,23 @@ namespace YXERP.Controllers
             else
             {
                 if (option == 1)
-                    flag = OrganizationBusiness.UpdateAccountBindMobile(CurrentUser.UserID, bindMobile, CurrentUser.AgentID);
+                {
+                    flag = OrganizationBusiness.UpdateAccountBindMobile(CurrentUser.UserID, bindMobile, CurrentUser.AgentID, CurrentUser.ClientID);
+                }
                 else
+                {
                     flag = OrganizationBusiness.ClearAccountBindMobile(CurrentUser.UserID, CurrentUser.AgentID);
-
+                }
                 if (flag)
                 {
                     if (option == 1)
+                    {
                         CurrentUser.BindMobilePhone = bindMobile;
+                    }
                     else
+                    {
                         CurrentUser.BindMobilePhone = string.Empty;
+                    }
 
                     Session["ClientManager"] = CurrentUser;
                     Common.Common.ClearMobilePhoneCode(bindMobile);
@@ -283,6 +278,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         #endregion
 
         #region 我的反馈
@@ -314,6 +310,7 @@ namespace YXERP.Controllers
             };
         }
         #endregion
+
         #endregion
 
     }

@@ -11,6 +11,7 @@ using CloudSalesTool;
 using CloudSalesEntity.Manage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CloudSalesEnum;
 namespace YXManage.Controllers
 {
     [YXManage.Common.UserAuthorize]
@@ -141,7 +142,8 @@ namespace YXManage.Controllers
             if (string.IsNullOrEmpty(model.ClientID))
 
             {
-                string clientid = ClientBusiness.InsertClient(model, loginName, "", loginName, CurrentUser.UserID, out result, "", "", "");
+                string clientid = ClientBusiness.InsertClient(EnumRegisterType.Manage,EnumAccountType.UserName,loginName,loginName,model.CompanyName,model.ContactName,model.MobilePhone,"",
+                                  model.Industry, model.CityCode, model.Address, model.Description, "", "", "", "", out result);
                 JsonDictionary.Add("Result", result);
                 JsonDictionary.Add("ClientID", clientid);
             }

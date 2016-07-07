@@ -320,11 +320,10 @@ namespace CloudSalesDAL
             return dt;
         }
 
-        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
+        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID)
         {
             string id = Guid.NewGuid().ToString();
-            string sqlText = "insert into Providers(ProviderID,Name,Contact,MobileTele,Email,Website,CityCode,Address,Remark,CreateTime,CreateUserID,AgentID,ClientID)"
-                                      + "values(@ProviderID ,@Name,@Contact ,@MobileTele,@Email,'',@CityCode,@Address,@Remark,getdate(),@CreateUserID,@AgentID,@ClientID)";
+            string sqlText = "";
             SqlParameter[] paras = { 
                                      new SqlParameter("@ProviderID" , id),
                                      new SqlParameter("@Name" , name),
@@ -334,18 +333,20 @@ namespace CloudSalesDAL
                                      new SqlParameter("@CityCode" , cityCode),
                                      new SqlParameter("@Address" , address),
                                      new SqlParameter("@Remark" , remark),
+                                     new SqlParameter("@CMClientID" , cmClientID),
+                                     new SqlParameter("@CMClientCode" , cmClientCode),
                                      new SqlParameter("@CreateUserID" , operateID),
                                      new SqlParameter("@AgentID" , agentid),
                                      new SqlParameter("@ClientID" , clientID)
                                    };
-            return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0 ? id : "";
+            return ExecuteNonQuery("P_AddProviders", paras, CommandType.StoredProcedure) > 0 ? id : "";
 
         }
         
         public bool UpdateProvider(string providerid, string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
         {
-            string sqlText = "Update Providers set [Name]=@Name,[Contact]=@Contact ,[MobileTele]=@MobileTele,[CityCode]=@CityCode," +
-                "[Address]=@Address,[Remark]=@Remark where [ProviderID]=@ProviderID";
+            string sqlText = " Update Providers set [Name]=@Name,[Contact]=@Contact ,[MobileTele]=@MobileTele,[CityCode]=@CityCode," +
+                "[Address]=@Address,[Remark]=@Remark where [ProviderID]=@ProviderID ";
             SqlParameter[] paras = { 
                                      new SqlParameter("@Name" , name),
                                      new SqlParameter("@Contact" , contact),

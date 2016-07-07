@@ -106,8 +106,10 @@
                             mduserids: ids
                         }, function (data) {
                             if (data.status) {
-                                alert("明道用户导入成功，新用户需设置角色后才能正常使用系统！");
+                                alert(data.message+",新员工需设置角色后才能正常使用系统");
                                 _self.getList();
+                            } else{
+                                alert(data.message);
                             }
                         });
                     }
@@ -118,7 +120,7 @@
         //注销员工
         $("#deleteObject").click(function () {
             var _this = $(this);
-            confirm("员工注销后不能再使用系统且不可恢复，确认注销吗?", function () {
+            confirm("员工账号注销后数据全部清空且不可恢复，请谨慎操作，确认注销员工吗?", function () {
                 Global.post("/Organization/DeleteUserByID", {
                     userid: _this.data("id")
                 }, function (data) {

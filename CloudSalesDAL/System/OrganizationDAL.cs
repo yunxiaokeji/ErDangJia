@@ -136,14 +136,15 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;
         }
 
-        public DataTable CreateUser(string userid, string loginname, string loginpwd, string name, string mobile, string email, string citycode, string address, string jobs,
-                               string roleid, string departid, string parentid, string agentid, string clientid, string mduserid, string mdprojectid, int isAppAdmin, string operateid, out int result)
+        public DataTable CreateUser(int accountType, string userid, string account, string loginpwd, string name, string mobile, string email, string citycode, string address, string jobs,
+                               string roleid, string departid, string parentid, string agentid, string clientid, string mdprojectid, int isAppAdmin, string operateid, out int result)
         {
             result = 0;
             SqlParameter[] paras = { 
                                        new SqlParameter("@Result",result),
+                                       new SqlParameter("@AccountType",accountType),
                                        new SqlParameter("@UserID",userid),
-                                       new SqlParameter("@LoginName",loginname),
+                                       new SqlParameter("@Account",account),
                                        new SqlParameter("@LoginPwd",loginpwd),
                                        new SqlParameter("@Name",name),
                                        new SqlParameter("@Mobile",mobile),
@@ -155,7 +156,6 @@ namespace CloudSalesDAL
                                        new SqlParameter("@DepartID",departid),
                                        new SqlParameter("@ParentID",parentid),
                                        new SqlParameter("@AgentID",agentid),
-                                       new SqlParameter("@MDUserID",mduserid),
                                        new SqlParameter("@MDProjectID",mdprojectid),
                                        new SqlParameter("@IsAppAdmin",isAppAdmin),
                                        new SqlParameter("@CreateUserID",operateid),
@@ -173,55 +173,39 @@ namespace CloudSalesDAL
         #endregion
 
         #region 编辑/删除
-        public bool UpdateUserAccount(string userid, string loginName, string loginPwd)
+
+        public bool UpdateUserAccount(string userid, string loginName, string loginPwd, string agentid, string clientid)
         {
-            if (string.IsNullOrEmpty(loginPwd))
-            {
-                string sql = "update users set LoginName=@LoginName where UserID=@UserID";
-
-                SqlParameter[] paras = { 
-                                       new SqlParameter("@UserID",userid),
-                                       new SqlParameter("@LoginName",loginName)
-                                   };
-
-                return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;
-            }
-            else
-            {
-                string sql = "update users set LoginName=@LoginName,LoginPwd=@LoginPwd where UserID=@UserID";
-
-                SqlParameter[] paras = { 
+            SqlParameter[] paras = { 
                                        new SqlParameter("@UserID",userid),
                                        new SqlParameter("@LoginName",loginName),
-                                       new SqlParameter("@LoginPwd",loginPwd)
+                                       new SqlParameter("@LoginPwd",loginPwd),
+                                       new SqlParameter("@AgentID",agentid),
+                                       new SqlParameter("@ClientID",clientid)
                                    };
 
-                return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;
-            }
+            return ExecuteNonQuery("P_UpdateUserAccount", paras, CommandType.StoredProcedure) > 0;
         }
 
         public bool UpdateUserPass(string userid, string loginPwd)
         {
-            string sql = "update users set LoginPwd=@LoginPwd where UserID=@UserID";
+            string sql = "update Users set LoginPwd=@LoginPwd where UserID=@UserID";
 
             SqlParameter[] paras = { 
                                        new SqlParameter("@UserID",userid),
                                        new SqlParameter("@LoginPwd",loginPwd)
                                    };
-
             return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;
         }
 
         public bool UpdateUserAccountPwd(string loginName, string loginPwd)
         {
-            string sql = "update users set LoginPwd=@LoginPwd where BindMobilePhone=@LoginName and Status<>9 ";
-
             SqlParameter[] paras = { 
                                        new SqlParameter("@LoginName",loginName),
                                        new SqlParameter("@LoginPwd",loginPwd)
                                    };
 
-            return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;
+            return ExecuteNonQuery("P_UpdateUserAccountPwd", paras, CommandType.StoredProcedure) > 0;
         }
 
         public bool UpdateUserInfo(string userid, string name, string jobs, DateTime birthday, int age, string departID, string email, string mobilePhone, string officePhone)
@@ -253,21 +237,21 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;
         }
 
-        public bool UpdateAccountBindMobile(string userid, string bindMobile)
+        public bool UpdateAccountBindMobile(string userid, string mobile, string agentid, string clientid)
         {
-            string sql = "update users set BindMobilePhone=@BindMobile where UserID=@UserID";
-
             SqlParameter[] paras = { 
                                        new SqlParameter("@UserID",userid),
-                                       new SqlParameter("@BindMobile",bindMobile)
+                                       new SqlParameter("@LoginName",mobile),
+                                       new SqlParameter("@AgentID",agentid),
+                                       new SqlParameter("@ClientID",clientid)
                                    };
 
-            return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;
+            return ExecuteNonQuery("P_UpdateAccountBindMobile", paras, CommandType.StoredProcedure) > 0;
         }
 
         public bool ClearAccountBindMobile(string userid)
         {
-            string sql = "update users set BindMobilePhone='' where UserID=@UserID";
+            string sql = "Delete from UserAccounts where UserID=@UserID and AccountType=2 ";
 
             SqlParameter[] paras = { 
                                        new SqlParameter("@UserID",userid)

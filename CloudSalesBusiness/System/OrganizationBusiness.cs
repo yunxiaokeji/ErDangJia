@@ -21,10 +21,6 @@ namespace CloudSalesBusiness
         private static Dictionary<string, List<Department>> _cacheDeparts;
         private static Dictionary<string, List<Role>> _cacheRoles;
 
-        
-        /// <summary>
-        /// 缓存用户信息
-        /// </summary>
         private static Dictionary<string, List<Users>> Users
         {
             get 
@@ -41,9 +37,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 缓存部门信息
-        /// </summary>
         private static Dictionary<string, List<Department>> Departments
         {
             get
@@ -60,9 +53,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 缓存角色信息
-        /// </summary>
         private static Dictionary<string, List<Role>> Roles
         {
             get
@@ -85,9 +75,12 @@ namespace CloudSalesBusiness
 
         public static bool IsExistLoginName(string loginName)
         {
-            if (string.IsNullOrEmpty(loginName)) return false;
+            if (string.IsNullOrEmpty(loginName))
+            {
+                return false;
+            }
 
-            object count = CommonBusiness.Select("Users", "count(0)", " Status=1 and (LoginName='" + loginName + "'  or BindMobilePhone='" + loginName + "')");
+            object count = CommonBusiness.Select("UserAccounts", "count(0)", " AccountName='" + loginName + "' and AccountType in(1,2) ");
             return Convert.ToInt32(count) > 0;
         }
 
@@ -145,28 +138,23 @@ namespace CloudSalesBusiness
             //记录登录日志
             if (model != null)
             {
-                LogBusiness.AddLoginLog(loginname, true,Manage.ClientBusiness.GetClientDetail(model.ClientID).AgentID == model.AgentID ? CloudSalesEnum.EnumSystemType.Client : CloudSalesEnum.EnumSystemType.Agent, operateip, model.UserID, model.AgentID, model.ClientID);
+                LogBusiness.AddLoginLog(loginname, true, model.Agents.IsDefault == 1 ? EnumSystemType.Client : EnumSystemType.Agent, operateip, model.UserID, model.AgentID, model.ClientID);
             }
             else
             {
-                LogBusiness.AddLoginLog(loginname, false, CloudSalesEnum.EnumSystemType.Client, operateip, "", "", "");
+                LogBusiness.AddLoginLog(loginname, false, EnumSystemType.Client, operateip, "", "", "");
             }
 
             return model;
         }
 
-        public static bool ConfirmLoginPwd(string loginname, string pwd)
+        public static bool ConfirmLoginPwd(string userid, string loginname, string pwd)
         {
             pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
-            int result;
-            DataSet ds = new OrganizationDAL().GetUserByUserName(loginname, pwd,out result);
 
-            if (ds.Tables.Contains("User") && ds.Tables["User"].Rows.Count > 0)
-            {
-                return true;
-            }
+            object obj = CommonBusiness.Select("Users", "Count(0)", " UserID='" + userid + "' and LoginPWD='" + pwd + "' ");
 
-            return false;
+            return Convert.ToInt32(obj) > 0;
         }
 
         public static Users GetUserByMDUserID(string mduserid, string mdprojectid, string operateip)
@@ -263,11 +251,7 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 非缓存
-        /// </summary>
-        /// <returns></returns>
-        public static DataTable GetUserById(string userID)
+        public static DataTable GetUserByIDNoCache(string userID)
         {
             return OrganizationDAL.BaseProvider.GetUserByUserID(userID);
         }
@@ -487,16 +471,16 @@ namespace CloudSalesBusiness
         /// <param name="operateid">操作人</param>
         /// <param name="result">返回结果 0 失败 1成功 2账号已存在 3人数达到限制</param>
         /// <returns></returns>
-        public static Users CreateUser(string loginname, string loginpwd, string name, string mobile, string email, string citycode, string address, string jobs,
-                               string roleid, string departid, string parentid, string agentid, string clientid, string mduserid, string mdprojectid, int isAppAdmin, string operateid, out int result)
+        public static Users CreateUser(EnumAccountType accountType, string account, string loginpwd, string name, string mobile, string email, string citycode, string address, string jobs,
+                               string roleid, string departid, string parentid, string agentid, string clientid, string mdprojectid, int isAppAdmin, string operateid, out int result)
         {
             string userid = Guid.NewGuid().ToString();
 
-            loginpwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginpwd, loginname);
+            loginpwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginpwd, account);
 
             Users user = null;
 
-            DataTable dt = OrganizationDAL.BaseProvider.CreateUser(userid, loginname, loginpwd, name, mobile, email, citycode, address, jobs, roleid, departid, parentid, agentid, clientid, mduserid, mdprojectid, isAppAdmin, operateid, out result);
+            DataTable dt = OrganizationDAL.BaseProvider.CreateUser((int)accountType, userid, account, loginpwd, name, mobile, email, citycode, address, jobs, roleid, departid, parentid, agentid, clientid, mdprojectid, isAppAdmin, operateid, out result);
             if (dt.Rows.Count > 0)
             {
                 user = new Users();
@@ -520,15 +504,14 @@ namespace CloudSalesBusiness
             return user;
         }
         
-
         #endregion
 
         #region 编辑/删除
 
-        public static bool UpdateUserAccount(string userid, string loginName, string loginPwd, string agentid)
+        public static bool UpdateUserAccount(string userid, string loginName, string loginPwd, string agentid, string clientid)
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, loginName);
-            bool flag = OrganizationDAL.BaseProvider.UpdateUserAccount(userid, loginName, loginPwd);
+            bool flag = OrganizationDAL.BaseProvider.UpdateUserAccount(userid, loginName, loginPwd, agentid, clientid);
 
             if (flag)
             {
@@ -542,9 +525,6 @@ namespace CloudSalesBusiness
             return flag;
         }
 
-        /// <summary>
-        /// 编辑用户密码
-        /// </summary>
         public static bool UpdateUserPass(string userid, string loginPwd, string agentid)
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, "");
@@ -553,9 +533,6 @@ namespace CloudSalesBusiness
             return flag;
         }
 
-        /// <summary>
-        /// 编辑用户密码
-        /// </summary>
         public static bool UpdateUserAccountPwd(string loginName, string loginPwd)
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, loginName);
@@ -564,16 +541,6 @@ namespace CloudSalesBusiness
             return flag;
         }
 
-        /// <summary>
-        /// 编辑用户基本信息
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="name"></param>
-        /// <param name="jobs"></param>
-        /// <param name="birthday"></param>
-        /// <param name="age"></param>
-        /// <param name="departID"></param>
-        /// <returns></returns>
         public static bool UpdateUserInfo(string userid, string name, string jobs, DateTime birthday, int age, string departID, string email, string mobilePhone, string officePhone, string agentid)
         {
             bool flag = OrganizationDAL.BaseProvider.UpdateUserInfo(userid, name, jobs, birthday, age, departID, email, mobilePhone, officePhone);
@@ -598,13 +565,6 @@ namespace CloudSalesBusiness
            return flag;
         }
 
-        /// <summary>
-        /// 设置用户头像
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="avatar"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
         public static bool UpdateAccountAvatar(string userid, string avatar, string agentid)
         {
             bool flag = OrganizationDAL.BaseProvider.UpdateAccountAvatar(userid, avatar);
@@ -622,16 +582,9 @@ namespace CloudSalesBusiness
             return flag;
         }
 
-        /// <summary>
-        /// 更改账户的绑定手机
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="bindMobile"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
-        public static bool UpdateAccountBindMobile(string userid, string bindMobile, string agentid)
+        public static bool UpdateAccountBindMobile(string userid, string bindMobile, string agentid, string clientid)
         {
-            bool flag = OrganizationDAL.BaseProvider.UpdateAccountBindMobile(userid, bindMobile);
+            bool flag = OrganizationDAL.BaseProvider.UpdateAccountBindMobile(userid, bindMobile, agentid, clientid);
 
             //清除缓存
             if (flag)
@@ -646,12 +599,6 @@ namespace CloudSalesBusiness
             return flag;
         }
 
-        /// <summary>
-        /// 清除账户的绑定手机
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="agentid"></param>
-        /// <returns></returns>
         public static bool ClearAccountBindMobile(string userid, string agentid)
         {
             bool flag = OrganizationDAL.BaseProvider.ClearAccountBindMobile(userid);
@@ -669,15 +616,6 @@ namespace CloudSalesBusiness
             return flag;
         }
 
-        /// <summary>
-        /// 编辑部门
-        /// </summary>
-        /// <param name="departid">部门ID</param>
-        /// <param name="name">名称</param>
-        /// <param name="description">描述</param>
-        /// <param name="operateid">操作人</param>
-        /// <param name="operateip">操作IP</param>
-        /// <returns></returns>
         public bool UpdateDepartment(string departid, string name, string description, string operateid, string operateip, string agentid)
         {
             var dal = new OrganizationDAL();
@@ -692,14 +630,6 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        /// <summary>
-        /// 编辑部门状态
-        /// </summary>
-        /// <param name="departid">部门ID</param>
-        /// <param name="status">状态</param>
-        /// <param name="operateid">操作人</param>
-        /// <param name="operateip">操作IP</param>
-        /// <returns></returns>
         public EnumResultStatus UpdateDepartmentStatus(string departid, EnumStatus status, string operateid, string operateip, string agentid)
         {
             if (status == EnumStatus.Delete)
@@ -722,16 +652,6 @@ namespace CloudSalesBusiness
             }
         }
 
-        /// <summary>
-        /// 编辑角色
-        /// </summary>
-        /// <param name="roleid"></param>
-        /// <param name="name">名称</param>
-        /// <param name="description">描述</param>
-        /// <param name="operateid">操作人</param>
-        /// <param name="ip">IP</param>
-        /// <param name="agentid">代理商ID</param>
-        /// <returns></returns>
         public bool UpdateRole(string roleid, string name, string description, string operateid, string ip, string agentid)
         {
             bool bl = OrganizationDAL.BaseProvider.UpdateRole(roleid, name, description, agentid);
@@ -745,15 +665,6 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        /// <summary>
-        /// 删除角色
-        /// </summary>
-        /// <param name="roleid"></param>
-        /// <param name="operateid"></param>
-        /// <param name="ip"></param>
-        /// <param name="agentid"></param>
-        /// <param name="result">0 失败 1成功 10002 存在员工</param>
-        /// <returns></returns>
         public bool DeleteRole(string roleid, string operateid, string ip, string agentid, out int result)
         {
             bool bl = OrganizationDAL.BaseProvider.DeleteRole(roleid, agentid, out result);
@@ -764,27 +675,12 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
-        /// <summary>
-        /// 编辑角色权限
-        /// </summary>
-        /// <param name="roleid"></param>
-        /// <param name="permissions"></param>
-        /// <param name="operateid"></param>
-        /// <param name="ip"></param>
-        /// <returns></returns>
+
         public bool UpdateRolePermission(string roleid, string permissions, string operateid, string ip)
         {
             return OrganizationDAL.BaseProvider.UpdateRolePermission(roleid, permissions, operateid);
         }
-        /// <summary>
-        /// 编辑员工上级
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="parentid"></param>
-        /// <param name="agentid"></param>
-        /// <param name="operateid"></param>
-        /// <param name="ip"></param>
-        /// <returns></returns>
+
         public bool UpdateUserParentID(string userid, string parentid, string agentid, string operateid, string ip)
         {
             bool bl = OrganizationDAL.BaseProvider.UpdateUserParentID(userid, parentid, agentid);
@@ -795,15 +691,7 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
-        /// <summary>
-        /// 替换人员
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="olduserid"></param>
-        /// <param name="agentid"></param>
-        /// <param name="operateid"></param>
-        /// <param name="ip"></param>
-        /// <returns></returns>
+
         public bool ChangeUsersParentID(string userid, string olduserid, string agentid, string operateid, string ip)
         {
             bool bl = OrganizationDAL.BaseProvider.ChangeUsersParentID(userid, olduserid, agentid);
@@ -825,15 +713,7 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
-        /// <summary>
-        /// 删除员工
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="agentid"></param>
-        /// <param name="operateid"></param>
-        /// <param name="ip"></param>
-        /// <param name="result"></param>
-        /// <returns></returns>
+
         public bool DeleteUserByID(string userid, string agentid, string operateid, string ip, out int result)
         {
             bool bl = OrganizationDAL.BaseProvider.DeleteUserByID(userid, agentid, out result);
@@ -852,15 +732,7 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
-        /// <summary>
-        /// 编辑员工角色
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="roleid"></param>
-        /// <param name="agentid"></param>
-        /// <param name="operateid"></param>
-        /// <param name="ip"></param>
-        /// <returns></returns>
+
         public bool UpdateUserRole(string userid, string roleid, string agentid, string operateid, string ip)
         {
             var user = GetUserByUserID(userid, agentid);

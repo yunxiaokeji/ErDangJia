@@ -10,6 +10,7 @@ using CloudSalesTool;
 using System.IO;
 using System.Web;
 using CloudSalesEntity.Manage.Report;
+using CloudSalesEnum;
 
 
 namespace CloudSalesBusiness.Manage
@@ -180,8 +181,10 @@ namespace CloudSalesBusiness.Manage
         /// <param name="clientID"></param>
         /// <param name="client"></param>
         /// <returns></returns>
-        public static bool UpdateClientCache(string clientID,Clients client) {
-            if (Clients.ContainsKey(clientID)) {
+        public static bool UpdateClientCache(string clientID, Clients client) 
+        {
+            if (Clients.ContainsKey(clientID)) 
+            {
                 Clients[clientID] = client;
             }
 
@@ -189,19 +192,32 @@ namespace CloudSalesBusiness.Manage
         }
 
         /// <summary>
-        /// 添加客户端
+        /// 注册二当家
         /// </summary>
-        /// <param name="model">Clients 对象</param>
-        /// <param name="loginName">账号</param>
+        /// <param name="registerType">来源类型</param>
+        /// <param name="accountType">账号类型</param>
+        /// <param name="account">账号</param>
         /// <param name="loginPwd">密码</param>
-        /// <param name="userid">操作人</param>
-        /// <param name="result">0：失败 1：成功 2：账号已存在 3：模块未选择</param>
-        public static string InsertClient(Clients model, string loginName, string bindMobilePhone, string loginPwd, string userid, out int result, string email = "", string mduserid = "", string mdprojectid = "")
+        /// <param name="clientName">客户名称</param>
+        /// <param name="contactName">联系人</param>
+        /// <param name="mobile">联系方式</param>
+        /// <param name="email">邮箱</param>
+        /// <param name="industry">行业</param>
+        /// <param name="citycode">城市</param>
+        /// <param name="address">地址</param>
+        /// <param name="remark">备注</param>
+        /// <param name="companyid">明道网络ID，智能工厂ID</param>
+        /// <param name="companyCode">智能工厂Code</param>
+        /// <param name="customerid">智能工厂客户ID</param>
+        /// <param name="operateid">操作人</param>
+        /// <param name="result">返回结果 0失败 1成功 2账号已存在</param>
+        /// <returns></returns>
+        public static string InsertClient(EnumRegisterType registerType, EnumAccountType accountType, string account, string loginPwd, string clientName, string contactName, string mobile, string email, string industry, string citycode, string address, string remark,
+                                          string companyid, string companyCode, string customerid, string operateid, out int result)
         {
-            loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, bindMobilePhone);
+            loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, account);
 
-            string clientid = ClientDAL.BaseProvider.InsertClient(model.CompanyName, model.ContactName, model.MobilePhone, model.Industry, model.CityCode,
-                                                             model.Address, model.Description, loginName, bindMobilePhone, loginPwd, email, mduserid, mdprojectid, userid, out result);
+            string clientid = ClientDAL.BaseProvider.InsertClient((int)registerType, (int)accountType, account, loginPwd, clientName, contactName, mobile, email, industry, citycode, address, remark, companyid, companyCode, customerid, operateid, out result);
 
             return clientid;
         }
@@ -277,7 +293,6 @@ namespace CloudSalesBusiness.Manage
             }
 
             return flag;
-
         }
 
         #endregion

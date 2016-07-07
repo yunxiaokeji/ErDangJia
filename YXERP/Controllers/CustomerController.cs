@@ -113,8 +113,8 @@ namespace YXERP.Controllers
             excelWriter.Map("District", "区");
             excelWriter.Map("Address", "详细地址");
             excelWriter.Map("Description", "描述");
-          
-            byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserById(CurrentUser.UserID),
+
+            byte[] buffer = excelWriter.Write(OrganizationBusiness.GetUserByIDNoCache(CurrentUser.UserID),
                 new Dictionary<string, ExcelFormatter>()
                 {
                     {

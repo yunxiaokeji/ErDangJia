@@ -47,63 +47,50 @@
 
         //修改密码
         $("#btnSaveAccountPwd").click(function () {
-
             if ($("#LoginOldPWD").val() != '') {
                 $("#LoginOldPWDError").html("");
 
                 if ($("#LoginPWD").val() == "") {
                     $("#LoginPWDError").html("密码不能为空");
                     return false;
-                }
-                else {
+                } else {
                     if ($("#LoginPWD").val().length < 5) {
                         $("#LoginPWDError").html("密码过短");
                         return false;
-                    }
-                    else {
+                    } else {
                         if (Global.passwordLevel($("#LoginPWD").val()) == 1) {
                             $("#LoginPWDError").html("密码至少包含字母大小写、数字、字符两种组合");
                             return false;
-                        }
-                        else {
+                        } else {
                             $("#LoginPWDError").html("");
                         }
                     }
-
                 }
 
                 if ($("#LoginConfirmPWD").val() == "") {
                     $("#LoginConfirmPWDError").html("确认密码不能为空");
                     return false;
-                }
-                else if ($("#LoginConfirmPWD").val() != $("#LoginPWD").val()) {
+                } else if ($("#LoginConfirmPWD").val() != $("#LoginPWD").val()) {
                     $("#LoginConfirmPWDError").html("确认密码有误");
                     return false;
-                }
-                else {
+                }else {
                     $("#LoginConfirmPWDError").html("");
                 }
 
-                Global.post("/MyAccount/ConfirmLoginPwd", { loginName: "", loginPwd: $("#LoginOldPWD").val() }, function (data) {
+                Global.post("/MyAccount/ConfirmLoginPwd", { loginPwd: $("#LoginOldPWD").val() }, function (data) {
                     if (data.Result) {
                         $("#LoginOldPWDError").html("");
 
                         ObjectJS.UpdateUserAccount();
-
-                    }
-                    else {
+                    } else {
                         $("#LoginOldPWDError").html("原密码有误");
                     }
                 });
-
-            }
-            else {
+            } else {
                 $("#LoginOldPWDError").html("原密码不能为空");
             }
         });
     }
-
-
 
     //账户管理
     ObjectJS.UpdateUserAccount = function () {
@@ -113,8 +100,7 @@
                 $("#LoginOldPWD").val("");
                 $("#LoginPWD").val("");
                 $("#LoginConfirmPWD").val("");
-            }
-            else {
+            } else {
                 alert("保存失败");
             }
         });

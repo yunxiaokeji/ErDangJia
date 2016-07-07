@@ -83,4 +83,50 @@ namespace CloudSalesEnum
         All = 3
     }
 
+    /// <summary>
+    /// 账号类型
+    /// </summary>
+    public enum EnumAccountType
+    {
+        /// <summary>
+        /// 账号
+        /// </summary>
+        UserName = 1,
+        /// <summary>
+        /// 手机
+        /// </summary>
+        Mobile = 2,
+        /// <summary>
+        /// 明道
+        /// </summary>
+        MingDao = 3,
+        /// <summary>
+        /// 微信
+        /// </summary>
+        WeiXin = 4,
+    }
+
+    /// <summary>
+    /// 注册来源
+    /// </summary>
+    public enum EnumRegisterType
+    {
+        /// <summary>
+        /// 后台添加
+        /// </summary>
+        Manage = 1,
+        /// <summary>
+        /// 自助注册
+        /// </summary>
+        Self = 2,
+        /// <summary>
+        /// 明道
+        /// </summary>
+        MingDao = 3,
+        /// <summary>
+        /// 智能工厂
+        /// </summary>
+        ZNGC = 4
+    }
+
 }

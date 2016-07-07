@@ -509,7 +509,7 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)
+        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID)
         {
             return ProductsDAL.BaseProvider.AddProviders(name, contact, mobile, email, cityCode, address, remark, operateID, agentid, clientID);
         }

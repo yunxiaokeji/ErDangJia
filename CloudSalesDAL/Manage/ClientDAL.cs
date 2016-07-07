@@ -34,29 +34,31 @@ namespace CloudSalesDAL.Manage
 
         #region 添加
 
-        public string InsertClient(string companyName, string contactName, string mobilePhone, string industry, string cityCode, string address,
-                                   string description, string loginName, string bindMobilePhone, string loginPwd, string email, string mduserid, string mdprojectid, string userid, out int result)
+        public string InsertClient(int registerType, int accountType, string account, string loginPwd, string clientName, string contactName, string mobile, string email, string industry, string cityCode, string address, string remark,
+                                          string companyid, string companyCode, string customerid, string operateid, out int result)
         {
             string clientid = Guid.NewGuid().ToString();
             result = 0;
             SqlParameter[] parms = { 
                                        new SqlParameter("@Result",result),
                                        new SqlParameter("@ClientID",clientid),
-                                       new SqlParameter("@CompanyName",companyName),
-                                       new SqlParameter("@MobilePhone",mobilePhone),
                                        new SqlParameter("@ClientCode",GetCode(8)),
+                                       new SqlParameter("@RegisterType",registerType),
+                                       new SqlParameter("@AccountType",accountType),
+                                       new SqlParameter("@Account",account),
+                                       new SqlParameter("@LoginPWD",loginPwd),
+                                       new SqlParameter("@ClientName",clientName),
+                                       new SqlParameter("@ContactName",contactName),
+                                       new SqlParameter("@MobilePhone",mobile),
+                                       new SqlParameter("@Email",email),
                                        new SqlParameter("@Industry",industry),
                                        new SqlParameter("@CityCode",cityCode),
                                        new SqlParameter("@Address",address),
-                                       new SqlParameter("@Description",description),
-                                       new SqlParameter("@ContactName",contactName),
-                                       new SqlParameter("@LoginName",loginName),
-                                       new SqlParameter("@BindMobilePhone",bindMobilePhone),
-                                       new SqlParameter("@LoginPWD",loginPwd),
-                                       new SqlParameter("@Email",email),
-                                       new SqlParameter("@MDUserID",mduserid),
-                                       new SqlParameter("@MDprojectID",mdprojectid),
-                                       new SqlParameter("@CreateUserID",userid)
+                                       new SqlParameter("@Description",remark),
+                                       new SqlParameter("@CompanyID",companyid),
+                                       new SqlParameter("@CompanyCode",companyCode),
+                                       new SqlParameter("@CustomerID",customerid),
+                                       new SqlParameter("@CreateUserID",operateid)
                                    };
             parms[0].Direction = ParameterDirection.Output;
 

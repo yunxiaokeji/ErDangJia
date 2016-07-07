@@ -70,7 +70,7 @@ define(function (require, exports, module) {
         require.async("autocomplete", function () {
             $("#choosecustomerSearch").autocomplete({
                 url: "/Customer/GetCustomersByKeywords",
-                placeholder:"输入客户名称、联系电话......",
+                placeholder:"输入客户名称、联系电话搜索......",
                 keywords: "keywords",
                 params: {
                     isAll: _self.setting.isAll ? 1 : 0

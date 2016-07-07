@@ -5,7 +5,7 @@
     var ObjectJS = {};
 
     //初始化
-    ObjectJS.init = function (departs,option) {
+    ObjectJS.init = function (departs, option) {
         var _self = this;
         departs = JSON.parse(departs.replace(/&quot;/g, '"'));
         
@@ -57,6 +57,7 @@
         });
   
     }
+
     //获取用户详情
     ObjectJS.getDetail = function (departs) {
 
@@ -65,9 +66,9 @@
                 var item = data;
                 //基本信息
                 $("#Name").val(item.Name);
-                $("#Jobs").val(item.Jobs); 
+                $("#Jobs").val(item.Jobs);
                 var birthday = item.Birthday.toDate("yyyy-MM-dd");
-                $("#Birthday").val(birthday != "3939-01-01" ?  birthday:"");
+                $("#Birthday").val(birthday != "3939-01-01" ? birthday : "");
                 $("#Age").val(item.Age);
                 //部门
                 $("#DepartmentName").val(item.DepartmentName);
@@ -81,7 +82,7 @@
                         dataValue: "DepartID",
                         dataText: "Name",
                         width: "157",
-                        isposition:true,
+                        isposition: true,
                         onChange: function (data) {
                             $("#DepartID").val(data.value);
                         }
@@ -123,24 +124,19 @@
 
                     $("#LoginOldPWD").blur(function () {
                         if ($(this).val() != '') {
-                            Global.post("/MyAccount/ConfirmLoginPwd", { loginName: $("#LoginName").val(), loginPwd: $(this).val() }, function (data) {
+                            Global.post("/MyAccount/ConfirmLoginPwd", { loginPwd: $(this).val() }, function (data) {
 
                                 if (data.Result) {
                                     $("#LoginOldPWDError").html("");
-                                }
-                                else {
+                                } else {
                                     $("#LoginOldPWDError").html("原密码有误");
                                 }
                             });
-
                         } else {
                             $("#LoginOldPWDError").html("原密码不能为空");
                         }
-
                     });
-                }
-                else
-                {
+                } else {
                     //新增账户
                     $("#li_loginOldPWD").hide();
 
@@ -168,9 +164,8 @@
                         }
                     });
                 }
-
             }
-        })
+        });
     }
 
     //保存基本信息

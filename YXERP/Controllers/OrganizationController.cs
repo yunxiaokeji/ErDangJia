@@ -1,5 +1,6 @@
 ﻿using CloudSalesBusiness;
 using CloudSalesEntity;
+using CloudSalesEnum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -239,9 +240,9 @@ namespace YXERP.Controllers
         public JsonResult SaveMDUser(string parentid, string mduserids)
         {
             bool bl = false;
-
-            string[] list = mduserids.Split(',');
-            foreach (string mduserid in list)
+            
+            string message = "";
+            foreach (string mduserid in mduserids.Split(','))
             {
                 if (!string.IsNullOrEmpty(mduserid) && !string.IsNullOrEmpty(CurrentUser.MDToken))
                 {
@@ -250,20 +251,33 @@ namespace YXERP.Controllers
                     {
                         var user = model.user;
                         int result = 0;
-
                         bool isAdmin = false;//MD.SDK.Entity.App.AppBusiness.IsAppAdmin(CurrentUser.MDToken, user.id, out error);
 
-                        OrganizationBusiness.CreateUser("", "", user.name, user.mobile_phone, user.email, "", "", "", "", "", parentid, CurrentUser.AgentID, CurrentUser.ClientID, user.id, user.project.id, isAdmin ? 1 : 0, CurrentUser.UserID, out result);
+                        OrganizationBusiness.CreateUser(EnumAccountType.MingDao, user.id, "", user.name, user.mobile_phone, user.email, "", "", "", "", "", parentid, CurrentUser.AgentID, CurrentUser.ClientID, user.project.id, isAdmin ? 1 : 0, CurrentUser.UserID, out result);
+                        
                         //添加成功
                         if (result == 1)
                         {
+                            message += "'" + user.name + "'添加成功，";
                             bl = true;
+                        }
+                        else if (result == 2)
+                        {
+                            message += "'" + user.name + "'已存在，";
+                        }
+                        else if (result == 3)
+                        {
+                            message += "'" + user.name + "'添加失败（人数已达上限），";
                         }
                     }
                 }
             }
-
+            if (message.Length > 0)
+            {
+                message = message.Substring(0, message.Length - 1);
+            }
             JsonDictionary.Add("status", bl);
+            JsonDictionary.Add("message", message);
             return new JsonResult()
             {
                 Data = JsonDictionary,
@@ -278,8 +292,8 @@ namespace YXERP.Controllers
 
             int result = 0;
 
-            var user = OrganizationBusiness.CreateUser(model.LoginName, model.LoginName, model.Name, model.MobilePhone, model.Email,model.CityCode,model.Address,model.Jobs,model.RoleID,model.DepartID, "",
-                CurrentUser.AgentID, CurrentUser.ClientID, "", "", 0, CurrentUser.UserID, out result);
+            var user = OrganizationBusiness.CreateUser(EnumAccountType.UserName, model.LoginName, model.LoginName, model.Name, model.MobilePhone, model.Email, model.CityCode, model.Address, model.Jobs, model.RoleID, model.DepartID, "",
+                CurrentUser.AgentID, CurrentUser.ClientID, "", 0, CurrentUser.UserID, out result);
 
             JsonDictionary.Add("model", user);
             JsonDictionary.Add("result", result);

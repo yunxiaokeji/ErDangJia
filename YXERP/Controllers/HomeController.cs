@@ -10,6 +10,7 @@ using CloudSalesBusiness;
 using CloudSalesEntity;
 using CloudSalesBusiness.Manage;
 using CloudSalesEntity.Manage;
+using CloudSalesEnum;
 
 namespace YXERP.Controllers
 {
@@ -137,13 +138,17 @@ namespace YXERP.Controllers
                             clientModel.CompanyName = user.user.project.name;
                             clientModel.ContactName = user.user.name;
                             clientModel.MobilePhone = user.user.mobile_phone;
-                            var clientid = ClientBusiness.InsertClient(clientModel, "", "", "", "", out result, user.user.email, user.user.id, user.user.project.id);
+                            var clientid = ClientBusiness.InsertClient(EnumRegisterType.MingDao, EnumAccountType.MingDao, user.user.id, "", user.user.project.name, user.user.name,
+                                                                       user.user.mobile_phone, user.user.email, "", "", "", "", user.user.project.id, "", "", "", out result);
                             if (!string.IsNullOrEmpty(clientid))
                             {
                                 var current = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip);
 
                                 current.MDToken = user.user.token;
-                                if (string.IsNullOrEmpty(current.Avatar)) current.Avatar = user.user.avatar;
+                                if (string.IsNullOrEmpty(current.Avatar))
+                                {
+                                    current.Avatar = user.user.avatar;
+                                }
                                 Session["ClientManager"] = current;
 
                                 if (string.IsNullOrEmpty(state))
@@ -160,7 +165,7 @@ namespace YXERP.Controllers
                         else
                         {
                             int result = 0;
-                            var newuser = OrganizationBusiness.CreateUser("", "", user.user.name, user.user.mobile_phone, user.user.email, "", "", "", "", "", "", "", "", user.user.id, user.user.project.id, 1, "", out result);
+                            var newuser = OrganizationBusiness.CreateUser(EnumAccountType.MingDao, user.user.id, "", user.user.name, user.user.mobile_phone, user.user.email, "", "", "", "", "", "", "", "", user.user.project.id, 1, "", out result);
                             if (newuser != null)
                             {
                                 var current = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip);
@@ -297,22 +302,25 @@ namespace YXERP.Controllers
                 }
                 else
                 {
-                    Clients client = new Clients() { CompanyName = companyName, ContactName = name, MobilePhone = loginName };
-                    ClientBusiness.InsertClient(client, "", loginName, loginPWD, string.Empty, out result);
+                    //自助注册
+                    ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result);
 
                     if (result == 1)
                     {
                         string operateip = Common.Common.GetRequestIP();
                         int outResult;
                         CloudSalesEntity.Users user = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(loginName, loginPWD, out outResult, operateip);
-                        if (user != null){
+                        if (user != null)
+                        {
                             Session["ClientManager"] = user;
                         }
 
                         Common.Common.ClearMobilePhoneCode(loginName);
                     }
                     else
+                    {
                         result = 0;
+                    }
                 }
             }
 

@@ -191,6 +191,7 @@
     <Content Include="modules\css\sales.css" />
     <Content Include="modules\css\report.css" />
     <Content Include="modules\css\stock.css" />
+    <Content Include="modules\images\bg-industrylist.jpg" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
     <Content Include="modules\images\ico-category-close.png" />
@@ -929,6 +930,7 @@
     <Content Include="modules\template\system\client-orders.html" />
     <Content Include="modules\template\system\clientindustry.html" />
     <Content Include="modules\template\system\clientindustry-detail.html" />
+    <Content Include="modules\template\system\clientmemberlevel-detail.html" />
     <Content Include="modules\template\system\sources-color.html" />
     <Content Include="modules\template\system\sources.html" />
     <Content Include="modules\template\system\sources-detail.html" />

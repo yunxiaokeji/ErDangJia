@@ -511,7 +511,7 @@ namespace CloudSalesBusiness
 
         public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID)
         {
-            return ProductsDAL.BaseProvider.AddProviders(name, contact, mobile, email, cityCode, address, remark, operateID, agentid, clientID);
+            return ProductsDAL.BaseProvider.AddProviders(name, contact, mobile, email, cityCode, address, remark, cmClientID, cmClientCode, operateID, agentid, clientID);
         }
 
         public bool UpdateProvider(string providerid, string name, string contact, string mobile, string email, string cityCode, string address, string remark, string operateID, string agentid, string clientID)

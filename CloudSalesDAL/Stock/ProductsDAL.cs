@@ -323,7 +323,6 @@ namespace CloudSalesDAL
         public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID)
         {
             string id = Guid.NewGuid().ToString();
-            string sqlText = "";
             SqlParameter[] paras = { 
                                      new SqlParameter("@ProviderID" , id),
                                      new SqlParameter("@Name" , name),

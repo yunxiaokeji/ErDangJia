@@ -124,10 +124,19 @@
     <Content Include="modules\css\iconfont\iconfont.svg" />
     <Content Include="modules\css\layout.css" />
     <Content Include="modules\css\product\product.css" />
+    <Content Include="modules\images\ico-company.png" />
+    <Content Include="modules\images\ico-goregister-hover.png" />
+    <Content Include="modules\images\ico-goregister.png" />
+    <Content Include="modules\images\ico-mobilecode.png" />
+    <Content Include="modules\images\ico-name.png" />
+    <Content Include="modules\images\ico-pwd.png" />
+    <Content Include="modules\images\ico-surepwd.png" />
+    <Content Include="modules\images\ico-username.png" />
     <Content Include="modules\images\logo_login.png" />
     <Content Include="modules\scripts\font.js" />
     <Content Include="modules\scripts\global.js" />
     <Content Include="modules\scripts\home\login.js" />
+    <Content Include="modules\scripts\home\register.js" />
     <Content Include="modules\scripts\products\product.js" />
     <Content Include="Scripts\jquery-1.11.1.js" />
     <Content Include="Scripts\sea-config.js" />
@@ -170,6 +179,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Register.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IntFactory.Sdk\IntFactory.Sdk.csproj">
+      <Project>{bc180ed7-4c16-4974-89fb-0894016f58ff}</Project>
+      <Name>IntFactory.Sdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YunXiaoService\YunXiaoService.csproj">
+      <Project>{28239182-0731-4e96-b9fe-e3c8a46335ca}</Project>
+      <Name>YunXiaoService</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

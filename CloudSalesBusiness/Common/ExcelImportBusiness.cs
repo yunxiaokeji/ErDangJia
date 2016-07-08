@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using CloudSalesDAL;
 using CloudSalesEntity;
 using CloudSalesEnum;
@@ -11,7 +13,13 @@ namespace CloudSalesBusiness
 {
     public class ExcelImportBusiness
     {
-        
+
+        /// <summary>
+        /// 文件默认存储路径
+        /// </summary>
+        public static string FILEPATH = CloudSalesTool.AppSettings.Settings["UploadFilePath"] + "Product/" + DateTime.Now.ToString("yyyyMM") + "/";
+        public static string TempPath = CloudSalesTool.AppSettings.Settings["UploadTempPath"];
+
         public static string InsertCustomer(List<CustomerEntity> list,int type,int overType)
         {
             int handleCount = 0;
@@ -46,11 +54,28 @@ namespace CloudSalesBusiness
             return handleCount > 0 ? "" : "导入失败,请联系管理员";
         }
 
-        public static string InsertProduct(List<Products> list)
-        { 
+        public static string InsertProduct(List<Products> list,Dictionary<int, PicturesInfo> imgList=null)
+        {
+            int i = 0;
             string mes ="";
             list.ForEach(x =>
             {
+                if (imgList != null && imgList.Any())
+                {
+                    if (imgList.ContainsKey(i))
+                    {
+                        DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                        if (!directory.Exists)
+                        {
+                            directory.Create();
+                        }
+                        System.IO.MemoryStream ms = new System.IO.MemoryStream(imgList[i].PictureData);  
+                        System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                        string fileName = x.ProductCode+DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        img.Save(HttpContext.Current.Server.MapPath(FILEPATH) + fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        x.ProductImage = FILEPATH + fileName;
+                    }
+                }
                 string result = "";
                 string pid
                     = new ProductsDAL().InsertProductExcel(x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.BrandID,
@@ -66,6 +91,7 @@ namespace CloudSalesBusiness
                 {
                     mes += result+",";
                 }
+                i++;
             });
             return string.IsNullOrEmpty(mes)  ? "" : mes;
         }

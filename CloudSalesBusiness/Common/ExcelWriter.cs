@@ -11,6 +11,7 @@ using System.Data;
 using System.Drawing;
 using CloudSalesEntity;
 using CloudSalesEnum;
+using NPOI.HSSF.UserModel;
 //using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.OpenXmlFormats.Spreadsheet;
@@ -19,7 +20,9 @@ using NPOI.SS.Util;
 
 namespace CloudSalesBusiness
 {
-   
+   /// <summary>
+   /// Excel 导出类
+   /// </summary>
     public class ExcelWriter
     {
         public ExcelWriter()
@@ -178,7 +181,8 @@ namespace CloudSalesBusiness
                                 CellRangeAddressList regions = new CellRangeAddressList(1, 65535, i, i);
                                 XSSFDataValidation dataValidate = (XSSFDataValidation)dvHelper.CreateValidation(dvConstraint, regions);
                                 sheet.AddValidationData(dataValidate);
-                            }else if (excelFormatter != null && excelFormatter.ColumnTrans == EnumColumnTrans.ConvertImage)
+                            }
+                            else if (excelFormatter != null && excelFormatter.ColumnTrans == EnumColumnTrans.ConvertImage)
                             {
                                 if (File.Exists(@"" + imgBasepath + drValue))
                                 {
@@ -369,7 +373,11 @@ namespace CloudSalesBusiness
                     if (formatters != null && formatters.Count > 0 && formatters.ContainsKey(defaulvalue.Value.ColumnName))
                     {
                         ExcelFormatter excelFormatter = formatters[defaulvalue.Value.ColumnName];
-                        drvalue = FormatterCoulumn(drvalue, excelFormatter.ColumnTrans,clientID);
+                        ///图片获取必须在Excel转Datatable之前获取到 此处不处理
+                        if (!excelFormatter.ColumnTrans.Equals(EnumColumnTrans.ConvertImportImage))
+                        {
+                            drvalue = FormatterCoulumn(drvalue, excelFormatter.ColumnTrans, clientID);
+                        }
                     }
                     switch (defaulvalue.Value.DataType)
                     {
@@ -473,7 +481,7 @@ namespace CloudSalesBusiness
         /// </summary>
         ConvertIndustry = 9,
         /// <summary>
-        /// 图片
+        /// 导出图片
         /// </summary>
         ConvertImage = 10,
         /// <summary>
@@ -507,7 +515,11 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 格式化品牌ID
         /// </summary>
-        ConvertCustomerExtentType = 18
+        ConvertCustomerExtentType = 18,
+        /// <summary>
+        /// 导入图片获取
+        /// </summary>
+        ConvertImportImage = 19
 
     }
 
@@ -541,6 +553,8 @@ namespace CloudSalesBusiness
 
     public class ExcelFormatter
     {
+
+        public string ColumnName { get; set; }
         public EnumColumnTrans ColumnTrans { get; set; }
         public string DropSource { get; set; }
     }
@@ -593,7 +607,6 @@ namespace CloudSalesBusiness
         public string DefaultText { get; set; }
     }
 
-
     public class ExcelPopertyMap
     {
         public readonly string Info;
@@ -603,6 +616,7 @@ namespace CloudSalesBusiness
         }
         public string Name { get; set; }
     }
+
     public class CommonUntil {
 
         public static List<Dictionary<string, string>> DataTableToList(DataTable dt)
@@ -618,6 +632,129 @@ namespace CloudSalesBusiness
                 list.Add(rowItem);
             }
             return list;
+        }
+    }
+    /// <summary>
+    /// Excel图片实体类
+    /// </summary>
+    public class PicturesInfo
+{
+    public int MinRow { get;set; }
+    public int MaxRow { get;set; }
+    public int MinCol { get;set; }
+    public int MaxCol { get;set; }
+    public Byte[] PictureData { get; private set; }
+ 
+    public PicturesInfo(int minRow, int maxRow, int minCol, int maxCol,Byte[] pictureData)
+    {
+        this.MinRow = minRow;
+        this.MaxRow = maxRow;
+        this.MinCol = minCol;
+        this.MaxCol = maxCol;
+        this.PictureData = pictureData;
+    }
+}
+ 
+    /// <summary>
+    /// Excel导入获取图片类
+    /// </summary>
+    public static class NPOIExtendImg
+    {
+        public static Dictionary<int, PicturesInfo> GetAllPictureInfos(this ISheet sheet)
+        {
+            return sheet.GetAllPictureInfos(null,null,null,null);
+        }
+
+        public static Dictionary<int, PicturesInfo> GetAllPictureInfos(this ISheet sheet, int? minRow, int? maxRow, int? minCol, int? maxCol, bool onlyInternal = true)
+        {
+            if (sheet is HSSFSheet)
+            {
+                return GetAllPictureInfos((HSSFSheet)sheet,minRow,maxRow,minCol,maxCol,onlyInternal);
+            }
+            else if (sheet is XSSFSheet)
+            {
+                return GetAllPictureInfos((XSSFSheet)sheet, minRow, maxRow, minCol, maxCol, onlyInternal);
+            }
+            else
+            {
+                throw new Exception("未处理类型，没有为该类型添加：GetAllPicturesInfos()扩展方法！");
+            }
+        }
+
+        private static Dictionary<int, PicturesInfo> GetAllPictureInfos(HSSFSheet sheet, int? minRow, int? maxRow, int? minCol, int? maxCol, bool onlyInternal)
+        {
+            Dictionary<int, PicturesInfo> picturesInfoList = new Dictionary<int, PicturesInfo>();
+ 
+            var shapeContainer = sheet.DrawingPatriarch as HSSFShapeContainer;
+            if (null != shapeContainer)
+            {
+                var shapeList = shapeContainer.Children;
+                foreach (var shape in shapeList)
+                {
+                    if (shape is HSSFPicture && shape.Anchor is HSSFClientAnchor)
+                    {
+                        var picture = (HSSFPicture)shape;
+                        var anchor = (HSSFClientAnchor)shape.Anchor;
+                    
+                        if (IsInternalOrIntersect(minRow, maxRow, minCol, maxCol, anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, onlyInternal))
+                        {
+                            picturesInfoList.Add(anchor.Row1-1,new PicturesInfo(anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, picture.PictureData.Data));
+                        }
+                    }
+                }
+            }
+ 
+            return picturesInfoList;
+        }
+
+        private static Dictionary<int, PicturesInfo> GetAllPictureInfos(XSSFSheet sheet, int? minRow, int? maxRow, int? minCol, int? maxCol, bool onlyInternal)
+        {
+            Dictionary<int, PicturesInfo> picturesInfoList = new Dictionary<int, PicturesInfo>();
+ 
+            var documentPartList = sheet.GetRelations(); 
+            foreach (var documentPart in documentPartList)
+            {
+                if (documentPart is XSSFDrawing)
+                {
+                    var drawing = (XSSFDrawing)documentPart; 
+                    var shapeList = drawing.GetShapes();
+                    foreach (var shape in shapeList)
+                    {
+                        if (shape is XSSFPicture)
+                        {
+                            var picture = (XSSFPicture)shape;
+                            var anchor = picture.GetPreferredSize();
+                        
+                            if (IsInternalOrIntersect(minRow, maxRow, minCol, maxCol, anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, onlyInternal))
+                            {
+                                picturesInfoList.Add(anchor.Row1-1,new PicturesInfo(anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, picture.PictureData.Data));
+                            }
+                        }
+                    }
+                }
+            }
+ 
+            return picturesInfoList;
+        }
+
+        private static bool IsInternalOrIntersect(int? rangeMinRow, int? rangeMaxRow, int? rangeMinCol, int? rangeMaxCol,
+            int pictureMinRow, int pictureMaxRow, int pictureMinCol, int pictureMaxCol, bool onlyInternal)
+        {
+            int _rangeMinRow = rangeMinRow ?? pictureMinRow;
+            int _rangeMaxRow = rangeMaxRow ?? pictureMaxRow;
+            int _rangeMinCol = rangeMinCol ?? pictureMinCol;
+            int _rangeMaxCol = rangeMaxCol ?? pictureMaxCol;
+ 
+            if (onlyInternal)
+            {
+                return (_rangeMinRow <= pictureMinRow && _rangeMaxRow >= pictureMaxRow &&
+                        _rangeMinCol <= pictureMinCol && _rangeMaxCol >= pictureMaxCol);
+            }
+            else
+            {
+                return ((Math.Abs(_rangeMaxRow - _rangeMinRow) + Math.Abs(pictureMaxRow - pictureMinRow) >= Math.Abs(_rangeMaxRow + _rangeMinRow - pictureMaxRow - pictureMinRow)) &&
+                (Math.Abs(_rangeMaxCol - _rangeMinCol) + Math.Abs(pictureMaxCol - pictureMinCol) >= Math.Abs(_rangeMaxCol + _rangeMinCol - pictureMaxCol - pictureMinCol)));
+            }
         }
     }
    

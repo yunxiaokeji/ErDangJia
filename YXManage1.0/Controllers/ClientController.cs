@@ -138,12 +138,12 @@ namespace YXManage.Controllers
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             Clients model = serializer.Deserialize<Clients>(client);
             int result;
-
+            string userid = "";
             if (string.IsNullOrEmpty(model.ClientID))
 
             {
                 string clientid = ClientBusiness.InsertClient(EnumRegisterType.Manage,EnumAccountType.UserName,loginName,loginName,model.CompanyName,model.ContactName,model.MobilePhone,"",
-                                  model.Industry, model.CityCode, model.Address, model.Description, "", "", "", "", out result);
+                                  model.Industry, model.CityCode, model.Address, model.Description, "", "", "", "", out result, out userid);
                 JsonDictionary.Add("Result", result);
                 JsonDictionary.Add("ClientID", clientid);
             }
@@ -151,7 +151,7 @@ namespace YXManage.Controllers
             {
                 bool flag = ClientBusiness.UpdateClient(model, CurrentUser.UserID);
 
-                JsonDictionary.Add("Result", flag?1:0);
+                JsonDictionary.Add("Result", flag ? 1 : 0);
             }
 
             return new JsonResult()

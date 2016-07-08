@@ -104,6 +104,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -114,6 +116,22 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
+    <Content Include="modules\css\base.css" />
+    <Content Include="modules\css\home\login.css" />
+    <Content Include="modules\css\iconfont\demo.css" />
+    <Content Include="modules\css\iconfont\demo.html" />
+    <Content Include="modules\css\iconfont\iconfont.css" />
+    <Content Include="modules\css\iconfont\iconfont.svg" />
+    <Content Include="modules\css\layout.css" />
+    <Content Include="modules\css\product\product.css" />
+    <Content Include="modules\images\logo_login.png" />
+    <Content Include="modules\scripts\font.js" />
+    <Content Include="modules\scripts\global.js" />
+    <Content Include="modules\scripts\home\login.js" />
+    <Content Include="modules\scripts\products\product.js" />
+    <Content Include="Scripts\jquery-1.11.1.js" />
+    <Content Include="Scripts\sea-config.js" />
+    <Content Include="Scripts\sea.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -125,11 +143,33 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
+    <Folder Include="modules\plug\" />
+    <Folder Include="modules\template\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="modules\css\iconfont\iconfont.eot" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="modules\css\iconfont\iconfont.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="modules\css\iconfont\iconfont.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Product\ProductsLists.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

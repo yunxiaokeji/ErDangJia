@@ -1071,7 +1071,7 @@ namespace CloudSalesBusiness
         {
             var model = GetOrderTypeByID(typeid, agentid, clientid);
 
-            bool bl = CommonBusiness.Update("OrderType", "Status", "9", "TypeID='" + typeid + "'");
+            bool bl = SystemDAL.BaseProvider.DeleteOrderType(typeid, clientid);
             if (bl)
             {
                 OrderTypes[clientid].Remove(model);

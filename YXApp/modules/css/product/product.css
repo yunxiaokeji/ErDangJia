@@ -1,0 +1,2 @@
+﻿.main-module { display: -webkit-box; display: -moz-box; }
+.main-module li { -webkit-box-flex:1;-moz-box-flex:1;text-align:center;}

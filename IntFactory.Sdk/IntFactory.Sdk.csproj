@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BC180ED7-4C16-4974-89FB-0894016F58FF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IntFactory.Sdk</RootNamespace>
+    <AssemblyName>IntFactory.Sdk</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Business\CustomerBusiness.cs" />
+    <Compile Include="Common\ApiOption.cs" />
+    <Compile Include="AppConfig.cs" />
+    <Compile Include="Business\OauthBusiness.cs" />
+    <Compile Include="Business\TaskBusiness.cs" />
+    <Compile Include="Business\UserBusiness.cs" />
+    <Compile Include="Entity\Customer\CustomerEntity.cs" />
+    <Compile Include="Entity\Customer\CustomerResult.cs" />
+    <Compile Include="Entity\Product\ProductBaseEntity.cs" />
+    <Compile Include="Entity\Order\OrderBaseEntity.cs" />
+    <Compile Include="Entity\Order\ProcessEntity.cs" />
+    <Compile Include="Entity\Order\ProcessListResult.cs" />
+    <Compile Include="Entity\Order\ProcessStageEntity.cs" />
+    <Compile Include="Entity\Order\ProcessStageListResult.cs" />
+    <Compile Include="Entity\Task\FilterTasks.cs" />
+    <Compile Include="Entity\Task\TaskDetailEntity.cs" />
+    <Compile Include="Entity\Task\TaskDetailResult.cs" />
+    <Compile Include="Entity\Task\TaskReplyEntity.cs" />
+    <Compile Include="Entity\Task\TaskReplyListResult.cs" />
+    <Compile Include="Entity\Task\TaskLogEntity.cs" />
+    <Compile Include="Entity\Task\TaskLogListResult.cs" />
+    <Compile Include="Entity\Order\OrderBaseResult.cs" />
+    <Compile Include="Entity\Task\TaskListResult.cs" />
+    <Compile Include="Entity\Token\TokenResult.cs" />
+    <Compile Include="Entity\User\MemberEntity.cs" />
+    <Compile Include="Entity\User\MemberJson.cs" />
+    <Compile Include="Entity\User\MemberResult.cs" />
+    <Compile Include="Entity\UserBase.cs" />
+    <Compile Include="Entity\User\UserLoginResult.cs" />
+    <Compile Include="Http\HttpRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\Signature.cs" />
+    <Compile Include="OperateResult\UpdateResult.cs" />
+    <Compile Include="OperateResult\AddResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entity\Common\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

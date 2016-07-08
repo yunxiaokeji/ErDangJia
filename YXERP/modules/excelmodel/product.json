@@ -6,7 +6,7 @@
             "hide": false,
             "format": true,
             "exporttype": -1,
-			"testexporttype": -1,			
+			"testexporttype": 7,			
 			"datasource":"DropSourceList|3",
 			"importtype":14,
 			"importcolumn":"CategoryID",
@@ -44,7 +44,7 @@
             "exporttype": 10,
 			"testexporttype": 10,
 			"datasource":"",
-			"importtype":-1,
+			"importtype":19,
 			"importcolumn":"",
 			"datatype":"string",
 			"defaulttext":"C:/Users/admin/Desktop/色卡.png"

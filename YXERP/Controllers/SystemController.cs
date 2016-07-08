@@ -796,7 +796,6 @@ namespace YXERP.Controllers
             {
                 int bl = SystemBusiness.BaseBusiness.UpdateClientIndustry(model.AgentID, model.ClientID, model.ClientIndustryID, model.Name, model.Description);
                 result = bl > 0 ? result :"修改失败";
-              
             }
             JsonDictionary.Add("result", result);
             return new JsonResult
@@ -810,6 +809,65 @@ namespace YXERP.Controllers
         public JsonResult DeleteClientIndustry(string clientindustryid)
         {
             bool result = SystemBusiness.BaseBusiness.DeleteClientIndustry(CurrentUser.ClientID,CurrentUser.AgentID, clientindustryid); 
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        #endregion
+
+        #region 客户会员等级
+        /// <summary>
+        /// 获取客户来源列表
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetClientMemberLevel()
+        {
+
+            var list = new SystemBusiness().GetClientMemberLevel(CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult SaveClientMemberLevel(string clientmemberlevel)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ClientMemberLevel model = serializer.Deserialize<ClientMemberLevel>(clientmemberlevel);
+            model.CreateUserID = CurrentUser.UserID;
+            model.ClientID = CurrentUser.ClientID;
+            model.AgentID = CurrentUser.AgentID;
+            model.Status = 1;
+            string result = "";
+            if (string.IsNullOrEmpty(model.LevelID))
+            {
+                string mes = SystemBusiness.BaseBusiness.CreateClientMemberLevel(Guid.NewGuid().ToString(),
+                    model.Name.Trim(),model.AgentID, model.ClientID, model.CreateUserID,model.DiscountFee,
+                    model.IntegFeeMore, model.Status, model.ImgUrl);
+                result = string.IsNullOrEmpty(mes) ? result : mes;
+            }
+            else
+            {
+                result = SystemBusiness.BaseBusiness.UpdateClientMemberLevel(model.ClientID, model.LevelID, 
+                    model.Name, model.DiscountFee, model.IntegFeeMore,model.ImgUrl);
+            }
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult DeleteClientMemberLevel(string levelid)
+        {
+            string result = SystemBusiness.BaseBusiness.DeleteClientMemberLevel(CurrentUser.ClientID, CurrentUser.AgentID, levelid);
             JsonDictionary.Add("result", result);
             return new JsonResult
             {

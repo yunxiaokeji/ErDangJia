@@ -84,6 +84,32 @@ namespace CloudSalesBusiness
             return Convert.ToInt32(count) > 0;
         }
 
+        public static bool IsExistOtherAccount(EnumAccountType type, string account, string companyid)
+        {
+            if (string.IsNullOrEmpty(account))
+            {
+                return false;
+            }
+
+            string where = " AccountName='" + account + "' and AccountType =" + (int)type;
+
+            if (type == EnumAccountType.MingDao)
+            {
+                where += " and ProjectID='" + companyid + "'";
+            }
+            object count = CommonBusiness.Select("UserAccounts", "count(0)", where);
+            return Convert.ToInt32(count) > 0;
+        }
+
+        public static bool ConfirmLoginPwd(string userid, string loginname, string pwd)
+        {
+            pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
+
+            object obj = CommonBusiness.Select("Users", "Count(0)", " UserID='" + userid + "' and LoginPWD='" + pwd + "' ");
+
+            return Convert.ToInt32(obj) > 0;
+        }
+
         public static Users GetUserByUserName(string loginname, string pwd, out int result, string operateip)
         {
             pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
@@ -148,15 +174,6 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public static bool ConfirmLoginPwd(string userid, string loginname, string pwd)
-        {
-            pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
-
-            object obj = CommonBusiness.Select("Users", "Count(0)", " UserID='" + userid + "' and LoginPWD='" + pwd + "' ");
-
-            return Convert.ToInt32(obj) > 0;
-        }
-
         public static Users GetUserByMDUserID(string mduserid, string mdprojectid, string operateip)
         {
             DataSet ds = new OrganizationDAL().GetUserByMDUserID(mduserid,mdprojectid);
@@ -213,7 +230,7 @@ namespace CloudSalesBusiness
             //记录登录日志
             if (model != null)
             {
-                LogBusiness.AddLoginLog(mduserid, true, Manage.ClientBusiness.GetClientDetail(model.ClientID).AgentID == model.AgentID ? CloudSalesEnum.EnumSystemType.Client : CloudSalesEnum.EnumSystemType.Agent, operateip, model.UserID, model.AgentID, model.ClientID);
+                LogBusiness.AddLoginLog(mduserid, true, model.Agents.IsDefault == 1 ? EnumSystemType.Client : EnumSystemType.Agent, operateip, model.UserID, model.AgentID, model.ClientID);
             }
             else
             {

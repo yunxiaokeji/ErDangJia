@@ -134,12 +134,13 @@ namespace YXERP.Controllers
                         if (!bl)
                         {
                             int result = 0;
+                            string userid = "";
                             Clients clientModel = new Clients();
                             clientModel.CompanyName = user.user.project.name;
                             clientModel.ContactName = user.user.name;
                             clientModel.MobilePhone = user.user.mobile_phone;
                             var clientid = ClientBusiness.InsertClient(EnumRegisterType.MingDao, EnumAccountType.MingDao, user.user.id, "", user.user.project.name, user.user.name,
-                                                                       user.user.mobile_phone, user.user.email, "", "", "", "", user.user.project.id, "", "", "", out result);
+                                                                       user.user.mobile_phone, user.user.email, "", "", "", "", user.user.project.id, "", "", "", out result, out userid);
                             if (!string.IsNullOrEmpty(clientid))
                             {
                                 var current = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip);
@@ -297,13 +298,15 @@ namespace YXERP.Controllers
             else
             {
                 bl = Common.Common.ValidateMobilePhoneCode(loginName, code);
-                if (!bl){
+                if (!bl)
+                {
                     result = 3;
                 }
                 else
                 {
+                    string userid = "";
                     //自助注册
-                    ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result);
+                    ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result, out userid);
 
                     if (result == 1)
                     {

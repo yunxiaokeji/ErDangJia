@@ -35,12 +35,14 @@ namespace CloudSalesDAL.Manage
         #region 添加
 
         public string InsertClient(int registerType, int accountType, string account, string loginPwd, string clientName, string contactName, string mobile, string email, string industry, string cityCode, string address, string remark,
-                                          string companyid, string companyCode, string customerid, string operateid, out int result)
+                                          string companyid, string companyCode, string customerid, string operateid, out int result, out string userid)
         {
-            string clientid = Guid.NewGuid().ToString();
+            string clientid = Guid.NewGuid().ToString().ToLower();
+            userid = Guid.NewGuid().ToString().ToLower();
             result = 0;
             SqlParameter[] parms = { 
                                        new SqlParameter("@Result",result),
+                                       new SqlParameter("@UserID",userid),
                                        new SqlParameter("@ClientID",clientid),
                                        new SqlParameter("@ClientCode",GetCode(8)),
                                        new SqlParameter("@RegisterType",registerType),
@@ -61,11 +63,19 @@ namespace CloudSalesDAL.Manage
                                        new SqlParameter("@CreateUserID",operateid)
                                    };
             parms[0].Direction = ParameterDirection.Output;
-
             ExecuteNonQuery("M_InsertClient", parms, CommandType.StoredProcedure);
 
             result = Convert.ToInt32(parms[0].Value);
-            return clientid;
+            if (result == 1)
+            {
+                return clientid;
+            }
+            else
+            {
+                userid = "";
+                return "";
+            }
+            
         }
 
         public bool InsertClientAuthorizeLog(string clientID, string agentID, string orderID, int userQuantity, DateTime? beginTime, DateTime? endTime, int type)

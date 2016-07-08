@@ -433,6 +433,16 @@ namespace CloudSalesDAL
             return bl;
         }
 
+        public bool DeleteOrderType(string typeid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@TypeID",typeid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            bool bl = ExecuteNonQuery("P_DeleteOrderType", paras, CommandType.StoredProcedure) > 0;
+            return bl;
+        }
+
         public bool DeleteTeam(string teamid, string userid, string agentid)
         {
             SqlParameter[] paras = { 

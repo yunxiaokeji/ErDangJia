@@ -33,7 +33,9 @@
                 _self.deleteModel(_this.data("id"), function (status) {
                     if (status == 1) {
                         _self.getList();
-                    } 
+                    } else {
+                        alert("订单类型存在关联数据，不能删除");
+                    }
                 });
             });
         });

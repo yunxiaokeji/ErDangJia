@@ -453,18 +453,20 @@ namespace YXERP.Controllers
             {
                 saleattr = saleattr.Substring(0, saleattr.Length - 1);
             }
-            Category result;
+            int result = 0;
+
             if (string.IsNullOrEmpty(model.CategoryID))
             {
-                result = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                model = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
             }
             else
             {
-                result = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                model = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.CategoryCode, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
             }
 
-            JsonDictionary.Add("status", result != null);
-            JsonDictionary.Add("model", result);
+            JsonDictionary.Add("status", result == 1);
+            JsonDictionary.Add("model", model);
+            JsonDictionary.Add("result", result);
 
             return new JsonResult
             {

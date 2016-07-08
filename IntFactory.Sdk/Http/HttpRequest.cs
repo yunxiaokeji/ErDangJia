@@ -18,12 +18,22 @@ namespace IntFactory.Sdk
             string urlPath = GetEnumDesc<ApiOption>(apiOption);
             string url = AppConfig.ApiUrl+ urlPath;
             string paraStr = string.Empty;
-            
-            if (paras != null && paras.Count > 0)
-                paraStr +=CreateParameterStr(paras);
+            string userID = string.Empty;
+            if (paras.ContainsKey("userID"))
+            {
+                userID = paras["userID"].ToString();
+            }
+            else
+            {
+                userID = "BC6802E9-285C-471C-8172-3867C87803E2";
+                paras.Add("userID", userID);
+            }
 
+            if (paras != null && paras.Count > 0)
+            {
+                paraStr += CreateParameterStr(paras);
+            }
             //签名认证
-            string userID = paras["userID"].ToString();
             string signature = Signature.GetSignature(AppConfig.AppKey, AppConfig.AppSecret, userID);
             paraStr += "signature=" + signature;
 

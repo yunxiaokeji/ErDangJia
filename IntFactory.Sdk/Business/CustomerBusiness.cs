@@ -28,7 +28,7 @@ namespace IntFactory.Sdk
             return HttpRequest.RequestServer<CustomerResult>(ApiOption.GetCustomerByMobilePhone, paras);
         }
 
-        public CustomerResult SetCustomerYXinfo(string customerID, string clientID, string yxAgentID, string yxClientID, string yxClientCode)
+        public UpdateResult SetCustomerYXinfo(string customerID, string clientID, string yxAgentID, string yxClientID, string yxClientCode)
         {
             var paras = new Dictionary<string, object>();
             paras.Add("customerID", customerID);
@@ -37,7 +37,7 @@ namespace IntFactory.Sdk
             paras.Add("yxClientID", yxClientID);
             paras.Add("yxClientCode", yxClientCode);
 
-            return HttpRequest.RequestServer<CustomerResult>(ApiOption.SetCustomerYXinfo, paras);
+            return HttpRequest.RequestServer<UpdateResult>(ApiOption.SetCustomerYXinfo, paras);
         }
     }
 }

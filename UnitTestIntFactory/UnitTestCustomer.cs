@@ -14,7 +14,7 @@ namespace UnitTestIntFactory
         public void GetCustomerByID()
         {
             var result = CustomerBusiness.BaseBusiness.GetCustomerByID(customerid, agentID);
-            Assert.IsNotNull(result.customer.CustomerID);
+            Assert.IsNotNull(result.customer.customerID);
             //Assert.IsTrue(result.error_code==0);
         }
 

@@ -1,0 +1,49 @@
+﻿body { background-color:#fff;}
+
+header { width:100%;background-color:#4a98e7;line-height:60px;color:#fff;}
+header .task-text {color:#373737;text-align:center;}
+
+#upAndDownModule { position:fixed;width:100%;height:100%;display:-webkit-box;display:-moz-box;-webkit-box-orient:vertical;-moz-box-orient:vertical;}
+#upAndDownModule .main-content { -webkit-box-flex: 1; -moz-box-flex: 1; width:100%;margin-top:60px;margin-bottom:100px;overflow-y:scroll;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;}
+#upAndDownModule header, #upAndDownModule footer { left:0;position:fixed;width:100%;}
+#upAndDownModule header {top:0;height:60px;line-height:60px;}
+#upAndDownModule footer {bottom: 0; border-top: 1px solid #ccc; height: 100px; line-height: 100px; }
+
+/*alert 弹出层样式*/
+.alert-layer {position: fixed; z-index:99998; top:0; left:0;right:0; bottom:0; background-color:#666; opacity:0.6;}
+
+.alert { border: 1px solid #2F73B8; background-color: #fff; font-size: 13px; position: fixed; top:35%; z-index: 99999; 
+         min-width: 330px; max-width:450px; box-shadow: 0 0 2px #666; overflow:auto; }
+
+.alert .alert-header { height:30px;line-height:30px; font-weight:bold; font-size:14px; color:#fff; text-indent:15px; background-color:#2F73B8;}
+.alert .alert-wrap { line-height:20px; margin:20px 15px;word-wrap: break-word;  word-break:break-all; text-align:center; }
+.alert .alert-bottom { height:25px; margin:10px 15px 15px; text-align:center; }
+
+.alert .confirm { padding:5px 10px; background-color:#4a98e7; color:#fff; border:none; cursor:pointer; display:inline-block; border-radius:2px; }
+.alert .confirm:hover {  background-color:#2F73B8;  }
+.alert .close { padding:5px 10px; background-color:#ccc; color:#666; border:none; cursor:pointer; display:inline-block; border-radius:2px; }
+.alert .close:hover {  background-color:#999; color:#fff; }
+
+/*删除 叉*/
+.ico-delete{ background:url(/modules/images/ico-delete.png) no-repeat; height:30px; min-width:30px; line-height:30px; 
+    cursor:pointer;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #fff;
+    border-radius:50%;
+    background-size:30px;
+}
+.ico-delete-file{
+    position: absolute;
+    top: -14px;
+    right: -8px;
+    font-size: 14px !important;
+    height: 28px;
+    line-height: 30px;
+    color: #999;
+    cursor: pointer;
+    background-color: #fff;
+    border: 0;
+    margin-top: 5px;
+}

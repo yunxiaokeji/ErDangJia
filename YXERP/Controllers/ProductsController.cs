@@ -826,13 +826,13 @@ namespace YXERP.Controllers
             }
             try
             {
-                DataTable dt = ImportExcelToDataTable(file);
+                ///1.获取系统模版列 
+                Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+                Dictionary<string, ExcelModel> listColumn = GetColumnForJson("product", ref dic, "", "import", CurrentUser.ClientID);
+                Dictionary<int, PicturesInfo> imgList;
+                DataTable dt = ImportExcelToDataTable(file, out imgList, dic);
                 if (dt.Columns.Count > 0)
-                {
-                    ///1.获取系统模版列 
-                    Dictionary<string, ExcelFormatter> dic=new Dictionary<string, ExcelFormatter>();
-                    Dictionary<string, ExcelModel> listColumn = GetColumnForJson("product", ref dic, "",  "import", CurrentUser.ClientID);
-                    ;//GetColumnForJson("product", "Item");
+                { 
                     ///2.上传Excel 与模板中列是否一致 不一致返回提示
                     foreach (DataColumn dc in dt.Columns)
                     {
@@ -869,7 +869,7 @@ namespace YXERP.Controllers
                     {
                         if (list.Count > 0)
                         {
-                            mes= ExcelImportBusiness.InsertProduct(list);
+                            mes= ExcelImportBusiness.InsertProduct(list,imgList);
                         }
                         if (!string.IsNullOrEmpty(mes))
                         {

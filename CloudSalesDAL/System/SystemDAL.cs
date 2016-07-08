@@ -46,6 +46,27 @@ namespace CloudSalesDAL
             return dt;
         }
 
+        public DataTable GetClientMemberLevel(string clientid)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+
+            DataTable dt = GetDataTable("select * from ClientMemberLevel where ClientID=@ClientID and Status=1 order by Origin", paras, CommandType.Text);
+
+            return dt;
+        }
+
+        public DataTable GetClientMemberLevelByLevelID(string levelID)
+        {
+            string sqlText = "select * from ClientMemberLevel where LevelID=@LevelID and Status=1";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@LevelID",levelID)
+                                   };
+
+            return GetDataTable(sqlText, paras, CommandType.Text);
+        }
+
         public DataTable GetClientIndustryByID(string clientIndustryID)
         {
             string sqlText = "select * from ClientsIndustry where ClientIndustryID=@clientIndustryID and Status=1";
@@ -327,7 +348,26 @@ namespace CloudSalesDAL
                                    };
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
-
+        public string InsertClientMemberLevel(string levelid, string name, string clientid, string agentid,
+         string userid, decimal discountfee, decimal integfeemore, ref int origin, int status = 1, string imgurl="")
+        {
+           SqlParameter[] paras = { 
+                                     new SqlParameter("@result" , SqlDbType.VarChar,300),
+                                     new SqlParameter("@LevelID" , levelid),
+                                     new SqlParameter("@Name" , name),
+                                     new SqlParameter("@ClientID" , clientid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@DiscountFee" , discountfee),
+                                     new SqlParameter("@IntegFeeMore" , integfeemore),
+                                     new SqlParameter("@Status" , status),
+                                     new SqlParameter("@CreateUserID" , userid),
+                                      new SqlParameter("@ImgUrl",imgurl), 
+                                    
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            origin= ExecuteNonQuery("P_InsertClientMemberLevel", paras, CommandType.StoredProcedure);
+            return Convert.ToString(paras[0].Value);
+        }
         #endregion
 
         #region 编辑/删除
@@ -370,7 +410,6 @@ namespace CloudSalesDAL
             bool bl = ExecuteNonQuery(sqltext, paras, CommandType.Text) > 0;
             return bl;
         }
-
         public bool DeleteClientIndustry(string clientid, string clientindustryid)
         {
             SqlParameter[] paras = { 
@@ -379,6 +418,32 @@ namespace CloudSalesDAL
                                    };
             bool bl = ExecuteNonQuery("P_DeleteClientIndustry", paras, CommandType.StoredProcedure) > 0;
             return bl;
+        }
+        public string UpdateClientMemberLevel(string clientid, string levelid, string name, decimal discountfee, decimal integfeemore, string imgurl="")
+        {  
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@result" , SqlDbType.VarChar,300),
+                                     new SqlParameter("@LevelID",levelid),
+                                     new SqlParameter("@Name",name), 
+                                     new SqlParameter("@DiscountFee" , discountfee),
+                                     new SqlParameter("@IntegFeeMore" , integfeemore),
+                                     new SqlParameter("@ClientID" , clientid),
+                                     new SqlParameter("@ImgUrl",imgurl), 
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_UpdateClientMemberLevel", paras, CommandType.StoredProcedure);
+            return paras[0].Value.ToString(); ;
+        }
+        public string DeleteClientMemberLevel(string clientid, string levelid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@result" , SqlDbType.VarChar,300),
+                                     new SqlParameter("@LevelID",levelid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery("P_DeleteClientMemberLevel", paras, CommandType.StoredProcedure);
+            return paras[0].Value.ToString();
         } 
 
         public bool UpdateCustomStage(string stageid, string stagename, string clientid)

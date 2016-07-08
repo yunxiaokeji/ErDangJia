@@ -133,7 +133,20 @@ namespace YXERP.Controllers
         /// <returns></returns>
         public DataTable ImportExcelToDataTable(HttpPostedFileBase file,Dictionary<string,ExcelFormatter> formatColumn=null)
         {
+            Dictionary<int, PicturesInfo> ImgList;
+            return ImportExcelBase(file, out ImgList, formatColumn);
+        }
+
+        public DataTable ImportExcelToDataTable(HttpPostedFileBase file, out Dictionary<int, PicturesInfo> ImgList,
+            Dictionary<string, ExcelFormatter> formatColumn = null)
+        {
+            return ImportExcelBase(file, out ImgList, formatColumn);
+        }
+
+        public DataTable ImportExcelBase(HttpPostedFileBase file, out Dictionary<int, PicturesInfo> ImgList, Dictionary<string, ExcelFormatter> formatColumn = null)
+        {
             var datatable = new DataTable();
+            ImgList=new Dictionary<int, PicturesInfo>();
             if (file.FileName.IndexOf("xlsx") > -1)
             {
                 NPOI.XSSF.UserModel.XSSFWorkbook Upfile = new NPOI.XSSF.UserModel.XSSFWorkbook(file.InputStream);
@@ -144,6 +157,7 @@ namespace YXERP.Controllers
                 {
                     datatable.Columns.Add(firstRow.GetCell(cellIndex).StringCellValue, typeof(string));
                 }
+                bool imgForm = true;
                 for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
                 {
                     DataRow datarow = datatable.NewRow();
@@ -155,10 +169,15 @@ namespace YXERP.Controllers
                     bool con = true;
                     for (int j = row.FirstCellNum; j < row.LastCellNum; j++)
                     {
-                        //if (formatColumn!=null && formatColumn.ContainsKey(firstRow.GetCell(j).StringCellValue))
-                        //{
-                           
-                        //}
+                        if (formatColumn != null  && formatColumn.Values.Where(x => x.ColumnName == firstRow.GetCell(j).StringCellValue).Any())
+                        {
+                            ExcelFormatter excelFormatter = formatColumn.Values.Where(x => x.ColumnName == firstRow.GetCell(j).StringCellValue).FirstOrDefault();
+                            if (excelFormatter.ColumnTrans.Equals(EnumColumnTrans.ConvertImportImage) && imgForm)
+                            {
+                                ImgList = NPOIExtendImg.GetAllPictureInfos(sheet);
+                                imgForm = false;
+                            }
+                        }
                         var cell = row.GetCell(j);
                         if (cell == null)
                         {
@@ -424,6 +443,7 @@ namespace YXERP.Controllers
                             }
                             formatColumn.Add(keyvalue.Key.ToLower(), new ExcelFormatter()
                             {
+                                ColumnName = excelModel.Title,
                                 ColumnTrans =
                                     (EnumColumnTrans)
                                         Enum.Parse(typeof(EnumColumnTrans), columnType.ToString()),

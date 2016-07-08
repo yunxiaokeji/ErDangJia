@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CloudSalesEntity;
-using System.Data; 
+using System.Data;
+using System.IO;
+using System.Web;
 using CloudSalesDAL;
 using CloudSalesDAL.Custom;
 using CloudSalesEnum;
@@ -15,7 +17,11 @@ namespace CloudSalesBusiness
     public class SystemBusiness
     {
         public static SystemBusiness BaseBusiness = new SystemBusiness();
-
+        /// <summary>
+        /// 文件默认存储路径
+        /// </summary>
+        public static string FILEPATH = CloudSalesTool.AppSettings.Settings["UploadFilePath"] + "MemberLevel/" + DateTime.Now.ToString("yyyyMM") + "/";
+        public static string TempPath = CloudSalesTool.AppSettings.Settings["UploadTempPath"];
         #region Cache
 
         private static Dictionary<string, List<CustomSourceEntity>> _source;
@@ -25,6 +31,19 @@ namespace CloudSalesBusiness
         private static Dictionary<string, List<TeamEntity>> _teams;
         private static Dictionary<string, List<WareHouse>> _wares;
         private static Dictionary<string, List<ClientsIndustry>> _clientInsdutryList;
+        private static Dictionary<string, List<ClientMemberLevel>> _clientMemberLevelList;
+
+        public static Dictionary<string, List<ClientMemberLevel>> ClientMemberLevelList
+        {
+            get
+            {
+                if (_clientMemberLevelList == null)
+                {
+                    _clientMemberLevelList = new Dictionary<string, List<ClientMemberLevel>>();
+                }
+                return _clientMemberLevelList;
+            }
+        }
 
         public static Dictionary<string, List<ClientsIndustry>> ClientIndustryList
         {
@@ -199,6 +218,48 @@ namespace CloudSalesBusiness
 
         }
 
+        public List<ClientMemberLevel> GetClientMemberLevel(string agentid, string clientid)
+        {
+            if (ClientMemberLevelList.ContainsKey(clientid))
+            {
+                return ClientMemberLevelList[clientid];
+            }
+
+            List<ClientMemberLevel> list = new List<ClientMemberLevel>();
+            DataTable dt = SystemDAL.BaseProvider.GetClientMemberLevel(clientid);
+            foreach (DataRow dr in dt.Rows)
+            {
+                ClientMemberLevel model = new ClientMemberLevel();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                list.Add(model);
+            }
+            ClientMemberLevelList.Add(clientid, list);
+            return list;
+
+        }
+        public ClientMemberLevel GetClientMemberLevelByID(string levelid, string agentid, string clientid)
+        {
+            if (string.IsNullOrEmpty(levelid))
+            {
+                return null;
+            }
+            var list = GetClientMemberLevel(agentid, clientid);
+            if (list.Where(m => m.LevelID == levelid).Count() > 0)
+            {
+                return list.Where(m => m.LevelID == levelid).FirstOrDefault();
+            }
+
+            ClientMemberLevel model = new ClientMemberLevel();
+            DataTable dt = SystemDAL.BaseProvider.GetClientMemberLevelByLevelID(levelid);
+            if (dt.Rows.Count > 0)
+            {
+                model.FillData(dt.Rows[0]);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                list.Add(model);
+            }
+            return model;
+        }
         public ClientsIndustry GetClientIndustryByName(string name, string agentid,string clientid)
         {
             if (string.IsNullOrEmpty(name))
@@ -603,6 +664,32 @@ namespace CloudSalesBusiness
             }
             return "";
         }
+        public string CreateClientMemberLevel(string levelid, string name, string agentid, string clientid, string userid, decimal discountfee, decimal integfeemore, int status = 1, string imgurl="")
+        {
+            imgurl = GetUploadImgurl(imgurl);
+            int origin = 1;
+            string result = SystemDAL.BaseProvider.InsertClientMemberLevel(levelid, name, clientid, agentid, userid, discountfee, integfeemore, ref origin, status, imgurl);
+            if (string.IsNullOrEmpty(result))
+            {
+                var list = GetClientMemberLevel(agentid, clientid);
+                list.Add(new ClientMemberLevel()
+                {
+                    AgentID = agentid,
+                    LevelID = levelid,
+                    DiscountFee = discountfee,
+                    Name = name,
+                    ImgUrl = imgurl,
+                    Origin = origin,
+                    ClientID = clientid,
+                    IntegFeeMore = integfeemore, 
+                    CreateUserID = userid,
+                    CreateTime = DateTime.Now,
+                    CreateUser = OrganizationBusiness.GetUserByUserID(userid, agentid),
+                    Status = 0
+                });
+            }
+            return result;
+        }
         
         public string CreateStageItem(string name, string stageid, string userid, string agentid, string clientid)
         {
@@ -816,7 +903,34 @@ namespace CloudSalesBusiness
             }
             return result ? 1 : 0;
         }
-
+        public string UpdateClientMemberLevel(string clientid, string levelid, string name, decimal discountfee, decimal integfeemore, string imgurl)
+        {
+            var model = GetClientMemberLevelByID(levelid, "",clientid);
+            if (model == null)
+            {
+                return "会员等级已被删除,操作失败";
+            }
+            imgurl=GetUploadImgurl(imgurl);
+            string result = SystemDAL.BaseProvider.UpdateClientMemberLevel(clientid, levelid, name, discountfee, integfeemore, imgurl);
+            if (string.IsNullOrEmpty(result))
+            {
+                model.Name = name;
+                model.DiscountFee = discountfee;
+                model.IntegFeeMore = integfeemore;
+                model.ImgUrl = imgurl;
+            }
+            return result;
+        }
+        public string DeleteClientMemberLevel(string clientid, string agentid, string levelid)
+        {
+            var model = GetClientMemberLevelByID(levelid, agentid, clientid);
+            string bl = SystemDAL.BaseProvider.DeleteClientMemberLevel(clientid, levelid);
+            if (string.IsNullOrEmpty(bl))
+            {
+                ClientMemberLevelList[clientid].Remove(model);
+            }
+            return bl;
+        }
         public bool DeleteClientIndustry(string clientid,string agentid, string clientindustryid)
         {
             var model = GetClientIndustryByID(clientindustryid, agentid, clientid);
@@ -1076,5 +1190,27 @@ namespace CloudSalesBusiness
 
         #endregion
 
+        public string GetUploadImgurl(string imgurl)
+        {
+            if (!string.IsNullOrEmpty(imgurl) && imgurl.IndexOf(TempPath) >= 0)
+            {
+                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                if (!directory.Exists)
+                {
+                    directory.Create();
+                }
+                if (imgurl.IndexOf("?") > 0)
+                {
+                    imgurl = imgurl.Substring(0, imgurl.IndexOf("?"));
+                }
+                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(imgurl));
+                imgurl = FILEPATH + file.Name;
+                if (file.Exists)
+                {
+                    file.MoveTo(HttpContext.Current.Server.MapPath(imgurl));
+                }
+            }
+            return imgurl;
+        }
     }
 }

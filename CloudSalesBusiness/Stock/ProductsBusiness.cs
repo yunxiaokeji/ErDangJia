@@ -608,9 +608,9 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public Category AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
+        public Category AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
         {
-            var id = ProductsDAL.BaseProvider.AddCategory(categoryCode, categoryName, pid, status, attrlist, saleattr, description, operateid, clientid);
+            var id = ProductsDAL.BaseProvider.AddCategory(categoryCode, categoryName, pid, status, attrlist, saleattr, description, operateid, clientid, out result);
 
             if (!string.IsNullOrEmpty(id))
             {
@@ -636,13 +636,14 @@ namespace CloudSalesBusiness
             return dal.AddCategoryAttr(categoryid, attrid, type, operateID);
         }
 
-        public Category UpdateCategory(string categoryid, string categoryName, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
+        public Category UpdateCategory(string categoryid, string categoryName, string categoryCode, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
         {
-            bool bl = ProductsDAL.BaseProvider.UpdateCategory(categoryid, categoryName, status, attrlist, saleattr, description, operateid);
+            bool bl = ProductsDAL.BaseProvider.UpdateCategory(categoryid, categoryName, categoryCode, status, attrlist, saleattr, description, operateid, clientid, out result);
             if (bl)
             {
                 var model = GetCategoryByID(categoryid, clientid);
                 model.CategoryName = categoryName;
+                model.CategoryCode = categoryCode;
                 model.Status = status;
                 model.SaleAttr = saleattr;
                 model.AttrList = attrlist;

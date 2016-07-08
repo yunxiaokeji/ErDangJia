@@ -11,11 +11,21 @@ define(function (require, exports, module) {
     //初始化
     ObjectJS.init = function (opportunityid, model, ordertypes) {
         var _self = this;
-        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
-        _self.model.OrderTypes = JSON.parse(ordertypes.replace(/&quot;/g, '"'));
         _self.opportunityid = opportunityid;
-        _self.bindEvent();
-        _self.bindStyle(_self.model);
+
+        try{
+            _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
+            _self.model.OrderTypes = JSON.parse(ordertypes.replace(/&quot;/g, '"'));
+            _self.bindEvent();
+            _self.bindStyle(_self.model);
+        } catch (err) {
+            Global.post("/Opportunitys/GetOpportunityByID", { opportunityid: _self.opportunityid }, function (data) {
+                _self.model = data.model;
+                _self.model.OrderTypes = JSON.parse(ordertypes.replace(/&quot;/g, '"'));
+                _self.bindEvent();
+                _self.bindStyle(_self.model);
+            });
+        }
     }
 
     //样式

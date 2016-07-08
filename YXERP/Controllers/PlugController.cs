@@ -68,7 +68,7 @@ namespace YXERP.Controllers
                 types.Add("image/png", "1");
                 types.Add("image/gif", "1");
                 types.Add("image/jpeg", "1");
-                types.Add("image/tiff", "1");
+                //types.Add("image/tiff", "1");
                 types.Add("application/x-MS-bmp", "1");
                 types.Add("image/pjpeg", "1");
                 if (!types.ContainsKey(ContentType))
@@ -83,7 +83,6 @@ namespace YXERP.Controllers
                 {
                     file.SaveAs(HttpContext.Server.MapPath(oldPath));
                     list.Add(oldPath);
-                   
                 }
                 else 
                 {

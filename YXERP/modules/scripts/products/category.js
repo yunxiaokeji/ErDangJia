@@ -238,8 +238,8 @@ define(function (require, exports, module) {
 
                         var model = {
                             CategoryID: Category.CategoryID,
-                            CategoryCode: "",
-                            CategoryName: $("#categoryName").val(),
+                            CategoryCode: $("#categoryCode").val().trim(),
+                            CategoryName: $("#categoryName").val().trim(),
                             PID: Category.PID,
                             Status: $("#categoryStatus").hasClass("hover") ? 1 : 0,
                             Description: $("#description").val()
@@ -255,6 +255,8 @@ define(function (require, exports, module) {
                             saleattrs += $(this).data("id") + ",";
                         });
                         _self.saveCategory(model, attrs, saleattrs, callback);
+
+                        return false;
                     },
                     callback: function () {
 
@@ -267,6 +269,7 @@ define(function (require, exports, module) {
             //编辑填充数据
             if (Category.CategoryID) {
                 $("#categoryName").val(Category.CategoryName);
+                $("#categoryCode").val(Category.CategoryCode);
                 Category.Status == 1 || $("#categoryStatus").removeClass("hover");
                 $("#description").val(Category.Description);
 
@@ -321,12 +324,22 @@ define(function (require, exports, module) {
             saleattr: saleattrs
         }, function (data) {
             if (data.result == "10001") {
-                alert("您没有此操作权限，请联系管理员帮您添加权限！");
+                alert("您没有此操作权限，请联系管理员帮您添加权限！", function () {
+                    Easydialog.close();
+                });
                 return;
-            }
-            if (data.status) {
+            } else if (data.status) {
                 !!callback && callback(data.model);
+                Easydialog.close();
+            } else if (data.result == 2) {
+                alert("分类编码已存在");
+            } else {
+                alert("保存失败", function () {
+                    Easydialog.close();
+                });
             }
+
+            
         });
     };
 

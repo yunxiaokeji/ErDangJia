@@ -453,18 +453,20 @@ namespace YXERP.Controllers
             {
                 saleattr = saleattr.Substring(0, saleattr.Length - 1);
             }
-            Category result;
+            int result = 0;
+
             if (string.IsNullOrEmpty(model.CategoryID))
             {
-                result = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                model = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
             }
             else
             {
-                result = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
+                model = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.CategoryCode, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
             }
 
-            JsonDictionary.Add("status", result != null);
-            JsonDictionary.Add("model", result);
+            JsonDictionary.Add("status", result == 1);
+            JsonDictionary.Add("model", model);
+            JsonDictionary.Add("result", result);
 
             return new JsonResult
             {
@@ -826,13 +828,13 @@ namespace YXERP.Controllers
             }
             try
             {
-                DataTable dt = ImportExcelToDataTable(file);
+                ///1.获取系统模版列 
+                Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+                Dictionary<string, ExcelModel> listColumn = GetColumnForJson("product", ref dic, "", "import", CurrentUser.ClientID);
+                Dictionary<int, PicturesInfo> imgList;
+                DataTable dt = ImportExcelToDataTable(file, out imgList, dic);
                 if (dt.Columns.Count > 0)
-                {
-                    ///1.获取系统模版列 
-                    Dictionary<string, ExcelFormatter> dic=new Dictionary<string, ExcelFormatter>();
-                    Dictionary<string, ExcelModel> listColumn = GetColumnForJson("product", ref dic, "",  "import", CurrentUser.ClientID);
-                    ;//GetColumnForJson("product", "Item");
+                { 
                     ///2.上传Excel 与模板中列是否一致 不一致返回提示
                     foreach (DataColumn dc in dt.Columns)
                     {
@@ -869,7 +871,7 @@ namespace YXERP.Controllers
                     {
                         if (list.Count > 0)
                         {
-                            mes= ExcelImportBusiness.InsertProduct(list);
+                            mes= ExcelImportBusiness.InsertProduct(list,imgList);
                         }
                         if (!string.IsNullOrEmpty(mes))
                         {

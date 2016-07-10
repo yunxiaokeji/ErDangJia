@@ -98,6 +98,18 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult GetOrderByID(string orderid)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var model = OrdersBusiness.BaseBusiness.GetOrderByID(orderid, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("model", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public JsonResult Create(string customerid, string typeid, string name, string mobile, string cityCode, string address, string remark)
         {
             string orderid = OrdersBusiness.BaseBusiness.CreateOrder(customerid, typeid, name, mobile, cityCode, address, remark, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);

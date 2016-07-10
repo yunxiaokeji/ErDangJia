@@ -13,9 +13,18 @@ define(function (require, exports, module) {
         var _self = this;
         _self.orderid = orderid;
         _self.status = status;
-        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
-        _self.bindEvent();
-        _self.bindCache();
+
+        try {
+            _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
+            _self.bindEvent();
+            _self.bindCache();
+        } catch (err) {
+            Global.post("/Orders/GetOrderByID", { orderid: _self.orderid }, function (data) {
+                _self.model = data.model;
+                _self.bindEvent();
+                _self.bindCache();
+            });
+        }
     }
 
     ObjectJS.bindCache = function () {

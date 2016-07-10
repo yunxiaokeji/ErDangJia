@@ -400,11 +400,12 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public string AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid)
+        public string AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
         {
             string id = "";
             SqlParameter[] paras = { 
                                        new SqlParameter("@CategoryID",SqlDbType.NVarChar,64),
+                                       new SqlParameter("@Result",SqlDbType.Int),
                                        new SqlParameter("@CategoryCode",categoryCode),
                                        new SqlParameter("@CategoryName",categoryName),
                                        new SqlParameter("@PID",pid),
@@ -417,9 +418,10 @@ namespace CloudSalesDAL
                                    };
             paras[0].Value = id;
             paras[0].Direction = ParameterDirection.InputOutput;
-
+            paras[1].Direction = ParameterDirection.Output;
             ExecuteNonQuery("P_InsertCategory", paras, CommandType.StoredProcedure);
             id = paras[0].Value.ToString();
+            result = Convert.ToInt32(paras[1].Value);
             return id;
         }
 
@@ -434,20 +436,25 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddCategoryAttr", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public bool UpdateCategory(string categoryid, string categoryName, int status, string attrlist, string saleattr, string description, string operateid)
+        public bool UpdateCategory(string categoryid, string categoryName, string categoryCode, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
         {
             string sql = "P_UpdateCategory";
             SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",SqlDbType.Int),
                                        new SqlParameter("@CategoryID",categoryid),
                                        new SqlParameter("@CategoryName",categoryName),
+                                       new SqlParameter("@CategoryCode",categoryCode),
                                        new SqlParameter("@Status",status),
                                        new SqlParameter("@AttrList",attrlist),
                                        new SqlParameter("@SaleAttr",saleattr),
                                        new SqlParameter("@UserID",operateid),
+                                       new SqlParameter("@ClientID",clientid),
                                        new SqlParameter("@Description",description)
                                    };
-
-            return ExecuteNonQuery(sql, paras, CommandType.StoredProcedure) > 0;
+            paras[0].Direction = ParameterDirection.Output;
+            ExecuteNonQuery(sql, paras, CommandType.StoredProcedure);
+            result = Convert.ToInt32(paras[0].Value);
+            return result == 1;
 
         }
 

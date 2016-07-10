@@ -85,6 +85,17 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult GetOpportunityByID(string opportunityid)
+        {
+            var model = OpportunityBusiness.BaseBusiness.GetOpportunityByID(opportunityid, CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("model", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public JsonResult GetOpportunitys(string filter)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();

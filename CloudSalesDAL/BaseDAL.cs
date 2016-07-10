@@ -182,7 +182,7 @@ namespace CloudSalesDAL
         /// 执行SQL语句返回结果的第一行第一列
         /// </summary>
         /// <param name="cmdText">SQL语句</param>
-        /// <returns>第一行第一列</returns>
+        /// <returns>第一行第一列</returns>   
         public static object ExecuteScalar(string cmdText)
         {
             object retVal;

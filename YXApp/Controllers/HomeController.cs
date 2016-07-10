@@ -6,6 +6,8 @@ using System.Web.Mvc;
 
 using YunXiaoService;
 using IntFactory.Sdk;
+using CloudSalesEnum;
+using CloudSalesEntity.Manage;
 namespace YXApp.Controllers
 {
     public class HomeController : Controller
@@ -22,6 +24,8 @@ namespace YXApp.Controllers
 
         public ActionResult Register()
         {
+            ViewBag.CustomerID = "ca91e1be-1e02-4fa1-97c5-b4d00841d421";
+            ViewBag.ClientID = "a89cbb94-e32b-4f99-bab9-2db1d9cff607";
             return View();
         }
 
@@ -32,6 +36,29 @@ namespace YXApp.Controllers
         #endregion
 
         #region ajax
+
+        public JsonResult IsExistAccount(int type, string account, string companyID,string name,string customerID)
+        {
+            bool falg = UserService.IsExistAccount((EnumAccountType)type, account, companyID);
+            if (!falg) 
+            {
+                int result = 0;
+                string userID = "";
+                string xyClientID = UserService.InsertClient(EnumRegisterType.ZNGC, (EnumAccountType)type, account, account, "",
+                                                                name, account, "", "", "", "", "", companyID, "", customerID, "",
+                                                                out result, out userID);
+                Clients clientItem = UserService.GetClientDetail(xyClientID);
+
+                //CustomerBusiness.BaseBusiness.SetCustomerYXinfo(
+            }
+            JsonDictionary.Add("result",!falg?"1":"0");
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public JsonResult GetCustomerBaseInfo(string customerID, string clientID) 
         {
             var item = CustomerBusiness.BaseBusiness.GetCustomerByID(customerID, clientID);

@@ -42,7 +42,6 @@ namespace CloudSalesEntity.Manage
 		private DateTime? _createtime= DateTime.Now;
         private string _createuserid;
 
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -186,6 +185,9 @@ namespace CloudSalesEntity.Manage
         public int Years { get; set; }
 
         public DateTime EndTime { get; set; }
+
+        public string ClientCode { get; set; }
+
 		#endregion Model
 
 

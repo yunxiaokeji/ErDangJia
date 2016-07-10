@@ -13,7 +13,6 @@ body { background-color: #fff; }
 .login-body .main .loginTitle {color:#4a98e7; text-align:center; font-size:22px;}
 .login-body .loginbar .input{ width:308px;height:40px; border:solid 1px #ccc;color:#333;}
 
-
 .remember-box { height:30px; margin-top:20px; }
 
 .remember-box .cb-remember-password { cursor:pointer; padding-left:2px; color:#666; }

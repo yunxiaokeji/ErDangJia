@@ -27,7 +27,7 @@ define(function (require, exports, module) {
             //    return;
             //}
             if (!$("#loginName").val()) {
-                $(".registerErr").html("请输入账号").slideDown();
+                $(".registerErr").html("请输入手机号").slideDown();
                 return;
             }
             //if (!$("#code").val()) {
@@ -44,7 +44,7 @@ define(function (require, exports, module) {
                 if (data.result == 1) {
 
                 } else {
-                    alert("帐号已存在");
+                    alert("手机号已存在");
                 }
             });
         });

@@ -129,6 +129,7 @@
     <Content Include="modules\css\layout.css" />
     <Content Include="modules\css\myaccount\index.css" />
     <Content Include="modules\css\order\list.css" />
+    <Content Include="modules\css\product\detail.css" />
     <Content Include="modules\css\product\list.css" />
     <Content Include="modules\images\defaultavatar.png" />
     <Content Include="modules\images\ico-company.png" />
@@ -140,12 +141,16 @@
     <Content Include="modules\images\ico-surepwd.png" />
     <Content Include="modules\images\ico-username.png" />
     <Content Include="modules\images\logo_login.png" />
+    <Content Include="modules\plug\doT.js" />
     <Content Include="modules\plug\verify.js" />
     <Content Include="modules\scripts\font.js" />
     <Content Include="modules\scripts\global.js" />
     <Content Include="modules\scripts\home\login.js" />
     <Content Include="modules\scripts\home\register.js" />
     <Content Include="modules\scripts\products\product.js" />
+    <Content Include="modules\scripts\products\detail.js" />
+    <Content Include="modules\template\product\list.html" />
+    <Content Include="modules\template\product\shopping-list.html" />
     <Content Include="Scripts\jquery-1.11.1.js" />
     <Content Include="Scripts\sea-config.js" />
     <Content Include="Scripts\sea.js" />
@@ -161,7 +166,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="modules\template\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

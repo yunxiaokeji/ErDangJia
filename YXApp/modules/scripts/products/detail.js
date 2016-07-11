@@ -5,18 +5,16 @@
     var ObjectJS = {};
 
     ObjectJS.init = function () {
-        ObjectJS.getProductList();
         ObjectJS.bindEvent();
     };
 
     ObjectJS.bindEvent = function () {
-    };
-
-    ObjectJS.getProductList = function () {
-        doT.exec("template/product/list.html", function (template) {
-            var innerHtml = template();
-            innerHtml = $(innerHtml);
-            $(".product-items").append(innerHtml);
+        $(".add-shopping").click(function () {
+            doT.exec("template/product/shopping-list.html",function (template) {
+                var innerHtml = template();
+                innerHtml = $(innerHtml);
+                $(".product-list .table-list .tr-header").after(innerHtml);
+            });
         });
     };
 

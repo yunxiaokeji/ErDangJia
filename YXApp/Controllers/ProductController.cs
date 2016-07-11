@@ -19,6 +19,7 @@ namespace YXApp.Controllers
 
         public ActionResult Detail()
         {
+            ViewBag.Title = "样衣详情";
             return View();
         }
 

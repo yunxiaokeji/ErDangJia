@@ -44,17 +44,13 @@ namespace YXApp.Controllers
             {
                 int result = 0;
                 string userID = "";
-                string yxClientID = UserService.InsertClient(EnumRegisterType.ZNGC, (EnumAccountType)type, account, account, "",
-                                                                name, account, "", "", "", "", "", companyID, "", customerID, "",
+                string yxClientID = UserService.InsertClient(EnumRegisterType.ZNGC, (EnumAccountType)type, account, account, name,
+                                                                name, account, "", "", "", "", "", companyID, "", "", "",
                                                                 out result, out userID);
-                
-
                 Clients clientItem = UserService.GetClientDetail(yxClientID);
-
                 var zngcResult = CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", name, account, zngcClientID, clientItem.AgentID, yxClientID, clientItem.ClientCode);
 
                 JsonDictionary.Add("zngcResult", zngcResult);
-                //CustomerBusiness.BaseBusiness.SetCustomerYXinfo(
             }
             JsonDictionary.Add("result",!falg?"1":"0");
             return new JsonResult

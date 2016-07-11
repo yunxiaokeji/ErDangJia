@@ -35,7 +35,7 @@
                 companyID: "",
                 name: $("#name").val(),
                 customerID: ObjectJS.customerID,
-                clientID: ObjectJS.clientID,
+                zngcClientID: ObjectJS.clientID,
                 verification:1
             }, function (data) {
                 if (data.result == 1) {

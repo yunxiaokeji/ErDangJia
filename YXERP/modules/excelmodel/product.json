@@ -1,18 +1,66 @@
 ﻿{
     "Error": "",
     "Item": {
-		"CategoryName": {
-            "title": "产品类别",
+	"CategoryCode": {
+            "title": "类别编码",
             "hide": false,
             "format": true,
             "exporttype": -1,
-			"testexporttype": 7,			
+			"testexporttype": -1,			
 			"datasource":"DropSourceList|3",
 			"importtype":14,
 			"importcolumn":"CategoryID",
 			"datatype":"string",
+			"defaulttext":"QK001"
+        },
+		"CategoryName": {
+            "title": "类别名称",
+            "hide": false,
+            "format": true,
+            "exporttype": -1,
+			"testexporttype": -1,			
+			"datasource":"DropSourceList|3",
+			"importtype":-1,
+			"importcolumn":"",
+			"datatype":"string",
 			"defaulttext":"裙裤"
         },
+		"BrandName": {
+            "title": "品牌",
+            "hide": false,
+            "format": true,
+            "exporttype": -1,
+			"testexporttype": 7,
+			"datasource":"DropSourceList|4",
+			"datatype":"string",
+			"importtype":13,
+			"importcolumn":"BrandID",
+			"defaulttext":"上海云销信息科技有限公司"
+        },
+		"Imgs":{
+			"title": "产品图片",
+            "hide": false,
+            "format": true,
+            "exporttype": 10,
+			"testexporttype": 10,
+			"datasource":"",
+			"importtype":19,
+			"importcolumn":"ProductImage",
+			"datatype":"string",
+			"defaulttext":"C:/Users/admin/Desktop/色卡.png"
+		},	
+		"ProductCode": {
+            "title": "产品编码",
+            "hide": false,
+            "format": false,
+            "exporttype": -1,
+			"testexporttype": -1,
+			"datasource":"",
+			"importtype":-1,
+			"importcolumn":"",
+			"datatype":"string",
+			"defaulttext":"CESHI001"
+        },	
         "ProductName": {
             "title": "产品名称",
             "hide": false,
@@ -24,31 +72,7 @@
 			"importcolumn":"",
 			"datatype":"string",
 			"defaulttext":"二当家--上海云销科技有限公司"
-        },   
-        "ProductCode": {
-            "title": "产品编码",
-            "hide": false,
-            "format": false,
-            "exporttype": -1,
-			"testexporttype": -1,
-			"datasource":"",
-			"importtype":-1,
-			"importcolumn":"",
-			"datatype":"string",
-			"defaulttext":"CESHI001"
-        },
-		"ProductImage":{
-			"title": "产品图片",
-            "hide": false,
-            "format": true,
-            "exporttype": 10,
-			"testexporttype": 10,
-			"datasource":"",
-			"importtype":19,
-			"importcolumn":"",
-			"datatype":"string",
-			"defaulttext":"C:/Users/admin/Desktop/色卡.png"
-		},		
+        },           
         "GeneralName": {
             "title": "常用名",
             "hide": false,
@@ -61,6 +85,31 @@
 			"datatype":"string",
 			"defaulttext":"田园风 裙仔"
         },
+		"DetailsCode": {
+            "title": "规格编码",
+            "hide": false,
+            "format": false,
+            "exporttype": -1,
+			"testexporttype": -1,
+			"datasource":"",
+			"importtype":-1,
+			"importcolumn":"",
+			"datatype":"string",
+			"defaulttext":"可为空"
+        },
+		"Remark": {
+            "title": "规格名称",
+            "hide": false,
+            "format": false,
+            "exporttype": -1,
+			"testexporttype": -1,
+			"datasource":"",
+			"importtype":-1,
+			"importcolumn":"",
+			"datatype":"string",
+			"defaulttext":"黑色 S(注格式必须'A B' 中间用英文空格连接)"
+        },
+
         "ShapeCode": {
             "title": "条形码",
             "hide": false,
@@ -73,18 +122,7 @@
 			"datatype":"string",
 			"defaulttext":"99999999"
         },
-        "BrandName": {
-            "title": "品牌",
-            "hide": false,
-            "format": true,
-            "exporttype": -1,
-			"testexporttype": 7,
-			"datasource":"DropSourceList|4",
-			"datatype":"string",
-			"importtype":13,
-			"importcolumn":"BrandID",
-			"defaulttext":"上海云销信息科技有限公司"
-        },
+    
         "UnitID": {
             "title": "单位",
             "hide": false,
@@ -107,9 +145,9 @@
 			"importtype":-1,
 			"importcolumn":"",		
 			"datatype":"decimal",
-			"defaulttext":"120.00"
+			"defaulttext":"120.00(注:同一产品成本价默认取第一个)"
         },
-        "Price": {
+        "SpecPrice": {
             "title": "销售价",
             "hide": false,
             "format": false,
@@ -117,7 +155,7 @@
 			"testexporttype": -1,
 			"datasource":"",
 			"importtype":-1,
-			"importcolumn":"",		
+			"importcolumn":"Price",		
 			"datatype":"decimal",
 			"defaulttext":"120.00"
         },

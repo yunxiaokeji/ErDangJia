@@ -64,7 +64,7 @@ namespace CloudSalesBusiness
                 {
                     if (imgList.ContainsKey(i))
                     {
-                        DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                        DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(TempPath));
                         if (!directory.Exists)
                         {
                             directory.Create();
@@ -72,8 +72,8 @@ namespace CloudSalesBusiness
                         System.IO.MemoryStream ms = new System.IO.MemoryStream(imgList[i].PictureData);  
                         System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
                         string fileName = x.ProductCode+DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
-                        img.Save(HttpContext.Current.Server.MapPath(FILEPATH) + fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        x.ProductImage = FILEPATH + fileName;
+                        img.Save(HttpContext.Current.Server.MapPath(TempPath) + fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        x.ProductImage = TempPath + fileName;
                     }
                 }
                 string result = "";
@@ -95,6 +95,6 @@ namespace CloudSalesBusiness
             });
             return string.IsNullOrEmpty(mes)  ? "" : mes;
         }
-
+         
     }
 }

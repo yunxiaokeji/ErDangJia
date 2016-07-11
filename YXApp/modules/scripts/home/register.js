@@ -41,6 +41,7 @@
                 }, function (data) {
                     if (data.result == 1) {
                         alert("注册成功");
+                        location.href = "/Product/ProductList";
                     } else {
                         confirm("该手机号已经注册二当家用户，是否添加供应商信息", function () {
                             Global.post("/Home/AddSuppliers", "", function (data) {

@@ -29,23 +29,30 @@
                 $(".registerErr").html("请输入验证码").slideDown();
                 return;
             }
-            Global.post("/Home/IsExistAccount", {
-                type: 2,
-                account: $("#loginName").val(),
-                companyID: "",
-                name: $("#name").val(),
-                customerID: ObjectJS.customerID,
-                zngcClientID: ObjectJS.clientID,
-                verification:1
-            }, function (data) {
-                if (data.result == 1) {
-                    alert("注册成功");
-                } else {
-                    confirm("该手机号已经注册二当家用户，是否添加供应商信息", function () {
-                        
-                    });
-                }
-            });
+            if (Global.validateMobilephone($("#loginName").val())) {
+                Global.post("/Home/IsExistAccount", {
+                    type: 2,
+                    account: $("#loginName").val(),
+                    companyID: "",
+                    name: $("#name").val(),
+                    customerID: ObjectJS.customerID,
+                    zngcClientID: ObjectJS.clientID,
+                    verification: 1
+                }, function (data) {
+                    if (data.result == 1) {
+                        alert("注册成功");
+                    } else {
+                        confirm("该手机号已经注册二当家用户，是否添加供应商信息", function () {
+                            Global.post("/Home/AddSuppliers", "", function (data) {
+
+                            });
+                        });
+                    }
+                });
+            } else {
+                $(".registerErr").html("请输入正确手机号").slideDown();
+                return;
+            }
         });
 
         /*发送验证码*/

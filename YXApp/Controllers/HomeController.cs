@@ -60,6 +60,12 @@ namespace YXApp.Controllers
             };
         }
 
+        //添加供应商
+        public JsonResult AddSuppliers()
+        {
+            return null;
+        }
+
         //获取用户在智能工厂基本信息
         public JsonResult GetCustomerBaseInfo(string customerID, string clientID) 
         {

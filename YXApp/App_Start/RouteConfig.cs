@@ -16,7 +16,7 @@ namespace YXApp
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Product", action = "ProductsLists", id = UrlParameter.Optional }
+                defaults: new { controller = "Product", action = "ProductList", id = UrlParameter.Optional }
             );
         }
     }

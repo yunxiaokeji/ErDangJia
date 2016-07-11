@@ -104,7 +104,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MyAccountController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -117,18 +120,37 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
     <Content Include="modules\css\base.css" />
+    <Content Include="modules\css\customer\list.css" />
     <Content Include="modules\css\home\login.css" />
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
     <Content Include="modules\css\layout.css" />
-    <Content Include="modules\css\product\product.css" />
+    <Content Include="modules\css\myaccount\index.css" />
+    <Content Include="modules\css\order\list.css" />
+    <Content Include="modules\css\product\detail.css" />
+    <Content Include="modules\css\product\list.css" />
+    <Content Include="modules\images\defaultavatar.png" />
+    <Content Include="modules\images\ico-company.png" />
+    <Content Include="modules\images\ico-goregister-hover.png" />
+    <Content Include="modules\images\ico-goregister.png" />
+    <Content Include="modules\images\ico-mobilecode.png" />
+    <Content Include="modules\images\ico-name.png" />
+    <Content Include="modules\images\ico-pwd.png" />
+    <Content Include="modules\images\ico-surepwd.png" />
+    <Content Include="modules\images\ico-username.png" />
     <Content Include="modules\images\logo_login.png" />
+    <Content Include="modules\plug\doT.js" />
+    <Content Include="modules\plug\verify.js" />
     <Content Include="modules\scripts\font.js" />
     <Content Include="modules\scripts\global.js" />
     <Content Include="modules\scripts\home\login.js" />
+    <Content Include="modules\scripts\home\register.js" />
     <Content Include="modules\scripts\products\product.js" />
+    <Content Include="modules\scripts\products\detail.js" />
+    <Content Include="modules\template\product\list.html" />
+    <Content Include="modules\template\product\shopping-list.html" />
     <Content Include="Scripts\jquery-1.11.1.js" />
     <Content Include="Scripts\sea-config.js" />
     <Content Include="Scripts\sea.js" />
@@ -144,8 +166,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="modules\plug\" />
-    <Folder Include="modules\template\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -163,13 +183,46 @@
     <Content Include="modules\css\iconfont\iconfont.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Product\ProductsLists.cshtml" />
+    <Content Include="Views\Product\ProductList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Register.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudSalesEntity\CloudSalesEntity.csproj">
+      <Project>{6e99de28-adb3-4c22-8de9-dea1e44c04bb}</Project>
+      <Name>CloudSalesEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudSalesEnum\CloudSalesEnum.csproj">
+      <Project>{b86924c1-ec31-449f-97f3-258dfa43a44f}</Project>
+      <Name>CloudSalesEnum</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntFactory.Sdk\IntFactory.Sdk.csproj">
+      <Project>{bc180ed7-4c16-4974-89fb-0894016f58ff}</Project>
+      <Name>IntFactory.Sdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YunXiaoService\YunXiaoService.csproj">
+      <Project>{28239182-0731-4e96-b9fe-e3c8a46335ca}</Project>
+      <Name>YunXiaoService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MyAccount\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\OrderList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Customer\CustomerList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Product\Detail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

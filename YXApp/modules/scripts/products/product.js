@@ -1,15 +1,23 @@
 ﻿define(function (require, exports, modules) {
     require("jquery");
-    var Global = require("global");
+    var Global = require("global"),
+        doT = require("dot");
     var ObjectJS = {};
 
     ObjectJS.init = function () {
+        ObjectJS.getProductList();
         ObjectJS.bindEvent();
     };
 
     ObjectJS.bindEvent = function () {
-        /*监视手机横评还是竖屏*/
+    };
 
+    ObjectJS.getProductList = function () {
+        doT.exec("template/product/list.html", function (template) {
+            var innerHtml = template();
+            innerHtml = $(innerHtml);
+            $(".product-items").append(innerHtml);
+        });
     };
 
     modules.exports = ObjectJS;

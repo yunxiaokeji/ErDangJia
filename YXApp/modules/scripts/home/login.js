@@ -77,7 +77,6 @@ define(function (require, exports, module) {
             });
         });
 
-
         $(".txtBoxPassword").click(function () {
             $(this).hide();
             $("#iptPwd").focus();

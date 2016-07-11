@@ -13,7 +13,6 @@ body { background-color: #fff; }
 .login-body .main .loginTitle {color:#4a98e7; text-align:center; font-size:22px;}
 .login-body .loginbar .input{ width:308px;height:40px; border:solid 1px #ccc;color:#333;}
 
-
 .remember-box { height:30px; margin-top:20px; }
 
 .remember-box .cb-remember-password { cursor:pointer; padding-left:2px; color:#666; }
@@ -25,13 +24,22 @@ border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radi
 
 .divRegister {padding:25px;float:right;}
 
+.icoUserName,.icoUserPwd,.icoMobileCode,.icoUserCompany,.icoName,.icoSurePwd{ text-indent: 26px; }
+.icoUserName { background:url(/modules/images/ico-name.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoUserPwd { background:url(/modules/images/ico-pwd.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoMobileCode { background:url(/modules/images/ico-mobilecode.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoUserCompany { background:url(/modules/images/ico-company.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoName { background:url(/modules/images/ico-username.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoSurePwd { background:url(/modules/images/ico-surepwd.png) no-repeat 7px 11px;border-radius:3px;}
+
 .btnRegister { height: 26px; line-height: 26px; padding: 0px 28px 0px 8px; background-color: #fff; color: #aaa; font-size: 14px; 
                text-align: center; cursor: pointer; border-radius: 3px; opacity: 0.8; border: solid 1px #aaa; 
                background: url(/modules/images/ico-goregister.png) no-repeat 40px center; }
-
-.btnRegister:hover { height: 26px; line-height: 26px; padding: 0px 28px 0px 8px; background-color: #fff; color: #4A98E7; font-size: 14px; 
-                     text-align: center; cursor: pointer; border-radius: 3px; opacity: 0.8; border: solid 1px #4A98E7; 
-                     background: url(/modules/images/ico-goregister-hover.png) no-repeat 40px center; }
 
 .error-body { display: none; }
 

@@ -1,0 +1,13 @@
+﻿@section css{
+    <link href="~/modules/css/product/list.css" rel="stylesheet" />
+}
+@section scripts{
+    <script type="text/javascript">
+        seajs.use("/modules/scripts/products/product", function (obj) {
+            obj.init();
+        });
+    </script>
+}
+<div class="product-items">
+
+</div>

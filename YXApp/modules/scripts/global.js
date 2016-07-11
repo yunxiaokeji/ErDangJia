@@ -22,7 +22,6 @@
             }
         });
     }
-
     //格式化日期
     Date.prototype.toString = function (format) {
         var o = {
@@ -52,7 +51,6 @@
         d.setTime(this.match(/\d+/)[0]);
         return (!!format) ? d.toString(format) : d;
     }
-
     //截取字符串
     String.prototype.subString = function (len) {
         if (this.length > len) {
@@ -60,9 +58,17 @@
         }
         return this;
     }
+    //判断字符串是否整数
+    String.prototype.isInt = function () {
+        return this.match(/^(0|([1-9]\d*))$/);
+    }
+    //判断字符串是否数字
+    String.prototype.isDouble = function () {
+        return this.match(/^\d+(.\d+)?$/);
+    }
 
     /*重写alert*/
-    window.alert = function (msg) {
+    window.alert = function (msg, callback) {
         $("#window_alert").remove();
 
         var _alter = $("<div id='window_alert' class='alert'></div>");
@@ -76,8 +82,58 @@
 
         var left = $(window).width() / 2 - (_alter.width() / 2);
         _alter.offset({ left: left });
-        _close.click(function () { _alter.remove() });
-        setTimeout(function () { _alter.remove(); }, 5000);
+        _close.click(function () {
+            _alter.remove();
+            if (callback) {
+                if (typeof callback === "function") {
+                    callback();
+                } else {
+                    location.href = url;
+                }
+            }
+        });
+        setTimeout(function () {
+            _alter.remove();
+            if (callback) {
+                if (typeof callback === "function") {
+                    callback();
+                } else {
+                    location.href = url;
+                }
+            }
+        }, 10000);
+    }
+
+    /*重写confirm*/
+    window.confirm = function (msg, confirm, cancel) {
+        $("#window_confirm").remove();
+        var _layer = $("<div class='alert-layer'><div>")
+        var window_confirm = $("<div id='window_confirm' class='alert'></div>");
+        var _header = $("<div class='alert-header'>提示</div>");
+        var _wrap = $("<div class='alert-wrap'></div>").html(msg);
+        var _bottom = $("<div class='alert-bottom'></div>"),
+            _close = $("<div class='close mLeft10'>取消</div>"),
+            _confirm = $("<div class='confirm mRight10'>确认</div>");
+
+        _bottom.append(_confirm).append(_close);
+        window_confirm.append(_header).append(_wrap).append(_bottom);
+
+        _layer.appendTo("body");
+        window_confirm.appendTo("body");
+
+        var left = $(window).width() / 2 - (window_confirm.width() / 2);
+        window_confirm.offset({ left: left });
+
+        _close.click(function () {
+            _layer.remove();
+            window_confirm.remove();
+            cancel && cancel();
+        });
+        _confirm.click(function () {
+            _layer.remove();
+            window_confirm.remove();
+            confirm && confirm();
+        });
     }
 
     /*生成GUID*/
@@ -86,6 +142,85 @@
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         };
         return (guid = S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+
+    Global.validateMobilephone = function (mobilephone) {
+        var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
+
+        return reg.test(mobilephone);
+    }
+
+    //数字转化为千位
+    Number.prototype.toMoney = function () {
+        var _value, _arr, _int, _decimal, _re;
+        _value = this.toString();
+        _arr = _value.split(".");
+        _int = _arr[0], _decimal = "00";
+        if (_arr.length > 1) {
+            _decimal = _arr[1];
+        }
+        _int = _int.replace(/^(-?\d*)$/, "$1,");
+
+        _re = /(\d)(\d{3},)/;
+        while (_re.test(_int)) {
+            _int = _int.replace(_re, "$1,$2");
+        }
+        _value = _int + _decimal;
+        _value = _value.replace(/,(\d*)$/, ".$1");
+        return _value;
+    };
+
+    //字符格式数字转化为千位
+    String.prototype.toMoney = function () {
+        var _value, _arr, _int, _decimal, _re;
+        _value = this;
+        _arr = _value.split(".");
+        _int = _arr[0], _decimal = "00";
+        if (_arr.length > 1) {
+            _decimal = _arr[1];
+        }
+        _int = _int.replace(/^(-?\d*)$/, "$1,");
+
+        _re = /(\d)(\d{3},)/;
+        while (_re.test(_int)) {
+            _int = _int.replace(_re, "$1,$2");
+        }
+        _value = _int + _decimal;
+        _value = _value.replace(/,(\d*)$/, ".$1");
+        return _value;
+    };
+
+    //获取密码复杂等级
+    Global.passwordLevel=function(password) {
+        var Modes = 0;
+        for (i = 0; i < password.length; i++) {
+            Modes |= Global.CharMode(password.charCodeAt(i));
+        }
+        return Global.bitTotal(Modes);
+       
+    }
+
+    //CharMode函数
+    Global.CharMode=function (iN) {
+        if (iN >= 48 && iN <= 57)//数字
+            return 1;
+        if (iN >= 65 && iN <= 90) //大写字母
+            return 2;
+        if ((iN >= 97 && iN <= 122) || (iN >= 65 && iN <= 90))
+            //大小写
+            return 4;
+        else
+            return 8; //特殊字符
+    }
+
+    //bitTotal函数
+    Global.bitTotal=function (num) {
+        modes = 0;
+        for (i = 0; i < 4; i++) {
+            if (num & 1) modes++;
+            num >>>= 1;
+        }
+        return modes;
     }
 
     module.exports = Global;

@@ -47,14 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\ClientBusiness.cs" />
     <Compile Include="Business\CustomerBusiness.cs" />
+    <Compile Include="Business\OrderBusiness.cs" />
     <Compile Include="Common\ApiOption.cs" />
     <Compile Include="AppConfig.cs" />
     <Compile Include="Business\OauthBusiness.cs" />
     <Compile Include="Business\TaskBusiness.cs" />
     <Compile Include="Business\UserBusiness.cs" />
+    <Compile Include="Entity\Client\ClientEntity.cs" />
+    <Compile Include="Entity\Client\ClientResult.cs" />
     <Compile Include="Entity\Customer\CustomerEntity.cs" />
     <Compile Include="Entity\Customer\CustomerResult.cs" />
+    <Compile Include="Entity\Order\OrderEntity.cs" />
+    <Compile Include="Entity\Order\OrderListResult.cs" />
     <Compile Include="Entity\Product\ProductBaseEntity.cs" />
     <Compile Include="Entity\Order\OrderBaseEntity.cs" />
     <Compile Include="Entity\Order\ProcessEntity.cs" />

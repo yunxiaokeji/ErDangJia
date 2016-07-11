@@ -54,6 +54,12 @@ namespace IntFactory.Sdk
         GetCustomerByMobilePhone,
 
         [Description("/api/customer/setCustomerYXinfo")]
-        SetCustomerYXinfo
+        SetCustomerYXinfo,
+
+        [Description("/api/order/getOrdersByYXClientCode")]
+        GetOrdersByYXClientCode,
+
+        [Description("/api/client/getClientInfo")]
+        GetClientInfo
     }
 }

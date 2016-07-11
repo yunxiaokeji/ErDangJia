@@ -28,7 +28,7 @@ namespace UnitTestIntFactory
         //[TestMethod]
         public void SetCustomerYXinfo()
         {
-            var result = CustomerBusiness.BaseBusiness.SetCustomerYXinfo(customerid,agentID,"", "","");
+            var result = CustomerBusiness.BaseBusiness.SetCustomerYXinfo(customerid,"","",agentID,"", "","");
             Assert.IsTrue(result.error_code == 0);
         }
     }

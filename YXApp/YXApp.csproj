@@ -149,7 +149,7 @@
     <Content Include="modules\scripts\home\register.js" />
     <Content Include="modules\scripts\products\product.js" />
     <Content Include="modules\scripts\products\detail.js" />
-    <Content Include="modules\template\product\list.html" />
+    <Content Include="modules\template\product\product-list.html" />
     <Content Include="modules\template\product\shopping-list.html" />
     <Content Include="Scripts\jquery-1.11.1.js" />
     <Content Include="Scripts\sea-config.js" />

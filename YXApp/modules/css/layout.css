@@ -1,13 +1,11 @@
 ﻿body { background-color:#fff;}
-
 header { width:100%;background-color:#4a98e7;line-height:60px;color:#fff;}
 header .task-text {color:#373737;text-align:center;}
 
-#upAndDownModule { position:fixed;width:100%;height:100%;display:-webkit-box;display:-moz-box;-webkit-box-orient:vertical;-moz-box-orient:vertical;}
-#upAndDownModule .main-content { -webkit-box-flex: 1; -moz-box-flex: 1; width:100%;margin-top:60px;margin-bottom:100px;overflow-y:scroll;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;position:relative;}
+#upAndDownModule .main-content {width:100%;margin-top:60px;margin-bottom:100px;}
 #upAndDownModule header, #upAndDownModule footer { left:0;position:fixed;width:100%;}
 #upAndDownModule header {top:0;height:60px;line-height:60px;}
-#upAndDownModule footer {bottom: 0; border-top: 1px solid #ccc; height: 100px; line-height: 100px; }
+#upAndDownModule footer {bottom: 0; border-top: 1px solid #ccc; height: 100px; line-height: 100px; background-color:#fff;}
 .main-module { display: -webkit-box; display: -moz-box; }
 .user-avatar img{width:40px;height:40px;border-radius:50%; }
 .user-nav { font-size:26px;line-height:40px;}

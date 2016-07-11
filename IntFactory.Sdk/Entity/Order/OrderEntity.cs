@@ -14,7 +14,7 @@ namespace IntFactory.Sdk
 
         public string goodsName;
 
-        public string goodsCode;
+        public string intGoodsCode;
 
         public decimal finalPrice;
 

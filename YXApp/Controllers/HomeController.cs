@@ -8,6 +8,7 @@ using YunXiaoService;
 using IntFactory.Sdk;
 using CloudSalesEnum;
 using CloudSalesEntity.Manage;
+using IntFactory.Sdk.Business;
 namespace YXApp.Controllers
 {
     public class HomeController : Controller
@@ -49,8 +50,6 @@ namespace YXApp.Controllers
                                                                 out result, out userID);
                 Clients clientItem = UserService.GetClientDetail(yxClientID);
                 var zngcResult = CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", name, account, zngcClientID, clientItem.AgentID, yxClientID, clientItem.ClientCode);
-
-                JsonDictionary.Add("zngcResult", zngcResult);
             }
             JsonDictionary.Add("result",!falg?"1":"0");
             return new JsonResult
@@ -66,11 +65,13 @@ namespace YXApp.Controllers
             return null;
         }
 
-        //获取用户在智能工厂基本信息
-        public JsonResult GetCustomerBaseInfo(string customerID, string clientID) 
+        //获取用户、智能工厂基本信息
+        public JsonResult GetCustomerBaseInfo(string customerID, string clientID)
         {
-            var item = CustomerBusiness.BaseBusiness.GetCustomerByID(customerID, clientID);
-            JsonDictionary.Add("item", item);
+            var userItem = CustomerBusiness.BaseBusiness.GetCustomerByID(customerID, clientID);
+            var clientItem = ClientBusiness.BaseBusiness.GetClientInfo(clientID);
+            JsonDictionary.Add("item", userItem);
+            JsonDictionary.Add("clientName", clientItem.client.companyName);
             return new JsonResult
             {
                 Data = JsonDictionary,

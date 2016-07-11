@@ -1,10 +1,10 @@
 ﻿@section css{
-    <link href="~/modules/css/product/list.css" rel="stylesheet" />
+    <link href="/modules/css/product/list.css" rel="stylesheet" />
 }
 @section scripts{
     <script type="text/javascript">
         seajs.use("/modules/scripts/products/product", function (obj) {
-            obj.init();
+            obj.init('@ViewBag.yxClientCode', '@ViewBag.zngcClientID');
         });
     </script>
 }

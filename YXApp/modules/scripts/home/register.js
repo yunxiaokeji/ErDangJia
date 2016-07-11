@@ -91,6 +91,7 @@
     /*通过智能工厂ID获取用户信息*/
     ObjectJS.getCustomerBaseInfo = function () {
         Global.post("/Home/GetCustomerBaseInfo", { customerID: ObjectJS.customerID, clientID: ObjectJS.clientID }, function (data) {
+            $("#loginCompany").html(data.clientName == "" ? "" : "-" + data.clientName);
             var customer = data.item.customer;
             $("#name").val(customer.name);
             $("#loginName").val(customer.mobilePhone);

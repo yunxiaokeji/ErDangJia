@@ -497,6 +497,34 @@ namespace CloudSalesDAL
 
         }
 
+        public DataSet GetProductExport(string categoryid, string beginprice, string endprice, string keyWords, string orderby, int isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@totalCount",SqlDbType.Int),
+                                       new SqlParameter("@pageCount",SqlDbType.Int),
+                                       new SqlParameter("@orderColumn",orderby),
+                                       new SqlParameter("@isAsc",isasc),
+                                       new SqlParameter("@BeginPrice",beginprice),
+                                       new SqlParameter("@EndPrice",endprice),
+                                       new SqlParameter("@CategoryID",categoryid),
+                                       new SqlParameter("@keyWords",keyWords),
+                                       new SqlParameter("@pageSize",pageSize),
+                                       new SqlParameter("@pageIndex",pageIndex),
+                                       new SqlParameter("@ClientID",clientID)
+                                       
+                                   };
+            paras[0].Value = totalCount;
+            paras[1].Value = pageCount;
+
+            paras[0].Direction = ParameterDirection.InputOutput;
+            paras[1].Direction = ParameterDirection.InputOutput;
+            DataSet ds = GetDataSet("P_GetProductListForExport", paras, CommandType.StoredProcedure);
+            totalCount = Convert.ToInt32(paras[0].Value);
+            pageCount = Convert.ToInt32(paras[1].Value);
+            return ds;
+
+        }
+
         public DataSet GetProductByID(string productid)
         {
             SqlParameter[] paras = { new SqlParameter("@ProductID", productid) };

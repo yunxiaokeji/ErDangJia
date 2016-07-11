@@ -10,7 +10,7 @@ namespace IntFactory.Sdk.Business
     {
         public static ClientBusiness BaseBusiness = new ClientBusiness();
 
-        public ClientResult GetOrdersByYXClientCode(string zngcClientID)
+        public ClientResult GetClientInfo(string zngcClientID)
         {
             var paras = new Dictionary<string, object>();
             paras.Add("zngcClientID", zngcClientID);

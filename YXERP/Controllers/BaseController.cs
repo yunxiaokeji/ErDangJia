@@ -18,7 +18,7 @@ namespace YXERP.Controllers
     [YXERP.Common.UserAuthorize]
     public class BaseController : Controller
     {
-
+        private  string TempFilePath = CloudSalesTool.AppSettings.Settings["UploadTempPath"];
         /// <summary>
         /// 默认分页Size
         /// </summary>
@@ -172,11 +172,16 @@ namespace YXERP.Controllers
                         if (formatColumn != null  && formatColumn.Values.Where(x => x.ColumnName == firstRow.GetCell(j).StringCellValue).Any())
                         {
                             ExcelFormatter excelFormatter = formatColumn.Values.Where(x => x.ColumnName == firstRow.GetCell(j).StringCellValue).FirstOrDefault();
-                            if (excelFormatter.ColumnTrans.Equals(EnumColumnTrans.ConvertImportImage) && imgForm)
+                            if (excelFormatter.ColumnTrans.Equals(EnumColumnTrans.ConvertImportImage) )
                             {
-                                ImgList = NPOIExtendImg.GetAllPictureInfos(sheet);
-                                imgForm = false;
-                            }
+                                if (imgForm)
+                                {
+                                    ImgList = NPOIExtendImg.GetAllPictureInfos(sheet);
+                                    imgForm = false;
+                                } 
+                                datarow[j] = GetImgsUrl(ImgList, i);
+                                continue; 
+                            } 
                         }
                         var cell = row.GetCell(j);
                         if (cell == null)
@@ -519,6 +524,24 @@ namespace YXERP.Controllers
             }
             return dic;
         }
-      
+
+        public string GetImgsUrl(Dictionary<int, PicturesInfo> imgList,int key)
+        {
+            if (imgList.Any() && imgList.ContainsKey(key))
+            {
+                DirectoryInfo directory = new DirectoryInfo(HttpContext.Server.MapPath(TempFilePath));
+                if (!directory.Exists)
+                {
+                    directory.Create();
+                }
+                System.IO.MemoryStream ms = new System.IO.MemoryStream(imgList[key].PictureData);
+                System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                string fileName = DateTime.Now.ToString("yyyyMMddHHmmssms") + new Random().Next(1000, 9999).ToString() +
+                                  ".jpg";
+                img.Save(HttpContext.Server.MapPath(TempFilePath) + fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                return TempFilePath + fileName;
+            }
+            return "";
+        }
     }
 }

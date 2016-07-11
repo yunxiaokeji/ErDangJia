@@ -676,9 +676,13 @@ namespace CloudSalesBusiness
 
         public List<Products> GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, bool isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
-            DataTable dt = GetProductListDataTable(categoryid, beginprice, endprice, keyWords,
-                orderby, isasc, pageSize, pageIndex, ref totalCount, ref pageCount,
-                clientID);
+            DataTable dt = new DataTable();
+            var dal = new ProductsDAL();
+            DataSet ds = dal.GetProductList(categoryid, beginprice, endprice, keyWords, orderby, isasc ? 1 : 0, pageSize, pageIndex, ref totalCount, ref pageCount, clientID);
+            if (ds.Tables.Count > 0)
+            {
+                dt = ds.Tables[0];
+            }
             List<Products> list = new List<Products>();
             foreach (DataRow dr in dt.Rows)
             {
@@ -695,7 +699,7 @@ namespace CloudSalesBusiness
         {
             DataTable dt=new DataTable();
             var dal = new ProductsDAL();
-            DataSet ds = dal.GetProductList(categoryid, beginprice, endprice, keyWords, orderby, isasc ? 1 : 0, pageSize, pageIndex, ref totalCount, ref pageCount, clientID);
+            DataSet ds = dal.GetProductExport(categoryid, beginprice, endprice, keyWords, orderby, isasc ? 1 : 0, pageSize, pageIndex, ref totalCount, ref pageCount, clientID);
             if (ds.Tables.Count > 0)
             {
                 dt = ds.Tables[0];
@@ -849,6 +853,25 @@ namespace CloudSalesBusiness
             }
 
             return model;
+        }
+
+        public string AddProduct(List<Products> list,string agentid="")
+        {
+            string mes = "";
+            list.ForEach(x =>
+            { 
+                int result = 0;
+                string pid
+                    = this.AddProduct(x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.BrandID,
+                    x.BigUnitID, x.UnitID, x.BigSmallMultiple.Value, x.CategoryID, x.Status.Value, x.AttrList, x.ValueList, x.AttrValueList,
+                    x.CommonPrice.Value, x.Price, x.Weight.Value, (x.IsNew == 1), (x.IsRecommend == 1), x.IsAllow, x.IsAutoSend, x.EffectiveDays.Value,
+                    x.DiscountValue.Value, x.WarnCount, x.ProductImage, x.ShapeCode, x.Description, x.ProductDetails, x.CreateUserID, agentid, x.ClientID, out result);
+                if (result!=1)
+                { 
+                    mes += result == 2 ? "编码" + x.ProductCode + "已存在," : result == 3 ? "条形码" + x.ShapeCode + "已存在," : "";
+                } 
+            });
+            return string.IsNullOrEmpty(mes) ? "" : mes;
         }
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,

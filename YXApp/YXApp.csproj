@@ -104,7 +104,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MyAccountController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -117,13 +120,16 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
     <Content Include="modules\css\base.css" />
+    <Content Include="modules\css\customer\list.css" />
     <Content Include="modules\css\home\login.css" />
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
     <Content Include="modules\css\layout.css" />
-    <Content Include="modules\css\product\product.css" />
+    <Content Include="modules\css\myaccount\index.css" />
+    <Content Include="modules\css\order\list.css" />
+    <Content Include="modules\css\product\list.css" />
     <Content Include="modules\images\defaultavatar.png" />
     <Content Include="modules\images\ico-company.png" />
     <Content Include="modules\images\ico-goregister-hover.png" />
@@ -173,7 +179,7 @@
     <Content Include="modules\css\iconfont\iconfont.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Product\ProductsLists.cshtml" />
+    <Content Include="Views\Product\ProductList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\_ViewStart.cshtml" />
@@ -201,6 +207,18 @@
       <Project>{28239182-0731-4e96-b9fe-e3c8a46335ca}</Project>
       <Name>YunXiaoService</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MyAccount\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\OrderList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Customer\CustomerList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Product\Detail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -11,7 +11,13 @@ namespace YXApp.Controllers
         //
         // GET: /Product/
 
-        public ActionResult ProductsLists()
+        public ActionResult ProductList()
+        {
+            ViewBag.Title = "样衣中心";
+            return View();
+        }
+
+        public ActionResult Detail()
         {
             return View();
         }

@@ -39,9 +39,11 @@
                 verification:1
             }, function (data) {
                 if (data.result == 1) {
-
+                    alert("注册成功");
                 } else {
-                    
+                    confirm("该手机号已经注册二当家用户，是否添加供应商信息", function () {
+                        
+                    });
                 }
             });
         });
@@ -49,24 +51,26 @@
         /*发送验证码*/
         $("#btnSendMsg").click(function () {
             if ($("#loginName").val() == '') {
-                $("#code-error").fadeIn().find(".error-msg").html("手机号不能为空");
+                $(".registerErr").html("请输入手机号").slideDown();
                 return;
             }
             else {
                 if (Global.validateMobilephone($("#loginName").val())) {
-                    Global.post("/Home/IsExistAccount", {
-                        type: 2,
-                        account: $("#loginName").val(),
-                        verification:2
-                    }, function (data) {
-                        if (data.result == 1) {
-                            $(".registerErr").html("").slideUp();
-                            ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
-                        } else {
-                            $(".registerErr").html("手机号已被注册").slideDown();
+                    //Global.post("/Home/IsExistAccount", {
+                    //    type: 2,
+                    //    account: $("#loginName").val(),
+                    //    verification:2
+                    //}, function (data) {
+                    //    if (data.result == 1) {
+                    //        $(".registerErr").html("").slideUp();
+                    //        ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
+                    //    } else {
+                    //        $(".registerErr").html("手机号已被注册").slideDown();
 
-                        }
-                    });
+                    //    }
+                    //});
+                    $(".registerErr").html("").slideUp();
+                    ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
                 }
                 else {
                     $(".registerErr").html("请输入正确手机号").slideDown();
@@ -107,11 +111,11 @@
 
         }, 1000);
 
-        Global.post("/Home/SendMobileMessage", { mobilePhone: mobilePhone }, function (data) {
-            if (data.Result == 0) {
-                alert("验证码发送失败");
-            }
-        });
+        //Global.post("/Home/SendMobileMessage", { mobilePhone: mobilePhone }, function (data) {
+        //    if (data.Result == 0) {
+        //        alert("验证码发送失败");
+        //    }
+        //});
     }
 
     module.exports = ObjectJS;

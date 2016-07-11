@@ -8,6 +8,10 @@ header .task-text {color:#373737;text-align:center;}
 #upAndDownModule header, #upAndDownModule footer { left:0;position:fixed;width:100%;}
 #upAndDownModule header {top:0;height:60px;line-height:60px;}
 #upAndDownModule footer {bottom: 0; border-top: 1px solid #ccc; height: 100px; line-height: 100px; }
+.main-module { display: -webkit-box; display: -moz-box; }
+.user-avatar img{width:40px;height:40px;border-radius:50%; }
+.user-nav { font-size:26px;line-height:40px;}
+.main-module li { -webkit-box-flex:1;-moz-box-flex:1;text-align:center;}
 
 /*alert 弹出层样式*/
 .alert-layer {position: fixed; z-index:99998; top:0; left:0;right:0; bottom:0; background-color:#666; opacity:0.6;}

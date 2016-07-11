@@ -47,6 +47,8 @@ namespace YXApp.Controllers
                 string yxClientID = UserService.InsertClient(EnumRegisterType.ZNGC, (EnumAccountType)type, account, account, "",
                                                                 name, account, "", "", "", "", "", companyID, "", customerID, "",
                                                                 out result, out userID);
+                
+
                 Clients clientItem = UserService.GetClientDetail(yxClientID);
 
                 var zngcResult = CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", name, account, zngcClientID, clientItem.AgentID, yxClientID, clientItem.ClientCode);

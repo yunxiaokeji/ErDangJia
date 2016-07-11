@@ -41,8 +41,6 @@ namespace CloudSalesEntity
 		private string _description="";
 		private string _createuserid;
 		private DateTime? _createtime= DateTime.Now;
-		private DateTime? _updatetime= DateTime.Now;
-		private string _operateip="";
 		private string _clientid;
 		/// <summary>
 		/// 
@@ -189,22 +187,7 @@ namespace CloudSalesEntity
 			set{ _createtime=value;}
 			get{return _createtime;}
 		}
-		/// <summary>
-		/// 
-		/// </summary>
-		public DateTime? UpdateTime
-		{
-			set{ _updatetime=value;}
-			get{return _updatetime;}
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		public string OperateIP
-		{
-			set{ _operateip=value;}
-			get{return _operateip;}
-		}
+
         /// <summary>
         /// 
         /// </summary>
@@ -236,6 +219,8 @@ namespace CloudSalesEntity
         public string DepotCode { get; set; }
 
         public string Remark { get; set; }
+
+        public int IsDefault { get; set; }
 
         /// <summary>
         /// 填充数据

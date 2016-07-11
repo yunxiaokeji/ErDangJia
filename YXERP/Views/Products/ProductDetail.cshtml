@@ -16,23 +16,18 @@
             var um = UE.getEditor('remark', {
                 autoHeightEnabled: true
             });
-            product.initEdit('@Html.ToJSONString(model)', um);
+            product.initEdit('@(model.ProductID)','@Html.ToJSONString(model)', um);
             
         });
     </script>
 }
 <div class="tab-nav">
     <a class="btn-back right mLeft5" title="返回" href="/Products/ProductList">返回</a>
-    @if (model.HasDetails==1)
-    {
-       <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
-    }
+    <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子规格产品</a>
+
     <ul class="search-tab">
         <li class="hover" data-id="productinfo">产品信息</li>
-         @if (model.HasDetails==1)
-        {
-            <li class="" data-id="childproduct">子产品管理</li>
-         }
+        <li class="" data-id="childproduct">产品规格管理</li>
     </ul>
 </div>
 <div class="content-body">

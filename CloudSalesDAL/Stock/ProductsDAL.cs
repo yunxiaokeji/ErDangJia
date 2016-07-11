@@ -476,7 +476,7 @@ namespace CloudSalesDAL
 
         #region 产品
 
-        public DataSet GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, int isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
+        public DataTable GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, int isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@totalCount",SqlDbType.Int),
@@ -497,10 +497,10 @@ namespace CloudSalesDAL
 
             paras[0].Direction = ParameterDirection.InputOutput;
             paras[1].Direction = ParameterDirection.InputOutput;
-            DataSet ds = GetDataSet("P_GetProductList", paras, CommandType.StoredProcedure);
+            DataTable dt = GetDataTable("P_GetProductList", paras, CommandType.StoredProcedure);
             totalCount = Convert.ToInt32(paras[0].Value);
             pageCount = Convert.ToInt32(paras[1].Value);
-            return ds;
+            return dt;
 
         }
 
@@ -636,54 +636,6 @@ namespace CloudSalesDAL
             ExecuteNonQuery("P_InsertProduct", paras, CommandType.StoredProcedure);
             id = paras[0].Value.ToString();
             result = Convert.ToInt32(paras[1].Value);
-            return id;
-        }
-
-        public string InsertProductExcel(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
-                        string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
-                        decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid, ref string result)
-        {
-            string id = ""; 
-            SqlParameter[] paras = { 
-                                       new SqlParameter("@ProductID",SqlDbType.NVarChar,64),
-                                       new SqlParameter("@Result",SqlDbType.NVarChar,64),
-                                       new SqlParameter("@ProductCode",productCode),
-                                       new SqlParameter("@ProductName",productName),
-                                       new SqlParameter("@GeneralName",generalName),
-                                       new SqlParameter("@IsCombineProduct",iscombineproduct),
-                                       new SqlParameter("@BrandID",brandid),
-                                       new SqlParameter("@BigUnitID",bigunitid),
-                                       new SqlParameter("@UnitID",UnitID),
-                                       new SqlParameter("@BigSmallMultiple",bigSmallMultiple),
-                                       new SqlParameter("@CategoryID",categoryid),
-                                       new SqlParameter("@Status",status),
-                                       new SqlParameter("@AttrList",attrlist),
-                                       new SqlParameter("@ValueList",valuelist),
-                                       new SqlParameter("@AttrValueList",attrvaluelist),
-                                       new SqlParameter("@CommonPrice",commonprice),
-                                       new SqlParameter("@Price",price),
-                                       new SqlParameter("@Weight",weight),
-                                       new SqlParameter("@Isnew",isnew ? 1 :0),
-                                       new SqlParameter("@IsRecommend",isRecommend ? 1 : 0),
-                                       new SqlParameter("@IsAllow",isallow),
-                                       new SqlParameter("@IsAutoSend",isautosend),
-                                       new SqlParameter("@EffectiveDays",effectiveDays),
-                                       new SqlParameter("@DiscountValue",discountValue),
-                                       new SqlParameter("@WarnCount",warnCount),
-                                       new SqlParameter("@ProductImg",productImg),
-                                       new SqlParameter("@ShapeCode",shapeCode),
-                                       new SqlParameter("@Description",description),
-                                       new SqlParameter("@CreateUserID",operateid),
-                                       new SqlParameter("@ClientID",clientid)
-                                   };
-            paras[0].Value = id;
-            paras[0].Direction = ParameterDirection.InputOutput;
-            paras[1].Value = result;
-            paras[1].Direction = ParameterDirection.InputOutput;
-
-            ExecuteNonQuery("P_InsertProductExcel", paras, CommandType.StoredProcedure);
-            id = paras[0].Value.ToString();
-            result = paras[1].Value.ToString();
             return id;
         }
 

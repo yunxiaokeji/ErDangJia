@@ -539,13 +539,23 @@ define(function (require, exports, module) {
     }
 
     //初始化编辑页数据
-    Product.initEdit = function (model, Editor) {
+    Product.initEdit = function (productid,model, Editor) {
         var _self = this;
         editor = Editor;
-        model = JSON.parse(model.replace(/&quot;/g, '"'));
-        _self.bindDetailEvent(model);
-        _self.bindDetail(model);
-        _self.getChildList(model);
+        try
+        {
+            model = JSON.parse(model.replace(/&quot;/g, '"'));
+            _self.bindDetailEvent(model);
+            _self.bindDetail(model);
+            _self.getChildList(model);
+        } catch (err) {
+            Global.post("/Products/GetProductByID", { productid: productid }, function (data) {
+                var _model = data.Item;
+                _self.bindDetailEvent(_model);
+                _self.bindDetail(_model);
+                _self.getChildList(_model);
+            })
+        }
     }
 
     //获取详细信息
@@ -746,7 +756,7 @@ define(function (require, exports, module) {
             Easydialog.open({
                 container: {
                     id: "productdetails-add-div",
-                    header: !id ? "添加子产品" : "编辑子产品",
+                    header: !id ? "添加产品规格" : "编辑产品规格",
                     content: html,
                     yesFn: function () {
 
@@ -754,14 +764,13 @@ define(function (require, exports, module) {
                             return false;
                         }
 
-                        var attrlist = "", valuelist = "", attrvaluelist = "", desc = "";
-
+                        var attrlist = "", valuelist = "", attrvaluelist = "", desc = $("#iptRemark").val().trim();
                         $(".productattr").each(function () {
                             var _this = $(this);
                             attrlist += _this.data("id") + ",";
                             valuelist += _this.find("select").val() + ",";
                             attrvaluelist += _this.data("id") + ":" + _this.find("select").val() + ",";
-                            desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                            //desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
                         });
 
                         var Model = {
@@ -780,6 +789,12 @@ define(function (require, exports, module) {
                             Remark: desc,
                             Description: ""
                         };
+
+                        if (!desc) {
+                            alert("规格不能为空！");
+                            return false;
+                        }
+
                         Global.post("/Products/SavaProductDetail", {
                             product: JSON.stringify(Model)
                         }, function (data) {
@@ -793,8 +808,8 @@ define(function (require, exports, module) {
                             } else if (data.result == 2) {
                                 alert("此规格已存在");
                             } else if (data.result == 3) {
-                                alert("子产品编码已存在");
-                            }
+                                alert("规格产品编码已存在");
+                            } 
                         });
                         return false;
                     },
@@ -804,12 +819,20 @@ define(function (require, exports, module) {
                 }
             });
 
+            
+
             //绑定单位
             $("#unitName").text(model.SmallUnit.UnitName);
 
             if (!id) {
                 $("#detailsPrice").val(model.Price);
-                $("#bigPrice").val(model.Price);
+                var _desc = "";
+                $(".productattr").each(function () {
+                    var _this = $(this);
+                    _desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                });
+                $("#iptRemark").val(_desc);
+
             } else {
                 var detailsModel;
                 for (var i = 0, j = model.ProductDetails.length; i < j; i++) {
@@ -823,10 +846,30 @@ define(function (require, exports, module) {
                 $("#imgS").attr("src", detailsModel.ImgS || "/modules/images/default.png");
 
                 var list = detailsModel.SaleAttrValue.split(',');
-                for (var i = 0, j = list.length; i < j; i++) {
-                    $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]).prop("disabled", true);
-                }
+                $(".productattr").each(function () {
+                    var _this = $(this), bl = false;
+                    for (var i = 0, j = list.length; i < j; i++) {
+                        if (_this.find("select").attr("id") == list[i].split(':')[0]) {
+                            $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]).prop("disabled", true);
+                            bl = true;
+                        }
+                    }
+                    if (!bl) {
+                        _this.find("select").val("");
+                    }
+                    
+                });
+                $("#iptRemark").val(detailsModel.Remark);
             }
+
+            $(".productattr select").change(function () {
+                var _desc = "";
+                $(".productattr").each(function () {
+                    var _this = $(this);
+                    _desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                });
+                $("#iptRemark").val(_desc);
+            });
 
             ImgsIco = Upload.createUpload({
                 element: "#imgSIco",

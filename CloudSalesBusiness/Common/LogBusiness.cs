@@ -126,37 +126,21 @@ namespace CloudSalesBusiness
 
         #region 添加
 
-        /// <summary>
-        /// 记录登录日志
-        /// </summary>
-        /// <param name="loginname">用户名</param>
-        /// <param name="status">登录结果</param>
-        /// <param name="systemtype">系统类型</param>
-        /// <param name="operateip">登录IP</param>
         public static async void AddLoginLog(string loginname, bool status, EnumSystemType systemtype, string operateip, string userid, string agentid, string clientid)
         {
             await LogDAL.AddLoginLog(loginname, status ? 1 : 0, (int)systemtype, operateip, userid, agentid, clientid);
         }
-        
-        /// <summary>
-        /// 记录操作日志
-        /// </summary>
-        public static async void AddOperateLog(string userid, string funcname, EnumLogType type, EnumLogModules modules, EnumLogEntity entity, string guid, string message, string operateip)
+
+        public static async void AddOperateLog(string userid, string funcname, EnumLogType type, EnumLogModules modules, EnumLogEntity entity, string guid, string message, string operateip, string agentid, string clientid)
         {
-            await LogDAL.AddOperateLog(userid, funcname, (int)type, (int)modules, (int)entity, guid, message, operateip);
+            await LogDAL.AddOperateLog(userid, funcname, (int)type, (int)modules, (int)entity, guid, message, operateip, agentid, clientid);
         }
         
-        /// <summary>
-        /// 记录错误日志
-        /// </summary>
         public static async void AddErrorLog(string userid, string message, EnumSystemType systemtype, string operateip)
         {
             await LogDAL.AddErrorLog(userid, message, (int)systemtype, operateip);
         }
 
-        /// <summary>
-        /// 记录日志
-        /// </summary>
         public static async void AddLog(string logguid, EnumLogObjectType type, string remark, string userid, string operateip, string guid, string agentid, string clientid)
         {
             string tablename = "";

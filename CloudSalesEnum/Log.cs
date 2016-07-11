@@ -35,15 +35,33 @@ namespace CloudSalesEnum
     /// </summary>
     public enum EnumLogModules
     {
-        [DescriptionAttribute("库存")]
-        Stock = 1
+        Customer = 1,
+        Sales = 2,
+        Stock = 3,
+        Finance = 4,
+        System = 5
     }
+
     /// <summary>
     /// 日志对象
     /// </summary>
     public enum EnumLogEntity
     {
-        Brand = 1,
-        ProductUnit
+        ClientSetting = 501
+    }
+
+    /// <summary>
+    /// 状态枚举
+    /// </summary>
+    public enum EnumLoginStatus
+    {
+        [DescriptionAttribute("全部")]
+        All = -1,
+        [DescriptionAttribute("正常")]
+        Normal = 1,
+        [DescriptionAttribute("异地登陆")]
+        OtherLogin = 2,
+        [DescriptionAttribute("删除")]
+        Delete = 9
     }
 }

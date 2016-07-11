@@ -18,22 +18,6 @@ namespace CloudSalesEnum
         [DescriptionAttribute("代理商系统")]
         Agent = 3
     }
-
-    /// <summary>
-    /// 状态枚举
-    /// </summary>
-    public enum EnumLoginStatus
-    {
-        [DescriptionAttribute("全部")]
-        All = -1,
-        [DescriptionAttribute("正常")]
-        Normal = 1,
-        [DescriptionAttribute("异地登陆")]
-        OtherLogin = 2,
-        [DescriptionAttribute("删除")]
-        Delete = 9
-    }
-
     /// <summary>
     /// 状态枚举
     /// </summary>
@@ -69,17 +53,8 @@ namespace CloudSalesEnum
     /// </summary>
     public enum EnumSearchType
     {
-        /// <summary>
-        /// 我的
-        /// </summary>
         Myself = 1,
-        /// <summary>
-        /// 下属
-        /// </summary>
         Branch = 2,
-        /// <summary>
-        /// 所有
-        /// </summary>
         All = 3
     }
 
@@ -129,4 +104,21 @@ namespace CloudSalesEnum
         ZNGC = 4
     }
 
+    /// <summary>
+    /// 系统设置
+    /// </summary>
+    public enum EnumSettingKey
+    {
+        /// <summary>
+        /// 积分来源 1：产品 2：订单金额
+        /// </summary>
+        [DescriptionAttribute("IValue")]
+        IntegralSource = 1,
+        /// <summary>
+        /// 金额积分比例
+        /// </summary>
+        [DescriptionAttribute("DValue")]
+        IntegralScale = 2
+
+    }
 }

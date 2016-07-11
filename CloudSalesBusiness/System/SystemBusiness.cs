@@ -903,6 +903,7 @@ namespace CloudSalesBusiness
             }
             return result ? 1 : 0;
         }
+
         public string UpdateClientMemberLevel(string clientid, string levelid, string name, decimal discountfee, decimal integfeemore, string imgurl)
         {
             var model = GetClientMemberLevelByID(levelid, "",clientid);
@@ -921,6 +922,7 @@ namespace CloudSalesBusiness
             }
             return result;
         }
+
         public string DeleteClientMemberLevel(string clientid, string agentid, string levelid)
         {
             var model = GetClientMemberLevelByID(levelid, agentid, clientid);
@@ -931,6 +933,7 @@ namespace CloudSalesBusiness
             }
             return bl;
         }
+
         public bool DeleteClientIndustry(string clientid,string agentid, string clientindustryid)
         {
             var model = GetClientIndustryByID(clientindustryid, agentid, clientid);

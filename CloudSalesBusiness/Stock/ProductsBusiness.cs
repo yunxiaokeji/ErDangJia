@@ -150,12 +150,6 @@ namespace CloudSalesBusiness
         {
             bool bl = CommonBusiness.Update("Brand", "Status", ((int)status).ToString(), " BrandID='" + brandID + "'");
 
-            if (bl)
-            {
-                string message = "编辑品牌状态为：" + CommonBusiness.GetEnumDesc(status);
-                LogBusiness.AddOperateLog(operateID, "ProductsBusiness.UpdateBrandStatus", EnumLogType.Update, EnumLogModules.Stock, EnumLogEntity.Brand, brandID, message, operateIP);
-            }
-
             return bl;
         }
 

@@ -113,7 +113,7 @@ namespace CloudSalesBusiness
         public static Users GetUserByUserName(string loginname, string pwd, out int result, string operateip)
         {
             pwd = CloudSalesTool.Encrypt.GetEncryptPwd(pwd, loginname);
-            DataSet ds = new OrganizationDAL().GetUserByUserName(loginname, pwd, out result);
+            DataSet ds = OrganizationDAL.BaseProvider.GetUserByUserName(loginname, pwd, out result);
             Users model = null;
             if (ds.Tables.Contains("User") && ds.Tables["User"].Rows.Count > 0)
             {

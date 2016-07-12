@@ -126,22 +126,22 @@ namespace CloudSalesBusiness
 
         #region 添加
 
-        public static async void AddLoginLog(string loginname, bool status, EnumSystemType systemtype, string operateip, string userid, string agentid, string clientid)
+        public static async Task AddLoginLog(string loginname, bool status, EnumSystemType systemtype, string operateip, string userid, string agentid, string clientid)
         {
             await LogDAL.AddLoginLog(loginname, status ? 1 : 0, (int)systemtype, operateip, userid, agentid, clientid);
         }
 
-        public static async void AddOperateLog(string userid, string funcname, EnumLogType type, EnumLogModules modules, EnumLogEntity entity, string guid, string message, string operateip, string agentid, string clientid)
+        public static async Task AddOperateLog(string userid, string funcname, EnumLogType type, EnumLogModules modules, EnumLogEntity entity, string guid, string message, string operateip, string agentid, string clientid)
         {
             await LogDAL.AddOperateLog(userid, funcname, (int)type, (int)modules, (int)entity, guid, message, operateip, agentid, clientid);
         }
-        
-        public static async void AddErrorLog(string userid, string message, EnumSystemType systemtype, string operateip)
+
+        public static async Task AddErrorLog(string userid, string message, EnumSystemType systemtype, string operateip)
         {
             await LogDAL.AddErrorLog(userid, message, (int)systemtype, operateip);
         }
 
-        public static async void AddLog(string logguid, EnumLogObjectType type, string remark, string userid, string operateip, string guid, string agentid, string clientid)
+        public static async Task AddLog(string logguid, EnumLogObjectType type, string remark, string userid, string operateip, string guid, string agentid, string clientid)
         {
             string tablename = "";
             switch (type)
@@ -159,7 +159,7 @@ namespace CloudSalesBusiness
             await LogDAL.AddLog(tablename, logguid, remark, userid, operateip, guid, agentid, clientid);
         }
 
-        public static async void AddActionLog(EnumSystemType systemtype, EnumLogObjectType objecttype, EnumLogType actiontype,  string operateip, string userid, string agentid, string clientid)
+        public static async Task AddActionLog(EnumSystemType systemtype, EnumLogObjectType objecttype, EnumLogType actiontype, string operateip, string userid, string agentid, string clientid)
         {
             await LogDAL.AddActionLog((int)systemtype, (int)objecttype, (int)actiontype, operateip, userid, agentid, clientid);
         }

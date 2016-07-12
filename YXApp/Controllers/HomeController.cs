@@ -84,7 +84,7 @@ namespace YXApp.Controllers
 
                         string providerID = ProductService.AddProviders(zngcClientItem.client.companyName, zngcClientItem.client.contactName,
                                                     zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                                                    "", zngcClientID, "", "", yxClientItem.AgentID, yxClientID);
+                                                    "", zngcClientID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientID);
                         var zngcResult = CustomerBusiness.BaseBusiness.SetCustomerYXinfo(customerID, name, account, zngcClientID,
                                                     yxClientItem.AgentID, yxClientID, yxClientItem.ClientCode);
                         

@@ -12,6 +12,8 @@ namespace IntFactory.Sdk
         /// </summary>
         public string orderID;
 
+        public string clientID;
+
         /// <summary>
         /// 订单编码
         /// </summary>

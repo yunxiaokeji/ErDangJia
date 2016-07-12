@@ -16,6 +16,7 @@
                 $(".product-list .table-list .tr-header").after(innerHtml);
             });
         });
+
     };
 
     modules.exports = ObjectJS;

@@ -71,7 +71,6 @@
                 $(".registerErr").html("请输入正确手机号").slideDown();
                 return;
             }
-
             if ($("#loginName").val() == '') {
                 $(".registerErr").html("请输入手机号").slideDown();
                 return;
@@ -86,8 +85,9 @@
                             $(".registerErr").html("").slideUp();
                             ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
                         } else {
-                            $(".registerErr").html("手机号已被注册").slideDown();
-
+                            confirm("手机号已注册，登陆后自动绑定供应商,是否前往登陆?", function () {
+                                location.href = "/Home/Login?" + "zngcClientID=" + ObjectJS.clientID + "";
+                            });
                         }
                     });
                 }

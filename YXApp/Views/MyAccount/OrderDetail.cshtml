@@ -1,10 +1,15 @@
-﻿@section css{
-    <link href="/modules/css/product/detail.css" rel="stylesheet" />
+﻿@{
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    var model = (IntFactory.Sdk.OrderResult)ViewBag.DetailItem;
+    var order = model.order;
+}
+@section css{
+    <link href="/modules/css/myaccount/detail.css" rel="stylesheet" />
 }
 @section scripts{
     <script type="text/javascript">
         seajs.use("/modules/scripts/myaccount/historyorderdetail", function (obj) {
-            obj.init();
+            obj.init(JSON.stringify('@order'));
         });
     </script>
 }
@@ -14,32 +19,86 @@
 <div class="product-info">
     <div class="model-box">
         <div class="describe">产品名称：</div>
-        <div class="content-box">牛仔裤</div>
-    </div>
-    <div class="model-box mTop10">
-        <div class="describe">产品描述：</div>
-        <div class="content-box">好好啊好好好哦吼吼吼</div>
+        <div class="content-box">@(order.intGoodsCode+order.goodsName)</div>
     </div>
     <div class="model-box mTop10">
         <div class="describe">价格区间：</div>
         <div class="content-box">
-            <div>
-                <span class="left">100-120</span><span class="blue right">￥50</span>
-                <div class="clear"></div>
-            </div>
-            <div>
-                <span class="left">121-150</span><span class="blue right">￥45</span>
-                <div class="clear"></div>
-            </div>
-            <div>
-                <span class="left">151-300</span><span class="blue right">￥40</span>
-                <div class="clear"></div>
-            </div>
+            @(order.finalPrice)
         </div>
     </div>
-    <div class="add-shopping right mRight10 mTop30">加入采购列表</div>
+    <div class="add-shopping right mRight10 mTop30">立即下单</div>
     <div class="clear"></div>
-    <div class="product-list">
+    <div class="content-menu">
+        <div class="left mRight10 mLeft10 menu-module hover" id="plate-module">制版信息</div>
+        <div class="left menu-module" id="materials-module">材料信息</div>
+        <div class="clear"></div>
+    </div>
+    <div class="content-main">
+        <div class="plate-info" data-module="plate-module">
+            <div class="mBottom10">
+                <p style="text-indent:10px;">制版工艺</p>
+                <div id="plateMarking">
+                    @(new MvcHtmlString(Server.UrlDecode(order.platemaking)))
+                </div>
+            </div>
+            <div class="">
+                <p>工艺说明</p>
+                <div id="plateDescribe">
+                    <table class="table-list">
+                        <tr class="tr-header">
+                            <td>类型</td>
+                            <td>图标</td>
+                            <td>名称</td>
+                            <td>描述</td>
+                        </tr>
+                        @{
+                            int type=0;
+                            for (int i = 0; i < order.plateMakings.Count; i++)
+                            {
+                                var item = order.plateMakings[i];
+                                <tr class="list-item" id="tr-plate-{%=item.PlateID%}">
+                                    <td class="center">@(item.type==1?"裁剪":item.type==2?"粘衬":item.type==3?"缝制工艺":item.type==4?"成衣整烫":item.type==5?"成衣检验":"成品包装")</td>
+                                    <td class="center"><img style="width:30px;height:30px;" src="@item.icon" /></td>
+                                    <td class="center">@(item.title)</td>        
+                                    <td class="center">@(item.remark)</td>  
+                                </tr>
+                            }
+                         }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="hide materials-info" data-module="materials-module">
+           
+                <table class="table-list">
+                    <tr class="tr-header">
+                        <td>图片</td>
+                        <td>名称</td>
+                        <td>价格</td>
+                        <td>单位</td>
+                    </tr>
+                    @{
+                    foreach (var material in order.details)
+                    {
+                        <tr>
+                            <td class="center"><img src="@material.productImage" /></td>
+                            <td class="center">@(material.productName)</td>
+                            <td class="center">@(material.price.ToString("f2"))</td>
+                            <td class="center">@(material.unitName)</td>
+                        </tr>
+                    } 
+                    }  
+                </table> 
+           
+        </div>
+    </div>
+
+    <div class="product-box">
+        
+    </div>
+
+    <div class="product-list hide">
         <table class="table-list">
             <tr class="tr-header">
                 <td>产品名称</td>

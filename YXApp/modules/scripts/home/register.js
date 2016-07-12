@@ -49,14 +49,14 @@
                                 //location.href = "/Product/ProductList";
                             } else if (data.status == 2) {
                                 confirm("手机号已注册，登陆后自动绑定供应商,是否前往登陆?", function () {
-                                    location.href = "/Home/Login?" + "zngcClientID=" + data.zngcClientID + "";
+                                    location.href = "/Home/Login?" + "clientID=" + data.zngcClientID + "";
                                 });
                             } else {
                                 alert("注册失败");
                             }
                         } else if (data.result == 2) {
                             confirm("手机号已注册，登陆后自动绑定供应商,是否前往登陆?", function () {
-                                location.href = "/Home/Login?" + "zngcClientID=" + data.zngcClientID + "";
+                                location.href = "/Home/Login?" + "clientID=" + data.zngcClientID + "";
                             });
                         } else if (data.result == 3) {
                             alert('验证码有误');
@@ -109,7 +109,7 @@
                             ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
                         } else {
                             confirm("手机号已注册，登陆后自动绑定供应商,是否前往登陆?", function () {
-                                location.href = "/Home/Login?" + "zngcClientID=" + ObjectJS.clientID + "";
+                                location.href = "/Home/Login?" + "clientID=" + ObjectJS.clientID + "";
                             });
                         }
                     });

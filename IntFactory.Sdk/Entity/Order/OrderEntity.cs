@@ -12,6 +12,8 @@ namespace IntFactory.Sdk
         /// </summary>
         public string orderID;
 
+        public string clientID;
+
         public string goodsName;
 
         public string intGoodsCode;

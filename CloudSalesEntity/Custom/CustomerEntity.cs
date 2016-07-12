@@ -94,6 +94,8 @@ namespace CloudSalesEntity
         [Property("Lower")]
         public string ClientID { get; set; }
 
+        public decimal IntegerFee { get; set; }
+
         public string FirstName
         {
             get

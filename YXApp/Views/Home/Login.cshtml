@@ -16,7 +16,7 @@
     <script src="/Scripts/sea-config.js" type="text/javascript"></script>
     <script type="text/javascript">
         seajs.use(["scripts/home/login"], function (login) {
-            login.initLogin('@ViewBag.zngcClientID');
+            login.initLogin('@ViewBag.zngcClientID', '@ViewBag.ReturnUrl');
         });
     </script>
 </head>

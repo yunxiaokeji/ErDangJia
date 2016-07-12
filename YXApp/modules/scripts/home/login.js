@@ -4,7 +4,8 @@
     var Home = {};
 
     //登陆初始化
-    Home.initLogin = function (zngcClientID) {
+    Home.initLogin = function (zngcClientID, returnUrl) {
+        Home.returnUrl = returnUrl;
         Home.zngcClientID = zngcClientID;
         Home.bindLoginEvent();
     }
@@ -42,12 +43,12 @@
                 $("#btnLogin").html("登录").removeAttr("disabled");
 
                 if (data.result == 1) {
-                    //if (Home.returnUrl != '') {
-                    //    location.href = Home.returnUrl;
-                    //}
-                    //else {
-                    //}
-                    location.href = "/Product/ProductList";
+                    if (Home.returnUrl != '') {
+                        location.href = Home.returnUrl;
+                    }
+                    else {
+                        location.href = "/Product/ProductList";
+                    }
                 }
                 else if (data.result == 0) {
                     $(".registerErr").html("账号或密码有误").slideDown();

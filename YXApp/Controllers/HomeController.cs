@@ -21,8 +21,10 @@ namespace YXApp.Controllers
         Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
 
         #region view
-        public ActionResult Login(string zngcClientID="")
+        public ActionResult Login(string ReturnUrl, string zngcClientID = "")
         {
+            ReturnUrl = ReturnUrl ?? string.Empty;
+            ViewBag.ReturnUrl = ReturnUrl;
             ViewBag.zngcClientID = zngcClientID;
             return View();
         }

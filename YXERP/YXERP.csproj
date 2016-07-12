@@ -1149,7 +1149,6 @@
     <Content Include="modules\plug\umeditor\lang\zh-cn\images\music.png" />
     <Content Include="modules\plug\umeditor\lang\zh-cn\images\upload.png" />
     <Content Include="modules\plug\umeditor\lang\zh-cn\zh-cn.js" />
-    <Content Include="modules\plug\umeditor\themes\default\css\umeditor.css" />
     <Content Include="modules\plug\umeditor\themes\default\images\caret.png" />
     <Content Include="modules\plug\umeditor\themes\default\images\close.png" />
     <Content Include="modules\plug\umeditor\themes\default\images\icons.gif" />

@@ -839,23 +839,42 @@ namespace YXERP.Controllers
         public JsonResult SaveClientMemberLevel(string clientmemberlevel)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            ClientMemberLevel model = serializer.Deserialize<ClientMemberLevel>(clientmemberlevel);
-            model.CreateUserID = CurrentUser.UserID;
-            model.ClientID = CurrentUser.ClientID;
-            model.AgentID = CurrentUser.AgentID;
-            model.Status = 1;
+            List<ClientMemberLevel> modelList = serializer.Deserialize<List<ClientMemberLevel>>(clientmemberlevel);
+            var tempList = SystemBusiness.BaseBusiness.GetClientMemberLevel(CurrentUser.AgentID, CurrentUser.ClientID);
+            modelList.ForEach(x =>
+            {
+                x.CreateUserID = CurrentUser.UserID;
+                x.ClientID = CurrentUser.ClientID;
+                x.AgentID = CurrentUser.AgentID;
+                x.Status = 1;
+                var temp = tempList.Where(y => y.Origin == x.Origin).FirstOrDefault();
+                if (temp != null)
+                {
+                    x.LevelID = temp.LevelID;
+                } 
+            });
+            var delList = tempList.Where(x => !modelList.Exists(y => y.Origin == x.Origin)).ToList();
+            var addList = modelList.Where(x => string.IsNullOrEmpty(x.LevelID)).ToList();
+            var updList = modelList.Where(x => !string.IsNullOrEmpty(x.LevelID)).ToList();
             string result = "";
-            if (string.IsNullOrEmpty(model.LevelID))
+            if (delList.Any())
             {
-                string mes = SystemBusiness.BaseBusiness.CreateClientMemberLevel(Guid.NewGuid().ToString(),
-                    model.Name.Trim(),model.AgentID, model.ClientID, model.CreateUserID,model.DiscountFee,
-                    model.IntegFeeMore, model.Status, model.ImgUrl);
-                result = string.IsNullOrEmpty(mes) ? result : mes;
+                delList.ForEach(x => { SystemBusiness.BaseBusiness.DeleteClientMemberLevel(CurrentUser.ClientID, CurrentUser.AgentID, x.LevelID); });
             }
-            else
+            updList.ForEach(x =>
             {
-                result = SystemBusiness.BaseBusiness.UpdateClientMemberLevel(model.ClientID, model.LevelID, 
-                    model.Name, model.DiscountFee, model.IntegFeeMore,model.ImgUrl);
+                result += SystemBusiness.BaseBusiness.UpdateClientMemberLevel(x.ClientID, x.LevelID,
+                x.Name, x.DiscountFee, x.IntegFeeMore, x.ImgUrl);
+            });
+            if (addList.Any())
+            {
+                addList.ForEach(x =>
+                {
+                    string mes = SystemBusiness.BaseBusiness.CreateClientMemberLevel(Guid.NewGuid().ToString(),
+                        x.Name.Trim(), x.AgentID, x.ClientID, x.CreateUserID, x.DiscountFee,
+                        x.IntegFeeMore, x.Status, x.ImgUrl,x.Origin);
+                    result += string.IsNullOrEmpty(mes) ? result : mes;
+                });
             }
             JsonDictionary.Add("result", result);
             return new JsonResult

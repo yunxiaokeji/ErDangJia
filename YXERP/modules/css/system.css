@@ -38,8 +38,8 @@
 .industrylist{margin: 0px auto;margin-right: 5px;   padding:22px 0px 0px 6px;  width: 20px;   font-size: 12px;  word-wrap: break-word;  letter-spacing: 20px;
     background-color: #E6E6E6;  border-radius:3px;  height:180px;}
 .memberlevelul {  margin: 15px 0;}
-.memberlevelul li{ width: 210px;  float: left;  margin-right: 40px;  margin-bottom: 25px;    list-style-type: none;}
-.memberlevelul li .levelitem { width: 210px;border: solid 1px #ccc;  }
+.memberlevelul li{ width: 100%;  float: left;  margin-right: 40px;  margin-bottom: 10px;    list-style-type: none;}
+/*.memberlevelul li .levelitem { width: 210px;border: solid 1px #ccc;  }*/
 .levelitem tr td{text-align:left;line-height: 20px;}
 
 /*团队成员*/

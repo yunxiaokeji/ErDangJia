@@ -664,10 +664,9 @@ namespace CloudSalesBusiness
             }
             return "";
         }
-        public string CreateClientMemberLevel(string levelid, string name, string agentid, string clientid, string userid, decimal discountfee, decimal integfeemore, int status = 1, string imgurl="")
+        public string CreateClientMemberLevel(string levelid, string name, string agentid, string clientid, string userid, decimal discountfee, decimal integfeemore, int status = 1, string imgurl="",int origin=1)
         {
             imgurl = GetUploadImgurl(imgurl);
-            int origin = 1;
             string result = SystemDAL.BaseProvider.InsertClientMemberLevel(levelid, name, clientid, agentid, userid, discountfee, integfeemore, ref origin, status, imgurl);
             if (string.IsNullOrEmpty(result))
             {

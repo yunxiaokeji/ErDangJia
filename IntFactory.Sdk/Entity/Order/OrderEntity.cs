@@ -43,5 +43,9 @@ namespace IntFactory.Sdk
         public List<PlateMakingEntity> plateMakings;
 
         public List<ProductDetailEntity> details;
+
+        public List<ProductAttrEntity> attrLists;
+
+        public List<ProductAttrEntity> saleAttrs;
     }
 }

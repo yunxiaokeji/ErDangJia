@@ -62,6 +62,9 @@ namespace IntFactory.Sdk
         [Description("/api/order/getOrderDetailByID")]
         GetOrderDetailByID,
 
+        [Description("/api/order/createDHOrder")]
+        CreateDHOrder,
+
         [Description("/api/client/getClientInfo")]
         GetClientInfo
     }

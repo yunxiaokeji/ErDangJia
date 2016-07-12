@@ -46,7 +46,6 @@
                     //    location.href = Home.returnUrl;
                     //}
                     //else {
-                    //    location.href = "/task/list";
                     //}
                     location.href = "/Product/ProductList";
                 }

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace YXApp.Controllers
 {
-    public class MyAccountController : Controller
+    public class MyAccountController : BaseController
     {
         //
         // GET: /MyAccount/
@@ -17,5 +17,16 @@ namespace YXApp.Controllers
             return View();
         }
 
+        public ActionResult HistoryOrder()
+        {
+            ViewBag.Title = "历史订单";
+            return View();
+        }
+
+        public ActionResult OrderDetail()
+        {
+            ViewBag.Title = "订单详情";
+            return View();
+        }
     }
 }

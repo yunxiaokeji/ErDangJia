@@ -133,6 +133,8 @@ define(function (require, exports, module) {
                                     _self.getList();
                                 } else if (data.result == 10002) {
                                     alert("存在关联数据，删除失败");
+                                } else if (data.result == 10003) {
+                                    alert("删除失败，系统内至少保留一个供应商");
                                 } else {
                                     alert("删除失败！");
                                 }

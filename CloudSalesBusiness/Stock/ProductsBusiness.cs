@@ -856,7 +856,7 @@ namespace CloudSalesBusiness
             { 
                 int result = 0;
                 string pid
-                    = this.AddProduct(x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.BrandID,
+                    = this.AddProduct(x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.ProviderID, x.BrandID,
                     x.BigUnitID, x.UnitID, x.BigSmallMultiple.Value, x.CategoryID, x.Status.Value, x.AttrList, x.ValueList, x.AttrValueList,
                     x.CommonPrice.Value, x.Price, x.Weight.Value, (x.IsNew == 1), (x.IsRecommend == 1), x.IsAllow, x.IsAutoSend, x.EffectiveDays.Value,
                     x.DiscountValue.Value, x.WarnCount, x.ProductImage, x.ShapeCode, x.Description, x.ProductDetails, x.CreateUserID, agentid, x.ClientID, out result);
@@ -868,7 +868,7 @@ namespace CloudSalesBusiness
             return string.IsNullOrEmpty(mes) ? "" : mes;
         }
 
-        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
+        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
                                  bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description,
                                  List<ProductDetail> details, string operateid, string agentid, string clientid, out int result)
@@ -898,7 +898,7 @@ namespace CloudSalesBusiness
                 }
 
                 var dal = new ProductsDAL();
-                string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
+                string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
                                         valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
                                         productImg, shapeCode, description, operateid, clientid, out result);
                 //产品添加成功添加子产品
@@ -963,7 +963,7 @@ namespace CloudSalesBusiness
             return CommonBusiness.Update("Products", "IsRecommend", isRecommend ? "1" : "0", " ProductID='" + productid + "'");
         }
 
-        public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
+        public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
                          bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
         {
@@ -990,7 +990,7 @@ namespace CloudSalesBusiness
             }
 
             var dal = new ProductsDAL();
-            return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid, attrlist,
+            return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid, attrlist,
                                     valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg,
                                     shapeCode, description, operateid, clientid, out result);
         }

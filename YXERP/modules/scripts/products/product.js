@@ -235,6 +235,7 @@ define(function (require, exports, module) {
             ProductName: $("#productName").val().trim(),
             GeneralName: $("#generalName").val().trim(),
             IsCombineProduct: 0,
+            ProviderID: $("#provider").val(),
             BrandID: $("#brand").val(),
             BigUnitID: $("#smallUnit").val().trim(),//$("#bigUnit").val().trim(),
             UnitID: $("#smallUnit").val().trim(),
@@ -572,11 +573,10 @@ define(function (require, exports, module) {
         for (var i = 0, j = list.length; i < j; i++) {
             $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]);
         }
-
-        $("#brand").val(model.BrandID);
+        model.ProviderID && $("#provider").val(model.ProviderID);
+        model.BrandID && $("#brand").val(model.BrandID);
         $("#smallUnit").val(model.UnitID);
         $("#bigUnit").val(model.BigUnitID);
-
         $("#bigSmallMultiple").val(model.BigSmallMultiple);
         $("#commonprice").val(model.CommonPrice);
         $("#price").val(model.Price);

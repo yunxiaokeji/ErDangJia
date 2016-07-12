@@ -16,10 +16,13 @@ define(function (require, exports, module) {
     var ObjectJS = {};
 
     //初始化数据
-    ObjectJS.init = function () {
+    ObjectJS.init = function (type) {
+        var _self = this;
+        _self.type = type;
         ObjectJS.bindEvent();
         ObjectJS.bindCategory();
         ObjectJS.cache();
+        ObjectJS.bindStyle();
     }
 
     //缓存数据
@@ -28,6 +31,13 @@ define(function (require, exports, module) {
         Global.post("/Products/GetAttrs", {}, function (data) {
             CacheAttrs = data.items;
         });
+    }
+
+    ObjectJS.bindStyle = function () {
+        var _self = this;
+        if (_self.type == "add") {
+            $(".category-add,.category-edit,.category-del").remove();
+        }
     }
 
     //绑定事件
@@ -45,6 +55,8 @@ define(function (require, exports, module) {
                     var _obj = _self.getChild(_this.data("id"), _this.prevUntil("div").html(), _this.data("eq"));
                     _this.parent().after(_obj);
                 }
+                _self.bindStyle();
+
                 $("#" + _this.data("id")).show();
             } else { //隐藏子下属
                 _this.data("state", "close");
@@ -155,6 +167,8 @@ define(function (require, exports, module) {
                     var item=data.items[i];
                     CacheCategorys[item.CategoryID] = item.ChildCategorys;
                 }
+
+                _self.bindStyle();
             });
         });
     }

@@ -59,7 +59,6 @@ namespace CloudSalesEntity
 		private string _productimage="";
 		private int? _effectivedays=0;
 		private string _shapecode="";
-		private string _prodiverid;
 		private string _description="";
 		private string _createuserid;
 		private DateTime _createtime= DateTime.Now;
@@ -351,12 +350,9 @@ namespace CloudSalesEntity
         /// <summary>
         /// 
         /// </summary>
-        [Property("Lower")] 
-		public string ProdiverID
-		{
-			set{ _prodiverid=value;}
-			get{return _prodiverid;}
-		}
+        [Property("Lower")]
+        public string ProviderID { get; set; }
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -444,6 +440,8 @@ namespace CloudSalesEntity
         public int LogicOut { get; set; }
 
         public string ImgS { get; set; }
+
+        public string ProviderName { get; set; }
 
         /// <summary>
         /// 填充数据

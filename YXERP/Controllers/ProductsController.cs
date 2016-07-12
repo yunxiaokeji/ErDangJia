@@ -871,7 +871,20 @@ namespace YXERP.Controllers
                                     detail.CreateUserID = CurrentUser.UserID;
                                     detail.ClientID = CurrentUser.ClientID;
                                     product.HasDetails = 1;
-                                    product.ProductDetails.Add(detail);
+                                    if (
+                                        !product.ProductDetails.Where(
+                                            x => !string.IsNullOrEmpty(x.Remark) && x.Remark == detail.Remark).Any() && !product.ProductDetails.Where(
+                                            x => !string.IsNullOrEmpty(x.DetailsCode) && x.DetailsCode == detail.DetailsCode).Any())
+                                    {
+                                        product.ProductDetails.Add(detail);
+                                    }
+                                    else
+                                    {
+                                        if (mes.IndexOf(product.ProductCode) == -1)
+                                        {
+                                            mes += "编码为:" + product.ProductCode + "的产品存在相同【规格名称】或【规格编码】,默认插入相同规格的第一条";
+                                        }
+                                    }
 
                                 }
                                 if (!string.IsNullOrEmpty(product.CategoryID))
@@ -895,13 +908,12 @@ namespace YXERP.Controllers
                     try
                     {
                         if (list.Count > 0)
-                        {
-                            //mes= ExcelImportBusiness.InsertProduct(list,null);
-                            mes = ProductsBusiness.BaseBusiness.AddProduct(list, CurrentUser.AgentID);
+                        { 
+                            mes += ExcelImportBusiness.AddProduct(list, CurrentUser.AgentID);
                         }
                         if (!string.IsNullOrEmpty(mes))
                         {
-                            return Content(list.Count > 0 ? "部分" : "" + "数据未导入成功,原因如下 ：" + mes);
+                            return Content((list.Count > 0 ? "部分" :"" ) + "数据未导入成功,原因如下 ："+ mes);
                         }
                         else
                         {

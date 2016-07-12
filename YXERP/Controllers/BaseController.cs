@@ -179,7 +179,7 @@ namespace YXERP.Controllers
                                     ImgList = NPOIExtendImg.GetAllPictureInfos(sheet);
                                     imgForm = false;
                                 } 
-                                datarow[j] = GetImgsUrl(ImgList, i);
+                                datarow[j] = GetImgsUrl(ImgList, i-1);
                                 continue; 
                             } 
                         }

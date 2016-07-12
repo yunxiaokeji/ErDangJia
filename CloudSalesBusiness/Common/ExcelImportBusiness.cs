@@ -37,6 +37,7 @@ namespace CloudSalesBusiness
             });
             return handleCount > 0 ? "" : "导入失败,请联系管理员";
         }
+
         public static string InsertContact(List<ContactEntity> list, int type, int overType)
         {
             int handleCount = 0;
@@ -52,6 +53,25 @@ namespace CloudSalesBusiness
                 }
             });
             return handleCount > 0 ? "" : "导入失败,请联系管理员";
-        }         
+        }
+
+        public static string AddProduct(List<Products> list, string agentid = "")
+        {
+            string mes = "";
+            list.ForEach(x =>
+            {
+                int result = 0;
+                string pid
+                    = ProductsBusiness.BaseBusiness.AddProduct(x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.BrandID,
+                    x.BigUnitID, x.UnitID, x.BigSmallMultiple.Value, x.CategoryID, x.Status.Value, x.AttrList, x.ValueList, x.AttrValueList,
+                    x.CommonPrice.Value, x.Price, x.Weight.Value, (x.IsNew == 1), (x.IsRecommend == 1), x.IsAllow, x.IsAutoSend, x.EffectiveDays.Value,
+                    x.DiscountValue.Value, x.WarnCount, x.ProductImage, x.ShapeCode, x.Description, x.ProductDetails, x.CreateUserID, agentid, x.ClientID, out result);
+                if (result != 1)
+                {
+                    mes += result == 2 ? "编码" + x.ProductCode + "已存在," : result == 3 ? "条形码" + x.ShapeCode + "已存在," : "";
+                }
+            });
+            return  mes;
+        }
     }
 }

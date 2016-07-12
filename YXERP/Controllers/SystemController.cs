@@ -9,6 +9,8 @@ using CloudSalesBusiness;
 using CloudSalesEntity;
 using CloudSalesBusiness.Manage;
 using CloudSalesEntity.Manage;
+using CloudSalesEnum;
+
 namespace YXERP.Controllers
 {
     public class SystemController : BaseController
@@ -23,6 +25,9 @@ namespace YXERP.Controllers
 
         public ActionResult Sources()
         {
+            ViewBag.integerFee = CommonBusiness.getClientSetting(EnumSettingKey.IntegralScale, "DValue",
+                CurrentUser.AgentID, CurrentUser.ClientID);
+            ViewBag.Items = new SystemBusiness().GetClientIndustry(CurrentUser.AgentID, CurrentUser.ClientID);
             return View();
         }
 
@@ -826,7 +831,6 @@ namespace YXERP.Controllers
         /// <returns></returns>
         public JsonResult GetClientMemberLevel()
         {
-
             var list = new SystemBusiness().GetClientMemberLevel(CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             return new JsonResult
@@ -887,6 +891,29 @@ namespace YXERP.Controllers
         public JsonResult DeleteClientMemberLevel(string levelid)
         {
             string result = SystemBusiness.BaseBusiness.DeleteClientMemberLevel(CurrentUser.ClientID, CurrentUser.AgentID, levelid);
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult SaveClietRule(decimal integerFee)
+        {
+            bool result =CommonBusiness.SetClientSetting(EnumSettingKey.IntegralScale, integerFee, CurrentUser.UserID, OperateIP,
+                CurrentUser.AgentID, CurrentUser.ClientID);
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult ChangeCumoterLevel()
+        {
+            bool result = CustomBusiness.BaseBusiness.RefreshCustomerLeve( CurrentUser.AgentID, CurrentUser.ClientID ,OperateIP, CurrentUser.UserID);
             JsonDictionary.Add("result", result);
             return new JsonResult
             {

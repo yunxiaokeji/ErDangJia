@@ -32,7 +32,7 @@ namespace CloudSalesBusiness
         private static Dictionary<string, List<WareHouse>> _wares;
         private static Dictionary<string, List<ClientsIndustry>> _clientInsdutryList;
         private static Dictionary<string, List<ClientMemberLevel>> _clientMemberLevelList;
-
+    
         public static Dictionary<string, List<ClientMemberLevel>> ClientMemberLevelList
         {
             get

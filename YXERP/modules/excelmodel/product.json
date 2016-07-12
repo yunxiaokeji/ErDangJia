@@ -204,20 +204,6 @@
 			"importcolumn":"",		
 			"datatype":"int",
 			"defaulttext":120
-        },
-		"Description":{
-			"title": "产品说明",
-            "hide": false,
-            "format": false,
-            "exporttype": -1,
-			"testexporttype": -1,
-			"datasource":"",
-			"importtype":-1,
-			"importcolumn":"",		
-			"datatype":"string",
-			"defaulttext":"为不同行业领域的企业打造一个共同的企业供应链管理平台"
-		}
-
-		
+        }		
     } 
 }

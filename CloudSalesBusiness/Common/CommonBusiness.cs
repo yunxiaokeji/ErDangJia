@@ -55,6 +55,7 @@ namespace CloudSalesBusiness
             }
         }
         private static List<Menu> _clientMenus;
+         
         /// <summary>
         /// 客户端菜单
         /// </summary>
@@ -85,8 +86,7 @@ namespace CloudSalesBusiness
             {
                 _clientMenus = value;
             }
-        }
-
+        } 
         private static List<Menu> _manageMenus;
         /// <summary>
         /// 后台端菜单
@@ -377,13 +377,18 @@ namespace CloudSalesBusiness
             return model;
         }
 
+        public static object getClientSetting(EnumSettingKey key, string columnName ,string agentid, string clientid)
+        {
+            return Select("ClientSetting", columnName, "ClientID='" + clientid + "' and [KeyType]=" + (int)key);
+        }
+
         /// <summary>
         /// 设置系统参数
         /// </summary>
         /// <returns></returns>
         public static bool SetClientSetting(EnumSettingKey key, object value, string userid, string ip, string agentid, string clientid)
         {
-            bool bl = Update("ClientSetting", GetEnumDesc<EnumSettingKey>(key), value, "ClientID='" + clientid + "' and [Key]=" + (int)key);
+            bool bl = Update("ClientSetting", GetEnumDesc<EnumSettingKey>(key), value, "ClientID='" + clientid + "' and [KeyType]=" + (int)key);
             if (bl)
             {
                 string message = "";

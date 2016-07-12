@@ -86,16 +86,20 @@ namespace YunXiaoService
         public static Users GetUserByAccount(EnumAccountType accountType, string account, string pwd, string companyid, string ip,out int result)
         {
             result = 0;
+            Users model = null;
             switch (accountType)
             {
                 case EnumAccountType.UserName:
-                    return OrganizationBusiness.GetUserByUserName(account, pwd, out result, ip);
+                    model= OrganizationBusiness.GetUserByUserName(account, pwd, out result, ip);
+                    break;
                 case EnumAccountType.Mobile:
-                    return OrganizationBusiness.GetUserByUserName(account, pwd, out result, ip);
+                    model= OrganizationBusiness.GetUserByUserName(account, pwd, out result, ip);
+                    break;
                 case EnumAccountType.MingDao:
-                    return OrganizationBusiness.GetUserByMDUserID(account, companyid, ip);
+                    model= OrganizationBusiness.GetUserByMDUserID(account, companyid, ip);
+                    break;
             }
-            return null;
+            return model;
         }
 
         /// <summary>

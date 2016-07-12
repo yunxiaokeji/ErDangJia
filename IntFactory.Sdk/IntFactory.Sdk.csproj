@@ -61,12 +61,15 @@
     <Compile Include="Entity\Customer\CustomerResult.cs" />
     <Compile Include="Entity\Order\OrderEntity.cs" />
     <Compile Include="Entity\Order\OrderListResult.cs" />
+    <Compile Include="Entity\Order\PlateMakingEntity.cs" />
+    <Compile Include="Entity\Order\OrderResult.cs" />
     <Compile Include="Entity\Product\ProductBaseEntity.cs" />
     <Compile Include="Entity\Order\OrderBaseEntity.cs" />
     <Compile Include="Entity\Order\ProcessEntity.cs" />
     <Compile Include="Entity\Order\ProcessListResult.cs" />
     <Compile Include="Entity\Order\ProcessStageEntity.cs" />
     <Compile Include="Entity\Order\ProcessStageListResult.cs" />
+    <Compile Include="Entity\Product\ProductDetailEntity.cs" />
     <Compile Include="Entity\Task\FilterTasks.cs" />
     <Compile Include="Entity\Task\TaskDetailEntity.cs" />
     <Compile Include="Entity\Task\TaskDetailResult.cs" />

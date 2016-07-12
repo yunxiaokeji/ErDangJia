@@ -18,6 +18,12 @@ namespace IntFactory.Sdk
 
         public decimal finalPrice;
 
+        public string categoryID;
+
+        public string categoryName;
+
+        public string platemaking;
+
         /// <summary>
         /// 订单样图缩约图
         /// </summary>
@@ -32,6 +38,8 @@ namespace IntFactory.Sdk
 
         public DateTime endTime;
 
+        public List<PlateMakingEntity> plateMakings;
 
+        public List<ProductDetailEntity> details;
     }
 }

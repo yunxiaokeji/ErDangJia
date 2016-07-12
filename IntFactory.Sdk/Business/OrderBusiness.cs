@@ -18,5 +18,15 @@ namespace IntFactory.Sdk.Business
 
             return HttpRequest.RequestServer<OrderListResult>(ApiOption.GetOrdersByYXClientCode, paras);
         }
+
+        public OrderResult GetOrderDetailByID(string orderID, string zngcClientID)
+        {
+            var paras = new Dictionary<string, object>();
+            paras.Add("orderID", orderID);
+            paras.Add("clientID", zngcClientID);
+
+            return HttpRequest.RequestServer<OrderResult>(ApiOption.GetOrderDetailByID, paras);
+        }
+
     }
 }

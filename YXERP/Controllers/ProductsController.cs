@@ -31,10 +31,9 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult Category() 
+        public ActionResult Category(string type = "") 
         {
-            var list = new ProductsBusiness().GetChildCategorysByID("", CurrentUser.ClientID);
-            ViewBag.Items = list;
+            ViewBag.Type = type;
             return View();
         }
 
@@ -47,6 +46,7 @@ namespace YXERP.Controllers
         {
             ViewBag.Model = new ProductsBusiness().GetCategoryDetailByID(id);
             ViewBag.BrandList = new ProductsBusiness().GetBrandList(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.UnitList = new ProductsBusiness().GetClientUnits(CurrentUser.ClientID);
             return View();
         }
@@ -56,6 +56,7 @@ namespace YXERP.Controllers
             var model = new ProductsBusiness().GetProductByID(id);
             ViewBag.Model = model;
             ViewBag.BrandList = new ProductsBusiness().GetBrandList(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.UnitList = new ProductsBusiness().GetClientUnits(CurrentUser.ClientID);
             return View();
         }
@@ -547,14 +548,14 @@ namespace YXERP.Controllers
             string id = "";
             if (string.IsNullOrEmpty(model.ProductID))
             {
-                id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
+                id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                                                         model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
             }
             else
             {
-                bool bl = new ProductsBusiness().UpdateProduct(model.ProductID,model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
+                bool bl = new ProductsBusiness().UpdateProduct(model.ProductID, model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.Status.Value, model.CategoryID, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                                                         model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
@@ -855,12 +856,37 @@ namespace YXERP.Controllers
                     {
                         try
                         {
-                            Products product=new Products();
-                            excelWriter.GetProductByDataRow(dr, listColumn, product,dic,CurrentUser.ClientID);
-                            product.CreateUserID = CurrentUser.UserID;
-                            product.ClientID = CurrentUser.ClientID;
-                            product.BigUnitID = "";
-                            list.Add(product);
+                            if (!list.Where(x => x.ProductCode == dr["产品编码"].ToString()).Any())
+                            {
+                                Products product = new Products();
+                                excelWriter.GetProductByDataRow(dr, listColumn, product, dic, CurrentUser.ClientID);
+                                product.CreateUserID = CurrentUser.UserID;
+                                product.ClientID = CurrentUser.ClientID;
+                                product.BigUnitID = "";
+                                product.ProductDetails = new List<ProductDetail>();
+                                DataRow[] details = dt.Select("产品编码='" + product.ProductCode + "'");
+                                foreach (DataRow drr in details)
+                                {
+                                    ProductDetail detail = new ProductDetail();
+                                    excelWriter.GetProductByDataRow(drr, listColumn, detail, dic, CurrentUser.ClientID);
+                                    detail.CreateUserID = CurrentUser.UserID;
+                                    detail.ClientID = CurrentUser.ClientID;
+                                    product.HasDetails = 1;
+                                    product.ProductDetails.Add(detail);
+
+                                }
+                                if (!string.IsNullOrEmpty(product.CategoryID))
+                                {
+                                    list.Add(product);
+                                }
+                                else
+                                {
+                                    if (mes.IndexOf(dr["类别编码"].ToString()) == -1)
+                                    {
+                                        mes += dr["类别编码"] + "类别编码不存在";
+                                    }
+                                }
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -871,11 +897,12 @@ namespace YXERP.Controllers
                     {
                         if (list.Count > 0)
                         {
-                            mes= ExcelImportBusiness.InsertProduct(list,imgList);
+                            //mes= ExcelImportBusiness.InsertProduct(list,null);
+                            mes = ProductsBusiness.BaseBusiness.AddProduct(list, CurrentUser.AgentID);
                         }
                         if (!string.IsNullOrEmpty(mes))
                         {
-                            return Content("部分数据未导入成功,原因如下 ：" + mes);
+                            return Content(list.Count > 0 ? "部分" : "" + "数据未导入成功,原因如下 ：" + mes);
                         }
                         else
                         {
@@ -886,7 +913,6 @@ namespace YXERP.Controllers
                     {
                         return Content("系统异常:请联系管理员,错误原因" + ex.Message);
                     }
-
                 }
                 if (!string.IsNullOrEmpty(mes))
                 {

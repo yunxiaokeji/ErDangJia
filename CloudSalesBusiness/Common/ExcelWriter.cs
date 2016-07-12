@@ -326,7 +326,13 @@ namespace CloudSalesBusiness
                     string categoryID = "";
                     if (!string.IsNullOrEmpty(coulumnValue))
                     {
-                        var category = ProductsBusiness.BaseBusiness.GetCategorys(clientID).Where(x => x.CategoryName == coulumnValue.Trim()).FirstOrDefault();
+                        var category = ProductsBusiness.BaseBusiness.GetCategorys(clientID).Where(x => x.CategoryCode == coulumnValue.Trim()).FirstOrDefault();
+                        if (category == null)
+                        {
+                            category =ProductsBusiness.BaseBusiness.GetCategorys(clientID)
+                                    .Where(x => x.CategoryName == coulumnValue.Trim())
+                                    .FirstOrDefault();
+                        }
                         if (category != null)
                         {
                             categoryID = category.CategoryID;

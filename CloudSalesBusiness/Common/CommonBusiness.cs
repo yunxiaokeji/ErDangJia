@@ -350,6 +350,7 @@ namespace CloudSalesBusiness
             }
             return listStr;
         }
+
         /// <summary>
         /// DataRow 转实体类 Michaux 添加
         /// </summary>
@@ -374,6 +375,30 @@ namespace CloudSalesBusiness
             }
              
             return model;
+        }
+
+        /// <summary>
+        /// 设置系统参数
+        /// </summary>
+        /// <returns></returns>
+        public static bool SetClientSetting(EnumSettingKey key, object value, string userid, string ip, string agentid, string clientid)
+        {
+            bool bl = Update("ClientSetting", GetEnumDesc<EnumSettingKey>(key), value, "ClientID='" + clientid + "' and [Key]=" + (int)key);
+            if (bl)
+            {
+                string message = "";
+                switch (key)
+                {
+                    case EnumSettingKey.IntegralSource:
+                        message = Convert.ToInt32(value) == 1 ? "积分规则变更为以产品积分计算" : "积分规则变更为以订单金额计算";
+                        break;
+                    case EnumSettingKey.IntegralScale:
+                        message = "金额积分比例设置为：" + value;
+                        break;
+                }
+                LogBusiness.AddOperateLog(userid, "", EnumLogType.Update, EnumLogModules.System, EnumLogEntity.ClientSetting, key.ToString(), message, ip, agentid, clientid);
+            }
+            return bl;
         }
     }
 }

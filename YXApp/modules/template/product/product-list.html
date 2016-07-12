@@ -1,0 +1,24 @@
+﻿{%
+    for(var i=0;i<$data.length;i++)
+    {
+        var item=$data[i];
+%}
+<div class="product-box">
+    <div class="product-img left">
+        <a href="/Product/Detail">
+            <img src="{%=item.orderImage!=""?item.orderImage:'/modules/images/defaultavatar.png'%}" />
+        </a>
+    </div>
+    <div class="product-info left mLeft10">
+        <ul>
+            <li class="long">{%=item.goodsName+item.intGoodsCode%}</li>
+            <li>
+                <p>创建时间：{%=item.createTime.toDate('yyyy-MM-dd')%}</p>
+                <p>结束时间：{%=item.endTime.toDate('yyyy-MM-dd')%}</p>
+                <p>产品价格：￥{%=item.finalPrice%}</p>
+            </li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+{%}%}

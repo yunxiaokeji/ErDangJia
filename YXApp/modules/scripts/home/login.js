@@ -1,16 +1,11 @@
-﻿
-
-define(function (require, exports, module) {
-
+﻿define(function (require, exports, module) {
     require("jquery");
-
-    var Global = require("global")
-
+    var Global = require("global");
     var Home = {};
 
     //登陆初始化
-    Home.initLogin = function (returnUrl) {
-        Home.returnUrl = returnUrl;
+    Home.initLogin = function (zngcClientID) {
+        Home.zngcClientID = zngcClientID;
         Home.bindLoginEvent();
     }
 
@@ -37,31 +32,31 @@ define(function (require, exports, module) {
             $(this).html("登录中...").attr("disabled", "disabled");
 
             Global.post("/Home/UserLogin", {
+                type: 2,
                 userName: $("#iptUserName").val(),
-                pwd: $("#iptPwd").val()
+                pwd: $("#iptPwd").val(),
+                companyID: "",
+                zngcClientID: Home.zngcClientID
             },
-            function (data)
-            {
+            function (data) {
                 $("#btnLogin").html("登录").removeAttr("disabled");
 
-                if (data.result == 1)
-                {
-                    if (Home.returnUrl != '') {
-                        location.href = Home.returnUrl;
-                    }
-                    else {
-                        location.href = "/task/list";
-                    }
+                if (data.result == 1) {
+                    //if (Home.returnUrl != '') {
+                    //    location.href = Home.returnUrl;
+                    //}
+                    //else {
+                    //}
+                    location.href = "/Product/ProductList";
                 }
-                else if (data.result == 0)
-                {
-                   $(".registerErr").html("账号或密码有误").slideDown();
+                else if (data.result == 0) {
+                    $(".registerErr").html("账号或密码有误").slideDown();
                 }
                 else if (data.result == 2) {
                     $(".registerErr").html("密码输入错误超过3次，请2小时后再试").slideDown();
                 }
                 else if (data.result == 3) {
-                    $(".registerErr").html("账号或密码有误,您还有" + (3 - parseInt( data.errorCount) ) + "错误机会").slideDown();
+                    $(".registerErr").html("账号或密码有误,您还有" + (3 - parseInt(data.errorCount)) + "错误机会").slideDown();
                 }
                 else if (data.result == 4) {
                     $(".registerErr").html("该系统已绑定过阿里账户,不能再绑定");
@@ -70,8 +65,7 @@ define(function (require, exports, module) {
                     alert("请重新阿里授权");
                     setTimeout(function () { location.href = "/home/login"; }, 500);
                 }
-                else if (data.result == -1)
-                {
+                else if (data.result == -1) {
                     $(".registerErr").html("账号已冻结，请" + data.forbidTime + "分钟后再试").slideDown();
                 }
             });

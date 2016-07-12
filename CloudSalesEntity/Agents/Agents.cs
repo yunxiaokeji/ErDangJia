@@ -168,29 +168,15 @@ namespace CloudSalesEntity
 
         public decimal TotalOut { get; set; }
 
-        public int AuthorizeType
-        {
-            set;
-            get;
-        }
+        public int AuthorizeType { set; get; }
 
-        public int UserQuantity
-        {
-            set;
-            get;
-        }
+        public int UserQuantity { set; get; }
 
-        public DateTime EndTime
-        {
-            set;
-            get;
-        }
+        public DateTime EndTime { set; get; }
 
-        public string AgentKey
-        {
-            set;
-            get;
-        }
+        public string AgentKey { set; get; }
+
+        public string IsIntFactory { get; set; }
 
         public void FillData(System.Data.DataRow dr) 
         {

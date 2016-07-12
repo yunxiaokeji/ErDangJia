@@ -17,6 +17,8 @@ namespace IntFactory.Sdk
 
         public string mobilePhone;
 
+        public string clientCode;
+
         public string address;
 
     }

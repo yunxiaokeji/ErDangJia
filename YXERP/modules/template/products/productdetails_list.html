@@ -1,6 +1,7 @@
 ﻿{%
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
+    if(item.IsDefault==0){
 %}
 <tr class="list-item">
     <td><img onerror="this.src='/modules/images/default.png'" src="{%=item.ImgS||'/modules/images/default.png'%}" /></td>
@@ -13,4 +14,4 @@
         <span class="iconfont ico-del right mRight3 mTop1" title="删除" data-id="{%=item.ProductDetailID%}"></span>
     </td>
 </tr>
-{% } %}
+{% }} %}

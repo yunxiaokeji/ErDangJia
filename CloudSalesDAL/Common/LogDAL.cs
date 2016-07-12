@@ -51,10 +51,10 @@ namespace CloudSalesDAL
             return Task.Run(() => { return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0; });
         }
 
-        public static Task<bool> AddOperateLog(string userid, string funcname, int type, int modules, int entity, string guid, string message, string operateip)
+        public static Task<bool> AddOperateLog(string userid, string funcname, int type, int modules, int entity, string guid, string message, string operateip, string agentid, string clientid)
         {
-            string sqlText = "insert into Log_Operate(UserID,FuncName,Type,Modules,Entity,GUID,Message,CreateTime,OperateIP) " +
-                            " values(@UserID,@FuncName,@Type,@Modules,@Entity,@GUID,@Message,GETDATE(),@OperateIP)";
+            string sqlText = "insert into Log_Operate(UserID,FuncName,Type,Modules,Entity,GUID,Message,CreateTime,OperateIP,AgentID,ClientID) " +
+                            " values(@UserID,@FuncName,@Type,@Modules,@Entity,@GUID,@Message,GETDATE(),@OperateIP,@AgentID,@ClientID)";
             SqlParameter[] paras = { 
                                      new SqlParameter("@UserID" , userid),
                                      new SqlParameter("@FuncName" , funcname),
@@ -63,7 +63,9 @@ namespace CloudSalesDAL
                                      new SqlParameter("@Entity" , entity),
                                      new SqlParameter("@GUID" , guid),
                                      new SqlParameter("@Message" , message),
-                                     new SqlParameter("@OperateIP" , operateip)
+                                     new SqlParameter("@OperateIP" , operateip),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid)
                                    };
             return Task.Run(() => { return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0; });
         }

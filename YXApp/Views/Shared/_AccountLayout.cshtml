@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" name="viewport">
+    <title>@ViewBag.Title</title>
+    <link href="/modules/css/base.css" rel="stylesheet" />
+    <link href="/modules/css/layout.css" rel="stylesheet" />
+    <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
+    @RenderSection("css", false)
+</head>
+
+<body>
+    <div class="main-body" id="upAndDownModule">
+        <header class="center">
+            <div class="left">1</div>
+            <div class="right">
+                <div class="mTop10 mRight30">
+                    <div class="user-avatar left mRight20"><img src="/modules/images/defaultavatar.png" /></div>
+                    <div class="iconfont left user-nav">&#xe60d;</div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            @ViewBag.Title
+            <div class="clear"></div>
+        </header>
+        <div class="main-content">
+            @RenderBody()
+        </div>
+    </div>    
+</body>
+<script src="/modules/scripts/font.js"></script>
+<script src="/Scripts/sea.js"></script>
+<script src="/Scripts/sea-config.js"></script>
+@RenderSection("scripts", false)
+</html>

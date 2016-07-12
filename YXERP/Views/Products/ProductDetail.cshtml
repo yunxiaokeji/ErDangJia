@@ -16,23 +16,18 @@
             var um = UE.getEditor('remark', {
                 autoHeightEnabled: true
             });
-            product.initEdit('@Html.ToJSONString(model)', um);
+            product.initEdit('@(model.ProductID)','@Html.ToJSONString(model)', um);
             
         });
     </script>
 }
 <div class="tab-nav">
     <a class="btn-back right mLeft5" title="返回" href="/Products/ProductList">返回</a>
-    @if (model.HasDetails==1)
-    {
-       <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子产品</a>
-    }
+    <a href="javascript:void(0)" id="addDetails" class="btn-add right">添加子规格产品</a>
+
     <ul class="search-tab">
         <li class="hover" data-id="productinfo">产品信息</li>
-         @if (model.HasDetails==1)
-        {
-            <li class="" data-id="childproduct">子产品管理</li>
-         }
+        <li class="" data-id="childproduct">产品规格管理</li>
     </ul>
 </div>
 <div class="content-body">
@@ -54,6 +49,15 @@
             </li>
             <li>
                 <span class="column-name">条形码：</span><input type="text" maxlength="50" id="shapeCode" class="input" />
+            </li>
+            <li>
+                <span class="column-name">供应商：</span>
+                <select id="provider">
+                @foreach (CloudSalesEntity.ProvidersEntity entity in (List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)
+                {
+                    <option value="@entity.ProviderID">@entity.Name</option> 
+                }
+                </select>
             </li>
             <li>
                 <span class="column-name">品牌：</span>

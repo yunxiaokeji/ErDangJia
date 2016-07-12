@@ -31,10 +31,9 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult Category() 
+        public ActionResult Category(string type = "") 
         {
-            var list = new ProductsBusiness().GetChildCategorysByID("", CurrentUser.ClientID);
-            ViewBag.Items = list;
+            ViewBag.Type = type;
             return View();
         }
 
@@ -47,6 +46,7 @@ namespace YXERP.Controllers
         {
             ViewBag.Model = new ProductsBusiness().GetCategoryDetailByID(id);
             ViewBag.BrandList = new ProductsBusiness().GetBrandList(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.UnitList = new ProductsBusiness().GetClientUnits(CurrentUser.ClientID);
             return View();
         }
@@ -56,6 +56,7 @@ namespace YXERP.Controllers
             var model = new ProductsBusiness().GetProductByID(id);
             ViewBag.Model = model;
             ViewBag.BrandList = new ProductsBusiness().GetBrandList(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.UnitList = new ProductsBusiness().GetClientUnits(CurrentUser.ClientID);
             return View();
         }
@@ -547,14 +548,14 @@ namespace YXERP.Controllers
             string id = "";
             if (string.IsNullOrEmpty(model.ProductID))
             {
-                id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
+                id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                                                         model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
             }
             else
             {
-                bool bl = new ProductsBusiness().UpdateProduct(model.ProductID,model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.BrandID, model.BigUnitID, model.UnitID,
+                bool bl = new ProductsBusiness().UpdateProduct(model.ProductID, model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.Status.Value, model.CategoryID, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                                                         model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);

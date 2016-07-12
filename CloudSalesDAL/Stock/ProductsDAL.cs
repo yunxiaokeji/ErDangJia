@@ -589,7 +589,7 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
+        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
                          decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount,
                          string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
@@ -603,6 +603,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ProductName",productName),
                                        new SqlParameter("@GeneralName",generalName),
                                        new SqlParameter("@IsCombineProduct",iscombineproduct),
+                                       new SqlParameter("@ProviderID",providerid),
                                        new SqlParameter("@BrandID",brandid),
                                        new SqlParameter("@BigUnitID",bigunitid),
                                        new SqlParameter("@UnitID",UnitID),
@@ -672,7 +673,7 @@ namespace CloudSalesDAL
             return id;
         }
 
-        public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
+        public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                             int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
                             decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, 
                             string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
@@ -685,6 +686,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ProductName",productName),
                                        new SqlParameter("@GeneralName",generalName),
                                        new SqlParameter("@IsCombineProduct",iscombineproduct),
+                                       new SqlParameter("@ProviderID",providerid),
                                        new SqlParameter("@BrandID",brandid),
                                        new SqlParameter("@BigUnitID",bigunitid),
                                        new SqlParameter("@UnitID",UnitID),

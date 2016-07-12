@@ -59,6 +59,9 @@ namespace IntFactory.Sdk
         [Description("/api/order/getOrdersByYXClientCode")]
         GetOrdersByYXClientCode,
 
+        [Description("/api/order/getOrderDetailByID")]
+        GetOrderDetailByID,
+
         [Description("/api/client/getClientInfo")]
         GetClientInfo
     }

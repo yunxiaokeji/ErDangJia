@@ -15,7 +15,7 @@
 <div class="header-box">
     <span class="header-title left">产品列表</span>
     <div class="right @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))"  >
-        <span data-url="/Products/Category" data-id="103010400" data-name="添加产品"  class="pLeft2 btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >添加产品</span>
+        <span data-url="/Products/Category?type=add" data-id="103010500" data-name="添加产品"  class="pLeft2 btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >添加产品</span>
         <div id="dropdown" class="bghulan dropdown rightraduis3 right " style="height:28px;width:20px;">
             <span class="mTop8 mRight5 ico-dropdown-white right"></span>
         </div>
@@ -66,12 +66,13 @@
             <td class="tLeft">产品编码</td>
             <td class="tLeft">产品名称</td>
             <td class="width100 tLeft">分类名称</td>
-            <td class="width100 tLeft">品牌</td>
+            <td class="tLeft">供应商</td>
+            <td class="tLeft">品牌</td>
             <td class="width100 tRight">成本价</td>
             <td class="width100 tRight">销售价</td>
-            <td class="width80">销量</td>
+            @*<td class="width80">销量</td>
             <td class="width80">逻辑库存</td>
-            <td class="width80">实际库存</td>
+            <td class="width80">实际库存</td>*@
             <td class="width80">是否销售</td>
             <td class="width100">上架日期</td>
             <td class="width50">操作</td>

@@ -1,0 +1,59 @@
+﻿@section css{
+    <link href="/modules/css/product/detail.css" rel="stylesheet" />
+}
+@section scripts{
+    <script type="text/javascript">
+        seajs.use("/modules/scripts/myaccount/historyorderdetail", function (obj) {
+            obj.init();
+        });
+    </script>
+}
+<div class="img-box">
+    <img src="/modules/images/defaultavatar.png" />
+</div>
+<div class="product-info">
+    <div class="model-box">
+        <div class="describe">产品名称：</div>
+        <div class="content-box">牛仔裤</div>
+    </div>
+    <div class="model-box mTop10">
+        <div class="describe">产品描述：</div>
+        <div class="content-box">好好啊好好好哦吼吼吼</div>
+    </div>
+    <div class="model-box mTop10">
+        <div class="describe">价格区间：</div>
+        <div class="content-box">
+            <div>
+                <span class="left">100-120</span><span class="blue right">￥50</span>
+                <div class="clear"></div>
+            </div>
+            <div>
+                <span class="left">121-150</span><span class="blue right">￥45</span>
+                <div class="clear"></div>
+            </div>
+            <div>
+                <span class="left">151-300</span><span class="blue right">￥40</span>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div class="add-shopping right mRight10 mTop30">加入采购列表</div>
+    <div class="clear"></div>
+    <div class="product-list">
+        <table class="table-list">
+            <tr class="tr-header">
+                <td>产品名称</td>
+                <td>单价</td>
+                <td>数量</td>
+                <td class="tRight">小计</td>
+                <td>删除</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="tRight">
+                    总计：<span class="total-pirce"></span>
+                </td>
+                <td class="center"></td>
+            </tr>
+        </table>
+    </div>
+</div>

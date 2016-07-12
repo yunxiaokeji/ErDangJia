@@ -6,20 +6,17 @@ using System.Web.Mvc;
 
 using IntFactory.Sdk.Business;
 using IntFactory.Sdk;
+using CloudSalesEntity;
+using YunXiaoService;
 namespace YXApp.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         //
         // GET: /Product/
-        Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
 
-        public ActionResult ProductList(string yxClientCode,string zngcClientID)
+        public ActionResult ProductList(string zngcClientID)
         {
-            yxClientCode = "H28L56GK";
-            zngcClientID = "a89cbb94-e32b-4f99-bab9-2db1d9cff607";
-            ViewBag.yxClientCode = yxClientCode;
-            ViewBag.zngcClientID = zngcClientID;
             ViewBag.Title = "样衣中心";
             return View();
         }
@@ -30,9 +27,9 @@ namespace YXApp.Controllers
             return View();
         }
 
-        public JsonResult GetProductList(string yxClientCode, string zngcClientID,int pageSize,int pageIndex)
+        public JsonResult GetProductList(string zngcClientID,int pageSize,int pageIndex)
         {
-            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(yxClientCode, pageSize, pageIndex, zngcClientID);
+            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(CurrentUser.Client.ClientCode, pageSize, pageIndex, zngcClientID);
             JsonDictionary.Add("item",item);
             return new JsonResult
             {

@@ -32,7 +32,7 @@
                                 $(".product-items").append("<div class='last-page-tip center'>已经是最后一页了</div>");
                             }
                         }
-                    } 
+                    }
                 }, 1000);
             }
         });
@@ -45,7 +45,7 @@
             PageCount = data.item.pageCount;
             var orders = data.item.orders;
             if (orders.length > 0) {
-                doT.exec("template/product/product-list.html", function (template) {
+                doT.exec("template/myaccount/history-order-list.html", function (template) {
                     var innerHtml = template(orders);
                     innerHtml = $(innerHtml);
                     $(".product-items").append(innerHtml);

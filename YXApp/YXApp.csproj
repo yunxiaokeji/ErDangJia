@@ -110,6 +110,8 @@
   <ItemGroup>
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\MessageSend.cs" />
+    <Compile Include="Common\UserAuthorize.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MyAccountController.cs" />
@@ -155,8 +157,11 @@
     <Content Include="modules\scripts\global.js" />
     <Content Include="modules\scripts\home\login.js" />
     <Content Include="modules\scripts\home\register.js" />
+    <Content Include="modules\scripts\myaccount\historyorderdetail.js" />
+    <Content Include="modules\scripts\myaccount\historyorder.js" />
     <Content Include="modules\scripts\products\product.js" />
     <Content Include="modules\scripts\products\detail.js" />
+    <Content Include="modules\template\myaccount\history-order-list.html" />
     <Content Include="modules\template\product\product-list.html" />
     <Content Include="modules\template\product\shopping-list.html" />
     <Content Include="Scripts\jquery-1.11.1.js" />
@@ -231,6 +236,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Product\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_AccountLayout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MyAccount\HistoryOrder.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MyAccount\OrderDetail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

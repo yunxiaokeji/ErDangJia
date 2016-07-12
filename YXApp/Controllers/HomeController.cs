@@ -30,7 +30,7 @@ namespace YXApp.Controllers
         public ActionResult Register()
         {
             ViewBag.CustomerID = "ca91e1be-1e02-4fa1-97c5-b4d00841d421";
-            ViewBag.ClientID = "a89cbb94-e32b-4f99-bab9-2db1d9cff607";
+            ViewBag.ClientID = "e3aa5f69-0362-450d-a6f2-a9a055c11d59";
             return View();
         }
 
@@ -84,17 +84,17 @@ namespace YXApp.Controllers
 
                         string providerID = ProductService.AddProviders(zngcClientItem.client.companyName, zngcClientItem.client.contactName,
                                                     zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                                                    "", zngcClientID, "", "", yxClientItem.AgentID, yxClientID);
+                                                    "", zngcClientID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientID);
                         var zngcResult = CustomerBusiness.BaseBusiness.SetCustomerYXinfo(customerID, name, account, zngcClientID,
                                                     yxClientItem.AgentID, yxClientID, yxClientItem.ClientCode);
                         
                         string operateip = Common.GetRequestIP();
                         int outResult;
-                        //CloudSalesEntity.Users user = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(loginName, loginPWD, out outResult, operateip);
-                        //if (user != null)
-                        //{
-                        //    Session["ClientManager"] = user;
-                        //}
+                        CloudSalesEntity.Users user = UserService.GetUserByAccount((EnumAccountType)type, account, account, companyID, operateip, out outResult);
+                        if (user != null)
+                        {
+                            Session["ClientManager"] = user;
+                        }
                         Common.ClearMobilePhoneCode(account);
                     }
                     JsonDictionary.Add("status", status);
@@ -125,6 +125,17 @@ namespace YXApp.Controllers
                 CloudSalesEntity.Users model = UserService.GetUserByAccount((EnumAccountType)type, userName, pwd, "", "", out outResult);
                 if (model != null)
                 {
+                    //添加供应商
+                    if (!string.IsNullOrEmpty(zngcClientID))
+                    {
+                        ClientResult zngcClientItem = ClientBusiness.BaseBusiness.GetClientInfo(zngcClientID);
+                        Clients yxClientItem = UserService.GetClientDetail(model.ClientID);
+
+                        string providerID = ProductService.AddProviders(zngcClientItem.client.companyName, zngcClientItem.client.contactName,
+                                                    zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
+                                                    "", zngcClientID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, model.ClientID);
+                    }
+
                     //保持登录状态
                     HttpCookie cook = new HttpCookie("yunxiao_erp_user");
                     cook["username"] = userName;
@@ -159,7 +170,6 @@ namespace YXApp.Controllers
                             result = 3;
                             resultObj.Add("errorCount", pwdErrorUser.ErrorCount);
                         }
-
                         Common.CachePwdErrorUsers[userName] = pwdErrorUser;
                     }
                 }
@@ -201,7 +211,8 @@ namespace YXApp.Controllers
             Random rd = new Random();
             int code = rd.Next(100000, 1000000);
 
-            bool flag = YXAPP.Common.MessageSend.SendMessage(mobilePhone, code);
+            //bool flag = YXAPP.Common.MessageSend.SendMessage(mobilePhone, code);
+            bool flag = true;
             JsonDictionary.Add("Result", flag ? 1 : 0);
             if (flag)
             {
@@ -209,7 +220,7 @@ namespace YXApp.Controllers
 
                 YXAPP.Common.Common.WriteAlipayLog(mobilePhone + " : " + code.ToString());
             }
-
+            JsonDictionary.Add("code", code);
             return new JsonResult()
             {
                 Data = JsonDictionary,

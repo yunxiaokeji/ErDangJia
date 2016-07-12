@@ -21,5 +21,14 @@ namespace IntFactory.Sdk
         public string productName { get; set; }
 
         public string productImage { get; set; }
+
+        public int quantity { get; set; }
+
+        public string saleAttr{ get; set; }
+
+        public string attrValue{ get; set; }
+
+        public string saleAttrValue{ get; set; }
+
     }
 }

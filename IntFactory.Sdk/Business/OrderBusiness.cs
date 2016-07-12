@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,19 @@ namespace IntFactory.Sdk.Business
 
             return HttpRequest.RequestServer<OrderResult>(ApiOption.GetOrderDetailByID, paras);
         }
+
+        public AddResult CreateDHOrder(string orderID, decimal price, List<ProductDetailEntity> details, string zngcClientID,string yxOrderID)
+        {
+            var paras = new Dictionary<string, object>();
+            paras.Add("orderID", orderID);
+            paras.Add("price", price);
+            paras.Add("details", JsonConvert.SerializeObject(details).ToString());
+            paras.Add("clientID", zngcClientID);
+            paras.Add("yxOrderID", yxOrderID);
+
+            return HttpRequest.RequestServer<AddResult>(ApiOption.CreateDHOrder, paras);
+        }
+
 
     }
 }

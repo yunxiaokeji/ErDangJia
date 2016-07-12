@@ -211,7 +211,8 @@ namespace YXApp.Controllers
             Random rd = new Random();
             int code = rd.Next(100000, 1000000);
 
-            bool flag = YXAPP.Common.MessageSend.SendMessage(mobilePhone, code);
+            //bool flag = YXAPP.Common.MessageSend.SendMessage(mobilePhone, code);
+            bool flag = true;
             JsonDictionary.Add("Result", flag ? 1 : 0);
             if (flag)
             {
@@ -219,7 +220,7 @@ namespace YXApp.Controllers
 
                 YXAPP.Common.Common.WriteAlipayLog(mobilePhone + " : " + code.ToString());
             }
-
+            JsonDictionary.Add("code", code);
             return new JsonResult()
             {
                 Data = JsonDictionary,

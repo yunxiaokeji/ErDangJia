@@ -14,7 +14,7 @@ namespace YXApp.Controllers
         // GET: /Product/
         Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
 
-        public ActionResult ProductList(string yxClientCode,string zngcClientID)
+        public ActionResult ProductList(string yxClientCode, string zngcClientID)
         {
             yxClientCode = "H28L56GK";
             zngcClientID = "a89cbb94-e32b-4f99-bab9-2db1d9cff607";

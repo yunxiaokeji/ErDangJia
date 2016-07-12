@@ -83,9 +83,9 @@ namespace YunXiaoService
         /// <param name="companyid">网络ID（非明道用户为空）</param>
         /// <param name="ip">登录IP</param>
         /// <returns></returns>
-        public static Users GetUserByAccount(EnumAccountType accountType, string account, string pwd, string companyid, string ip)
+        public static Users GetUserByAccount(EnumAccountType accountType, string account, string pwd, string companyid, string ip,out int result)
         {
-            int result = 0;
+            result = 0;
             switch (accountType)
             {
                 case EnumAccountType.UserName:

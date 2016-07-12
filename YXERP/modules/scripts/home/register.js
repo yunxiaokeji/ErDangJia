@@ -254,7 +254,6 @@
                         content: html
                     }
                 });
-
             }
             else if (data.Result == 0) {
                 alert("注册失败");

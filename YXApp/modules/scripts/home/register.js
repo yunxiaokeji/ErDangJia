@@ -30,24 +30,33 @@
                 return;
             }
             if (Global.validateMobilephone($("#loginName").val())) {
-                Global.post("/Home/IsExistAccount", {
+                Global.post("/Home/RegisterClient", {
                     type: 2,
                     account: $("#loginName").val(),
-                    companyID: "",
                     name: $("#name").val(),
                     customerID: ObjectJS.customerID,
                     zngcClientID: ObjectJS.clientID,
-                    verification: 1
+                    code: $("#code").val()
                 }, function (data) {
                     if (data.result == 1) {
-                        alert("注册成功");
-                        location.href = "/Product/ProductList";
-                    } else {
-                        confirm("该手机号已经注册二当家用户，是否添加供应商信息", function () {
-                            Global.post("/Home/AddSuppliers", "", function (data) {
-
+                        if (data.status == 1) {
+                            alert("注册成功");
+                            location.href = "/Product/ProductList";
+                        } else if (data.status == 2) {
+                            confirm("手机号已注册，登陆后自动绑定供应商,是否前往登陆?", function () {
+                                location.href = "/Home/Login?" + "zngcClientID=" + data.zngcClientID + "";
                             });
+                        } else {
+                            alert("注册失败");
+                        }
+                    } else if (data.result == 2) {
+                        confirm("手机号已注册，登陆后自动绑定供应商,是否前往登陆?", function () {
+                            location.href = "/Home/Login?" + "zngcClientID=" + data.zngcClientID + "";
                         });
+                    } else if (data.result == 3) {
+                        alert('验证码有误');
+                    } else {
+                        alert("注册失败");
                     }
                 });
             } else {
@@ -58,27 +67,29 @@
 
         /*发送验证码*/
         $("#btnSendMsg").click(function () {
+            if (!Global.validateMobilephone($("#loginName").val())) {
+                $(".registerErr").html("请输入正确手机号").slideDown();
+                return;
+            }
+
             if ($("#loginName").val() == '') {
                 $(".registerErr").html("请输入手机号").slideDown();
                 return;
             }
             else {
                 if (Global.validateMobilephone($("#loginName").val())) {
-                    //Global.post("/Home/IsExistAccount", {
-                    //    type: 2,
-                    //    account: $("#loginName").val(),
-                    //    verification:2
-                    //}, function (data) {
-                    //    if (data.result == 1) {
-                    //        $(".registerErr").html("").slideUp();
-                    //        ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
-                    //    } else {
-                    //        $(".registerErr").html("手机号已被注册").slideDown();
+                    Global.post("/Home/IsExistAccount", {
+                        type: 2,
+                        account: $("#loginName").val()
+                    }, function (data) {
+                        if (data.result == 1) {
+                            $(".registerErr").html("").slideUp();
+                            ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
+                        } else {
+                            $(".registerErr").html("手机号已被注册").slideDown();
 
-                    //    }
-                    //});
-                    $(".registerErr").html("").slideUp();
-                    ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
+                        }
+                    });
                 }
                 else {
                     $(".registerErr").html("请输入正确手机号").slideDown();
@@ -120,11 +131,11 @@
 
         }, 1000);
 
-        //Global.post("/Home/SendMobileMessage", { mobilePhone: mobilePhone }, function (data) {
-        //    if (data.Result == 0) {
-        //        alert("验证码发送失败");
-        //    }
-        //});
+        Global.post("/Home/SendMobileMessage", { mobilePhone: mobilePhone }, function (data) {
+            if (data.Result == 0) {
+                alert("验证码发送失败");
+            }
+        });
     }
 
     module.exports = ObjectJS;

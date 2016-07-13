@@ -45,22 +45,18 @@
             _self.Industry.Description = "";
             _self.Industry.Name = ""; 
             _self.createIndustry();
+        }); 
+        $("#deleteObject").click(function () { 
+            _self.deleteModel($(this));
         });
-        /*添加会员等级*/
-        $("#createMeber").click(function () {
-            _self.MemberLevel = {};
-            _self.MemberLevel.IntegFeeMore = ""; 
-            _self.MemberLevel.DiscountFee = "";
-            _self.MemberLevel.Name = "";
-            _self.MemberLevel.ImgUrl = "";
+        $('#saveMemberLevel').click(function() {
+            _self.saveMemberLevel();
+        });
+        $('#createMemberLevel').click(function() {
             _self.createMemberLevel();
         });
-        $("#deleteObject").click(function () { 
-            ObjectJS.deleteModel($(this));
-        });
-
         $("#updateObject").click(function () {
-            ObjectJS.SourceEdit($(this));
+            _self.SourceEdit($(this));
         });
 
         $('#createColor').click(function () {
@@ -141,17 +137,7 @@
                         });
                     } else if (_this.data("id") == "sourceList") {
                         ObjectJS.deleteModel(_thisnow);
-                    } else if (_this.data("id") == "memberList") {
-                        confirm("客户等级删除后不可恢复,确认删除吗？", function () {
-                            Global.post("/System/DeleteClientMemberLevel", { levelid: _thisnow.data("id") }, function (data) {
-                                if (data.result=="") {
-                                    _self.getMemberLevelList();
-                                } else {
-                                    alert("此客户等级已被使用，删除失败");
-                                }
-                            });
-                        });
-                    }
+                    }  
                 });
 
                 $("#updateObject").unbind().click(function () {
@@ -164,15 +150,7 @@
                         _self.Industry.Name = _thisnow.data('name');
                         _self.Industry.Description = _thisnow.data('description');
                         _self.createIndustry();
-                    } else if (_this.data("id") == "memberList") {
-                        _self.MemberLevel = {};
-                        _self.MemberLevel.LevelID = _thisnow.data('id');
-                        _self.MemberLevel.Name = _thisnow.data('name');
-                        _self.MemberLevel.DiscountFee = _thisnow.data('discountfee'); 
-                        _self.MemberLevel.IntegFeeMore = _thisnow.data('integfeemore');
-                        _self.MemberLevel.ImgUrl = _thisnow.data('imgurl');
-                        _self.createMemberLevel();
-                    }
+                    } 
                 });
             }
         });
@@ -472,6 +450,7 @@
     /*客户行业弹窗*/
     ObjectJS.createIndustry = function () {
         var _self = this;
+    
         doT.exec("template/system/clientindustry-detail.html", function (template) {
             var html = template([]);
             Easydialog.open({
@@ -517,7 +496,7 @@
             }
         });
     }
-
+ 
     /*客户会员等级列表*/
     ObjectJS.getMemberLevelList = function () {
         $(".memberlevelul").html('');
@@ -526,29 +505,17 @@
             $(".memberlevelul").html('');
             var items = data.items;
             if (items.length > 0) {
-                var innnerHtml = '';
-                for (var i = 0; i < items.length; i++) {
-                    /* style='background-image:url(" + items[i].ImgUrl + "); background-size:contain;'*/
-                    innnerHtml += "<li><div class='levelitem left' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' ></tr>" +
-                        "<div class='mTop5 mLeft5 mBottom5'> <table width='100%'><tbody><tr> <td colspan='2' style='width:100%;text-align:center;font-size:14px;'><span style='width:25px;height:25px;border-radius:50%;' class='left'>" +
-                        "<img style='width:100% ;height:100%;border-radius:50%;' src='" +( items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png' )+ "' alt=''></span><span class='left mLeft5 pTop3'>" + items[i].Name + "</span></td></tr>" +
-                        "<tr class='mTop5'><td class='color999 width50'>升级条件:</td><td> " + (i==0?"0":items[i-1].IntegFeeMore) + "<会员积分<="+items[i].IntegFeeMore+ "</td>" +
-                        "<tr><td class='color999'>折扣:</td><td > " + items[i].DiscountFee + "</td></tr>" +
-                        "</tbody></table> </div></div></li>";
+                var innnerHtml = ''; 
+                for (var i = 0; i < items.length; i++) { 
+                    innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin-1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
+                        "<span  style='width:18px;height:18px;border-radius:50%;'><img style='width:18px;height:18px;border-radius:50%;' src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span>" +
+                        "<span  class='mLeft5 mRight5'>当顾客积分在</span><input id='changeFeeMore"+i+"' readOnly='readOnly' class='width50 mRight5' type='text' value='" + (i == 0 ? "0" : items[i - 1].IntegFeeMore) + "' /><span class='mRight5'>到</span>" +
+                        "<input id='IntegFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' value='" + items[i].IntegFeeMore + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee' class='width50 mRight5' type='text' value='" + items[i].DiscountFee + "' />" +
+                        "<span  class='mRight5'>折优惠</span><input class='width80 mRight5' type='text' name='MemberName' placeholder='请填写等级名' value='" + items[i].Name + "' /><span id='delMeber" + i + "' data-ind='" + i + "' class='" + (i==0?"hide":i == items.length - 1 ? "" : "hide") + " borderccc circle12 mLeft10'>X</span>" +
+                        "</div></li>";
                 }
                 $(".memberlevelul").html(innnerHtml);
-                $(".levelitem").click(function () {
-                    var _this = $(this);
-                    var position = _this.position(); 
-                    $("#ddlSource li").data("id", _this.data("id"));
-                    $("#ddlSource li").data("name", _this.data("name"));
-                    $("#ddlSource li").data("discountfee", _this.data("discountfee")); 
-                    $("#ddlSource li").data("integfeemore", _this.data("integfeemore"));
-                    $("#ddlSource li").data("imgurl", _this.data("imgurl"));
-                    $("#ddlSource").css({ "top": position.top , "left": position.left + 210 }).show().mouseleave(function () {
-                        $(this).hide();
-                    });
-                });
+                ObjectJS.bindMemberLi();
             } else {
                 $(".memberlevelul").html("<h1><div class='nodata-txt' >暂无数据!<div></h1>");
             }
@@ -557,76 +524,92 @@
     /*客户会员等级弹窗*/
     ObjectJS.createMemberLevel = function () {
         var _self = this;
-        doT.exec("template/system/clientmemberlevel-detail.html", function (template) {
-            var html = template([]);
-            Easydialog.open({
-                container: {
-                    id: "show-model-detail",
-                    header: !_self.MemberLevel.LeveID ? "新建等级" : "编辑等级",
-                    content: html,
-                    yesFn: function () {
-                        if (!VerifyObject.isPass()) {
-                            return false;
-                        }
-                        _self.MemberLevel.Name = $("#Name").val();
-                        _self.MemberLevel.IntegFeeMore = $("#IntegFeeMore").val(); 
-                        _self.MemberLevel.DiscountFee = $("#DiscountFee").val();
-                        _self.MemberLevel.ImgUrl= $("#ImgUrl").attr("src"),
-                        _self.saveMemberLevel();
-                    },
-                    callback: function () {
-
-                    }
-                }
-            });
-            VerifyObject = Verify.createVerify({
-                element: ".verify",
-                emptyAttr: "data-empty",
-                verifyType: "data-type",
-                regText: "data-text"
-            });
-            $("#Name").focus();
-            $("#Name").val(_self.MemberLevel.Name);
-            $("#IntegFeeMore").val(_self.MemberLevel.IntegFeeMore); 
-            $("#DiscountFee").val(_self.MemberLevel.DiscountFee);
-            $("#ImgUrl").attr("src", _self.MemberLevel.ImgUrl);
-            Upload.createUpload({
-                element: "#ImgUrlUpload",
-                buttonText: "选择等级图标",
-                className: "",
-                data: { folder: '', action: 'add', oldPath: _self.MemberLevel.ImgUrl },
-                success: function (data, status) {
-                    if (data.Items.length > 0) {
-                        $("#ImgUrl").attr("src", data.Items[0]);
-                    } else {
-                        alert("只能上传jpg/png/gif类型的图片，且大小不能超过1M！");
-                    }
-                }
-            });
-        });
+        var i = $('.levelitem').length;
+        $('#delMeber' + (i - 1)).hide();
+        var intefee = parseInt($('#memberLi' + (i - 1) + ' div:first-child').data('integfeemore'));
+        var innnerHtml = "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + i + "' data-imgurl=''  data-integfeemore='" + (intefee + 300) + "' data-name='' data-discountfee='1.00' data-id='' title='' >" +
+                      "<span  style='width:18px;height:18px;border-radius:50%;'><img style='width:18px;height:18px;border-radius:50%;' src='/Content/menuico/custom.png' alt=''></span>" +
+                      "<span  class='mLeft5 mRight5'>当顾客积分在</span><input id='changeFeeMore" + i + "' readOnly='readOnly' class='width50 mRight5' type='text' value='" + intefee + "' /><span class='mRight5'>到</span>" +
+                      "<input id='IntegFeeMore" + i + "' name='IntegFeeMore'  class='width50 mRight5' placeholder='请填写积分'  type='text' value='" + (intefee + 300) + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee'  class='width50 mRight5' placeholder='请填写折扣'  type='text' value='1.00' />" +
+                      "<span  class='mRight5'>折优惠</span><input class='width80 mRight5' name='MemberName' type='text'  placeholder='请填写等级名' value='' /><span id='delMeber" + i + "' data-ind='" + i + "' class=' borderccc circle12 mLeft10'>X</span>" +
+                      "</div></li>";
+        $(".memberlevelul li:last-child").after(innnerHtml);
+        ObjectJS.bindMemberLi(); 
     }
     /*客户行业保存*/
+    var reg = /^\d+(\.\d+)?$/; 
+    var reg2 = /^(((\d[0]\.\d+))|\+?0\.\d*|\+?1)$/;
     ObjectJS.saveMemberLevel = function () {
+        var list = [];
         var _self = this;
-        var reg = /^\d+(\.\d+)?$/;
-        //var reg2 = /^\d[0]+(\.\d+)?$/;
-        var reg2 = /^(((\d[0]\.\d+))|\+?0\.\d*|\+?1)$/;
-        if (!reg2.test(_self.MemberLevel.DiscountFee) && parseFloat(_self.MemberLevel.DiscountFee)>1) {
-            alert('折扣格式输入有误,请修改后在提交');
-            return false;
-        }
-        if (!reg.test(_self.MemberLevel.IntegFeeMore)) {
-            alert('满足条件格式输入有误!请修改后在提交');
-            return false;
-        } 
-        Global.post("/System/SaveClientMemberLevel", { clientmemberlevel: JSON.stringify(_self.MemberLevel) }, function (data) {
+        $('.levelitem').each(function (i, v) {
+            var item = {};
+            item.IntegFeeMore = $(v).data('integfeemore');
+            item.DiscountFee = $(v).data('discountfee');
+            item.Name = $(v).data('name');
+            item.ImgUrl = $(v).data('imgurl');
+            item.Origin = parseInt($(v).data('origin')) +1;
+            item.LevelID = $(v).data('id');
+            list.push(item);
+        }); 
+        Global.post("/System/SaveClientMemberLevel", { clientmemberlevel: JSON.stringify(list) }, function (data) {
             if (data.result == "") {
+                alert('等级配置成功');
                 _self.getMemberLevelList();
             } else {
                 alert(data.result);
             }
         });
     }
-
+    ObjectJS.hideMember= function(ind) {
+        $('#memberLi' + ind).remove();
+        if (ind > 1) {
+            $('#delMeber' + (ind - 1)).show();
+        }
+    } 
+    ObjectJS.bindMemberLi= function() {
+        $(".circle12").click(function () { ObjectJS.hideMember($(this).parent().data("origin")); });
+        $("input[name^='IntegFeeMore']").change(function () {
+            ObjectJS.changeInput(1, $(this));
+        });
+        $("input[name^='DiscountFee']").change(function () {
+            ObjectJS.changeInput(2, $(this));
+        });
+        $("input[name^='MemberName']").change(function () {
+            ObjectJS.changeInput(3, $(this));
+        });
+    }
+    ObjectJS.changeInput = function (type,_this) { 
+        var s = parseInt(_this.parent().data("origin")) + 1;
+        if (type == 1){
+            if (/^[0-9]*[1-9][0-9]*$/.test(_this.val())) {
+                if (s != $('.levelitem').length) {
+                    if (parseInt($('#IntegFeeMore' + s).val()) < parseInt(_this.val())) {
+                        alert('当前积分阶段不能大于下一等级积分阶段');
+                        _this.val(_this.parent().data('integfeemore'));
+                    } else {
+                        $('#changeFeeMore' + s).val(_this.val());
+                        _this.parent().data('integfeemore', _this.val());
+                    }
+                } else {
+                    _this.parent().data('integfeemore', _this.val());
+                }
+            } else {
+                alert('积分格式输入有误，请重新输入');
+                _this.val(_this.parent().data('integfeemore'));
+            }
+        } else if (type == 2) { 
+            if (!reg2.test(_this.val())) {
+                alert('折扣格式输入有误，请重新输入');
+                _this.val(_this.parent().data('discountfee'));
+            } else {
+                _this.parent().data('discountfee', _this.val());
+            }
+        } else if (type == 3) {
+            if (_this.val() != '') {
+                _this.parent().data('name', _this.val());
+            }
+        }
+    }
     module.exports = ObjectJS;
 });

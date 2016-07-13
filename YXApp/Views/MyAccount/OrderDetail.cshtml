@@ -21,7 +21,7 @@
 <div class="product-info">
     <div class="model-box">
         <div class="describe">产品名称：</div>
-        <div class="content-box">@(order.intGoodsCode+order.goodsName)</div>
+        <div class="content-box">@(order.intGoodsCode + order.goodsName)</div>
     </div>
     <div class="model-box mTop10">
         <div class="describe">价格区间：</div>
@@ -38,7 +38,7 @@
             @{
                 foreach (var colorItem in colorModel)
                 {
-                    <div class="color-box" data-id="@colorItem.attrID" >
+                    <div id="color-box" data-id="@colorItem.attrID" >
                        <div class="left" style="text-indent:10px;">
                            @colorItem.attrName：
                        </div>
@@ -46,11 +46,35 @@
                             for (int i = 0; i < colorItem.attrValues.Count; i++)
                             {
                                 var color = colorItem.attrValues[i];
-                                <div class="left color-item @(i==0?"hover":"")" data-value="@color.valueName" data-id="@color.valueID">
-                                    @color.valueName
-                                </div>
+                                        <div class="left attr-item color" data-value="@color.valueName" data-id="@color.valueID">
+                                            @color.valueName
+                                        </div>
                             }
                         }  
+                        <input type="text" style="width:80px;height:40px;text-align:center;" class="define-color" value="" placeholder="自定义" />
+                        <div class="clear"></div>
+                    </div>
+                }
+            }
+            <div class="clear"></div>
+        </div>
+        <div class="mBottom20 mTop20">
+            @{
+                foreach (var attrItem in attrModel)
+                {
+                    <div id="attr-box" data-id="@attrItem.attrID" >
+                        <div class="left" style="text-indent:10px;">
+                            @attrItem.attrName：
+                        </div>
+                         @{
+                            for (int i = 0; i < attrItem.attrValues.Count; i++)
+                            {
+                            var attr = attrItem.attrValues[i];
+                                <div class="left attr-item size" data-value="@attr.valueName" data-id="@attr.valueID">
+                                    @attr.valueName
+                                </div>
+                            }
+                         }  
                         <div class="clear"></div>
                     </div>
                 }
@@ -58,33 +82,14 @@
             <div class="clear"></div>
         </div>
         <div class=" mBottom20 mTop20">
-            @{
-                foreach (var attrItem in attrModel)
-                {
-                    <div class="attr-box" data-id="@attrItem.attrID" >
-                       <div class="left" style="text-indent:10px;">
-                           @attrItem.attrName：
-                       </div>
-                       <div class="left">
-                        @{
-                            for (int i = 0; i < attrItem.attrValues.Count; i++)
-                            {
-                                var attr = attrItem.attrValues[i];
-                                <div>
-                                    <div class="left">@attr.valueName</div>
-                                    <div class="right"><input type="text" data-name="@attr.valueName" data-value="@attr.valueName" data-id="@attr.valueID" value="0" class="@attr.valueID txt-model" /></div>
-                                    <div class="clear"></div>
-                                </div>
-                            }
-                        }  
-                        </div>
-                    </div>
-                }
-            }
+            <table class="table-list"id="attr-list">
+                <tr class="tr-header addmark">
+                    <td>规格</td>
+                    <td>数量</td>
+                    <td>操作</td>
+                </tr>
+            </table>
             <div class="clear"></div>
-        </div>
-        <div class="mLeft50">
-            价格：<span class="total-price"></span>
         </div>
     </div>
 
@@ -117,7 +122,7 @@
                             {
                                 var item = order.plateMakings[i];
                                 <tr class="list-item" id="tr-plate-{%=item.PlateID%}">
-                                    <td class="center">@(item.type==1?"裁剪":item.type==2?"粘衬":item.type==3?"缝制工艺":item.type==4?"成衣整烫":item.type==5?"成衣检验":"成品包装")</td>
+                                    <td class="center">@(item.type == 1 ? "裁剪" : item.type == 2 ? "粘衬" : item.type == 3 ? "缝制工艺" : item.type == 4 ? "成衣整烫" : item.type == 5 ? "成衣检验" : "成品包装")</td>
                                     <td class="center"><img style="width:30px;height:30px;" src="@item.icon" /></td>
                                     <td class="center">@(item.title)</td>        
                                     <td class="center">@(item.remark)</td>  
@@ -138,15 +143,15 @@
                         <td>单位</td>
                     </tr>
                     @{
-                    foreach (var material in order.details)
-                    {
+                        foreach (var material in order.details)
+                        {
                         <tr>
                             <td class="center"><img src="@material.productImage" /></td>
                             <td class="center">@(material.productName)</td>
                             <td class="center">@(material.price.ToString("f2"))</td>
                             <td class="center">@(material.unitName)</td>
                         </tr>
-                    } 
+                        } 
                     }  
                 </table> 
            

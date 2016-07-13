@@ -475,7 +475,7 @@ define(function (require, exports, module) {
                     if (item.Members) {
                         for (var i = 0; i < item.Members.length; i++) {
                             var m = item.Members[i];
-                            $("#MemberList").append("<li class='member' data-id='" + m.UserID + "'>" + m.Name + "</li>");
+                            m && $("#MemberList").append("<li class='member' data-id='" + m.UserID + "'>" + m.Name + "</li>");
                         }
                     }
                     require.async("sharemingdao", function () {

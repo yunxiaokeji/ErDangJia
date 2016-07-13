@@ -819,8 +819,6 @@ define(function (require, exports, module) {
                 }
             });
 
-            
-
             //绑定单位
             $("#unitName").text(model.SmallUnit.UnitName);
 

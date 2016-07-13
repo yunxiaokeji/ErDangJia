@@ -425,10 +425,10 @@ select option{ padding:2px; }
 
 /*盒模型表格样式*/
 .table-box-list { width:100%; }
-.table-box-list ul { width:100%;  box-sizing:border-box; height:25px; display: table; padding:8px 0;}
+.table-box-list ul { width:100%;  box-sizing:border-box; height:25px; display: table; }
 .table-box-list ul li{ text-align:center; padding:0 10px; vertical-align:middle; display:table-cell; white-space:nowrap; overflow: hidden; text-overflow:ellipsis; height:25px; }
 .table-box-list ul.box-header li{ color:#999;  border-right:solid 1px #fff;}
-.table-box-list ul.box-item { border:solid 1px #ddd; border-radius:5px; overflow:auto; margin:10px 0; }
+.table-box-list ul.box-item { padding:8px 0; border:solid 1px #ddd; border-radius:5px; overflow:auto; margin:10px 0; }
 .table-box-list ul.box-item li{ border-right:solid 1px #eee; }
 .table-box-list ul.box-item li:last-child{ border-right:none; }
 

@@ -830,7 +830,6 @@
     <Content Include="modules\scripts\products\providers.js" />
     <Content Include="modules\scripts\purchase\purchases.js" />
     <Content Include="modules\scripts\purchase\confirmpurchase.js" />
-    <Content Include="modules\scripts\purchase\docdetail.js" />
     <Content Include="modules\scripts\customerrpt\sourcerpt.js" />
     <Content Include="modules\scripts\salesrpt\opportunitystagerpt.js" />
     <Content Include="modules\scripts\salesrpt\ordermaprpt.js" />
@@ -912,7 +911,6 @@
     <Content Include="modules\template\products\product_child_add_list.html" />
     <Content Include="modules\template\products\brand-detail.html" />
     <Content Include="modules\template\purchase\purchases.html" />
-    <Content Include="modules\template\purchase\storagedocaction.html" />
     <Content Include="modules\template\stock\chooseware.html" />
     <Content Include="modules\template\stock\storagedocs.html" />
     <Content Include="modules\template\stock\stocks.html" />
@@ -950,7 +948,6 @@
     <Content Include="Views\Purchase\Purchases.cshtml" />
     <Content Include="Views\CustomerRPT\Index.cshtml" />
     <Content Include="Views\Purchase\DocDetail.cshtml" />
-    <Content Include="Views\Purchase\AuditDetail.cshtml" />
     <Content Include="Views\Organization\RolePermission.cshtml" />
     <Content Include="Views\Organization\Structure.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />

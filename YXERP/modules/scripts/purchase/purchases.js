@@ -23,14 +23,15 @@ define(function (require, exports, module) {
     };
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (type, wares) {
+    ObjectJS.init = function (type, providers) {
         var _self = this;
         Params.type = type;
-        _self.bindEvent();
+        providers = JSON.parse(providers.replace(/&quot;/g, '"'));
+        _self.bindEvent(providers);
         _self.getList();
     }
     //绑定事件
-    ObjectJS.bindEvent = function () {
+    ObjectJS.bindEvent = function (providers) {
         var _self = this;
 
         Global.post("/ShoppingCart/GetShoppingCartCount", {
@@ -40,11 +41,22 @@ define(function (require, exports, module) {
             $("#btnSubmit").html("提交采购单 ( " + data.Quantity + " ) ");
         });
 
-        $(document).click(function (e) {
-            //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
-                $(".dropdown-ul").hide();
-            }
+        require.async("dropdown", function () {
+            var dropdown = $("#ddlProviders").dropdown({
+                prevText: "供应商-",
+                defaultText: "全部",
+                defaultValue: "",
+                data: providers,
+                dataValue: "ProviderID",
+                dataText: "Name",
+                width: "180",
+                isposition: true,
+                onChange: function (data) {
+                    Params.pageIndex = 1;
+                    Params.providerid = data.value;
+                    _self.getList();
+                }
+            });
         });
 
         require.async("search", function () {
@@ -84,18 +96,6 @@ define(function (require, exports, module) {
             _self.getList();
         });
 
-        //供应商
-        $(".search-providers li").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.siblings().removeClass("hover");
-                _this.addClass("hover");
-                Params.pageIndex = 1;
-                Params.providerid = _this.data("id");
-                _self.getList();
-            }
-        });
-
         //仓库
         $(".search-wares li").click(function () {
             var _this = $(this);
@@ -107,76 +107,27 @@ define(function (require, exports, module) {
                 _self.getList();
             }
         });
-
-        //审核
-        $("#audit").click(function () {
-            location.href = "/Purchase/AuditDetail/" + _self.docid;
-        });
-
-        //作废
-        $("#invalid").click(function () {
-            confirm("采购单作废后不可恢复,确认作废吗？", function () {
-                Global.post("/Purchase/InvalidPurchase", { docid: _self.docid }, function (data) {
-                    if (data.Status) {
-                        alert("采购单作废成功");
-                    } else {
-                        alert("采购单作废失败");
-                    }
-                    _self.getList();
-                });
-            });
-        });
-
-        $("#delete").click(function () {
-            confirm("采购单删除后不可恢复,确认删除吗？", function () {
-                Global.post("/Purchase/DeletePurchase", { docid: _self.docid }, function (data) {
-                    if (data.Status) {
-                        alert("采购单删除成功");
-                    } else {
-                        alert("采购单删除失败");
-                    }
-                    _self.getList();
-                });
-            });
-        });
-
     }
+
     //获取单据列表
     ObjectJS.getList = function () {
         var _self = this;
-        $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='10'><div class='data-loading' ><div></td></tr>");
+        $(".box-header").nextAll().remove();
+        $(".box-header").after("<div class='data-loading' ><div>");
         var url = "/Purchase/GetPurchases",
             template = "template/purchase/purchases.html";
         Global.post(url, Params, function (data) {
-            $(".tr-header").nextAll().remove();
+            $(".box-header").nextAll().remove();
 
             if (data.items.length > 0) {
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
-                    $(".tr-header").after(innerText);
-
-                    //下拉事件
-                    $(".dropdown").click(function () {
-                        var _this = $(this);
-                        if (_this.data("status") == 0) {
-                            $("#invalid").show();
-                            $("#delete").show();
-                        } else {
-                            $("#invalid").hide();
-                            $("#delete").hide();
-                        }
-                        var position = _this.find(".ico-dropdown").position();
-                        $(".dropdown-ul").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
-                            $(this).hide();
-                        });
-                        _self.docid = _this.data("id");
-                    });
+                    $(".box-header").after(innerText);
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='10'><div class='nodata-txt' >暂无数据!</div></td></tr>");
+                $(".box-header").after("<div class='nodata-box' >暂无数据!</div>");
             }
 
             $("#pager").paginate({
@@ -215,7 +166,41 @@ define(function (require, exports, module) {
         //审核入库
         $("#btnconfirm").click(function () {
             _self.auditStorageIn();
-        })
+        });
+
+        //作废
+        $("#invalid").click(function () {
+            confirm("采购单作废后不可恢复,确认作废吗？", function () {
+                Global.post("/Purchase/InvalidPurchase", { docid: _self.docid }, function (data) {
+                    if (data.Status) {
+                        alert("采购单作废成功", function () {
+                            location.href = location.href;
+                        });
+                    } else {
+                        alert("采购单作废失败", function () {
+                            location.href = location.href;
+                        });
+                    }
+                });
+            });
+        });
+
+        //删除单据
+        $("#delete").click(function () {
+            confirm("采购单删除后不可恢复,确认删除吗？", function () {
+                Global.post("/Purchase/DeletePurchase", { docid: _self.docid }, function (data) {
+                    if (data.Status) {
+                        alert("采购单删除成功", function () {
+                            location.href = location.href;
+                        });
+                    } else {
+                        alert("采购单删除失败", function () {
+                            location.href = location.href;
+                        });
+                    }
+                });
+            });
+        });
     }
 
     //审核入库
@@ -240,12 +225,12 @@ define(function (require, exports, module) {
                             }
                         });
 
-                        if (details.length > 0 || $("#showAuditStorageIn .check").hasClass("ico-checked")) {
+                        if (details.length > 0 || $("#showAuditStorageIn .checkbox").hasClass("hover")) {
 
                             Global.post("/Purchase/AuditPurchase", {
                                 docid: _self.docid,
                                 doctype: 101,
-                                isover: $("#showAuditStorageIn .check").hasClass("ico-checked") ? 1 : 0,
+                                isover: $("#showAuditStorageIn .checkbox").hasClass("hover") ? 1 : 0,
                                 details: details,
                                 remark: $("#expressRemark").val().trim()
                             }, function (data) {
@@ -269,12 +254,12 @@ define(function (require, exports, module) {
                     }
                 }
             });
-            $("#showAuditStorageIn .check").click(function () {
+            $("#showAuditStorageIn .checkbox").click(function () {
                 var _this = $(this);
-                if (!_this.hasClass("ico-checked")) {
-                    _this.addClass("ico-checked").removeClass("ico-check");
+                if (!_this.hasClass("hover")) {
+                    _this.addClass("hover");
                 } else {
-                    _this.addClass("ico-check").removeClass("ico-checked");
+                    _this.removeClass("hover");
                 }
             });
             $("#showAuditStorageIn").find(".quantity").change(function () {

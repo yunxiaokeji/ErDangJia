@@ -8,13 +8,14 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/purchase/purchases"], function (obj) {
-            obj.init('@ViewBag.Type','@Html.ToJSONString((List<CloudSalesEntity.WareHouse>)ViewBag.Wares)');
+            obj.init('@ViewBag.Type', '');@*@Html.ToJSONString((List<CloudSalesEntity.WareHouse>)ViewBag.Wares)*@
         });
     </script>
 }
 <div class="header-box">
     <span class="header-title left">采购管理</span>
-    <div id="btnCreate" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103029001"))">新建采购</div>
+    <div id="btnSubmit" data-id="103029001" data-name="提交采购单" data-url="/Purchase/ConfirmPurchase" class="btn mLeft10 btn-open-window right @(ExpandClass.IsLimits(HttpContext.Current,"103029001"))">提交采购单(0)</div>
+    <div id="btnCreate" data-id="103029001" data-name="新建采购" data-url="/Purchase/ChooseProducts" class="btn-add btn-open-window right @(ExpandClass.IsLimits(HttpContext.Current,"103029001"))">选择采购产品</div>
 </div>
 <div class="search-header">
     <div class="left" title="采购时间">
@@ -62,8 +63,8 @@
             <td class="tLeft">仓库</td>
             <td class="tLeft">供应商</td>
             <td class="width100">状态</td>
-            <td class="tRight width150">采购总额</td>
-            <td class="tRight width150">已采购金额</td>
+            <td class="tRight width150">订单总额</td>
+            <td class="tRight width150">已入库金额</td>
             <td class="width150">采购员</td>
             <td class="width200">采购日期</td>
             <td class="width80">操作</td>

@@ -437,11 +437,14 @@ namespace CloudSalesEntity
         public int WarnCount { get; set; }
 
         public int StockIn { get; set; }
+
         public int LogicOut { get; set; }
 
         public string ImgS { get; set; }
 
         public string ProviderName { get; set; }
+
+        public string Remark { get; set; }
 
         /// <summary>
         /// 填充数据

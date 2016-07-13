@@ -19,9 +19,9 @@
 
 /*产品列表样式*/
 .productlist { width:100%; overflow:auto;}
-.productlist li{ width:250px; height:350px; float:left; margin-top:20px; }
+.productlist li{ width:250px; height:360px; float:left; margin-top:20px; }
 
-.productlist .product-item{  width:230px; height:320px;  border:solid 1px #eee; display:inline-block; position:relative; }
+.productlist .product-item{  width:230px; height:330px;  border:solid 1px #eee; display:inline-block; position:relative; }
 .productlist li:hover .product-item{ border:solid 1px #B10000; }
 
 .product-item .productimg { width:230px; height:230px; display:table-cell; background:url('/modules/images/none-img.png') no-repeat center; overflow:hidden; text-align:center; vertical-align:middle; background-color:#eee; }
@@ -29,7 +29,7 @@
 
 .product-item .price { color:#B10000; padding:0 5px; height:30px; line-height:30px; font-size:16px; }
 
-.product-item .name { height:35px; overflow:hidden; color:#333; padding:0 5px; font-size:14px; }
+.product-item .name { width:220px; max-height:40px; line-height:20px; overflow:hidden; color:#333; margin:0 5px; font-size:14px; display:inline-block; }
 .product-item .name:hover { text-decoration:underline; color:#B10000; }
 .product-item .sales-stock { padding:5px; position:absolute; bottom:0px; width:220px; }
 .product-item .sales-stock span{ color:#999; }

@@ -26,13 +26,19 @@ define(function (require, exports, module) {
     ObjectJS.init = function (type, wares) {
         var _self = this;
         Params.type = type;
-        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
-        _self.bindEvent(wares);
+        _self.bindEvent();
         _self.getList();
     }
     //绑定事件
-    ObjectJS.bindEvent = function (wares) {
+    ObjectJS.bindEvent = function () {
         var _self = this;
+
+        Global.post("/ShoppingCart/GetShoppingCartCount", {
+            ordertype: 1,
+            guid: ""
+        }, function (data) {
+            $("#btnSubmit").html("提交采购单 ( " + data.Quantity + " ) ");
+        });
 
         $(document).click(function (e) {
             //隐藏下拉
@@ -102,42 +108,11 @@ define(function (require, exports, module) {
             }
         });
 
-        //新建采购
-        $("#btnCreate").click(function () {
-            var _this = $(this);
-            doT.exec("template/stock/chooseware.html", function (template) {
-                var innerHtml = template(wares);
-                Easydialog.open({
-                    container: {
-                        id: "show-model-chooseware",
-                        header: "选择采购仓库",
-                        content: innerHtml,
-                        yesFn: function () {
-                            var wareid = $(".ware-items .hover").data("id");
-                            if (!wareid) {
-                                alert("请选择采购仓库！");
-                                return false;
-                            } else {
-                                location.href = "/Purchase/ConfirmPurchase/" + wareid;
-                            }
-                        },
-                        callback: function () {
-
-                        }
-                    }
-                });
-
-                $(".ware-items .ware-item").click(function () {
-                    $(this).siblings().removeClass("hover");
-                    $(this).addClass("hover");
-                });
-            });
-        });
-
         //审核
         $("#audit").click(function () {
             location.href = "/Purchase/AuditDetail/" + _self.docid;
         });
+
         //作废
         $("#invalid").click(function () {
             confirm("采购单作废后不可恢复,确认作废吗？", function () {
@@ -170,7 +145,7 @@ define(function (require, exports, module) {
     ObjectJS.getList = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='8'><div class='data-loading' ><div></td></tr>");
+        $(".tr-header").after("<tr><td colspan='10'><div class='data-loading' ><div></td></tr>");
         var url = "/Purchase/GetPurchases",
             template = "template/purchase/purchases.html";
         Global.post(url, Params, function (data) {
@@ -201,7 +176,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='8'><div class='nodata-txt' >暂无数据!</div></td></tr>");
+                $(".tr-header").after("<tr><td colspan='10'><div class='nodata-txt' >暂无数据!</div></td></tr>");
             }
 
             $("#pager").paginate({
@@ -328,7 +303,6 @@ define(function (require, exports, module) {
 
         depotbox.val(depotbox.data("id"));
     }
-
 
     module.exports = ObjectJS;
 })

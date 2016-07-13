@@ -222,6 +222,10 @@ namespace CloudSalesEntity
 
         public int IsDefault { get; set; }
 
+        public string ProviderID { get; set; }
+
+        public string ProviderName { get; set; }
+
         /// <summary>
         /// 填充数据
         /// </summary>

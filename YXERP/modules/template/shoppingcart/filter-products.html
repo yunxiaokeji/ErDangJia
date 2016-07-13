@@ -11,7 +11,7 @@
             ￥{%=item.Price.toFixed(2)%}
         </h2>
         <a class="btn-open-window name" data-url="/Products/ChooseDetail?pid={%=item.ProductID%}&did={%=item.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-id="{%=item.ProductID%}">
-            {%=item.ProductName%}
+            {%=item.ProductName%}&nbsp;[&nbsp;{%=item.Remark.replace(/\[/g, '').replace(/\]/g, '') || '默认规格' %}&nbsp;]
         </a>
         <div class="sales-stock">
             <span class="left">

@@ -148,16 +148,15 @@ namespace CloudSalesDAL
 
         #region 添加
 
-        public static bool AddStorageDoc(string docid, int doctype, decimal totalmoney, string providerid, string remark, string wareid, string userid, string operateip, string clientid)
+        public static bool AddStorageDoc(string docid, int doctype, string ids, string remark, string wareid, string userid, string operateip, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@DocID",docid),
                                      new SqlParameter("@DocCode",DateTime.Now.ToString("yyyyMMddHHmmssfff")),
                                      new SqlParameter("@DocType",doctype),
-                                     new SqlParameter("@TotalMoney" , totalmoney),
                                      new SqlParameter("@Remark" , remark),
                                      new SqlParameter("@WareID" , wareid),
-                                     new SqlParameter("@ProviderID" , providerid),
+                                     new SqlParameter("@AutoIDs" , ids),
                                      new SqlParameter("@UserID" , userid),
                                      new SqlParameter("@OperateIP" , operateip),
                                      new SqlParameter("@ClientID" , clientid)

@@ -213,11 +213,11 @@ namespace CloudSalesBusiness
 
         #region 添加
 
-        public static bool CreateStorageDoc(string wareid, string providerid, string remark, string userid, string operateip, string agentid, string clientid)
+        public static bool CreateStorageDoc(string wareid, string ids, string remark, string userid, string operateip, string agentid, string clientid)
         {
 
             string guid = Guid.NewGuid().ToString();
-            bool bl = StockDAL.AddStorageDoc(guid, (int)EnumDocType.RK, 0, providerid, remark, wareid, userid, operateip, clientid);
+            bool bl = StockDAL.AddStorageDoc(guid, (int)EnumDocType.RK, ids, remark, wareid, userid, operateip, clientid);
             if (bl)
             {
                 //日志

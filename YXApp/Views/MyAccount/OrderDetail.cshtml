@@ -2,6 +2,8 @@
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
     var model = (IntFactory.Sdk.OrderResult)ViewBag.DetailItem;
     var order = model.order;
+    var colorModel = model.order.saleAttrs;
+    var attrModel = model.order.attrLists;
 }
 @section css{
     <link href="/modules/css/myaccount/detail.css" rel="stylesheet" />
@@ -9,7 +11,7 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use("/modules/scripts/myaccount/historyorderdetail", function (obj) {
-            obj.init(JSON.stringify('@order'));
+            obj.init();
         });
     </script>
 }
@@ -29,6 +31,63 @@
     </div>
     <div class="add-shopping right mRight10 mTop30">立即下单</div>
     <div class="clear"></div>
+
+    <!--选择规格-->
+    <div>
+        <div class=" mBottom20 mTop20">
+            @{
+                foreach (var colorItem in colorModel)
+                {
+                    <div class="color-box" data-id="@colorItem.attrID" >
+                       <div class="left" style="text-indent:10px;">
+                           @colorItem.attrName：
+                       </div>
+                    @{
+                        for (int i = 0; i < colorItem.attrValues.Count; i++)
+                        {
+                            var color = colorItem.attrValues[i];
+                            <div class="left color-item @(i==0?"hover":"")" data-value="@color.valueName" data-id="@color.valueID">
+                                @color.valueName
+                            </div>
+                        }
+                    }  
+                    </div>
+                }
+            }
+            <div class="clear"></div>
+        </div>
+        <div class=" mBottom20 mTop20">
+            @{
+                foreach (var attrItem in attrModel)
+                {
+                    <div class="attr-box" data-id="@attrItem.attrID" >
+                       <div class="left" style="text-indent:10px;">
+                           @attrItem.attrName：
+                       </div>
+                       <div class="left">
+                        @{
+                            for (int i = 0; i < attrItem.attrValues.Count; i++)
+                            {
+                                var attr = attrItem.attrValues[i];
+                                <div>
+                                    <div class="left">@attr.valueName</div>
+                                    <div class="right"><input type="text" data-name="@attr.valueName" data-value="@attr.valueName" data-id="@attr.valueID" value="0" class="@attr.valueID txt-model" /></div>
+                                    <div class="clear"></div>
+                                </div>
+                            }
+                        }  
+                        </div>
+                    </div>
+                }
+            }
+            <div class="clear"></div>
+        </div>
+        <div class="mLeft50">
+            价格：<span class="total-price"></span>
+        </div>
+    </div>
+
+    <!--菜单选项-->
     <div class="content-menu">
         <div class="left mRight10 mLeft10 menu-module hover" id="plate-module">制版信息</div>
         <div class="left menu-module" id="materials-module">材料信息</div>
@@ -53,7 +112,6 @@
                             <td>描述</td>
                         </tr>
                         @{
-                            int type=0;
                             for (int i = 0; i < order.plateMakings.Count; i++)
                             {
                                 var item = order.plateMakings[i];
@@ -93,7 +151,6 @@
            
         </div>
     </div>
-
     <div class="product-list hide">
         <table class="table-list">
             <tr class="tr-header">

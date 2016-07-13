@@ -13,3 +13,4 @@
 .plate-info .table-list tr td:last-child { display:none;}
 .color-item { background-color:#fff;border:1px solid #ccc;padding:4px 6px;text-align:center;margin-right:10px;min-width:80px;margin-bottom:10px;}
 .color-item.hover { background-color:#ff6a00;color:#fff;}
+.color-item.has { background-color:#4a98e7;color:#fff;}

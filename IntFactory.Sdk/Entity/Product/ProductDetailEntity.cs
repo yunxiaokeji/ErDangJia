@@ -30,5 +30,6 @@ namespace IntFactory.Sdk
 
         public string saleAttrValue{ get; set; }
 
+        public string description { get; set; }
     }
 }

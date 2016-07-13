@@ -12,11 +12,19 @@ namespace IntFactory.Sdk
         /// </summary>
         public string orderID;
 
+        public string clientID;
+
         public string goodsName;
 
         public string intGoodsCode;
 
         public decimal finalPrice;
+
+        public string categoryID;
+
+        public string categoryName;
+
+        public string platemaking;
 
         /// <summary>
         /// 订单样图缩约图
@@ -32,6 +40,12 @@ namespace IntFactory.Sdk
 
         public DateTime endTime;
 
+        public List<PlateMakingEntity> plateMakings;
 
+        public List<ProductDetailEntity> details;
+
+        public List<ProductAttrEntity> attrLists;
+
+        public List<ProductAttrEntity> saleAttrs;
     }
 }

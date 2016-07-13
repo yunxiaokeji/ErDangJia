@@ -6,3 +6,10 @@
 .model-box .describe {width:120px;}
 .model-box .content-box {-webkit-box-flex:1;}
 .product-list {min-height:80px;line-height:80px;border-top:1px solid #ccc;width:100%;position:fixed;bottom:0;left:0;background-color:#fff;}
+.menu-module { background-color:#6699cc;color:#fff;padding:10px;border:1px solid #ccc;border-bottom:none;}
+.menu-module.hover { background-color:#fff;color:#6699cc;}
+.content-main { border:1px solid #ccc;min-height:100px;}
+.plate-info .table-list tr td { text-align:center !important;}
+.plate-info .table-list tr td:last-child { display:none;}
+.color-item { background-color:#fff;border:1px solid #ccc;padding:4px 6px;text-align:center;margin-right:10px;min-width:80px;margin-bottom:10px;}
+.color-item.hover { background-color:#ff6a00;color:#fff;}

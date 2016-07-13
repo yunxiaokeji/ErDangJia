@@ -5,7 +5,7 @@
     var ObjectJS = {};
     var Params = {
         zngcClientID: "",
-        pageSize: 1,
+        pageSize: 10,
         pageIndex: 1
     };
     var IsLoadding = false;

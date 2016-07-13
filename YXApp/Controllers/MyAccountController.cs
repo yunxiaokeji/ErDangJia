@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IntFactory.Sdk;
+using IntFactory.Sdk.Business;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -23,9 +25,11 @@ namespace YXApp.Controllers
             return View();
         }
 
-        public ActionResult OrderDetail()
+        public ActionResult OrderDetail(string orderID,string zngcClientID)
         {
             ViewBag.Title = "订单详情";
+            OrderResult item = OrderBusiness.BaseBusiness.GetOrderDetailByID(orderID, zngcClientID);
+            ViewBag.DetailItem = item;
             return View();
         }
     }

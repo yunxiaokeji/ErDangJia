@@ -137,6 +137,7 @@
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
     <Content Include="modules\css\layout.css" />
+    <Content Include="modules\css\myaccount\detail.css" />
     <Content Include="modules\css\myaccount\index.css" />
     <Content Include="modules\css\order\list.css" />
     <Content Include="modules\css\product\detail.css" />
@@ -162,6 +163,7 @@
     <Content Include="modules\scripts\products\product.js" />
     <Content Include="modules\scripts\products\detail.js" />
     <Content Include="modules\template\myaccount\history-order-list.html" />
+    <Content Include="modules\template\myaccount\platematring-orderdatail.html" />
     <Content Include="modules\template\product\product-list.html" />
     <Content Include="modules\template\product\shopping-list.html" />
     <Content Include="Scripts\jquery-1.11.1.js" />
@@ -241,10 +243,10 @@
     <Content Include="Views\Shared\_AccountLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\MyAccount\HistoryOrder.cshtml" />
+    <Content Include="Views\MyAccount\OrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\MyAccount\OrderDetail.cshtml" />
+    <Content Include="Views\MyAccount\HistoryOrder.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -23,9 +23,9 @@ define(function (require, exports, module) {
     UPLoad.prototype.init = function () {
         var _self = this;
         if (_self.setting.element) {
-            var form = $('<form id="' + _self.setting.element + '_postForm" enctype="multipart/form-data"></form>'),
-                file = $('<input type="file" name="file" id="' + _self.setting.element + '_fileUpLoad" ' + (_self.setting.multiple ? 'multiple="multiple"' : '') + ' style="display:none;" />'),
-                button = $('<input id="' + _self.setting.element + '_buttonSubmit" class="' + (_self.setting.className || "ico-upload") + '" type="button" value="' + _self.setting.buttonText + '" />')
+            var form = $('<form id="' + _self.setting.element.replace('#', '') + '_postForm" enctype="multipart/form-data"></form>'),
+                file = $('<input type="file" name="file" id="' + _self.setting.element.replace('#', '') + '_fileUpLoad" ' + (_self.setting.multiple ? 'multiple="multiple"' : '') + ' style="display:none;" />'),
+                button = $('<input id="' + _self.setting.element.replace('#','') + '_buttonSubmit" class="' + (_self.setting.className || "ico-upload") + '" type="button" value="' + _self.setting.buttonText + '" />')
             form.append(file).append(button);
 
             $(_self.setting.element).append(form);

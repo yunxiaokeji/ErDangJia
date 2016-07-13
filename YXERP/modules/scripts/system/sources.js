@@ -46,7 +46,10 @@
             $("#wareInfo").css({ "top": position.top-45, "left": position.left + 30 }).show().mouseleave(function() {
                 $(this).hide();
             });
+        }).mouseout(function() {
+            $("#wareInfo").hide(); 
         });
+
         $('#setToCustomers').click(function() {
             _self.setToCustomers();
         });
@@ -471,7 +474,7 @@
                 var innnerHtml = ''; 
                 for (var i = 0; i < items.length; i++) { 
                     innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin-1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
-                        "<span  style='width:18px;height:18px;border-radius:50%;'><img name='MemberImg' id='MemberImg" + i + "'  style='width:18px;height:18px;border-radius:50%;' src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span>" +
+                        "<span  class='spanimg'><span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg' id='MemberImg" + i + "'  class='memberimg'  src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span>" +
                         "<span  class='mLeft5 mRight5'>当顾客积分在</span><input id='changeFeeMore"+i+"' readOnly='readOnly' class='width50 mRight5' type='text' value='" + (i == 0 ? "0" : items[i - 1].IntegFeeMore) + "' /><span class='mRight5'>到</span>" +
                         "<input id='IntegFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' value='" + items[i].IntegFeeMore + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee' class='width50 mRight5' type='text' value='" + items[i].DiscountFee + "' />" +
                         "<span  class='mRight5'>折优惠</span><input class='width80 mRight5' type='text' name='MemberName' placeholder='请填写等级名' value='" + items[i].Name + "' /><span id='delMeber" + i + "' data-ind='" + i + "' class='" + (i==0?"hide":i == items.length - 1 ? "" : "hide") + " borderccc circle12 mLeft10'>X</span>" +
@@ -491,7 +494,7 @@
         $('#delMeber' + (i - 1)).hide();
         var intefee = parseInt($('#memberLi' + (i - 1) + ' div:first-child').data('integfeemore'));
         var innnerHtml = "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + i + "' data-imgurl=''  data-integfeemore='" + (intefee + 300) + "' data-name='' data-discountfee='1.00' data-id='' title='' >" +
-                      "<span  style='width:18px;height:18px;border-radius:50%;'><img name='MemberImg' id='MemberImg"+i+"' style='width:18px;height:18px;border-radius:50%;' src='/Content/menuico/custom.png' alt=''></span>" +
+                      "<span  class='spanimg'><span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg'  id='MemberImg" + i + "' class='memberimg'   src='/Content/menuico/custom.png' alt=''></span>" +
                       "<span  class='mLeft5 mRight5'>当顾客积分在</span><input id='changeFeeMore" + i + "' readOnly='readOnly' class='width50 mRight5' type='text' value='" + intefee + "' /><span class='mRight5'>到</span>" +
                       "<input id='IntegFeeMore" + i + "' name='IntegFeeMore'  class='width50 mRight5' placeholder='请填写积分'  type='text' value='" + (intefee + 300) + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee'  class='width50 mRight5' placeholder='请填写折扣'  type='text' value='1.00' />" +
                       "<span  class='mRight5'>折优惠</span><input class='width80 mRight5' name='MemberName' type='text'  placeholder='请填写等级名' value='' /><span id='delMeber" + i + "' data-ind='" + i + "' class=' borderccc circle12 mLeft10'>X</span>" +
@@ -540,25 +543,27 @@
         });
         $("input[name^='MemberName']").change(function () {
             ObjectJS.changeInput(3, $(this));
-        });
-        $("img[name^='MemberImg']").click(function () {
-            console.log(1);
+        }); 
+
+        $("img[name^='MemberImg']").click(function () { 
             var _this = $(this); 
+            var elem = "#SpanImg" + _this[0].id.replace('MemberImg', '');
+            $(elem).html(''); 
             Upload.createUpload({
-                element: "#"+_this[0].id,
-                buttonText: "选择等级图标",
+                element: elem,
+                buttonText: "",
                 className: "",
-                data: { folder: '', action: 'add', oldPath: _this.attr("src") },
+                data: { folder: '', action: 'add', oldPath: '' },
                 success: function (data, status) {
-                    if (data.Items.length > 0) {
-                        _this.attr("src", data.Items[0]);
+                    if (data.Items.length > 0) { 
+                        _this.attr("src", data.Items[0]); 
                         _this.parent().parent().data('imgurl', data.Items[0]);
                     } else {
                         alert("只能上传jpg/png/gif类型的图片，且大小不能超过1M！");
                     }
                 }
-            });
-            //$("#" + _this[0].id).trigger("click");
+            });   
+            $( elem + '_buttonSubmit').click(); 
         });
     }
 

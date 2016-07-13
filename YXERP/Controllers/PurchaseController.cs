@@ -69,16 +69,6 @@ namespace YXERP.Controllers
             ViewBag.providers = providers;
             return View();
         }
-        /// <summary>
-        /// 采购审核页面
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public ActionResult AuditDetail(string id)
-        {
-            ViewBag.Model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
-            return View();
-        }
 
         public ActionResult ChooseProducts(string id)
         {
@@ -163,20 +153,6 @@ namespace YXERP.Controllers
             string errinto = "";
             bool bl = new StockBusiness().AuditStorageIn(docid, doctype, isover, details, remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID, ref result, ref errinto);
             JsonDictionary.Add("status", bl);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult GetStorageDocLog(string docid, int pageIndex, int totalCount)
-        {
-            int pageCount = 0;
-            List<StorageDocAction> list = StockBusiness.GetStorageDocAction(docid, 10, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID);
-            JsonDictionary.Add("Items", list);
-            JsonDictionary.Add("TotalCount", totalCount);
-            JsonDictionary.Add("PageCount", pageCount);
             return new JsonResult
             {
                 Data = JsonDictionary,

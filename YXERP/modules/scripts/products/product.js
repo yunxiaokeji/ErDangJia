@@ -819,8 +819,6 @@ define(function (require, exports, module) {
                 }
             });
 
-            
-
             //绑定单位
             $("#unitName").text(model.SmallUnit.UnitName);
 
@@ -849,7 +847,7 @@ define(function (require, exports, module) {
                 $(".productattr").each(function () {
                     var _this = $(this), bl = false;
                     for (var i = 0, j = list.length; i < j; i++) {
-                        if (_this.find("select").attr("id") == list[i].split(':')[0]) {
+                        if (_this.find("select").attr("id") == list[i].split(':')[0] && list[i].split(':')[1]) {
                             $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]).prop("disabled", true);
                             bl = true;
                         }

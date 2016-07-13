@@ -83,7 +83,6 @@
     <Compile Include="System\CustomStageEntity.cs" />
     <Compile Include="Manage\ClientAuthorizeLog.cs" />
     <Compile Include="Manage\ExpressCompany.cs" />
-    <Compile Include="Stock\StorageDocAction.cs" />
     <Compile Include="Manage\ModulesProduct.cs" />
     <Compile Include="System\Department.cs" />
     <Compile Include="Common\Industry.cs" />

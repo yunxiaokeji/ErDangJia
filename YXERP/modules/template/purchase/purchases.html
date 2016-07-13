@@ -2,19 +2,30 @@
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
 %}
-<tr class="list-item">
-    <td>
+<ul class="box-item">
+    <li class="tLeft width150">
         <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">{%=item.DocCode%}</a>
-    </td>
-    <td>{%=item.WareHouse?item.WareHouse.Name:""%}</td>
-    <td>{%=item.ProviderName||""%}</td>
-    <td class="center {%=item.Status<2?'red':''%}">{%=item.StatusStr%}</td>
-    <td class="tRight">{%=item.TotalMoney.toFixed(2)%}</td>
-    <td class="tRight">{%=item.RealMoney.toFixed(2)%}</td>
-    <td class="center">{%=item.CreateUser.Name%}</td>
-    <td class="center">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
-    <td class="center {%=item.Status < 2? 'dropdown':''%} " data-status="{%=item.Status%}" data-id="{%=item.DocID%}">
-        <span class="{%=item.Status < 2? 'ico-dropdown':''%}"></span>
-    </td>
-</tr>
+    </li>
+    <li class="tLeft width100">
+        {%=item.WareHouse?item.WareHouse.Name:"--"%}
+    </li>
+    <li class="tLeft width150">
+        {%=item.ProviderName.subString(12)||"--"%}
+    </li>
+    <li class="width100 {%=item.Status<2?'red':''%}">
+        {%=item.StatusStr%}
+    </li>
+    <li class="tRight width100">
+        {%=item.TotalMoney.toFixed(2)%}
+    </li>
+    <li class="tRight width100">
+        {%=item.RealMoney.toFixed(2)%}
+    </li>
+    <li class="width100">
+        {%=item.CreateUser.Name%}
+    </li>
+    <li class="width100">
+        {%=item.CreateTime.toDate("yyyy-MM-dd")%}
+    </li>
+</ul>
 {% } %}

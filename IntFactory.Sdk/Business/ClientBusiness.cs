@@ -13,7 +13,7 @@ namespace IntFactory.Sdk.Business
         public ClientResult GetClientInfo(string zngcClientID)
         {
             var paras = new Dictionary<string, object>();
-            paras.Add("zngcClientID", zngcClientID);
+            paras.Add("clientID", zngcClientID);
 
             return HttpRequest.RequestServer<ClientResult>(ApiOption.GetClientInfo, paras);
         }

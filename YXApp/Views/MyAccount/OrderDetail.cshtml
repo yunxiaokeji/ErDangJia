@@ -29,7 +29,7 @@
             @(order.finalPrice)
         </div>
     </div>
-    <div class="add-shopping right mRight10 mTop30">立即下单</div>
+    <div class="add-shopping right mRight10 mTop30" data-orderid="@order.orderID" data-clientid="@order.clientID" data-price=" @order.finalPrice">立即下单</div>
     <div class="clear"></div>
 
     <!--选择规格-->
@@ -42,15 +42,16 @@
                        <div class="left" style="text-indent:10px;">
                            @colorItem.attrName：
                        </div>
-                    @{
-                        for (int i = 0; i < colorItem.attrValues.Count; i++)
-                        {
-                            var color = colorItem.attrValues[i];
-                            <div class="left color-item @(i==0?"hover":"")" data-value="@color.valueName" data-id="@color.valueID">
-                                @color.valueName
-                            </div>
-                        }
-                    }  
+                        @{
+                            for (int i = 0; i < colorItem.attrValues.Count; i++)
+                            {
+                                var color = colorItem.attrValues[i];
+                                <div class="left color-item @(i==0?"hover":"")" data-value="@color.valueName" data-id="@color.valueID">
+                                    @color.valueName
+                                </div>
+                            }
+                        }  
+                        <div class="clear"></div>
                     </div>
                 }
             }

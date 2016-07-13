@@ -13,7 +13,7 @@ namespace IntFactory.Sdk
 {
     public class HttpRequest
     {
-        public static T RequestServer<T>(ApiOption apiOption, Dictionary<string, object> paras,RequestType requestType = RequestType.Get)
+        public static T RequestServer<T>(ApiOption apiOption, Dictionary<string, object> paras,RequestType requestType = RequestType.Post)
         {
             string urlPath = GetEnumDesc<ApiOption>(apiOption);
             string url = AppConfig.ApiUrl+ urlPath;

@@ -6,26 +6,43 @@ define(function (require, exports, module) {
 
     var ObjectJS = {};
     //添加页初始化
-    ObjectJS.init = function (wareid) {
+    ObjectJS.init = function (guid, wares) {
         var _self = this;
-        _self.wareid = wareid;
-        _self.bindEvent(wareid);
+        _self.guid = guid;
+        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
+        _self.bindEvent(wares);
         _self.getAmount();
     }
     //绑定事件
-    ObjectJS.bindEvent = function (wareid) {
+    ObjectJS.bindEvent = function (wares) {
         var _self = this;
+        //仓库
+        require.async("dropdown", function () {
+            var dropdown = $("#wareid").dropdown({
+                prevText: "仓库-",
+                defaultText: "请选择",
+                defaultValue: "",
+                data: wares,
+                dataValue: "WareID",
+                dataText: "Name",
+                width: "180",
+                isposition: true,
+                onChange: function (data) {
+
+                }
+            });
+        });
 
         //添加产品
         $("#btnChooseProduct").click(function () {
             ChooseProduct.create({
                 title: "选择采购产品",
                 type: 1, //1采购 2出库 3报损 4报溢 5调拨
-                wareid: wareid,
+                wareid: _self.guid,
                 callback: function (products) {
                     if (products.length > 0) {
                         var entity = {}, items = [];
-                        entity.guid = wareid;
+                        entity.guid = guid;
                         entity.type = 1;
                         for (var i = 0; i < products.length; i++) {
                             items.push({
@@ -53,7 +70,7 @@ define(function (require, exports, module) {
             var _this = $(this);
             Global.post("/ShoppingCart/UpdateCartBatch", {
                 autoid: _this.data("id"),
-                guid: _self.wareid,
+                guid: _self.guid,
                 batch: _this.val().trim()
             }, function (data) {
                 if (!data.status) {
@@ -81,7 +98,7 @@ define(function (require, exports, module) {
 
                 Global.post("/ShoppingCart/UpdateCartPrice", {
                     autoid: _this.data("id"),
-                    guid: _self.wareid,
+                    guid: _self.guid,
                     price: _this.val()
                 }, function (data) {
                     if (!data.Status) {
@@ -106,27 +123,64 @@ define(function (require, exports, module) {
             confirm("确认移除此产品吗？", function () {
                 Global.post("/ShoppingCart/DeleteCart", {
                     ordertype: 1,
-                    guid: _self.wareid,
+                    guid: _self.guid,
                     productid: _this.data("id"),
                     name:""
                 }, function (data) {
                     if (!data.status) {
                         alert("系统异常，请重新操作！");
                     } else {
-                        _this.parents("tr.item").remove();
+                        _this.parents("ul.item").remove();
                         _self.getAmount();
                     }
                 });
             });
         });
 
+        //选择提交产品
+        $(".cart-item .checkbox").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+            } else {
+                _this.removeClass("hover");
+            }
+            _self.getAmount();
+        });
+
+        //全选
+        $(".check-all").click(function () {
+            var _this = $(this).find(".checkbox");
+            if (!_this.hasClass("hover")) {
+                $(".checkbox").addClass("hover");
+            } else {
+                $(".checkbox").removeClass("hover");
+            }
+            _self.getAmount();
+        });
+
+        //选择单个供应商
+        $(".check-part").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                $(".checkbox[data-id='" + _this.data("id") + "']").addClass("hover");
+            } else {
+                $(".checkbox[data-id='" + _this.data("id") + "']").removeClass("hover");
+            }
+            _self.getAmount();
+        });
+
+        //提交采购单
         $("#btnconfirm").click(function () {
             var bl = false;
-            $(".cart-item").each(function () {
-                bl = true;
-            });
-            if (!bl) {
-                alert("请选择采购产品！");
+            
+            if ($(".cart-item .checkbox.hover").length == 0) {
+                alert("请选择采购产品");
+                return;
+            }
+
+            if (!$("#wareid").data("id")) {
+                alert("请选择仓库");
                 return;
             }
             confirm("采购单提交后不可编辑，确认提交吗？", function () {
@@ -139,10 +193,12 @@ define(function (require, exports, module) {
     //计算总金额
     ObjectJS.getAmount = function () {
         var amount = 0;
-        $(".amount").each(function () {
+        $(".box-item.item").each(function () {
             var _this = $(this);
-            _this.html((_this.prevAll(".tr-quantity").find("input").val() * _this.prevAll(".tr-price").find("input").val()).toFixed(2));
-            amount += _this.html() * 1;
+            _this.find(".amount").html((_this.find(".tr-quantity").find("input").val() * _this.find(".tr-price").find("input").val()).toFixed(2));
+            if (_this.find(".checkbox").hasClass("hover")) {
+                amount += _this.find(".amount").html() * 1;
+            }
         });
         $("#amount").text(amount.toFixed(2));
     }
@@ -152,7 +208,7 @@ define(function (require, exports, module) {
         var _self = this;
         Global.post("/ShoppingCart/UpdateCartQuantity", {
             autoid: ele.data("id"),
-            guid: _self.wareid,
+            guid: _self.guid,
             quantity: ele.val()
         }, function (data) {
             if (!data.Status) {
@@ -168,25 +224,26 @@ define(function (require, exports, module) {
 
     //保存
     ObjectJS.submitOrder = function () {
-        var _self = this, bl = false;
-        var totalamount = 0, list = [];
+        var _self = this;
+        var ids = "";
 
         $(".cart-item").each(function () {
-            bl = true;
+            if ($(this).find(".checkbox").hasClass("hover")) {
+                ids += $(this).data("autoid") + ",";
+            }
         });
-        if (!bl) {
-            alert("请选择采购产品！");
-            return;
-        }
+
         Global.post("/Purchase/SubmitPurchase", {
-            wareid: _self.wareid,
-            providerid: $("#provider").val(),
+            ids: ids,
+            wareid: $("#wareid").data("id"),
             remark: $("#remark").val().trim()
         }, function (data) {
             if (data.status) {
-                location.href = "/Purchase/MyPurchase";
+                location.href = "/Purchase/Purchases";
             } else {
-                location.href = location.href;
+                alert("提交失败，请重新操作", function () {
+                    location.href = location.href;
+                });
             }
         });
     }

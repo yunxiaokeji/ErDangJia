@@ -21,6 +21,10 @@
     {
         <a href="/Orders/Detail/@ViewBag.GUID" class="btn-back right">返回订单详情</a> 
     }
+    else if (ViewBag.Type == (int)CloudSalesEnum.EnumDocType.RK)
+    {
+         <a href="/Purchase/ConfirmPurchase" class="btn right">提交采购单</a> 
+    }
 </div>
 <div class="search-header">
     <ul class="category-map">

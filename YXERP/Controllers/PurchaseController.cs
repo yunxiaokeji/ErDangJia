@@ -21,18 +21,6 @@ namespace YXERP.Controllers
         {
             return View("Purchase");
         }
-        
-
-        /// <summary>
-        /// 我的采购
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Purchase()
-        {
-            ViewBag.Type = (int)EnumDocType.RK;
-            ViewBag.Title = "采购入库";
-            return View("FilterProducts");
-        }
 
         public ActionResult Purchases()
         {
@@ -65,18 +53,20 @@ namespace YXERP.Controllers
         /// <returns></returns>
         public ActionResult ConfirmPurchase(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            var wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
+            var list = ShoppingCartBusiness.GetShoppingCart(EnumDocType.RK, CurrentUser.UserID, CurrentUser.UserID);
+            Dictionary<string, string> providers = new Dictionary<string, string>();
+            foreach (var model in list)
             {
-                return Redirect("/Purchase/MyPurchase");
+                if (!providers.ContainsKey(model.ProviderID))
+                {
+                    providers.Add(model.ProviderID, model.ProviderName);
+                }
             }
-            var ware = SystemBusiness.BaseBusiness.GetWareByID(id, CurrentUser.ClientID);
-            if (ware == null || string.IsNullOrEmpty(ware.WareID))
-            {
-                return Redirect("/Purchase/MyPurchase");
-            }
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
-            ViewBag.Ware = ware;
-            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.RK, ware.WareID, CurrentUser.UserID);
+            ViewBag.wares = wares;
+            ViewBag.items = list;
+            ViewBag.guid = CurrentUser.UserID;
+            ViewBag.providers = providers;
             return View();
         }
         /// <summary>
@@ -90,11 +80,25 @@ namespace YXERP.Controllers
             return View();
         }
 
+        public ActionResult ChooseProducts(string id)
+        {
+            ViewBag.Type = (int)EnumDocType.RK;
+            ViewBag.GUID = CurrentUser.UserID;
+            ViewBag.Title = "选择采购产品";
+            return View("FilterProducts");
+        }
+
         #region Ajax
 
-        public JsonResult SubmitPurchase(string wareid, string providerid, string remark)
+        public JsonResult SubmitPurchase(string wareid, string ids, string remark)
         {
-            var bl = StockBusiness.CreateStorageDoc(wareid, providerid, remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            bool bl = false;
+            if (!string.IsNullOrEmpty(wareid) && !string.IsNullOrEmpty(ids))
+            {
+                ids = ids.Substring(0, ids.Length - 1);
+                bl = StockBusiness.CreateStorageDoc(wareid, ids, remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            }
+            
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {

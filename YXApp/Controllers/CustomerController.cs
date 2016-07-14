@@ -11,9 +11,15 @@ namespace YXApp.Controllers
         //
         // GET: /Customer/
 
-        public ActionResult CustomerList()
+        public ActionResult List()
         {
             ViewBag.Title = "客户列表";
+            return View();
+        }
+
+        public ActionResult Detail()
+        {
+            ViewBag.Title = "客户详情";
             return View();
         }
 

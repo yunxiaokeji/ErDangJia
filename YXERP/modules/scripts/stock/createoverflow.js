@@ -7,44 +7,50 @@ define(function (require, exports, module) {
 
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (wareid) {
+    ObjectJS.init = function (guid, wares) {
         var _self = this;
-        _self.wareid = wareid;
-        _self.bindEvent(wareid);
+        _self.guid = guid;
+        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
+        _self.bindEvent(wares);
     }
     //绑定事件
-    ObjectJS.bindEvent = function (wareid) {
+    ObjectJS.bindEvent = function (wares) {
         var _self = this;
 
-        $("#btnChooseProduct").click(function () {
-            ChooseProduct.create({
-                title: "选择报溢产品",
-                type: 4, //1采购 2出库 3报损 4报溢 5调拨
-                wareid: wareid,
-                callback: function (products) {
-                    if (products.length > 0) {
-                        var entity = {}, items = [];
-                        entity.guid = wareid;
-                        entity.type = 4;
-                        for (var i = 0; i < products.length; i++) {
-                            items.push({
-                                ProductID: products[i].pid,
-                                ProductDetailID: products[i].did,
-                                BatchCode: products[i].batch,
-                                DepotID: products[i].depotid,
-                                SaleAttrValueString: products[i].remark,
-                            });
-                        }
-                        entity.Products = items;
+        //仓库
+        require.async("dropdown", function () {
+            var dropdown = $("#wareid").dropdown({
+                prevText: "仓库-",
+                defaultText: "请选择",
+                defaultValue: "",
+                data: wares,
+                dataValue: "WareID",
+                dataText: "Name",
+                width: "180",
+                isposition: true,
+                onChange: function (data) {
 
-                        Global.post("/ShoppingCart/AddShoppingCartBatchIn", { entity: JSON.stringify(entity) }, function (data) {
-                            if (data.status) {
-                                location.href = location.href;
-                            }
-                        });
-                    }
-                }   
+                }
             });
+        });
+
+        $(".check-all").click(function () {
+            var _this = $(this).find(".checkbox");
+            if (!_this.hasClass("hover")) {
+                $(".checkbox").addClass("hover");
+            } else {
+                $(".checkbox").removeClass("hover");
+            }
+        });
+
+        //选择提交产品
+        $(".cart-item .checkbox").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+            } else {
+                _this.removeClass("hover");
+            }
         });
 
         //编辑数量
@@ -56,35 +62,20 @@ define(function (require, exports, module) {
             }
         });
 
-        $(".batch").change(function () {
-            var _this = $(this);
-            Global.post("/ShoppingCart/UpdateCartBatch", {
-                autoid: _this.data("id"),
-                guid: _self.wareid,
-                batch: _this.val().trim()
-            }, function (data) {
-                if (!data.status) {
-                    _this.val(_this.data("value"));
-                    alert("系统异常，请重新操作！");
-                } else {
-                    _this.data("value", _this.val());
-                }
-            });
-        });
         //删除
         $(".ico-del").click(function () {
             var _this = $(this);
             confirm("确认删除此产品吗？", function () {
                 Global.post("/ShoppingCart/DeleteCart", {
                     ordertype: 4,
-                    guid: _self.wareid,
+                    guid: _self.guid,
                     productid: _this.data("id"),
                     name: ""
                 }, function (data) {
                     if (!data.status) {
                         alert("系统异常，请重新操作！");
                     } else {
-                        _this.parents("tr.item").remove();
+                        _this.parents("ul.item").remove();
                     }
                 });
             });
@@ -93,22 +84,29 @@ define(function (require, exports, module) {
         //提交订单
         $("#btnconfirm").click(function () {
 
-            if ($(".cart-item").length == 0) {
-                alert("请选择报溢产品！");
+            if ($(".cart-item .checkbox.hover").length == 0) {
+                alert("请选择报溢产品");
                 return;
             }
+
+            if (!$("#wareid").data("id")) {
+                alert("请选择仓库");
+                return;
+            }
+
             confirm("报溢单提交后不可编辑，确认提交吗？", function () {
                 _self.submitOrder();
             });
 
         });
     }
+
     //更改数量
     ObjectJS.editQuantity = function (ele) {
         var _self = this;
         Global.post("/ShoppingCart/UpdateCartQuantity", {
             autoid: ele.data("id"),
-            guid: _self.wareid,
+            guid: _self.guid,
             quantity: ele.val()
         }, function (data) {
             if (!data.Status) {
@@ -119,22 +117,30 @@ define(function (require, exports, module) {
             }
         });
     }
+
     //保存
     ObjectJS.submitOrder = function () {
         var _self = this;
 
-        if ($(".cart-item").length == 0) {
-            alert("请选择报溢产品！");
-            return;
-        }
+        var ids = "";
+
+        $(".cart-item").each(function () {
+            if ($(this).find(".checkbox").hasClass("hover")) {
+                ids += $(this).data("autoid") + ",";
+            }
+        });
+
         Global.post("/Stock/SubmitOverflowDoc", {
-            wareid: _self.wareid,
+            ids: ids,
+            wareid: $("#wareid").data("id"),
             remark: $("#remark").val().trim()
         }, function (data) {
             if (data.status) {
                 location.href = "/Stock/Overflow";
             } else {
-                location.href = location.href;
+                alert("提交失败，请重新操作", function () {
+                    location.href = location.href;
+                });
             }
         });
     }

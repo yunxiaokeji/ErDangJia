@@ -33,55 +33,6 @@ define(function (require, exports, module) {
             });
         });
 
-        //添加产品
-        $("#btnChooseProduct").click(function () {
-            ChooseProduct.create({
-                title: "选择采购产品",
-                type: 1, //1采购 2出库 3报损 4报溢 5调拨
-                wareid: _self.guid,
-                callback: function (products) {
-                    if (products.length > 0) {
-                        var entity = {}, items = [];
-                        entity.guid = guid;
-                        entity.type = 1;
-                        for (var i = 0; i < products.length; i++) {
-                            items.push({
-                                ProductID: products[i].pid,
-                                ProductDetailID: products[i].did,
-                                BatchCode: products[i].batch,
-                                DepotID: products[i].depotid,
-                                SaleAttrValueString: products[i].remark,
-                            });
-                        }
-                        entity.Products = items;
-
-                        Global.post("/ShoppingCart/AddShoppingCartBatchIn", { entity: JSON.stringify(entity) }, function (data) {
-                            if (data.status) {
-                                location.href = location.href;
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
-        //编辑批次
-        $(".batch").change(function () {
-            var _this = $(this);
-            Global.post("/ShoppingCart/UpdateCartBatch", {
-                autoid: _this.data("id"),
-                guid: _self.guid,
-                batch: _this.val().trim()
-            }, function (data) {
-                if (!data.status) {
-                    _this.val(_this.data("value"));
-                    alert("系统异常，请重新操作！");
-                } else {
-                    _this.data("value", _this.val());
-                }
-            });
-        });
-
         //编辑数量
         $(".quantity").change(function () {
             if ($(this).val().isInt() && $(this).val() > 0) {

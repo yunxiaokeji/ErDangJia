@@ -26,9 +26,11 @@ namespace CloudSalesBusiness
             {
                 StorageDoc model = new StorageDoc();
                 model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                var user = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                model.UserName = user != null ? user.Name : "";
                 model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
-                model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+                var ware = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+                model.WareName = ware != null ? ware.Name : "";
 
                 list.Add(model);
             }
@@ -40,15 +42,31 @@ namespace CloudSalesBusiness
             DataSet ds = StockDAL.GetStorageDocList(userid, (int)type, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
 
             List<StorageDoc> list = new List<StorageDoc>();
-            foreach (DataRow dr in ds.Tables[0].Rows)
+            if (ds.Tables.Contains("Doc"))
             {
-                StorageDoc model = new StorageDoc();
-                model.FillData(dr);
-                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
-                model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
-                model.WareHouse = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+                foreach (DataRow dr in ds.Tables["Doc"].Rows)
+                {
+                    StorageDoc model = new StorageDoc();
+                    model.FillData(dr);
+                    var user = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                    model.UserName = user != null ? user.Name : "";
+                    model.StatusStr = GetDocStatusStr(model.DocType, model.Status);
+                    var ware = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
+                    model.WareName = ware != null ? ware.Name : "";
 
-                list.Add(model);
+                    if (ds.Tables.Contains("Details"))
+                    {
+                        model.Details = new List<StorageDetail>();
+                        foreach (DataRow ddr in ds.Tables["Details"].Select("DocID='" + model.DocID + "'")) 
+                        {
+                            StorageDetail detail = new StorageDetail();
+                            detail.FillData(ddr);
+                            model.Details.Add(detail);
+                        }
+                    }
+
+                    list.Add(model);
+                }
             }
             return list;
         }
@@ -72,10 +90,6 @@ namespace CloudSalesBusiness
                 {
                     StorageDetail details = new StorageDetail();
                     details.FillData(item);
-                    if (!string.IsNullOrEmpty(details.UnitID))
-                    {
-                        details.UnitName = ProductsBusiness.BaseBusiness.GetUnitByID(details.UnitID, clientid).UnitName;
-                    }
                     model.Details.Add(details);
                 }
             }
@@ -137,28 +151,6 @@ namespace CloudSalesBusiness
             {
                 ProductDetail model = new ProductDetail();
                 model.FillData(dr);
-                model.SaleAttrValueString = "";
-                if (!string.IsNullOrEmpty(model.SaleAttrValue)) 
-                {
-                    string[] attrs = model.SaleAttrValue.Split(',');
-                    foreach (string attrid in attrs)
-                    {
-                        if (!string.IsNullOrEmpty(attrid))
-                        {
-                            var attr = new ProductsBusiness().GetProductAttrByID(attrid.Split(':')[0], clientid);
-                            var value = attr.AttrValues.Where(m => m.ValueID == attrid.Split(':')[1]).FirstOrDefault();
-                            if (attr != null && value != null)
-                            {
-                                model.SaleAttrValueString += attr.AttrName + "：" + value.ValueName + "，";
-                            }
-                        }
-                    }
-                    if (model.SaleAttrValueString.Length > 0)
-                    {
-                        model.SaleAttrValueString = model.SaleAttrValueString.Substring(0, model.SaleAttrValueString.Length - 1);
-                    }
-                }
-
                 list.Add(model);
             }
             return list;
@@ -231,10 +223,10 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool SubmitOverflowDoc(string wareid, string remark, string userid, string operateip, string clientid)
+        public bool SubmitOverflowDoc(string wareid, string ids, string remark, string userid, string operateip, string clientid)
         {
             string guid = Guid.NewGuid().ToString();
-            bool bl = StockDAL.SubmitOverflowDoc(guid, (int)EnumDocType.BY, 0, remark, wareid, userid, operateip, clientid);
+            bool bl = StockDAL.SubmitOverflowDoc(guid, (int)EnumDocType.BY, ids, remark, wareid, userid, operateip, clientid);
             return bl;
         }
 

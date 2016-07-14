@@ -63,7 +63,7 @@ namespace CloudSalesDAL
 
             paras[0].Direction = ParameterDirection.InputOutput;
             paras[1].Direction = ParameterDirection.InputOutput;
-            DataSet ds = GetDataSet("P_GetStorageDocList", paras, CommandType.StoredProcedure, "Doc");
+            DataSet ds = GetDataSet("P_GetStorageDocList", paras, CommandType.StoredProcedure, "Doc|Details");
             totalCount = Convert.ToInt32(paras[0].Value);
             pageCount = Convert.ToInt32(paras[1].Value);
             return ds;
@@ -180,13 +180,13 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_SubmitDamagedDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool SubmitOverflowDoc(string docid, int doctype, decimal totalmoney, string remark, string wareid, string userid, string operateip, string clientid)
+        public static bool SubmitOverflowDoc(string docid, int doctype, string ids, string remark, string wareid, string userid, string operateip, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@DocID",docid),
                                      new SqlParameter("@DocCode",DateTime.Now.ToString("yyyyMMddHHmmssfff")),
                                      new SqlParameter("@DocType",doctype),
-                                     new SqlParameter("@TotalMoney" , totalmoney),
+                                     new SqlParameter("@AutoIDs" , ids),
                                      new SqlParameter("@Remark" , remark),
                                      new SqlParameter("@WareID" , wareid),
                                      new SqlParameter("@UserID" , userid),

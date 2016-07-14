@@ -25,6 +25,10 @@
     {
          <a href="/Purchase/ConfirmPurchase" class="btn right">提交采购单</a> 
     }
+    else if (ViewBag.Type == (int)CloudSalesEnum.EnumDocType.BY)
+    {
+         <a href="/Stock/CreateOverflow/@ViewBag.GUID" class="btn right">提交报溢单</a> 
+    }
 </div>
 <div class="search-header">
     <ul class="category-map">

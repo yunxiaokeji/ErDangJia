@@ -305,10 +305,15 @@ namespace CloudSalesEntity
         public string DocCode { get; set; }
 
         public Users CreateUser { get; set; }
+
+        public string UserName { get; set; }
+
         [Property("Lower")] 
         public string WareID { get; set; }
 
         public WareHouse WareHouse { get; set; }
+
+        public string WareName { get; set; }
 
         /// <summary>
         /// 填充数据

@@ -120,15 +120,12 @@ namespace YXERP.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Redirect("/Stock/Overflow");
+                id = CurrentUser.UserID;
             }
-            var ware = SystemBusiness.BaseBusiness.GetWareByID(id, CurrentUser.ClientID);
-            if (ware == null || string.IsNullOrEmpty(ware.WareID))
-            {
-                return Redirect("/Stock/Overflow");
-            }
-            ViewBag.Ware = ware;
-            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BY, ware.WareID, CurrentUser.UserID);
+            var wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
+            ViewBag.wares = wares;
+            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BY, id, CurrentUser.UserID);
+            ViewBag.guid = id;
             return View();
         }
 
@@ -190,6 +187,14 @@ namespace YXERP.Controllers
             }
             ViewBag.Model = model;
             return View();
+        }
+
+        public ActionResult ChooseBYProducts()
+        {
+            ViewBag.Type = (int)EnumDocType.BY;
+            ViewBag.GUID = CurrentUser.UserID;
+            ViewBag.Title = "选择报溢产品";
+            return View("FilterProducts");
         }
 
         #region Ajax
@@ -302,9 +307,15 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult SubmitOverflowDoc(string wareid, string remark)
+        public JsonResult SubmitOverflowDoc(string ids, string wareid, string remark)
         {
-            var bl = StockBusiness.BaseBusiness.SubmitOverflowDoc(wareid, remark, CurrentUser.UserID, OperateIP, CurrentUser.ClientID);
+            bool bl = false;
+            if (!string.IsNullOrEmpty(wareid) && !string.IsNullOrEmpty(ids))
+            {
+                ids = ids.Substring(0, ids.Length - 1);
+                bl = StockBusiness.BaseBusiness.SubmitOverflowDoc(wareid, ids, remark, CurrentUser.UserID, OperateIP, CurrentUser.ClientID);
+            }
+
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {

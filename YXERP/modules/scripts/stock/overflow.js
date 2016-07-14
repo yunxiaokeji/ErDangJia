@@ -23,13 +23,19 @@ define(function (require, exports, module) {
     //初始化
     ObjectJS.init = function (wares) {
         var _self = this;
-        wares = JSON.parse(wares.replace(/&quot;/g, '"'));
-        _self.bindEvent(wares);
+        _self.bindEvent();
         _self.getList();
     }
     //绑定事件
     ObjectJS.bindEvent = function (wares) {
         var _self = this;
+
+        Global.post("/ShoppingCart/GetShoppingCartCount", {
+            ordertype: 4,
+            guid: ""
+        }, function (data) {
+            $("#btnSubmit").html("提交报溢单 ( " + data.Quantity + " ) ");
+        });
 
         $(document).click(function (e) {
             //隐藏下拉
@@ -87,38 +93,6 @@ define(function (require, exports, module) {
             }
         });
 
-        //新建报溢
-        $("#btnCreate").click(function () {
-            var _this = $(this);
-            doT.exec("template/stock/chooseware.html", function (template) {
-                var innerHtml = template(wares);
-                Easydialog.open({
-                    container: {
-                        id: "show-model-chooseware",
-                        header: "选择报溢仓库",
-                        content: innerHtml,
-                        yesFn: function () {
-                            var wareid = $(".ware-items .hover").data("id");
-                            if (!wareid) {
-                                alert("请选择报溢仓库！");
-                                return false;
-                            } else {
-                                location.href = "/Stock/CreateOverflow/" + wareid;
-                            }
-                        },
-                        callback: function () {
-
-                        }
-                    }
-                });
-
-                $(".ware-items .ware-item").click(function () {
-                    $(this).siblings().removeClass("hover");
-                    $(this).addClass("hover");
-                });
-            });
-        });
-
         //审核
         $("#audit").click(function () {
             location.href = "/Stock/OverflowDetail/" + _self.docid;
@@ -133,6 +107,7 @@ define(function (require, exports, module) {
         });
 
     }
+
     //获取单据列表
     ObjectJS.getList = function () {
         var _self = this;

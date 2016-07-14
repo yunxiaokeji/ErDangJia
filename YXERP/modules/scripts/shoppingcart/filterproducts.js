@@ -26,6 +26,7 @@
         var _self = this;
         _self.type = type;
         _self.guid = guid;
+        _self.isLoading = false;
         Params.DocType = type;
         _self.getChildCategory("");
         _self.bindEvent();
@@ -201,6 +202,9 @@
     ObjectJS.getProducts = function (params) {
         var _self = this;
         var attrs = [];
+        $("#productlist").empty();
+        $("#productlist").append("<div class='data-loading' ><div>");
+
         $(".filter-attr").each(function () {
             var _this = $(this), _value = _this.find(".hover");
             if (_value.data("id")) {
@@ -227,23 +231,26 @@
 
         Global.post("/ShoppingCart/GetProductListForShopping", { filter: JSON.stringify(opt) }, function (data) {
             $("#productlist").empty();
-            doT.exec("template/shoppingcart/filter-products.html", function (templateFun) {
-                var html = templateFun(data.Items);
-                html = $(html);
+            if (data.Items.length > 0) {
+                doT.exec("template/shoppingcart/filter-products.html", function (templateFun) {
+                    var html = templateFun(data.Items);
+                    html = $(html);
 
-                //打开产品详情页
-                html.find(".productimg,.name").each(function () {
-                    $(this).data("url", $(this).data("url") + "&type=" + _self.type + "&guid=" + _self.guid);
+                    //打开产品详情页
+                    html.find(".productimg,.name").each(function () {
+                        $(this).data("url", $(this).data("url") + "&type=" + _self.type + "&guid=" + _self.guid);
+                    });
+                    //加入购物车
+                    html.find(".btnAddCart").click(function () {
+                        var _this = $(this);
+                        _self.showDetail(_this.data("pid"), _this.data("did"));
+                    });
+
+                    $("#productlist").append(html);
                 });
-                //加入购物车
-                html.find(".btnAddCart").click(function () {
-                    var _this = $(this);
-                    _self.showDetail(_this.data("pid"), _this.data("did"));
-                });
-
-                $("#productlist").append(html);
-
-            });
+            } else {
+                $("#productlist").append("<div class='nodata-box' >暂无数据!</div>");
+            }
 
             $("#pager").paginate({
                 total_count: data.TotalCount,
@@ -293,6 +300,11 @@
     //加入购物车
     ObjectJS.showDetail = function (pid, did) {
         var _self = this;
+        if (_self.isLoading) {
+            alert("数据加载中，请稍后");
+            return false;
+        }
+        _self.isLoading = true;
         //缓存产品信息
         if (!CacheProduct[pid]) {
             Global.post("/Products/GetProductByIDForDetails", { productid: pid }, function (data) {
@@ -425,6 +437,8 @@
                 break;
             }
         }
+
+        _self.isLoading = false;
     }
 
     module.exports = ObjectJS;

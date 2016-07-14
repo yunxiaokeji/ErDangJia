@@ -7,7 +7,7 @@
         <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">{%=item.DocCode%}</a>
     </li>
     <li class="tLeft width100">
-        {%=item.WareHouse?item.WareHouse.Name:"--"%}
+        {%=item.WareName||"--"%}
     </li>
     <li class="tLeft width150">
         {%=item.ProviderName.subString(12)||"--"%}
@@ -22,7 +22,7 @@
         {%=item.RealMoney.toFixed(2)%}
     </li>
     <li class="width100">
-        {%=item.CreateUser.Name%}
+        {%=item.UserName||"--"%}
     </li>
     <li class="width100">
         {%=item.CreateTime.toDate("yyyy-MM-dd")%}

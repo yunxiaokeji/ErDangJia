@@ -6,60 +6,55 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/stock/createoverflow"], function (obj) {
-            obj.init('@(ware.WareID)');
+            obj.init('@ViewBag.guid', '@Html.ToJSONString((List<CloudSalesEntity.WareHouse>)ViewBag.wares)');
         });
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">新建报溢单</span>
-    <a class="btn-back right" href="/Stock/Overflow">返回</a>
+    <span class="header-title left">提交报溢单</span>
+   <a class="btn right" href="/Stock/ChooseBYProducts">继续选择产品</a>
 </div>
 <div class="content-body mTop20">
-     <ul class="table-add">
-        <li>
-            <span class="column-title">仓库：</span>
-            @ware.Name
-        </li>
-        <li>
-            <span class="column-title">备注：</span> 
-            <span">
-                 <textarea id="remark" class="width310"></textarea>
-            </span>
-           
-        </li>
-    </ul>
-</div>
-<div class="tab-nav mTop30">
-    <ul class="tab-nav-ul left">
-        <li class="hover" data-id="navRemark">产品明细</li>
-    </ul>
-    <div class="btn right" id="btnChooseProduct">添加报溢产品</div>
-</div>
-<div class="content-body">
-    <table class="table-list">
-        <tr class="tr-header">
-            <td class="tLeft">产品名称</td>
-            <td class="tLeft">规格</td>
-            <td class="">单位</td>
-            <td class="center">数量</td>
-            <td class="center width80">删除</td>
-        </tr>
-        @foreach (var model in (List<CloudSalesEntity.ProductDetail>)ViewBag.Items)
-        { 
-            <tr class="item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
-                <td>
+    <div class="table-box-list pBottom20">
+        <ul class="box-header">
+            <li class="width30"></li>
+            <li class="tLeft width300">产品名称</li>
+            <li class="width300">规格</li>
+            <li class="width100">单位</li>
+            <li class="width100">数量</li>
+            <li class="width80">删除</li>
+        </ul>
+        @foreach (var model in (List<CloudSalesEntity.ProductDetail>)ViewBag.items)
+        {
+            <ul class="box-item item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
+                <li class="width30"><span class="checkbox iconfont"></span></li>
+                <li class="tLeft width300">
                     <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(model.ProductID)&did=@(model.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(model.ProductName)" data-id="@(model.ProductID)">@(model.ProductName)</a>
-                </td>
-                <td>@(model.Remark)</td>
-                <td class="center">@(model.UnitName)</td>
-                <td class="center tr-quantity"><input  type="text" data-id="@(model.AutoID)" data-value="@(model.Quantity)" class="quantity width50" value="@(model.Quantity)" /></td>
-                <td class="center">
-                    <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a>
-                </td>
-            </tr>
+                </li>
+                <li class="width300">@(model.Remark)</li>
+                <li class="tr-price width100">
+                    @(model.UnitName)
+                </li>
+                <li class="tr-quantity width100">
+                    <input  type="text" data-id="@(model.AutoID)" data-value="@(model.Quantity)" class="quantity width50" value="@(model.Quantity)" />
+                </li>
+                <li class="width80"><a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a></li>
+            </ul>
         }
-    </table>
+        <ul class="box-header">
+            <li style="width:330px;" class="tLeft">
+                <div class="check-all hand mLeft10"><span class="checkbox iconfont"></span> 全选</div> 
+            </li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+    <div class="right" id="wareid"></div>
+    <div class="clear"></div>
+    <input type="text" placeholder="备注" id="remark" class="width500 mTop10 right" />
+    <div class="clear"></div>
     <div class="mTop20">
         <div class="btn right" id="btnconfirm">提交报溢单</div>
+        <a class="btn999 right mRight10" href="/Stock/ChooseBYProducts">继续选择产品</a>
     </div>
+    <div class="clear"></div>
 </div>

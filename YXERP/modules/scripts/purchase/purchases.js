@@ -3,6 +3,7 @@ define(function (require, exports, module) {
     var Global = require("global"),
         Easydialog = require("easydialog"),
         doT = require("dot"),
+        Dialog = require("dialog"),
         moment = require("moment");
     require("daterangepicker");
     require("pager");
@@ -36,7 +37,8 @@ define(function (require, exports, module) {
 
         $(document).click(function (e) {
             //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")
+                && !$(e.target).parents().hasClass("bghulan") && !$(e.target).hasClass("bghulan")) {
                 $(".dropdown-ul").hide();
             }
         });
@@ -164,7 +166,17 @@ define(function (require, exports, module) {
                 });
             });
         });
-
+        $("#dropdown").click(function () {
+            var position = $("#dropdown").position();
+            $("#exceldropdown").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+        $('#exportPurchases').click(function () {
+            Params.filleName = '采购单导出';
+            Params.doctype = 1;
+            Dialog.exportModel("/Purchase/ExportFromPurchases", Params);
+        });
     }
     //获取单据列表
     ObjectJS.getList = function () {
@@ -193,7 +205,7 @@ define(function (require, exports, module) {
                             $("#delete").hide();
                         }
                         var position = _this.find(".ico-dropdown").position();
-                        $(".dropdown-ul").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
+                        $("#opeardropdown").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
                             $(this).hide();
                         });
                         _self.docid = _this.data("id");

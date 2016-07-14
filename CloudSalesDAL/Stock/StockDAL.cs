@@ -14,6 +14,23 @@ namespace CloudSalesDAL
 
         #region 查询
 
+        public static DataTable GetPurchasesByExcel(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int doctype, string clientid)
+        {
+            SqlParameter[] paras = {   new SqlParameter("@UserID", userid),
+                                       new SqlParameter("@DocType", doctype),
+                                       new SqlParameter("@Status", status),
+                                       new SqlParameter("@BeginTime", begintime),
+                                       new SqlParameter("@EndTime", endtime),
+                                       new SqlParameter("@KeyWords",keywords),
+                                       new SqlParameter("@WareID", wareid),
+                                       new SqlParameter("@ProviderID", providerid), 
+                                       new SqlParameter("@ClientID",clientid)
+                                   }; 
+            DataTable dt = GetDataTable("P_GetStorageDocForExcel", paras, CommandType.StoredProcedure);
+            return dt;
+        }
+
+
         public static DataSet GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
         {
             SqlParameter[] paras = { 

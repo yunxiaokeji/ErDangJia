@@ -278,6 +278,9 @@
     <Content Include="modules\plug\umeditor\net\controller.ashx" />
     <Content Include="modules\plug\umeditor\net\README.md" />
     <Content Include="modules\excelmodel\category.json" />
+    <Content Include="modules\excelmodel\purchase.json" />
+    <Content Include="modules\excelmodel\overflow.json" />
+    <Content Include="modules\excelmodel\stockdetail.json" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

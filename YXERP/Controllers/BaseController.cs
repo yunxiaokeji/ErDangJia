@@ -425,7 +425,7 @@ namespace YXERP.Controllers
                     {
                         dic.Add(keyvalue.Key.ToLower(), excelModel);
                         int columnType = Convert.ToInt32(jChild[test + "type"]);
-                        if (excelModel.IsFomat && columnType > 0)
+                        if (excelModel.IsFomat && columnType > -1)
                         {
                             string dataList = excelModel.DataSource;
                             string[] distType = dataList.Split('|');

@@ -35,6 +35,7 @@
                     zngcClientID: _this.data('clientid')
                 }, function () {
                     alert("下单成功");
+                    location.href = "/MyAccount/OrderStatusList";
                 });
             } else {
                 alert("请输入下单数量");

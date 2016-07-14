@@ -25,6 +25,12 @@ namespace YXApp.Controllers
             return View();
         }
 
+        public ActionResult OrderStatusList()
+        {
+            ViewBag.Title = "订单列表";
+            return View();
+        }
+
         public ActionResult OrderDetail(string orderID,string zngcClientID)
         {
             ViewBag.Title = "订单详情";

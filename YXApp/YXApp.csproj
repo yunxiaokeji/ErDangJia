@@ -234,9 +234,6 @@
     <Content Include="Views\Order\OrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Customer\CustomerList.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Product\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +244,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\MyAccount\HistoryOrder.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MyAccount\OrderStatusList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Customer\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Customer\Detail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

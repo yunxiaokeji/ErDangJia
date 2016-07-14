@@ -20,8 +20,9 @@
                     %}
                         <option value="{%=value.ValueID%}">{%=value.ValueName%}</option> 
                     {% } %}
-                    <option value="">其他</option> 
+                    <option value="|">自定义</option> 
                 </select>
+                <input data-id="{%=item.AttrID%}" type="text" class="hide customize width100" />
         </li>
     {% } %}
     <li class="specification">

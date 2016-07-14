@@ -764,15 +764,24 @@ define(function (require, exports, module) {
                             return false;
                         }
 
-                        var attrlist = "", valuelist = "", attrvaluelist = "", desc = $("#iptRemark").val().trim();
+                        var attrlist = "", valuelist = "", attrvaluelist = "", desc = $("#iptRemark").val().trim(), isNull = false;
                         $(".productattr").each(function () {
                             var _this = $(this);
                             attrlist += _this.data("id") + ",";
                             valuelist += _this.find("select").val() + ",";
                             attrvaluelist += _this.data("id") + ":" + _this.find("select").val() + ",";
                             //desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                            if (_this.find("select").val() == "|" && !_this.find("select").next().val()) {
+                                isNull = true;
+                                alert("请输入自定义规格", function () {
+                                    _this.find("select").next().focus();
+                                });
+                                return false;
+                            }
                         });
-
+                        if (isNull) {
+                            return false;
+                        }
                         var Model = {
                             ProductDetailID: id,
                             ProductID: model.ProductID,
@@ -819,6 +828,11 @@ define(function (require, exports, module) {
                 }
             });
 
+            //设置有规格不能自动输入
+            if ($(".productattr").length > 0) {
+                $("#iptRemark").prop("disabled", "disabled").css({ "border": "none", "background-color": "#fff" });
+            }
+
             //绑定单位
             $("#unitName").text(model.SmallUnit.UnitName);
 
@@ -847,24 +861,59 @@ define(function (require, exports, module) {
                 $(".productattr").each(function () {
                     var _this = $(this), bl = false;
                     for (var i = 0, j = list.length; i < j; i++) {
-                        if (_this.find("select").attr("id") == list[i].split(':')[0] && list[i].split(':')[1]) {
+                        if (_this.find("select").attr("id") == list[i].split(':')[0] && list[i].split(':')[1] && list[i].split(':')[1] != "|") {
                             $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]).prop("disabled", true);
                             bl = true;
                         }
                     }
                     if (!bl) {
-                        _this.find("select").val("");
+                        _this.find("select").val("|");
+                        _this.find("select").next().show();
+                        var star = detailsModel.Remark.indexOf(_this.find(".attrname").html()) + _this.find(".attrname").html().length;
+                        var len = 0;
+                        
+                        if (_this.next().hasClass("productattr")) {
+                            len = detailsModel.Remark.indexOf(_this.next().find(".attrname").html()) - star - 2;
+                        } else {
+                            len = detailsModel.Remark.length - star - 1;
+                        }
+                        _this.find("select").next().val(detailsModel.Remark.substr(star, len));
                     }
                     
                 });
                 $("#iptRemark").val(detailsModel.Remark);
             }
 
+            //选择规格
             $(".productattr select").change(function () {
+                
+                if ($(this).val() != "|") {
+                    $(this).next().hide();
+                } else {
+                    $(this).next().show();
+                }
                 var _desc = "";
                 $(".productattr").each(function () {
                     var _this = $(this);
-                    _desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                    if (_this.find("select").val() != "|") {
+                        _desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                    } else {
+                        _desc += "[" + _this.find(".attrname").html() + _this.find("select").next().val().trim() + "]";
+                    }
+                });
+                $("#iptRemark").val(_desc);
+            });
+
+            //自定义文本
+            $(".customize").keyup(function () {
+                var _desc = "";
+                $(".productattr").each(function () {
+                    var _this = $(this);
+                    if (_this.find("select").val() != "|") {
+                        _desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                    } else {
+                        _desc += "[" + _this.find(".attrname").html() + _this.find("select").next().val().trim() + "]";
+                    }
                 });
                 $("#iptRemark").val(_desc);
             });

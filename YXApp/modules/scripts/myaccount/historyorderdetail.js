@@ -80,7 +80,7 @@
 
         $(".define-color").blur(function () {
             var _this=$(this);
-            if (_this.val() != "") {
+            if (_this.val().trim() != "") {
                 var isContinue = 1;
                 $("#color-box .attr-item").each(function () {
                     if (_this.val() == $(this).text().trim()) {
@@ -121,9 +121,9 @@
                     _this.before(colorAttr);
                     colorAttr.click();
                     alert("添加成功");
-                    _this.val("");
                 }
             }
+            _this.val("");
         });
     };
 

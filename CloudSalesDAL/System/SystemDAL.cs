@@ -349,7 +349,7 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
         public string InsertClientMemberLevel(string levelid, string name, string clientid, string agentid,
-         string userid, decimal discountfee, decimal integfeemore, ref int origin, int status = 1, string imgurl="")
+         string userid, decimal discountfee, decimal integfeemore,  int origin, int status = 1, string imgurl="")
         {
            SqlParameter[] paras = { 
                                      new SqlParameter("@result" , SqlDbType.VarChar,300),

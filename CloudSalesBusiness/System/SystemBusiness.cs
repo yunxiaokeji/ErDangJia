@@ -667,11 +667,10 @@ namespace CloudSalesBusiness
         public string CreateClientMemberLevel(string levelid, string name, string agentid, string clientid, string userid, decimal discountfee, decimal integfeemore, int status = 1, string imgurl="",int origin=1)
         {
             imgurl = GetUploadImgurl(imgurl);
-            string result = SystemDAL.BaseProvider.InsertClientMemberLevel(levelid, name, clientid, agentid, userid, discountfee, integfeemore, ref origin, status, imgurl);
+            string result = SystemDAL.BaseProvider.InsertClientMemberLevel(levelid, name, clientid, agentid, userid, discountfee, integfeemore,  origin, status, imgurl);
             if (string.IsNullOrEmpty(result))
-            {
-                var list = GetClientMemberLevel(agentid, clientid);
-                list.Add(new ClientMemberLevel()
+            { 
+                ClientMemberLevelList[clientid].Add(new ClientMemberLevel()
                 {
                     AgentID = agentid,
                     LevelID = levelid,

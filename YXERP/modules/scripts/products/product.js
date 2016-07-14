@@ -894,8 +894,7 @@ define(function (require, exports, module) {
             });
         });
     }
-
-    //  
+      
     Product.ShowExportExcel = function () {
         $('#show-product-export').empty();
         var guid = Global.guid() + "_";

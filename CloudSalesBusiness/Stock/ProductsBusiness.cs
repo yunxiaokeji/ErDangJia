@@ -547,6 +547,12 @@ namespace CloudSalesBusiness
             return list;
         }
 
+        public DataTable GetCategorysByExcel(string clientid)
+        {
+            DataTable dt = ProductsDAL.BaseProvider.GetCategorysByExcel(clientid);
+            return dt;
+        }
+
         public List<Category> GetChildCategorysByID(string categoryid, string clientid)
         {
             var list = GetCategorys(clientid);
@@ -727,7 +733,22 @@ namespace CloudSalesBusiness
 
             return model;
         }
+        public string GetProductCode(string code,string shapecode, string clientid)
+        {
+            object obj ;
+            if (!string.IsNullOrEmpty(shapecode))
+            {
+                obj = CommonBusiness.Select("Products", " top 1 ProductID ",
+                    "ClientID='" + clientid + "' and ShapeCode='" + shapecode + "' and ProductCode='" + code +
+                    "' and Status<>9");
+            }
+            else
+            {
+                obj = CommonBusiness.Select("Products", " top 1 ProductID ", "ClientID='" + clientid + "' and ProductCode='" + code + "' and Status<>9");
+            }
+            return obj!=null?obj.ToString():"";
 
+        }
         public bool IsExistProductCode(string code, string productid, string clientid)
         {
             if (string.IsNullOrEmpty(productid))

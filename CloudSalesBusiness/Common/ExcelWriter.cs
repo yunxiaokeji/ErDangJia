@@ -284,6 +284,13 @@ namespace CloudSalesBusiness
                     return CommonBusiness.GetIndustryID(coulumnValue);
                 case EnumColumnTrans.ConvertCustomerType:
                     return coulumnValue == "1" ? "企业" : "个人";
+                case EnumColumnTrans.ConvertIsorNo:
+                    switch (coulumnValue)
+                    {
+                        case "1": case "true":return "是";
+                        case "0": case "false": return "否";
+                        default: return "否";
+                    } 
                 case EnumColumnTrans.ConvertClientIndustry:
                        string IndustryName = "";
                        ClientsIndustry clientsIndustry= SystemBusiness.BaseBusiness.GetClientIndustryByID(coulumnValue, "", clientID);
@@ -525,7 +532,11 @@ namespace CloudSalesBusiness
         /// <summary>
         /// 导入图片获取
         /// </summary>
-        ConvertImportImage = 19
+        ConvertImportImage = 19,
+        /// <summary>
+        /// 导出显示是否
+        /// </summary>
+        ConvertIsorNo = 20
 
     }
 

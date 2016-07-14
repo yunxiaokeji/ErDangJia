@@ -5,8 +5,12 @@ define(function (require, exports, module) {
     var $ = require("jquery"),
         Global = require("global"),
         doT = require("dot"),
-        Verify = require("verify"), VerifyObject, 
+        Verify = require("verify"), VerifyObject,
+        Dialog = require("dialog"),
         Easydialog = require("easydialog");
+    var $ = require('jquery');
+    require("parser")($);
+    require("form")($);
     var Category = {
         CategoryID: "",
         PID: ""
@@ -33,6 +37,27 @@ define(function (require, exports, module) {
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
+        /**
+         * 绑定下拉框
+         */
+        $("#dropdown").click(function () {
+            var position = $("#dropdown").position();
+            $(".dropdown-ul").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+                $(".dropdown-ul").hide();
+            }
+        });
+
+        $("#exportExcel").click(function () {
+            _self.ShowExportExcel();
+        });
+        $('#exportCategory').click(function () {
+            Dialog.exportModel("/Products/ExportFromCategory", {  filleName: "产品类别导出" });
+        });
 
         //展开
         $(".content-body").delegate(".openchild", "click", function () {
@@ -342,6 +367,42 @@ define(function (require, exports, module) {
             
         });
     };
+    ObjectJS.ShowExportExcel = function () {
+        $('#show-category-import').empty();
+        var guid = Global.guid() + "_";
+        Dialog.open({
+            container: {
+                id: "show-catagory-import",
+                header: "导入产品分类",
+                importUrl: '/Products/CategoryImport',
+                yesFn: function () {
+                    $('#upfileForm').form('submit', {
+                        onSubmit: function () {
+                            Dialog.setOverlay(guid, true);
+                        },
+                        success: function (data) {
+                            Dialog.setOverlay(guid, false);
+                            if (data == "操作成功") {
+                                Dialog.close(guid);
+                                ObjectJS.bindCategory();
+                            }
+                            alert(data);
+                        }
+                    });
+                },
+                docWidth: 450,
+                exportUrl: '/Products/ExportFromCategory',
+                exportParam: { test: true, model: 'Item' },
+                herf: '/Products/CategoryImport',
+                noFn: true,
+                yesText: '导入',
+                callback: function () {
 
+                }
+            },
+            guid: guid
+        });
+
+    }
     module.exports = ObjectJS;
 })

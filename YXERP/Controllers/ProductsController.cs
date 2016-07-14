@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -37,7 +38,11 @@ namespace YXERP.Controllers
             ViewBag.Items = list;
             return View();
         }
-
+        [HttpGet]
+        public ActionResult CategoryImport()
+        {
+            return View();
+        }
         public ActionResult Attr() 
         {
             return View();
@@ -805,7 +810,7 @@ namespace YXERP.Controllers
 
             }
             buffer = excelWriter.Write(dt, dic, ipPath);
-            var fileName = filleName + (test ? "导入模版" : "")+DateTime.Now.ToString("yyyyMMdd");
+            var fileName =CurrentUser.Client.CompanyName+ filleName + (test ? "导入模版" : "")+DateTime.Now.ToString("yyyyMMdd");
             if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
                 fileName = HttpUtility.UrlEncode(fileName);
             this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
@@ -936,6 +941,171 @@ namespace YXERP.Controllers
             }
             return Content(mes);
         } 
+
+        #endregion
+
+        #region 类目导入导出
+
+        public ActionResult ExportFromCategory(bool test = false, string model = "", string filleName = "分类")
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+            Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
+            listColumn = GetColumnForJson("category", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "testexport" : "export", CurrentUser.ClientID);
+            var excelWriter = new ExcelWriter();
+            foreach (var key in listColumn)
+            {
+                excelWriter.Map(key.Key, key.Value.Title);
+            }
+            byte[] buffer;
+            DataTable dt = new DataTable();
+            //模版导出
+            if (test)
+            {
+                DataRow dr = dt.NewRow();
+                foreach (var key in listColumn)
+                {
+                    DataColumn dc1 = new DataColumn(key.Key, Type.GetType("System.String"));
+                    dt.Columns.Add(dc1);
+                    dr[key.Key] = key.Value.DefaultText;
+                }
+                dt.Rows.Add(dr);
+            }
+            else
+            { 
+                dt = new ProductsBusiness().GetCategorysByExcel(CurrentUser.ClientID);
+            }
+            buffer = excelWriter.Write(dt, dic, "");
+            var fileName =CurrentUser.Client.CompanyName+ filleName + (test ? "导入模版" : "") + DateTime.Now.ToString("yyyyMMdd");
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
+        }
+
+        [HttpPost]
+        public ActionResult CategoryImport(HttpPostedFileBase file)
+        { 
+            string mes = "";
+            if (file == null) { return Content("请选择要导入的文件"); }
+            if (file.ContentLength > 2097152)
+            {
+                return Content("导入文件超过规定（2M )大小,请修改后再操作.");
+            }
+            if (!file.FileName.Contains(".xls") && !file.FileName.Contains(".xlsx"))
+            {
+                return Content("文件格式类型不正确");
+            }
+            try
+            {
+                var catelist = ProductsBusiness.BaseBusiness.GetCategorys(CurrentUser.ClientID);
+                ///1.获取系统模版列 
+                Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+                Dictionary<string, ExcelModel> listColumn = GetColumnForJson("category", ref dic, "", "import", CurrentUser.ClientID);
+                Dictionary<int, PicturesInfo> imgList;
+                DataTable dt = ImportExcelToDataTable(file, out imgList, dic);
+                if (dt.Columns.Count > 0)
+                {
+                    ///2.上传Excel 与模板中列是否一致 不一致返回提示
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        if (default(KeyValuePair<string, ExcelModel>).Equals(listColumn.FirstOrDefault(x => x.Value.Title == dc.ColumnName)))
+                        {
+                            mes += dc.ColumnName + ",";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(mes))
+                    {
+                        return Content("Excel模版与系统模版不一致,请重新下载模板,编辑后再上传.错误:缺少列 " + mes);
+                    }
+                    ///3.开始处理
+                    int k = 1;
+                    var excelWriter = new ExcelWriter();
+                    List<Category> list = new List<Category>();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        try
+                        {
+                            Category category = new Category();
+                            excelWriter.GetProductByDataRow(dr, listColumn, category, dic, CurrentUser.ClientID);
+                            if (!list.Where(x => x.CategoryCode == category.CategoryCode).Any())
+                            {
+                                category.CreateUserID = CurrentUser.UserID;
+                                category.ClientID = CurrentUser.ClientID;
+                                category.CategoryID = Guid.NewGuid().ToString();
+                                category.ChildCategorys = new List<Category>();
+                                var tempcate=catelist.Where(x => !string.IsNullOrEmpty(category.PCode)&& x.CategoryCode == category.PCode).FirstOrDefault();
+                                if (tempcate != null)
+                                {
+                                    category.PID = tempcate.CategoryID;
+                                } 
+                                DataRow[] details = dt.Select("类别编码='" + category.CategoryCode + "'");
+                                if (details.Count() > 0 && mes.IndexOf(category.CategoryCode) == -1)
+                                {
+                                    mes += "编码为:" + category.CategoryCode + "的产品存在相同【类别编码】,默认插入第一条";
+                                }
+                                list.Add(category);
+                            }
+                            else
+                            {
+                                if (mes.IndexOf(dr["类别编码"].ToString()) == -1)
+                                {
+                                    mes += dr["类别编码"] + "类别编码重复";
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            mes += k + " 原因:" + ex.Message + ",";
+                        }
+                    }
+                    try
+                    {
+                        if (list.Count > 0)
+                        {
+                            List<Category> removelist = new List<Category>();
+                            list.ForEach(x =>
+                            {
+                                x.ChildCategorys = new List<Category>();
+                                var templist = list.Where(
+                                    y => !string.IsNullOrEmpty(y.PCode) && y.PCode == x.CategoryCode && x.PCode != x.CategoryCode)
+                                    .ToList();
+                                if (templist.Any())
+                                {
+                                    x.ChildCategorys = templist;
+                                    removelist.AddRange(templist);
+                                }
+                            });
+                          
+                            list.RemoveAll(x => removelist.Exists(y => y.CategoryCode == x.CategoryCode));
+
+                            mes += ExcelImportBusiness.AddCategoryList(list);
+                        }
+                        if (!string.IsNullOrEmpty(mes))
+                        {
+                            return Content((list.Count > 0 ? "部分" : "") + "数据未导入成功,原因如下 ：" + mes);
+                        }
+                        else
+                        {
+                            return Content("操作成功");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content("系统异常:请联系管理员,错误原因" + ex.Message);
+                    }
+                }
+                if (!string.IsNullOrEmpty(mes))
+                {
+                    return Content("部分数据未导入成功,Excel行位置" + mes);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Content("系统异常:请联系管理员,错误原因:" + ex.Message.ToString());
+            }
+            return Content(mes);
+        }
 
         #endregion
 

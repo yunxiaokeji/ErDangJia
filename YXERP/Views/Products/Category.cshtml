@@ -12,10 +12,21 @@
 }
 <div class="content-body">
     <div class="category-header">
-        全部分类
-        <a href="javascript:void(0)" class="category-add">添加子类</a>
+        <span class="left ">全部分类</span>
+        <div class="right mLeft20">
+            <span  class="pLeft2 btn-add left category-add" style="color: #fff; -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px; -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px; border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >添加子类</span>
+            <div id="dropdown" class="bghulan dropdown rightraduis3 right " style="height: 28px; width: 20px;">
+                <span class="mTop8 mRight5 ico-dropdown-white right"></span>
+            </div>
+        </div>
+        <div class="clear"></div>
+        @*<a href="javascript:void(0)" class="btn category-add">添加子类</a>*@
     </div>
     <div id="categoryBox" class="category-box">
 
     </div>
 </div>
+<ul class="dropdown-ul hide" style="width: 100px;">
+    <li class="" id="exportExcel">导入分类</li>
+    <li class="" id="exportCategory">导出分类</li> 
+</ul>

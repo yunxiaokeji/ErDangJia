@@ -76,15 +76,6 @@ namespace CloudSalesBusiness
             return ShoppingCartDAL.AddShoppingCartBatchOut(productid, detailsid, quantity, (int)ordertype, batchcode, depotid, remark, guid, userid, operateip);
         }
 
-        public static bool AddShoppingCartBatchIn(string productid, string detailsid, int quantity, EnumDocType ordertype, string remark, string guid, string userid, string operateip)
-        {
-            if (string.IsNullOrEmpty(guid))
-            {
-                guid = userid;
-            }
-            return ShoppingCartDAL.AddShoppingCartBatchIn(productid, detailsid, quantity, (int)ordertype, remark, guid, userid, operateip);
-        }
-
         public static bool UpdateCartQuantity(string autoid, string guid, int quantity, string userid)
         {
             return CommonBusiness.Update("ShoppingCart", "Quantity", quantity, "AutoID=" + autoid + " and [GUID]='" + guid + "'");

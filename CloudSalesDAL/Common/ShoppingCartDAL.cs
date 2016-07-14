@@ -52,21 +52,6 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddShoppingCartBatchOut", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool AddShoppingCartBatchIn(string productid, string detailsid, int quantity, int ordertype, string remark, string guid, string userid, string operateip)
-        {
-            SqlParameter[] paras = { 
-                                     new SqlParameter("@OrderType",ordertype),
-                                     new SqlParameter("@ProductDetailID",detailsid),
-                                     new SqlParameter("@ProductID" , productid),
-                                     new SqlParameter("@Quantity" , quantity),
-                                     new SqlParameter("@Remark" , remark),
-                                     new SqlParameter("@GUID" , guid),
-                                     new SqlParameter("@UserID" , userid),
-                                     new SqlParameter("@OperateIP" , operateip)
-                                   };
-            return ExecuteNonQuery("P_AddShoppingCartBatchIn", paras, CommandType.StoredProcedure) > 0;
-        }
-
         public static bool DeleteCart(string guid, string productid, int ordertype, string userid)
         {
             SqlParameter[] paras = {

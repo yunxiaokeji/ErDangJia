@@ -41,7 +41,6 @@
             <td class="tLeft">产品名称</td>
             <td class="tLeft">规格</td>
             <td class="center width80">货位</td>
-            <td class="tLeft">批次</td>
             <td class="center">数量</td>
             <td class="center width80">删除</td>
         </tr>
@@ -53,7 +52,6 @@
                 </td>
                 <td>@(model.Remark)</td>
                 <td class="center">@(model.DepotCode)</td>
-                <td>@(model.BatchCode)</td>
                 <td class="center tr-quantity"><input  type="text" data-id="@(model.AutoID)" data-value="@(model.Quantity)" class="quantity width50" value="@(model.Quantity)" /></td>
                 <td class="center">
                     <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a>

@@ -81,7 +81,7 @@ namespace YXERP.Controllers
             var bl = false;
             foreach (var product in model.Products)
             {
-                if (ShoppingCartBusiness.AddShoppingCartBatchIn(product.ProductID, product.ProductDetailID, 1, model.type, product.SaleAttrValueString, model.guid, CurrentUser.UserID, OperateIP))
+                if (ShoppingCartBusiness.AddShoppingCart(model.type, model.guid, product.ProductID, product.ProductDetailID, "", "", 1, product.SaleAttrValueString, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID))
                 {
                     bl = true;
                 }

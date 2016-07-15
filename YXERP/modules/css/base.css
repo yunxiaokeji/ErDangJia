@@ -163,7 +163,7 @@ select option{ padding:2px; }
 .leftraduis3{ -moz-border-radius-topleft: 3px; -webkit-border-top-left-radius: 3px;border-top-left-radius: 3px;-moz-border-radius-bottomleft: 3px; -webkit-border-bottom-left-radius:3px;border-bottom-left-radius:3px; }
 .rightraduis3{ -moz-border-radius-topright: 3px; -webkit-border-top-right-radius: 3px;border-top-right-radius: 3px;-moz-border-radius-bottomright: 3px; -webkit-border-bottom-right-radius:3px;border-bottom-right-radius:3px; }
 .rightraduis3:hover{ background-color:#2F73B8;}
-.btn-open-window { cursor:pointer;}
+.btn-open-window { display:inline-block; cursor:pointer;}
 
 /*按钮和图标*/
 .btn { padding: 5px 10px; background-color: #4a98e7; color: #fff; border: none; cursor: pointer; display: inline-block; border-radius: 2px; line-height: 18px; 
@@ -344,17 +344,17 @@ select option{ padding:2px; }
 /*表格样式*/
 .table-list { width:100%; border-spacing:0px;}
 .table-list img{ max-height:80px;max-width:80px; vertical-align:middle; }
-.table-list .tr-header{ height:35px; text-align:center; }
-.table-list .tr-header td{ height:35px; border-bottom:solid 2px #eee; font-size:13px; color:#999; padding:0 5px;
+.table-list .tr-header{ height:35px; text-align:center;}
+.table-list .tr-header td{ height:35px; border-bottom:solid 2px #ddd; font-size:13px; color:#696969; padding:0 5px;
                            white-space:nowrap; overflow: hidden; text-overflow:ellipsis; }
 
-.table-list tr:not(:first-child){ height:35px; cursor:pointer; }
+.table-list tr:not(:first-child){ height:35px; }
 .table-list tr:not(:first-child):hover { background-color: #f6f6f6; }
-.table-list tr:not(:first-child) td{ padding:5px; line-height:35px; border-bottom:solid 1px #eee; max-width:500px; color:#333; 
+.table-list tr:not(:first-child) td{ padding:5px; line-height:35px; border-bottom:solid 1px #ddd; max-width:500px; color:#333; 
                                      white-space:nowrap; overflow: hidden; text-overflow:ellipsis; vertical-align:middle; }
 
-.table-list td a{ color:#4a98e7;  vertical-align:middle;}
-.table-list td a:hover{ color:red; text-decoration:underline; }
+.table-list td a{ color:#333;  vertical-align:middle;}
+.table-list td a:hover{ color:red;}
 
 .table-list .ico-check,.table-list .ico-checked { vertical-align:middle; }
 

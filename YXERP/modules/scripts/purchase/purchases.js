@@ -112,22 +112,22 @@ define(function (require, exports, module) {
     //获取单据列表
     ObjectJS.getList = function () {
         var _self = this;
-        $(".box-header").nextAll().remove();
-        $(".box-header").after("<div class='data-loading' ><div>");
+        $(".table-header").nextAll().remove();
+        $(".table-header").after("<tr><td colspan='10'><div class='data-loading'><div></td></tr> ");
         var url = "/Purchase/GetPurchases",
             template = "template/purchase/purchases.html";
         Global.post(url, Params, function (data) {
-            $(".box-header").nextAll().remove();
+            $(".table-header").nextAll().remove();
 
             if (data.items.length > 0) {
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
-                    $(".box-header").after(innerText);
+                    $(".table-header").after(innerText);
                 });
             }
             else {
-                $(".box-header").after("<div class='nodata-box' >暂无数据!</div>");
+                $(".table-header").after("<tr><td colspan='10'><div class='nodata-box' >暂无数据!</div></td></tr>");
             }
 
             $("#pager").paginate({

@@ -2,30 +2,62 @@
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
 %}
-<ul class="box-item">
-    <li class="tLeft width150">
-        <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">{%=item.DocCode%}</a>
-    </li>
-    <li class="tLeft width100">
-        {%=item.WareName||"--"%}
-    </li>
-    <li class="tLeft width150">
-        {%=item.ProviderName.subString(12)||"--"%}
-    </li>
-    <li class="width100 {%=item.Status<2?'red':''%}">
-        {%=item.StatusStr%}
-    </li>
-    <li class="tRight width100">
-        {%=item.TotalMoney.toFixed(2)%}
-    </li>
-    <li class="tRight width100">
-        {%=item.RealMoney.toFixed(2)%}
-    </li>
-    <li class="width100">
-        {%=item.UserName||"--"%}
-    </li>
-    <li class="width100">
-        {%=item.CreateTime.toDate("yyyy-MM-dd")%}
-    </li>
-</ul>
+<tr class="line-item">
+    <td colspan="10"></td>
+</tr>
+<tr class="item-header">
+    <td class="tLeft bolder">
+        采购单号：{%=item.DocCode%}
+    </td>
+    <td class="tLeft bolder">
+        供应商：{%=item.ProviderName||"--"%}
+    </td>
+    <td>采购价</td>
+    <td>数量</td>
+    <td>入库数量</td>
+    <td>总金额</td>
+    <td>已采购金额</td>
+    <td class="bolder" title="仓库">{%=item.CreateTime.toDate("yyyy-MM-dd")%}</td>
+</tr>
+    {%
+	    for(var ii=0, jj=item.Details.length; ii < jj; ii++){
+	    var model = item.Details[ii];
+    %}
+        
+        <tr class="item {%=ii==jj-1?'last':''%}">
+            <td class="tLeft bBottom">
+                <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=model.ProductID%}&did={%=model.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=model.ProductName%}" data-id="{%=model.ProductID%}">
+                    {%=model.ProductName%}
+                </a>
+            </td>
+            <td class="tLeft bBottom">
+                {%=model.Remark%}
+            </td>
+            <td class="bBottom">
+                {%=model.Price.toFixed(2)%}
+            </td>
+            <td class="bBottom">
+                {%=model.Quantity%}
+            </td>
+            <td class="bBottom bRight">
+                {%=model.Complete%}
+            </td>
+            {%if(ii==0){ %}
+                <td rowspan="{%= jj %}" class="bRight bBottom">
+                    {%= item.TotalMoney.toFixed(2)%}
+                </td>
+                <td rowspan="{%= jj %}" class="bRight bBottom">
+                    {%= item.RealMoney.toFixed(2)%}
+                </td>
+                <td rowspan="{%= jj %}" class="bRight bBottom">
+                    <div class="{%=item.Status<2?'red':''%}">{%= item.StatusStr%}</div>
+                    <a href="javascript:void(0)" class="btn-open-window mTop5" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
+                        查看详情
+                    </a>
+                </td>
+            {% } %}
+            
+        </tr>
+    {% } %}
+    
 {% } %}

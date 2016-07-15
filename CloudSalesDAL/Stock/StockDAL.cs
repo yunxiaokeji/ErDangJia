@@ -35,7 +35,7 @@ namespace CloudSalesDAL
 
             paras[0].Direction = ParameterDirection.InputOutput;
             paras[1].Direction = ParameterDirection.InputOutput;
-            DataSet ds = GetDataSet("P_GetPurchases", paras, CommandType.StoredProcedure, "Doc");
+            DataSet ds = GetDataSet("P_GetPurchases", paras, CommandType.StoredProcedure, "Doc|Details");
             totalCount = Convert.ToInt32(paras[0].Value);
             pageCount = Convert.ToInt32(paras[1].Value);
             return ds;

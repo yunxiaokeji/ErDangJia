@@ -32,6 +32,17 @@ namespace CloudSalesBusiness
                 var ware = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, model.ClientID);
                 model.WareName = ware != null ? ware.Name : "";
 
+                if (ds.Tables.Contains("Details"))
+                {
+                    model.Details = new List<StorageDetail>();
+                    foreach (DataRow ddr in ds.Tables["Details"].Select("DocID='" + model.DocID + "'"))
+                    {
+                        StorageDetail detail = new StorageDetail();
+                        detail.FillData(ddr);
+                        model.Details.Add(detail);
+                    }
+                }
+
                 list.Add(model);
             }
             return list;

@@ -32,8 +32,9 @@ define(function (require, exports, module) {
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-        require.async("search", function () {
-            $(".searth-module").searchKeys(function (keyWords) {
+        $('.searth-module').html('');
+        require.async("search", function() {
+            $(".searth-module").searchKeys(function(keyWords) {
                 Params.keywords = keyWords;
                 _self.getList();
             });
@@ -77,7 +78,48 @@ define(function (require, exports, module) {
             Params.EndTime = end ? end.format("YYYY-MM-DD") : "";
             _self.getList();
         });
+        //全部选中
+        $("#checkAll").click(function () {
+            var _this = $(this).find(".checkbox");
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+                $(".table-list .checkbox").addClass("hover");
+            } else {
+                _this.removeClass("hover");
+                $(".table-list .checkbox").removeClass("hover");
+            }
+        });
+        _self.checkClick();
 
+        //批量打印
+        $("#printOrderOut").click(function () {
+            var checks = $(".table-list .checkbox.hover");
+            if (checks.length ==1) {
+                var headstr = "<html><head><title></title></head><body>";
+                var footstr = "</body>";
+                var newstr = "暂无数据,请刷新页面重试";
+                $.ajax({
+                    url: '/StorageOut/StorageOutPrintModel/' + $(checks[0]).data('id'),
+                    type: "GET",
+                    async: false,
+                    success: function (data) { 
+                        newstr = data;  
+                    }
+                }); 
+                var oldstr = document.body.innerHTML;
+                document.body.innerHTML = headstr + newstr + footstr;
+                window.print();
+                document.body.innerHTML = oldstr;
+                ObjectJS.bindEvent();
+                return false;
+            } else {
+                if (checks.length == 0) {
+                    alert("您尚未选择要打印的出库单");
+                } else {
+                    alert("目前只支持单条打印的出库单");
+                }
+            }
+        });
     }
     //获取单据列表
     ObjectJS.getList = function () {
@@ -94,8 +136,9 @@ define(function (require, exports, module) {
             if (data.items.length > 0) {
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
-                    innerText = $(innerText);
+                    innerText = $(innerText); 
                     $(".tr-header").after(innerText);
+                    _self.checkClick();
                 });
             }
             else {
@@ -224,6 +267,17 @@ define(function (require, exports, module) {
             });
         });
     }
-
+     
+    ObjectJS.checkClick = function () {
+        $(".checkbox").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+            } else {
+                _this.removeClass("hover");
+            }
+            return false;
+        });
+    }
     module.exports = ObjectJS;
 })

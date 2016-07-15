@@ -281,6 +281,7 @@
     <Content Include="modules\excelmodel\purchase.json" />
     <Content Include="modules\excelmodel\overflow.json" />
     <Content Include="modules\excelmodel\stockdetail.json" />
+    <Content Include="modules\excelmodel\stockout.json" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -1053,6 +1054,7 @@
     <Content Include="Views\Products\ProductImport.cshtml" />
     <Content Include="Views\Customer\CustomerOwnRPT.cshtml" />
     <Content Include="Views\Products\CategoryImport.cshtml" />
+    <Content Include="Views\StorageOut\StorageOutPrintModel.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

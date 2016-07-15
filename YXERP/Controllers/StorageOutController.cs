@@ -47,7 +47,23 @@ namespace YXERP.Controllers
 
             return View();
         }
+        public ActionResult StorageOutPrintModel(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Redirect("/StorageOut/StorageOut");
+            }
+            var model = AgentOrderBusiness.BaseBusiness.GetAgentOrderByID(id, CurrentUser.AgentID, CurrentUser.ClientID);
 
+            if (model == null || string.IsNullOrEmpty(model.OrderID))
+            {
+                return Redirect("/StorageOut/StorageOut");
+            }
+
+            ViewBag.Model = model;
+
+            return View();
+        }
         public ActionResult OrderOut(string id)
         {
             if (string.IsNullOrEmpty(id))

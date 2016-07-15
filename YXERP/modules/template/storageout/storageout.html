@@ -3,6 +3,9 @@
 	var item = $data[i];
 %}
 <tr class="list-item">
+    <td class="width30">
+        <span data-id="{%=item.OrderID%}" data-userid="{%=item.SendStatus%}" class="checkbox iconfont"></span>
+    </td>
     <td>
         <a href="javascript:void(0)" class="btn-open-window" data-url="/StorageOut/Detail/{%=item.OrderID%}" data-id="{%=item.OrderID%}" data-name="订单详情-{%=item.OrderCode%}">{%=item.OrderCode%}</a>
     </td>
@@ -19,9 +22,9 @@
     <td class='center'>{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
     <td class="center sendout" data-status="{%=item.SendStatus%}">
         {% if(item.SendStatus==0){ %}
-            <a href="/StorageOut/OrderOut/{%=item.OrderID%}">出库</a> 
+        <a href="/StorageOut/OrderOut/{%=item.OrderID%}">出库</a>
         {% }else if(item.SendStatus==1){ %}
-            <a href="/StorageOut/OrderSend/{%=item.OrderID%}">发货</a>
+        <a href="/StorageOut/OrderSend/{%=item.OrderID%}">发货</a>
         {% } %}
     </td>
 </tr>

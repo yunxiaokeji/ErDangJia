@@ -392,7 +392,7 @@ select option{ padding:2px; }
 .easydialog-create li label{ line-height:20px; height:20px; cursor:pointer; }
 .easydialog-create li label input{ line-height:20px; height:20px; }
 
-/*详情页-信息*/
+/*详情页-信息*/ 
 .content-info { width:80%; min-width:600px; overflow:auto; }
 .content-info li{ width:50%; float:left;  line-height:35px; }
 .content-info li .column-title{ width:100px; float:left; color:#666; }

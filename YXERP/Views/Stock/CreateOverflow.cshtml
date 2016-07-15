@@ -15,38 +15,49 @@
    <a class="btn right" href="/Stock/ChooseBYProducts">继续选择产品</a>
 </div>
 <div class="content-body mTop20">
-    <div class="table-box-list pBottom20">
-        <ul class="box-header">
-            <li class="width30"></li>
-            <li class="tLeft width300">产品名称</li>
-            <li class="width300">规格</li>
-            <li class="width100">单位</li>
-            <li class="width100">数量</li>
-            <li class="width80">删除</li>
-        </ul>
+    <table class="table-items-detail mBottom20">
+        <tr class="item-header">
+            <td class="width30 check-all"><span class="checkbox iconfont"></span></td>
+            <td class="tLeft">产品名称</td>
+            <td class="width300 tLeft">规格</td>
+            <td class="width100">单位</td>
+            <td class="width100">报溢数量</td>
+            <td class="width80">删除</td>
+        </tr>
+        @if (((List<CloudSalesEntity.ProductDetail>)ViewBag.items).Count == 0)
+        {
+            <tr class="line-item">
+                <td colspan="10">
+                    <div class='nodata-txt' >暂无选择产品</div>
+                </td>
+            </tr>
+        }
         @foreach (var model in (List<CloudSalesEntity.ProductDetail>)ViewBag.items)
         {
-            <ul class="box-item item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
-                <li class="width30"><span class="checkbox iconfont"></span></li>
-                <li class="tLeft width300">
+            <tr class="item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
+                <td class="bBottom"><span class="checkbox iconfont"></span></td>
+                <td class="tLeft bBottom">
                     <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(model.ProductID)&did=@(model.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(model.ProductName)" data-id="@(model.ProductID)">@(model.ProductName)</a>
-                </li>
-                <li class="width300">@(model.Remark)</li>
-                <li class="tr-price width100">
+                </td>
+                <td class="tLeft bBottom">@(model.Remark)</td>
+                <td class="tr-price bBottom">
                     @(model.UnitName)
-                </li>
-                <li class="tr-quantity width100">
+                </td>
+                <td class="tr-quantity bBottom">
                     <input  type="text" data-id="@(model.AutoID)" data-value="@(model.Quantity)" class="quantity width50" value="@(model.Quantity)" />
-                </li>
-                <li class="width80"><a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a></li>
-            </ul>
+                </td>
+                <td class="bBottom"><a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a></td>
+            </tr>
         }
-        <ul class="box-header">
-            <li style="width:330px;" class="tLeft">
+         <tr class="line-item">
+            <td colspan="10"></td>
+        </tr>
+        <tr class="item-header">
+            <td colspan="10" class="tLeft">
                 <div class="check-all hand mLeft10"><span class="checkbox iconfont"></span> 全选</div> 
-            </li>
-        </ul>
-    </div>
+            </td>
+        </tr>
+    </table>
     <div class="clear"></div>
     <div class="right" id="wareid"></div>
     <div class="clear"></div>

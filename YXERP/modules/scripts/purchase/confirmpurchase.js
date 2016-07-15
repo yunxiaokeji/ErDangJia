@@ -20,8 +20,8 @@ define(function (require, exports, module) {
         require.async("dropdown", function () {
             var dropdown = $("#wareid").dropdown({
                 prevText: "仓库-",
-                defaultText: "请选择",
-                defaultValue: "",
+                defaultText: wares && wares.length == 1 ? wares[0].Name : "请选择",
+                defaultValue: wares && wares.length == 1 ? wares[0].WareID : "",
                 data: wares,
                 dataValue: "WareID",
                 dataText: "Name",
@@ -81,7 +81,7 @@ define(function (require, exports, module) {
                     if (!data.status) {
                         alert("系统异常，请重新操作！");
                     } else {
-                        _this.parents("ul.item").remove();
+                        _this.parents("tr.item").remove();
                         _self.getAmount();
                     }
                 });
@@ -144,7 +144,7 @@ define(function (require, exports, module) {
     //计算总金额
     ObjectJS.getAmount = function () {
         var amount = 0;
-        $(".box-item.item").each(function () {
+        $(".cart-item.item").each(function () {
             var _this = $(this);
             _this.find(".amount").html((_this.find(".tr-quantity").find("input").val() * _this.find(".tr-price").find("input").val()).toFixed(2));
             if (_this.find(".checkbox").hasClass("hover")) {

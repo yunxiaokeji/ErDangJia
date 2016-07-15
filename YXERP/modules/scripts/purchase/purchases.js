@@ -127,7 +127,7 @@ define(function (require, exports, module) {
                 });
             }
             else {
-                $(".table-header").after("<tr><td colspan='10'><div class='nodata-box' >暂无数据!</div></td></tr>");
+                $(".table-header").after("<tr><td colspan='10'><div class='nodata-txt' >暂无数据!</div></td></tr>");
             }
 
             $("#pager").paginate({

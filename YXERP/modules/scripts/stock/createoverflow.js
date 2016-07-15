@@ -21,8 +21,8 @@ define(function (require, exports, module) {
         require.async("dropdown", function () {
             var dropdown = $("#wareid").dropdown({
                 prevText: "仓库-",
-                defaultText: "请选择",
-                defaultValue: "",
+                defaultText: wares && wares.length == 1 ? wares[0].Name : "请选择",
+                defaultValue: wares && wares.length == 1 ? wares[0].WareID : "",
                 data: wares,
                 dataValue: "WareID",
                 dataText: "Name",
@@ -75,7 +75,7 @@ define(function (require, exports, module) {
                     if (!data.status) {
                         alert("系统异常，请重新操作！");
                     } else {
-                        _this.parents("ul.item").remove();
+                        _this.parents("tr.item").remove();
                     }
                 });
             });

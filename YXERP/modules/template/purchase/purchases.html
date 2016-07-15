@@ -17,7 +17,10 @@
     <td>入库数量</td>
     <td>总金额</td>
     <td>已采购金额</td>
-    <td class="bolder" title="仓库">{%=item.CreateTime.toDate("yyyy-MM-dd")%}</td>
+    <td class="bolder">
+        {%=item.CreateTime.toDate("yyyy-MM-dd")%}
+        <span class="ico-dropdown"></span>
+    </td>
 </tr>
     {%
 	    for(var ii=0, jj=item.Details.length; ii < jj; ii++){
@@ -50,10 +53,13 @@
                     {%= item.RealMoney.toFixed(2)%}
                 </td>
                 <td rowspan="{%= jj %}" class="bRight bBottom">
-                    <div class="{%=item.Status<2?'red':''%}">{%= item.StatusStr%}</div>
+                    <div class="{%=item.Status<2?'red':''%}">
+                        {%= item.StatusStr%}
+                    </div>
                     <a href="javascript:void(0)" class="btn-open-window mTop5" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
                         查看详情
                     </a>
+                    
                 </td>
             {% } %}
             

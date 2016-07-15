@@ -14,62 +14,76 @@
     <a class="btn right" href="/Purchase/ChooseProducts">继续选择产品</a>
 </div>
 <div class="content-body mTop20">
-    <div class="table-box-list pBottom20">
-        <ul class="box-header">
-            <li class="width30"></li>
-            <li class="tLeft width300">产品名称</li>
-            <li class="width300">规格</li>
-            <li class="width100">采购价</li>
-            <li class="width100">数量</li>
-            <li class="width100">小计</li>
-            <li class="width80">删除</li>
-        </ul>
+    <table class="table-items-detail mBottom20">
+        @if (((Dictionary<string, string>)ViewBag.providers).Keys.Count == 0)
+        {
+             <tr class="item-header">
+                <td class="width30 check-all"><span class="checkbox iconfont"></span></td>
+                <td class="tLeft bolder">
+                    产品名称
+                </td>
+                <td class="tLeft">规格</td>
+                <td class="">采购价</td>
+                <td class="">数量</td>
+                <td class="">小计</td>
+                <td class="">删除</td>
+            </tr>
+            <tr class="line-item">
+                <td colspan="10">
+                    <div class='nodata-txt' >暂无选择产品</div>
+                </td>
+            </tr>
+        }
+        
         @foreach (var item in (Dictionary<string, string>)ViewBag.providers)
         {
-            <ul class="box-header">
-                <li class="width30"><span data-id="@item.Key" class="checkbox check-part iconfont"></span></li>
-                <li class="tLeft width300 color333">
+            <tr class="item-header">
+                <td class="width30"><span data-id="@item.Key" class="checkbox check-part iconfont"></span></td>
+                <td class="tLeft bolder">
                     供应商：@item.Value
-                </li>
-                <li class="width300"></li>
-                <li class="width100"></li>
-                <li class="width100"></li>
-                <li class="width100"></li>
-                <li class="width80"></li>
-            </ul>
+                </td>
+                <td class="tLeft">规格</td>
+                <td class="">采购价</td>
+                <td class="">数量</td>
+                <td class="">小计</td>
+                <td class="">删除</td>
+            </tr>
             foreach (var model in (List<CloudSalesEntity.ProductDetail>)ViewBag.items)
             {
-                if (model.ProviderID==item.Key)
+                if (model.ProviderID == item.Key)
                 {
-                    <ul class="box-item item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
-                        <li class="width30"><span data-id="@item.Key" class="checkbox iconfont"></span></li>
-                        <li class="tLeft width300">
+                    <tr class="item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
+                        <td class="bBottom"><span data-id="@item.Key" class="checkbox iconfont"></span></td>
+                        <td class="tLeft bBottom">
                             <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(model.ProductID)&did=@(model.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(model.ProductName)" data-id="@(model.ProductID)">@(model.ProductName)</a>
-                        </li>
-                        <li class="width300">@(model.Remark)</li>
-                        <li class="tr-price width100">
+                        </td>
+                        <td class="bBottom tLeft">@(model.Remark)</td>
+                        <td class="tr-price bBottom">
                             <input type="text" data-id="@(model.AutoID)" data-value="@(model.Price.ToString("f2"))" class="price width80" value="@(model.Price.ToString("f2"))" />
-                        </li>
-                        <li class="tr-quantity width100">
+                        </td>
+                        <td class="tr-quantity bBottom">
                             <input  type="text" data-id="@(model.AutoID)" data-value="@(model.Quantity)" class="quantity width50" value="@(model.Quantity)" />
-                        </li>
-                        <li class="amount width100">@((model.Price*model.Quantity).ToString("f2"))</li>
-                        <li class="width80"><a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a></li>
-                    </ul>
-                 }
+                        </td>
+                        <td class="amount bBottom">@((model.Price * model.Quantity).ToString("f2"))</td>
+                        <td class="bBottom"><a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a></td>
+                    </tr>
+                }
             }
+             <tr class="line-item">
+                <td colspan="10"></td>
+            </tr>
         }
-        <ul class="box-header">
-            <li style="width:330px;" class="tLeft">
+        <tr class="item-header">
+            <td colspan="2" class="tLeft">
                 <div class="check-all hand mLeft10"><span class="checkbox iconfont"></span> 全选</div> 
-            </li>
-            <li class="width300"></li>
-            <li class="width100"></li>
-            <li class="width100">合计：</li>
-            <li class="width100"><label id="amount"></label></li>
-            <li class="width80"></li>
-        </ul>
-    </div>
+            </td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class="">合计：</td>
+            <td class=""><label id="amount"></label></td>
+            <td class=""></td>
+        </tr>
+    </table>
     <div class="clear"></div>
     <div class="right" id="wareid"></div>
     <div class="clear"></div>

@@ -122,7 +122,7 @@ namespace YXERP.Controllers
             {
                 id = CurrentUser.UserID;
             }
-            var wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
+            var wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
             ViewBag.wares = wares;
             ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BY, id, CurrentUser.UserID);
             ViewBag.guid = id;

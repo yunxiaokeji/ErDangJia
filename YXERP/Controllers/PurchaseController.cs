@@ -27,7 +27,7 @@ namespace YXERP.Controllers
             ViewBag.Title = "所有采购";
             ViewBag.Type = (int)EnumSearchType.All;
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
-            ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
+            ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
             return View("Purchases");
         }
 

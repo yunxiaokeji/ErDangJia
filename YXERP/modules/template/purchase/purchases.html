@@ -3,6 +3,9 @@
 	var item = $data[i];
 %}
 <tr class="list-item">
+    <td class="width30">
+        <span data-id="{%=item.DocID%}" data-userid="{%=item.Status%}" class="checkbox iconfont"></span>
+    </td>
     <td>
         <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">{%=item.DocCode%}</a>
     </td>

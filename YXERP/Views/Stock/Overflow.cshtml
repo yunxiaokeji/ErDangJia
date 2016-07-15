@@ -52,6 +52,7 @@
 <div class="content-body mTop20">
     <table class="table-list">
         <tr class="tr-header">
+            <td class="width30">全选</td>
             <td class="tLeft">报溢单号</td>
             <td class="tLeft">仓库</td>
             <td class="width100">状态</td>
@@ -61,7 +62,20 @@
             <td class="width80">操作</td>
         </tr>
     </table>
-    <div class="mTop20" id="pager"></div>
+     <div class="mTop20">
+        <ul class="left"> 
+            <li class="hand left width80 mLeft5" id="checkAll">
+                <span class="checkbox iconfont mTop5 mRight5"></span>全选
+            </li>
+            <li class="left">
+                <a href="javascript:void(0);" class="btn" id="printOrderOut" >
+                        <i class="left iconfont mRight5" style="margin-left: -5px;color:aliceblue">&#xe658;</i>打 印
+                </a>
+            </li>
+        </ul>
+        <div id="pager"></div>
+        <div class="clear"></div>
+    </div> 
 </div>
 <ul id="opeardropdown" class="dropdown-ul hide" style="width:65px;">
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"103030402"))" id="audit">审核</li>

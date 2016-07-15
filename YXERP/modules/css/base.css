@@ -88,7 +88,9 @@ select option{ padding:2px; }
 .pTop30 {padding-top:30px;}
 .pTop50 {padding-top:50px;}
 
-.pBottom20 {padding-bottom:10px;}
+.pBottom1 {padding-bottom:1px;}
+.pBottom5 {padding-bottom:5px;}
+.pBottom10 {padding-bottom:10px;}
 .pBottom20 {padding-bottom:20px;}
 .pBottom50 {padding-bottom:50px;}
 .pBottom100 {padding-bottom:100px;}

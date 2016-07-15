@@ -278,6 +278,7 @@ define(function (require, exports, module) {
             }
             return false;
         });
+        $("#checkAll").find(".checkbox").unbind("click");
     }
     module.exports = ObjectJS;
 })

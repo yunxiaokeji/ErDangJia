@@ -439,7 +439,7 @@ select option{ padding:2px; }
 
 /*表格样式-带详情*/
 .table-items-detail { width:100%; border-spacing:0px; box-sizing:border-box;}
-.table-items-detail td{ text-align:center; padding:5px 10px; }
+.table-items-detail td{ text-align:center; padding:0px 10px; }
 
 .table-items-detail .table-header { background-color:#f1f1f1; height:35px; }
 .table-items-detail .table-header td{ border-top:solid 1px #ddd;  border-bottom:solid 1px #ddd; color:#333; }

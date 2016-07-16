@@ -112,6 +112,7 @@ define(function (require, exports, module) {
     //获取单据列表
     ObjectJS.getList = function () {
         var _self = this;
+        $(".table-header").show();
         $(".table-header").nextAll().remove();
         $(".table-header").after("<tr><td colspan='10'><div class='data-loading'><div></td></tr> ");
         var url = "/Purchase/GetPurchases",
@@ -120,6 +121,7 @@ define(function (require, exports, module) {
             $(".table-header").nextAll().remove();
 
             if (data.items.length > 0) {
+                $(".table-header").hide();
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
@@ -158,9 +160,28 @@ define(function (require, exports, module) {
         var _self = this;
         _self.docid = docid;
         _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
+        _self.bindDetailEvent();
 
         Global.post("/System/GetDepotSeatsByWareID", { wareid: _self.model.WareID }, function (data) {
             CacheDepot = data.Items;
+        });
+    }
+
+    ObjectJS.bindDetailEvent = function () {
+        var _self = this;
+
+        $(".tab-nav-ul li").click(function () {
+            var _this = $(this);
+            _this.siblings().removeClass("hover");
+            _this.addClass("hover");
+            $(".nav-partdiv").hide();
+            $("#" + _this.data("id")).show();
+
+            if (_this.data("id") == "navStorageIn" && (!_this.data("first") || _this.data("first") == 0)) {
+                _this.data("first", "1");
+                _self.getDocList();
+            }
+
         });
 
         //审核入库
@@ -200,6 +221,50 @@ define(function (require, exports, module) {
                     }
                 });
             });
+        });
+
+        $("#btnOver").click(function () {
+            if (_self.model.Status == 0) {
+                confirm("您尚未登记入库产品，完成采购单后不能再登记入库，确认操作吗？", function () {
+                    Global.post("/Purchase/AuditPurchase", {
+                        docid: _self.docid,
+                        doctype: 101,
+                        isover: 1,
+                        details: "",
+                        remark: ""
+                    }, function (data) {
+                        if (data.status) {
+                            alert("操作成功!", function () {
+                                location.href = location.href;
+                            });
+                        } else if (data.result == "10001") {
+                            alert("您没有操作权限!")
+                        } else {
+                            alert("操作失败！");
+                        }
+                    });
+                });
+            } else {
+                confirm("完成采购单后不能再登记入库，确认操作吗？", function () {
+                    Global.post("/Purchase/AuditPurchase", {
+                        docid: _self.docid,
+                        doctype: 101,
+                        isover: 1,
+                        details: "",
+                        remark: ""
+                    }, function (data) {
+                        if (data.status) {
+                            alert("操作成功!", function () {
+                                location.href = location.href;
+                            });
+                        } else if (data.result == "10001") {
+                            alert("您没有操作权限!")
+                        } else {
+                            alert("操作失败！");
+                        }
+                    });
+                });
+            }
         });
     }
 
@@ -287,6 +352,21 @@ define(function (require, exports, module) {
         }
 
         depotbox.val(depotbox.data("id"));
+    }
+
+    //获取入库明细
+    ObjectJS.getDocList = function () {
+        var _self = this;
+        $("#navStorageIn").empty();
+        Global.post( "/Purchase/GetPurchasesDetails", {
+            docid: _self.docid
+        }, function (data) {
+            doT.exec("template/purchase/purchases-details.html", function (templateFun) {
+                var innerText = templateFun(data.items);
+                innerText = $(innerText);
+                $("#navStorageIn").append(innerText);
+            });
+        });
     }
 
     module.exports = ObjectJS;

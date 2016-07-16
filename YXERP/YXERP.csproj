@@ -884,6 +884,7 @@
     <Content Include="modules\template\myaccount\setloginname.html" />
     <Content Include="modules\template\purchase\audit_storagein.html" />
     <Content Include="modules\template\customer\create-order.html" />
+    <Content Include="modules\template\purchase\purchases-details.html" />
     <Content Include="modules\template\sales\order-detail.html" />
     <Content Include="modules\template\sales\orders.html" />
     <Content Include="modules\template\customer\customerorders.html" />

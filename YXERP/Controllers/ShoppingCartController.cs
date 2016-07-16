@@ -77,7 +77,10 @@ namespace YXERP.Controllers
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             var model = serializer.Deserialize<ShoppingCartProduct>(entity);
-
+            if (string.IsNullOrEmpty(model.guid))
+            {
+                model.guid = CurrentUser.UserID;
+            }
             var bl = false;
             foreach (var product in model.Products)
             {

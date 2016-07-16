@@ -144,6 +144,14 @@ namespace CloudSalesDAL
             return ds;
         }
 
+        public DataSet GetStorageDocDetails(string docid)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@DocID",docid)
+                                   };
+            return GetDataSet("P_GetStorageDocDetails", paras, CommandType.StoredProcedure, "Doc|Details");
+        }
+
         #endregion
 
         #region 添加

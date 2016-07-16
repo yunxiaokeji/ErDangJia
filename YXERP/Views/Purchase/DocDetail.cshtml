@@ -12,9 +12,13 @@
 }
 <div class="header-box">
     <span class="header-title left">采购单号：@(model.DocCode)</span>
+    @if (model.Status < 2)
+    {
+        <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" id="btnOver">完成采购单</div>
+    }
     @if (model.Status == 0)
     {
-        <div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current, "103029003"))" id="invalid">作废</div>
+        @*<div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current, "103029003"))" id="invalid">作废</div>*@
         <div class="btn999 right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"103029004"))" id="delete">删除</div>
     }
     
@@ -33,22 +37,28 @@
 <div class="tab-nav">
     <ul class="tab-nav-ul left">
         <li class="hover " data-id="navProduct">采购单明细</li>
+        @if (model.Status == 1 || model.Status == 2)
+        {
+            <li data-id="navStorageIn">入库明细</li>
+        }
     </ul>
     @if (model.Status < 2)
     {
-        <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" id="btnconfirm">审核入库</div>
+        <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" id="btnconfirm">入库登记</div>
     }
 </div>
 <div class="content-body">
-    <table class="table-list">
+    <table class="table-list nav-partdiv" id="navProduct">
         <tr class="tr-header">
             <td class="tLeft width300">产品名称</td>
             <td class="tLeft width300">规格</td>
             <td class="center width50">单位</td>
             <td class="tRight width100">采购价</td>
             <td class="center width80">数量</td>
+            <td class="tRight width150">采购合计</td>
             <td class="center width80">入库数量</td>
-            <td class="tRight width150">小计</td>
+            <td class="tRight width150">入库合计</td>
+            
         </tr>
         @foreach (var item in model.Details)
         { 
@@ -68,13 +78,19 @@
                 <td class="center">
                     @(item.Quantity)
                 </td>
+                 <td class="tRight">
+                    @(item.TotalMoney.ToString("f2"))
+                </td>
                 <td class="center">
                     @(item.Complete)
                 </td>
-                <td class="tRight">
-                    @(item.TotalMoney.ToString("f2"))
+               <td class="tRight">
+                    @((item.Complete*item.Price).ToString("f2"))
                 </td>
             </tr>
         }
+    </table>
+    <table id="navStorageIn" class="nav-partdiv table-items-detail hide">
+        
     </table>
 </div>

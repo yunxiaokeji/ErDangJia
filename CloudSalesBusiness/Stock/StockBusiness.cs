@@ -196,6 +196,34 @@ namespace CloudSalesBusiness
             return list;
         }
 
+        public static List<StorageDoc> GetStorageDocDetails(string docid, string agentid)
+        {
+            DataSet ds = StockDAL.BaseProvider.GetStorageDocDetails(docid);
+
+            List<StorageDoc> list = new List<StorageDoc>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                StorageDoc model = new StorageDoc();
+                model.FillData(dr);
+                var user = OrganizationBusiness.GetUserByUserID(model.CreateUserID, agentid);
+                model.UserName = user != null ? user.Name : "";
+
+                if (ds.Tables.Contains("Details"))
+                {
+                    model.Details = new List<StorageDetail>();
+                    foreach (DataRow ddr in ds.Tables["Details"].Select("DocID='" + model.DocID + "'"))
+                    {
+                        StorageDetail detail = new StorageDetail();
+                        detail.FillData(ddr);
+                        model.Details.Add(detail);
+                    }
+                }
+
+                list.Add(model);
+            }
+            return list;
+        }
+
         #endregion
 
         #region 添加

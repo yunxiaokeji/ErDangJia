@@ -2,9 +2,6 @@
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
 %}
-<tr class="line-item">
-    <td colspan="10"></td>
-</tr>
 <tr class="item-header">
     <td class="tLeft bolder">
         采购单号：{%=item.DocCode%}
@@ -19,14 +16,15 @@
     <td>已采购金额</td>
     <td class="bolder">
         {%=item.CreateTime.toDate("yyyy-MM-dd")%}
-        <span class="ico-dropdown"></span>
+    </td>
+    <td class="bolder">
+        采购员：{%=item.UserName%}
     </td>
 </tr>
     {%
 	    for(var ii=0, jj=item.Details.length; ii < jj; ii++){
 	    var model = item.Details[ii];
     %}
-        
         <tr class="item {%=ii==jj-1?'last':''%}">
             <td class="tLeft bBottom">
                 <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=model.ProductID%}&did={%=model.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=model.ProductName%}" data-id="{%=model.ProductID%}">
@@ -56,14 +54,20 @@
                     <div class="{%=item.Status<2?'red':''%}">
                         {%= item.StatusStr%}
                     </div>
-                    <a href="javascript:void(0)" class="btn-open-window mTop5" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
+                 </td>
+                 <td rowspan="{%= jj %}" class="bRight bBottom">
+                    <a href="javascript:void(0)" class="btn-open-window {%=item.Status<2 ?'':'hide'%}" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
+                        审核入库
+                    </a>
+                     <a href="javascript:void(0)" class="btn-open-window {%=item.Status==2? '':'hide'%}" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
                         查看详情
                     </a>
-                    
-                </td>
+                 </td>
             {% } %}
             
         </tr>
     {% } %}
-    
+  <tr class="line-item">
+    <td colspan="10"></td>
+  </tr>  
 {% } %}

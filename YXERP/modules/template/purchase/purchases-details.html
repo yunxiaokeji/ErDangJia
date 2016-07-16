@@ -1,0 +1,44 @@
+﻿{%
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+%}
+<tr class="line-item">
+    <td colspan="10"></td>
+</tr>
+<tr class="item-header">
+    <td class="tLeft bolder">
+        入库单号：{%=item.DocCode%}
+    </td>
+    <td class="tLeft">规格</td>
+    <td>入库数量</td>
+    <td>入库日期</td>
+    <td>操作员人</td>
+</tr>
+    {%
+	    for(var ii=0, jj=item.Details.length; ii < jj; ii++){
+	    var model = item.Details[ii];
+    %}
+        <tr class="item {%=ii==jj-1?'last':''%}">
+            <td class="tLeft bBottom">
+                <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=model.ProductID%}&did={%=model.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=model.ProductName%}" data-id="{%=model.ProductID%}">
+                    {%=model.ProductName%}
+                </a>
+            </td>
+            <td class="tLeft bBottom">
+                {%=model.Remark%}
+            </td>
+            <td class="bBottom bRight">
+                {%=model.Quantity%}
+            </td>
+            {%if(ii==0){ %}
+                <td rowspan="{%= jj %}" class="bRight bBottom">
+                   {%=item.CreateTime.toDate("yyyy-MM-dd")%}
+                </td>
+                <td rowspan="{%= jj %}" class="bBottom">
+                    {%= item.UserName%}
+                </td>
+            {% } %}
+        </tr>
+    {% } %}
+    
+{% } %}

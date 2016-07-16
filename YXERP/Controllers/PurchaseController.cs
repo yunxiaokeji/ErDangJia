@@ -160,6 +160,17 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult GetPurchasesDetails(string docid)
+        {
+            List<StorageDoc> list = StockBusiness.GetStorageDocDetails(docid, CurrentUser.AgentID);
+            JsonDictionary.Add("items", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
 
     }

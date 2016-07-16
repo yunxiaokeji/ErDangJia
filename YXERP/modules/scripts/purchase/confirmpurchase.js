@@ -16,6 +16,38 @@ define(function (require, exports, module) {
     //绑定事件
     ObjectJS.bindEvent = function (wares) {
         var _self = this;
+
+        //添加产品
+        $("#btnChooseProduct").click(function () {
+            ChooseProduct.create({
+                title: "选择采购产品",
+                type: 1, //1采购 2出库 3报损 4报溢 5调拨
+                wareid: "",
+                callback: function (products) {
+                    if (products.length > 0) {
+                        var entity = {}, items = [];
+                        entity.guid = "";
+                        entity.type = 1;
+                        for (var i = 0; i < products.length; i++) {
+                            items.push({
+                                ProductID: products[i].pid,
+                                ProductDetailID: products[i].did,
+                                BatchCode: products[i].batch,
+                                DepotID: products[i].depotid,
+                                SaleAttrValueString: products[i].remark,
+                            });
+                        }
+                        entity.Products = items;
+                        Global.post("/ShoppingCart/AddShoppingCartBatchIn", { entity: JSON.stringify(entity) }, function (data) {
+                            if (data.status) {
+                                location.href = location.href;
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
         //仓库
         require.async("dropdown", function () {
             var dropdown = $("#wareid").dropdown({
@@ -138,7 +170,6 @@ define(function (require, exports, module) {
                 _self.submitOrder();
             });
         });
-
     }
 
     //计算总金额

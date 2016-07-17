@@ -54,7 +54,7 @@ namespace YXERP.Controllers
         public ActionResult ConfirmPurchase(string id)
         {
             var wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID).Where(m => m.Status == 1).ToList();
-            var list = ShoppingCartBusiness.GetShoppingCart(EnumDocType.RK, CurrentUser.UserID, CurrentUser.UserID);
+            var list = ShoppingCartBusiness.GetShoppingCart(EnumDocType.RK, CurrentUser.UserID, CurrentUser.UserID, CurrentUser.ClientID);
             Dictionary<string, string> providers = new Dictionary<string, string>();
             foreach (var model in list)
             {

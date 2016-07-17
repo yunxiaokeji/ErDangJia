@@ -172,7 +172,7 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddStorageDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool SubmitDamagedDoc(string docid, int doctype, decimal totalmoney, string remark, string wareid, string userid, string operateip, string clientid)
+        public static bool SubmitDamagedDoc(string docid, int doctype, decimal totalmoney, string remark, string ids, string userid, string operateip, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@DocID",docid),
@@ -180,7 +180,7 @@ namespace CloudSalesDAL
                                      new SqlParameter("@DocType",doctype),
                                      new SqlParameter("@TotalMoney" , totalmoney),
                                      new SqlParameter("@Remark" , remark),
-                                     new SqlParameter("@WareID" , wareid),
+                                     new SqlParameter("@AutoIDs" , ids),
                                      new SqlParameter("@UserID" , userid),
                                      new SqlParameter("@OperateIP" , operateip),
                                      new SqlParameter("@ClientID" , clientid)

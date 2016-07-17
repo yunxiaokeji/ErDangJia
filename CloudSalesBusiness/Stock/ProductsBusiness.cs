@@ -909,7 +909,7 @@ namespace CloudSalesBusiness
                     int r = 0;
                     foreach (var model in details)
                     {
-                        AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.BigPrice, model.ImgS, model.Remark, model.Description, operateid, clientid, out r);
+                        AddProductDetails(pid, model.DetailsCode, model.ShapeCode, model.SaleAttr, model.AttrValue, model.SaleAttrValue, model.Price, model.Weight, model.Price, model.ImgS, model.Remark, model.Description, operateid, clientid, out r);
                     }
                 }
                 return pid;

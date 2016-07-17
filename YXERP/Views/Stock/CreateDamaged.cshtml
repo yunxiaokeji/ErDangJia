@@ -6,60 +6,84 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/stock/createdamaged"], function (obj) {
-            obj.init('@(ware.WareID)');
+            obj.init('@ViewBag.guid');
         });
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">新建报损单</span>
-    <a class="btn-back right" href="/Stock/Damaged">返回</a>
-</div>
-<div class="content-body mTop20">
-     <ul class="table-add">
-        <li>
-            <span class="column-title">仓库：</span>
-            @ware.Name
-        </li>
-        <li>
-            <span class="column-title">备注：</span> 
-            <span">
-                 <textarea id="remark" class="width310"></textarea>
-            </span>
-           
-        </li>
-    </ul>
-</div>
-<div class="tab-nav mTop30">
-    <ul class="tab-nav-ul left">
-        <li class="hover" data-id="navRemark">产品明细</li>
-    </ul>
+    <span class="header-title left">提交报损单</span>
     <div class="btn right" id="btnChooseProduct">添加报损产品</div>
 </div>
-<div class="content-body">
-    <table class="table-list">
-        <tr class="tr-header">
-            <td class="tLeft">产品名称</td>
-            <td class="tLeft">规格</td>
-            <td class="center width80">货位</td>
-            <td class="center">数量</td>
-            <td class="center width80">删除</td>
-        </tr>
-        @foreach (var model in (List<CloudSalesEntity.ProductDetail>)ViewBag.Items)
-        { 
-            <tr class="item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
-                <td>
-                    <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(model.ProductID)&did=@(model.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(model.ProductName)" data-id="@(model.ProductID)">@(model.ProductName)</a>
-                </td>
-                <td>@(model.Remark)</td>
-                <td class="center">@(model.DepotCode)</td>
-                <td class="center tr-quantity"><input  type="text" data-id="@(model.AutoID)" data-value="@(model.Quantity)" class="quantity width50" value="@(model.Quantity)" /></td>
-                <td class="center">
-                    <a class="iconfont ico-del" href="javascript:void(0)" title="删除" data-id="@(model.ProductDetailID)"></a>
+<div class="content-body mTop20">
+    <table class="table-items-detail mBottom20">
+        @if (((Dictionary<string, string>)ViewBag.wares).Keys.Count == 0)
+        {
+             <tr class="item-header">
+                <td class="width30 check-all"><span class="checkbox iconfont"></span></td>
+                <td class="tLeft">产品名称</td>
+                <td class="tLeft">规格</td>
+                <td class="">货位</td>
+                <td class="">数量</td>
+                <td class="">删除</td>
+            </tr>
+            <tr class="line-item">
+                <td colspan="10">
+                    <div class='nodata-txt' >暂无选择产品</div>
                 </td>
             </tr>
         }
+        
+        @foreach (var item in (Dictionary<string, string>)ViewBag.wares)
+        {
+            <tr class="item-header">
+                <td class="width30"><span data-id="@item.Key" class="checkbox check-part iconfont"></span></td>
+                <td class="tLeft bolder">
+                    仓库：@item.Value
+                </td>
+                <td class="tLeft">规格</td>
+                <td class="">货位</td>
+                <td class="">数量</td>
+                <td class="">删除</td>
+            </tr>
+            foreach (var model in (List<CloudSalesEntity.ProductDetail>)ViewBag.items)
+            {
+                if (model.WareID == item.Key)
+                {
+                    <tr class="item cart-item" data-autoid="@(model.AutoID)" data-id="@(model.ProductDetailID)" >
+                        <td class="bBottom"><span data-id="@item.Key" class="checkbox iconfont"></span></td>
+                        <td class="tLeft bBottom">
+                            <a class="btn-open-window" data-url="/Products/ChooseDetail?pid=@(model.ProductID)&did=@(model.ProductDetailID)" href="javascript:void(0);" data-name="产品详情页-@(model.ProductName)" data-id="@(model.ProductID)">@(model.ProductName)</a>
+                        </td>
+                        <td class="bBottom tLeft">@(model.Remark)</td>
+                        <td class="tr-price bBottom">
+                            @(model.DepotCode)
+                        </td>
+                        <td class="tr-quantity bBottom">
+                            <input  type="text" data-id="@(model.AutoID)" data-value="@(model.Quantity)" class="quantity width50" value="@(model.Quantity)" />
+                        </td>
+                        <td class="bBottom"><a class="iconfont ico-del" href="javascript:void(0)" data-depotid="@(model.DepotID)" title="删除" data-id="@(model.ProductDetailID)"></a></td>
+                    </tr>
+                }
+            }
+             <tr class="line-item">
+                <td colspan="10"></td>
+            </tr>
+        }
+        <tr class="item-header">
+            <td colspan="2" class="tLeft">
+                <div class="check-all hand mLeft10"><span class="checkbox iconfont"></span> 全选</div> 
+            </td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+        </tr>
     </table>
+    <div class="clear"></div>
+    <input type="text" placeholder="备注" id="remark" class="width500 mTop10 right" />
+    <div class="clear"></div>
     <div class="mTop20">
         <div class="btn right" id="btnconfirm">提交报损单</div>
     </div>
+    <div class="clear"></div>
 </div>

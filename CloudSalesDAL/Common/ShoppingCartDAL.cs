@@ -35,7 +35,7 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddShoppingCart", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool AddShoppingCartBatchOut(string productid, string detailsid, int quantity, int ordertype, string batch, string depotid, string remark, string guid, string userid, string operateip)
+        public static bool AddShoppingCartBatchOut(string productid, string detailsid, int quantity, int ordertype, string batch, string wareid, string depotid, string remark, string guid, string userid, string operateip)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@OrderType",ordertype),
@@ -43,6 +43,7 @@ namespace CloudSalesDAL
                                      new SqlParameter("@ProductID" , productid),
                                      new SqlParameter("@Quantity" , quantity),
                                      new SqlParameter("@BatchCode" , batch),
+                                     new SqlParameter("@WareID" , wareid),
                                      new SqlParameter("@DepotID" , depotid),
                                      new SqlParameter("@Remark" , remark),
                                      new SqlParameter("@GUID" , guid),
@@ -52,12 +53,13 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddShoppingCartBatchOut", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool DeleteCart(string guid, string productid, int ordertype, string userid)
+        public static bool DeleteCart(string guid, string productid, int ordertype, string userid, string depotid)
         {
             SqlParameter[] paras = {
                                        new SqlParameter("@GUID" , guid),
                                        new SqlParameter("@ProductID",productid),
                                        new SqlParameter("@Ordertype",ordertype),
+                                       new SqlParameter("@DepotID",depotid),
                                        new SqlParameter("@UserID",userid)
                                    };
             return ExecuteNonQuery("P_DeleteCart", paras, CommandType.StoredProcedure) > 0;

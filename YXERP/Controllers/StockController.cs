@@ -79,15 +79,20 @@ namespace YXERP.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Redirect("/Stock/Damaged");
+                id = CurrentUser.UserID;
             }
-            var ware = SystemBusiness.BaseBusiness.GetWareByID(id, CurrentUser.ClientID);
-            if (ware == null || string.IsNullOrEmpty(ware.WareID))
+            var list = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BS, id, CurrentUser.UserID, CurrentUser.ClientID);
+            Dictionary<string, string> wares = new Dictionary<string, string>();
+            foreach (var model in list)
             {
-                return Redirect("/Stock/Damaged");
+                if (!wares.ContainsKey(model.WareID))
+                {
+                    wares.Add(model.WareID, model.WareName);
+                }
             }
-            ViewBag.Ware = ware;
-            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BS, ware.WareID, CurrentUser.UserID);
+            ViewBag.guid = id;
+            ViewBag.wares = wares;
+            ViewBag.Items = list;
             return View();
         }
 
@@ -124,7 +129,7 @@ namespace YXERP.Controllers
             }
             var wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
             ViewBag.wares = wares;
-            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BY, id, CurrentUser.UserID);
+            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BY, id, CurrentUser.UserID, CurrentUser.ClientID);
             ViewBag.guid = id;
             return View();
         }
@@ -166,7 +171,7 @@ namespace YXERP.Controllers
                 return Redirect("/Stock/HandOut");
             }
             ViewBag.Ware = ware;
-            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.SGCK, ware.WareID, CurrentUser.UserID);
+            ViewBag.Items = ShoppingCartBusiness.GetShoppingCart(EnumDocType.SGCK, ware.WareID, CurrentUser.UserID, CurrentUser.ClientID);
             return View();
         }
 
@@ -296,9 +301,16 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult SubmitDamagedDoc(string wareid, string remark)
+        public JsonResult SubmitDamagedDoc(string ids, string remark)
         {
-            var bl = StockBusiness.BaseBusiness.SubmitDamagedDoc(wareid, remark, CurrentUser.UserID, OperateIP, CurrentUser.ClientID);
+            var bl = false;
+
+            if (!string.IsNullOrEmpty(ids))
+            {
+                ids = ids.Substring(0, ids.Length - 1);
+                bl = StockBusiness.BaseBusiness.SubmitDamagedDoc(ids, remark, CurrentUser.UserID, OperateIP, CurrentUser.ClientID);
+            }
+
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {

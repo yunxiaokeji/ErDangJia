@@ -31,9 +31,16 @@ define(function (require, exports, module) {
 
         $(document).click(function (e) {
             //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
                 $(".dropdown-ul").hide();
             }
+        });
+
+        Global.post("/ShoppingCart/GetShoppingCartCount", {
+            ordertype: 3,
+            guid: ""
+        }, function (data) {
+            $("#btnSubmit").html("新建报损 ( " + data.Quantity + " ) ");
         });
 
         //日期插件
@@ -85,89 +92,54 @@ define(function (require, exports, module) {
             }
         });
 
-        //新建报损
-        $("#btnCreate").click(function () {
-            var _this = $(this);
-            doT.exec("template/stock/chooseware.html", function (template) {
-                var innerHtml = template(wares);
-                Easydialog.open({
-                    container: {
-                        id: "show-model-chooseware",
-                        header: "选择报损仓库",
-                        content: innerHtml,
-                        yesFn: function () {
-                            var wareid = $(".ware-items .hover").data("id");
-                            if (!wareid) {
-                                alert("请选择报损仓库！");
-                                return false;
-                            } else {
-                                location.href = "/Stock/CreateDamaged/" + wareid;
-                            }
-                        },
-                        callback: function () {
-
-                        }
-                    }
-                });
-
-                $(".ware-items .ware-item").click(function () {
-                    $(this).siblings().removeClass("hover");
-                    $(this).addClass("hover");
-                });
-            });
-        });
-
-        //审核
-        $("#audit").click(function () {
-            location.href = "/Stock/DamagedDetail/" + _self.docid;
-        });
-        //作废
-        $("#invalid").click(function () {
-            location.href = "/Stock/DamagedDetail/" + _self.docid;
-        });
         //删除
         $("#delete").click(function () {
-            location.href = "/Stock/DamagedDetail/" + _self.docid;
+            var _this = $(this);
+            confirm("报损单删除后不可恢复,确认删除吗？", function () {
+                Global.post("/Stock/DeleteDamagedDoc", { docid: _this.data("id") }, function (data) {
+                    if (data.status) {
+                        alert("删除成功");
+                    } else {
+                        alert("删除失败");
+                    }
+                    _self.getList();
+                });
+            });
         });
 
     }
     //获取单据列表
     ObjectJS.getList = function () {
         var _self = this;
-        $(".tr-header").nextAll().remove();
-        $(".tr-header").after("<tr><td colspan='7'><div class='data-loading' ><div></td></tr>");
+        $(".table-header").show();
+        $(".table-header").nextAll().remove();
+        $(".table-header").after("<tr><td colspan='7'><div class='data-loading' ><div></td></tr>");
         var url = "/Stock/GetStorageDocs",
             template = "template/stock/storagedocs.html";
 
         Global.post(url, Params, function (data) {
-            $(".tr-header").nextAll().remove();
+            $(".table-header").nextAll().remove();
 
             if (data.items.length > 0) {
+                $(".table-header").hide();
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
-                    $(".tr-header").after(innerText);
+                    $(".table-header").after(innerText);
 
                     //下拉事件
                     $(".dropdown").click(function () {
                         var _this = $(this);
-                        if (_this.data("status") == 0) {
-                            $("#invalid").show();
-                            $("#delete").show();
-                        } else {
-                            $("#invalid").hide();
-                            $("#delete").hide();
-                        }
                         var position = _this.find(".ico-dropdown").position();
-                        $(".dropdown-ul").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
+                        $("#auditDropdown").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
                             $(this).hide();
                         });
-                        _self.docid = _this.data("id");
+                        $("#auditDropdown li").data("id", _this.data("id")).data("url", "/Stock/DamagedDetail/" + _this.data("id"));
                     });
                 });
             }
             else {
-                $(".tr-header").after("<tr><td colspan='7'><div class='nodata-txt' >暂无数据!</div></td></tr>");
+                $(".table-header").after("<tr><td colspan='7'><div class='nodata-txt' >暂无数据!</div></td></tr>");
             }
 
             $("#pager").paginate({

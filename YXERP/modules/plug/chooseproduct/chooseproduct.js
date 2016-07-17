@@ -51,6 +51,7 @@ define(function (require, exports, module) {
                                     pid: _this.data("pid"),
                                     did: _this.data("did"),
                                     batch: _this.data("batch"),
+                                    wareid: _this.data("wareid"),
                                     depotid: _this.data("depotid"),
                                     remark: _this.data("remark")
                                 };

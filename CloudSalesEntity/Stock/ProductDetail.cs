@@ -199,6 +199,10 @@ namespace CloudSalesEntity
 		}
 		#endregion Model
 
+        [Property("Lower")] 
+        public string WareID { get; set; }
+
+        public string WareName { get; set; }
 
         public string ShapeCode { get; set; }
 
@@ -216,12 +220,16 @@ namespace CloudSalesEntity
 
         public string BatchCode { get; set; }
 
+        [Property("Lower")] 
+        public string DepotID { get; set; }
+
         public string DepotCode { get; set; }
 
         public string Remark { get; set; }
 
         public int IsDefault { get; set; }
 
+        [Property("Lower")] 
         public string ProviderID { get; set; }
 
         public string ProviderName { get; set; }

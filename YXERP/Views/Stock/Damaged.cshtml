@@ -14,9 +14,8 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">报损单列表</span>
-    <a href="javascript:void(0);" id="btnCreate" class="btn-add right @(ExpandClass.IsLimits(HttpContext.Current,"103030301"))">新建报损</a>
-   
+    <span class="header-title left">报损管理</span>
+    <div id="btnSubmit" data-id="103030301" data-name="新建报损" data-url="/Stock/CreateDamaged" class="btn-add btn-open-window right">新建报损（0）</div> 
 </div>
 <div class="search-header">
     <div class="left" title="报损日期">
@@ -51,7 +50,7 @@
             <td class="tLeft">规格</td>
             <td>数量</td>
             <td>仓位</td>
-            <td class="width100">报溢日期</td>
+            <td class="width100">报损日期</td>
             <td class="width100">操作</td>
         </tr>
     </table>

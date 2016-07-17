@@ -31,7 +31,7 @@ namespace CloudSalesBusiness
             return Convert.ToInt32(obj);
         }
 
-        public static List<ProductDetail> GetShoppingCart(EnumDocType ordertype, string guid, string userid)
+        public static List<ProductDetail> GetShoppingCart(EnumDocType ordertype, string guid, string userid, string clientid)
         {
             DataTable dt = ShoppingCartDAL.GetShoppingCart((int)ordertype, guid, userid);
             List<ProductDetail> list = new List<ProductDetail>();
@@ -39,7 +39,13 @@ namespace CloudSalesBusiness
             {
                 ProductDetail model = new ProductDetail();
                 model.FillData(dr);
-
+                if (!string.IsNullOrEmpty(model.WareID))
+                {
+                    var ware = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, clientid);
+                    model.WareName = ware != null ? ware.Name : "";
+                    var depot = SystemBusiness.BaseBusiness.GetDepotByID(model.DepotID, model.WareID, clientid);
+                    model.DepotCode = depot != null ? depot.DepotCode : "";
+                }
                 list.Add(model);
             }
             return list;
@@ -67,13 +73,13 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public static bool AddShoppingCartBatchOut(string productid, string detailsid, int quantity, string batchcode, string depotid, EnumDocType ordertype, string remark, string guid, string userid, string operateip)
+        public static bool AddShoppingCartBatchOut(string productid, string detailsid, int quantity, string batchcode, string wareid, string depotid, EnumDocType ordertype, string remark, string guid, string userid, string operateip)
         {
             if (string.IsNullOrEmpty(guid))
             {
                 guid = userid;
             }
-            return ShoppingCartDAL.AddShoppingCartBatchOut(productid, detailsid, quantity, (int)ordertype, batchcode, depotid, remark, guid, userid, operateip);
+            return ShoppingCartDAL.AddShoppingCartBatchOut(productid, detailsid, quantity, (int)ordertype, batchcode, wareid, depotid, remark, guid, userid, operateip);
         }
 
         public static bool UpdateCartQuantity(string autoid, string guid, int quantity, string userid)
@@ -91,9 +97,9 @@ namespace CloudSalesBusiness
             return CommonBusiness.Update("ShoppingCart", "Price", price, "AutoID=" + autoid + " and [GUID]='" + guid + "'");
         }
 
-        public static bool DeleteCart(EnumDocType ordertype, string guid, string productid, string name, string userid, string ip, string agentid, string clientid)
+        public static bool DeleteCart(EnumDocType ordertype, string guid, string productid, string name, string userid, string depotid, string ip, string agentid, string clientid)
         {
-            bool bl = ShoppingCartDAL.DeleteCart(guid, productid, (int)ordertype, userid);
+            bool bl = ShoppingCartDAL.DeleteCart(guid, productid, (int)ordertype, userid, depotid);
             if (bl)
             {
                 string msg = "移除产品：" + name;

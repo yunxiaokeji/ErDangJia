@@ -115,6 +115,8 @@ namespace CloudSalesEntity
 
         public string SaleAttrValueString { get; set; }
 
+        public string WareID { get; set; }
+
         public string WareName { get; set; }
 
         public string Remark { get; set; }

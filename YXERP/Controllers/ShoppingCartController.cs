@@ -60,7 +60,7 @@ namespace YXERP.Controllers
             var bl = false;
             foreach (var product in model.Products)
             {
-                if (ShoppingCartBusiness.AddShoppingCartBatchOut(product.ProductID, product.ProductDetailID, 1, product.BatchCode, product.DepotID, model.type, product.SaleAttrValueString, model.guid, CurrentUser.UserID, OperateIP))
+                if (ShoppingCartBusiness.AddShoppingCartBatchOut(product.ProductID, product.ProductDetailID, 1, product.BatchCode, product.WareID, product.DepotID, model.type, product.SaleAttrValueString, model.guid, CurrentUser.UserID, OperateIP))
                 {
                     bl = true;
                 }
@@ -119,7 +119,7 @@ namespace YXERP.Controllers
                 guid = CurrentUser.UserID;
             }
 
-            var list = ShoppingCartBusiness.GetShoppingCart(ordertype, guid, "");
+            var list = ShoppingCartBusiness.GetShoppingCart(ordertype, guid, "", CurrentUser.ClientID);
             JsonDictionary.Add("Items", list);
             return new JsonResult
             {
@@ -161,9 +161,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult DeleteCart(EnumDocType ordertype, string guid, string productid, string name)
+        public JsonResult DeleteCart(EnumDocType ordertype, string guid, string productid, string name, string depotid = "")
         {
-            var bl = ShoppingCartBusiness.DeleteCart(ordertype, guid, productid, name, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
+            var bl = ShoppingCartBusiness.DeleteCart(ordertype, guid, productid, name, CurrentUser.UserID, depotid, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("status", bl);
             return new JsonResult
             {

@@ -201,6 +201,10 @@ namespace CloudSalesBusiness
             {
                 ProductStock model = new ProductStock();
                 model.FillData(dr);
+                var ware = SystemBusiness.BaseBusiness.GetWareByID(model.WareID, clientid);
+                model.WareName = ware != null ? ware.Name : "";
+                var depot = SystemBusiness.BaseBusiness.GetDepotByID(model.DepotID, model.WareID, clientid);
+                model.DepotCode = depot != null ? depot.DepotCode : "";
                 list.Add(model);
             }
             return list;
@@ -251,10 +255,10 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool SubmitDamagedDoc(string wareid, string remark, string userid, string operateip, string clientid)
+        public bool SubmitDamagedDoc(string ids, string remark, string userid, string operateip, string clientid)
         {
             string guid = Guid.NewGuid().ToString();
-            bool bl = StockDAL.SubmitDamagedDoc(guid, (int)EnumDocType.BS, 0, remark, wareid, userid, operateip, clientid);
+            bool bl = StockDAL.SubmitDamagedDoc(guid, (int)EnumDocType.BS, 0, remark, ids, userid, operateip, clientid);
             return bl;
         }
 

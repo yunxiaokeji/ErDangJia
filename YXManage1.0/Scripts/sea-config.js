@@ -14,7 +14,9 @@ seajs.config({
         //报表底层
         'zrender': 'plug/echarts/zrender/zrender.js',
         //分页控件
-        "pager": "plug/datapager/paginate.js"
+        "pager": "plug/datapager/paginate.js",
+        "moment": "plug/daterangepicker/moment.js",
+        "daterangepicker": "plug/daterangepicker/daterangepicker.js"
     }
 });
 

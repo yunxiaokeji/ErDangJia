@@ -1,18 +1,56 @@
-﻿{%
+﻿
+{%
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
 %}
-<tr class="list-item">
-   <td>
-        <a href="javascript:void(0)" class="btn-open-window" data-url="/Stock/Detail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="单据详情-{%=item.DocCode%}">{%=item.DocCode%}</a>
+<tr class="item-header">
+    <td class="tLeft bolder">
+        单据编号：{%=item.DocCode%}
     </td>
-    <td>{%=item.WareName||"--"%}</td>
-    <td class="center {%=item.Status<2?'red':''%}"">{%=item.StatusStr%}</td>
-    <td class="tRight">{%=item.TotalMoney.toFixed(2)%}</td>
-    <td class="center">{%=item.UserName||"--"%}</td>
-    <td class="center">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
-    <td class="center {%=item.Status < 2? 'dropdown':''%} " data-status="{%=item.Status%}" data-id="{%=item.DocID%}">
-        <span class="{%=item.Status < 2? 'ico-dropdown':''%}"></span>
+    <td class="tLeft">规格</td>
+    <td>数量</td>
+    <td class="bolder">仓库：{%=item.WareName||"--"%}</td>
+    <td class="bolder">
+        操作人：{%=item.UserName%}
+    </td>
+    <td class="bolder {%=item.Status<2?'red dropdown':''%}" data-id="{%=item.DocID%}">
+        {%= item.StatusStr%}
+        <span class="right mTop2 {%=item.Status < 2? 'ico-dropdown':''%}"></span>
     </td>
 </tr>
+    {%
+	    for(var ii=0, jj=item.Details.length; ii < jj; ii++){
+	    var model = item.Details[ii];
+    %}
+        <tr class="item {%=ii==jj-1?'last':''%}">
+            <td class="tLeft bBottom">
+                <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=model.ProductID%}&did={%=model.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=model.ProductName%}" data-id="{%=model.ProductID%}">
+                    {%=model.ProductName%}
+                </a>
+            </td>
+            <td class="tLeft bBottom">
+                {%=model.Remark%}
+            </td>
+            <td class="bBottom ">
+                {%=model.Quantity%}
+            </td>
+            <td class="bRight bBottom">
+                {%= model.Price.toFixed(2)%}
+             </td>
+            {%if(ii==0){ %}
+                 <td rowspan="{%= jj %}" class="bRight bBottom">
+                    {%=item.CreateTime.toDate("yyyy-MM-dd")%}
+                 </td>
+                 <td rowspan="{%= jj %}" class="bRight bBottom">
+                    <a href="javascript:void(0)" class="btn-open-window" data-url="/Stock/Detail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="单据详情-{%=item.DocCode%}">
+                        查看详情
+                    </a>
+                 </td>
+            {% } %}
+        </tr>
+    {% } %}
+  <tr class="line-item">
+    <td colspan="10"></td>
+  </tr>  
 {% } %}
+

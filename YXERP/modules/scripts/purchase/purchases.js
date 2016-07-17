@@ -34,6 +34,13 @@ define(function (require, exports, module) {
     ObjectJS.bindEvent = function (providers) {
         var _self = this;
 
+        $(document).click(function (e) {
+            //隐藏下拉
+            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+                $(".dropdown-ul").hide();
+            }
+        });
+
         Global.post("/ShoppingCart/GetShoppingCartCount", {
             ordertype: 1,
             guid: ""
@@ -107,6 +114,21 @@ define(function (require, exports, module) {
                 _self.getList();
             }
         });
+
+        //删除单据
+        $("#delete").click(function () {
+            var _this = $(this);
+            confirm("采购单删除后不可恢复,确认删除吗？", function () {
+                Global.post("/Purchase/DeletePurchase", { docid: _this.data("id") }, function (data) {
+                    if (data.Status) {
+                        alert("采购单删除成功");
+                    } else {
+                        alert("采购单删除失败");
+                    }
+                    _self.getList();
+                });
+            });
+        });
     }
 
     //获取单据列表
@@ -126,6 +148,21 @@ define(function (require, exports, module) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
                     $(".table-header").after(innerText);
+
+                    //下拉事件
+                    $(".dropdown").click(function () {
+                        var _this = $(this);
+                        if (_this.data("status") == 0) {
+                            $("#delete").show();
+                        } else {
+                            $("#delete").hide();
+                        }
+                        var position = _this.find(".ico-dropdown").position();
+                        $("#auditDropdown").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
+                            $(this).hide();
+                        });
+                        $("#auditDropdown li").data("id", _this.data("id")).data("url", _this.data("url"));
+                    });
                 });
             }
             else {

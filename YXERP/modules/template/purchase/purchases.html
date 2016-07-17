@@ -15,10 +15,11 @@
     <td>总金额</td>
     <td>已采购金额</td>
     <td class="bolder">
-        日期：{%=item.CreateTime.toDate("yyyyMMdd")%}
-    </td>
-    <td class="bolder">
         采购员：{%=item.UserName%}
+    </td>
+    <td class="bolder {%=item.Status<2?'red dropdown':''%}" data-status="{%=item.Status%}" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}">
+        {%= item.StatusStr%}
+        <span class="right mTop2 {%=item.Status < 2? 'ico-dropdown':''%}"></span>
     </td>
 </tr>
     {%
@@ -51,15 +52,10 @@
                     {%= item.RealMoney.toFixed(2)%}
                 </td>
                 <td rowspan="{%= jj %}" class="bRight bBottom">
-                    <div class="{%=item.Status<2?'red':''%}">
-                        {%= item.StatusStr%}
-                    </div>
+                    {%=item.CreateTime.toDate("yyyy-MM-dd")%}
                  </td>
                  <td rowspan="{%= jj %}" class="bRight bBottom">
-                    <a href="javascript:void(0)" class="btn-open-window {%=item.Status<2 ?'':'hide'%}" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
-                        审核入库
-                    </a>
-                     <a href="javascript:void(0)" class="btn-open-window {%=item.Status==2? '':'hide'%}" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
+                     <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
                         查看详情
                     </a>
                  </td>

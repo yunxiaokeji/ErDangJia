@@ -353,7 +353,7 @@ select option{ padding:2px; }
 .table-list tr:not(:first-child) td{ padding:5px; line-height:35px; border-bottom:solid 1px #ddd; max-width:500px; color:#333; 
                                      white-space:nowrap; overflow: hidden; text-overflow:ellipsis; vertical-align:middle; }
 
-.table-list td a{ color:#4a98e7;  vertical-align:middle;}
+.table-list td a{ color:#2F73B8;  vertical-align:middle;}
 .table-list td a:hover{ color:red;}
 
 .table-list .ico-check,.table-list .ico-checked { vertical-align:middle; }
@@ -463,5 +463,5 @@ select option{ padding:2px; }
 .table-items-detail .bRight { border-right:solid 1px #ddd; }
 .table-items-detail .bBottom { border-bottom:solid 1px #ddd; }
 
-.table-items-detail a { color:#333; }
+.table-items-detail a { color:#2F73B8; }
 .table-items-detail a:hover { color:red; }

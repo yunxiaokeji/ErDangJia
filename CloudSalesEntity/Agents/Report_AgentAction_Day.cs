@@ -31,6 +31,8 @@ namespace CloudSalesEntity
 
         public string CompanyName { get; set; }
 
+        public string ClientCode { get; set; }
+
         [Property("Lower")] 
         public string AgentID { get; set; }
 

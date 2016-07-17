@@ -13,7 +13,8 @@
 
 /*超过长度显示...*/
 .long { display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
+.ipt-date { background: rgba(0, 0, 0, 0) url("/modules/images/icondate.png") no-repeat scroll 4px 4px;
+    height: 25px; line-height: 25px;  text-indent: 20px;  width: 180px; }
 .blue { color:#4a98e7 !important;}
 .red { color:red !important;}
 .bRed { border-color:red !important; }

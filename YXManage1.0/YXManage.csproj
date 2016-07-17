@@ -527,6 +527,13 @@
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Detail.cshtml" />
     <None Include="Properties\PublishProfiles\yunxiaomanage.pubxml" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

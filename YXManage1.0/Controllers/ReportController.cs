@@ -21,11 +21,24 @@ namespace YXManage.Controllers
             return View();
         }
 
-        public JsonResult GetAgentActionReports(string keyword,string startDate,string endDate)
-        {
-            var list = AgentsBusiness.GetAgentActionReport(keyword, startDate, endDate);
-            JsonDictionary.Add("Items", list);
+        //public JsonResult GetAgentActionReports(string keyword,string startDate,string endDate)
+        //{
+        //    var list = AgentsBusiness.GetAgentActionReport(keyword, startDate, endDate);
+        //    JsonDictionary.Add("Items", list);
 
+        //    return new JsonResult()
+        //    {
+        //        Data = JsonDictionary,
+        //        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+        //    };
+        //}
+        public JsonResult GetAgentActionReports(string keyword, string startDate, string endDate, int type, int pageIndex, string orderBy = "SUM(a.CustomerCount) desc")
+        {
+            int totalCount = 0, pageCount = 0;
+            var list = AgentsBusiness.GetAgentActionReport(keyword, startDate, endDate, type, orderBy, PageSize, pageIndex, ref totalCount, ref pageCount);
+            JsonDictionary.Add("Items", list);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
             return new JsonResult()
             {
                 Data = JsonDictionary,

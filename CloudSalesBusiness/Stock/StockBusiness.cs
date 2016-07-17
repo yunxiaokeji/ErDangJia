@@ -72,6 +72,11 @@ namespace CloudSalesBusiness
                         {
                             StorageDetail detail = new StorageDetail();
                             detail.FillData(ddr);
+                            var depot = SystemBusiness.BaseBusiness.GetDepotByID(detail.DepotID, model.WareID, clientid);
+                            if (depot != null)
+                            {
+                                detail.DepotCode = depot.DepotCode;
+                            }
                             model.Details.Add(detail);
                         }
                     }
@@ -101,6 +106,11 @@ namespace CloudSalesBusiness
                 {
                     StorageDetail details = new StorageDetail();
                     details.FillData(item);
+                    var depot = SystemBusiness.BaseBusiness.GetDepotByID(details.DepotID, model.WareID, clientid);
+                    if (depot != null)
+                    {
+                        details.DepotCode = depot.DepotCode;
+                    }
                     model.Details.Add(details);
                 }
             }

@@ -22,6 +22,7 @@ namespace CloudSalesBusiness
         /// </summary>
         public static string FILEPATH = CloudSalesTool.AppSettings.Settings["UploadFilePath"] + "MemberLevel/" + DateTime.Now.ToString("yyyyMM") + "/";
         public static string TempPath = CloudSalesTool.AppSettings.Settings["UploadTempPath"];
+
         #region Cache
 
         private static Dictionary<string, List<CustomSourceEntity>> _source;
@@ -238,6 +239,7 @@ namespace CloudSalesBusiness
             return list;
 
         }
+
         public ClientMemberLevel GetClientMemberLevelByID(string levelid, string agentid, string clientid)
         {
             if (string.IsNullOrEmpty(levelid))
@@ -260,6 +262,7 @@ namespace CloudSalesBusiness
             }
             return model;
         }
+
         public ClientsIndustry GetClientIndustryByName(string name, string agentid,string clientid)
         {
             if (string.IsNullOrEmpty(name))
@@ -498,13 +501,20 @@ namespace CloudSalesBusiness
                 return WareHouses[clientID];
             }
 
-            DataTable dt = SystemDAL.BaseProvider.GetWareHouses(clientID);
+            DataSet ds = SystemDAL.BaseProvider.GetWareHouses(clientID);
 
             List<WareHouse> list = new List<WareHouse>();
-            foreach (DataRow dr in dt.Rows)
+            foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 WareHouse model = new WareHouse();
                 model.FillData(dr);
+                model.DepotSeats = new List<DepotSeat>();
+                foreach (DataRow ddr in ds.Tables[1].Select("WareID='" + model.WareID + "'"))
+                {
+                    DepotSeat depot = new DepotSeat();
+                    depot.FillData(ddr);
+                    model.DepotSeats.Add(depot);
+                }
                 list.Add(model);
             }
             WareHouses.Add(clientID, list);
@@ -528,13 +538,19 @@ namespace CloudSalesBusiness
                 return list.Where(m => m.WareID == wareid).FirstOrDefault();
             }
 
-            DataTable dt = SystemDAL.BaseProvider.GetWareByID(wareid);
+            DataSet ds = SystemDAL.BaseProvider.GetWareByID(wareid);
 
             WareHouse model = new WareHouse();
-            if (dt.Rows.Count > 0)
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                model.FillData(dt.Rows[0]);
+                model.FillData(ds.Tables[0].Rows[0]);
                 model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
+                foreach (DataRow ddr in ds.Tables[1].Rows)
+                {
+                    DepotSeat depot = new DepotSeat();
+                    depot.FillData(ddr);
+                    model.DepotSeats.Add(depot);
+                }
                 list.Add(model);
             }
             return model;
@@ -556,28 +572,14 @@ namespace CloudSalesBusiness
         
         public List<DepotSeat> GetDepotSeatsByWareID(string wareid, string clientid)
         {
-            DataTable dt = SystemDAL.BaseProvider.GetDepotSeatsByWareID(wareid);
-
-            List<DepotSeat> list = new List<DepotSeat>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                DepotSeat model = new DepotSeat();
-                model.FillData(dr);
-                list.Add(model);
-            }
-            return list;
+            var ware = GetWareByID(wareid, clientid);
+            return ware.DepotSeats;
         }
 
-        public DepotSeat GetDepotByID(string depotid)
+        public DepotSeat GetDepotByID(string depotid, string wareid, string clientid)
         {
-            DataTable dt = SystemDAL.BaseProvider.GetDepotByID(depotid);
-
-            DepotSeat model = new DepotSeat();
-            if (dt.Rows.Count > 0)
-            {
-                model.FillData(dt.Rows[0]);
-            }
-            return model;
+            var ware = GetWareByID(wareid, clientid);
+            return ware.DepotSeats.Where(m => m.DepotID.ToLower() == depotid.ToLower()).FirstOrDefault();
         }
 
         #endregion
@@ -664,6 +666,7 @@ namespace CloudSalesBusiness
             }
             return "";
         }
+        
         public string CreateClientMemberLevel(string levelid, string name, string agentid, string clientid, string userid, decimal discountfee, decimal integfeemore, int status = 1, string imgurl="",int origin=1)
         {
             imgurl = GetUploadImgurl(imgurl);
@@ -812,8 +815,9 @@ namespace CloudSalesBusiness
 
         public string AddWareHouse(string warecode, string name, string shortname, string citycode, int status, string depotcode, string depotname, string description, string operateid, string clientid)
         {
-            var id = Guid.NewGuid().ToString();
-            if (SystemDAL.BaseProvider.AddWareHouse(id, warecode, name, shortname, citycode, status, depotcode, depotname, description, operateid, clientid))
+            var id = Guid.NewGuid().ToString().ToLower();
+            var depotid = Guid.NewGuid().ToString().ToLower();
+            if (SystemDAL.BaseProvider.AddWareHouse(id, warecode, name, shortname, citycode, status, depotid, depotcode, depotname, description, operateid, clientid))
             {
                 if (!WareHouses.ContainsKey(clientid))
                 {
@@ -830,6 +834,7 @@ namespace CloudSalesBusiness
                     Description = description,
                     CreateUserID = operateid,
                     ClientID = clientid,
+                    DepotSeats = new List<DepotSeat>() { new DepotSeat() { DepotID = depotid, DepotCode = depotcode, Name = depotname, ClientID = clientid, Status = 1, WareID = id } },
                     CreateTime = DateTime.Now
                 };
                 WareHouses[clientid].Add(model);
@@ -846,6 +851,8 @@ namespace CloudSalesBusiness
             var id = Guid.NewGuid().ToString();
             if (SystemDAL.BaseProvider.AddDepotSeat(id, depotcode, wareid, name, status, description, operateid, clientid))
             {
+                var model = GetWareByID(wareid, clientid);
+                model.DepotSeats.Add(new DepotSeat() { DepotID = id, DepotCode = depotcode, Name = name, ClientID = clientid, Status = 1, WareID = wareid });
                 return id.ToString();
             }
             return string.Empty;
@@ -1173,20 +1180,40 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool UpdateDepotSeat(string id, string depotcode, string name, int status, string description, string operateid, string clientid)
+        public bool UpdateDepotSeat(string id, string wareid, string depotcode, string name, int status, string description, string operateid, string clientid)
         {
-            return SystemDAL.BaseProvider.UpdateDepotSeat(id, depotcode, name, status, description);
+            bool bl = SystemDAL.BaseProvider.UpdateDepotSeat(id, depotcode, name, status, description);
+            if (bl)
+            {
+                var model = GetDepotByID(id, wareid, clientid);
+                model.DepotCode = depotcode;
+                model.Name = name;
+                model.Status = status;
+                model.Description = description;
+            }
+            return bl;
         }
 
-        public bool UpdateDepotSeatStatus(string id, EnumStatus status, string operateid, string clientid)
+        public bool UpdateDepotSeatStatus(string id, string wareid, EnumStatus status, string operateid, string clientid)
         {
-            return CommonBusiness.Update("DepotSeat", "Status", (int)status, " DepotID='" + id + "'");
+            bool bl = CommonBusiness.Update("DepotSeat", "Status", (int)status, " DepotID='" + id + "'");
+            if (bl)
+            {
+                var model = GetDepotByID(id, wareid, clientid);
+                model.Status = (int)status;
+            }
+            return bl;
         }
 
-        public bool DeleteDepotSeat(string depotid, string userid, string clientid, out int result)
+        public bool DeleteDepotSeat(string depotid, string wareid,string userid, string clientid, out int result)
         {
             bool bl = SystemDAL.BaseProvider.DeleteDepotSeat(depotid, userid, clientid, out result);
-            
+            if (bl)
+            {
+                var ware = GetWareByID(wareid, clientid);
+                var depot = GetDepotByID(depotid, wareid, clientid);
+                ware.DepotSeats.Remove(depot);
+            }
             return bl;
         }
 

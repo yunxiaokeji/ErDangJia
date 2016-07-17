@@ -15,6 +15,7 @@
 *└──────────────────────────────────┘
 */
 using System;
+using System.Collections.Generic;
 namespace CloudSalesEntity
 {
 	/// <summary>
@@ -165,6 +166,8 @@ namespace CloudSalesEntity
         public string DepotCode { get; set; }
 
         public string DepotName { get; set; }
+
+        public List<DepotSeat> DepotSeats { get; set; }
 
         public CityEntity City { get; set; }
 

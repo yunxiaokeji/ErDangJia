@@ -21,7 +21,7 @@ define(function (require, exports, module) {
     //列表页初始化
     ObjectJS.init = function (wareid) {
         var _self = this;
-
+        _self.wareid = wareid;
         Params.wareid = wareid;
         EntityModel.WareID = wareid;
         _self.getList();
@@ -80,6 +80,7 @@ define(function (require, exports, module) {
             });
         });
     }
+
     //保存
     ObjectJS.savaEntity = function (entity) {
         var _self = this;
@@ -118,7 +119,10 @@ define(function (require, exports, module) {
         $("#deleteObject").click(function () {
             var _this = $(this);
             confirm("货位删除后不可恢复,确认删除吗？", function () {
-                Global.post("/System/DeleteDepotSeat", { id: _this.data("id") }, function (data) {
+                Global.post("/System/DeleteDepotSeat", {
+                    id: _this.data("id"),
+                    wareid: _self.wareid
+                }, function (data) {
                     if (data.status) {
                         _self.getList();
                     } else if (data.result == 2) {
@@ -133,12 +137,16 @@ define(function (require, exports, module) {
         //编辑
         $("#updateObject").click(function () {
             var _this = $(this);
-            Global.post("/System/GetDepotByID", { id: _this.data("id") }, function (data) {
+            Global.post("/System/GetDepotByID", {
+                id: _this.data("id"),
+                wareid: _self.wareid
+            }, function (data) {
                 EntityModel = data.Item;
                 _self.showCreate();
             });
         });
     }
+
     //获取列表
     ObjectJS.getList = function () {
         var _self = this;
@@ -192,12 +200,14 @@ define(function (require, exports, module) {
             });
         });
     }
+
     //更改状态
     ObjectJS.editStatus = function (obj, id, status, callback) {
         var _self = this;
         Global.post("/System/UpdateDepotSeatStatus", {
             id: id,
-            status: status ? 0 : 1
+            status: status ? 0 : 1,
+            wareid: _self.wareid
         }, function (data) {
             if (data.result == "10001") {
                 alert("您没有此操作权限，请联系管理员帮您添加权限！");

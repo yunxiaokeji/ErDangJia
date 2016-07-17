@@ -147,6 +147,12 @@ namespace CloudSalesEntity
 			get{return _clientid;}
 		}
 
+       
+
+		#endregion Model
+
+        public int Complete { get; set; }
+
         public int Status { get; set; }
 
         public string Remark { get; set; }
@@ -157,9 +163,8 @@ namespace CloudSalesEntity
 
         public string Imgs { get; set; }
 
-		#endregion Model
+        public string DepotCode { get; set; }
 
-        public int Complete { get; set; }
         /// <summary>
         /// 填充数据
         /// </summary>

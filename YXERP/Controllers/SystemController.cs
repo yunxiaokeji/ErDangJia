@@ -548,7 +548,7 @@ namespace YXERP.Controllers
             {
                 id = new SystemBusiness().AddDepotSeat(model.DepotCode, model.WareID, model.Name, model.Status.Value, model.Description, CurrentUser.UserID, CurrentUser.ClientID);
             }
-            else if (new SystemBusiness().UpdateDepotSeat(model.DepotID, model.DepotCode, model.Name, model.Status.Value, model.Description, CurrentUser.UserID, CurrentUser.ClientID))
+            else if (new SystemBusiness().UpdateDepotSeat(model.DepotID, model.WareID, model.DepotCode, model.Name, model.Status.Value, model.Description, CurrentUser.UserID, CurrentUser.ClientID))
             {
                 id = model.WareID;
             }
@@ -587,9 +587,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetDepotByID(string id = "")
+        public JsonResult GetDepotByID(string id, string wareid)
         {
-            var model = new SystemBusiness().GetDepotByID(id);
+            var model = new SystemBusiness().GetDepotByID(id, wareid, CurrentUser.ClientID);
             JsonDictionary.Add("Item", model);
 
             return new JsonResult
@@ -599,10 +599,10 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult DeleteDepotSeat(string id)
+        public JsonResult DeleteDepotSeat(string id, string wareid)
         {
             int result = 0;
-            bool bl = new SystemBusiness().DeleteDepotSeat(id, CurrentUser.UserID, CurrentUser.ClientID, out result);
+            bool bl = new SystemBusiness().DeleteDepotSeat(id, wareid, CurrentUser.UserID, CurrentUser.ClientID, out result);
             JsonDictionary.Add("status", bl);
             JsonDictionary.Add("result", result);
             return new JsonResult
@@ -612,9 +612,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult UpdateDepotSeatStatus(string id, int status)
+        public JsonResult UpdateDepotSeatStatus(string id, string wareid, int status)
         {
-            bool bl = new SystemBusiness().UpdateDepotSeatStatus(id, (CloudSalesEnum.EnumStatus)status, CurrentUser.UserID, CurrentUser.ClientID);
+            bool bl = new SystemBusiness().UpdateDepotSeatStatus(id, wareid, (CloudSalesEnum.EnumStatus)status, CurrentUser.UserID, CurrentUser.ClientID);
             JsonDictionary.Add("Status", bl);
             return new JsonResult
             {

@@ -162,18 +162,18 @@ namespace CloudSalesDAL
 
         }
 
-        public DataTable GetWareHouses(string clientID)
+        public DataSet GetWareHouses(string clientID)
         {
             SqlParameter[] paras = { new SqlParameter("@ClientID", clientID) };
-            DataTable dt = GetDataTable("select * from WareHouse where Status<>9 and ClientID=@ClientID", paras, CommandType.Text);
-            return dt;
+            DataSet ds = GetDataSet("select * from WareHouse where Status<>9 and ClientID=@ClientID ; select * from DepotSeat where Status<>9 and ClientID=@ClientID", paras, CommandType.Text);
+            return ds;
         }
 
-        public DataTable GetWareByID(string wareid)
+        public DataSet GetWareByID(string wareid)
         {
             SqlParameter[] paras = { new SqlParameter("@WareID", wareid) };
-            DataTable dt = GetDataTable("select * from WareHouse where WareID=@WareID", paras, CommandType.Text);
-            return dt;
+            DataSet ds = GetDataSet("select * from WareHouse where WareID=@WareID; select * from DepotSeat where Status<>9 and WareID=@WareID", paras, CommandType.Text);
+            return ds;
         }
 
         public DataSet GetDepotSeats(string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID, string wareid = "")
@@ -186,7 +186,6 @@ namespace CloudSalesDAL
                                        new SqlParameter("@pageIndex",pageIndex),
                                        new SqlParameter("@ClientID",clientID),
                                        new SqlParameter("@WareID",wareid)
-                                       
                                    };
             paras[0].Value = totalCount;
             paras[1].Value = pageCount;
@@ -296,7 +295,7 @@ namespace CloudSalesDAL
             return ExecuteNonQuery(sqlText, paras, CommandType.Text) > 0;
         }
 
-        public bool AddWareHouse(string id, string warecode, string name, string shortname, string citycode, int status, string depotcode, string depotname, string description, string operateid, string clientid)
+        public bool AddWareHouse(string id, string warecode, string name, string shortname, string citycode, int status, string depotid, string depotcode, string depotname, string description, string operateid, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@WareID" , id),
@@ -305,6 +304,7 @@ namespace CloudSalesDAL
                                      new SqlParameter("@ShortName" , shortname),
                                      new SqlParameter("@CityCode" , citycode),
                                      new SqlParameter("@Status" , status),
+                                     new SqlParameter("@DepotID" , depotid),
                                      new SqlParameter("@DepotCode" , depotcode),
                                      new SqlParameter("@DepotName" , depotname),
                                      new SqlParameter("@Description" , description),

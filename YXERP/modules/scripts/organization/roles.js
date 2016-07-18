@@ -209,14 +209,15 @@
             innerHtml.find("input").change(function () {
                 var _this = $(this);
                 if (_this.prop("checked")) {
-                    _this.parent().addClass("checked").removeClass("check");
+                    _this.parent().addClass("checked").removeClass("check").removeClass("checknotall");
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
-                    $("#" + _this.data("id")).find("label").addClass("checked").removeClass("check");
+                    $("#" + _this.data("id")).find("label").addClass("checked").removeClass("check").removeClass("checknotall");
                 } else {
-                    _this.parent().addClass("check").removeClass("checked");
+                    _this.parent().addClass("check").removeClass("checked").removeClass("checknotall");
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
-                    $("#" + _this.data("id")).find("label").addClass("check").removeClass("checked");
+                    $("#" + _this.data("id")).find("label").addClass("check").removeClass("checked").removeClass("checknotall");
                 }
+                _self.checkRefresh(_this.parent().data("pcode"));
             });
 
             //默认选中拥有权限
@@ -244,10 +245,13 @@
                     } else { //隐藏子下属
                         _this.attr("data-state", "close");
                         _this.removeClass("icoclose").addClass("icoopen");
-
                         $("#" + _this.attr("data-id")).hide();
                     }
                 });
+                if (_self.getClass(_this.data("id")) != "") {
+                    $('label[data-cid="' + _this.data("id") + '"]').removeClass("check").removeClass("checked").removeClass("checknotall").addClass(ObjectJS.getClass(_this.data("id")));
+                    _self.checkRefresh(_this.data("id"));
+                }
             });
         });
     }
@@ -268,7 +272,6 @@
                 _leftBg.append("<span class='line left'></span>");
             }
             _item.append(_leftBg);
-
             //是否最后一位
             if (i == cacheMenu[menuCode].length - 1) {
                 _item.append("<span class='lastline left'></span>");
@@ -292,16 +295,15 @@
                 }
             }
 
-            _item.append("<label class='check left'><input type='checkbox' class='left'  value='" + cacheMenu[menuCode][i].MenuCode + "' data-id='" + cacheMenu[menuCode][i].MenuCode + "' /><span>" + cacheMenu[menuCode][i].Name + "</span></label>");
+            _item.append("<label class='check left'  data-pcode='" + cacheMenu[menuCode][i].PCode + "' data-cid='" + cacheMenu[menuCode][i].MenuCode + "'><input type='checkbox' class='left'  value='" + cacheMenu[menuCode][i].MenuCode + "' data-id='" + cacheMenu[menuCode][i].MenuCode + "' /><span>" + cacheMenu[menuCode][i].Name + "</span></label>");
 
             _div.append(_item);
 
             _item.find("input").change(function () {
                 var _this = $(this);
                 if (_this.prop("checked")) {
-                    _this.parent().addClass("checked").removeClass("check");
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
-                    $("#" + _this.data("id")).find("label").addClass("checked").removeClass("check");
+                    $("#" + _this.data("id")).find("label").addClass("checked").removeClass("check").removeClass("checknotall");
                     _this.parents().each(function () {
                         var _parent = $(this);
                         if (_parent.hasClass("childbox")) {
@@ -309,11 +311,13 @@
                             _parent.prev().find("label").addClass("checked").removeClass("check");
                         }
                     });
+                    _this.parent().addClass("checked").removeClass("check").removeClass("checknotall");
                 } else {
-                    _this.parent().addClass("check").removeClass("checked");
+                    _this.parent().addClass("check").removeClass("checked").removeClass("checknotall");
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
-                    $("#" + _this.data("id")).find("label").addClass("check").removeClass("checked");
+                    $("#" + _this.data("id")).find("label").addClass("check").removeClass("checked").removeClass("checknotall");
                 }
+                _self.checkRefresh(_this.parent().data("pcode"));
             });
             //默认加载下级
             _item.find(".openchild").each(function () {
@@ -330,7 +334,6 @@
                     } else { //隐藏子下属
                         _this.attr("data-state", "close");
                         _this.removeClass("icoclose").addClass("icoopen");
-
                         $("#" + _this.attr("data-id")).hide();
                     }
                 });
@@ -349,6 +352,33 @@
         });
         return _div;
     }
-
+    ObjectJS.checkRefresh = function (pcode) {
+        if ($("label[data-pcode='" + pcode + "']").length > 0) {
+            $("label[data-pcode='" + pcode + "']").each(function (i, v) {
+                ObjectJS.checkRefresh($(v).data("cid"));
+                var classname = ObjectJS.getClass($(v).data("cid"));
+                if (classname != "") {
+                    $(v).removeClass("check").removeClass("checked").removeClass("checknotall").addClass(classname);
+                }
+            });
+            var v2 = $("label[data-cid='" + pcode + "']")[0];
+            var classname = ObjectJS.getClass($(v2).data("cid"));
+            $(v2).removeClass("check").removeClass("checked").removeClass("checknotall").addClass(classname);
+        } else {
+            return false;
+        }
+    }
+    ObjectJS.getClass = function (divid) {
+        if ($("label[data-pcode='" + divid + "']").length == 0) {
+            return "";
+        }
+        if ($("label[data-pcode='" + divid + "']").hasClass("check") && !$("label[data-pcode='" + divid + "']").hasClass("checked") && !$("label[data-pcode='" + divid + "']").hasClass("checknotall")) {
+            return "check";
+        } else if ($("label[data-pcode='" + divid + "']").hasClass("check") || $("label[data-pcode='" + divid + "']").hasClass("checknotall")) {
+            return "checknotall";
+        } else {
+            return "checked";
+        }
+    }
     module.exports = ObjectJS;
 });

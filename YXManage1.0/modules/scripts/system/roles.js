@@ -196,7 +196,6 @@
         }
 
         doT.exec("template/System/permissions.html", function (template) {
-
             var innerHtml = template(permissions);
             innerHtml = $(innerHtml);
 
@@ -244,7 +243,7 @@
                         $("#" + _this.attr("data-id")).hide();
                     }
                 });
-                if (ObjectJS.getClass(_this.data("id")) != "") {
+                if (_self.getClass(_this.data("id")) != "") {
                     $('label[data-cid="' + _this.data("id") + '"]').removeClass("check").removeClass("checked").removeClass("checknotall").addClass(ObjectJS.getClass(_this.data("id")));
                     _self.checkRefresh(_this.data("id"));
                 }
@@ -268,15 +267,13 @@
             } else {
                 _leftBg.append("<span class='line left'></span>");
             }
-            _item.append(_leftBg);
-            var haschildren = false;
+            _item.append(_leftBg); 
             //是否最后一位
             if (i == cacheMenu[menuCode].length - 1) {
                 _item.append("<span class='lastline left'></span>");
 
                 //加载显示下属图标和缓存数据
-                if (cacheMenu[menuCode][i].ChildMenus && cacheMenu[menuCode][i].ChildMenus.length > 0) {
-                    haschildren = true;
+                if (cacheMenu[menuCode][i].ChildMenus && cacheMenu[menuCode][i].ChildMenus.length > 0) { 
                     _item.append("<span data-id='" + cacheMenu[menuCode][i].MenuCode + "' data-eq='last' data-state='close' class='icoopen openchild left'></span>");
                     if (!cacheMenu[cacheMenu[menuCode][i].MenuCode]) {
                         cacheMenu[cacheMenu[menuCode][i].MenuCode] = cacheMenu[menuCode][i].ChildMenus;
@@ -286,8 +283,7 @@
                 _item.append("<span class='leftline left'></span>");
 
                 //加载显示下属图标和缓存数据
-                if (cacheMenu[menuCode][i].ChildMenus && cacheMenu[menuCode][i].ChildMenus.length > 0) {
-                    haschildren = true;
+                if (cacheMenu[menuCode][i].ChildMenus && cacheMenu[menuCode][i].ChildMenus.length > 0) { 
                     _item.append("<span data-id='" + cacheMenu[menuCode][i].MenuCode + "' data-eq='' data-state='close' class='icoopen openchild left'></span>");
                     if (!cacheMenu[cacheMenu[menuCode][i].MenuCode]) {
                         cacheMenu[cacheMenu[menuCode][i].MenuCode] = cacheMenu[menuCode][i].ChildMenus;

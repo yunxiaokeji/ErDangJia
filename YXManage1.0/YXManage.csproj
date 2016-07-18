@@ -132,6 +132,7 @@
     <Content Include="modules\images\default.png" />
     <Content Include="modules\images\defaultavatar.png" />
     <Content Include="modules\images\ico-checked.png" />
+    <Content Include="modules\images\ico-checknotall.png" />
     <Content Include="modules\images\ico-del-deep.png" />
     <Content Include="modules\images\ico-del-light.png" />
     <Content Include="modules\images\ico-dropdown-white.png" />
@@ -144,6 +145,7 @@
     <Content Include="modules\images\ico-logout.png" />
     <Content Include="modules\images\ico-name.png" />
     <Content Include="modules\images\ico-pwd.png" />
+    <Content Include="modules\images\icondate.png" />
     <Content Include="modules\images\ico_search.png" />
     <Content Include="modules\images\loginMainBackground.jpg" />
     <Content Include="modules\images\logo.png" />

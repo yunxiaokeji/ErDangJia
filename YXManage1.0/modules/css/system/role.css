@@ -6,6 +6,7 @@
 .menulist .menuitem label:hover{ border:solid 1px #4a98e7; }
 .menulist .menuitem .check { background:url('/modules/images/ico-check.png') no-repeat 4px 4px; border:solid 1px #ccc; }
 .menulist .menuitem .checked { background:url('/modules/images/ico-checked.png') no-repeat 4px 4px; border:solid 1px #4a98e7; }
+.menulist .menuitem .checknotall { background:url('/modules/images/ico-checknotall.png') no-repeat 4px 4px; border:solid 1px #4a98e7; }
 
 .menulist .menuitem input{ margin-top:8px; opacity:0;}
 .menulist .menuitem label span{ margin-left:10px; color:#333; font-size:14px;}

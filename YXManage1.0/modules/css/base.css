@@ -206,7 +206,8 @@ select option{ padding:2px; }
           display:inline-block; cursor:pointer;}
 .ico-checked{ background:url(../images/ico-checked.png) no-repeat; height:20px; min-width:20px; line-height:20px;  text-indent:20px;
           display:inline-block; cursor:pointer;}
-
+.ico-checknotall{ background:url(../images/ico-checknotall.png) no-repeat; height:20px; min-width:20px; line-height:20px;  text-indent:20px;
+          display:inline-block; cursor:pointer;}
 
 /*alert 弹出层样式*/
 

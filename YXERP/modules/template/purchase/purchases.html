@@ -4,9 +4,10 @@
 %}
 <tr class="item-header">
     <td class="tLeft bolder">
-        采购单号：{%=item.DocCode%}
-    </td>
-    </td>
+        <span class="hand left mRight10" ><span class="checkbox iconfont " data-code="{%=item.DocCode%}" data-id="{%=item.DocID%}" style="height: 14px; width: 14px;"></span></span> 
+        <span class="left">采购单号：{%=item.DocCode%}</span>
+        <span class="clear"></span>
+    </td> 
     <td class="tLeft bolder">
         供应商：{%=item.ProviderName||"--"%}
     </td>

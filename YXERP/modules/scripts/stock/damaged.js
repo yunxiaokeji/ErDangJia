@@ -120,22 +120,24 @@ define(function (require, exports, module) {
             Params.doctype = 3;
             Dialog.exportModel("/Purchase/ExportFromPurchases", Params);
         });
-
+        //导出后重新绑定
         _self.checkClick();
+        _self.dropdownul();
+
         $("#checkAll").click(function () {
             var _this = $(this).find(".checkbox");
             _this.unbind("click");
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover");
-                $(".table-list .checkbox").addClass("hover");
+                $(".table-items-detail .checkbox").addClass("hover");
             } else {
                 _this.removeClass("hover");
-                $(".table-list .checkbox").removeClass("hover");
+                $(".table-items-detail .checkbox").removeClass("hover");
             }
         });
         //批量打印
         $("#printOrderOut").click(function () {
-            var checks = $(".table-list .checkbox.hover");
+            var checks = $(".table-items-detail .checkbox.hover");
             if (checks.length == 1) {
                 var headstr = "<html><head><title></title></head><body>";
                 var footstr = "</body>";
@@ -157,9 +159,9 @@ define(function (require, exports, module) {
                 return false;
             } else {
                 if (checks.length == 0) {
-                    alert("您尚未选择要打印的出库单");
+                    alert("您尚未选择要打印的库存报损单");
                 } else {
-                    alert("目前只支持单条打印的出库单");
+                    alert("目前只支持单条打印的库存报损单");
                 }
             }
         });
@@ -184,14 +186,7 @@ define(function (require, exports, module) {
                     $(".table-header").after(innerText);
                     _self.checkClick();
                     //下拉事件
-                    $(".dropdown").click(function () {
-                        var _this = $(this);
-                        var position = _this.find(".ico-dropdown").position();
-                        $("#auditDropdown").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
-                            $(this).hide();
-                        });
-                        $("#auditDropdown li").data("id", _this.data("id")).data("url", "/Stock/DamagedDetail/" + _this.data("id"));
-                    });
+                    _self.dropdownul();
                 });
             }
             else {
@@ -275,6 +270,16 @@ define(function (require, exports, module) {
         });
         $("#checkAll").find(".checkbox").unbind("click");
     }
-
+    //绑定下拉框点击事件
+    ObjectJS.dropdownul = function () {
+        $(".dropdown").click(function () {
+            var _this = $(this);
+            var position = _this.find(".ico-dropdown").position();
+            $("#auditDropdown").css({ "top": position.top + 15, "left": position.left - 40 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+            $("#auditDropdown li").data("id", _this.data("id")).data("url", "/Stock/DamagedDetail/" + _this.data("id"));
+        });
+    }
     module.exports = ObjectJS;
 })

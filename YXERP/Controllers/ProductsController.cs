@@ -857,6 +857,7 @@ namespace YXERP.Controllers
                     int k = 1;
                     var excelWriter = new ExcelWriter();
                     List<Products> list = new List<Products>();
+                    var providList = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
                     foreach (DataRow dr in dt.Rows)
                     {
                         try
@@ -868,6 +869,15 @@ namespace YXERP.Controllers
                                 product.CreateUserID = CurrentUser.UserID;
                                 product.ClientID = CurrentUser.ClientID;
                                 product.BigUnitID = "";
+                                if (providList.Any())
+                                {
+                                    product.ProviderID = providList[0].ProviderID;
+                                    var tempprovd=providList.Where(x => x.Name == product.ProviderName).FirstOrDefault();
+                                    if (tempprovd != null)
+                                    {
+                                        product.ProviderID = tempprovd.ProviderID;
+                                    } 
+                                }
                                 product.ProductDetails = new List<ProductDetail>();
                                 DataRow[] details = dt.Select("产品编码='" + product.ProductCode + "'");
                                 foreach (DataRow drr in details)

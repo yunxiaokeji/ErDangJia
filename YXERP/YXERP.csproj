@@ -1212,7 +1212,9 @@
     <Folder Include="modules\plug\umeditor\net\Bin\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Login.cshtml" />

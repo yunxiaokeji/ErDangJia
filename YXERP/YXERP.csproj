@@ -196,6 +196,7 @@
     <Content Include="modules\images\ico-alipay.png" />
     <Content Include="modules\images\ico-category-close.png" />
     <Content Include="modules\images\ico-category.png" />
+    <Content Include="modules\images\ico-checknotall.png" />
     <Content Include="modules\images\ico-company.png" />
     <Content Include="modules\images\ico-contact.png" />
     <Content Include="modules\images\ico-feedback.png" />

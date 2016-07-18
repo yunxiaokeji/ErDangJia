@@ -571,7 +571,7 @@
             ObjectJS.changeInput(3, $(this));
         }); 
 
-        $("img[name^='MemberImg']").click(function () { 
+        $("img[name^='MemberImg']").unbind('click').click(function () { 
             var _this = $(this); 
             var elem = "#SpanImg" + _this[0].id.replace('MemberImg', '');
             $(elem).html(''); 

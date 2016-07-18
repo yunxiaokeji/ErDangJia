@@ -30,6 +30,7 @@ define(function (require, exports, module) {
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         _self.bindEvent(providers);
         _self.getList();
+        _self.checkClick();
     }
     //绑定事件
     ObjectJS.bindEvent = function (providers) {
@@ -37,7 +38,7 @@ define(function (require, exports, module) {
 
         $(document).click(function (e) {
             //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")
                 && !$(e.target).parents().hasClass("bghulan") && !$(e.target).hasClass("bghulan")) {
                 $(".dropdown-ul").hide();
             }
@@ -131,18 +132,20 @@ define(function (require, exports, module) {
                 });
             });
         });
+
         $("#dropdown").click(function () {
             var position = $("#dropdown").position();
             $("#exceldropdown").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
                 $(this).hide();
             });
         });
+
         $('#exportPurchases').click(function () {
             Params.filleName = '采购单导出';
             Params.doctype = 1;
             Dialog.exportModel("/Purchase/ExportFromPurchases", Params);
         });
-        _self.checkClick();
+        
         $("#checkAll").click(function () { 
             var _this = $(this).find(".checkbox");
             _this.unbind("click");
@@ -154,6 +157,7 @@ define(function (require, exports, module) {
                 $(".table-list .checkbox").removeClass("hover");
             }
         });
+
         //批量打印
         $("#printOrderOut").click(function () {
             var checks = $(".table-list .checkbox.hover");
@@ -450,7 +454,7 @@ define(function (require, exports, module) {
     ObjectJS.getDocList = function () {
         var _self = this;
         $("#navStorageIn").empty();
-        Global.post( "/Purchase/GetPurchasesDetails", {
+        Global.post("/Purchase/GetPurchasesDetails", {
             docid: _self.docid
         }, function (data) {
             doT.exec("template/purchase/purchases-details.html", function (templateFun) {
@@ -458,20 +462,20 @@ define(function (require, exports, module) {
                 innerText = $(innerText);
                 $("#navStorageIn").append(innerText);
             });
+        });
+    }
+
     ObjectJS.checkClick = function () {
         $(".checkbox").click(function () {
-            var _this = $(this);  
+            var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover");
             } else {
                 _this.removeClass("hover");
-            } 
+            }
             return false;
         });
         $("#checkAll").find(".checkbox").unbind("click");
-    }
-        });
-        
     }
 
     module.exports = ObjectJS;

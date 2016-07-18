@@ -7,20 +7,19 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/purchase/purchases"], function (obj) {
-            obj.init('@ViewBag.Type', '@Html.ToJSONString((List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)');@**@
+            obj.init('@ViewBag.Type', '@Html.ToJSONString((List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)');
         });
     </script>
 }
 <div class="header-box">
     <span class="header-title left">采购管理</span>
     <div id="btnSubmit" data-id="103029001" data-name="新建采购" data-url="/Purchase/ConfirmPurchase" class="btn mLeft10 btn-open-window right">提交采购单(0)</div>
-    <div id="btnCreate" data-id="103029001" data-name="新建采购" data-url="/Purchase/ChooseProducts" class="btn-add btn-open-window right">选择采购产品</div>
-        <span id="btnCreate" class="pLeft2 btn-add left" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >新建采购</span>
+    <div class=" right">
+        <span id="btnCreate" class="pLeft2 btn-add left btn-add btn-open-window"  data-id="103029001" data-name="新建采购" data-url="/Purchase/ChooseProducts" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >选择采购产品</span>
         <div id="dropdown" class="bghulan rightraduis3 right " style="height:28px;width:20px;">
             <span class="mTop8 mRight5 ico-dropdown-white right"></span>
         </div>
     </div>
-
 </div>
 <div class="search-header">
     <div id="ddlProviders" class="left">
@@ -39,7 +38,6 @@
             <li data-id="0" class="">待审核</li>
             <li data-id="1" class="">部分入库</li>
             <li data-id="2" class="">已入库</li>
-            @*<li data-id="4" class="">已作废</li>*@
         </ul>
     </div>
    <div class="search-item">
@@ -68,6 +66,7 @@
         </tr>
     </table> 
     <div class="mTop20">
+        <ul>
             <li class="hand left width80 mLeft5" id="checkAll">
                 <span class="checkbox iconfont mTop5 mRight5"></span>全选
             </li>

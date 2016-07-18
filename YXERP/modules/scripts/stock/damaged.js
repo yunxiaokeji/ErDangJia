@@ -32,7 +32,7 @@ define(function (require, exports, module) {
 
         $(document).click(function (e) {
             //隐藏下拉
-            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+            if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")
                 && !$(e.target).parents().hasClass("bghulan") && !$(e.target).hasClass("bghulan")) {
                 $(".dropdown-ul").hide();
             }

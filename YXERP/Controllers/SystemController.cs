@@ -857,13 +857,20 @@ namespace YXERP.Controllers
                     x.LevelID = temp.LevelID;
                 } 
             });
-            var delList = tempList.Where(x => !modelList.Exists(y => y.Origin == x.Origin)).ToList();
+            var delList = tempList.Where(x => !modelList.Exists(y => y.Origin == x.Origin)).OrderByDescending(x => x.Origin).ToList();
             var addList = modelList.Where(x => string.IsNullOrEmpty(x.LevelID)).ToList();
             var updList = modelList.Where(x => !string.IsNullOrEmpty(x.LevelID)).ToList();
             string result = "";
             if (delList.Any())
             {
-                delList.ForEach(x => { SystemBusiness.BaseBusiness.DeleteClientMemberLevel(CurrentUser.ClientID, CurrentUser.AgentID, x.LevelID); });
+                delList.ForEach(x =>
+                {
+                    string tempresult= SystemBusiness.BaseBusiness.DeleteClientMemberLevel(CurrentUser.ClientID, CurrentUser.AgentID, x.LevelID);
+                    if (result.IndexOf(tempresult) == -1)
+                    {
+                        result += tempresult + ",";
+                    }
+                });
             }
             updList.ForEach(x =>
             {

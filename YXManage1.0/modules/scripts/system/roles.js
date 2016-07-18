@@ -203,16 +203,17 @@
             $("#rolePermission").append(innerHtml);
 
             innerHtml.find("input").change(function () {
-                var _this = $(this);
-                if (_this.prop("checked")) {
-                    _this.parent().addClass("checked").removeClass("check");
+                var _this = $(this); 
+                if (_this.prop("checked") ) {
+                    _this.parent().addClass("checked").removeClass("check").removeClass("checknotall");
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
-                    $("#" + _this.data("id")).find("label").addClass("checked").removeClass("check");
+                    $("#" + _this.data("id")).find("label").addClass("checked").removeClass("check").removeClass("checknotall");
                 } else {
-                    _this.parent().addClass("check").removeClass("checked");
+                    _this.parent().addClass("check").removeClass("checked").removeClass("checknotall");
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
-                    $("#" + _this.data("id")).find("label").addClass("check").removeClass("checked");
+                    $("#" + _this.data("id")).find("label").addClass("check").removeClass("checked").removeClass("checknotall");
                 }
+                _self.checkRefresh(_this.parent().data("pcode"));
             });
 
             //默认选中拥有权限
@@ -240,14 +241,12 @@
                     } else { //隐藏子下属
                         _this.attr("data-state", "close");
                         _this.removeClass("icoclose").addClass("icoopen");
-
                         $("#" + _this.attr("data-id")).hide();
                     }
                 });
                 if (ObjectJS.getClass(_this.data("id")) != "") {
                     $('label[data-cid="' + _this.data("id") + '"]').removeClass("check").removeClass("checked").removeClass("checknotall").addClass(ObjectJS.getClass(_this.data("id")));
                     _self.checkRefresh(_this.data("id"));
-
                 }
             });
 
@@ -301,10 +300,8 @@
             _div.append(_item);
 
             _item.find("input").change(function () {
-                var _this = $(this);
-                console.log(_this.prop("checked"));
-                if (_this.prop("checked") &&( _this.parent().hasClass("check") || _this.parent().hasClass("checknotall"))) {
-                    
+                var _this = $(this); 
+                if (_this.prop("checked") ) {
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
                     $("#" + _this.data("id")).find("label").addClass("checked").removeClass("check").removeClass("checknotall");
                     _this.parents().each(function () {
@@ -314,18 +311,13 @@
                             _parent.prev().find("label").addClass("checked").removeClass("check");
                         }
                     }); 
-                    _this.parent().addClass("checked").removeClass("check").removeClass("checknotall");
-                    _self.checkRefresh(_this.data("id"));
+                    _this.parent().addClass("checked").removeClass("check").removeClass("checknotall"); 
                 }  else {
                     _this.parent().addClass("check").removeClass("checked").removeClass("checknotall");
                     $("#" + _this.data("id")).find("input").prop("checked", _this.prop("checked"));
                     $("#" + _this.data("id")).find("label").addClass("check").removeClass("checked").removeClass("checknotall");
-
-                    _self.checkRefresh(_this.data("id"));
-                    //if(ObjectJS.getClass(_this.data("id"))!=""){
-                    //    $('label[data-cid="' + _this.data("id") + '"]').removeClass("check").removeClass("checked").removeClass("checknotall").addClass(ObjectJS.getClass(_this.data("id")));
-                    //}
                 }
+                _self.checkRefresh(_this.parent().data("pcode"));
             });
             //默认加载下级
             _item.find(".openchild").each(function () {
@@ -342,7 +334,6 @@
                     } else { //隐藏子下属
                         _this.attr("data-state", "close");
                         _this.removeClass("icoclose").addClass("icoopen");
-
                         $("#" + _this.attr("data-id")).hide();
                     }
                 });               
@@ -359,43 +350,29 @@
                 }
             }
         }); 
-        _div.find(".check").each(function (i, v) {
-            var _this = $(v);
-            var templist = _div.find("[data-cid = '" + _this.attr("data-pcode") + "']"); 
-            if (templist.length > 0) {
-                $(_div.find("[data-cid = '" + _this.attr("data-pcode") + "']")[0]).removeClass("check").removeClass("check").addClass("checknotall");
-            }
-        }); 
-        _div.find(".checknotall").each(function (i,v) {
-            var _this = $(v);
-            var templist = _div.find("[data-cid = '" + _this.attr("data-pcode") + "']");
-            if (templist.length > 0) {
-                $(_div.find("[data-cid = '" + _this.attr("data-pcode") + "']")[0]).removeClass("checked").addClass("checknotall");
-            }
-        });
         return _div;
-    }
-    ObjectJS.checkRefresh = function (pcode) {
+    } 
+    ObjectJS.checkRefresh = function (pcode) { 
         if ($("label[data-pcode='" + pcode + "']").length > 0) {
-            $("label[data-cid='" + pcode + "']").each(function(i, v) {
+            $("label[data-pcode='" + pcode + "']").each(function (i, v) {
+                ObjectJS.checkRefresh($(v).data("cid"));
                 var classname = ObjectJS.getClass($(v).data("cid"));
-                console.log(classname);
                 if (classname != "") {
                     $(v).removeClass("check").removeClass("checked").removeClass("checknotall").addClass(classname);
-                   //ObjectJS.checkchildRefresh($(v).data("cid"));
                 }
             });
+            var v2 = $("label[data-cid='" + pcode + "']")[0];
+            var classname = ObjectJS.getClass($(v2).data("cid"));
+            $(v2).removeClass("check").removeClass("checked").removeClass("checknotall").addClass(classname);
         } else {
             return false;
         }
-    } 
-     
-    ObjectJS.getClass = function (divid) {
-        console.log($("label[data-pcode='" + divid + "']").hasClass("check") );
+    }
+    ObjectJS.getClass = function (divid) { 
         if ($("label[data-pcode='" + divid + "']").length == 0) {
             return "";
         }
-        if ($("label[data-pcode='" + divid + "']").hasClass("check") && !$("label[data-pcode='" + divid + "']").hasClass("checknotall")) {
+        if ($("label[data-pcode='" + divid + "']").hasClass("check") && !$("label[data-pcode='" + divid + "']").hasClass("checked") && !$("label[data-pcode='" + divid + "']").hasClass("checknotall")) {
             return "check";
         } else if ($("label[data-pcode='" + divid + "']").hasClass("check") || $("label[data-pcode='" + divid + "']").hasClass("checknotall")) {
             return "checknotall";

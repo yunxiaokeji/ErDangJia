@@ -3,6 +3,7 @@ define(function (require, exports, module) {
     var Global = require("global"),
         Easydialog = require("easydialog"),
         doT = require("dot"),
+        Dialog = require("dialog"),
         moment = require("moment");
     require("daterangepicker");
     require("pager");
@@ -32,6 +33,7 @@ define(function (require, exports, module) {
         $(document).click(function (e) {
             //隐藏下拉
             if (!$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
+                && !$(e.target).parents().hasClass("bghulan") && !$(e.target).hasClass("bghulan")) {
                 $(".dropdown-ul").hide();
             }
         });
@@ -73,6 +75,7 @@ define(function (require, exports, module) {
             }
         });
 
+        $(".searth-module").html('');
         require.async("search", function () {
             $(".searth-module").searchKeys(function (keyWords) {
                 Params.keyWords = keyWords;
@@ -106,7 +109,60 @@ define(function (require, exports, module) {
                 });
             });
         });
+        $("#dropdown").click(function () {
+            var position = $("#dropdown").position();
+            $("#exceldropdown").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
+                $(this).hide();
+            });
+        });
+        $('#exportPurchases').click(function () {
+            Params.filleName = '损耗单导出';
+            Params.doctype = 3;
+            Dialog.exportModel("/Purchase/ExportFromPurchases", Params);
+        });
 
+        _self.checkClick();
+        $("#checkAll").click(function () {
+            var _this = $(this).find(".checkbox");
+            _this.unbind("click");
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+                $(".table-list .checkbox").addClass("hover");
+            } else {
+                _this.removeClass("hover");
+                $(".table-list .checkbox").removeClass("hover");
+            }
+        });
+        //批量打印
+        $("#printOrderOut").click(function () {
+            var checks = $(".table-list .checkbox.hover");
+            if (checks.length == 1) {
+                var headstr = "<html><head><title></title></head><body>";
+                var footstr = "</body>";
+                var newstr = "暂无数据,请刷新页面重试";
+                $.ajax({
+                    url: '/Stock/Detail/' + $(checks[0]).data('id'),
+                    type: "GET",
+                    async: false,
+                    success: function (data) {
+                        data = data.replace('content-body', 'content-body pBottom1');
+                        newstr = data;
+                    }
+                });
+                var oldstr = document.body.innerHTML;
+                document.body.innerHTML = headstr + newstr + footstr;
+                window.print();
+                document.body.innerHTML = oldstr;
+                ObjectJS.bindEvent();
+                return false;
+            } else {
+                if (checks.length == 0) {
+                    alert("您尚未选择要打印的出库单");
+                } else {
+                    alert("目前只支持单条打印的出库单");
+                }
+            }
+        });
     }
     //获取单据列表
     ObjectJS.getList = function () {
@@ -126,7 +182,7 @@ define(function (require, exports, module) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
                     $(".table-header").after(innerText);
-
+                    _self.checkClick();
                     //下拉事件
                     $(".dropdown").click(function () {
                         var _this = $(this);
@@ -205,6 +261,19 @@ define(function (require, exports, module) {
                 });
             });
         });
+    }
+
+    ObjectJS.checkClick = function () {
+        $(".checkbox").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.addClass("hover");
+            } else {
+                _this.removeClass("hover");
+            }
+            return false;
+        });
+        $("#checkAll").find(".checkbox").unbind("click");
     }
 
     module.exports = ObjectJS;

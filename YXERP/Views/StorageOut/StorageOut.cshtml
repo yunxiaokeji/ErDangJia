@@ -12,14 +12,18 @@
         });
     </script>
 }
+
+<div id="printData" class="hide"></div>
+
+<div id="notprintData" >
 <div class="header-box">
-    <span class="header-title left">订单出库</span>
+    <span class="header-title left">订单出库</span> 
 </div>
 <div class="search-header">
     <div class="left" title="订货时间">
         <input type="text" id="iptCreateTime" placeholder="订货时间" class="ipt-date"  />
     </div>
-    <div class="right searth-module" data-text="订单编号/收货人/联系电话..." data-width="200"> </div> 
+    <div class="right searth-module" data-text="订单编号/收货人/联系电话..." data-width="200"></div> 
 </div>
 <div class="search-body">
      <div class="search-item">
@@ -42,6 +46,7 @@
 <div class="content-body mTop20">
     <table class="table-list">
         <tr class="tr-header">
+            <td class="width30">全选</td>
             <td class="tLeft">订单编号</td>
             <td class="width100">总金额</td>
             <td class="tLeft">地址</td>
@@ -55,6 +60,20 @@
             <td class="width50">操作</td>
         </tr>
     </table>
-    <div id="pager" class="mTop20"></div>
-</div>
 
+    <div class="mTop20">
+        <ul class="left"> 
+            <li class="hand left width80 mLeft5" id="checkAll">
+                <span class="checkbox iconfont mTop5 mRight5"></span>全选
+            </li>
+            <li class="left">
+                <a href="javascript:void(0);" class="btn" id="printOrderOut" >
+                     <i class="left iconfont mRight5" style="margin-left: -5px;color:aliceblue">&#xe658;</i>打 印
+                </a>
+            </li>
+        </ul>
+        <div id="pager"></div>
+        <div class="clear"></div>
+    </div> 
+</div>
+</div>

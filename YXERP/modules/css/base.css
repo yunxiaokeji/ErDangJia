@@ -40,6 +40,7 @@ select option{ padding:2px; }
 .bghulan{background-color: #4A98E7;}
 .circle12{-webkit-border-radius: 999px;-moz-border-radius: 999px;-ms-border-radius: 999px;-o-border-radius: 999px;border-radius: 999px;
     width: 12px;height: 12px;padding: 2px 4px;cursor: pointer;margin-left: 5px;}
+.circle18{background-color: transparent;color:#2c2c2c;width: 18px;padding: 0px 5px 0px 4px; height: 16px;cursor: help;transform: scale(0.77);text-align: center;border: 1px solid #c9c9c9;border-radius: 50%;}
 /*超过长度显示...*/
 .long { display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /*强制换行*/
@@ -87,7 +88,9 @@ select option{ padding:2px; }
 .pTop30 {padding-top:30px;}
 .pTop50 {padding-top:50px;}
 
-.pBottom20 {padding-bottom:10px;}
+.pBottom1 {padding-bottom:1px;}
+.pBottom5 {padding-bottom:5px;}
+.pBottom10 {padding-bottom:10px;}
 .pBottom20 {padding-bottom:20px;}
 .pBottom50 {padding-bottom:50px;}
 .pBottom100 {padding-bottom:100px;}
@@ -391,7 +394,7 @@ select option{ padding:2px; }
 .easydialog-create li label{ line-height:20px; height:20px; cursor:pointer; }
 .easydialog-create li label input{ line-height:20px; height:20px; }
 
-/*详情页-信息*/
+/*详情页-信息*/ 
 .content-info { width:80%; min-width:600px; overflow:auto; }
 .content-info li{ width:50%; float:left;  line-height:35px; }
 .content-info li .column-title{ width:100px; float:left; color:#666; }

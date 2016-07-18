@@ -48,6 +48,13 @@ namespace CloudSalesBusiness
             return list;
         }
 
+        public static DataTable GetPurchasesByExcel(string userid, int status, string keywords, string begintime,
+            string endtime, string wareid, string providerid, int doctype, string clientid)
+        {
+            return StockDAL.GetPurchasesByExcel(userid, status, keywords, begintime, endtime, wareid, providerid,
+                doctype, clientid);
+        }
+
         public static List<StorageDoc> GetStorageDocList(string userid, EnumDocType type, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
             DataSet ds = StockDAL.GetStorageDocList(userid, (int)type, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
@@ -118,7 +125,7 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        private static string GetDocStatusStr(int doctype, int status)
+        public static string GetDocStatusStr(int doctype, int status)
         {
             string str = "";
             switch (status)
@@ -179,10 +186,10 @@ namespace CloudSalesBusiness
 
         public List<ProductStock> GetDetailStocks(string wareid, string keywords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
-            DataSet ds = StockDAL.BaseProvider.GetDetailStocks(wareid, keywords, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
-
+            //DataSet ds = StockDAL.BaseProvider.GetDetailStocks(wareid, keywords, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
+            DataTable dt = GetDetailStocksDataTable(wareid, keywords, pageSize, pageIndex, ref totalCount, ref pageCount, clientid); ;
             List<ProductStock> list = new List<ProductStock>();
-            foreach (DataRow dr in ds.Tables[0].Rows)
+            foreach (DataRow dr in dt.Rows)
             {
                 ProductStock model = new ProductStock();
                 model.FillData(dr);
@@ -190,6 +197,13 @@ namespace CloudSalesBusiness
                 list.Add(model);
             }
             return list;
+        }
+
+        public DataTable GetDetailStocksDataTable(string wareid, string keywords, int pageSize, int pageIndex, ref int totalCount,
+            ref int pageCount, string clientid)
+        {
+           return StockDAL.BaseProvider.GetDetailStocks(wareid, keywords, pageSize, pageIndex, ref totalCount,
+                    ref pageCount, clientid).Tables[0];
         }
 
         public List<ProductStock> GetProductsByKeywords(string wareid, string keywords, string agentid, string clientid)

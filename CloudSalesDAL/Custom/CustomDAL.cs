@@ -298,6 +298,18 @@ namespace CloudSalesDAL
 
             return ExecuteNonQuery("P_UpdateContactDefault", paras, CommandType.StoredProcedure) > 0;
         }
+        public bool RefreshCustomerLeve(string agentid, string clientid,string ip, string userid )
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@IP",ip),
+                                     new SqlParameter("@CreateUserID" , userid),
+                                     new SqlParameter("@AgentID" , agentid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+
+            return ExecuteNonQuery("P_RefreshMemberLevelID", paras, CommandType.StoredProcedure) > 0;
+        }
+        
 
         #endregion
     }

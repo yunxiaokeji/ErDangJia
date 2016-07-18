@@ -277,6 +277,11 @@
     <Content Include="modules\plug\umeditor\net\config.json" />
     <Content Include="modules\plug\umeditor\net\controller.ashx" />
     <Content Include="modules\plug\umeditor\net\README.md" />
+    <Content Include="modules\excelmodel\category.json" />
+    <Content Include="modules\excelmodel\purchase.json" />
+    <Content Include="modules\excelmodel\overflow.json" />
+    <Content Include="modules\excelmodel\stockdetail.json" />
+    <Content Include="modules\excelmodel\stockout.json" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -1046,6 +1051,8 @@
     <Content Include="Views\Customer\CustomerImport.cshtml" />
     <Content Include="Views\Products\ProductImport.cshtml" />
     <Content Include="Views\Customer\CustomerOwnRPT.cshtml" />
+    <Content Include="Views\Products\CategoryImport.cshtml" />
+    <Content Include="Views\StorageOut\StorageOutPrintModel.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -157,6 +157,9 @@
     <Content Include="modules\plug\datapager\images\snext.png" />
     <Content Include="modules\plug\datapager\images\sprevious.png" />
     <Content Include="modules\plug\datapager\paginate.js" />
+    <Content Include="modules\plug\daterangepicker\daterangepicker.css" />
+    <Content Include="modules\plug\daterangepicker\daterangepicker.js" />
+    <Content Include="modules\plug\daterangepicker\moment.js" />
     <Content Include="modules\plug\doT.js" />
     <Content Include="modules\plug\dropdown\dropdown.js" />
     <Content Include="modules\plug\dropdown\style.css" />
@@ -524,6 +527,13 @@
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Detail.cshtml" />
     <None Include="Properties\PublishProfiles\yunxiaomanage.pubxml" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

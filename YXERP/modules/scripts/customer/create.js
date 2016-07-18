@@ -67,9 +67,7 @@
     }
 
     //保存实体
-    ObjectJS.saveModel = function () {
-        console.log($('#source').children(":selected").data("code"));
-        console.log($('#activity').val());
+    ObjectJS.saveModel = function () { 
         var _self = this; 
         var model = {
             Name: $("#name").val().trim(),

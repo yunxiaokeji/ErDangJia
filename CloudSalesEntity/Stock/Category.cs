@@ -30,6 +30,7 @@ namespace CloudSalesEntity
         private int _autoid;
         private string _categorycode;
         private string _categoryname = "";
+        private string _pid = "";
         private string _pcode = "";
         private string _pcodelist = "";
         private int? _layers = 1;
@@ -78,6 +79,14 @@ namespace CloudSalesEntity
         /// </summary>
         [Property("Lower")] 
         public string PID
+        {
+            set { _pid = value; }
+            get { return _pid; }
+        }
+        /// <summary>
+        /// 
+        /// </summary> 
+        public string PCode
         {
             set { _pcode = value; }
             get { return _pcode; }

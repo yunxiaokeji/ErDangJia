@@ -12,10 +12,13 @@
     var Model = {};
     var ColorModel = {};
     var ObjectJS = {};
-
+    var reg = /^[0-9]*[1-9][0-9]*$/; 
+    var reg2 = /^(((\d[0]\.\d+))|\+?0\.\d*|\+?1)$/;
+    var reg3 = /^\d+(\.\d+)?$/;
     ObjectJS.init = function () {
         var _self = this;
         _self.bindEvent();
+        _self.bindElementEvent($(".industry-item"));
         _self.getList();
     }
      
@@ -24,11 +27,32 @@
         $(document).click(function (e) { 
             /*隐藏下拉*/ 
             if ((!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown"))
-                && !$(e.target).hasClass("industrylist")  && !$(e.target).parents().hasClass("levelitem") && (!$(e.target).parents().hasClass("color-item") && !$(e.target).hasClass("color-item"))) {
+                && !$(e.target).parents().hasClass("levelitem") && (!$(e.target).parents().hasClass("color-item") && !$(e.target).hasClass("color-item"))) {
                 $(".dropdown-ul").hide();
             }
         });
 
+        $('#integerFee').change(function() {
+            if (!reg3.test($(this).val())) {
+                alert('积分比例格式输入有误,请重新输入');
+                $(this).val($(this).data('oldvalue'));
+            } else {
+                $('#saveClientRule').show();
+            }
+        });
+        $('#tipInfo').mousemove(function() {
+            var _this = $(this);
+            var position = _this.position();
+            $("#wareInfo").css({ "top": position.top-45, "left": position.left + 30 }).show().mouseleave(function() {
+                $(this).hide();
+            });
+        }).mouseout(function() {
+            $("#wareInfo").hide(); 
+        });
+
+        $('#setToCustomers').click(function() {
+            _self.setToCustomers();
+        });
         /*添加来源*/
         $("#createModel").click(function () {
             var _this = $(this);
@@ -37,28 +61,35 @@
             Model.SourceCode = "";
             _self.createModel();
         });
-
         /*添加行业*/
-        $("#createIndustry").click(function () {
-            _self.Industry = {};
-            _self.Industry.ClientIndustryID = "";
-            _self.Industry.Description = "";
-            _self.Industry.Name = ""; 
-            _self.createIndustry();
-        }); 
+        $("#createIndustry").click(function () { 
+            var _this = $(this);
+            var _ele = $('<li class="industry-item"><input type="text" data-id="" data-value="" value="" /><span data-id="" class="ico-delete"></span></li>');
+            _self.bindElementEvent(_ele);
+            _this.before(_ele);
+            _ele.find("input").focus();
+        });
+        /*删除来源*/
         $("#deleteObject").click(function () { 
             _self.deleteModel($(this));
         });
-        $('#saveMemberLevel').click(function() {
-            _self.saveMemberLevel();
-        });
-        $('#createMemberLevel').click(function() {
-            _self.createMemberLevel();
-        });
+        /*修改来源*/
         $("#updateObject").click(function () {
             _self.SourceEdit($(this));
         });
-
+        /*积分规则保存*/
+        $('#saveClientRule').click(function() {
+            _self.saveClientRule();
+        });
+        /*积分等级保存*/
+        $('#saveMemberLevel').click(function () {
+            _self.saveMemberLevel();
+        });
+        /*积分等级新建*/
+        $('#createMemberLevel').click(function () {
+            _self.createMemberLevel();
+        });
+        /*客户标签新建*/
         $('#createColor').click(function () {
             var _this = $(this);
             ColorModel.ColorID = 0;
@@ -66,7 +97,6 @@
             ColorModel.ColorValue = "";
             _self.createColor();
         });
-
         //删除颜色
         $("#deleteColor").click(function () {
             var _this = $(this); 
@@ -87,7 +117,6 @@
                 });
             });
         });
-
         /*编辑颜色*/
         $("#updateColor").click(function () {
             var _this = $(this);
@@ -99,7 +128,6 @@
                 _self.createColor();
             });
         });
-
         /*切换模块*/
         $(".search-tab li").click(function () { 
             var _this = $(this);
@@ -114,48 +142,65 @@
                 if (_this.data("id") == "colorList" && (!_this.data("first") || _this.data("first") == 0)) {
                     _this.data("first", "1");
                     _self.bindColorList();
-                } else if (_this.data("id") == "industryList" && (!_this.data("first") || _this.data("first") == 0)) {
-                    _this.data("first", "1");
-                   
-                    _self.getIndustryList();
                 } else if (_this.data("id") == "memberList" && (!_this.data("first") || _this.data("first") == 0)) {
                     _this.data("first", "1"); 
                     _self.getMemberLevelList();
-                }
-
-                $("#deleteObject").unbind().click(function () {
-                    var _thisnow = $(this);
-                    if (_this.data("id") == "industryList") {
-                        confirm("客户行业删除后不可恢复,确认删除吗？", function () {
-                            Global.post("/System/DeleteClientIndustry", { clientindustryid: _thisnow.data("id") }, function (data) {
-                                if (data.result) {
-                                    _self.getIndustryList();
-                                } else {
-                                    alert("行业存在关联数据，删除失败");
-                                }
-                            });
-                        });
-                    } else if (_this.data("id") == "sourceList") {
-                        ObjectJS.deleteModel(_thisnow);
-                    }  
-                });
-
-                $("#updateObject").unbind().click(function () {
-                    var _thisnow = $(this);
-                    if (_this.data("id") == "sourceList") {
-                        ObjectJS.SourceEdit($(this));
-                    } else if (_this.data("id") == "industryList") {
-                        _self.Industry = {};
-                        _self.Industry.ClientIndustryID = _thisnow.data('id');
-                        _self.Industry.Name = _thisnow.data('name');
-                        _self.Industry.Description = _thisnow.data('description');
-                        _self.createIndustry();
-                    } 
-                });
+                } 
             }
         });
     }
-
+    ObjectJS.bindElementEvent = function (elments) { 
+        elments.find("input").focus(function () {
+            var _this = $(this);
+            _this.select();
+        });
+        elments.find("input").blur(function () {
+            var _this = $(this); 
+            if (_this.val() == "") {
+                if (_this.data("id") == "") {
+                    _this.parent().remove();
+                } else {
+                    _this.val(_this.data("value"));
+                }
+            } else if (_this.val() != _this.data("value")) {
+                var Industry = {
+                    ClientIndustryID: _this.data('id'),
+                    Name: _this.val(),
+                    Description: ''
+                }
+                var unit = {
+                    UnitID: _this.data("id"),
+                    UnitName: _this.val(),
+                    Description: ""
+                }; 
+                Global.post("/System/SaveClientIndustry", { clientindustry: JSON.stringify(Industry) }, function (data) {
+                    if (data.result == 1) { 
+                    } else if (data.result == 2) {
+                        alert("保存失败,行业已存在!");
+                    } else {
+                        alert(result);
+                    }
+                });
+            }
+        });
+        elments.find(".ico-delete")
+        elments.find(".ico-delete").click(function() {
+            var _this = $(this);
+            if (_this.data("id") != "") {
+                confirm("客户行业删除后不可恢复,确认删除吗？", function() {
+                    Global.post("/System/DeleteClientIndustry", { clientindustryid: _this.data("id") }, function(data) {
+                        if (data.result) {
+                            _this.parent().remove();
+                        } else {
+                            alert("行业存在关联数据，删除失败");
+                        }
+                    });
+                });
+            } else {
+                _this.parent().remove();
+            }
+        });
+    }
     ObjectJS.SourceEdit = function (obj) {
         var _self = this;
         Global.post("/System/GetCustomSourceByID", { id: obj.data("id") }, function (data) {
@@ -391,7 +436,8 @@
             if (data.items.length > 0) {
                 for (var i = 0; i < data.items.length; i++) {
                     var item = data.items[i];
-                    urlItem += '<li data-id="' + item.ColorID + '" data-value="' + item.ColorValue + '" data-name="' + item.ColorName + '"  class="color-item"><div class="left color-leftzuoyou" style=" border-right:18px solid ' + item.ColorValue + '; "></div><div class="left colordiv" style="background-color:' + item.ColorValue + '";>' + item.ColorName + '</div></li>';
+                    urlItem += '<li data-id="' + item.ColorID + '" data-value="' + item.ColorValue + '" data-name="' + item.ColorName + '"  class="color-item"><div class="left color-leftzuoyou" style=" border-right:18px solid ' + item.ColorValue + '; "></div><div class="left colordiv" style="background-color:' + item.ColorValue + '";>' + item.ColorName + '</div>' +
+                        '<div class="dropdown left" style=" width:18px;background-color:' + item.ColorValue + '"> <span class="ico-dropdown-white" style="color:#000;"></span></div></li>';
                 }
             } 
             $("#colorList").html(urlItem);
@@ -399,7 +445,7 @@
                 var _this = $(this);
                 var position = _this.position(); 
                 $(".colordrop li").data("id", _this.data("id"));
-                $(".colordrop").css({ "top": position.top+45, "left": position.left+30 }).show().mouseleave(function () {
+                $(".colordrop").css({ "top": position.top+40, "left": position.left+80 }).show().mouseleave(function () {
                     $('.colordrop').hide();
                 }); 
             });  
@@ -417,86 +463,6 @@
     ObjectJS.getLeft = function (b) {
         return 10 + $(".sourceul li").eq(b - 1).offset().left - $(".sourceul li").eq(0).offset().left;
     }
-
-    /*客户行业列表*/
-    ObjectJS.getIndustryList = function () { 
-        $("#industryList .table-list").nextAll().remove();
-        $("#industryList .table-list").after("<tr><td colspan='5'><div class='data-loading' ><div></td></tr>");
-        Global.post("/System/GetClientIndustry", {}, function (data) {
-            $("#industryList .tr-header").nextAll().remove();
-            var items = data.items;
-            if (items.length > 0) {
-                var innerhtml = "";
-                for (var i = 0; i < items.length; i++) {
-                    innerhtml += "<h1 class='industrylist left' data-id='" + items[i].ClientIndustryID + "' data-name='" + items[i].Name + "' data-description='" + items[i].Description + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" + items[i].Name + "</h1>";
-                } 
-                $("#industryList .table-list").after(innerhtml);
-                $(".industrylist").click(function () {
-                    var _this = $(this);
-                    var position = _this.position(); 
-                    $("#ddlSource li").data("id", _this.data("id"));
-                    $("#ddlSource li").data("name", _this.data("name"));
-                    $("#ddlSource li").data("description", _this.data("description"));
-                    $("#ddlSource").css({ "top": position.top +130, "left": position.left+5 }).show().mouseleave(function () {
-                        $(this).hide();
-                    }); 
-                });
-            } else {
-                $("#industryList .table-list").after("<tr><td colspan='5'><div class='nodata-txt' >暂无数据!<div></td></tr>");
-            }
-        });
-    }
-
-    /*客户行业弹窗*/
-    ObjectJS.createIndustry = function () {
-        var _self = this;
-    
-        doT.exec("template/system/clientindustry-detail.html", function (template) {
-            var html = template([]);
-            Easydialog.open({
-                container: {
-                    id: "show-model-detail",
-                    header: !_self.Industry.ClientIndustryID ? "新建行业" : "编辑行业",
-                    content: html,
-                    yesFn: function () {
-                        if (!VerifyObject.isPass()) {
-                            return false;
-                        }
-                        _self.Industry.Name = $("#Name").val();
-                        _self.Industry.Description = $("#Description").val();
-                        _self.saveIndustry();
-                    },
-                    callback: function () {
-
-                    }
-                }
-            });
-            VerifyObject = Verify.createVerify({
-                element: ".verify",
-                emptyAttr: "data-empty",
-                verifyType: "data-type",
-                regText: "data-text"
-            });  
-            $("#Name").focus();
-            $("#Name").val(_self.Industry.Name);
-            $("#Description").val(_self.Industry.Description);
-        });
-    }
-
-    /*客户行业保存*/
-    ObjectJS.saveIndustry = function () {
-        var _self = this;
-        Global.post("/System/SaveClientIndustry", { clientindustry: JSON.stringify(_self.Industry) }, function (data) {
-            if (data.result == 1) {
-                _self.getIndustryList();
-            } else if (data.result == 2) {
-                alert("保存失败,行业已存在!");
-            } else{
-                alert(result);
-            }
-        });
-    }
- 
     /*客户会员等级列表*/
     ObjectJS.getMemberLevelList = function () {
         $(".memberlevelul").html('');
@@ -508,7 +474,7 @@
                 var innnerHtml = ''; 
                 for (var i = 0; i < items.length; i++) { 
                     innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin-1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
-                        "<span  style='width:18px;height:18px;border-radius:50%;'><img style='width:18px;height:18px;border-radius:50%;' src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span>" +
+                        "<span  class='spanimg'><span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg' id='MemberImg" + i + "'  class='memberimg'  src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span>" +
                         "<span  class='mLeft5 mRight5'>当顾客积分在</span><input id='changeFeeMore"+i+"' readOnly='readOnly' class='width50 mRight5' type='text' value='" + (i == 0 ? "0" : items[i - 1].IntegFeeMore) + "' /><span class='mRight5'>到</span>" +
                         "<input id='IntegFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' value='" + items[i].IntegFeeMore + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee' class='width50 mRight5' type='text' value='" + items[i].DiscountFee + "' />" +
                         "<span  class='mRight5'>折优惠</span><input class='width80 mRight5' type='text' name='MemberName' placeholder='请填写等级名' value='" + items[i].Name + "' /><span id='delMeber" + i + "' data-ind='" + i + "' class='" + (i==0?"hide":i == items.length - 1 ? "" : "hide") + " borderccc circle12 mLeft10'>X</span>" +
@@ -528,17 +494,15 @@
         $('#delMeber' + (i - 1)).hide();
         var intefee = parseInt($('#memberLi' + (i - 1) + ' div:first-child').data('integfeemore'));
         var innnerHtml = "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + i + "' data-imgurl=''  data-integfeemore='" + (intefee + 300) + "' data-name='' data-discountfee='1.00' data-id='' title='' >" +
-                      "<span  style='width:18px;height:18px;border-radius:50%;'><img style='width:18px;height:18px;border-radius:50%;' src='/Content/menuico/custom.png' alt=''></span>" +
+                      "<span  class='spanimg'><span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg'  id='MemberImg" + i + "' class='memberimg'   src='/Content/menuico/custom.png' alt=''></span>" +
                       "<span  class='mLeft5 mRight5'>当顾客积分在</span><input id='changeFeeMore" + i + "' readOnly='readOnly' class='width50 mRight5' type='text' value='" + intefee + "' /><span class='mRight5'>到</span>" +
                       "<input id='IntegFeeMore" + i + "' name='IntegFeeMore'  class='width50 mRight5' placeholder='请填写积分'  type='text' value='" + (intefee + 300) + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee'  class='width50 mRight5' placeholder='请填写折扣'  type='text' value='1.00' />" +
                       "<span  class='mRight5'>折优惠</span><input class='width80 mRight5' name='MemberName' type='text'  placeholder='请填写等级名' value='' /><span id='delMeber" + i + "' data-ind='" + i + "' class=' borderccc circle12 mLeft10'>X</span>" +
                       "</div></li>";
         $(".memberlevelul li:last-child").after(innnerHtml);
-        ObjectJS.bindMemberLi(); 
+        _self.bindMemberLi();
     }
-    /*客户行业保存*/
-    var reg = /^\d+(\.\d+)?$/; 
-    var reg2 = /^(((\d[0]\.\d+))|\+?0\.\d*|\+?1)$/;
+ 
     ObjectJS.saveMemberLevel = function () {
         var list = [];
         var _self = this;
@@ -561,12 +525,14 @@
             }
         });
     }
+
     ObjectJS.hideMember= function(ind) {
         $('#memberLi' + ind).remove();
         if (ind > 1) {
             $('#delMeber' + (ind - 1)).show();
         }
-    } 
+    }
+
     ObjectJS.bindMemberLi= function() {
         $(".circle12").click(function () { ObjectJS.hideMember($(this).parent().data("origin")); });
         $("input[name^='IntegFeeMore']").change(function () {
@@ -577,12 +543,34 @@
         });
         $("input[name^='MemberName']").change(function () {
             ObjectJS.changeInput(3, $(this));
+        }); 
+
+        $("img[name^='MemberImg']").click(function () { 
+            var _this = $(this); 
+            var elem = "#SpanImg" + _this[0].id.replace('MemberImg', '');
+            $(elem).html(''); 
+            Upload.createUpload({
+                element: elem,
+                buttonText: "",
+                className: "",
+                data: { folder: '', action: 'add', oldPath: '' },
+                success: function (data, status) {
+                    if (data.Items.length > 0) { 
+                        _this.attr("src", data.Items[0]); 
+                        _this.parent().parent().data('imgurl', data.Items[0]);
+                    } else {
+                        alert("只能上传jpg/png/gif类型的图片，且大小不能超过1M！");
+                    }
+                }
+            });   
+            $( elem + '_buttonSubmit').click(); 
         });
     }
+
     ObjectJS.changeInput = function (type,_this) { 
         var s = parseInt(_this.parent().data("origin")) + 1;
         if (type == 1){
-            if (/^[0-9]*[1-9][0-9]*$/.test(_this.val())) {
+            if (reg.test(_this.val())) {
                 if (s != $('.levelitem').length) {
                     if (parseInt($('#IntegFeeMore' + s).val()) < parseInt(_this.val())) {
                         alert('当前积分阶段不能大于下一等级积分阶段');
@@ -609,7 +597,28 @@
             if (_this.val() != '') {
                 _this.parent().data('name', _this.val());
             }
-        }
+        }  
+    }
+
+    ObjectJS.saveClientRule= function() {
+        Global.post("/System/SaveClietRule", { integerFee: $('#integerFee').val() }, function (data) {
+            if (data.result) {
+                alert('积分兑换比例设置成功');
+                $('#integerFee').data('oldvalue', $('#integerFee').val());
+                $('#saveClientRule').hide();
+            } else {
+                alert('操作失败');
+            }
+        });
+    }
+    ObjectJS.setToCustomers= function() {
+        Global.post("/System/ChangeCumoterLevel", null, function (data) {
+            if (data.result) {
+                alert('客户等级刷新成功'); 
+            } else {
+                alert('操作失败');
+            }
+        });
     }
     module.exports = ObjectJS;
 });

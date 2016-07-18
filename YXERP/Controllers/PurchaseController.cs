@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using CloudSalesEnum;
 using CloudSalesBusiness;
 using CloudSalesEntity;
+using System.Data;
 
 namespace YXERP.Controllers
 {
@@ -169,6 +170,71 @@ namespace YXERP.Controllers
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
+        }
+
+        public ActionResult ExportFromPurchases(string keyWords, int status = -1, int type = 1, int doctype=1,string begintime = "", string endtime = "", string wareid = "", string providerid = "", bool test=false, string model = "", string filleName = "")
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+            Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
+            var modelname = "purchase";
+            switch (doctype)
+            {
+                case 4:
+                case 3:
+                    modelname = "overflow";
+                    break;
+            }
+            listColumn = GetColumnForJson(modelname, ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "testexport" : "export", CurrentUser.ClientID);
+            var excelWriter = new ExcelWriter();
+            foreach (var key in listColumn)
+            {
+                excelWriter.Map(key.Key, key.Value.Title);
+            }
+            byte[] buffer;
+            DataTable dt = new DataTable();
+            //模版导出
+            if (test)
+            {
+                DataRow dr = dt.NewRow();
+                foreach (var key in listColumn)
+                {
+                    DataColumn dc1 = new DataColumn(key.Key, Type.GetType("System.String"));
+                    dt.Columns.Add(dc1);
+                    dr[key.Key] = key.Value.DefaultText;
+                }
+                dt.Rows.Add(dr);
+            }
+            else
+            {
+                dt = StockBusiness.GetPurchasesByExcel(type >=3 ? string.Empty : CurrentUser.UserID, status, keyWords, begintime, endtime, wareid, providerid, doctype, CurrentUser.ClientID);
+                if (!dt.Columns.Contains("statusstr"))
+                {
+                    dt.Columns.Add("statusstr", Type.GetType("System.String"));
+                }
+                if (!dt.Columns.Contains("createusername"))
+                {
+                    dt.Columns.Add("createusername", Type.GetType("System.String"));
+                }
+                if (!dt.Columns.Contains("wareid"))
+                {
+                    dt.Columns.Add("wareid", Type.GetType("System.String"));
+                }
+                foreach (DataRow drRow in dt.Rows)
+                {
+                    var user = OrganizationBusiness.GetUserByUserID(drRow["CreateUserID"].ToString(), CurrentUser.AgentID);
+                    drRow["createusername"]=user!=null?user.Name:"";
+                    var house=SystemBusiness.BaseBusiness.GetWareByID(drRow["wareid"].ToString(), CurrentUser.ClientID);
+                    drRow["wareid"] = house != null ? house.Name : "";
+                    drRow["statusstr"] = StockBusiness.GetDocStatusStr(Convert.ToInt32(drRow["doctype"]), Convert.ToInt32(drRow["status"]));
+                }  
+            }
+            buffer = excelWriter.Write(dt, dic, "");
+            var fileName = CurrentUser.Client.CompanyName + filleName + (test ? "导入模版" : "") + DateTime.Now.ToString("yyyyMMdd");
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
         }
 
         #endregion

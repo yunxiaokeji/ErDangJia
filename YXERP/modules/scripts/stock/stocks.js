@@ -30,7 +30,7 @@
                 Params.Keywords = keyWords;
                 _self.getList();
             });
-        });     
+        });
     }
 
     //获取列表

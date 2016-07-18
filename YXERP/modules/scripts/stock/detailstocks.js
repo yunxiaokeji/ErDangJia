@@ -1,5 +1,6 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
+        Dialog = require("dialog"),
         doT = require("dot");
     require("pager");
 
@@ -49,7 +50,11 @@
                 Params.Keywords = keyWords;
                 _self.getList();
             });
-        });     
+        });
+        $('#exportStock').click(function () {
+            Params.filleName = '库存导出';
+            Dialog.exportModel("/Stock/ExportFromStock", Params);
+        });
     }
 
     //获取列表

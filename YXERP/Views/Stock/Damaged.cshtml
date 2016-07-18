@@ -16,6 +16,11 @@
 <div class="header-box">
     <span class="header-title left">报损管理</span>
     <div id="btnSubmit" data-id="103030301" data-name="新建报损" data-url="/Stock/CreateDamaged" class="btn-add btn-open-window right">新建报损（0）</div> 
+        <span id="btnCreate" class="pLeft2 btn-add left" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >新建报损</span>
+        <div id="dropdown" class="bghulan rightraduis3 right " style="height:28px;width:20px;">
+            <span class="mTop8 mRight5 ico-dropdown-white right"></span>
+        </div>
+    </div>
 </div>
 <div class="search-header">
     <div class="left" title="报损日期">
@@ -54,9 +59,25 @@
             <td class="width100">操作</td>
         </tr>
     </table>
-    <div class="mTop20" id="pager"></div>
-</div>
+    <div class="mTop20">
+        <ul class="left"> 
+            <li class="hand left width80 mLeft5" id="checkAll">
+                <span class="checkbox iconfont mTop5 mRight5"></span>全选
+            </li>
+            <li class="left">
+                <a href="javascript:void(0);" class="btn" id="printOrderOut" >
+                        <i class="left iconfont mRight5" style="margin-left: -5px;color:aliceblue">&#xe658;</i>打 印
+                </a>
+            </li>
+        </ul>
+        <div id="pager"></div>
+        <div class="clear"></div>
+    </div> 
 <ul class="dropdown-ul hide" id="auditDropdown" style="width:65px;">
     <li class="btn-open-window @(ExpandClass.IsLimits(HttpContext.Current,"103030302"))" data-name="审核报损单" id="audit">审核</li>
     <li class="@(ExpandClass.IsLimits(HttpContext.Current,"103030304"))" id="delete">删除</li>
+</ul>
+<ul id="exceldropdown" class="dropdown-ul hide" style="width: 100px;">
+    @*<li class="" id="exportPurchases">导入报损单</li>*@
+    <li class="" id="exportPurchases">导出报损单</li> 
 </ul>

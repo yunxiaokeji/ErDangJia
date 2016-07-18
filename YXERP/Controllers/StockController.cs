@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using System.Web.Script.Serialization;
 using CloudSalesBusiness;
 using CloudSalesEnum;
 using CloudSalesEntity;
@@ -485,6 +486,55 @@ namespace YXERP.Controllers
             };
         }
 
+
+        #region 库存导出
+        public ActionResult ExportFromStock(string WareID,string Keywords, bool test=false, string model = "", string filleName = "库存")
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            Dictionary<string, ExcelFormatter> dic = new Dictionary<string, ExcelFormatter>();
+            Dictionary<string, ExcelModel> listColumn = new Dictionary<string, ExcelModel>();
+            listColumn = GetColumnForJson("stockdetail", ref dic, !string.IsNullOrEmpty(model) ? model : "Item", test ? "testexport" : "export", CurrentUser.ClientID);
+            var excelWriter = new ExcelWriter();
+            foreach (var key in listColumn)
+            {
+                excelWriter.Map(key.Key, key.Value.Title);
+            }
+            byte[] buffer;
+            DataTable dt = new DataTable(); 
+            if (test)
+            {
+                DataRow dr = dt.NewRow();
+                foreach (var key in listColumn)
+                {
+                    DataColumn dc1 = new DataColumn(key.Key, Type.GetType("System.String"));
+                    dt.Columns.Add(dc1);
+                    dr[key.Key] = key.Value.DefaultText;
+                }
+                dt.Rows.Add(dr);
+            }
+            else
+            {
+                int total = 0;
+                dt = new StockBusiness().GetDetailStocksDataTable(WareID, Keywords,  int.MaxValue,1, ref total,
+                    ref total, CurrentUser.ClientID);
+                if (!dt.Columns.Contains("stocklast"))
+                {
+                    dt.Columns.Add("stocklast", Type.GetType("System.Int32"));
+                }
+                foreach (DataRow drRow in dt.Rows)
+                {
+                    drRow["stocklast"] = Convert.ToInt32(drRow["stockin"]) - Convert.ToInt32(drRow["stockout"]);
+                } 
+            }
+            buffer = excelWriter.Write(dt, dic, "");
+            var fileName = CurrentUser.Client.CompanyName + filleName + (test ? "导入模版" : "") + DateTime.Now.ToString("yyyyMMdd");
+            if (!Request.ServerVariables["http_user_agent"].ToLower().Contains("firefox"))
+                fileName = HttpUtility.UrlEncode(fileName);
+            this.Response.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            return File(buffer, "application/ms-excel");
+        }
+
+        #endregion
         #endregion
     }
 }

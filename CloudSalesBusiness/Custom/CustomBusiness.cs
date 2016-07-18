@@ -343,6 +343,11 @@ namespace CloudSalesBusiness
             return bl;
         }
 
+        public bool RefreshCustomerLeve(string agenrid,string clientid,string ip,string userid)
+        {
+            return CustomDAL.BaseProvider.RefreshCustomerLeve(agenrid, clientid, ip, userid);
+        }
+
         #endregion
     }
 }

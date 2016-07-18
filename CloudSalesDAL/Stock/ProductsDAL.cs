@@ -386,6 +386,16 @@ namespace CloudSalesDAL
             return dt;
         }
 
+        public DataTable GetCategorysByExcel(string clientid)
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@ClientID", clientid) 
+                                   };
+            DataTable dt = GetDataTable(@"select a.CategoryID,a.CategoryCode,a.CategoryName,a.PID,a.Layers,a.Status, b.CategoryCode as PCode, 
+                b.CategoryName as PName ,b.Layers as PLayers from Category a  left join Category b on b.CategoryID=a.PID and a.ClientID=b.ClientID 
+                where a.Status<>9 and a.ClientID=@ClientID Order by b.PIDList,a.Layers  ", paras, CommandType.Text);
+            return dt;
+        }
         public DataTable GetCategoryByID(string categoryid)
         {
             SqlParameter[] paras = { new SqlParameter("@CategoryID", categoryid) };

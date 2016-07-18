@@ -1,0 +1,78 @@
+﻿{%
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+%}
+<<<<<<< HEAD
+<tr class="item-header">
+    <td class="tLeft bolder">
+        采购单号：{%=item.DocCode%}
+=======
+<tr class="list-item">
+    <td class="width30">
+        <span data-id="{%=item.DocID%}" data-userid="{%=item.Status%}" class="checkbox iconfont"></span>
+    </td>
+    <td>
+        <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">{%=item.DocCode%}</a>
+>>>>>>> 994e0d6426ee106c9b030cf3bdac57daf02f38e1
+    </td>
+    <td class="tLeft bolder">
+        供应商：{%=item.ProviderName||"--"%}
+    </td>
+    <td>采购价</td>
+    <td>数量</td>
+    <td>入库数量</td>
+    <td>总金额</td>
+    <td>已采购金额</td>
+    <td class="bolder">
+        采购员：{%=item.UserName%}
+    </td>
+    <td class="bolder {%=item.Status<2?'red dropdown':''%}" data-status="{%=item.Status%}" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}">
+        {%= item.StatusStr%}
+        <span class="right mTop2 {%=item.Status < 2? 'ico-dropdown':''%}"></span>
+    </td>
+</tr>
+    {%
+	    for(var ii=0, jj=item.Details.length; ii < jj; ii++){
+	    var model = item.Details[ii];
+    %}
+        <tr class="item {%=ii==jj-1?'last':''%}">
+            <td class="tLeft bBottom">
+                <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=model.ProductID%}&did={%=model.ProductDetailID%}" href="javascript:void(0);" data-name="产品详情页-{%=model.ProductName%}" data-id="{%=model.ProductID%}">
+                    {%=model.ProductName%}
+                </a>
+            </td>
+            <td class="tLeft bBottom">
+                {%=model.Remark%}
+            </td>
+            <td class="bBottom">
+                {%=model.Price.toFixed(2)%}
+            </td>
+            <td class="bBottom">
+                {%=model.Quantity%}
+            </td>
+            <td class="bBottom bRight">
+                {%=model.Complete%}
+            </td>
+            {%if(ii==0){ %}
+                <td rowspan="{%= jj %}" class="bRight bBottom">
+                    {%= item.TotalMoney.toFixed(2)%}
+                </td>
+                <td rowspan="{%= jj %}" class="bRight bBottom">
+                    {%= item.RealMoney.toFixed(2)%}
+                </td>
+                <td rowspan="{%= jj %}" class="bRight bBottom">
+                    {%=item.CreateTime.toDate("yyyy-MM-dd")%}
+                 </td>
+                 <td rowspan="{%= jj %}" class="bRight bBottom">
+                     <a href="javascript:void(0)" class="btn-open-window" data-url="/Purchase/DocDetail/{%=item.DocID%}" data-id="{%=item.DocID%}" data-name="采购单详情-{%=item.DocCode%}">
+                        查看详情
+                    </a>
+                 </td>
+            {% } %}
+            
+        </tr>
+    {% } %}
+  <tr class="line-item">
+    <td colspan="10"></td>
+  </tr>  
+{% } %}

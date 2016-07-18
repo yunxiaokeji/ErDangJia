@@ -1,0 +1,26 @@
+﻿ 
+
+<div class="mLeft20 mTop10" style="height: 360px; overflow-y: scroll; overflow-x: hidden;">
+    <div>
+        <span> 请按照数据模板的格式准备要导入的数据</span> <br/>
+        <div class="mLeft20">
+            <a href="javascript:void(0);" id="exportModel" class="exportModel" > 下载数据模板</a>
+            <br/>
+            <span id="spanWare" class="spanWare hide">     
+        查看注意事项>></span> 
+            <div id="divInfo" class="divInfo">
+                <p class="mLeft5 red">注意事项：</p>
+                <ul class="mLeft5 red">
+                    <li class="red">1、模板中的表头名称不可更改，表头行不能删除</li> 
+                    <li class="red">2、其中【类别编码】【类别名称】【当前层级】为必填项,若存在上级,【上级类别编码】为必填写</li>
+                    <li class="red">3、导入文件请勿超过2MB</li> 
+                </ul>
+            </div>
+        </div>
+    </div>
+        
+    <div class="mTop20">
+        <span> 请选择需要导入的Excel文件。</span> <br/>
+        <input name="file" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="cursor: pointer;color:red" class="mLeft20 mTop5 "/>
+</div>
+</div> 

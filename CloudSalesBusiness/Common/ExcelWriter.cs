@@ -712,8 +712,8 @@ namespace CloudSalesBusiness
                     {
                         var picture = (HSSFPicture)shape;
                         var anchor = (HSSFClientAnchor)shape.Anchor;
-                    
-                        if (IsInternalOrIntersect(minRow, maxRow, minCol, maxCol, anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, onlyInternal))
+
+                        if (IsInternalOrIntersect(minRow, maxRow, minCol, maxCol, anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, onlyInternal) && !picturesInfoList.ContainsKey((anchor.Row1 - 1)))
                         {
                             picturesInfoList.Add(anchor.Row1-1,new PicturesInfo(anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, picture.PictureData.Data));
                         }
@@ -741,8 +741,8 @@ namespace CloudSalesBusiness
                         {
                             var picture = (XSSFPicture)shape;
                             var anchor = picture.GetPreferredSize();
-                        
-                            if (IsInternalOrIntersect(minRow, maxRow, minCol, maxCol, anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, onlyInternal))
+
+                            if (IsInternalOrIntersect(minRow, maxRow, minCol, maxCol, anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, onlyInternal) && !picturesInfoList.ContainsKey((anchor.Row1 - 1)))
                             {
                                 picturesInfoList.Add(anchor.Row1-1,new PicturesInfo(anchor.Row1, anchor.Row2, anchor.Col1, anchor.Col2, picture.PictureData.Data));
                             }

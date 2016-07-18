@@ -37,6 +37,18 @@
 			"importcolumn":"BrandID",
 			"defaulttext":"上海云销信息科技有限公司"
         },
+		"ProviderName": {
+            "title": "供应商",
+            "hide": false,
+            "format": false,
+            "exporttype": -1,
+			"testexporttype": -1,
+			"datasource":"",
+			"importtype":-1,
+			"importcolumn":"",
+			"datatype":"string",
+			"defaulttext":"CESHI001"
+        },	
 		"Imgs":{
 			"title": "产品图片",
             "hide": false,

@@ -473,26 +473,29 @@
             if (items.length > 0) {
                 var innnerHtml = ''; 
                 for (var i = 0; i < items.length; i++) {
+                    //if (i == 0) {
+                    //innnerHtml += "<li id='memberLi-1' class='lineHeight30'><div class='levelitem left' data-origin='-1' data-imgurl=''  data-integfeemore='0' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='点击替换等级图标 创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
+                    //                        "<div class='left'><span  class='spanimg mTop5'><img name='MemberImg' id='MemberImg-1' style='display:inline-block;' class='memberimg'  src='/Content/menuico/custom.png' alt=''></span></div><span class='hide' id='SpanImg-1'></span>" +
+                    //                        "<span  class='mLeft5 mRight5'>当客户积分在</span><input id='IntegFeeMore-1' name='IntegFeeMore'  class='width50 mRight5' type='text' disabled='disabled' value='0' /><span class='mRight5'>到</span>" +
+                    //                        "<input id='changeFeeMore-1' name='IntegFeeMore' class='width50 mRight5' type='text' disabled='disabled' value='"+items[i].IntegFeeMore + "' /><span class='mRight5'>之间，可享受</span><input disabled='disabled' name='DiscountFee' class='width50 mRight5' type='text' value='1' />" +
+                    //                        "<span  class='mRight5'>折优惠 &nbsp; | 等级名称</span><input class='width80 mRight5'  type='text' disabled='disabled'  name='MemberName' placeholder='请填写等级名' value='新客户' /><span id='delMeber-1' data-ind='-1' class='hide borderccc circle12 mLeft10'>X</span>" +
+                    //                        "</div></li>";
+                    //}
                     if (i == 0) {
-                    innnerHtml += "<li id='memberLi-1' class='lineHeight30'><div class='levelitem left' data-origin='-1' data-imgurl=''  data-integfeemore='0' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='点击替换等级图标 创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
-                                            "<span  class='spanimg'><span class='hide' id='SpanImg-1'></span><img name='MemberImg' id='MemberImg-1' style='display:inline-block;' class='memberimg'  src='/Content/menuico/custom.png' alt=''></span>" +
-                                            "<span  class='mLeft5 mRight5'>当客户积分在</span><input id='IntegFeeMore-1' name='IntegFeeMore'  class='width50 mRight5' type='text' disabled='disabled' value='0' /><span class='mRight5'>到</span>" +
-                                            "<input id='changeFeeMore-1' name='IntegFeeMore' class='width50 mRight5' type='text' disabled='disabled' value='"+items[i].IntegFeeMore + "' /><span class='mRight5'>之间，可享受</span><input disabled='disabled' name='DiscountFee' class='width50 mRight5' type='text' value='1' />" +
-                                            "<span  class='mRight5'>折优惠 &nbsp; | 等级名称</span><input class='width80 mRight5'  type='text' disabled='disabled'  name='MemberName' placeholder='请填写等级名' value='新客户' /><span id='delMeber-1' data-ind='-1' class='hide borderccc circle12 mLeft10'>X</span>" +
-                                            "</div></li>";
+                        innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin - 1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
+                            "<div class='left'><span  class='spanimg mTop5' ><img name='MemberImg' id='MemberImg" + i + "' style='display:inline-block;' class='memberimg' title='点击替换等级图标 '  src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span></div><span class='hide' id='SpanImg" + i + "'></span>" +
+                            "<span  class='mLeft5 mRight5' style='display:inline-block;'>当客户积分在</span><input id='IntegFeeMore" + i + "' name='IntegFeeMore'  disabled='disabled' class='width50 mRight5' type='text' value='" + items[i].IntegFeeMore + "' /><span class='mRight5'>到</span>" +
+                            "<input id='changeFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' readOnly='readOnly' disabled='disabled'  value='" + (i == items.length - 1 ? '无上限' : items[i + 1].IntegFeeMore) + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee' class='width50 mRight5' type='text' value='" + items[i].DiscountFee + "' />" +
+                            "<span  class='mRight5'>折优惠 &nbsp; | 等级名称</span><input class='width80 mRight5' type='text' name='MemberName' placeholder='请填写等级名' value='" + items[i].Name + "' /><span id='delMeber" + i + "' data-ind='" + i + "' class='" + (i == 0 ? "hide" : i == items.length - 1 ? "" : "hide") + " borderccc circle12 mLeft10'>X</span>" +
+                            "</div></li>";
+                    } else {
+                        innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin - 1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
+                            "<div class='left'><span  class='spanimg mTop5' ><img name='MemberImg' id='MemberImg" + i + "' style='display:inline-block;' class='memberimg' title='点击替换等级图标 '  src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span></div><span class='hide' id='SpanImg" + i + "'></span>" +
+                            "<span  class='mLeft5 mRight5' style='display:inline-block;'>当客户积分在</span><input id='IntegFeeMore" + i + "' name='IntegFeeMore'  class='width50 mRight5' type='text' value='" + items[i].IntegFeeMore + "' /><span class='mRight5'>到</span>" +
+                            "<input id='changeFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' readOnly='readOnly' disabled='disabled'  value='" + (i == items.length - 1 ? '无上限' : items[i + 1].IntegFeeMore) + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee' class='width50 mRight5' type='text' value='" + items[i].DiscountFee + "' />" +
+                            "<span  class='mRight5'>折优惠 &nbsp; | 等级名称</span><input class='width80 mRight5' type='text' name='MemberName' placeholder='请填写等级名' value='" + items[i].Name + "' /><span id='delMeber" + i + "' data-ind='" + i + "' class='" + (i == 0 ? "hide" : i == items.length - 1 ? "" : "hide") + " borderccc circle12 mLeft10'>X</span>" +
+                            "</div></li>";
                     }
-                    innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin - 1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='点击替换等级图标 创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
-                        "<span  class='spanimg'><span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg' id='MemberImg" + i + "' style='display:inline-block;' class='memberimg'  src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span>" +
-                        "<span  class='mLeft5 mRight5'>当客户积分在</span><input id='IntegFeeMore" + i + "' name='IntegFeeMore'  class='width50 mRight5' type='text' value='" + items[i].IntegFeeMore + "' /><span class='mRight5'>到</span>" +
-                        "<input id='changeFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' readOnly='readOnly' disabled='disabled'  value='" + (i == items.length - 1 ? '无上限' : items[i + 1].IntegFeeMore) + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee' class='width50 mRight5' type='text' value='" + items[i].DiscountFee + "' />" +
-                        "<span  class='mRight5'>折优惠 &nbsp; | 等级名称</span><input class='width80 mRight5' type='text' name='MemberName' placeholder='请填写等级名' value='" + items[i].Name + "' /><span id='delMeber" + i + "' data-ind='" + i + "' class='" + (i == 0 ? "hide" : i == items.length - 1 ? "" : "hide") + " borderccc circle12 mLeft10'>X</span>" +
-                        "</div></li>"; 
-                    //innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin-1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='点击替换等级图标 创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
-                    //    "<span  class='spanimg'>&nbsp;<span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg' id='MemberImg" + i + "'  class='memberimg'  src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span>" +
-                    //    "<span  class='mLeft5 mRight5'>当客户积分在</span><input id='changeFeeMore"+i+"' readOnly='readOnly' class='width50 mRight5' type='text' value='" + (i == 0 ? "0" : items[i - 1].IntegFeeMore) + "' /><span class='mRight5'>到</span>" +
-                    //    "<input id='IntegFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' value='" + items[i].IntegFeeMore + "' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee' class='width50 mRight5' type='text' value='" + items[i].DiscountFee + "' />" +
-                    //    "<span  class='mRight5'>折优惠</span><input class='width80 mRight5' type='text' name='MemberName' placeholder='请填写等级名' value='" + items[i].Name + "' /><span id='delMeber" + i + "' data-ind='" + i + "' class='" + (i==0?"hide":i == items.length - 1 ? "" : "hide") + " borderccc circle12 mLeft10'>X</span>" +
-                    //    "</div></li>";
                 }
                 $(".memberlevelul").html(innnerHtml);
                 ObjectJS.bindMemberLi();
@@ -504,12 +507,13 @@
     /*客户会员等级弹窗*/
     ObjectJS.createMemberLevel = function () {
         var _self = this;
-        var i = $('.levelitem').length-1; 
-        $('#delMeber' + (i - 1)).hide();
-        var intefee = parseInt($('#memberLi' + (i - 1) + ' div:first-child').data('integfeemore'))+300;
-        $('#changeFeeMore' + (i-1)).val(intefee);
+        var i = $('.levelitem').length - 1; 
+        $('#delMeber' + i).hide();
+        var intefee = parseInt($('#memberLi' +i + ' div:first-child').data('integfeemore'))+300;
+        $('#changeFeeMore' + i).val(intefee);
+        i = i + 1;
         var innnerHtml = "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + i + "' data-imgurl=''  data-integfeemore='" + intefee + "' data-name='' data-discountfee='1.00' data-id='' title='' >" +
-                      "<span  class='spanimg'><span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg' style='display:inline-block;' id='MemberImg" + i + "' class='memberimg'   src='/Content/menuico/custom.png' alt=''></span>" +
+                      "<div class='left'><span  class='spanimg mTop5' ><span class='hide' id='SpanImg" + i + "'></span><img name='MemberImg' style='display:inline-block;' id='MemberImg" + i + "' class='memberimg'   src='/Content/menuico/custom.png' alt=''></span></div>" +
                       "<span  class='mLeft5 mRight5'>当客户积分在</span><input id='IntegFeeMore" + i + "' name='IntegFeeMore' class='width50 mRight5' type='text' value='" + intefee + "' /><span class='mRight5'>到</span>" +
                       "<input id='changeFeeMore" + i + "'  class='width50 mRight5' placeholder='请填写积分' disabled='disabled'  type='text' value='无上限' /><span class='mRight5'>之间，可享受</span><input name='DiscountFee'  class='width50 mRight5' placeholder='请填写折扣'  type='text' value='1.00' />" +
                       "<span  class='mRight5'>折优惠 &nbsp; | 等级名称</span><input class='width80 mRight5' name='MemberName' type='text'  placeholder='请填写等级名' value='' /><span id='delMeber" + i + "' data-ind='" + i + "' class=' borderccc circle12 mLeft10'>X</span>" +

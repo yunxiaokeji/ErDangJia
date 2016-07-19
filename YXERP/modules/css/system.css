@@ -42,10 +42,10 @@
 .memberlevelul {  margin: 15px 0;}
 .memberlevelul li{ width: 100%;  float: left;  margin-right: 40px;  margin-bottom: 10px;    list-style-type: none;}
 .memberlevelul li .memberimg{width:18px;height:18px;border-radius:50%;border: solid 1px #ccc;}
-.memberlevelul li .spanimg{width:18px;height:18px;border-radius:50%;cursor: pointer;}
+.memberlevelul li .spanimg{width:20px;height:20px;border-radius:50%;cursor: pointer;display:inline-block;}
 .memberlevelul li .spanimg:hover{filter:alpha(opacity=60);-moz-opacity: 0.6; -khtml-opacity: 0.6;opacity: 0.6;}
 .levelitem tr td{text-align:left;line-height: 20px;}
-
+.levelitem span{ line-height: 30px;}
 /*团队成员*/
 .team-header { font-size:14px; height:20px; line-height:20px; font-weight:bold; padding-bottom:5px;}
 

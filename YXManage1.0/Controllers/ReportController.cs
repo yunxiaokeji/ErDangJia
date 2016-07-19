@@ -21,6 +21,14 @@ namespace YXManage.Controllers
             return View();
         }
 
+        public ActionResult ClientsGrowReport()
+        {
+            return View();
+        }
+        public ActionResult ClientsAgentActionReport()
+        {
+            return View();
+        }
         //public JsonResult GetAgentActionReports(string keyword,string startDate,string endDate)
         //{
         //    var list = AgentsBusiness.GetAgentActionReport(keyword, startDate, endDate);
@@ -48,6 +56,33 @@ namespace YXManage.Controllers
         public JsonResult GetClientVitalityReport(int dateType, string beginTime, string endTime, string clientId)
         {
             var list = ClientBusiness.GetClientsVitalityReport(dateType, beginTime, endTime, clientId);
+            JsonDictionary.Add("items", list);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        /// <summary>
+        /// 客户增量统计
+        /// </summary> 
+        public JsonResult GetClientsGrow(int dateType, string beginTime, string endTime)
+        {
+            var list = ClientBusiness.GetClientsGrow(dateType, beginTime, endTime);
+            JsonDictionary.Add("items", list);
+
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetClientsAgentActionReport(int dateType, string beginTime, string endTime, string clientId)
+        {
+            var list = ClientBusiness.GetClientsAgentActionReport(dateType, beginTime, endTime, clientId);
             JsonDictionary.Add("items", list);
 
             return new JsonResult()

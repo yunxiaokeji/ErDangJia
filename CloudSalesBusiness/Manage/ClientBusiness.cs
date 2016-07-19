@@ -174,6 +174,89 @@ namespace CloudSalesBusiness.Manage
             return list;
         }
 
+        /// <summary>
+        /// 获取工厂注册报表
+        /// </summary>
+        public static List<ClientsDateEntity> GetClientsGrow(int type, string begintime, string endtime)
+        {
+            List<ClientsDateEntity> list = new List<ClientsDateEntity>();
+
+            DataTable dt = ClientDAL.BaseProvider.GetClientsGrow(type, begintime, endtime);
+            foreach (DataRow dr in dt.Rows)
+            {
+                ClientsDateEntity model = new ClientsDateEntity();
+                model.Name = dr["CreateTime"].ToString();
+                model.Value = int.Parse(dr["TotalNum"].ToString());
+                list.Add(model);
+            }
+            return list;
+        }
+        /// <summary>
+        /// 获取工厂行为报表
+        /// </summary>
+        public static List<ClientsBaseEntity> GetClientsAgentActionReport(int type, string begintime, string endtime, string clientId)
+        {
+            List<ClientsBaseEntity> list = new List<ClientsBaseEntity>();
+            DataSet ds = ClientDAL.BaseProvider.GetClientsAgentActionReport(type, begintime, endtime, clientId);
+
+            if (ds.Tables.Count > 0)
+            {
+                foreach (DataColumn dc in ds.Tables[0].Columns)
+                {
+                    if (dc.ColumnName != "ReportDate")
+                    {
+                        List<ClientsItem> item = new List<ClientsItem>();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            ClientsItem model = new ClientsItem();
+                            model.Name = dr["ReportDate"].ToString();
+                            model.Value = int.Parse(dr[dc.ColumnName].ToString());
+                            item.Add(model);
+                        }
+                        ClientsBaseEntity clientloginEntity = new ClientsBaseEntity
+                        {
+                            Name = GetCloumnName(dc.ColumnName),
+                            Items = item
+                        };
+                        list.Add(clientloginEntity);
+                    }
+                }
+            }
+            return list;
+        }
+        private static string GetCloumnName(string cloumnName)
+        {
+            switch (cloumnName)
+            {
+                case "CustomerCount":
+                    return "客户";
+                case "OrdersCount":
+                    return "订单";
+                case "ActivityCount":
+                    return "活动";
+                case "ProductCount":
+                    return "产品";
+                case "UsersCount":
+                    return "员工";
+                case "AgentCount":
+                    return "代理商";
+                case "OpportunityCount":
+                    return "机会";
+                case "PurchaseCount":
+                    return "采购";
+                case "WarehousingCount":
+                    return "出库";
+                case "TaskCount":
+                    return "任务";
+                case "DownOrderCount":
+                    return "拉取阿里订单";
+                case "ProductOrderCount":
+                    return "生产订单";
+                default:
+                    return "";
+            }
+        }
         #endregion
 
         #region 添加

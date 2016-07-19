@@ -472,15 +472,7 @@
             var items = data.items;
             if (items.length > 0) {
                 var innnerHtml = ''; 
-                for (var i = 0; i < items.length; i++) {
-                    //if (i == 0) {
-                    //innnerHtml += "<li id='memberLi-1' class='lineHeight30'><div class='levelitem left' data-origin='-1' data-imgurl=''  data-integfeemore='0' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='点击替换等级图标 创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
-                    //                        "<div class='left'><span  class='spanimg mTop5'><img name='MemberImg' id='MemberImg-1' style='display:inline-block;' class='memberimg'  src='/Content/menuico/custom.png' alt=''></span></div><span class='hide' id='SpanImg-1'></span>" +
-                    //                        "<span  class='mLeft5 mRight5'>当客户积分在</span><input id='IntegFeeMore-1' name='IntegFeeMore'  class='width50 mRight5' type='text' disabled='disabled' value='0' /><span class='mRight5'>到</span>" +
-                    //                        "<input id='changeFeeMore-1' name='IntegFeeMore' class='width50 mRight5' type='text' disabled='disabled' value='"+items[i].IntegFeeMore + "' /><span class='mRight5'>之间，可享受</span><input disabled='disabled' name='DiscountFee' class='width50 mRight5' type='text' value='1' />" +
-                    //                        "<span  class='mRight5'>折优惠 &nbsp; | 等级名称</span><input class='width80 mRight5'  type='text' disabled='disabled'  name='MemberName' placeholder='请填写等级名' value='新客户' /><span id='delMeber-1' data-ind='-1' class='hide borderccc circle12 mLeft10'>X</span>" +
-                    //                        "</div></li>";
-                    //}
+                for (var i = 0; i < items.length; i++) { 
                     if (i == 0) {
                         innnerHtml += "<li id='memberLi" + i + "' class='lineHeight30'><div class='levelitem left' data-origin='" + (items[i].Origin - 1) + "' data-imgurl='" + items[i].ImgUrl + "'  data-integfeemore='" + items[i].IntegFeeMore + "' data-name='" + items[i].Name + "' data-discountfee='" + items[i].DiscountFee + "' data-id='" + items[i].LevelID + "' title='创建人:" + (items[i].CreateUser ? items[i].CreateUser.Name : "--") + "' >" +
                             "<div class='left'><span  class='spanimg mTop5' ><img name='MemberImg' id='MemberImg" + i + "' style='display:inline-block;' class='memberimg' title='点击替换等级图标 '  src='" + (items[i].ImgUrl != '' ? items[i].ImgUrl : '/Content/menuico/custom.png') + "' alt=''></span></div><span class='hide' id='SpanImg" + i + "'></span>" +

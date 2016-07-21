@@ -140,7 +140,14 @@ namespace CloudSalesBusiness.Manage
 
             return list;
         }
-
+        /// <summary>
+        /// 活跃度统计 当即没有字段Vitality
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="begintime"></param>
+        /// <param name="endtime"></param>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
         public static List<ClientVitalityEntity> GetClientsVitalityReport(int type, string begintime, string endtime, string clientId)
         {
             List<ClientVitalityEntity> list = new List<ClientVitalityEntity>();
@@ -173,9 +180,39 @@ namespace CloudSalesBusiness.Manage
 
             return list;
         }
-
         /// <summary>
-        /// 获取工厂注册报表
+        /// 获取客户登陆报表
+        /// </summary>
+        public static List<ClientsBaseEntity> GetClientsLoginReport(int type, string begintime, string endtime)
+        {
+            List<ClientsBaseEntity> list = new List<ClientsBaseEntity>();
+            DataSet ds = ClientDAL.BaseProvider.GetClientsLoginReport(type, begintime, endtime);
+            int k = 0;
+            foreach (DataTable dt in ds.Tables)
+            {
+                List<ClientsItem> item = new List<ClientsItem>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ClientsItem model = new ClientsItem();
+                    model.Name = dr["ReportDate"].ToString();
+                    model.Value = int.Parse(dr["Num"].ToString());
+                    item.Add(model);
+                }
+                if (item.Any())
+                {
+                    ClientsBaseEntity clientloginEntity = new ClientsBaseEntity
+                    {
+                        Name = (k == 0 ? "登录次数" : (k == 1 ? "登陆人数" : "登陆工厂数")),
+                        Items = item
+                    };
+                    list.Add(clientloginEntity);
+                }
+                k++;
+            }
+            return list;
+        }
+        /// <summary>
+        /// 获取客户注册报表
         /// </summary>
         public static List<ClientsDateEntity> GetClientsGrow(int type, string begintime, string endtime)
         {
@@ -192,7 +229,7 @@ namespace CloudSalesBusiness.Manage
             return list;
         }
         /// <summary>
-        /// 获取工厂行为报表
+        /// 获取客户行为报表
         /// </summary>
         public static List<ClientsBaseEntity> GetClientsAgentActionReport(int type, string begintime, string endtime, string clientId)
         {

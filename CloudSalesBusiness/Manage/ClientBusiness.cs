@@ -148,7 +148,7 @@ namespace CloudSalesBusiness.Manage
         /// <param name="endtime"></param>
         /// <param name="clientId"></param>
         /// <returns></returns>
-        public static List<ClientVitalityEntity> GetClientsVitalityReport(int type, string begintime, string endtime, string clientId)
+        public static List<ClientVitalityEntity> GetClientsVitalityReport(int type, string begintime, string endtime, string clientId,string modelname="")
         {
             List<ClientVitalityEntity> list = new List<ClientVitalityEntity>();
             DataSet ds = ClientDAL.BaseProvider.GetClientsVitalityReport(type, begintime, endtime, clientId);
@@ -175,8 +175,15 @@ namespace CloudSalesBusiness.Manage
                 else { clientReport.Add(new ClientVitalityItem() { Name = dr["ReportDate"].ToString(), Value = (decimal)0.0000 }); }
 
             }
-            list.Add(new ClientVitalityEntity() { Name = "系统均值", Items = sysReport });
-            list.Add(new ClientVitalityEntity() { Name = clientName, Items = clientReport });
+            if (!string.IsNullOrEmpty(modelname) && modelname == "system")
+            {
+                list.Add(new ClientVitalityEntity() { Name = "系统活跃度--均值", Items = sysReport });
+            }
+            else
+            {
+                list.Add(new ClientVitalityEntity() { Name = "系统活跃度--均值", Items = sysReport });
+                list.Add(new ClientVitalityEntity() {Name = clientName, Items = clientReport});
+            }
 
             return list;
         }

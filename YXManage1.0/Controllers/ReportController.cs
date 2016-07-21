@@ -58,9 +58,9 @@ namespace YXManage.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        public JsonResult GetClientVitalityReport(int dateType, string beginTime, string endTime, string clientId)
+        public JsonResult GetClientVitalityReport(int dateType, string beginTime, string endTime, string clientId,string modelname="")
         {
-            var list = ClientBusiness.GetClientsVitalityReport(dateType, beginTime, endTime, clientId);
+            var list = ClientBusiness.GetClientsVitalityReport(dateType, beginTime, endTime, clientId, modelname);
             JsonDictionary.Add("items", list);
 
             return new JsonResult()

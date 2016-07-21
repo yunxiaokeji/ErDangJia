@@ -1,4 +1,61 @@
 ﻿@{
     ViewBag.Title = "首页";
+    int ind=0;    
+}
+@section css{
+    <link href="/modules/css/home.css" rel="stylesheet"/>
+    <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
 }
 
+
+@section scripts{
+    <script type="text/javascript">
+        seajs.use(["scripts/controls.js"], function (vitality) {
+            vitality.init();
+        }); 
+    </script>
+}
+<div class="header-box">
+    <span class="header-title left">控制台</span>
+</div>
+<div class="content-body">
+
+    <ul class="tagdivul">
+         @foreach (CloudSalesEntity.Menu entity in (List<CloudSalesEntity.Menu>)ViewBag.Menus)
+        {
+            <li style="background-color:(@ind==0?'#4197e7;':'#4ab3dd;')">
+                <a href="/@(entity.Controller)/@(entity.View)">
+                    <div class="center bolder font18"> <i class="iconfont mRight10 colorfff" style="font-size: 22pt;">&#xe624;</i><span class="colorfff font18">@entity.Name</span>
+                    </div>
+                </a>
+            </li>
+        }
+
+
+        <li style="background-color: #4197e7;">
+            <div class="center bolder font18"> <i class="iconfont mRight10 colorfff" style="font-size: 22pt;">&#xe624;</i><span class="colorfff font18">客户</span>
+            </div>
+
+        </li>
+        <li style="background-color: #4ab3dd;">
+            <div class="center bolder font18"> <i class="iconfont mRight10 colorfff" style="font-size: 20pt;">&#xe636;</i><span class="colorfff font18">分析</span>
+            </div>
+
+        </li>
+        <li style="background-color: #35c6c7;">
+            <div class="center bolder font18"> <i class="iconfont mRight10 colorfff" style="font-size: 22pt;">&#xe604;</i><span class="colorfff font18">系统</span>
+            </div>
+
+        </li>
+        <li style="background-color: #97d3cb;">
+            <div class="center bolder font18"> <i class="iconfont mRight10 colorfff" style="font-size: 20pt;">&#xe610;</i><span class="colorfff font18">反馈</span>
+            </div>
+
+        </li>
+    </ul>
+ 
+    <div id="systemVitalityRPT" class="source-box" style="display:block">
+
+    </div>
+
+</div>

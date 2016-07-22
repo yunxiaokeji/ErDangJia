@@ -7,7 +7,7 @@
 
 .cart-mainbody { padding:20px; position:relative; background-color:#f9f9f9; border-top:solid 1px #ccc; border-left:solid 1px #ccc; box-shadow:-1px -1px 1px #ccc;  }
 
-.cart-product-div { max-height:450px; overflow-y:auto; overflow-x:hidden; }
+.cart-product-div { max-height:450px; overflow-y:auto; overflow-x:hidden; min-width:400px; }
 
 /*表格样式*/
 .cart-product-list { border-collapse:collapse;border-spacing:0; }

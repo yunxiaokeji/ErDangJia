@@ -97,38 +97,42 @@
                     content: html,
                     yesFn: function () {
 
-                        if (!VerifyObject.isPass("#setloginname-add-div")) {
+                        if ($("#LoginName").length < 6) {
+                            alert("账号长度不能低于6位！");
                             return false;
                         }
 
-                        if (!$("#S_BindMobile").html().trim()) {
-                            if ($("#LoginPWD").val() == "") {
-                                alert("密码不能为空！");
-                                return false;
-                            } else if ($("#LoginPWD").val().length < 6) {
-                                alert("密码长度不能低于6位！");
-                                return false;
-                            } else if (Global.passwordLevel($("#LoginPWD").val()) == 1) {
-                                alert("密码至少包含字母大小写、数字、字符两种组合！");
-                                return false;
-                            }
+                        if (!VerifyObject.isPass("#setloginname-add-div")) {
+                            return false;
+                        } else {
+                            if (!$("#S_BindMobile").html().trim()) {
+                                if ($("#LoginPWD").val() == "") {
+                                    alert("密码不能为空！");
+                                    return false;
+                                } else if ($("#LoginPWD").val().length < 6) {
+                                    alert("密码长度不能低于6位！");
+                                    return false;
+                                } else if (Global.passwordLevel($("#LoginPWD").val()) == 1) {
+                                    alert("密码至少包含字母大小写、数字、字符两种组合！");
+                                    return false;
+                                }
 
-                            if ($("#LoginConfirmPWD").val() != $("#LoginPWD").val()) {
-                                alert("确认密码输入不一致！");
-                                return false;
+                                if ($("#LoginConfirmPWD").val() != $("#LoginPWD").val()) {
+                                    alert("确认密码输入不一致！");
+                                    return false;
+                                }
                             }
+                            Global.post("/MyAccount/UpdateUserAccount", { loginName: $("#LoginName").val(), loginPwd: $("#LoginPWD").val() }, function (data) {
+                                if (data.Result) {
+                                    alert("账号设置成功！");
+                                    $("#S_LoginName").html($("#LoginName").val());
+                                    $("#bindLogioName").hide();
+                                }
+                                else {
+                                    alert("账号设置失败！");
+                                }
+                            });
                         }
-                        Global.post("/MyAccount/UpdateUserAccount", { loginName: $("#LoginName").val(), loginPwd: $("#LoginPWD").val() }, function (data) {
-                            if (data.Result) {
-                                alert("账号设置成功！");
-                                $("#S_LoginName").html($("#LoginName").val());
-                                $("#bindLogioName").hide();
-                            }
-                            else {
-                                alert("账号设置失败！");
-                            }
-                        });
-                        
                     },
                     callback: function () {
 

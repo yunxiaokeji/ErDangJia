@@ -55,7 +55,7 @@ namespace CloudSalesBusiness.Manage
         {
             string sqlWhere = "a.Status<>9";
             if (!string.IsNullOrEmpty(keyWords))
-                sqlWhere += " and ( a.CompanyName like '%" + keyWords + "%'  or  a.MobilePhone like '%" + keyWords + "%' )";
+                sqlWhere += " and ( a.CompanyName like '%" + keyWords + "%' or a.ClientCode like '%" + keyWords + "%' or  a.MobilePhone like '%" + keyWords + "%' )";
             bool isAsc = false;
             if (string.IsNullOrEmpty(orderBy))
             {
@@ -66,7 +66,7 @@ namespace CloudSalesBusiness.Manage
                 isAsc = orderBy.IndexOf(" asc") > -1 ? true : false;
                 orderBy = orderBy.Replace(" desc", "").Replace(" asc", "");
             }
-            string sqlColumn = @" a.AutoID,a.ClientID, a.CompanyName,a.Logo,a.Industry,
+            string sqlColumn = @" a.AutoID,a.ClientID,  a.ClientCode,a.CompanyName,a.Logo,a.Industry,
                                     a.CityCode,a.Address,a.PostalCode,a.ContactName,a.MobilePhone,a.OfficePhone,
                                     a.Status,b.EndTime,b.UserQuantity,a.TotalIn,a.TotalOut,a.FreezeMoney,
                                     a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID ";
@@ -140,8 +140,15 @@ namespace CloudSalesBusiness.Manage
 
             return list;
         }
-
-        public static List<ClientVitalityEntity> GetClientsVitalityReport(int type, string begintime, string endtime, string clientId)
+        /// <summary>
+        /// 活跃度统计 当即没有字段Vitality
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="begintime"></param>
+        /// <param name="endtime"></param>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        public static List<ClientVitalityEntity> GetClientsVitalityReport(int type, string begintime, string endtime, string clientId,string modelname="")
         {
             List<ClientVitalityEntity> list = new List<ClientVitalityEntity>();
             DataSet ds = ClientDAL.BaseProvider.GetClientsVitalityReport(type, begintime, endtime, clientId);
@@ -168,12 +175,132 @@ namespace CloudSalesBusiness.Manage
                 else { clientReport.Add(new ClientVitalityItem() { Name = dr["ReportDate"].ToString(), Value = (decimal)0.0000 }); }
 
             }
-            list.Add(new ClientVitalityEntity() { Name = "系统均值", Items = sysReport });
-            list.Add(new ClientVitalityEntity() { Name = clientName, Items = clientReport });
+            if (!string.IsNullOrEmpty(modelname) && modelname == "system")
+            {
+                list.Add(new ClientVitalityEntity() { Name = "系统活跃度--均值", Items = sysReport });
+            }
+            else
+            {
+                list.Add(new ClientVitalityEntity() { Name = "系统活跃度--均值", Items = sysReport });
+                list.Add(new ClientVitalityEntity() {Name = clientName, Items = clientReport});
+            }
 
             return list;
         }
+        /// <summary>
+        /// 获取客户登陆报表
+        /// </summary>
+        public static List<ClientsBaseEntity> GetClientsLoginReport(int type, string begintime, string endtime)
+        {
+            List<ClientsBaseEntity> list = new List<ClientsBaseEntity>();
+            DataSet ds = ClientDAL.BaseProvider.GetClientsLoginReport(type, begintime, endtime);
+            int k = 0;
+            foreach (DataTable dt in ds.Tables)
+            {
+                List<ClientsItem> item = new List<ClientsItem>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ClientsItem model = new ClientsItem();
+                    model.Name = dr["ReportDate"].ToString();
+                    model.Value = int.Parse(dr["Num"].ToString());
+                    item.Add(model);
+                }
+                if (item.Any())
+                {
+                    ClientsBaseEntity clientloginEntity = new ClientsBaseEntity
+                    {
+                        Name = (k == 0 ? "登录次数" : (k == 1 ? "登陆人数" : "登陆工厂数")),
+                        Items = item
+                    };
+                    list.Add(clientloginEntity);
+                }
+                k++;
+            }
+            return list;
+        }
+        /// <summary>
+        /// 获取客户注册报表
+        /// </summary>
+        public static List<ClientsDateEntity> GetClientsGrow(int type, string begintime, string endtime)
+        {
+            List<ClientsDateEntity> list = new List<ClientsDateEntity>();
 
+            DataTable dt = ClientDAL.BaseProvider.GetClientsGrow(type, begintime, endtime);
+            foreach (DataRow dr in dt.Rows)
+            {
+                ClientsDateEntity model = new ClientsDateEntity();
+                model.Name = dr["CreateTime"].ToString();
+                model.Value = int.Parse(dr["TotalNum"].ToString());
+                list.Add(model);
+            }
+            return list;
+        }
+        /// <summary>
+        /// 获取客户行为报表
+        /// </summary>
+        public static List<ClientsBaseEntity> GetClientsAgentActionReport(int type, string begintime, string endtime, string clientId)
+        {
+            List<ClientsBaseEntity> list = new List<ClientsBaseEntity>();
+            DataSet ds = ClientDAL.BaseProvider.GetClientsAgentActionReport(type, begintime, endtime, clientId);
+
+            if (ds.Tables.Count > 0)
+            {
+                foreach (DataColumn dc in ds.Tables[0].Columns)
+                {
+                    if (dc.ColumnName != "ReportDate")
+                    {
+                        List<ClientsItem> item = new List<ClientsItem>();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            ClientsItem model = new ClientsItem();
+                            model.Name = dr["ReportDate"].ToString();
+                            model.Value = int.Parse(dr[dc.ColumnName].ToString());
+                            item.Add(model);
+                        }
+                        ClientsBaseEntity clientloginEntity = new ClientsBaseEntity
+                        {
+                            Name = GetCloumnName(dc.ColumnName),
+                            Items = item
+                        };
+                        list.Add(clientloginEntity);
+                    }
+                }
+            }
+            return list;
+        }
+        private static string GetCloumnName(string cloumnName)
+        {
+            switch (cloumnName)
+            {
+                case "CustomerCount":
+                    return "客户";
+                case "OrdersCount":
+                    return "订单";
+                case "ActivityCount":
+                    return "活动";
+                case "ProductCount":
+                    return "产品";
+                case "UsersCount":
+                    return "员工";
+                case "AgentCount":
+                    return "代理商";
+                case "OpportunityCount":
+                    return "机会";
+                case "PurchaseCount":
+                    return "采购";
+                case "WarehousingCount":
+                    return "出库";
+                case "TaskCount":
+                    return "任务";
+                case "DownOrderCount":
+                    return "拉取阿里订单";
+                case "ProductOrderCount":
+                    return "生产订单";
+                default:
+                    return "";
+            }
+        }
         #endregion
 
         #region 添加

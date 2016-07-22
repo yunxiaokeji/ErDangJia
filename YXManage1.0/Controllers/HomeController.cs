@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CloudSalesBusiness.Manage;
 
 namespace YXManage.Controllers
 {
@@ -17,6 +18,14 @@ namespace YXManage.Controllers
             {
                 return Redirect("/Home/Login");
             }
+            ViewBag.Menus = CurrentUser.Menus.Where(x => x.PCode == "100000000").OrderBy(x => x.Sort).ToList();
+            string beginTime = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+            ViewBag.LogRPT = ClientBusiness.GetClientsLoginReport(1, beginTime, beginTime);
+            ViewBag.GrowRPT = ClientBusiness.GetClientsGrow(1, beginTime, beginTime).FirstOrDefault();
+            ViewBag.OrderNum = ClientOrderBusiness.GetClientOrdersCount(-1, beginTime, beginTime);
+            ViewBag.FeedNum = FeedBackBusiness.GetFeedBacksCount("", "", 1);
+            ViewBag.FeedAllNum = FeedBackBusiness.GetFeedBacksCount(beginTime, beginTime,-1);
+
             return View();
         }
 
@@ -46,8 +55,7 @@ namespace YXManage.Controllers
             bool bl = false;
 
             string operateip = string.IsNullOrEmpty(Request.Headers.Get("X-Real-IP")) ? Request.UserHostAddress : Request.Headers["X-Real-IP"];
-            int result = 0;
-           // CloudSalesEntity.Manage.M_Users model = CloudSalesBusiness.M_UsersBusiness.GetM_UserByUserName(userName, pwd, operateip);
+            int result = 0; 
             CloudSalesEntity.Manage.M_Users model = CloudSalesBusiness.M_UsersBusiness.GetM_UserByProUserName(userName, pwd, operateip,out result);
             
             if (model != null)

@@ -23,4 +23,16 @@ namespace CloudSalesEntity.Manage.Report
 
         public List<ClientVitalityItem> Items { get; set; }
     }
+    public class ClientsBaseEntity
+    {
+        public string Name { get; set; }
+
+        public List<ClientsItem> Items { get; set; }
+    }
+    public class ClientsItem
+    {
+        public string Name { get; set; }
+
+        public int Value { get; set; }
+    }
 }

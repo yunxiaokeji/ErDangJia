@@ -37,7 +37,7 @@ namespace YXApp.Controllers
         }
 
         public ActionResult Index()
-        {
+        { 
             return View();
         } 
         #endregion

@@ -87,6 +87,32 @@ namespace CloudSalesBusiness.Manage
             return list;
         }
 
+
+
+        public static int GetFeedBacksCount(string beginDate, string endDate, int status)
+        {
+            string sqlWhere = "1=1"; 
+            if (status != -1)
+            {
+                sqlWhere += " and status=" + status;
+            }  
+
+            if (!string.IsNullOrEmpty(beginDate))
+            {
+                sqlWhere += " and createtime>='" + beginDate + "'";
+            }
+
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                sqlWhere += " and createtime<='" + DateTime.Parse(endDate).AddDays(1).ToString("yyyy-MM-dd") + "'";
+            }
+
+            int result = Convert.ToInt32(CommonBusiness.Select("FeedBack", "count(1)", sqlWhere));
+
+            return result;
+        }
+
+
         public static FeedBack GetFeedBackDetail(string id)
         {
             DataTable dt = FeedBackDAL.BaseProvider.GetFeedBackDetail(id);

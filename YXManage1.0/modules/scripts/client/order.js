@@ -3,8 +3,10 @@
 define(function (require, exports, module) {
 
     require("jquery");
+    require("daterangepicker");
     var Global = require("global"),
         Easydialog = require("easydialog"),
+        moment = require("moment"),
         doT = require("dot");
 
     var Order = {};
@@ -36,6 +38,24 @@ define(function (require, exports, module) {
                 Order.bindData();
             });
         });
+        //日期插件
+        $("#orderBeginTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
+            Order.Params.pageIndex = 1;
+            Order.Params.beginDate = start ? start.format("YYYY-MM-DD") : '';
+            Order.Params.endDate = end ? end.format("YYYY-MM-DD") : '';
+            Order.bindData();
+        });
+
         $(document).click(function (e) {
             //隐藏下拉
             if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
@@ -107,18 +127,9 @@ define(function (require, exports, module) {
     //搜索
     require.async("dropdown", function () {
         var OrderStatus = [
-            {
-                ID: "0",
-                Name: "未支付"
-            },
-            {
-                ID: "1",
-                Name: "已支付"
-            },
-            {
-                ID: "9",
-                Name: "已关闭"
-            }
+            { ID: "0", Name: "未支付" },
+            { ID: "1", Name: "已支付" },
+            { ID: "9",  Name: "已关闭" }
         ];
         $("#OrderStatus").dropdown({
             prevText: "订单状态-",
@@ -130,7 +141,6 @@ define(function (require, exports, module) {
             width: "120",
             onChange: function (data) {
                 $("#clientOrders").nextAll().remove();
-
                 Order.Params.pageIndex = 1;
                 Order.Params.status = parseInt(data.value);
                 Order.bindData();
@@ -138,22 +148,10 @@ define(function (require, exports, module) {
         });
 
         var OrderTypes = [
-            {
-                ID: "4",
-                Name: "试用"
-            },
-            {
-                ID: "1",
-                Name: "购买系统"
-            },
-            {
-                ID: "2",
-                Name: "购买人数"
-            },
-            {
-                ID: "3",
-                Name: "续费"
-            }
+            { ID: "4", Name: "试用" },
+            { ID: "1", Name: "购买系统" },
+            { ID: "2", Name: "购买人数" },
+            { ID: "3", Name: "续费" }
         ];
         $("#OrderTypes").dropdown({
             prevText: "订单类型-",
@@ -165,21 +163,11 @@ define(function (require, exports, module) {
             width: "120",
             onChange: function (data) {
                 $("#clientOrders").nextAll().remove();
-
                 Order.Params.pageIndex = 1;
                 Order.Params.type = parseInt(data.value);
                 Order.bindData();
             }
-        });
-
-        $("#SearchClientOrders").click(function () {
-            if ($("#orderBeginTime").val() != '' || $("#orderEndTime").val() != '') {
-                Order.Params.pageIndex = 1;
-                Order.Params.beginDate = $("#orderBeginTime").val();
-                Order.Params.endDate = $("#orderEndTime").val();
-                Order.bindData();
-            }
-        });
+        }); 
 
     });
 

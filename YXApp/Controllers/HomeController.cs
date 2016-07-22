@@ -14,7 +14,7 @@ using YXAPP.Common;
 
 namespace YXApp.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
         //
         // GET: /Home/
@@ -37,8 +37,7 @@ namespace YXApp.Controllers
         }
 
         public ActionResult Index()
-        {
-            ViewBag.Menus = CurrentUser.Menus.Where(x => x.PCode == "100000000").ToList().OrderBy(x => x.MenuCode);
+        { 
             return View();
         } 
         #endregion

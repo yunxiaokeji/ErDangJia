@@ -35,8 +35,8 @@
             }
         }, function (start, end, label) {
             Params.pageIndex = 1;
-            Params.startDate = start ? start.format("YYYY-MM-DD") : '';
-            Params.endDate = end ? end.format("YYYY-MM-DD") : '';
+            Params.beginTime = start ? start.format("YYYY-MM-DD") : '';
+            Params.endTime = end ? end.format("YYYY-MM-DD") : '';
             _self.sourceDate();
         });
         $("#rptBeginTime").val(Params.beginTime + ' 至 ' + Params.endTime);

@@ -10,11 +10,10 @@
             height:30px; line-height:30px; padding:0px 10px;  cursor:pointer; }
 
 .colorfff{ color: #ffffff;}
-.font30{ font-size: 30pt;}
-.tagdiv{ min-height: 100px;width: 200px;padding: 20px;text-align: center;  }
-.tagdiv.nextdiv{ margin: auto;padding: 0; }
-.tagdivul { height:100px; }
-.tagdivul li {height:100px;float: left; width:200px; text-align:center; min-width:115px;margin:0px 20px 0px 20px;}  
-.tagdivul li div{ padding: 20px;}
-.tagdivul li:hover { filter:alpha(opacity=80);-moz-opacity: 0.8; -khtml-opacity: 0.8;opacity: 0.8; }
+.font30{ font-size: 30pt;} 
+.tagdivul { height:120px; }
+.tagdivul li {height:120px;float: left; width:200px; text-align:center; min-width:115px;margin:0px 20px 0px 20px;}  
+.tagdivul li a{ padding: 20px;}
+.tagdivul li:hover { filter:alpha(opacity=75);-moz-opacity: 0.75; -khtml-opacity: 0.75;opacity: 0.75; }
 .source-box { height: 400px;margin-top: 20px; }
+.tagdivul li p:hover { color: #800000;font-weight: bold;}

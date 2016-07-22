@@ -55,7 +55,7 @@ namespace CloudSalesBusiness.Manage
         {
             string sqlWhere = "a.Status<>9";
             if (!string.IsNullOrEmpty(keyWords))
-                sqlWhere += " and ( a.CompanyName like '%" + keyWords + "%'  or  a.MobilePhone like '%" + keyWords + "%' )";
+                sqlWhere += " and ( a.CompanyName like '%" + keyWords + "%' or a.ClientCode like '%" + keyWords + "%' or  a.MobilePhone like '%" + keyWords + "%' )";
             bool isAsc = false;
             if (string.IsNullOrEmpty(orderBy))
             {
@@ -66,7 +66,7 @@ namespace CloudSalesBusiness.Manage
                 isAsc = orderBy.IndexOf(" asc") > -1 ? true : false;
                 orderBy = orderBy.Replace(" desc", "").Replace(" asc", "");
             }
-            string sqlColumn = @" a.AutoID,a.ClientID, a.CompanyName,a.Logo,a.Industry,
+            string sqlColumn = @" a.AutoID,a.ClientID,  a.ClientCode,a.CompanyName,a.Logo,a.Industry,
                                     a.CityCode,a.Address,a.PostalCode,a.ContactName,a.MobilePhone,a.OfficePhone,
                                     a.Status,b.EndTime,b.UserQuantity,a.TotalIn,a.TotalOut,a.FreezeMoney,
                                     a.Description,a.AuthorizeType,a.IsDefault,a.AgentID,a.CreateTime,a.CreateUserID ";

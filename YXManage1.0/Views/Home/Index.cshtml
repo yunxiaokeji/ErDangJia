@@ -40,7 +40,7 @@
                     <p class="mTop10 font10 colorfff">  
                         @(entity.MenuCode == "201000000" ? "昨天新增":entity.MenuCode == "203000000" ? "昨日登陆" :entity.MenuCode == "205000000" ? "昨日反馈": "")
                         <br/>
-                          @(entity.MenuCode == "201000000" ?  "客户数(" + clientanum + ")":entity.MenuCode == "205000000" ?  "新增(" + ViewBag.FeedAllNum.ToString() + ") 待处理(" + ViewBag.FeedNum.ToString() + ")" :entity.MenuCode == "203000000" ?"客户数(" + (logRPT.Count > 0 ? logRPT[2].Items[0].Value.ToString() : "0") + ") 人数(" + (logRPT.Count > 0 ? logRPT[1].Items[0].Value.ToString() : "0") + ")" : "")
+                          @(entity.MenuCode == "201000000" ?  "客户数(" + clientanum + ") 订单数("+ViewBag.OrderNum+")":entity.MenuCode == "205000000" ?  "新增(" + ViewBag.FeedAllNum.ToString() + ") 待处理(" + ViewBag.FeedNum.ToString() + ")" :entity.MenuCode == "203000000" ?"客户数(" + (logRPT.Count > 0 ? logRPT[2].Items[0].Value.ToString() : "0") + ") 人数(" + (logRPT.Count > 0 ? logRPT[1].Items[0].Value.ToString() : "0") + ")" : "")
                     </p>
                 </a>
             </li>

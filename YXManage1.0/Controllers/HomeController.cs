@@ -22,6 +22,7 @@ namespace YXManage.Controllers
             string beginTime = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
             ViewBag.LogRPT = ClientBusiness.GetClientsLoginReport(1, beginTime, beginTime);
             ViewBag.GrowRPT = ClientBusiness.GetClientsGrow(1, beginTime, beginTime).FirstOrDefault();
+            ViewBag.OrderNum = ClientOrderBusiness.GetClientOrdersCount(-1, beginTime, beginTime);
             ViewBag.FeedNum = FeedBackBusiness.GetFeedBacksCount("", "", 1);
             ViewBag.FeedAllNum = FeedBackBusiness.GetFeedBacksCount(beginTime, beginTime,-1);
 

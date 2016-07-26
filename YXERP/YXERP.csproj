@@ -288,6 +288,7 @@
     <Content Include="modules\excelmodel\stockdetail.json" />
     <Content Include="modules\excelmodel\stockout.json" />
     <Content Include="modules\excelmodel\orderdetailrpt.json" />
+    <Content Include="modules\excelmodel\stockdetailrpt.json" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

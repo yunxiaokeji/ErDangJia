@@ -458,5 +458,48 @@ namespace CloudSalesBusiness
 
             return list;
         }
+
+        public List<OrderStockRPT> GetOrderDetailRPT(int pageSize, int pageIndex, string clientid, string keyWords, string begintime, string endtime,string orderBy, string customerid, ref int totalCount, ref int pageCount)
+        {
+            List<OrderStockRPT> stockList=new List<OrderStockRPT>();
+            DataTable dt = GetOrderDetailRPTBase(pageSize, pageIndex, clientid, keyWords, begintime, endtime, orderBy, customerid, ref  totalCount, ref  pageCount);
+           
+            foreach (DataRow dr in dt.Rows)
+            {
+                OrderStockRPT stock=new OrderStockRPT();;
+                stock.FillData(dr);
+                stockList.Add(stock);
+            }
+            return stockList;
+        }
+
+        public DataTable GetOrderDetailRPTBase(int pageSize, int pageIndex, string clientid, string keyWords,
+            string begintime, string endtime, string orderBy, string customerid, ref int totalCount, ref int pageCount)
+        {
+            DataTable dt=new DataTable();
+            dt=SalesRPTDAL.BaseProvider.GetaOrderDetailReport(pageSize, pageIndex, clientid, keyWords, begintime, endtime, orderBy, customerid, ref  totalCount, ref  pageCount);
+            return dt;
+        }
+
+        public List<OrderStockRPT> GetaStockDetailReport(int pageSize, int pageIndex, string clientid, string keyWords, string begintime, string endtime, ref int totalCount, ref int pageCount)
+        {
+            List<OrderStockRPT> stockList = new List<OrderStockRPT>();
+            DataTable dt = GetaStockDetailReportBase(pageSize, pageIndex, clientid, keyWords, begintime, endtime, ref  totalCount, ref  pageCount);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                OrderStockRPT stock = new OrderStockRPT(); ;
+                stock.FillData(dr);
+                stockList.Add(stock);
+            }
+            return stockList;
+        }
+
+        public DataTable GetaStockDetailReportBase(int pageSize, int pageIndex, string clientid, string keyWords, string begintime, string endtime, ref int totalCount, ref int pageCount)
+        {
+            DataTable dt = new DataTable();
+            dt = SalesRPTDAL.BaseProvider.GetaStockDetailReport(pageSize, pageIndex, clientid, keyWords, begintime, endtime,  ref  totalCount, ref  pageCount);
+            return dt;
+        }
     }
 }

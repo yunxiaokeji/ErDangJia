@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "个人中心";
     Layout = "/Views/Shared/_LayoutUserCenter.cshtml";
-    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];    
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)ViewBag.User;    
 }
 
 @section css{
@@ -18,40 +18,52 @@
     });
 </script>
 }
+
 <div class="accountContent"> 
 
     <div class="content-body">
         <div name="accountInfo">
-            <ul class="table-add mLeft10">
+            <ul class="table-add mLeft10" style="z-index: 1;">
                 <li>
                     <span class="width80">账号：</span>
                     <span id="S_LoginName">@(CurrentUser.LoginName)</span>
                     @if (string.IsNullOrEmpty(CurrentUser.LoginName))
                     {
-                       <input type="button" id="bindLogioName" class="btn" value="设置" />
+                        <input type="button" id="bindLogioName" class="btn" value="设置"/>
                     }
                 </li>
                 <li>
                     <span class="width80">手机：</span>
-                    <span id="S_BindMobile">@(CurrentUser.BindMobilePhone)</span>
-                    <input type="text" id="mobilePhone" class="input bindloginmobile hide" value="@(CurrentUser.BindMobilePhone)" />
-                    <input type="button" id="bindLoginMobile" class="btn" value="@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone)?"绑定":"解绑")" />
+                    <span id="S_BindMobile" class="bolder">@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "未绑定" : CurrentUser.BindMobilePhone)</span>
+                    <input type="text" id="mobilePhone" class="input bindloginmobile hide" value="@(CurrentUser.BindMobilePhone)"/>
+                    <br/><input type="button" id="bindLoginMobile" class="btn mLeft80" value="@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "绑定" : "解绑")"/>
                     <span class="mLeft10 red loginError"  id="BindMobileError"></span>
                 </li>
                 <li class="bindloginmobile hide">
                     <span class="width80">验证码：</span>
                     <span></span>
-                    <input type="text"id="BindMobileCode" class="input width60" />
-                    <input type="button" id="SendBindMobileCode" class="btn mLeft5" value="获取验证码" />
+                    <input type="text"id="BindMobileCode" class="input width60"/>
+                    <input type="button" id="SendBindMobileCode" class="btn mLeft5" value="获取验证码"/>
                     <span class="mLeft10 red loginError"  id="BindMobileCodeError"></span>
                 </li>
-                 <li class="bindloginmobile hide">
+                <li class="bindloginmobile hide">
                     <span class="width80"></span>
                     <span></span>
-                    <input type="button" id="saveLoginMobile" class="btn" value="保存" />
-                    <input type="button" id="cancleLoginMobile" class="btn bindloginmobile mLeft5" value="取消" />
+                    <input type="button" id="saveLoginMobile" class="btn" value="保存"/>
+                    <input type="button" id="cancleLoginMobile" class="btn bindloginmobile mLeft5" value="取消"/>
+                </li>
+                <li>
+                    <span class="width80">微信：</span>
+                    <span id="S_BindWeiXin" class="bolder">@(string.IsNullOrEmpty(CurrentUser.WeiXinID) ? "未绑定" : "已绑定")</span>
+                    <input type="text" id="weixinid" class="input bindweixin hide" value="@(CurrentUser.WeiXinID)"/>
+                    <br/><input type="button" id="bindWeiXin" class="btn mLeft80" value="@(string.IsNullOrEmpty(CurrentUser.WeiXinID) ? "绑定" : "解绑")"/>
+                    <span class="mLeft10 red loginError"  id="BindWeiXinError"></span>
                 </li>
             </ul>
+           @* <div style="z-index: 66; position:absolute;left: 40%; top: 30%;background-color: #999">
+                <iframe id="WeiXinBindFrame" frameborder="0" scrolling="no" marginheight="0"   src="@ViewBag.BindUrl" style="height: 400px; width: 322px;" >
+                 </iframe>
+            </div>*@
         </div>
     </div>
 </div>

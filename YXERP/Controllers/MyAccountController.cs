@@ -7,6 +7,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using CloudSalesBusiness.Manage;
+using CloudSalesEntity;
 
 namespace YXERP.Controllers
 {
@@ -24,7 +26,7 @@ namespace YXERP.Controllers
         public ActionResult Index(string id)
         {
             ViewBag.Departments = OrganizationBusiness.GetDepartments(CurrentUser.AgentID);
-
+            ViewBag.User = Session["ClientManager"];
             id = id ?? "-1";
             ViewBag.Option = id;
             return View();
@@ -42,6 +44,9 @@ namespace YXERP.Controllers
 
         public ActionResult Account()
         {
+            ViewBag.User = Session["ClientManager"];
+            ViewBag.BindUrl = WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.BindCallBackUrl),
+                "", false);
             return View();
         }
 
@@ -71,6 +76,7 @@ namespace YXERP.Controllers
             JsonDictionary.Add("OfficePhone", CurrentUser.OfficePhone);
             JsonDictionary.Add("Email", CurrentUser.Email);
             JsonDictionary.Add("BindMobilePhone", CurrentUser.BindMobilePhone);
+            JsonDictionary.Add("WeiXinID", CurrentUser.WeiXinID);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -309,6 +315,125 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+        #endregion
+        #region 绑定微信
+
+        //微信授权地址
+        public ActionResult WeiXinLogin(string ReturnUrl)
+        {
+            return Redirect(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.BindCallBackUrl), ReturnUrl, false));
+        }
+
+        public ActionResult WeiXinBindUrl(string ReturnUrl)
+        {
+            return
+                Content(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.BindCallBackUrl),
+                    ReturnUrl, false));
+        }
+
+        public ActionResult WeiXinCallBack(string code, string state)
+        {
+            string result ="0";
+            string operateip = Common.Common.GetRequestIP();
+            var userToken = WeiXin.Sdk.Token.GetAccessToken(code);
+
+            if (string.IsNullOrEmpty(userToken.errcode))
+            {
+                var model = OrganizationBusiness.GetUserByWeiXinID(userToken.unionid, operateip);
+                if (model == null)
+                {
+                    Session["WeiXinTokenInfo"] = userToken.access_token + "|" + userToken.openid + "|" +
+                                                 userToken.unionid;
+                    if (BindWeiXin() > 0)
+                    {
+                        Response.Write("<script> alert('绑定成功');window.close();</script>");
+                        Response.End();
+                        return Redirect(state);
+                    }
+                    else
+                    {
+                        Response.Write("<script>window.close();</script>");
+                        Response.End();
+                        return Content("");
+                    }
+                }
+                else
+                {
+                    //未注销
+                    if (model.Status.Value==1)
+                    {
+                        Session["ClientManager"] = model;
+                        return Redirect("/Home/Index");
+                    }
+                    else
+                    {
+                        Response.Write("<script>alert('用户已被注销');window.close();</script>");
+                        Response.End();
+                        return Content("");
+                    }
+                }
+            }
+            else
+            {
+                Response.Write("<script>alert('暂未获取到微信用户信息，绑定失败');window.close();</script>");
+                Response.End();
+                return Content("");
+            }
+        }
+
+        //绑定微信账户
+        public int BindWeiXin()
+        {
+            int result = 0;
+            if (Session["WeiXinTokenInfo"] != null)
+            {
+                string tokenInfo = Session["WeiXinTokenInfo"].ToString();
+                string[] tokenArr = tokenInfo.Split('|');
+                if (tokenArr.Length == 3)
+                {
+                    string access_token = tokenArr[0];
+                    string unionid = tokenArr[2];
+                    bool flag = ClientBusiness.BindUserWeiXinID(CurrentUser.ClientID, CurrentUser.UserID, unionid);
+                    if (flag)
+                    {
+                        Users user = (Users)Session["ClientManager"];
+                        user.WeiXinID = unionid; 
+                        Session["ClientManager"] = user;
+                        Session.Remove("WeiXinTokenInfo");
+                        result = 1;
+                    }
+                }
+            }
+            else
+            {
+                result = -5;
+            }
+
+            return result;
+        }
+
+        public JsonResult UnBindWeiXin()
+        {
+            int result = 0;
+            bool flag = ClientBusiness.BindUserWeiXinID(CurrentUser.ClientID, CurrentUser.UserID, "",1);
+            if (flag)
+            {
+                if (Session["ClientManager"] != null)
+                {
+                    Users user = (Users) Session["ClientManager"];
+                    user.WeiXinID = "";
+                    Session["ClientManager"] = user;
+                } 
+                result = 1;
+            }
+            JsonDictionary.Add("Result", result);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
 
         #endregion

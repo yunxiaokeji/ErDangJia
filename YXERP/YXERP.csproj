@@ -54,8 +54,9 @@
       <HintPath>DLL\Net.Sourceforge.Pinyin4j.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NPOI">
       <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
@@ -184,6 +185,7 @@
     <Content Include="Content\menuico\stockmanage.png" />
     <Content Include="Content\menuico\systemSet.png" />
     <Content Include="DLL\JsonObject.dll" />
+    <Content Include="modules\css\home\selectlogin.css" />
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />
     <Content Include="modules\css\iconfont\iconfont.css" />
@@ -216,7 +218,9 @@
     <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\loginBackground.png" />
+    <Content Include="modules\images\logo-weixin.png" />
     <Content Include="modules\images\none-img.png" />
+    <Content Include="modules\images\wx_logo64.png" />
     <Content Include="modules\plug\autocomplete\autocomplete.js" />
     <Content Include="modules\plug\autocomplete\style.css" />
     <Content Include="modules\plug\choosecolor\spectrum.css" />
@@ -283,6 +287,7 @@
     <Content Include="modules\excelmodel\overflow.json" />
     <Content Include="modules\excelmodel\stockdetail.json" />
     <Content Include="modules\excelmodel\stockout.json" />
+    <Content Include="modules\excelmodel\orderdetailrpt.json" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -825,6 +830,7 @@
     <Content Include="modules\scripts\myaccount\setavatar.js" />
     <Content Include="modules\scripts\myaccount\setpassword.js" />
     <Content Include="modules\scripts\myaccount\account.js" />
+    <Content Include="modules\scripts\salesrpt\orderdetailrpt.js" />
     <Content Include="modules\scripts\sales\opportunity-detail.js" />
     <Content Include="modules\scripts\sales\orders.js" />
     <Content Include="modules\scripts\sales\detail.js" />
@@ -1054,6 +1060,8 @@
     <Content Include="Views\Customer\CustomerOwnRPT.cshtml" />
     <Content Include="Views\Products\CategoryImport.cshtml" />
     <Content Include="Views\StorageOut\StorageOutPrintModel.cshtml" />
+    <Content Include="Views\Home\WeiXinSelectLogin.cshtml" />
+    <Content Include="Views\SalesRPT\OrderDetailRPT.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1247,6 +1255,10 @@
     <ProjectReference Include="..\MD.SDK\MD.SDK.csproj">
       <Project>{c6cd2682-4dca-4ee8-a5e5-a0e117073390}</Project>
       <Name>MD.SDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WeiXin.Sdk\WeiXin.Sdk.csproj">
+      <Project>{a01e43b8-fabf-4601-8894-4374026aa08c}</Project>
+      <Name>WeiXin.Sdk</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

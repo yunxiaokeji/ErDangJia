@@ -807,7 +807,7 @@ namespace YXERP.Controllers
                 int totalCount = 0;
                 int pageCount = 0; 
                 ipPath= Server.MapPath("~");
-                dt = new ProductsBusiness().GetProductListDataTable(qicProduct.CategoryID, qicProduct.BeginPrice, qicProduct.EndPrice, qicProduct.Keywords, qicProduct.OrderBy, qicProduct.IsAsc, PageSize, qicProduct.PageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+                dt = new ProductsBusiness().GetProductListDataTable(qicProduct.CategoryID, qicProduct.BeginPrice, qicProduct.EndPrice, qicProduct.Keywords, qicProduct.OrderBy, qicProduct.IsAsc, int.MaxValue, 1, ref totalCount, ref pageCount, CurrentUser.ClientID);
 
             }
             buffer = excelWriter.Write(dt, dic, ipPath);

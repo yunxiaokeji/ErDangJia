@@ -51,6 +51,15 @@ namespace CloudSalesDAL
             return GetDataTable(sql, paras, CommandType.Text);
         }
 
+        public DataSet GetUserByWeiXinID(string weiXinID)
+        {
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@WeiXinID", weiXinID)
+            };
+            return GetDataSet("P_GetUserByWeiXinID", paras, CommandType.StoredProcedure, "User|Permission");
+        }
+
         public DataTable GetUserByUserID(string userid)
         {
             string sql = "select * from Users where UserID=@UserID";

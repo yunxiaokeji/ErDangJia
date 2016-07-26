@@ -1,58 +1,211 @@
 ﻿
 @{
     ViewBag.Title = "个人中心";
-    Layout = "/Views/Shared/_LayoutUserCenter.cshtml";
+   // Layout = "/Views/Shared/_LayoutUserCenter.cshtml";
     var departs = (List<CloudSalesEntity.Department>)ViewBag.Departments;
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)ViewBag.User;  
     
 }
 
 @section css{
-    <link href="/modules/css/myaccount/myaccount.css" rel="stylesheet" />
+    <link href="/modules/css/myaccount/myaccount.css" rel="stylesheet"/>
+    <link href="/modules/css/myaccount/cropbox.css" rel="stylesheet"/>
+    <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
 }
-<div class="accountContent">
-    <div class="content-body">
-        <div name="accountInfo" id="accountInfo">
-            <ul class="table-add pLeft10">
-                <li>
-                    <span class="width80">姓名：</span><input type="text" id="Name" data-empty="* 必填" class="input verify" />
+
+<div  class="userinfo" >
+        <div class="left">
+            <span class="imgradius">
+                <img class="imgradius" style="width: 80px; height: 80px;" src="/Content/uploadFiles/9c167e3b-6e38-4c51-ad36-fcd770b4c6c3.png"/>
+            </span>
+        </div>
+        <div class="left">
+            <ul class="table-info pLeft20">
+                <li >
+                    <label class="colorhulan font14" id="labName">Michaux</label>
                 </li>
                 <li>
-                    <span class="width80">职位：</span><input type="text" id="Jobs"  class="input" />
+                    <label id="labDepart">开发部</label>
+                    <label class="mLeft20" id="labJob">员工</label>
+                    <a class="mLeft10" id="labelpassWord" >[重置密码]</a>
+                </li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+<div class="accountContent">
+    <div class="tab-nav ">
+        <ul class="tab-nav-ul left">
+            <li data-id="userInfo" class="hover">基本信息</li>
+            <li data-id="userAccount">账号设置</li>
+            <li data-id="userImg">设置头像</li>
+            <li data-id="userPassWord">重置密码</li>
+            <li data-id="UserFeedBack">我的反馈</li>
+        </ul>
+    </div>
+    <div class="content-body">
+        <div class="nav-partdiv" id="userInfo">
+            <ul class="table-add pLeft10">
+                <li>
+                    <span class="width80">姓名：</span><input type="text" id="Name" data-empty="* 必填" class="input verify"/>
+                </li>
+                <li>
+                    <span class="width80">职位：</span><input type="text" id="Jobs" class="input"/>
                 </li>
                 <li>
                     <span class="width80">部门：</span><span id="ddlDepart"></span>
                 </li>
-                 <li>
-                    <span class="width80">手机：</span><input type="text" id="MobilePhone" data-text="手机格式不对" data-type="mobile" class="input verify" />
+                <li>
+                    <span class="width80">手机：</span><input type="text" id="MobilePhone" data-text="手机格式不对" data-type="mobile" class="input verify"/>
                 </li>
                 <li>
-                    <span class="width80">办公电话：</span><input type="text" id="OfficePhone"  class="input" />
+                    <span class="width80">办公电话：</span><input type="text" id="OfficePhone" class="input"/>
                 </li>
                 <li>
-                    <span class="width80">邮箱：</span><input type="text" id="Email" data-text="邮箱格式不对" data-type="email" class="input verify" />
+                    <span class="width80">邮箱：</span><input type="text" id="Email" data-text="邮箱格式不对" data-type="email" class="input verify"/>
                 </li>
                 <li>
-                    <span class="width80">生日：</span><input type="text" id="Birthday"  class="input "/>
+                    <span class="width80">生日：</span><input type="text" id="Birthday" class="input "/>
                 </li>
             </ul>
-
             <div class="mTop20">
                 <span  class="btn" id="btnSaveAccountInfo" >保存</span>   
             </div>
         </div>
-    </div>
-</div>
-       
+        <div id="userImg" class="nav-partdiv hide">
+            <div>
+                <div style="margin: 30px auto 0 20px; width: 900px;">
+                    <div class="imageBox left" style="height: 242px; width: 242px;">
+                        <div class="thumbBox"></div>
+                        <div class="spinner" style="display: none; line-height: 242px;">上传头像</div>
+                    </div>
+                    <div class="left mLeft20" style="height: 242px; right: 0px; text-align: center">
+                        <div><input type="button" id="btnZoomIn" class="btn" style="padding: 5px 16px; background-color: #eee; color: #666; font-size: 18px;" value="+">
+                        </div>
+                        <div style="margin-top: 185px;"><input type="button" id="btnZoomOut" class="btn " style="padding: 5px 18px; background-color: #eee; color: #666; font-size: 20px;" value="-">
+                        </div>
+                    </div>
+                    <div class="cropped3 left hide mLeft50">
 
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+            </div>
+            <div class="action" style="margin-left: 20px; width: 245px;">
+                <div class="left">
+                    <label for="upload-file" class="btn">上传头像</label>
+                    <input type="file" class="upload-file" name="upload-file" id="upload-file"/>
+                </div>
+                <div class="right">
+                    <input type="button" id="btnCrop" class="btn" value="保存">
+                </div>
+                <div class="clear"></div>
+
+            </div>
+        </div>
+        <div id="userAccount" class="nav-partdiv hide">
+                 <ul class="table-add mLeft10" style="z-index: 1;">
+                <li>
+                    <span class="width80">账号：</span>
+                    <span id="S_LoginName">@(CurrentUser.LoginName)</span>
+                    @if (string.IsNullOrEmpty(CurrentUser.LoginName))
+                    {
+                        <input type="button" id="bindLogioName" class="btn" value="设置"/>
+                    }
+                </li>
+                <li>
+                    <span class="width80 lineHeight30">手机：</span>
+                    <span id="S_BindMobile" class="bolder lineHeight30">@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "未绑定" : CurrentUser.BindMobilePhone)</span>
+                    <input type="text" id="mobilePhone" class="input bindloginmobile hide" value="@(CurrentUser.BindMobilePhone)"/>
+                    <br/><input type="button" id="bindLoginMobile" class="btn mLeft80" value="@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "绑定" : "解绑")"/>
+                    <span class="mLeft10 red loginError"  id="BindMobileError"></span>
+                </li>
+                <li class="bindloginmobile hide">
+                    <span class="width80">验证码：</span>
+                    <span></span>
+                    <input type="text"id="BindMobileCode" class="input width60"/>
+                    <input type="button" id="SendBindMobileCode" class="btn mLeft5" value="获取验证码"/>
+                    <span class="mLeft10 red loginError"  id="BindMobileCodeError"></span>
+                </li>
+                <li class="bindloginmobile hide">
+                    <span class="width80"></span>
+                    <span></span>
+                    <input type="button" id="saveLoginMobile" class="btn" value="保存"/>
+                    <input type="button" id="cancleLoginMobile" class="btn bindloginmobile mLeft5" value="取消"/>
+                </li>
+                <li>
+                    <span class="width80 lineHeight30">微信：</span>
+                    <span id="S_BindWeiXin" class="bolder lineHeight30">@(string.IsNullOrEmpty(CurrentUser.WeiXinID) ? "未绑定" : "已绑定")</span>
+                    <input type="text" id="weixinid" class="input bindweixin hide" value="@(CurrentUser.WeiXinID)"/>
+                    <br/><input type="button" id="bindWeiXin" class="btn mLeft80" value="@(string.IsNullOrEmpty(CurrentUser.WeiXinID) ? "绑定" : "解绑")"/>
+                    <span class="mLeft10 red loginError"  id="BindWeiXinError"></span>
+                </li>
+            </ul>
+           @* <div style="z-index: 66; position:absolute;left: 40%; top: 30%;background-color: #999">
+                <iframe id="WeiXinBindFrame" frameborder="0" scrolling="no" marginheight="0"   src="@ViewBag.BindUrl" style="height: 400px; width: 322px;" >
+                 </iframe>
+            </div>*@
+        </div>
+        <div id="userPassWord" class="nav-partdiv hide">
+             <ul class="table-add mLeft10">
+                <li id="li_loginOldPWD">
+                    <span class="width80">原密码：</span><input type="password" id="LoginOldPWD" maxlength="25" class="input" />
+                    <span class="mLeft10 red loginError"  id="LoginOldPWDError"></span>
+                </li>
+                <li>
+                    <span class="width80">密码：</span><input type="password" id="LoginPWD" maxlength="25" class="input" />
+                    <span class="mLeft10 red loginError"  id="LoginPWDError"></span> <span >密码，6-25位，至少两种不同组合</span>
+                </li>
+                <li>
+                    <span class="width80">确认密码：</span><input type="password" id="LoginConfirmPWD" maxlength="25" class="input" />
+                    <span class="mLeft10 red loginError"  id="LoginConfirmPWDError"></span>
+                </li>
+            </ul>
+            <div class="mTop20">
+                <span  class="btn" id="btnSaveAccountPwd" >保存</span>
+            </div>
+        </div>
+        <div id="UserFeedBack" class="nav-partdiv hide">
+            <div class="accountsearch-body">
+                <div class="left" title="创建时间">
+                    <input type="text" id="iptCreateTime" placeholder="创建时间" class="ipt-date"  />
+                </div>
+                <a class="btn right mLeft20 ico-feedback" href="#">我要反馈</a>
+                <div class="right searth-module" data-text="输入关键字..." data-width="150"></div>
+                <div class="clear"></div>
+            </div>
+            <table class="table-list">
+                <tr class="tr-header">            
+                    <td class="tLeft">标题</td>
+                    <td class="width150">类型</td>
+                    <td class="tLeft">解答</td>
+                    <td class="width200">创建时间</td>           
+                    <td class="width60">状态</td>
+                </tr>
+            </table>
+             <div id="pager" class="mTop20"></div>
+         </div>
+    </div>
+ </div>  
+@*    <div class="feedback">意见反馈</div>*@
+    <input id="feedback-filepath" type="hidden" />
+    <input id="txt_username" value="@CurrentUser.Name" type="hidden" />
+    <input id="txt_usermobilephone" value="@CurrentUser.MobilePhone" type="hidden" />
 @section scripts{
+
 <script src="/Scripts/jquery-1.11.1.js"></script>
 <script src="/modules/plug/laydate/laydate.js"></script>
-
+<script src="/modules/scripts/myaccount/cropbox.js"></script>
 <script type="text/javascript">
-   
-    $(function () {
-        seajs.use(["scripts/myaccount/myaccount"], function (ObjectJS) {
-            ObjectJS.init('@Html.ToJSONString(departs)','@ViewBag.Option');
+    $(function () { 
+        $(".bindloginmobile").hide();
+        seajs.use(["scripts/index", "scripts/myaccount/myaccount", "scripts/myaccount/setavatar", "scripts/myaccount/account", "scripts/myaccount/setpassword", "scripts/myaccount/myfeedback"], function (index,ObjectJS, imgUpload, accoun, editpass) {
+            index.init();
+            ObjectJS.init('@Html.ToJSONString(departs)', '@ViewBag.Option');
+            imgUpload.init();
+            accoun.init();
+            editpass.init(); 
         }); 
     });
 

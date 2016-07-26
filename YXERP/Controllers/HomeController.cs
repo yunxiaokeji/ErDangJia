@@ -195,6 +195,70 @@ namespace YXERP.Controllers
             return Redirect("/Home/Login");
         }
 
+
+        //微信账户选择进入方式
+        public ActionResult WeiXinSelectLogin()
+        {
+            if (Session["WeiXinTokenInfo"] == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            return View();
+        }
+
+        //微信授权地址
+        public ActionResult WeiXinLogin(string ReturnUrl)
+        { 
+            return Redirect(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.CallBackUrl), "", false));
+        }
+
+        //微信回调地址
+        public ActionResult WeiXinCallBack(string code, string state)
+        {
+            string operateip = Common.Common.GetRequestIP();
+            var userToken = WeiXin.Sdk.Token.GetAccessToken(code);
+
+            if (string.IsNullOrEmpty(userToken.errcode))
+            {
+                var model = OrganizationBusiness.GetUserByWeiXinID(userToken.unionid, operateip);
+                //已注册
+                if (model != null)
+                {
+                    //未注销
+                    if (model.Status.Value == 1)
+                    {
+                        Session["ClientManager"] = model;
+
+                        if (string.IsNullOrEmpty(state))
+                            return Redirect("/Home/Index");
+                        else
+                            return Redirect(state);
+                    }
+                    else
+                    {
+                        if (model.Status.Value == 9)
+                        {
+                            Response.Write("<script>alert('您的账户已注销,请切换其他账户登录');location.href='/Home/login';</script>");
+                            Response.End();
+                        }
+                        else
+                        {
+                            return Redirect("/Home/Login");
+                        }
+
+                    }
+                }
+                else
+                {
+                    Session["WeiXinTokenInfo"] = userToken.access_token + "|" + userToken.openid + "|" + userToken.unionid;
+                    return Redirect("/Home/Login");
+                }
+            }
+
+            return Redirect("/Home/Login");
+        }
+         
         #region Ajax
 
         //员工登录

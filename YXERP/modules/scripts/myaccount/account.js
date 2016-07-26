@@ -1,5 +1,5 @@
 ﻿define(function (require, exports, module) {
-    var Global = require("global"),
+    var Global = require("global"), 
         Verify = require("verify"), VerifyObject,
         doT = require("dot"),
         Easydialog = require("easydialog");
@@ -18,10 +18,40 @@
 
         var _self = this;
 
-        $("#bindLogioName").click(function () {
-            _self.setLoginname(function () {
+        $("#bindWeiXin").click(function () {
+            if ($('#weixinid').val() != '') {
+                confirm("确认解除绑定吗?", function() {
+                    Global.post("/MyAccount/UnBindWeiXin", null, function(data) { 
+                        if (data.Result > 0) {
+                            $('#weixinid').val('');
+                            $('#S_BindWeiXin').html('未绑定');
+                            $('#bindWeiXin').val('绑定');
+                            alert("操作成功");
+                        } else {
+                            alert("操作失败");
+                        }
+                    });
+                });
+            } else { 
+                //Easydialog.open({
+                //    container: {
+                //        id: "bindweixin",
+                //        header: '绑定微信登陆二当家',
+                //        content: $($($('#WeiXinBindFrame').context)[0].body).find('img')[0],
+                //        yesFn: function() {
+                //        },
+                //        callback: function() {
 
-            });
+                //        }
+                //    }
+                //});
+
+                var  s = window.open("/MyAccount/WeiXinLogin?ReturnUrl='/MyAccount/Account'", "绑定微信登陆二当家", "height=540, width=450, toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+                //console.log(s.document);
+            }
+        }); 
+        $("#bindLogioName").click(function () {
+            _self.setLoginname(function () {});
         });
         $("#bindLoginMobile").click(function () {
             if (!$("#S_LoginName").html()) {
@@ -35,15 +65,15 @@
             }
         });
 
-        $("#cancleLoginMobile").click(function () {
+        $("#cancleLoginMobile").click(function() {
             $(".bindloginmobile").hide();
             $("#bindLoginMobile").show();
             $("#mobilePhone").val("");
             $("#BindMobileCode").val("");
             $("#BindMobileCodeError").html("");
             $("#BindMobileError").html("");
-            $("#SendBindMobileCode").removeAttr("disabled")
-        })
+            $("#SendBindMobileCode").removeAttr("disabled");
+        });
 
         $("#saveLoginMobile").click(function () {
             _self.SaveAccountBindMobile();
@@ -59,27 +89,20 @@
                         Global.post("/MyAccount/IsExistLoginName", { loginName: BindMobile }, function (data) {
                             if (data.Result) {
                                 $("#BindMobileError").html("手机已存在");
-                            }
-                            else {
+                            }else {
                                 $("#BindMobileCodeError").html("");
-
                                 ObjectJS.SendMobileMessage("SendBindMobileCode", BindMobile);
                             }
                         });
-                    }
-                    else {
+                    }else {
                         $("#BindMobileError").html("手机格式有误");
                     }
-
-                }
-                else {
+                }else {
                     $("#BindMobileError").html("手机不能为空");
                 }
-            }
-            else {
+            }else {
                 ObjectJS.SendMobileMessage("SendBindMobileCode", S_BindMobile);
             }
-
         });
     }
 
@@ -127,8 +150,7 @@
                                     alert("账号设置成功！");
                                     $("#S_LoginName").html($("#LoginName").val());
                                     $("#bindLogioName").hide();
-                                }
-                                else {
+                                }else {
                                     alert("账号设置失败！");
                                 }
                             });
@@ -181,20 +203,17 @@
 
                         if (data.Result) {
                             $("#BindMobileError").html("手机已存在");
-                        }
-                        else {
+                        }else {
                             $("#BindMobileError").html("");
 
                             var BindMobileCode = $("#BindMobileCode").val();
                             if (BindMobileCode == "") {
                                 $("#BindMobileCodeError").html("验证码不能为空");
-                            }
-                            else {
+                            }else {
                                 Global.post("/Home/ValidateMobilePhoneCode", { mobilePhone: BindMobile, code: BindMobileCode }, function (data) {
                                     if (data.Result == 0) {
                                         $("#BindMobileCodeError").html("验证码有误");
-                                    }
-                                    else {
+                                    } else {
                                         $("#BindMobileCodeError").html("");
 
                                         var Paras =
@@ -208,11 +227,9 @@
                                                 $("#S_BindMobile").html(BindMobile);
                                                 $("#cancleLoginMobile").click();
                                                 $("#bindLoginMobile").val("解绑");
-                                            }
-                                            else if (data.Result == 2) {
+                                            }else if (data.Result == 2) {
                                                 $("#BindMobileCodeError").html("验证码有误");
-                                            }
-                                            else if (data.Result == 0) {
+                                            }else if (data.Result == 0) {
                                                 alert("保存失败");
                                             }
                                         });

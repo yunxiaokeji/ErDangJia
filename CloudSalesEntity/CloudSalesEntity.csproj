@@ -71,6 +71,7 @@
     <Compile Include="Manage\SystemMenu.cs" />
     <Compile Include="Report\CustomerSourceRPT.cs" />
     <Compile Include="Report\CustomerStageRPT.cs" />
+    <Compile Include="Report\OrderStockRPT.cs" />
     <Compile Include="Report\OrderTypeRPT.cs" />
     <Compile Include="Report\OrderMapRPT.cs" />
     <Compile Include="Sales\OrderEntity.cs" />

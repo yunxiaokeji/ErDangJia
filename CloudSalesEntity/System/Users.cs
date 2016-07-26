@@ -52,7 +52,7 @@ namespace CloudSalesEntity
 		private DateTime _createtime= DateTime.Now;
 		private string _createuserid;
 		private string _clientid;
-
+        private string _weixinid;
 
         public List<Menu> Menus { get; set; }
 
@@ -271,6 +271,11 @@ namespace CloudSalesEntity
 			get{return _clientid;}
 		}
 
+        [Property("Lower")] 
+        public string WeiXinID {
+            set { _weixinid = value; }
+            get { return _weixinid; }
+        }
 		#endregion Model
 
         public string FirstName 
@@ -316,7 +321,9 @@ namespace CloudSalesEntity
 
         public Agents Agents { get; set; }
 
-        public Manage.Clients Client { get; set; }
+	  
+
+	    public Manage.Clients Client { get; set; }
         /// <summary>
         /// 填充数据
         /// </summary>

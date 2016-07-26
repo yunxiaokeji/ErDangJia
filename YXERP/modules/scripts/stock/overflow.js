@@ -112,7 +112,7 @@ define(function (require, exports, module) {
 
         $("#dropdown").click(function () {
             var position = $("#dropdown").position();
-            $("#exceldropdown").css({ "top": position.top + 30, "left": position.left - 80 }).show().mouseleave(function () {
+            $("#exceldropdown").css({ "top": position.top + 30, "left": position.left - 110 }).show().mouseleave(function () {
                 $(this).hide();
             });
         });

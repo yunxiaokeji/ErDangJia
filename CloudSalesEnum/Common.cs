@@ -101,7 +101,11 @@ namespace CloudSalesEnum
         /// <summary>
         /// 智能工厂
         /// </summary>
-        ZNGC = 4
+        ZNGC = 4,
+        /// <summary>
+        /// 微信
+        /// </summary>
+        WeiXin = 5
     }
 
     /// <summary>

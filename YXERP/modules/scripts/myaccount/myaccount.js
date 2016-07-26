@@ -1,8 +1,25 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
+        Easydialog = require("easydialog"),
+        doT = require("dot"),
+        moment = require("moment"),
         Verify = require("verify"), VerifyObject;
 
+    require("daterangepicker");
+    require("jquery");
+    require("pager");
+
     var ObjectJS = {};
+
+    ObjectJS.Params = {
+        pageIndex: 1,
+        type: -1,
+        status: -1,
+        beginDate: '',
+        endDate: '',
+        keyWords: '',
+        id: ''
+    };
 
     //初始化
     ObjectJS.init = function (departs, option) {
@@ -15,29 +32,13 @@
             verifyType: "data-type",
             regText: "data-text"
         });
-
         _self.bindEvent();
-
-        _self.getDetail(departs);
-
-        if (option != "-1")
-        {
-            $(".search-stages li").removeClass("hover").eq(parseInt(option)).addClass("hover");
-            $(".content-body div[name='accountInfo']").hide().eq(parseInt(option)).show();
-        }
+        _self.getDetail(departs); 
     }
 
     //绑定事件
     ObjectJS.bindEvent = function () {
-
-        //tab切换
-        $(".search-stages li").click(function () {
-            var _this = $(this);
-            _this.siblings().removeClass("hover");
-            _this.addClass("hover");
-
-            $(".content-body div[name='accountInfo']").hide().eq( parseInt(_this.data("id")) ).show();
-        });
+        var _self = this;
         $("#btnExportExcel").click(function () {
             var form = $("<form>");//定义一个form表单
             form.attr("style", "display:none");
@@ -49,13 +50,65 @@
         });
         //用户基本信息
         $("#btnSaveAccountInfo").click(function () {
-            if (!VerifyObject.isPass("#accountInfo")) {
+            if (!VerifyObject.isPass("#userInfo")) {
                 return false;
             };
-
-            ObjectJS.saveAccountInfo();
+            _self.saveAccountInfo();
         });
-  
+        //切换模块
+        $(".tab-nav-ul li").click(function () {
+            var _this = $(this);
+            _this.siblings().removeClass("hover");
+            _this.addClass("hover");
+            $(".nav-partdiv").hide();
+            $("#" + _this.data("id")).show();
+
+            if (_this.data("id") == "userInfo") {
+                _self.getDetail();
+            } else if (_this.data("id") == "userAccount" ) {
+                
+            } else if (_this.data("id") == "userImg" ) {
+                
+            } else if (_this.data("id") == "userPassWord" ) {
+                 
+            } else if (_this.data("id") == "UserFeedBack" && (!_this.data("first") || _this.data("first") == 0)) {
+                _this.data("first", "1");
+                _self.bindData(); 
+            }
+        });
+        $('#labelpassWord').click(function() {
+            $(".tab-nav-ul li").eq(3).click();
+        });
+
+        /*我的反馈绑定*/
+        //关键字查询
+        require.async("search", function () {
+            $(".searth-module").searchKeys(function (keyWords) {
+                if (ObjectJS.Params.keyWords != keyWords) {
+                    ObjectJS.Params.pageIndex = 1;
+                    ObjectJS.Params.keyWords = keyWords;
+                    ObjectJS.bindData();
+                }
+            });
+        });
+
+        //日期插件
+        $("#iptCreateTime").daterangepicker({
+            showDropdowns: true,
+            empty: true,
+            opens: "right",
+            ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')]
+            }
+        }, function (start, end, label) {
+            ObjectJS.Params.PageIndex = 1;
+            ObjectJS.Params.beginDate = start ? start.format("YYYY-MM-DD") : "";
+            ObjectJS.Params.endDate = end ? end.format("YYYY-MM-DD") : "";
+            ObjectJS.bindData();
+        });
     }
 
     //获取用户详情
@@ -67,6 +120,10 @@
                 //基本信息
                 $("#Name").val(item.Name);
                 $("#Jobs").val(item.Jobs);
+                $('#labName').text(item.Name);
+                $('#labDepart').text(item.DepartmentName);
+                $('#labJob').text(item.Jobs);
+
                 var birthday = item.Birthday.toDate("yyyy-MM-dd");
                 $("#Birthday").val(birthday != "3939-01-01" ? birthday : "");
                 $("#Age").val(item.Age);
@@ -93,7 +150,7 @@
                 $("#MobilePhone").val(item.MobilePhone);
                 $("#OfficePhone").val(item.OfficePhone);
                 $("#Email").val(item.Email);
-
+                 
                 //绑定的手机号
                 if (item.BindMobilePhone != '') {
 
@@ -139,7 +196,6 @@
                 } else {
                     //新增账户
                     $("#li_loginOldPWD").hide();
-
                     $("#LoginName").blur(function () {
                         if ($(this).val() != '') {
                             if ($(this).val().length > 4) {
@@ -188,6 +244,57 @@
             }
         })
     }
+
+    //绑定发聩数据列表
+    ObjectJS.bindData = function () {
+        $(".tr-header").nextAll().remove();
+        Global.post("/MyAccount/GetFeedBacks", ObjectJS.Params, function (data) {
+            doT.exec("template/myaccount/myfeedback-list.html?3", function (templateFun) {
+                var innerText = templateFun(data.Items);
+                innerText = $(innerText);
+                $(".tr-header").after(innerText);
+                $(".a").bind("click", function () { ObjectJS.getFeedBackDetail($(this).data("id")); });
+            });
+
+            $("#pager").paginate({
+                total_count: data.TotalCount,
+                count: data.PageCount,
+                start: ObjectJS.Params.pageIndex,
+                display: 5,
+                border: true,
+                rotate: true,
+                images: false,
+                mouse: 'slide',
+                onChange: function (page) {
+                    ObjectJS.Params.pageIndex = page;
+                    ObjectJS.bindData();
+                }
+            });
+
+        });
+    }
+    
+    //反馈详情
+    ObjectJS.getFeedBackDetail = function (id) {
+        Global.post("/MyAccount/GetFeedBackDetail", { id: id }, function (data) {
+            $("#show-contact-detail").empty();
+            doT.exec("template/myaccount/myfeedback-detail.html?3", function (templateFun) {
+                var innerText = templateFun(data.Item);
+                Easydialog.open({
+                    container: {
+                        id: "show-model-detail",
+                        header: "反馈详情",
+                        content: innerText,
+                        yesFn: function () {
+                        },
+                        callback: function () {
+                        }
+                    }
+                });
+                $(".edit-company").hide();
+            });
+        });
+    };
 
     module.exports = ObjectJS;
 });

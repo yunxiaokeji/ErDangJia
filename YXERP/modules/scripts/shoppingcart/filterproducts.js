@@ -22,18 +22,21 @@
 
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (type, guid) {
+    ObjectJS.init = function (type, guid, pids) { 
         var _self = this;
         _self.type = type;
         _self.guid = guid;
+        _self.pids = pids; 
         _self.isLoading = false;
         Params.DocType = type;
         _self.getChildCategory("");
         _self.bindEvent();
-        $(".content-body").createCart({
+        _self.cartitem = {
             ordertype: type,
-            guid: guid
-        });
+            guid: guid,
+            pids: pids
+        };
+        $(".content-body").createCart(_self.cartitem);
     }
 
     //获取分类信息和下级分类
@@ -272,28 +275,7 @@
                     Params.PageIndex = page;
                     ObjectJS.getProducts();
                 }
-            });
-            //$("#toppager").paginate({
-            //    total_count: data.TotalCount,
-            //    count: data.PageCount,
-            //    start: Params.PageIndex,
-            //    display: 5,
-            //    border: true,
-            //    border_color: '#fff',
-            //    text_color: '#333',
-            //    background_color: '#fff',
-            //    border_hover_color: '#ccc',
-            //    text_hover_color: '#000',
-            //    background_hover_color: '#efefef',
-            //    rotate: true,
-            //    images: false,
-            //    mouse: 'slide',
-            //    float: "left",
-            //    onChange: function (page) {
-            //        Params.PageIndex = page;
-            //        ObjectJS.getProducts();
-            //    }
-            //});
+            }); 
         });
     }
 
@@ -345,7 +327,7 @@
                 _self.bindDetail(CacheProduct[pid], did);
                 _self.bindDetailEvent(CacheProduct[pid], pid, did)
             });
-        }
+        } 
     }
 
     //绑定加入购物车事件
@@ -391,17 +373,14 @@
                 $("#quantity").val($("#quantity").val() * 1 - 1);
             }
         });
-
-        //加入购物车
-        $("#addcart").click(function () {
-            var cart = $("#shopping-cart").offset();
+        $("#addcart").click(function () { 
+            var cart = $("#shopping-cart").offset(); 
             var temp = $("<div style='width:30px;height:30px;'><img style='width:30px;height:30px;' src='" + $("#productimg").attr("src") + "' /></div>");
             temp.offset({ top: $(this).offset().top + 20, left: $(this).offset().left + 100 });
             temp.css("position", "absolute");
             $("body").append(temp);
             temp.animate({ top: cart.top, left: cart.left }, 500, function () {
-                temp.remove();
-
+                temp.remove(); 
                 Global.post("/ShoppingCart/AddShoppingCart", {
                     ordertype: _self.type,
                     guid: _self.guid,
@@ -413,14 +392,20 @@
                     remark: $("#productDetails li.hover").data("name")
                 }, function (data) {
                     if (data.Status) {
-                        Easydialog.close();
-                        $("#shopping-cart .totalcount").html($("#shopping-cart .totalcount").html() * 1 + 1);
-
+                        Easydialog.close(); 
+                        if ($("#shopping-cart .totalcount").html() == '0') {
+                            _self.cartitem.pids = '';
+                            $("#shopping-cart").data('pid', '');
+                        }  
+                        if ($("#shopping-cart").data('pid').indexOf(_self.detailid) == -1) {
+                            $("#shopping-cart").data('pid', $("#shopping-cart").data('pid') + ',' + _self.detailid);
+                            $("#shopping-cart .totalcount").html($("#shopping-cart .totalcount").html() * 1 + 1);
+                            _self.cartitem.pids += _self.detailid + ',';
+                        }  
                     }
                 });
             });
         });
-
     }
 
     //绑定信息
@@ -440,6 +425,6 @@
 
         _self.isLoading = false;
     }
-
+     
     module.exports = ObjectJS;
 });

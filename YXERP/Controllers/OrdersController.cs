@@ -40,10 +40,11 @@ namespace YXERP.Controllers
             return View("Orders");
         }
 
-        public ActionResult ChooseProducts(string id)
+        public ActionResult ChooseProducts(string id,string pids="")
         {
             ViewBag.Type = (int)EnumDocType.Order;
             ViewBag.GUID = id;
+            ViewBag.Pids = pids;
             ViewBag.Title = "选择产品";
             return View("FilterProducts");
         }
@@ -55,6 +56,9 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Orders/MyOrder");
             }
+            string pids = "";
+            model.Details.ForEach(x => { if (pids.IndexOf(x.ProductDetailID) == -1) pids += x.ProductDetailID + ","; });
+            ViewBag.Pids =pids;
             ViewBag.Model = model;
             return View();
         }

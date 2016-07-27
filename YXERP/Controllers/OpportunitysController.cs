@@ -46,10 +46,11 @@ namespace YXERP.Controllers
             return View("Opportunitys");
         }
 
-        public ActionResult ChooseProducts(string id)
+        public ActionResult ChooseProducts(string id, string pids = "")
         {
             ViewBag.Type = (int)EnumDocType.Opportunity;
             ViewBag.GUID = id;
+            ViewBag.Pids = pids;
             ViewBag.Title = "添加意向产品";
             return View("FilterProducts");
         }
@@ -62,7 +63,9 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Opportunitys/MyOpportunity");
             }
-
+            string pids = "";
+            model.Details.ForEach(x => {if (!pids.Contains(x.ProductDetailID)){  pids += x.ProductDetailID + ','; } });
+            ViewBag.Pids = pids;
             ViewBag.Model = model;
             ViewBag.Stages = SystemBusiness.BaseBusiness.GetOpportunityStages(CurrentUser.AgentID, CurrentUser.ClientID);
             ViewBag.OrderTypes = SystemBusiness.BaseBusiness.GetOrderTypes(CurrentUser.AgentID, CurrentUser.ClientID);

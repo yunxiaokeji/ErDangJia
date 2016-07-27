@@ -103,7 +103,7 @@
     </ul>
     @if (model.Status == 1)
     {
-        <a href="/Opportunitys/ChooseProducts/@(model.OpportunityID)" id="addProduct" class="btn right">选择意向产品</a>
+        <a href="/Opportunitys/ChooseProducts?id=@(model.OpportunityID)&pids=@(ViewBag.Pids)" id="addProduct" class="btn right">选择意向产品</a>
     }
 </div>
 <div class="content-body">

@@ -11,7 +11,8 @@ define(function (require, exports, module) {
         doT = require("dot");
     require("plug/shoppingcart/style.css");
     (function ($) {
-        $.fn.createCart = function (options) {
+      
+        $.fn.createCart = function (options) { 
             var opts = $.extend({}, $.fn.createCart.defaults, options);
             return this.each(function () {
                 var _this = $(this);
@@ -20,47 +21,58 @@ define(function (require, exports, module) {
         }
         $.fn.createCart.defaults = {
             ordertype: 0,
-            guid: ""
+            guid: "",
+            pids: ""
         };
         $.fn.drawCart = function (obj, opts) {
+           
             Global.post("/ShoppingCart/GetShoppingCartCount", {
                 ordertype: opts.ordertype,
                 guid: opts.guid
-            }, function (data) {
+            }, function (data) { 
                 doT.exec("plug/shoppingcart/shoppingcart.html", function (templateFun) {
                     var innerText = templateFun([]);
-                    innerText = $(innerText);
-
-                    //产品数量
-                    innerText.find(".totalcount").html(data.Quantity);
-
+                    innerText = $(innerText); 
+                    //产品数量 
+                    if (opts.pids != '' && opts.pids.length > 10) {
+                        innerText.find(".totalcount").html(opts.pids.split(',').length>0?opts.pids.split(',').length-1:0);
+                    } else {
+                         innerText.find(".totalcount").html(data.Quantity);
+                    } 
+                    innerText.data('pid', opts.pids);
                     //展开购物车
                     innerText.find(".cart-header").click(function () {
                         if ($("#shopping-cart .totalcount").html() > 0) {
                             $(this).hide();
                             $.fn.drawCartProduct(innerText, opts);
                         }
-                    });
-
+                    });  
                     //关闭购物车
                     innerText.find(".btnclose").click(function () {
                         obj.find(".cart-header").show();
                         obj.find(".cart-mainbody").hide();
-                    });
-                    obj.append(innerText);
+                    }); 
+                    obj.append(innerText); 
                 });
             });
+           
         }
         //加载购物车明细
         $.fn.drawCartProduct = function (obj, opts) {
             obj.find(".cart-mainbody").show();
-            obj.find(".cart-product-list").empty();
+            obj.find(".cart-product-list").empty(); 
             Global.post("/ShoppingCart/GetShoppingCart", {
                 ordertype: opts.ordertype,
                 guid: opts.guid
             }, function (data) {
+                $('#shopping-cart').data('pid', '');
                 doT.exec("plug/shoppingcart/product-list.html", function (templateFun) {
-                    if (data.Items.length > 0) {
+                    if (data.Items.length > 0) { 
+                        for (var i = 0; i < data.Items.length; i++) {
+                            if ($('#shopping-cart').data('pid').indexOf(data.Items[i].ProductDetailID) == -1) {
+                                $('#shopping-cart').data('pid', $('#shopping-cart').data('pid') + data.Items[i].ProductDetailID + ',');
+                            }
+                        } 
                         var innerText = templateFun(data.Items);
                         innerText = $(innerText);
 
@@ -77,7 +89,9 @@ define(function (require, exports, module) {
                                     if (!data.status) {
                                         alert("网络异常或数据状态有变更，请重新操作！");
                                     } else {
-                                        _this.parents("tr.item").remove();
+                                        _this.parents("tr.item").remove(); 
+                                        $('#shopping-cart').data('pid').replace(_this.data("id") + ',', '');
+                                        opts.pids.replace(_this.data("id") + ',', '') 
                                         obj.find(".totalcount").html(obj.find(".totalcount").html() - 1);
                                     }
                                 });

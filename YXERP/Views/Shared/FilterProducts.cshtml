@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="/modules/css/shoppingcart.css" />
 }
 @section scripts{
-    <script type="text/javascript">
+    <script type="text/javascript"> 
         seajs.use(["scripts/shoppingcart/filterproducts"], function (obj) {
-            obj.init('@ViewBag.Type', '@ViewBag.GUID');
+            obj.init('@ViewBag.Type', '@ViewBag.GUID', '@ViewBag.Pids');
         });
     </script>
 }

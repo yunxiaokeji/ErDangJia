@@ -71,11 +71,15 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult ChooseProducts(string id)
+        public ActionResult ChooseProducts()
         {
+            var list = ShoppingCartBusiness.GetShoppingCart(EnumDocType.RK, CurrentUser.UserID, CurrentUser.UserID, CurrentUser.ClientID);
+            string pids = "";
+            list.ForEach(x => { if (!pids.Contains(x.ProductDetailID)) pids += x.ProductDetailID + ","; });
             ViewBag.Type = (int)EnumDocType.RK;
             ViewBag.GUID = CurrentUser.UserID;
             ViewBag.Title = "选择采购产品";
+            ViewBag.Pids = pids;
             return View("FilterProducts");
         }
 

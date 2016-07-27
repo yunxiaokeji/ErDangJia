@@ -197,8 +197,12 @@ namespace YXERP.Controllers
 
         public ActionResult ChooseBYProducts()
         {
+            var list = ShoppingCartBusiness.GetShoppingCart(EnumDocType.BY, CurrentUser.UserID, CurrentUser.UserID, CurrentUser.ClientID);
+            string pids = "";
+            list.ForEach(x => { if (!pids.Contains(x.ProductDetailID)) pids += x.ProductDetailID + ","; });
             ViewBag.Type = (int)EnumDocType.BY;
             ViewBag.GUID = CurrentUser.UserID;
+            ViewBag.Pids = pids;
             ViewBag.Title = "选择报溢产品";
             return View("FilterProducts");
         }

@@ -108,7 +108,7 @@
         <div id="addInvoice" data-id="navInvoices" class="btn right">开票申请</div>
         @if (model.Status == 1)
         {
-          <a href="/Orders/ChooseProducts/@(model.OrderID)" data-id="navProducts" class="btn right">选择产品</a>
+          <a href="/Orders/ChooseProducts?id=@(model.OrderID)&pids=@(ViewBag.Pids)" data-id="navProducts" class="btn right">选择产品</a>
         }
     </div>
 </div>

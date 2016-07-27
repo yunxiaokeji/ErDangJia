@@ -244,7 +244,6 @@ define(function (require, exports, module) {
                             location.href = location.href;
                         });
                     } else {
-                        alert("产品移除成功");
                         _this.parents("tr.item").remove();
                         _self.getAmount();
                     }

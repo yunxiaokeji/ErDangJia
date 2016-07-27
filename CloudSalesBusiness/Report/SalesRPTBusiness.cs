@@ -490,6 +490,8 @@ namespace CloudSalesBusiness
             {
                 OrderStockRPT stock = new OrderStockRPT(); ;
                 stock.FillData(dr);
+                ProductUnit unit = ProductsBusiness.BaseBusiness.GetUnitByID(stock.UnitID, clientid);
+                stock.UnitName =unit!=null?unit.UnitName:"";
                 stockList.Add(stock);
             }
             return stockList;

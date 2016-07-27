@@ -1,0 +1,67 @@
+﻿@using CloudSalesEntity
+@{
+    ViewBag.Title = "库存明细统计";
+    List<OrderTypeEntity> types = ViewBag.Types;
+}
+ <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
+@section scripts{
+    <script type="text/javascript">
+        seajs.use(["scripts/stockrpt/stockdetailrpt"], function (obj) {
+            obj.init();
+        });
+    </script>
+} 
+ 
+<div class="mLeft20 mTop20 " title="日期"> 
+    <div class="left hide mRight5 seachType" id="seachOrderType"></div>
+    <input type="text" id="iptCreateTime" placeholder="日期" style="width: 190px;" class="ipt-date left mRight10"/>
+    <div class="left searth-module" data-text="输入规格名称..." data-width="150"></div>
+    <a href="javascript:void(0);" class="btn right mRight20" id="exportSaleRPT" >
+        <i class="left iconfont mRight5" style="margin-left: -5px;color:aliceblue">&#xe658;</i> 导 出 
+    </a>
+    <div class="clear"></div>
+</div>
+
+<div class="content-body mTop10"> 
+    <table id="orderDetailRPT" class="table-list-rpt tab-content">
+        <tr class="tr-header">
+            <td class="tLeft">产品编码</td>
+            <td class="tLeft">产品名称</td>
+            <td class="tLeft">规格</td>
+            <td class="tLeft">单位</td>
+            <td class="center">
+                <span class="td-span hover" data-column="SUM(b.Quantity-b.ReturnQuantity)"> 期初库存
+                    <span class="asc"></span>
+                    <span class="desc hover"></span>
+               </span>
+                
+            </td>
+            <td class="center">
+                <span class="td-span" data-column="SUM(b.TotalMoney-b.ReturnMoney)"> 入库数量
+                    <span class="asc"></span>
+                    <span class="desc"></span>
+               </span>
+                
+            </td>
+            <td class="center">
+                <span class="td-span" data-column="SUM(b.TotalMoney-b.ReturnMoney)"> 出库数量
+                    <span class="asc"></span>
+                    <span class="desc"></span>
+               </span>
+                
+            </td>
+             <td class="center">
+                 <span class="td-span" data-column="SUM(b.TotalMoney-b.ReturnMoney)"> 结余库存
+                    <span class="asc"></span>
+                    <span class="desc"></span>
+               </span>
+                
+            </td>
+        </tr>
+
+    </table>
+    <div id="pager" class="mTop20"></div> 
+</div>
+
+
+

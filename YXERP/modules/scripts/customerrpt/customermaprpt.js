@@ -297,17 +297,26 @@
     ///团队汇总
     ObjectJS.getUserCustomer = function () {
         var _self = this; 
-        $("#userTotalRPT .tr-header").nextAll().remove();
+        if (Params.type == 6) {
+            $("#userRank .tr-header").nextAll().remove();
+            $("#userRank .tr-header").after('<tr class="item-tr"><td class="center" colspan="3"><div class="center data-loading"><div></td></tr>');
+        }
+        else
+        {
+            $("#userTotalRPT .tr-header").nextAll().remove();
+            $("#userTotalRPT .tr-header").after('<tr class="item-tr"><td class="center" colspan="6"><div class="center data-loading"><div></td></tr>');
+        }
         Global.post("/CustomerRPT/GetUserCustomers", Params, function (data) {
             if (Params.type == 6) {
+                $("#userRank .tr-header").nextAll().remove();
                 var crslist = ['TotalList', 'NCSRList', 'OCSRList', 'SCSRList'];
                 for (var j = 0; j < crslist.length; j++) {
                     $("#" + crslist[j] + " .tr-header").nextAll().remove();
                     var innerhtml = ''; 
                     if (data.items[crslist[j]].length > 0) {
                         for (var i = 0; i < data.items[crslist[j]].length; i++) {
-                            innerhtml += '<tr class="item-tr"><td class="center">' + data.items[crslist[j]][i].PName + '</td>' +
-                                '<td class="center">' + data.items[crslist[j]][i].Name + '</td>' +
+                            innerhtml += '<tr class="item-tr"><td class="center">' + data.items[crslist[j]][i].Name + '</td>' +
+                                '<td class="center">' + data.items[crslist[j]][i].PName + '</td>' +
                                 '<td class="center">' + (j == 0 ? data.items[crslist[j]][i].TotalNum : j == 1 ? data.items[crslist[j]][i].NCSRNum : j == 2 ? data.items[crslist[j]][i].OCSRNum : j == 3 ? data.items[crslist[j]][i].SCSRNum : 0) + '</td>' +
                                 '</tr>';
                         }
@@ -317,6 +326,7 @@
                     $("#" + crslist[j] + " .tr-header").after(innerhtml);
                 }
             } else {
+                $("#userTotalRPT .tr-header").nextAll().remove();
                 var cache = [];
                 for (var i = 0; i < data.items.length; i++) {
                     if (data.items[i].ChildItems && data.items[i].ChildItems.length > 0) {

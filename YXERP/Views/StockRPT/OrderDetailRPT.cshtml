@@ -1,12 +1,12 @@
 ﻿@using CloudSalesEntity
 @{
-    ViewBag.Title = "销售订单统计";
+    ViewBag.Title = "产品销售统计";
     List<OrderTypeEntity> types = ViewBag.Types;
 }
  <link href="/modules/plug/daterangepicker/daterangepicker.css" rel="stylesheet" />
 @section scripts{
     <script type="text/javascript">
-        seajs.use(["scripts/salesrpt/orderdetailrpt"], function (obj) {
+        seajs.use(["scripts/stockrpt/orderdetailrpt"], function (obj) {
             obj.init();
         });
     </script>

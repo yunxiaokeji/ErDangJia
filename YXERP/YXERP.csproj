@@ -155,6 +155,7 @@
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StockController.cs" />
+    <Compile Include="Controllers\StockRPTController.cs" />
     <Compile Include="Controllers\StorageOutController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\OpportunitysController.cs" />
@@ -831,7 +832,8 @@
     <Content Include="modules\scripts\myaccount\setavatar.js" />
     <Content Include="modules\scripts\myaccount\setpassword.js" />
     <Content Include="modules\scripts\myaccount\account.js" />
-    <Content Include="modules\scripts\salesrpt\orderdetailrpt.js" />
+    <Content Include="modules\scripts\stockrpt\orderdetailrpt.js" />
+    <Content Include="modules\scripts\stockrpt\stockdetailrpt.js" />
     <Content Include="modules\scripts\sales\opportunity-detail.js" />
     <Content Include="modules\scripts\sales\orders.js" />
     <Content Include="modules\scripts\sales\detail.js" />
@@ -1062,7 +1064,8 @@
     <Content Include="Views\Products\CategoryImport.cshtml" />
     <Content Include="Views\StorageOut\StorageOutPrintModel.cshtml" />
     <Content Include="Views\Home\WeiXinSelectLogin.cshtml" />
-    <Content Include="Views\SalesRPT\OrderDetailRPT.cshtml" />
+    <Content Include="Views\StockRPT\OrderDetailRPT.cshtml" />
+    <Content Include="Views\StockRPT\StockDetailRPT.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

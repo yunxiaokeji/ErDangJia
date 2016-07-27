@@ -37,11 +37,11 @@
 			"datatype":"string",
 			"defaulttext":"1.0"
         },
-		"UnitName": {
+		"UnitID": {
             "title": "单位",
             "hide": false,
-            "format": false,
-            "exporttype": -1,
+            "format": true,
+            "exporttype": 11,
 			"testexporttype": -1,
 			"datasource":"",
 			"importtype":-1,

@@ -80,31 +80,18 @@
 
 
         $('#exportSaleRPT').click(function () {
-            Params.filleName = '产品销售报表导出';
+            Params.filleName = '库存明细报表';
             Params.doctype = 1;
-            Dialog.exportModel("/SalesRPT/ExportOrderDetailRPT", Params);
-        });
-        //require.async("dropdown", function () {
-        //    $("#seachOrderType").dropdown({
-        //        prevText: "",
-        //        defaultText: "全部",
-        //        defaultValue: "1",
-        //        data: _self.typeList,
-        //        dataValue: "TypeID",
-        //        dataText: "TypeName",
-        //        width: "140",
-        //        onChange: function (data) {
-        //            Params.ordertype = data.value;
-        //            _self.getOrderDetailRPT();
-        //        }
-        //    });
-        //}); 
+            Dialog.exportModel("/StockRPT/ExportStockDetailRPT", Params);
+        }); 
     }
      
     ObjectJS.getOrderDetailRPT = function () {
         var _self = this;
         $(".tr-header").nextAll().remove();
-        Global.post("/SalesRPT/GetOrderDetailRPT", Params, function (data) {
+        $(".tr-header").after('<tr class="item-tr"><td class="center" colspan="8"><div class="center data-loading"><div></td></tr>');
+        Global.post("/StockRPT/GetStockDetailRPT", Params, function (data) {
+            $(".tr-header").nextAll().remove();
             var innerhtml = '';
             if (data.items.length > 0) {
                 for (var j = 0; j < data.items.length; j++) {
@@ -113,12 +100,14 @@
                         '<td class="tLeft">' + item.ProductName + '</td>' +
                         '<td class="tLeft">' + item.Remark + '</td>' +
                         '<td class="tLeft">' + item.UnitName + '</td>' +
-                        '<td class="center">' + item.Quantity + '</td>' +
-                        '<td class="center">' + item.TotalMoney + '</td>' +
+                        '<td class="center">' + item.QCQuantity + '</td>' +
+                        '<td class="center">' + item.InQuantity + '</td>' +
+                        '<td class="center">' + item.OutQuantity + '</td>' +
+                        '<td class="center">' + item.JYQuantity + '</td>' + 
                         '</tr>';
                 }
             } else {
-                innerhtml = '<tr class="tr-header"><td class="center" colspan="6">暂无数据</td></tr>';
+                innerhtml = '<tr class="item-tr"><td class="center" colspan="8"><h2>暂无数据</h2></td></tr>';
             }
             $(".tr-header").after(innerhtml);
 

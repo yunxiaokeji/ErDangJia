@@ -16,6 +16,9 @@ namespace CloudSalesEntity
         public int JYQuantity { get; set; }
         public int InQuantity { get; set; }
         public int OutQuantity { get; set; }
+        public string CategoryID { get; set; }
+        public string CategoryName { get; set; }
+        public string UnitID { get; set; }
         public string UnitName { get; set; }
         public decimal TotalMoney { get; set; }
         public void FillData(System.Data.DataRow dr)

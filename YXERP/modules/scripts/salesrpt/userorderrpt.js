@@ -80,9 +80,16 @@
     }
     ObjectJS.getUserCustomer = function () {
         var _self = this;
-        $("#tr-header").nextAll().remove();
+        if (Params.type == 2) {
+            $("#userRPT .tr-header").nextAll().remove();
+            $("#userRPT .tr-header").after('<tr class="item-tr"><td class="center" colspan="3"><div class="center data-loading"><div></td></tr>');
+        } else {
+            $("#tr-header").nextAll().remove();
+            $("#tr-header").after('<tr class="item-tr"><td class="center" colspan="10"><div class="center data-loading"><div></td></tr>');
+        }
         Global.post("/SalesRPT/GetUserOrders", Params, function (data) {
             if (Params.type == 2) {
+                $("#userRPT .tr-header").nextAll().remove();
                 $('.ordertypetitle').each(function (i, v) { 
                     $(v).html($('#seachOrderType div').eq(0).html() + $(this).data('name'));
                 }); 
@@ -92,8 +99,8 @@
                     var innerhtml = '';
                     if (data.items[crslist[j]].length > 0) {
                         for (var i = 0; i < data.items[crslist[j]].length; i++) {
-                            innerhtml += '<tr class="item-tr"><td class="center">' + data.items[crslist[j]][i].PName + '</td>' +
-                                '<td class="center">' + data.items[crslist[j]][i].Name + '</td>' +
+                            innerhtml += '<tr class="item-tr"><td class="center">' + data.items[crslist[j]][i].Name + '</td>' +
+                                '<td class="center">' + data.items[crslist[j]][i].PName + '</td>' +
                                 '<td class="center">' + (crslist[j] == "TotalList" ? data.items[crslist[j]][i].TCount : data.items[crslist[j]][i].TMoney) + '</td>' +
                                 '</tr>';
                         }
@@ -103,6 +110,7 @@
                     $("#" + crslist[j] + " .tr-header").after(innerhtml);
                 }
             } else {
+                $("#tr-header").nextAll().remove();
                 var cache = [];
                 for (var i = 0; i < data.items.length; i++) {
                     if (data.items[i].ChildItems && data.items[i].ChildItems.length > 0) {

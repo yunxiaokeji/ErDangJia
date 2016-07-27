@@ -53,7 +53,7 @@ define(function (require, exports, module) {
         var unit = 302;
         
         $(".report-box").css({
-            width: unit * 3 + 120
+            width: unit * 3 + 121
         });
 
         $(".report-box").css({

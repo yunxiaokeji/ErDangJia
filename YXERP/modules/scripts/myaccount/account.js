@@ -1,4 +1,7 @@
-﻿define(function (require, exports, module) {
+﻿/// <reference path="../../../Views/MyAccount/bindweixin.html" />
+/// <reference path="../../../Views/MyAccount/bindweixin.html" />
+/// <reference path="../../../Views/MyAccount/bindweixin.html" />
+define(function (require, exports, module) {
     var Global = require("global"), 
         Verify = require("verify"), VerifyObject,
         doT = require("dot"),
@@ -32,22 +35,10 @@
                         }
                     });
                 });
-            } else { 
-                //Easydialog.open({
-                //    container: {
-                //        id: "bindweixin",
-                //        header: '绑定微信登陆二当家',
-                //        content: $($($('#WeiXinBindFrame').context)[0].body).find('img')[0],
-                //        yesFn: function() {
-                //        },
-                //        callback: function() {
-
-                //        }
-                //    }
-                //});
-
-                var  s = window.open("/MyAccount/WeiXinLogin?ReturnUrl='/MyAccount/Account'", "绑定微信登陆二当家", "height=540, width=450, toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
-                //console.log(s.document);
+            } else {
+                var top = ($(window).height()-540) / 2,
+                left = ($(window).width()-400) / 2;
+                var s = window.open("/MyAccount/WeiXinLogin?ReturnUrl='/MyAccount/Account'", "绑定微信登陆二当家", "height=540, width=450,top=" + top + ",left=" + left + ", toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
             }
         }); 
         $("#bindLogioName").click(function () {

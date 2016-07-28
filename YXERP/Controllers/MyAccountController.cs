@@ -33,6 +33,7 @@ namespace YXERP.Controllers
             var tempact = OrganizationBusiness.GetUserAccount(CurrentUser.UserID, CurrentUser.ClientID,
                (int)EnumAccountType.WeiXin);
             ViewBag.WeiXinID= tempact != null ? tempact.AccountName : "";
+            //ViewBag.BindUrl = WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.BindCallBackUrl), "/MyAccount/Account", false);
             return View();
         }
 
@@ -50,7 +51,7 @@ namespace YXERP.Controllers
         {
             ViewBag.User = Session["ClientManager"];
             ViewBag.BindUrl = WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.BindCallBackUrl),
-                "", false);
+                "ReturnUrl='/MyAccount/Account", false);
             return View();
         }
 
@@ -349,13 +350,13 @@ namespace YXERP.Controllers
                     string flag = OrganizationBusiness.BindOtherAccount(EnumAccountType.WeiXin, CurrentUser.UserID, "", userToken.unionid, CurrentUser.ClientID, CurrentUser.AgentID);
                     if (string.IsNullOrEmpty(flag))
                     {
-                        Response.Write("<script> alert('绑定成功');window.close();</script>");
+                        Response.Write("<script> alert('绑定成功');window.opener.location.reload(); window.close(); </script>");
                         Response.End();
                         return Redirect(state);
                     } 
                     else
                     {
-                        Response.Write("<script>alert('绑定失败');window.close();</script>");
+                        Response.Write("<script>alert('绑定失败'); window.close(); </script>");
                         Response.End();
                         return Content("");
                     }

@@ -251,8 +251,8 @@ namespace YXERP.Controllers
                 }
                 else
                 {
-                    Session["WeiXinTokenInfo"] = userToken.access_token + "|" + userToken.openid + "|" + userToken.unionid;
-                    return Redirect("/Home/Login");
+                    Response.Write("<script>alert('您的微信账号暂未绑定用户,请使用其他方式登陆.');location.href='/Home/login';</script>");
+                    Response.End(); 
                 }
             }
 

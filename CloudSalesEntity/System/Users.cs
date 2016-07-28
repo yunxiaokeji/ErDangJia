@@ -51,8 +51,7 @@ namespace CloudSalesEntity
 		private DateTime _turnovertime;
 		private DateTime _createtime= DateTime.Now;
 		private string _createuserid;
-		private string _clientid;
-        private string _weixinid;
+		private string _clientid; 
 
         public List<Menu> Menus { get; set; }
 
@@ -269,13 +268,7 @@ namespace CloudSalesEntity
 		{
 			set{ _clientid=value;}
 			get{return _clientid;}
-		}
-
-        [Property("Lower")] 
-        public string WeiXinID {
-            set { _weixinid = value; }
-            get { return _weixinid; }
-        }
+		} 
 		#endregion Model
 
         public string FirstName 

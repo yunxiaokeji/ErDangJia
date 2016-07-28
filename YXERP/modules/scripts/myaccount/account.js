@@ -160,9 +160,7 @@
                     }
                 }
             });
-
             $("#LoginName").focus();
-
             if ($("#S_BindMobile").html()) {
                 $(".nologinname").hide();
             }
@@ -178,10 +176,7 @@
                 } else if (_this.val()) {
                     alert("账号长度不能低于6位！");
                 }
-            });
-
-            
-
+            }); 
             VerifyObject = Verify.createVerify({
                 element: ".verify",
                 emptyAttr: "data-empty",

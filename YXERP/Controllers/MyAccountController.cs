@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using CloudSalesBusiness.Manage;
 using CloudSalesEntity;
+using CloudSalesEnum;
 
 namespace YXERP.Controllers
 {
@@ -29,6 +30,9 @@ namespace YXERP.Controllers
             ViewBag.User = Session["ClientManager"];
             id = id ?? "-1";
             ViewBag.Option = id;
+            var tempact = OrganizationBusiness.GetUserAccount(CurrentUser.UserID, CurrentUser.ClientID,
+               (int)EnumAccountType.WeiXin);
+            ViewBag.WeiXinID= tempact != null ? tempact.AccountName : "";
             return View();
         }
 
@@ -76,7 +80,7 @@ namespace YXERP.Controllers
             JsonDictionary.Add("OfficePhone", CurrentUser.OfficePhone);
             JsonDictionary.Add("Email", CurrentUser.Email);
             JsonDictionary.Add("BindMobilePhone", CurrentUser.BindMobilePhone);
-            JsonDictionary.Add("WeiXinID", CurrentUser.WeiXinID);
+           
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -258,7 +262,7 @@ namespace YXERP.Controllers
                 }
                 else
                 {
-                    flag = OrganizationBusiness.ClearAccountBindMobile(CurrentUser.UserID, CurrentUser.AgentID);
+                    flag = OrganizationBusiness.ClearAccountBindMobile(CurrentUser.UserID, CurrentUser.AgentID,EnumAccountType.Mobile);
                 }
                 if (flag)
                 {
@@ -339,20 +343,19 @@ namespace YXERP.Controllers
 
             if (string.IsNullOrEmpty(userToken.errcode))
             {
-                var model = OrganizationBusiness.GetUserByWeiXinID(userToken.unionid, operateip);
+                var model = OrganizationBusiness.GetUserByMDUserID(userToken.unionid, "",operateip,(int)EnumAccountType.WeiXin);
                 if (model == null)
                 {
-                    Session["WeiXinTokenInfo"] = userToken.access_token + "|" + userToken.openid + "|" +
-                                                 userToken.unionid;
-                    if (BindWeiXin() > 0)
+                    string flag = OrganizationBusiness.BindOtherAccount(EnumAccountType.WeiXin, CurrentUser.UserID, "", userToken.unionid, CurrentUser.ClientID, CurrentUser.AgentID);
+                    if (string.IsNullOrEmpty(flag))
                     {
                         Response.Write("<script> alert('绑定成功');window.close();</script>");
                         Response.End();
                         return Redirect(state);
-                    }
+                    } 
                     else
                     {
-                        Response.Write("<script>window.close();</script>");
+                        Response.Write("<script>alert('绑定失败');window.close();</script>");
                         Response.End();
                         return Content("");
                     }
@@ -379,51 +382,14 @@ namespace YXERP.Controllers
                 Response.End();
                 return Content("");
             }
-        }
-
-        //绑定微信账户
-        public int BindWeiXin()
-        {
-            int result = 0;
-            if (Session["WeiXinTokenInfo"] != null)
-            {
-                string tokenInfo = Session["WeiXinTokenInfo"].ToString();
-                string[] tokenArr = tokenInfo.Split('|');
-                if (tokenArr.Length == 3)
-                {
-                    string access_token = tokenArr[0];
-                    string unionid = tokenArr[2];
-                    bool flag = ClientBusiness.BindUserWeiXinID(CurrentUser.ClientID, CurrentUser.UserID, unionid);
-                    if (flag)
-                    {
-                        Users user = (Users)Session["ClientManager"];
-                        user.WeiXinID = unionid; 
-                        Session["ClientManager"] = user;
-                        Session.Remove("WeiXinTokenInfo");
-                        result = 1;
-                    }
-                }
-            }
-            else
-            {
-                result = -5;
-            }
-
-            return result;
-        }
+        } 
 
         public JsonResult UnBindWeiXin()
         {
             int result = 0;
-            bool flag = ClientBusiness.BindUserWeiXinID(CurrentUser.ClientID, CurrentUser.UserID, "",1);
+            bool flag = OrganizationBusiness.ClearAccountBindMobile(CurrentUser.UserID, CurrentUser.AgentID,EnumAccountType.WeiXin);
             if (flag)
-            {
-                if (Session["ClientManager"] != null)
-                {
-                    Users user = (Users) Session["ClientManager"];
-                    user.WeiXinID = "";
-                    Session["ClientManager"] = user;
-                } 
+            { 
                 result = 1;
             }
             JsonDictionary.Add("Result", result);

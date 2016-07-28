@@ -350,14 +350,7 @@ namespace CloudSalesBusiness.Manage
 
             return clientid;
         }
-
-        public static bool BindUserWeiXinID(string clientID, string userID, string weiXinID,int type=0)
-        {
-            bool flag = ClientDAL.BaseProvider.BindUserWeiXinID(clientID, userID, weiXinID, type);
-
-            return flag;
-        }
-
+ 
         /// <summary>
         /// 添加客户授权日志
         /// </summary>

@@ -29,11 +29,12 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public DataSet GetUserByMDUserID(string userid, string mdprojectid)
+        public DataSet GetUserByMDUserID(string userid, string mdprojectid,int accoutype=3)
         {
             SqlParameter[] paras = { 
                                     new SqlParameter("@MDUserID",userid),
-                                    new SqlParameter("@MDProjectID",mdprojectid)
+                                    new SqlParameter("@MDProjectID",mdprojectid),
+                                    new SqlParameter("@AccouType",accoutype)
                                    };
             return GetDataSet("GetUserByMDUserID", paras, CommandType.StoredProcedure, "User|Permission");//|Department|Role
 
@@ -104,6 +105,7 @@ namespace CloudSalesDAL
 
             return GetDataSet(sql, paras, CommandType.Text, "Role|Menus");
         }
+
 
         #endregion
 
@@ -177,6 +179,28 @@ namespace CloudSalesDAL
             result = Convert.ToInt32(paras[0].Value);
 
             return dt;
+        }
+
+        public string BindOtherAccount(int accountType, string userid, string projectid,
+            string accountname, string clientid, string agentid)
+        {
+
+            string result ="";
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",result),
+                                       new SqlParameter("@AccountType",accountType),
+                                       new SqlParameter("@UserID",userid),  
+                                       new SqlParameter("@ProjectID",projectid), 
+                                       new SqlParameter("@AccountName",accountname), 
+                                       new SqlParameter("@AgentID",agentid), 
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+
+            paras[0].Direction = ParameterDirection.Output;
+
+            ExecuteNonQuery("M_BindOtherAccount", paras, CommandType.StoredProcedure);
+            result = paras[0].Value.ToString();
+            return result;
         }
 
         #endregion
@@ -258,12 +282,13 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_UpdateAccountBindMobile", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public bool ClearAccountBindMobile(string userid)
+        public bool ClearAccountBindMobile(string userid,int accountType=2)
         {
-            string sql = "Delete from UserAccounts where UserID=@UserID and AccountType=2 ";
+            string sql = "Delete from UserAccounts where UserID=@UserID and AccountType=@AccountType ";
 
             SqlParameter[] paras = { 
-                                       new SqlParameter("@UserID",userid)
+                                       new SqlParameter("@UserID",userid),
+                                       new SqlParameter("@AccountType",accountType)
                                    };
 
             return ExecuteNonQuery(sql, paras, CommandType.Text) > 0;

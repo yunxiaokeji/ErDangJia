@@ -20,7 +20,7 @@ namespace CloudSalesBusiness
         private static Dictionary<string, List<Users>> _cacheUsers;
         private static Dictionary<string, List<Department>> _cacheDeparts;
         private static Dictionary<string, List<Role>> _cacheRoles;
-
+        private static Dictionary<string, List<UserAccounts>> _userAccount;
         private static Dictionary<string, List<Users>> Users
         {
             get 
@@ -66,6 +66,22 @@ namespace CloudSalesBusiness
             set
             {
                 _cacheRoles = value;
+            }
+        }
+
+        private static Dictionary<string, List<UserAccounts>> UserActList
+        {
+            get
+            {
+                if (_userAccount == null)
+                {
+                    _userAccount = new Dictionary<string, List<UserAccounts>>();
+                }
+                return _userAccount;
+            }
+            set
+            {
+                _userAccount = value;
             }
         }
 
@@ -174,9 +190,9 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public static Users GetUserByMDUserID(string mduserid, string mdprojectid, string operateip)
+        public static Users GetUserByMDUserID(string mduserid, string mdprojectid, string operateip,int accountType=3)
         {
-            DataSet ds = new OrganizationDAL().GetUserByMDUserID(mduserid,mdprojectid);
+            DataSet ds = new OrganizationDAL().GetUserByMDUserID(mduserid, mdprojectid, accountType);
             Users model = null;
             if (ds.Tables.Contains("User") && ds.Tables["User"].Rows.Count > 0)
             {
@@ -268,66 +284,48 @@ namespace CloudSalesBusiness
             }
         }
 
-        public static Users GetUserByWeiXinID(string weiXinID, string operateip)
+        public static List<UserAccounts> GetUserAccounts(string userid, string clientid)
         {
-            DataSet ds = new OrganizationDAL().GetUserByWeiXinID(weiXinID);
-            Users model = null;
-            if (ds.Tables.Contains("User") && ds.Tables["User"].Rows.Count > 0)
+            if (!UserActList.ContainsKey(userid))
             {
-                model = new Users();
-                model.FillData(ds.Tables["User"].Rows[0]);
-
-                model.LogGUID = Guid.NewGuid().ToString();
-
-                model.Department = GetDepartmentByID(model.DepartID, model.AgentID);
-                model.Role = GetRoleByIDCache(model.RoleID, model.AgentID);
-                model.Client = Manage.ClientBusiness.GetClientDetail(model.ClientID);
-                //处理缓存
-                if (!Users.ContainsKey(model.AgentID))
+                List<UserAccounts> list = new List<UserAccounts>();
+                string whereSql = "ClientID='" + clientid + "' and UserID='" + userid + "' ";
+                int result = 0;
+                DataTable dt = CommonBusiness.GetPagerData("UserAccounts", "*", whereSql, "AutoID", int.MaxValue, 1,
+                    out result, out result);
+                foreach (DataRow dr in dt.Rows)
                 {
-                    GetUsers(model.AgentID);
+                    UserAccounts uact = new UserAccounts();
+                    uact.FillData(dr);
+                    list.Add(uact);
                 }
-                if (Users[model.AgentID].Where(u => u.UserID == model.UserID).Count() == 0)
-                {
-                    Users[model.AgentID].Add(model);
-                }
-                else
-                {
-                    var user = Users[model.AgentID].Where(u => u.UserID == model.UserID).FirstOrDefault();
-                    user.LogGUID = model.LogGUID;
-                }
-
-                //权限
-                if (model.Role != null && model.Role.IsDefault == 1)
-                {
-                    model.Menus = CommonBusiness.ClientMenus;
-                }
-                else
-                {
-                    model.Menus = new List<Menu>();
-                    foreach (DataRow dr in ds.Tables["Permission"].Rows)
-                    {
-                        Menu menu = new Menu();
-                        menu.FillData(dr);
-                        model.Menus.Add(menu);
-                    }
-                }
-            }
-            if (string.IsNullOrEmpty(operateip))
-            {
-                operateip = "";
+                UserActList[userid] = list;
+                return list;
             }
 
-            //记录登录日志
-            if (model != null)
+            return UserActList[userid].ToList();
+        }
+
+        public static UserAccounts GetUserAccount(string userid, string clientid,int accounttype)
+        {
+            if (!UserActList.ContainsKey(userid))
             {
-                LogBusiness.AddLoginLog(weiXinID, true, Manage.ClientBusiness.GetClientDetail(model.ClientID).AgentID == model.AgentID ? EnumSystemType.Client : EnumSystemType.Agent, operateip, model.UserID, model.AgentID, model.ClientID);
+                List<UserAccounts> list = new List<UserAccounts>();
+                string whereSql = "ClientID='" + clientid + "' and UserID='" + userid + "' ";
+                int result = 0;
+                DataTable dt = CommonBusiness.GetPagerData("UserAccounts", "*", whereSql, "AutoID", int.MaxValue, 1,
+                    out result, out result);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    UserAccounts uact = new UserAccounts();
+                    uact.FillData(dr);
+                    list.Add(uact);
+                }
+                UserActList[userid] = list;
+                return list.Where(x => x.AccountType == accounttype).FirstOrDefault();
             }
-            else
-            {
-                LogBusiness.AddLoginLog(weiXinID, false, EnumSystemType.Client, operateip, "", "", "");
-            }
-            return model;
+
+            return UserActList[userid].Where(x=>x.AccountType==accounttype).FirstOrDefault();
         }
 
         public static DataTable GetUserByIDNoCache(string userID)
@@ -472,7 +470,7 @@ namespace CloudSalesBusiness
             }
             return model;
         }
-
+       
         #endregion
 
         #region 添加
@@ -582,7 +580,33 @@ namespace CloudSalesBusiness
             }
             return user;
         }
-        
+
+        public static string BindOtherAccount(EnumAccountType accountType, string userid, string projectid,
+            string accountname, string clientid, string agentid)
+        {
+            string mes = "";
+            mes=OrganizationDAL.BaseProvider.BindOtherAccount((int)accountType, userid, projectid, accountname, clientid,
+                agentid);
+            if (string.IsNullOrEmpty(mes))
+            {
+                if (UserActList.ContainsKey(userid))
+                {
+                    var accountList = GetUserAccounts(userid,clientid);
+                    accountList.Add(new UserAccounts()
+                    {
+                        AccountType = (int)accountType,
+                        AccountName = accountname,
+                        ProjectID = projectid,
+                        UserID=userid,
+                        ClientID =clientid,
+                        AgentID = agentid
+                    });
+                    UserActList[userid] = accountList;
+                }
+            }
+            return mes;
+        }
+
         #endregion
 
         #region 编辑/删除
@@ -678,10 +702,10 @@ namespace CloudSalesBusiness
             return flag;
         }
 
-        public static bool ClearAccountBindMobile(string userid, string agentid)
+        public static bool ClearAccountBindMobile(string userid, string agentid, EnumAccountType accounttype)
         {
-            bool flag = OrganizationDAL.BaseProvider.ClearAccountBindMobile(userid);
-
+            bool flag = OrganizationDAL.BaseProvider.ClearAccountBindMobile(userid, (int)accounttype);
+            
             //清除缓存
             if (flag)
             {
@@ -690,6 +714,12 @@ namespace CloudSalesBusiness
                     List<Users> users = Users[agentid];
                     Users u = users.Find(m => m.UserID == userid);
                     u.BindMobilePhone = string.Empty;
+                }
+
+                if (UserActList.ContainsKey(userid))
+                {
+                    var tempaccount = UserActList[userid].Where(x => x.AccountType == (int)accounttype).FirstOrDefault();
+                    UserActList[userid].Remove(tempaccount);
                 }
             }
             return flag;

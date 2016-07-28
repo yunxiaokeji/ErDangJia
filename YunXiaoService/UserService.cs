@@ -96,7 +96,8 @@ namespace YunXiaoService
                     model= OrganizationBusiness.GetUserByUserName(account, pwd, out result, ip);
                     break;
                 case EnumAccountType.MingDao:
-                    model= OrganizationBusiness.GetUserByMDUserID(account, companyid, ip);
+                case EnumAccountType.WeiXin:
+                    model = OrganizationBusiness.GetUserByMDUserID(account, companyid, ip, (int)accountType);
                     break;
             }
             return model;

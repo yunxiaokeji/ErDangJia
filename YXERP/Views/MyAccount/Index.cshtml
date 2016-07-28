@@ -117,11 +117,11 @@
                 <li>
                     <span class="width80 lineHeight30">手机：</span>
                     <span id="S_BindMobile" class="bolder lineHeight30">@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "未绑定" : CurrentUser.BindMobilePhone)</span>
-                    <input type="text" id="mobilePhone" class="input bindloginmobile hide" value="@(CurrentUser.BindMobilePhone)"/>
+                    <input type="text" class="input bindloginmobile" value="@(CurrentUser.BindMobilePhone)"/>  <span class="mLeft10 red loginError"  id="BindMobileError"></span>
                     <br/><input type="button" id="bindLoginMobile" class="btn mLeft80" value="@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "绑定" : "解绑")"/>
-                    <span class="mLeft10 red loginError"  id="BindMobileError"></span>
+                    
                 </li>
-                <li class="bindloginmobile hide">
+                <li class="bindloginmobile hide"> 
                     <span class="width80">验证码：</span>
                     <span></span>
                     <input type="text"id="BindMobileCode" class="input width60"/>
@@ -136,9 +136,9 @@
                 </li>
                 <li>
                     <span class="width80 lineHeight30">微信：</span>
-                    <span id="S_BindWeiXin" class="bolder lineHeight30">@(string.IsNullOrEmpty(CurrentUser.WeiXinID) ? "未绑定" : "已绑定")</span>
-                    <input type="text" id="weixinid" class="input bindweixin hide" value="@(CurrentUser.WeiXinID)"/>
-                    <br/><input type="button" id="bindWeiXin" class="btn mLeft80" value="@(string.IsNullOrEmpty(CurrentUser.WeiXinID) ? "绑定" : "解绑")"/>
+                    <span id="S_BindWeiXin" class="bolder lineHeight30">@(string.IsNullOrEmpty(ViewBag.WeiXinID) ? "未绑定" : "已绑定")</span>
+                    <input type="text" id="weixinid" class="input bindweixin hide" value="@(ViewBag.WeiXinID)"/>
+                    <br/><input type="button" id="bindWeiXin" class="btn mLeft80" value="@(string.IsNullOrEmpty(ViewBag.WeiXinID) ? "绑定" : "解绑")"/>
                     <span class="mLeft10 red loginError"  id="BindWeiXinError"></span>
                 </li>
             </ul>

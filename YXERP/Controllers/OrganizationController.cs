@@ -304,6 +304,8 @@ namespace YXERP.Controllers
             };
         }
 
+       
+
         public JsonResult IsExistLoginName(string loginname)
         {
             var bl = OrganizationBusiness.IsExistLoginName(loginname);

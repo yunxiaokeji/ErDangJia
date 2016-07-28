@@ -124,18 +124,7 @@ namespace CloudSalesDAL.Manage
 
             return ExecuteNonQuery(cmdTxt, parms, CommandType.Text) > 0;
         }
-        public bool BindUserWeiXinID(string clientID, string userID, string weiXinID,int type =0)
-        {
-            SqlParameter[] parms = { 
-                                       new SqlParameter("@ClientiD",clientID),
-                                       new SqlParameter("@UserID",userID),
-                                       new SqlParameter("@WeiXinID",weiXinID),
-                                       new SqlParameter("@Type",type)
-                                   };
-
-            return ExecuteNonQuery("M_BindUserWeiXinID", parms, CommandType.StoredProcedure) > 0;
-        }
-
+ 
         #endregion
 
         #region 编辑

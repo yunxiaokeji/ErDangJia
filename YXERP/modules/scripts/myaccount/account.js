@@ -60,13 +60,12 @@
             }
             $(this).hide();
             $(".bindloginmobile").show();
-            if ($("#S_BindMobile").html()) {
-                $("#mobilePhone").hide();
-            }
+            $("#S_BindMobile").hide(); 
         });
 
         $("#cancleLoginMobile").click(function() {
             $(".bindloginmobile").hide();
+            $("#S_BindMobile").show();
             $("#bindLoginMobile").show();
             $("#mobilePhone").val("");
             $("#BindMobileCode").val("");

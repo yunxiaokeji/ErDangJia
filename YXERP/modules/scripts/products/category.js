@@ -40,7 +40,10 @@ define(function (require, exports, module) {
     ObjectJS.bindStyle = function () {
         var _self = this;
         if (_self.type == "add") {
+            $('#btndiv').remove();
             $(".category-add,.category-edit,.category-del").remove();
+        }else{ 
+            $('#btndiv').show();
         }
     }
 

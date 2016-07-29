@@ -102,7 +102,7 @@ namespace YXERP.Controllers
             var user = OauthBusiness.GetMDUser(code);
             if (user.error_code <= 0)
             {
-                var model = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip,(int)EnumAccountType.MingDao);
+                var model = OrganizationBusiness.GetUserByOtherAccount(user.user.id, user.user.project.id, operateip, (int)EnumAccountType.MingDao);
                 //已注册云销账户
                 if (model != null)
                 {
@@ -143,7 +143,7 @@ namespace YXERP.Controllers
                                                                        user.user.mobile_phone, user.user.email, "", "", "", "", user.user.project.id, "", "", "", out result, out userid);
                             if (!string.IsNullOrEmpty(clientid))
                             {
-                                var current = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip,(int) EnumAccountType.MingDao);
+                                var current = OrganizationBusiness.GetUserByOtherAccount(user.user.id, user.user.project.id, operateip, (int)EnumAccountType.MingDao);
 
                                 current.MDToken = user.user.token;
                                 if (string.IsNullOrEmpty(current.Avatar))
@@ -169,7 +169,7 @@ namespace YXERP.Controllers
                             var newuser = OrganizationBusiness.CreateUser(EnumAccountType.MingDao, user.user.id, "", user.user.name, user.user.mobile_phone, user.user.email, "", "", "", "", "", "", "", "", user.user.project.id, 1, "", out result);
                             if (newuser != null)
                             {
-                                var current = OrganizationBusiness.GetUserByMDUserID(user.user.id, user.user.project.id, operateip,(int) EnumAccountType.MingDao);
+                                var current = OrganizationBusiness.GetUserByOtherAccount(user.user.id, user.user.project.id, operateip, (int)EnumAccountType.MingDao);
 
                                 current.MDToken = user.user.token;
                                 if (string.IsNullOrEmpty(current.Avatar)) current.Avatar = user.user.avatar;
@@ -221,7 +221,7 @@ namespace YXERP.Controllers
 
             if (string.IsNullOrEmpty(userToken.errcode))
             {
-                var model = OrganizationBusiness.GetUserByMDUserID(userToken.unionid, "", operateip,(int)EnumAccountType.WeiXin); 
+                var model = OrganizationBusiness.GetUserByOtherAccount(userToken.unionid, "", operateip, (int)EnumAccountType.WeiXin); 
                 //已注册
                 if (model != null)
                 {

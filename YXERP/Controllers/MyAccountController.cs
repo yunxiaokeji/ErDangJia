@@ -346,7 +346,7 @@ namespace YXERP.Controllers
 
             if (string.IsNullOrEmpty(userToken.errcode))
             {
-                var model = OrganizationBusiness.GetUserByMDUserID(userToken.unionid, "",operateip,(int)EnumAccountType.WeiXin);
+                var model = OrganizationBusiness.GetUserByOtherAccount(userToken.unionid, "", operateip, (int)EnumAccountType.WeiXin);
                 if (model == null)
                 {
                     string flag = OrganizationBusiness.BindOtherAccount(EnumAccountType.WeiXin, CurrentUser.UserID, "", userToken.unionid, CurrentUser.ClientID, CurrentUser.AgentID);

@@ -1,6 +1,4 @@
-﻿/// <reference path="../../../Views/MyAccount/bindweixin.html" />
-/// <reference path="../../../Views/MyAccount/bindweixin.html" />
-/// <reference path="../../../Views/MyAccount/bindweixin.html" />
+﻿
 define(function (require, exports, module) {
     var Global = require("global"), 
         Verify = require("verify"), VerifyObject,

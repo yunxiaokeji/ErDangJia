@@ -29,14 +29,14 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public DataSet GetUserByMDUserID(string userid, string mdprojectid,int accoutype=3)
+        public DataSet GetUserByOtherAccount(string userid, string mdprojectid, int accoutype = 3)
         {
             SqlParameter[] paras = { 
                                     new SqlParameter("@MDUserID",userid),
                                     new SqlParameter("@MDProjectID",mdprojectid),
                                     new SqlParameter("@AccouType",accoutype)
                                    };
-            return GetDataSet("GetUserByMDUserID", paras, CommandType.StoredProcedure, "User|Permission");//|Department|Role
+            return GetDataSet("P_GetUserByOtherAccount", paras, CommandType.StoredProcedure, "User|Permission");//|Department|Role
 
 
         }
@@ -51,15 +51,7 @@ namespace CloudSalesDAL
 
             return GetDataTable(sql, paras, CommandType.Text);
         }
-
-        public DataSet GetUserByWeiXinID(string weiXinID)
-        {
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@WeiXinID", weiXinID)
-            };
-            return GetDataSet("P_GetUserByWeiXinID", paras, CommandType.StoredProcedure, "User|Permission");
-        }
+ 
 
         public DataTable GetUserByUserID(string userid)
         {
@@ -198,7 +190,7 @@ namespace CloudSalesDAL
 
             paras[0].Direction = ParameterDirection.Output;
 
-            ExecuteNonQuery("M_BindOtherAccount", paras, CommandType.StoredProcedure);
+            ExecuteNonQuery("P_BindOtherAccount", paras, CommandType.StoredProcedure);
             result = paras[0].Value.ToString();
             return result;
         }

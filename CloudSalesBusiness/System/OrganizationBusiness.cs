@@ -190,9 +190,9 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public static Users GetUserByMDUserID(string mduserid, string mdprojectid, string operateip,int accountType=3)
+        public static Users GetUserByOtherAccount(string mduserid, string mdprojectid, string operateip, int accountType = 3)
         {
-            DataSet ds = new OrganizationDAL().GetUserByMDUserID(mduserid, mdprojectid, accountType);
+            DataSet ds = new OrganizationDAL().GetUserByOtherAccount(mduserid, mdprojectid, accountType);
             Users model = null;
             if (ds.Tables.Contains("User") && ds.Tables["User"].Rows.Count > 0)
             {

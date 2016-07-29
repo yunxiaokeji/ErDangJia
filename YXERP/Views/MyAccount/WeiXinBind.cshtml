@@ -19,15 +19,13 @@
     <div id="container">加载中...</div>
     <div class="desc">绑定后，可直接使用微信扫描二维码登录二当家</div>
     <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
-<script type="text/javascript">
-    var url = '@ViewBag.Url' + '/MyAccount/WeiXinCallBack';
-    var cssurl = '@ViewBag.Url'+'/modules/css/myaccount/weixinbind.css';
+<script type="text/javascript"> 
     var obj = new WxLogin({
         id: "container",
         appid: '@ViewBag.APPKey',
         scope: "snsapi_login",
-        redirect_uri:url,
-        href: cssurl
+        redirect_uri: '@ViewBag.Url' + '/MyAccount/WeiXinCallBack',
+        href: '@ViewBag.Url' + '/modules/css/myaccount/weixinbind.css'
     });
 </script>
 

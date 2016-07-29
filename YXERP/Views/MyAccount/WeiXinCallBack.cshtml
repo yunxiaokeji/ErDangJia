@@ -7,12 +7,9 @@
 <script type="text/javascript">
 
     var isie = !!window.ActiveXObject || "ActiveXObject" in window;
-    if (!isie) {
-        window.opener.document.location.href = window.opener.document.location.href + "?t" + Date.now();
-    }
+    window.opener.document.location.href = window.opener.document.location.href + "?t" + Date.now(); 
     if (isie) { 
-        if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {
-            window.opener.location.reload();
+        if (navigator.userAgent.indexOf("MSIE 6.0") > 0) { 
             window.opener = null;
             window.close();
         }

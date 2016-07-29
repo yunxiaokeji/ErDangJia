@@ -32,8 +32,7 @@ namespace YXERP.Controllers
             ViewBag.Option = id;
             var tempact = OrganizationBusiness.GetUserAccount(CurrentUser.UserID, CurrentUser.ClientID,
                (int)EnumAccountType.WeiXin);
-            ViewBag.WeiXinID= tempact != null ? tempact.AccountName : "";
-            //ViewBag.BindUrl = WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.BindCallBackUrl), "/MyAccount/Account", false);
+            ViewBag.WeiXinID= tempact != null ? tempact.AccountName : ""; 
             return View();
         }
 

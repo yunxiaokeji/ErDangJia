@@ -139,11 +139,7 @@
                     <br/><input type="button" id="bindWeiXin" class="btn mLeft80" value="@(string.IsNullOrEmpty(ViewBag.WeiXinID) ? "绑定" : "解绑")"/>
                     <span class="mLeft10 red loginError"  id="BindWeiXinError"></span>
                 </li>
-            </ul>
-      @*      <div style="z-index: 66; position:absolute;left: 40%; top: 30%;background-color: #999">
-                <iframe id="WeiXinBindFrame" name="WeiXinBindFrame" frameborder="0" scrolling="no" marginheight="0"   src="@ViewBag.BindUrl" style="height: 400px; width: 322px;" >
-                 </iframe>
-            </div>*@
+            </ul> 
         </div>
         <div id="userPassWord" class="nav-partdiv hide">
              <ul class="table-add mLeft10">
@@ -185,11 +181,10 @@
              <div id="pager" class="mTop20"></div>
          </div>
     </div>
- </div>  
-@*    <div class="feedback">意见反馈</div>*@
-    <input id="feedback-filepath" type="hidden" />
-    <input id="txt_username" value="@CurrentUser.Name" type="hidden" />
-    <input id="txt_usermobilephone" value="@CurrentUser.MobilePhone" type="hidden" />
+ </div>   
+<input id="feedback-filepath" type="hidden" />
+<input id="txt_username" value="@CurrentUser.Name" type="hidden" />
+<input id="txt_usermobilephone" value="@CurrentUser.MobilePhone" type="hidden" />
 @section scripts{
 
 <script src="/Scripts/jquery-1.11.1.js"></script>

@@ -38,7 +38,7 @@ define(function (require, exports, module) {
             } else {
                 var top = ($(window).height()-540) / 2,
                 left = ($(window).width()-400) / 2;
-                var s = window.open("/MyAccount/WeiXinLogin?ReturnUrl='/MyAccount/Account'", "绑定微信登陆二当家", "height=540, width=450,top=" + top + ",left=" + left + ", toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+                window.open("/MyAccount/WeiXinBind", "绑定微信登陆二当家", "height=540, width=450,top=" + top + ",left=" + left + ", toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
             }
         }); 
         $("#bindLogioName").click(function () {

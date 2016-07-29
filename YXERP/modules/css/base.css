@@ -378,14 +378,14 @@ select option{ padding:2px; }
 
 
 /*排序*/
-/*.table-list-rpt .tr-header .td-span{  position:relative; cursor:pointer;line-height:35px; }
+.table-list-rpt .tr-header .td-span{  position:relative; cursor:pointer;line-height:35px; }
 .table-list-rpt .tr-header .td-span:hover { color:#4a98e7; }
 .table-list-rpt .tr-header .td-span.hover { color:#4a98e7; }
 .table-list-rpt .tr-header .td-span .asc { position:absolute;  top:2px; border-bottom:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
 .table-list-rpt .tr-header .td-span .desc { position:absolute; top:9px; border-top:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
 
 .table-list-rpt .tr-header .td-span .asc.hover {  border-bottom:solid 5px #4a98e7;}
-.table-list-rpt .tr-header .td-span .desc.hover { border-top:solid 5px #4a98e7;}*/
+.table-list-rpt .tr-header .td-span .desc.hover { border-top:solid 5px #4a98e7;}
 
 /*新建样式*/
 .table-add {  border-bottom:solid 1px #eee; padding-bottom:20px; overflow:auto; }

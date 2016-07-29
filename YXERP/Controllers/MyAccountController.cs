@@ -323,10 +323,13 @@ namespace YXERP.Controllers
         #endregion
         #region 绑定微信
 
-        //微信授权地址
-        public ActionResult WeiXinLogin(string ReturnUrl)
+        public ActionResult WeiXinBind()
         {
-            return Redirect(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.BindCallBackUrl), ReturnUrl, false));
+            string port = HttpContext.Request.Url.Port.ToString();
+            ViewBag.Url = HttpContext.Request.Url.Scheme + "://" + HttpContext.Request.Url.Host +
+                          (string.IsNullOrEmpty(port) ? "" : ":" + port);
+            ViewBag.APPKey = WeiXin.Sdk.AppConfig.AppKey;
+            return View();
         }
 
         public ActionResult WeiXinBindUrl(string ReturnUrl)
@@ -348,18 +351,6 @@ namespace YXERP.Controllers
                 if (model == null)
                 {
                     string flag = OrganizationBusiness.BindOtherAccount(EnumAccountType.WeiXin, CurrentUser.UserID, "", userToken.unionid, CurrentUser.ClientID, CurrentUser.AgentID);
-                    if (string.IsNullOrEmpty(flag))
-                    {
-                        Response.Write("<script> alert('绑定成功');window.opener.location.reload(); window.close(); </script>");
-                        Response.End();
-                        return Redirect(state);
-                    } 
-                    else
-                    {
-                        Response.Write("<script>alert('绑定失败'); window.close(); </script>");
-                        Response.End();
-                        return Content("");
-                    }
                 }
                 else
                 {
@@ -372,17 +363,16 @@ namespace YXERP.Controllers
                     else
                     {
                         Response.Write("<script>alert('用户已被注销');window.close();</script>");
-                        Response.End();
-                        return Content("");
+                        Response.End(); 
                     }
                 }
             }
             else
             {
                 Response.Write("<script>alert('暂未获取到微信用户信息，绑定失败');window.close();</script>");
-                Response.End();
-                return Content("");
+                Response.End(); 
             }
+            return View();
         } 
 
         public JsonResult UnBindWeiXin()

@@ -191,6 +191,7 @@
     <Content Include="modules\css\iconfont\demo.html" />
     <Content Include="modules\css\iconfont\iconfont.css" />
     <Content Include="modules\css\iconfont\iconfont.svg" />
+    <Content Include="modules\css\myaccount\weixinbind.css" />
     <Content Include="modules\css\sales.css" />
     <Content Include="modules\css\report.css" />
     <Content Include="modules\css\stock.css" />
@@ -1066,6 +1067,8 @@
     <Content Include="Views\Home\WeiXinSelectLogin.cshtml" />
     <Content Include="Views\StockRPT\OrderDetailRPT.cshtml" />
     <Content Include="Views\StockRPT\StockDetailRPT.cshtml" />
+    <Content Include="Views\MyAccount\WeiXinCallBack.cshtml" />
+    <Content Include="Views\MyAccount\WeiXinBind.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

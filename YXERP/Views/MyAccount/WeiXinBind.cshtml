@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+} 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>绑定微信登录二当家</title>
+    <style>
+        body {
+            text-align: center;
+            font-size: 14px;
+            font-family: '微软雅黑';
+        }
+        #container,iframe{height:330px;}
+        .desc{margin-top:20px;} 
+
+    </style>
+</head>
+<body>
+    <div id="container">加载中...</div>
+    <div class="desc">绑定后，可直接使用微信扫描二维码登录二当家</div>
+    <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+<script type="text/javascript">
+    var url = '@ViewBag.Url' + '/MyAccount/WeiXinCallBack';
+    var cssurl = '@ViewBag.Url'+'/modules/css/myaccount/weixinbind.css';
+    var obj = new WxLogin({
+        id: "container",
+        appid: '@ViewBag.APPKey',
+        scope: "snsapi_login",
+        redirect_uri:url,
+        href: cssurl
+    });
+</script>
+

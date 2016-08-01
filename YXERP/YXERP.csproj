@@ -125,14 +125,21 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\BaseAPIController.cs" />
+    <Compile Include="Areas\Api\Controllers\ClientController.cs" />
+    <Compile Include="Areas\Api\Controllers\PurchaseController.cs" />
+    <Compile Include="Areas\Api\Controllers\UserController.cs" />
     <Compile Include="Common\Alipay\AlipayConfig.cs" />
     <Compile Include="Common\Alipay\AlipayCore.cs" />
     <Compile Include="Common\Alipay\AlipayNotify.cs" />
     <Compile Include="Common\Alipay\AlipaySubmit.cs" />
     <Compile Include="Common\Alipay\MD5.cs" />
+    <Compile Include="Common\ApiAuthorize.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\ExpandClass.cs" />
     <Compile Include="Common\MessageSend.cs" />
+    <Compile Include="Common\Signature.cs" />
     <Compile Include="Common\UserAuthorize.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AgentsController.cs" />
@@ -163,6 +170,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FilterProduct.cs" />
+    <Content Include="Common\ApiSetting.xml" />
     <Content Include="Content\homeico\active.png" />
     <Content Include="Content\homeico\buy.png" />
     <Content Include="Content\homeico\custom.png" />
@@ -186,6 +194,7 @@
     <Content Include="Content\menuico\stockmanage.png" />
     <Content Include="Content\menuico\systemSet.png" />
     <Content Include="DLL\JsonObject.dll" />
+    <Content Include="modules\css\error.css" />
     <Content Include="modules\css\home\selectlogin.css" />
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />
@@ -219,6 +228,7 @@
     <Content Include="modules\images\icondate.png" />
     <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
+    <Content Include="modules\images\img-noaccess.png" />
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\images\logo-weixin.png" />
     <Content Include="modules\images\none-img.png" />
@@ -291,6 +301,7 @@
     <Content Include="modules\excelmodel\stockout.json" />
     <Content Include="modules\excelmodel\orderdetailrpt.json" />
     <Content Include="modules\excelmodel\stockdetailrpt.json" />
+    <Content Include="Areas\Api\Views\Web.config" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -1230,6 +1241,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Content\tempfile\" />
     <Folder Include="Content\uploadFiles\" />
     <Folder Include="modules\plug\umeditor\net\Bin\" />
@@ -1266,6 +1279,10 @@
     <ProjectReference Include="..\WeiXin.Sdk\WeiXin.Sdk.csproj">
       <Project>{a01e43b8-fabf-4601-8894-4374026aa08c}</Project>
       <Name>WeiXin.Sdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YunXiaoService\YunXiaoService.csproj">
+      <Project>{28239182-0731-4e96-b9fe-e3c8a46335ca}</Project>
+      <Name>YunXiaoService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

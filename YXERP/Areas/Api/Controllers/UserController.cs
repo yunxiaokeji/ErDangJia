@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using CloudSalesBusiness;
+using YunXiaoService;
 using CloudSalesEntity;
+using CloudSalesEnum;
 
 namespace YXERP.Areas.Api.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseAPIController
     {
         public JsonResult UserLogin(string userName, string pwd)
         {
@@ -25,7 +26,7 @@ namespace YXERP.Areas.Api.Controllers
             {
                 string operateip = Common.Common.GetRequestIP();
 
-                Users model = OrganizationBusiness.GetUserByUserName(userName, pwd, out result, operateip);
+                Users model = UserService.GetUserByAccount(EnumAccountType.UserName, userName, pwd, "", OperateIP, out result);
 
                 if (model != null)
                 {

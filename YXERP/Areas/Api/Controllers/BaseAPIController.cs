@@ -22,6 +22,17 @@ namespace YXERP.Areas.Api.Controllers
         public static string AppSecret = Common.Common.GetXmlNodeValue("root/ZNGCApi", "AppSecret");
         public static string CallBackUrl = Common.Common.GetXmlNodeValue("root/ZNGCApi", "CallBackUrl");
 
+        /// <summary>
+        /// 登录IP
+        /// </summary>
+        protected string OperateIP
+        {
+            get
+            {
+                return string.IsNullOrEmpty(Request.Headers.Get("X-Real-IP")) ? Request.UserHostAddress : Request.Headers["X-Real-IP"];
+            }
+        }
+
         protected override void HandleUnknownAction(string actionName)
         {
             try

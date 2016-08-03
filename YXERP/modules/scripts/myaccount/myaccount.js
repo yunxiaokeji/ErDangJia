@@ -72,8 +72,7 @@
                 
             } else if (_this.data("id") == "userPassWord" ) {
                  
-            } else if (_this.data("id") == "UserFeedBack" && (!_this.data("frist") || _this.data("frist") == 0)) {
-                _this.data("frist", "1");
+            } else if (_this.data("id") == "UserFeedBack") {
                 _self.bindData(); 
             }
         });

@@ -130,6 +130,7 @@
     <Compile Include="Areas\Api\Controllers\ClientController.cs" />
     <Compile Include="Areas\Api\Controllers\StockController.cs" />
     <Compile Include="Areas\Api\Controllers\UserController.cs" />
+    <Compile Include="Areas\Api\Models\FilterPurchase.cs" />
     <Compile Include="Common\Alipay\AlipayConfig.cs" />
     <Compile Include="Common\Alipay\AlipayCore.cs" />
     <Compile Include="Common\Alipay\AlipayNotify.cs" />
@@ -1241,7 +1242,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Content\tempfile\" />
     <Folder Include="Content\uploadFiles\" />

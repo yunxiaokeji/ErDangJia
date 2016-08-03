@@ -327,7 +327,7 @@ namespace YXERP.Controllers
         {
             string port = HttpContext.Request.Url.Port.ToString();
             ViewBag.Url = HttpContext.Request.Url.Scheme + "://" + HttpContext.Request.Url.Host +
-                          (string.IsNullOrEmpty(port) ? "" : ":" + port);
+                          (string.IsNullOrEmpty(port) || port=="80" ? "" : ":" + port);
             ViewBag.APPKey = WeiXin.Sdk.AppConfig.AppKey;
             return View();
         }

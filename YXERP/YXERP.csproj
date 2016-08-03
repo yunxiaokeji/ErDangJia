@@ -222,6 +222,11 @@
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\images\logo-weixin.png" />
     <Content Include="modules\images\none-img.png" />
+    <Content Include="modules\images\weixin-38.png" />
+    <Content Include="modules\images\weixin-40.png" />
+    <Content Include="modules\images\weixin-hover-38.png" />
+    <Content Include="modules\images\weixin-hover.png" />
+    <Content Include="modules\images\weixin.png" />
     <Content Include="modules\images\wx_logo64.png" />
     <Content Include="modules\plug\autocomplete\autocomplete.js" />
     <Content Include="modules\plug\autocomplete\style.css" />

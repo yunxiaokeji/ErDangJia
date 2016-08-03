@@ -79,6 +79,7 @@ namespace YXERP.Controllers
             JsonDictionary.Add("MobilePhone", CurrentUser.MobilePhone);
             JsonDictionary.Add("OfficePhone", CurrentUser.OfficePhone);
             JsonDictionary.Add("Email", CurrentUser.Email);
+            JsonDictionary.Add("Avatar", CurrentUser.Avatar);
             JsonDictionary.Add("BindMobilePhone", CurrentUser.BindMobilePhone);
            
             return new JsonResult

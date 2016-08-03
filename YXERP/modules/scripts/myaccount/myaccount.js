@@ -63,7 +63,8 @@
             $(".nav-partdiv").hide();
             $("#" + _this.data("id")).show();
 
-            if (_this.data("id") == "userInfo") {
+            if (_this.data("id") == "userInfo" && (!_this.data("frist") || _this.data("frist") == 0)) {
+                _this.data("frist", "1");
                 _self.getDetail();
             } else if (_this.data("id") == "userAccount" ) {
                 
@@ -71,8 +72,8 @@
                 
             } else if (_this.data("id") == "userPassWord" ) {
                  
-            } else if (_this.data("id") == "UserFeedBack" && (!_this.data("first") || _this.data("first") == 0)) {
-                _this.data("first", "1");
+            } else if (_this.data("id") == "UserFeedBack" && (!_this.data("frist") || _this.data("frist") == 0)) {
+                _this.data("frist", "1");
                 _self.bindData(); 
             }
         });
@@ -123,7 +124,7 @@
                 $('#labName').text(item.Name);
                 $('#labDepart').text(item.DepartmentName);
                 $('#labJob').text(item.Jobs);
-
+                $('#imgtitle').attr("src", item.Avatar);
                 var birthday = item.Birthday.toDate("yyyy-MM-dd");
                 $("#Birthday").val(birthday != "3939-01-01" ? birthday : "");
                 $("#Age").val(item.Age);

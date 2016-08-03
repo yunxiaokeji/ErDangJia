@@ -59,9 +59,12 @@ border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radi
 
 .accounts .mingdao:hover {background:url(/Content/homeico/mingdao-hover.png) no-repeat; }
 
-.accounts .account-weixin {background-color:#ccc; }
+.accounts .account-weixin {background:url(/modules/images/weixin-38.png) no-repeat center  center ;background-size: 37px 37px; } 
+.accounts .account-weixin:hover{background:url(/modules/images/weixin-hover-38.png) no-repeat center  center ;background-size:37px 37px;}
 
-.accounts .account-weixin:hover {background-color:#3eb94e; }
+/*.accounts .account-weixin {background-color:#ccc; }
+
+.accounts .account-weixin:hover {background-color:#3eb94e; }*/
 
 .login-body .copyright{ position:fixed; bottom:20px; right:20px; color:#333; text-align:right}
 

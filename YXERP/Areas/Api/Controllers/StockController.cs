@@ -191,7 +191,41 @@ namespace YXERP.Areas.Api.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
+        /// <summary>
+        /// 订单出库--（根据issend(发货但是否自动发货)生成发货单 ）
+        /// </summary>
+        /// <param name="expresscode"></param>
+        /// <param name="expressid"></param>
+        /// <param name="issend"></param>
+        /// <param name="orderid"></param>
+        /// <param name="wareid"></param>
+        /// <returns></returns>
+        public ActionResult ConfirmAgentOrderOut(string expresscode, string expressid, string orderid, string wareid, string userid,string agentid, string clientid, ref string errmsg, int issend = 0)
+        {
+            bool result = false;
+            if (!string.IsNullOrEmpty(orderid) && !string.IsNullOrEmpty(wareid))
+            {
+                string msg = "";
+                result=StockService.ConfirmAgentOrderOut(expresscode, expressid, orderid, wareid, userid, agentid, clientid,
+                    ref msg, issend);
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    JsonDictionary["error_code"] = -101;
+                    JsonDictionary["error_msg"] = msg;
+                }
+            }
+            else
+            {
+                JsonDictionary["error_code"] = -100;
+                JsonDictionary["error_msg"] = "参数orderid，wareid不能为空";
+            }
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
         #endregion
 
 

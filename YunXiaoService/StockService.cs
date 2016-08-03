@@ -86,6 +86,14 @@ namespace YunXiaoService
                 keywords, beginTime, endTime, pagesize, pageindex, ref totalCount, ref pageCount, agentid, clientid);
         }
 
+        public static bool ConfirmAgentOrderOut(string expresscode, string expressid, string orderid, string wareid, string userid,string agentid, string clientid, ref string errmsg,
+            int issend = 0)
+        {
+            int result = 0;
+            return AgentOrderBusiness.BaseBusiness.ConfirmAgentOrderOut(orderid, wareid, issend, expressid, expresscode, userid,
+                agentid, clientid, ref result, ref errmsg);
+        }
+
         #endregion
 
     }

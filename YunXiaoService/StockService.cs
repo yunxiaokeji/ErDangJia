@@ -5,18 +5,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CloudSalesBusiness;
-using CloudSalesEnum;
+using CloudSalesEntity.Manage;
+using CloudSalesEnum; 
 
 namespace YunXiaoService
 {
     public class StockService
     {
+        #region 仓库 快递基本信息获取
+        /// <summary>
+        /// 获取代理商仓库信息
+        /// </summary>
+        /// <param name="clientid">公司ID</param>
+        /// <returns></returns>
+        public static List<WareHouse> GetAllWareHouses(string clientid)
+        {
+            return  new SystemBusiness().GetWareHouses(clientid);
+        }
+
+        /// <summary>
+        /// 获取仓库库位信息
+        /// </summary>
+        /// <param name="wareid">仓库ID</param>
+        /// <param name="agentid">代理商ID</param>
+        /// <param name="clientid">公司ID</param>
+        /// <returns>List</returns>
+        public static List<DepotSeat> GetDepotSeatsByWareID(string wareid, string agentid, string clientid)
+        {
+            return new SystemBusiness().GetDepotSeatsByWareID(wareid, clientid);
+        }
+        /// <summary>
+        /// 获取系统所有快递
+        /// </summary>
+        /// <returns></returns>
+        public static List<ExpressCompany> GetExpress()
+        {
+            return  CloudSalesBusiness.Manage.ExpressCompanyBusiness.GetExpressCompanys();
+        }
+
+        #endregion
+
+        #region 采购单
+
         //获取采购订单
         public static List<StorageDoc> GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
-        { 
-           return StockBusiness.GetPurchases(userid, (EnumDocStatus)Enum.Parse(typeof(EnumDocStatus), status.ToString()), keywords, begintime, endtime, wareid, providerid, pageSize,
-                pageIndex, ref totalCount, ref pageCount, agentid, clientid);
-        } 
+        {
+            return StockBusiness.GetPurchases(userid, (EnumDocStatus)Enum.Parse(typeof(EnumDocStatus), status.ToString()), keywords, begintime, endtime, wareid, providerid, pageSize,
+                 pageIndex, ref totalCount, ref pageCount, agentid, clientid);
+        }
         /// <summary>
         /// 入库采购单 支持 分批入库
         /// </summary>
@@ -30,10 +66,27 @@ namespace YunXiaoService
         /// <param name="clientid">公司ID</param>
         /// <param name="errmsg">返回错误信息</param>
         /// <returns></returns>
-        public static bool AuditPurchase(string docid,int doctype,int isover,string details,string remark,string userid, string agentid, string clientid,ref string errmsg)
+        public static bool AuditPurchase(string docid, int doctype, int isover, string details, string remark, string userid, string agentid, string clientid, ref string errmsg)
         {
             int result = 0;
             return new StockBusiness().AuditStorageIn(docid, doctype, isover, details, remark, userid, "", agentid, clientid, ref result, ref errmsg);
         }
+ 
+        #endregion
+
+        #region 出库单
+
+        /// <summary>
+        /// 分页获取出库单（GetAgentOrders）
+        /// </summary>
+        /// <returns></returns>
+        public static List<AgentOrderEntity> GetStockOut(int status, int outstatus, int sendstatus, int returnstatus, string keywords, string beginTime, string endTime, int pagesize, int pageindex, ref int totalCount, ref int pageCount, string clientid, string agentid = "")
+        {
+            return AgentOrderBusiness.BaseBusiness.GetAgentOrders("", (EnumOrderStatus)Enum.Parse(typeof(EnumOrderStatus), status.ToString()), (EnumOutStatus)Enum.Parse(typeof(EnumOutStatus), outstatus.ToString()), (EnumSendStatus)Enum.Parse(typeof(EnumSendStatus), sendstatus.ToString()), (EnumReturnStatus)Enum.Parse(typeof(EnumReturnStatus),returnstatus.ToString()),
+                keywords, beginTime, endTime, pagesize, pageindex, ref totalCount, ref pageCount, agentid, clientid);
+        }
+
+        #endregion
+
     }
 }

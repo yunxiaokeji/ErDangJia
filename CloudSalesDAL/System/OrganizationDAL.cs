@@ -277,7 +277,14 @@ namespace CloudSalesDAL
         public bool ClearAccountBindMobile(string userid,int accountType=2)
         {
             string sql = "Delete from UserAccounts where UserID=@UserID and AccountType=@AccountType ";
-
+            if (accountType == 2)
+            {
+                string sql2 = "update Users set BindMobilePhone='' where UserID=@UserID  ";
+                SqlParameter[] paras2 = { 
+                                       new SqlParameter("@UserID",userid),
+                                   };
+                ExecuteNonQuery(sql2, paras2, CommandType.Text);
+            }
             SqlParameter[] paras = { 
                                        new SqlParameter("@UserID",userid),
                                        new SqlParameter("@AccountType",accountType)

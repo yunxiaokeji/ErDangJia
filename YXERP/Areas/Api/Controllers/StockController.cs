@@ -149,7 +149,7 @@ namespace YXERP.Areas.Api.Controllers
                     }
                     string errmsg = "";
                     result = StockService.AuditPurchase(model.DocID, model.DocType, model.IsOver, details,
-                        model.Remark, userid, agentid, clientid, ref errmsg);
+                        model.Remark,OperateIP, userid, agentid, clientid, ref errmsg);
                     JsonDictionary["error_msg"] = errmsg;
                 }
                 else
@@ -226,8 +226,41 @@ namespace YXERP.Areas.Api.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
+        public ActionResult ConfirmAgentOrderSend(string orderid, string expressid, string expresscode, string userid, string agentid, string clientid)
+        {
+            bool result = false;
+            string errmsg = "";
+            if (!string.IsNullOrEmpty(orderid) && !string.IsNullOrEmpty(expressid))
+            {
+                result = StockService.ConfirmAgentOrderSend(orderid, expressid, expresscode, userid, agentid, clientid, ref errmsg);
+                if (!string.IsNullOrEmpty(errmsg))
+                {
+                    JsonDictionary["error_code"] = -101;
+                    JsonDictionary["error_msg"] = errmsg;
+                }
+            }
+             else
+             {
+                 JsonDictionary["error_code"] = -100;
+                 JsonDictionary["error_msg"] = "参数orderid，expressid不能为空";
+             }
+
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
 
+
+        #region 发货单
+        
+
+        #endregion
 
 
     }

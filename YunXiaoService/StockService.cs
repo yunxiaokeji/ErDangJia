@@ -66,10 +66,10 @@ namespace YunXiaoService
         /// <param name="clientid">公司ID</param>
         /// <param name="errmsg">返回错误信息</param>
         /// <returns></returns>
-        public static bool AuditPurchase(string docid, int doctype, int isover, string details, string remark, string userid, string agentid, string clientid, ref string errmsg)
+        public static bool AuditPurchase(string docid, int doctype, int isover, string details, string remark,string opearip, string userid, string agentid, string clientid, ref string errmsg)
         {
             int result = 0;
-            return new StockBusiness().AuditStorageIn(docid, doctype, isover, details, remark, userid, "", agentid, clientid, ref result, ref errmsg);
+            return new StockBusiness().AuditStorageIn(docid, doctype, isover, details, remark, userid, opearip, agentid, clientid, ref result, ref errmsg);
         }
  
         #endregion
@@ -94,6 +94,13 @@ namespace YunXiaoService
                 agentid, clientid, ref result, ref errmsg);
         }
 
+
+        public static bool ConfirmAgentOrderSend(string orderid, string expressid, string expresscode, string userid, string agentid, string clientid, ref string errmsg)
+        {
+            int result = 0;
+            return AgentOrderBusiness.BaseBusiness.ConfirmAgentOrderSend(orderid,expressid,expresscode, userid,
+                agentid, clientid, ref result, ref errmsg);
+        }
         #endregion
 
     }

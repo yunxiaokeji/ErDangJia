@@ -15,8 +15,7 @@ namespace YXERP.Areas.Api.Controllers
         {
           {"error_code",0}, {"error_msg",""}
         }; 
-        protected int PageSize = 10;
-
+        protected int PageSize = 10; 
         public static string ApiUrl = Common.Common.GetXmlNodeValue("root/ZNGCApi", "ApiUrl") ?? "http://localhost:8888";
         public static string AppKey = Common.Common.GetXmlNodeValue("root/ZNGCApi", "AppKey");
         public static string AppSecret = Common.Common.GetXmlNodeValue("root/ZNGCApi", "AppSecret");
@@ -29,7 +28,8 @@ namespace YXERP.Areas.Api.Controllers
         {
             get
             {
-                return string.IsNullOrEmpty(Request.Headers.Get("X-Real-IP")) ? Request.UserHostAddress : Request.Headers["X-Real-IP"];
+                string operateip = Common.Common.GetRequestIP();
+                return string.IsNullOrEmpty(operateip) ? "" : operateip;
             }
         }
 

@@ -39,6 +39,7 @@
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
+        $(".bindloginmobile").hide();
         $("#btnExportExcel").click(function () {
             var form = $("<form>");//定义一个form表单
             form.attr("style", "display:none");

@@ -105,10 +105,11 @@ define(function (require, exports, module) {
                 container: {
                     id: "setloginname-add-div",
                     header: "设置账号",
+                    docWidth:450,
                     content: html,
                     yesFn: function () {
 
-                        if ($("#LoginName").length < 6) {
+                        if ($("#LoginName").val().length < 6) {
                             alert("账号长度不能低于6位！");
                             return false;
                         }
@@ -149,8 +150,9 @@ define(function (require, exports, module) {
                     }
                 }
             });
+             
             $("#LoginName").focus();
-            if ($("#S_BindMobile").html()) {
+            if ($("span[id='S_BindMobile']").html()!='未绑定') {
                 $(".nologinname").hide();
             }
             $("#LoginName").blur(function () {
@@ -247,7 +249,8 @@ define(function (require, exports, module) {
                         };
                         Global.post("/MyAccount/SaveAccountBindMobile", Paras, function (data) {
                             if (data.Result == 1) {
-                                $("#S_BindMobile").html("");
+                                $("#S_BindMobile").html("未绑定");
+                                $(".bindloginmobile").html("");
                                 $("#cancleLoginMobile").click();
                                 $("#bindLoginMobile").val("绑定");
                             }

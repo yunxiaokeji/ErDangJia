@@ -69,9 +69,7 @@ define(function (require, exports, module) {
         //绑定手机
         $("#SendBindMobileCode").click(function () {
             var BindMobile = $("#bmobilePhone").val();
-            var S_BindMobile = $("span[id='S_BindMobile']").html();
-            console.log(S_BindMobile);
-            console.log(BindMobile);
+            var S_BindMobile = $("span[id='S_BindMobile']").html(); 
             if (S_BindMobile == '未绑定') {
                 if (BindMobile != '') {
                     if (Global.validateMobilephone(BindMobile)) {

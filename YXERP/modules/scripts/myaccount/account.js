@@ -69,7 +69,7 @@ define(function (require, exports, module) {
         //绑定手机
         $("#SendBindMobileCode").click(function () {
             var BindMobile = $("#mobilePhone").val();
-            var S_BindMobile = $("#S_BindMobile").html();
+            var S_BindMobile = $("span[id='S_BindMobile']").html();
 
             if (S_BindMobile == '') {
                 if (BindMobile != '') {
@@ -179,7 +179,7 @@ define(function (require, exports, module) {
 
     //保存绑定手机信息
     ObjectJS.SaveAccountBindMobile = function () {
-        var option = $("#S_BindMobile").html().trim() ? 2 : 1;
+        var option = $("span[id='S_BindMobile']").html().trim() !== '未绑定' ? 2 : 1;
         var BindMobile = $("#mobilePhone").val();
         if (option == 1) {
             if (BindMobile != '') {
@@ -209,7 +209,7 @@ define(function (require, exports, module) {
                                         };
                                         Global.post("/MyAccount/SaveAccountBindMobile", Paras, function (data) {
                                             if (data.Result == 1) {
-                                                $("#S_BindMobile").html(BindMobile);
+                                                $("span[id='S_BindMobile']").html(BindMobile);
                                                 $("#cancleLoginMobile").click();
                                                 $("#bindLoginMobile").val("解绑");
                                             }else if (data.Result == 2) {
@@ -235,7 +235,7 @@ define(function (require, exports, module) {
             if (BindMobileCode == "") {
                 $("#BindMobileCodeError").html("验证码不能为空");
             } else {
-                Global.post("/Home/ValidateMobilePhoneCode", { mobilePhone: $("#S_BindMobile").html().trim(), code: BindMobileCode }, function (data) {
+                Global.post("/Home/ValidateMobilePhoneCode", { mobilePhone: $("span[id='S_BindMobile']").html().trim(), code: BindMobileCode }, function (data) {
                     if (data.Result == 0) {
                         $("#BindMobileCodeError").html("验证码有误");
                     }else {
@@ -243,13 +243,13 @@ define(function (require, exports, module) {
 
                         var Paras =
                         {
-                            bindMobile: $("#S_BindMobile").html().trim(),
+                            bindMobile: $("span[id='S_BindMobile']").html().trim(),
                             code: $("#BindMobileCode").val(),
                             option: option//1:绑定手机；2：解除绑定
                         };
                         Global.post("/MyAccount/SaveAccountBindMobile", Paras, function (data) {
                             if (data.Result == 1) {
-                                $("#S_BindMobile").html("未绑定");
+                                $("span[id='S_BindMobile']").html('未绑定');
                                 $(".bindloginmobile").html("");
                                 $("#cancleLoginMobile").click();
                                 $("#bindLoginMobile").val("绑定");

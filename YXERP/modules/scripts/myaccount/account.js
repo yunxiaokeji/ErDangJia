@@ -68,10 +68,11 @@ define(function (require, exports, module) {
         });
         //绑定手机
         $("#SendBindMobileCode").click(function () {
-            var BindMobile = $("#mobilePhone").val();
+            var BindMobile = $("#bmobilePhone").val();
             var S_BindMobile = $("span[id='S_BindMobile']").html();
-
-            if (S_BindMobile == '') {
+            console.log(S_BindMobile);
+            console.log(BindMobile);
+            if (S_BindMobile == '未绑定') {
                 if (BindMobile != '') {
                     if (Global.validateMobilephone(BindMobile)) {
                         Global.post("/MyAccount/IsExistLoginName", { loginName: BindMobile }, function (data) {
@@ -180,7 +181,7 @@ define(function (require, exports, module) {
     //保存绑定手机信息
     ObjectJS.SaveAccountBindMobile = function () {
         var option = $("span[id='S_BindMobile']").html().trim() !== '未绑定' ? 2 : 1;
-        var BindMobile = $("#mobilePhone").val();
+        var BindMobile = $("#bmobilePhone").val();
         if (option == 1) {
             if (BindMobile != '') {
                 if (Global.validateMobilephone(BindMobile)) {
@@ -208,7 +209,7 @@ define(function (require, exports, module) {
                                             option: option//1:绑定手机；2：解除绑定
                                         };
                                         Global.post("/MyAccount/SaveAccountBindMobile", Paras, function (data) {
-                                            if (data.Result == 1) {
+                                            if (data.Result == 1) { 
                                                 $("span[id='S_BindMobile']").html(BindMobile);
                                                 $("#cancleLoginMobile").click();
                                                 $("#bindLoginMobile").val("解绑");
@@ -249,10 +250,11 @@ define(function (require, exports, module) {
                         };
                         Global.post("/MyAccount/SaveAccountBindMobile", Paras, function (data) {
                             if (data.Result == 1) {
-                                $("span[id='S_BindMobile']").html('未绑定');
+                                $("span[id='S_BindMobile']").html('未绑定').show();
                                 $(".bindloginmobile").html("");
+                                $("#bmobilePhone").val('').hide();
                                 $("#cancleLoginMobile").click();
-                                $("#bindLoginMobile").val("绑定");
+                                $("#bindLoginMobile").val("绑定").show();
                             }
                             else if (data.Result == 2) {
                                 $("#BindMobileCodeError").html("验证码有误");

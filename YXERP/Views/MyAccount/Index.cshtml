@@ -115,7 +115,7 @@
                 <li>
                     <span class="width80 lineHeight30">手机：</span>
                     <span id="S_BindMobile" class="bolder lineHeight30">@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "未绑定" : CurrentUser.BindMobilePhone)</span>
-                    <input type="text" class="input bindloginmobile" value="@(CurrentUser.BindMobilePhone)"/>  <span class="mLeft10 red loginError"  id="BindMobileError"></span>
+                    <input type="text" id='bmobilePhone' class="input bindloginmobile" value="@(CurrentUser.BindMobilePhone)"/>  <span class="mLeft10 red loginError"  id="BindMobileError"></span>
                     <br/><input type="button" id="bindLoginMobile" class="btn mLeft80" value="@(string.IsNullOrEmpty(CurrentUser.BindMobilePhone) ? "绑定" : "解绑")"/>
                     
                 </li>

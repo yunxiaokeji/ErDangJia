@@ -110,11 +110,66 @@
             ObjectJS.Params.endDate = end ? end.format("YYYY-MM-DD") : "";
             ObjectJS.bindData();
         });
+
+        $(".ico-feedback").click(function () {
+            doT.exec("template/default/feedback-add.html", function (template) {
+                var html = template([]);
+                $("#show-model-feedback").empty();
+                Easydialog.open({
+                    container: {
+                        id: "show-model-feedback",
+                        header: "意见反馈",
+                        content: html,
+                        yesFn: function () {
+                            if ($("#feedback-title").val() == "") {
+                                alert("标题不能为空");
+                                return false;
+                            }
+                            var entity = {
+                                Title: $("#feedback-title").val(),
+                                ContactName: $("#feedback-contactname").val(),
+                                MobilePhone: $("#feedback-mobilephone").val(),
+                                Type: $("#feedback-type").val(),
+                                FilePath: $("#feedback-filepath").val(),
+                                Remark: $("#feedback-remark").val()
+                            };
+                            Global.post("/Default/SaveFeedBack", { entity: JSON.stringify(entity) }, function (data) {
+                                if (data.Result == 1) {
+                                    alert("反馈提交成功，谢谢反馈");
+                                    _self.bindData();
+                                }
+                            });
+                        },
+                        callback: function () {
+
+                        }
+                    }
+                });
+
+                $("#feedback-contactname").val($("#txt_username").val());
+                $("#feedback-mobilephone").val($("#txt_usermobilephone").val());
+                var Upload = require("upload");
+                //选择意见反馈附件
+                Upload.createUpload({
+                    element: "#feedback-file",
+                    buttonText: "选择附件",
+                    className: "",
+                    data: { folder: '/Content/tempfile/', action: 'add', oldPath: "" },
+                    success: function (data, status) {
+                        if (data.Items.length > 0) {
+                            $("#feedback-filepath").val(data.Items[0]);
+                            var arr = data.Items[0].split("/");
+                            $("#feedback-filename").html(arr[arr.length - 1]);
+                        }
+                    }
+                });
+
+            });
+        });
     }
 
     //获取用户详情
     ObjectJS.getDetail = function (departs) {
-
         Global.post("/MyAccount/GetAccountDetail", null, function (data) {
             if (data) {
                 var item = data;
@@ -278,21 +333,18 @@
     //反馈详情
     ObjectJS.getFeedBackDetail = function (id) {
         Global.post("/MyAccount/GetFeedBackDetail", { id: id }, function (data) {
-            $("#show-contact-detail").empty();
+            $("#show-model-detail").empty();
             doT.exec("template/myaccount/myfeedback-detail.html?3", function (templateFun) {
                 var innerText = templateFun(data.Item);
                 Easydialog.open({
                     container: {
                         id: "show-model-detail",
                         header: "反馈详情",
-                        content: innerText,
-                        yesFn: function () {
-                        },
+                        content: innerText, 
                         callback: function () {
                         }
                     }
-                });
-                $(".edit-company").hide();
+                }); 
             });
         });
     };

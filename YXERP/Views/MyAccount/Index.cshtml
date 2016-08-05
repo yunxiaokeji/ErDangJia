@@ -193,13 +193,12 @@
 <script type="text/javascript">
     $(function () { 
         $(".bindloginmobile").hide();
-        seajs.use(["scripts/myaccount/myaccount", "scripts/myaccount/setavatar", "scripts/myaccount/account", "scripts/myaccount/setpassword", "scripts/myaccount/myfeedback"], function (ObjectJS, imgUpload, accoun, editpass,feedback) {
+        seajs.use(["scripts/myaccount/myaccount", "scripts/myaccount/setavatar", "scripts/myaccount/account", "scripts/myaccount/setpassword"], function (ObjectJS, imgUpload, accoun, editpass) {
 
             ObjectJS.init('@Html.ToJSONString(departs)', '@ViewBag.Option');
             imgUpload.init();
             accoun.init();
-            editpass.init();
-            feedback.init();
+            editpass.init(); 
         }); 
     });
 

@@ -116,8 +116,14 @@ nav .action-items .point { width:6px; height:6px; border-radius:3px; background-
 
 .help-feedback .ico-contact { background:url('/modules/images/ico-contact.png') no-repeat center; background-color:#4a98e7; bottom:135px; }
 .help-feedback .ico-feedback { background:url('/modules/images/ico-feedback.png') no-repeat center; background-color:#4a98e7; bottom:90px;}
-.help-feedback .ico-help { background:url('/modules/images/ico-help.png') no-repeat center; background-color:#4a98e7; bottom:45px; }
+.help-feedback .ico-help { background:url('/modules/images/ico-wechat.png')no-repeat center center; background-size:22px 22px;background-color:#4a98e7; bottom:45px; }
+.help-feedback .ico-help:hover {background-color:#2F73B8;}
 .help-feedback .ico-open { background:url('/modules/images/ico-operate-open.png') no-repeat center; background-color:#4a98e7;  bottom:0; }
+ 
+.wechat { position:fixed;z-index:1000 ;bottom:60px;left:44px;transition:0.7s;-webkit-transition:0.7s;-moz-transition:0.7s;}
+
+.wechat img { z-index:888 ;width:0;height:0;transition:0.7s;-webkit-transition:0.7s;-moz-transition:0.7s;}
+
 
 
 

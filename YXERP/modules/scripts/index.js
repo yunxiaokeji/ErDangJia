@@ -202,6 +202,16 @@ define(function (require, exports, module) {
             }
         });
 
+        $(".help-feedback .ico-help").hover(function () {
+            $(".wechat").css({ "bottom": "105px", "left": "70px" ,"z-index":"1000"});
+
+            $(".wechat img").css({ "width": "150px", "height": "150px" });
+
+        }, function () {
+            $(".wechat").css({ "bottom": "70px", "left": "44px" });
+
+            $(".wechat img").css({ "width": "0", "height": "0" });
+        })
         //意见反馈
         $(".ico-feedback").click(function () {
             doT.exec("template/default/feedback-add.html", function (template) {
@@ -259,7 +269,19 @@ define(function (require, exports, module) {
             });
 
         });
+        //关注微信号
+        $(".help-feedback .ico-help").click(function() {
+            Easydialog.open({
+                container: {
+                    id: "",
+                    header: "二当家微信公众号",
+                    content: "<div class='center'><img src='/modules/images/wx-code.jpg' /><br><span class='font14'>扫一扫关注公众号</span></div>",
+                    yesfn: function() {
 
+                    }
+                }
+            });
+        });
         //关闭标签
         $("#closeThis").click(function () {
             $("#windowItems li[data-id='" + $(this).data("id") + "']").find(".close").click();

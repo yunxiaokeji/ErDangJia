@@ -32,7 +32,10 @@ namespace YXERP.Controllers
             ViewBag.Option = id;
             var tempact = OrganizationBusiness.GetUserAccount(CurrentUser.UserID, CurrentUser.ClientID,
                (int)EnumAccountType.WeiXin);
-            ViewBag.WeiXinID= tempact != null ? tempact.AccountName : ""; 
+            ViewBag.WeiXinID= tempact != null ? tempact.AccountName : "";
+            var tempactmb = OrganizationBusiness.GetUserAccount(CurrentUser.UserID, CurrentUser.ClientID,
+              (int)EnumAccountType.Mobile);
+            CurrentUser.BindMobilePhone = tempactmb != null ? tempactmb.AccountName : "";
             return View();
         }
 

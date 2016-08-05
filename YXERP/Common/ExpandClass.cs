@@ -18,7 +18,7 @@ public static class ExpandClass
     /// </summary>
     public const string CLIENT_DEFAULT_CODE = "101000000";
 
-    public const string Version = "20160705";
+    public const string Version = "20160805";
 
     /// <summary>
     /// 获取下级菜单

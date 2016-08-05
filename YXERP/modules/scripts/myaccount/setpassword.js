@@ -27,7 +27,7 @@
             _this.siblings().removeClass("hover");
             _this.addClass("hover");
 
-            $(".content-body div[name='accountInfo']").hide().eq(parseInt(_this.data("id"))).show();
+            //$(".content-body div[name='accountInfo']").hide().eq(parseInt(_this.data("id"))).show();
         });
 
         $("#LoginConfirmPWD").blur(function () {

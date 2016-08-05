@@ -25,7 +25,7 @@ define(function (require, exports, module) {
     //列表初始化
     FeedBack.init = function () {
         FeedBack.bindEvent();
-        FeedBack.bindData();
+        //FeedBack.bindData();
     };
 
     //绑定事件
@@ -57,6 +57,62 @@ define(function (require, exports, module) {
             FeedBack.Params.beginDate = start ? start.format("YYYY-MM-DD") : "";
             FeedBack.Params.endDate = end ? end.format("YYYY-MM-DD") : "";
             FeedBack.bindData();
+        });
+
+        $(".ico-feedback").click(function () { 
+            doT.exec("template/default/feedback-add.html", function (template) {
+                var html = template([]);
+                Easydialog.open({
+                    container: {
+                        id: "show-model-feedback",
+                        header: "意见反馈",
+                        content: html,
+                        yesFn: function () {
+                            if ($("#feedback-title").val() == "") {
+                                alert("标题不能为空");
+                                return false;
+                            }
+                            var entity = {
+                                Title: $("#feedback-title").val(),
+                                ContactName: $("#feedback-contactname").val(),
+                                MobilePhone: $("#feedback-mobilephone").val(),
+                                Type: $("#feedback-type").val(),
+                                FilePath: $("#feedback-filepath").val(),
+                                Remark: $("#feedback-remark").val()
+                            };
+                            Global.post("/Default/SaveFeedBack", { entity: JSON.stringify(entity) }, function (data) {
+                                if (data.Result == 1) {
+                                    alert("反馈提交成功，谢谢反馈");
+                                    FeedBack.bindData();
+                                }
+                            });
+                        },
+                        callback: function () {
+
+                        }
+                    }
+                });
+
+                $("#feedback-contactname").val($("#txt_username").val());
+                $("#feedback-mobilephone").val($("#txt_usermobilephone").val());
+                var Upload = require("upload");
+                //选择意见反馈附件
+                Upload.createUpload({
+                    element: "#feedback-file",
+                    buttonText: "选择附件",
+                    className: "",
+                    data: { folder: '/Content/tempfile/', action: 'add', oldPath: "" },
+                    success: function (data, status) {
+                        if (data.Items.length > 0) {
+                            $("#feedback-filepath").val(data.Items[0]);
+                            var arr = data.Items[0].split("/");
+                            $("#feedback-filename").html(arr[arr.length - 1]);
+                        }
+                    }
+                });
+
+            });
+
         });
     };
 

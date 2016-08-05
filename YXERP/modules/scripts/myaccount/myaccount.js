@@ -175,7 +175,7 @@
                 }
 
                 //账户管理
-                if (item.LoginName) {
+                if (item.LoginName || item.BindMobilePhone) {
                     //设置密码
                     $("#LoginName").val(item.LoginName).attr("disabled", "disabled").hide();
                     $("#S_LoginName").html(item.LoginName);

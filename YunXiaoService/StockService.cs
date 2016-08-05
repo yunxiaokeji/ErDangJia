@@ -85,7 +85,19 @@ namespace YunXiaoService
             return AgentOrderBusiness.BaseBusiness.GetAgentOrders("", (EnumOrderStatus)Enum.Parse(typeof(EnumOrderStatus), status.ToString()), (EnumOutStatus)Enum.Parse(typeof(EnumOutStatus), outstatus.ToString()), (EnumSendStatus)Enum.Parse(typeof(EnumSendStatus), sendstatus.ToString()), (EnumReturnStatus)Enum.Parse(typeof(EnumReturnStatus),returnstatus.ToString()),
                 keywords, beginTime, endTime, pagesize, pageindex, ref totalCount, ref pageCount, agentid, clientid);
         }
-
+        /// <summary>
+        /// 出库
+        /// </summary>
+        /// <param name="expresscode"></param>
+        /// <param name="expressid"></param>
+        /// <param name="orderid"></param>
+        /// <param name="wareid"></param>
+        /// <param name="userid"></param>
+        /// <param name="agentid"></param>
+        /// <param name="clientid"></param>
+        /// <param name="errmsg"></param>
+        /// <param name="issend"></param>
+        /// <returns></returns>
         public static bool ConfirmAgentOrderOut(string expresscode, string expressid, string orderid, string wareid, string userid,string agentid, string clientid, ref string errmsg,
             int issend = 0)
         {
@@ -94,13 +106,29 @@ namespace YunXiaoService
                 agentid, clientid, ref result, ref errmsg);
         }
 
-
+        /// <summary>
+        /// 发货
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <param name="expressid"></param>
+        /// <param name="expresscode"></param>
+        /// <param name="userid"></param>
+        /// <param name="agentid"></param>
+        /// <param name="clientid"></param>
+        /// <param name="errmsg"></param>
+        /// <returns></returns>
         public static bool ConfirmAgentOrderSend(string orderid, string expressid, string expresscode, string userid, string agentid, string clientid, ref string errmsg)
         {
             int result = 0;
             return AgentOrderBusiness.BaseBusiness.ConfirmAgentOrderSend(orderid,expressid,expresscode, userid,
                 agentid, clientid, ref result, ref errmsg);
         }
+
+        public static bool AuditApplyReturnProduct(string orderid, string wareid,string userid,string agentid,string clientid,ref string errmsg)
+        {
+            return AgentOrderBusiness.BaseBusiness.AuditApplyReturnProduct(orderid, wareid, userid, agentid, clientid, ref result, ref errmsg);
+        }
+
         #endregion
 
     }

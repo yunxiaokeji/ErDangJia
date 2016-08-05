@@ -103,13 +103,11 @@ namespace YXERP.Areas.Api.Controllers
         /// <param name="wareid">仓库ID</param>
         /// <param name="providerid">经销商ID</param>
         /// <param name="pageSize">显示条数　默认10</param>
-        /// <param name="pageIndex">页码</param>
-        /// <param name="totalCount">总条数</param>
-        /// <param name="pageCount">总页数</param>
+        /// <param name="pageIndex">页码</param> 
         /// <param name="agentid">代理商ID</param>
         /// <param name="clientid">公司ID</param>
         /// <returns></returns>
-        public ActionResult GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        public ActionResult GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex,string agentid, string clientid)
         {
             int total = 0;
             int pagecount = 0;
@@ -174,16 +172,30 @@ namespace YXERP.Areas.Api.Controllers
         #endregion
 
         #region 出库单
-
-        public ActionResult GetStockOut(int status, int outstatus, int sendstatus, int returnstatus, string keywords, string beginTime, string endTime, int pagesize, int pageindex, ref int totalCount, ref int pageCount, string clientid, string agentid = "")
-        {
-            int total = 0;
-            int pagecount = 0;
+        /// <summary>
+        /// 出库单 退货单 获取
+        /// </summary>
+        /// <param name="status">订单状态</param>
+        /// <param name="outstatus">出库状态</param>
+        /// <param name="sendstatus">发货状态</param>
+        /// <param name="returnstatus">退货状态</param>
+        /// <param name="keywords"></param>
+        /// <param name="beginTime">创建时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <param name="pagesize">每页条数</param>
+        /// <param name="pageindex">当前页数</param> 
+        /// <param name="clientid">公司ID</param>
+        /// <param name="agentid">代理商ID</param>
+        /// <returns></returns>
+        public ActionResult GetStockOut(int status=-1, int outstatus=-1, int sendstatus=-1, int returnstatus=-1, string keywords="", string beginTime="", string endTime="", int pagesize=10, int pageindex=1,  string clientid="", string agentid = "")
+        { 
+            int totalCount = 0;
+            int pageCount = 0;
                var list = StockService.GetStockOut(status, outstatus, sendstatus, returnstatus, keywords, beginTime,
                    endTime, pagesize, pageindex, ref totalCount, ref pageCount, clientid, agentid);
 
-            JsonDictionary.Add("TotalCount", total);
-            JsonDictionary.Add("PageCount", pagecount);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
             JsonDictionary.Add("result", list);
             return new JsonResult
             {
@@ -226,7 +238,16 @@ namespace YXERP.Areas.Api.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
+        /// <summary>
+        /// 订单发货
+        /// </summary>
+        /// <param name="orderid">订单ID</param>
+        /// <param name="expressid">物流公司ID</param>
+        /// <param name="expresscode">物流单号</param>
+        /// <param name="userid">当前ID</param>
+        /// <param name="agentid">代理商ID</param>
+        /// <param name="clientid">公司ID</param>
+        /// <returns></returns>
         public ActionResult ConfirmAgentOrderSend(string orderid, string expressid, string expresscode, string userid, string agentid, string clientid)
         {
             bool result = false;
@@ -257,8 +278,41 @@ namespace YXERP.Areas.Api.Controllers
         #endregion
 
 
-        #region 发货单
-        
+        #region 退货单
+        /// <summary>
+        /// 退货单 审核
+        /// </summary>
+        /// <param name="orderid">订单ID</param>
+        /// <param name="wareid">仓库ID</param>
+        /// <param name="userid"></param>
+        /// <param name="agentid"></param>
+        /// <param name="clientid"></param>
+        /// <returns></returns>
+        public ActionResult AuditApplyReturnProduct(string orderid, string wareid, string userid, string agentid, string clientid)
+        {
+            bool result = false;
+            string errmsg = "";
+            if (!string.IsNullOrEmpty(orderid) && !string.IsNullOrEmpty(wareid))
+            {
+                result = StockService.AuditApplyReturnProduct(orderid, wareid, userid, agentid, clientid, ref errmsg);
+                if (!string.IsNullOrEmpty(errmsg))
+                {
+                    JsonDictionary["error_code"] = -101;
+                    JsonDictionary["error_msg"] = errmsg;
+                }
+            }
+            else
+            {
+                JsonDictionary["error_code"] = -100;
+                JsonDictionary["error_msg"] = "参数orderid，wareid不能为空";
+            } 
+            JsonDictionary.Add("result", list);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
 
         #endregion
 

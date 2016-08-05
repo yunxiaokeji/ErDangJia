@@ -251,7 +251,7 @@
                     });
                 } else {
                     //新增账户
-                    $("#li_loginOldPWD").hide();
+                    //$("#li_loginOldPWD").hide();
                     $("#LoginName").blur(function () {
                         if ($(this).val() != '') {
                             if ($(this).val().length > 4) {

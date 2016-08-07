@@ -305,8 +305,8 @@ namespace YXERP.Areas.Api.Controllers
             {
                 JsonDictionary["error_code"] = -100;
                 JsonDictionary["error_msg"] = "参数orderid，wareid不能为空";
-            } 
-            JsonDictionary.Add("result", list);
+            }
+            JsonDictionary.Add("result", result);
             return new JsonResult
             {
                 Data = JsonDictionary,

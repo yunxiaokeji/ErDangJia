@@ -126,6 +126,7 @@ namespace YunXiaoService
 
         public static bool AuditApplyReturnProduct(string orderid, string wareid,string userid,string agentid,string clientid,ref string errmsg)
         {
+            int result = 0;
             return AgentOrderBusiness.BaseBusiness.AuditApplyReturnProduct(orderid, wareid, userid, agentid, clientid, ref result, ref errmsg);
         }
 

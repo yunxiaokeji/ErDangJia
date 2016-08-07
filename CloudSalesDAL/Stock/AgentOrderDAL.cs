@@ -87,7 +87,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ExpressID",expressid),
                                        new SqlParameter("@ExpressCode",expresscode),
                                        new SqlParameter("@UserID",userid),
-                                       new SqlParameter("@AgentID",agentid),
+                                       new SqlParameter("@AgentID",agentid), 
                                        new SqlParameter("@ClientID",clientid)
                                    };
             paras[0].Value = result;

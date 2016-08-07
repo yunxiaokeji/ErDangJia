@@ -26,6 +26,25 @@ namespace YXERP.Common
             return string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.Headers.Get("X-Real-IP")) ? System.Web.HttpContext.Current.Request.UserHostAddress : System.Web.HttpContext.Current.Request.Headers["X-Real-IP"];
         }
 
+
+        public static string GetXmlNodeValue(string strNodeName, string strValueName)
+        {
+            try
+            {
+                string pathurl = System.Web.HttpContext.Current.Server.MapPath("~/Common/ApiSetting.xml");
+                System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.Load(pathurl);
+                System.Xml.XmlNode xNode = xmlDoc.SelectSingleNode("//" + strNodeName + "");
+                string strValue = xNode.Attributes[strValueName].Value;
+                return strValue;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+
+        }
+
         /// <summary>
         /// 写支付宝文本日志
         /// </summary>
@@ -124,4 +143,5 @@ namespace YXERP.Common
         public int ErrorCount;
         public DateTime ForbidTime;
     }
+
 }

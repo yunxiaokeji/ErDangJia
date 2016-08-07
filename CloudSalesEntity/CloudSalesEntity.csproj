@@ -87,6 +87,7 @@
     <Compile Include="Manage\ModulesProduct.cs" />
     <Compile Include="System\Department.cs" />
     <Compile Include="Common\Industry.cs" />
+    <Compile Include="System\IntegerFeeChange.cs" />
     <Compile Include="System\Role.cs" />
     <Compile Include="System\RolePermission.cs" />
     <Compile Include="System\UserAccounts.cs" />

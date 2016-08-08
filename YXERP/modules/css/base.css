@@ -390,7 +390,7 @@ select option{ padding:2px; }
 /*新建样式*/
 .table-add {  border-bottom:solid 1px #eee; padding-bottom:20px; overflow:auto; }
 .table-add li{ line-height:25px; margin-top:5px;  padding: 2px 0px;}
-.table-add li input[type="text"],.table-add li input[type="password"]{ height:20px; line-height:20px; padding:2px 5px; width:150px; }
+.table-add li input[type="text"],.table-add li input[type="password"]{ height:25px; line-height:25px; padding:2px 5px; width:150px; }
 .table-add li textarea {resize:none; height:80px; line-height:20px; padding:1px 5px; border:solid 1px #ccc; width:350px; border-radius:2px;}
 .table-add span {  display:inline-block; vertical-align:top;}
 .table-add .column-title { color:#666; width:100px;}

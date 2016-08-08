@@ -62,9 +62,26 @@ namespace IntFactory.Sdk
         [Description("/api/order/getOrderDetailByID")]
         GetOrderDetailByID,
 
+        /// <summary>
+        /// 创建订单
+        /// </summary>
+        [Description("/api/order/createOrder")]
+        CreateOrder,
+
         [Description("/api/order/createDHOrder")]
         CreateDHOrder,
+        /// <summary>
+        /// 分类
+        /// </summary>
+        [Description("/api/client/getClientCategorys")]
+        GetClientCategorys,
+        /// <summary>
+        /// 加工品类
+        /// </summary>
+        [Description("/api/client/getProcessCategorys")]
+        GetProcessCategorys,
 
+        
         [Description("/api/client/getClientInfo")]
         GetClientInfo
     }

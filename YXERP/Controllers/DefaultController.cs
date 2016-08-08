@@ -28,7 +28,7 @@ namespace YXERP.Controllers
             ViewBag.MenuCode = id;
             return PartialView();
         }
-
+    
         public ActionResult Home()
         {
             ViewBag.UserCount = OrganizationBusiness.GetUsers(CurrentUser.AgentID).Count;

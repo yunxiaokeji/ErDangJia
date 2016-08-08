@@ -16,7 +16,7 @@ define(function (require, exports, module) {
     var Default = {
         elementID: "cityPlug",
         cityCode: "",
-        dataUrl: "/Plug/GetCityByPCode"
+        dataUrl: "/IntFactoryOrder/GetCityByPCode"
     };
     var City = function (options) {
         this.setting = [];

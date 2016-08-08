@@ -43,6 +43,13 @@ namespace IntFactory.Sdk.Business
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateDHOrder, paras);
         }
 
-
+        public AddResult CreateOrder(string entity, string clientid, string userid = "")
+        {
+            var paras = new Dictionary<string, object>();
+            paras.Add("entity", entity);
+            paras.Add("clientid", clientid);
+            paras.Add("opearid", userid);
+            return HttpRequest.RequestServer<AddResult>(ApiOption.CreateOrder, paras);
+        }
     }
 }

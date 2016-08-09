@@ -83,19 +83,27 @@
                 $(".category-item").removeClass("hover");
                 _this.addClass("hover");
             }
+        }); 
+        var ProductIco = Upload.createUpload({
+            element: "#productIco",
+            buttonText: "选择产品图片", 
+            multiple:true,
+            success: function (data, status) { 
+                if (data.Items.length > 0) {
+                    var inthtml = "";
+                    for (var i = 0; i < data.Items.length; i++) {
+                        inthtml += '<li data-src="'+ data.Items[i] + '">' +
+                            '<img src="' + data.Items[i] + '"/>' +
+                            '<span class="ico-delete"></span></li>';
+                    } 
+                    $("#orderImages").html($("#orderImages").html() + inthtml);
+                    $('.ico-delete').click( function(){$(this).parent().remove()});
+                    $("#orderImages").show(); 
+                } else {
+                    alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
+                }
+            }
         });
-
-        //var uploader = Upload.uploader({
-        //    browse_button: 'productIco',
-        //    file_path: "/Content/UploadFiles/Order/",
-        //    picture_container: "orderImages",
-        //    image_view: "?imageView2/1/w/120/h/80",//缩略图大小
-        //    maxQuantity: 5,
-        //    maxSize: 5,
-        //    successItems: '#orderImages li',
-        //    fileType: 1,
-        //    init: {}
-        //});
 
         VerifyObject = Verify.createVerify({
             element: ".verify",
@@ -282,12 +290,11 @@
     //保存实体
     ObjectJS.saveModel = function () {
         var _self = this;
-        var images = "";
+        var images = "";  
         $("#orderImages li").each(function () {
             var _this = $(this);
-            images += _this.data("server") + _this.data("filename") + ",";
-        });
-
+            images += window.location.host + _this.data("src") + ",";
+        }); 
         var model = {
             CustomerID: _self.customerid,
             PersonName: $("#name").val().trim(),
@@ -327,10 +334,9 @@
         }
 
         Global.post("/IntFactoryOrder/CreateOrder", { entity: JSON.stringify(model), clientid: _self.clientid }, function (data) {
-            console.log(data);
             if (data.id) {
                 alert("新增成功！");
-                window.location = location.href;
+               // window.location = location.href;
             } else {
                 alert("网络异常,请稍后重试!");
             }

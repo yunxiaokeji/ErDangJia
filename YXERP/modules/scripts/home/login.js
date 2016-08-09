@@ -8,12 +8,12 @@ define(function (require, exports, module) {
 
     var ObjectJS = {};
     //登陆初始化
-    ObjectJS.init = function (status) {
-
+    ObjectJS.init = function (status, returnUrl) {
+        var _self=this;
         if ($(window.parent.document).find("#windowItems").length > 0) {
             window.top.location.href = location.href;
         }
-
+        _self.returnUrl = returnUrl;
         ObjectJS.placeholderSupport();
 
         if (status == 2) {
@@ -25,7 +25,7 @@ define(function (require, exports, module) {
     }
     //绑定事件
     ObjectJS.bindEvent = function () {
-
+        var _self = this;
         $(document).on("keypress", function (e) {
             if (e.keyCode == 13) {
                 $("#btnLogin").click();
@@ -53,7 +53,12 @@ define(function (require, exports, module) {
                 $("#btnLogin").html("登录").removeAttr("disabled");
 
                 if (data.result == 1) {
-                    location.href = "/Default/Index";
+                    if (_self.returnUrl) {
+                        location.href = _self.returnUrl;
+                    }
+                    else {
+                        location.href = "/Default/Index";
+                    } 
                 }
                 else if (data.result == 0) {
                     $(".registerErr").html("账号或密码有误").slideDown();

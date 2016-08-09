@@ -79,20 +79,19 @@ define(function (require, exports, module) {
 
             method = this.attr('method');
             action = this.attr('action');
-            url = (typeof action === 'string') ? $.trim(action) : '';
-            url = url || window.location.href || '';
+            url = (typeof action === 'string') ? $.trim(action) : ''; 
+            url = url || window.location.href || ''; 
             if (url) {
                 // clean url (don't include hash vaue)
                 url = (url.match(/^([^#]+)/) || [])[1];
-            }
-
+            } 
             options = $.extend(true, {
                 url: url,
                 success: $.ajaxSettings.success,
                 type: method || 'GET',
                 iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'
             }, options);
-
+             
             // hook for manipulating the form data before it is extracted;
             // convenient for use with rich editors like tinyMCE or FCKEditor
             var veto = {};
@@ -289,6 +288,7 @@ define(function (require, exports, module) {
                 s = $.extend(true, {}, $.ajaxSettings, options);
                 s.context = s.context || s;
                 id = 'jqFormIO' + (new Date().getTime());
+                
                 if (s.iframeTarget) {
                     $io = $(s.iframeTarget);
                     n = $io.attr('name');

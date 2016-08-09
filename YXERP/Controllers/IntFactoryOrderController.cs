@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,14 +10,13 @@ using CloudSalesBusiness;
 
 namespace YXERP.Controllers
 {
-    public class IntFactoryOrderController : Controller
+    public class IntFactoryOrderController : BaseController
     {
         //
         // GET: /IntFactoryOrder/
 
         public ActionResult DownOrder(string id)
-        {
-           // ViewBag.Model = ClientBusiness.BaseBusiness.GetClientInfo(clientID);
+        { 
             ViewBag.ClientID = id;
             ViewBag.Items = ClientBusiness.BaseBusiness.GetClientCategorys("", EnumCategoryType.Order);
             ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
@@ -45,6 +45,6 @@ namespace YXERP.Controllers
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
-        }
+        } 
     }
 }

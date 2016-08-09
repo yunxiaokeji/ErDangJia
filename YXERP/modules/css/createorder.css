@@ -49,16 +49,14 @@ input[type="text"],#remark { border: 1px solid #ccc; border-radius: 2px; line-he
 
 
 .categoryselect { width:98px;}
-.ico-upload { width:60px;font-size:60px;background-color:#eee;color:#aaa;padding:0;height:60px;line-height:0px;padding-bottom:10px;}
-.ico-upload:hover { background-color:#ddd;color:#888;}
 #city_province { width:200px;}
 
 /*图片*/
-.img-box { float:left;}
-.img-box #orderImages li {float:left;margin-right:10px;margin-top:4px;position:relative;}
-.img-box #orderImages li:not(:first-child) {width:60px;height:60px;line-height:60px;padding:1px;border:1px solid #ccc;}
-.img-box #orderImages .ico-delete { position:absolute;right:-6px;top:-11px;}
-.img-box img { width:60px;height:60px;border-radius:2px;display:block;}
+.order-imgs {width: 400px;height: 80px;margin-left: 100px; }  
+#orderImages li {float:left;margin-right:10px;margin-top:4px;position:relative;}
+#orderImages li:not(:first-child) {width:60px;height:60px;line-height:60px;padding:1px;border:1px solid #ccc;}
+#orderImages .ico-delete { position:absolute;right:-6px;top:-11px;}
+#orderImages img { width:60px;height:60px;border-radius:2px;display:block;}
 
  
 .dropdown-items-modules li{ margin-top:0 !important;}
@@ -94,11 +92,6 @@ input[type="text"],#remark { border: 1px solid #ccc; border-radius: 2px; line-he
 }
 
 .table-add li textarea {resize: none;height: 80px;line-height: 20px;padding: 1px 5px;border: solid 1px #ccc;width: 300px;border-radius: 2px;}
-.order-imgs {width: 400px;height: 65px;margin-left: 85px; }
-.order-imgs li {width: 60px;height: 60px;float: left;margin-left: 10px;position: relative;padding: 1px;line-height: 60px;border: 1px solid #eee;}
-.order-imgs li img {width: 60px;height: 60px; }
-.order-imgs .ico-delete {position: absolute;top: -9px;right: -7px;  }
-
 .info-box {line-height: 30px;border-bottom: 1px solid #eee;margin-bottom: 10px;padding-bottom: 6px;}
 .info-box span { color: #4a98e7; }
 .info-box .iconfont { font-size: 24px; }

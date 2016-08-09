@@ -293,7 +293,7 @@
         var images = "";  
         $("#orderImages li").each(function () {
             var _this = $(this);
-            images += window.location.host + _this.data("src") + ",";
+            images += 'http://'+window.location.host + _this.data("src") + ",";
         }); 
         var model = {
             CustomerID: _self.customerid,

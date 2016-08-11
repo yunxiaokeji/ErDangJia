@@ -1,15 +1,17 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
     ViewBag.Title = "新建订单"; 
     var categoryItems = (List<IntFactory.Sdk.CategoryEntity>)ViewBag.Items;
 }
-   
-<link href="/modules/css/base.css" rel="stylesheet"/>
+@*<head>
+   <title>新建订单</title>
+</head>*@
+@*<link href="/modules/css/base.css" rel="stylesheet"/>*@
 <link href="/modules/css/createorder.css" rel="stylesheet"/> 
 <link href="/modules/css/iconfont/iconfont.css" rel="stylesheet" />
 <link href="/modules/plug/laydate/need/laydate.css" rel="stylesheet" />
- 
-<div style="width: 800px; max-width: 1200px; margin: auto;"> 
+ @*margin: auto;*@
+<div style="width: 800px; max-width: 1200px; "> 
     <div class="content-body">
         <ul class="table-add">
             <li class="mTop10">
@@ -23,7 +25,7 @@
             <li>
                 <span class="column-title">加工品类：</span>
                 <span>
-                @foreach (var item in (List<IntFactory.Sdk.ProcessCategoryEntity>) ViewBag.Categorys)
+                @foreach (var item in (List<IntFactory.Sdk.ProcessCategoryEntity>)ViewBag.Categorys)
                 {
                     <span class="category-item" data-id="@(item.CategoryID)">@item.Name</span>
                 }
@@ -70,7 +72,8 @@
             </li>
             <li>
                 <span class="column-title">附件：</span>
-                <span id="productIco"></span>
+                @*<span id="productIco"></span>*@
+                <span class="btn" id="productIco" style="position: relative; z-index: 1;">选择图片</span>
             </li> 
             <li>
                 <ul id="orderImages" class="order-imgs hide">
@@ -110,7 +113,8 @@
     </div>
 </div>
 <script type="text/javascript" src="/Scripts/sea.js"></script>
-<script type="text/javascript" src="/Scripts/sea-config.js"></script><script src="/modules/plug/laydate/laydate.js"></script>
+<script type="text/javascript" src="/Scripts/sea-config.js"></script>
+<script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
     seajs.use(["scripts/default/ordercreat"], function (ObjectJS) {
         ObjectJS.init('', '@(ViewBag.ClientID)', '@Html.ToJSONString(categoryItems)');

@@ -9,6 +9,10 @@ using System.IO;
 using CloudSalesEnum;
 using System.Web.Script.Serialization;
 using CloudSalesEntity;
+using Qiniu.Conf;
+using Qiniu.IO;
+using Qiniu.RPC;
+using Qiniu.RS;
 
 namespace YXERP.Controllers
 {
@@ -28,6 +32,34 @@ namespace YXERP.Controllers
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
+        }
+        public JsonResult GetToken()
+        {
+            return new JsonResult()
+            {
+                Data = Common.Common.GetQNToken(),
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public int DeleteAttachment(string key)
+        {
+            Config.Init(); 
+            //实例化一个RSClient对象，用于操作BucketManager里面的方法
+            RSClient client = new RSClient();
+            CallRet ret = client.Delete(new EntryPath(Common.Common.bucket, key));
+
+            return ret.OK ? 1 : 0;
+        }
+        /// <summary>
+        /// 支持批量上传  
+        /// </summary>
+        /// <param name="filepath">格式 英文逗号分割 A,B,C </param>
+        /// <param name="file">文件夹名车 例如 产品product 订单 orders</param>
+        /// <returns>图片地址A,图片地址B,图片地址C</returns>
+        public string UploadAttachment(string filepath,string file)
+        {
+           return  Common.Common.UploadAttachment(filepath, file);
         }
 
         /// <summary>

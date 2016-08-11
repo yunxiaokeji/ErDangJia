@@ -342,20 +342,16 @@ define(function (require, exports, module) {
         var _self = this;
 
         //选择海报图片
-        PosterIco = Upload.createUpload({
-            element: "#Poster",
-            buttonText: "选择活动海报图片",
-            className: "",
-            data: { folder: '/Content/tempfile/', action: 'add', oldPath: "" },
-            success: function (data, status) {
-                if (data.Items.length > 0)
-                {
-                    _self.IcoPath = data.Items[0];
-                    $("#PosterDisImg").show().attr("src", data.Items[0]);
-                    $("#PosterImg").val(data.Items[0]);
-                }
-            }
-        });
+        PosterIco = Upload.uploader({
+            browse_button: 'Poster',
+            file_path: "/Content/UploadFiles/Action/",
+            picture_container: "orderImages", 
+            multi_selection:false,
+            maxSize: 1,
+            successItems: '#PosterDisImg',
+            fileType: 1,
+            init: {}
+        }); 
 
         //添加负责人
         $("#addOwner").click(function () {
@@ -417,7 +413,7 @@ define(function (require, exports, module) {
             var model = {
                 ActivityID: $("#ActivityID").val(),
                 Name: $("#Name").val(),
-                Poster: $("#PosterImg").val(),
+                Poster: $("#PosterDisImg").attr("src"),
                 OwnerID: OwnerID,
                 MemberID: MemberID,
                 BeginTime: BeginTime,
@@ -442,8 +438,7 @@ define(function (require, exports, module) {
                     $("#Name").val(item.Name);
                     $("#EndTime").val(item.EndTime.toDate("yyyy-MM-dd"));
                     $("#BeginTime").val(item.BeginTime.toDate("yyyy-MM-dd"));
-                    $("#Address").val(item.Address);
-                    $("#PosterImg").val(item.Poster);
+                    $("#Address").val(item.Address); 
                     if (item.Poster != '') {
                         $("#PosterDisImg").attr("src", item.Poster).show();
                     }

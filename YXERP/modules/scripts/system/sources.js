@@ -566,26 +566,31 @@
         $("input[name^='MemberName']").change(function () {
             ObjectJS.changeInput(3, $(this));
         }); 
-
+   
         $("img[name^='MemberImg']").unbind('click').click(function () { 
             var _this = $(this); 
-            var elem = "#SpanImg" + _this[0].id.replace('MemberImg', '');
-            $(elem).html(''); 
-            Upload.createUpload({
-                element: elem,
-                buttonText: "",
-                className: "",
-                data: { folder: '', action: 'add', oldPath: '' },
-                success: function (data, status) {
-                    if (data.Items.length > 0) { 
-                        _this.attr("src", data.Items[0]); 
-                        _this.parent().parent().data('imgurl', data.Items[0]);
-                    } else {
-                        alert("只能上传jpg/png/gif类型的图片，且大小不能超过1M！");
+            var elem = "SpanImg" + _this[0].id.replace('MemberImg', '');
+            $('#' + elem).html('');
+            if ($('#' + elem).parent().parent().find('input[type="file"]').length == 0) {
+                var imgupload = Upload.uploader({
+                    browse_button: elem,
+                    file_path: "/Content/UploadFiles/Member/",
+                    picture_container: "orderImages",
+                    multi_selection: false,
+                    maxSize: 1, 
+                    fileType: 1,
+                    auto_callback: false,
+                    init: {},
+                    success: function (upseting, info) { 
+                        var src = upseting.imgurl + info.key;  
+                        _this.attr("src", src); 
+                        _this.parent().parent().parent().data('imgurl', src); 
                     }
-                }
-            });   
-            $( elem + '_buttonSubmit').click(); 
+                });
+                setTimeout(function() { $('#' + elem).parent().parent().find('input[type="file"]').click() }, 500);
+            } else{
+                $('#' + elem).parent().parent().find('input[type="file"]').click(); 
+            }
         });
     }
 

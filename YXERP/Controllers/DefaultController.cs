@@ -19,7 +19,7 @@ namespace YXERP.Controllers
 
         public ActionResult Index(string href = "")
         {
-            ViewBag.Herf = href;
+            ViewBag.Herf = href ;
             return View();
         }
 

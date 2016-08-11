@@ -34,20 +34,18 @@ define(function (require, exports, module) {
     //绑定事件
     Product.bindEvent = function () {
         var _self = this;
-        ProductIco = Upload.createUpload({
-            element: "#productIco",
-            buttonText: "选择产品图片",
-            className: "",
-            data: { folder: '', action: 'add', oldPath: "" },
-            success: function (data, status) {
-                if (data.Items.length > 0) {
-                    _self.ProductImage = data.Items[0];
-                    $("#productImg").attr("src", data.Items[0]);
-                } else {
-                    alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
-                }
-            }
-        });
+
+
+        PosterIco = Upload.uploader({
+            browse_button: 'productIco',
+            file_path: "/Content/UploadFiles/Product/",
+            picture_container: "orderImages", 
+            multi_selection: false,
+            maxSize: 1,
+            successItems: '#productImg',
+            fileType: 1,
+            init: {}
+        }); 
         $("#btnSaveProduct").on("click", function () {
             if (!VerifyObject.isPass()) {
                 return;
@@ -255,7 +253,7 @@ define(function (require, exports, module) {
             IsAutoSend: 0, //$("#isAutoSend").prop("checked") ? 1 : 0,
             EffectiveDays: $("#effectiveDays").val(),
             DiscountValue:1,
-            ProductImage: _self.ProductImage,
+            ProductImage:$("#productImg").attr("src"),
             ShapeCode: $("#shapeCode").val().trim(),
             Description: encodeURI(editor.getContent())
         };
@@ -550,12 +548,12 @@ define(function (require, exports, module) {
             _self.bindDetail(model);
             _self.getChildList(model);
         } catch (err) {
-            Global.post("/Products/GetProductByID", { productid: productid }, function (data) {
+            Global.post("/Products/GetProductByID", { productid: productid }, function(data) {
                 var _model = data.Item;
                 _self.bindDetailEvent(_model);
                 _self.bindDetail(_model);
                 _self.getChildList(_model);
-            })
+            });
         }
     }
 
@@ -589,9 +587,7 @@ define(function (require, exports, module) {
         //$("#isNew").prop("checked", model.IsNew == 1);
         //$("#isRecommend").prop("checked", model.IsRecommend == 1);
         //$("#isAutoSend").prop("checked", model.IsAutoSend == 1);
-        $("#productImg").attr("src", model.ProductImage);
-        
-        _self.ProductImage = model.ProductImage;
+        $("#productImg").attr("src", model.ProductImage); 
         
         editor.ready(function () {
             editor.setContent(decodeURI(model.Description));
@@ -617,20 +613,17 @@ define(function (require, exports, module) {
             regText: "data-text"
         });
         //编辑图片
-        ProductIco = Upload.createUpload({
-            element: "#productIco",
-            buttonText: "更换产品图片",
-            className: "",
-            data: { folder: '', action: 'add', oldPath: model.ProductImage },
-            success: function (data, status) {
-                if (data.Items.length > 0) {
-                    _self.ProductImage = data.Items[0];
-                    $("#productImg").attr("src", data.Items[0] + "?" + Global.guid());
-                } else {
-                    alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
-                }
-            }
-        });
+        PosterIco = Upload.uploader({
+            browse_button: 'productIco',
+            file_path: "/Content/UploadFiles/Product/",
+            picture_container: "orderImages",
+            //maxQuantity: 1,
+            multi_selection: false,
+            maxSize: 1,
+            successItems: '#productImg',
+            fileType: 1,
+            init: {}
+        }); 
 
         //编码是否重复
         $("#productCode").blur(function () {
@@ -794,7 +787,7 @@ define(function (require, exports, module) {
                             Price: $("#detailsPrice").val(),
                             BigPrice: $("#detailsPrice").val(),
                             Weight: 0,
-                            ImgS: _self.ImgS,
+                            ImgS: $("#imgS").attr("src"),
                             Remark: desc,
                             Description: ""
                         };
@@ -854,7 +847,7 @@ define(function (require, exports, module) {
                 }
                 $("#detailsPrice").val(detailsModel.Price);
                 $("#detailsCode").val(detailsModel.DetailsCode);
-                _self.ImgS = detailsModel.ImgS;
+                //_self.ImgS = detailsModel.ImgS;
                 $("#imgS").attr("src", detailsModel.ImgS || "/modules/images/default.png");
 
                 var list = detailsModel.SaleAttrValue.split(',');
@@ -917,21 +910,16 @@ define(function (require, exports, module) {
                 });
                 $("#iptRemark").val(_desc);
             });
-
-            ImgsIco = Upload.createUpload({
-                element: "#imgSIco",
-                buttonText: "选择产品图片",
-                className: "",
-                data: { folder: '/Content/tempfile/', action: 'add', oldPath: _self.ImgS },
-                success: function (data, status) {
-                    if (data.Items.length > 0) {
-                        _self.ImgS = data.Items[0];
-                        $("#imgS").attr("src", data.Items[0] + "?" + count++);
-                    } else {
-                        alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
-                    }
-                }
-            });
+            ImgsIco = Upload.uploader({
+                browse_button: 'imgSIco',
+                file_path: "/Content/UploadFiles/PdtDetail/",
+                picture_container: "orderImages", 
+                multi_selection: false,
+                maxSize: 1,
+                successItems: '#imgS',
+                fileType: 1,
+                init: {}
+            }); 
 
             DetailsVerify = Verify.createVerify({
                 element: ".verify",

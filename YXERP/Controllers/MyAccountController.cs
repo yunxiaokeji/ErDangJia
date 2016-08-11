@@ -162,18 +162,18 @@ namespace YXERP.Controllers
                 MemoryStream stream = new MemoryStream(Convert.FromBase64String(avatar));
                 Bitmap img = new Bitmap(stream);
 
-                avatar = FilePath + CurrentUser.UserID+".png";
-                img.Save(Server.MapPath(avatar));
+                avatar = Server.MapPath(TempPath + CurrentUser.UserID + ".png");
+                img.Save(avatar);
 
-                bool flag= OrganizationBusiness.UpdateAccountAvatar(CurrentUser.UserID, avatar, CurrentUser.AgentID);
+                avatar = Common.Common.UploadAttachment(avatar, "MyAccount");
 
+                bool flag = OrganizationBusiness.UpdateAccountAvatar(CurrentUser.UserID, avatar, CurrentUser.ClientID);
                 if (flag)
-                {
+                { 
                     result = 1;
                     CurrentUser.Avatar = avatar;
                     Session["ClientManager"] = CurrentUser;
-                }
-                    
+                } 
             }
 
             JsonDictionary.Add("Result",result);

@@ -22,6 +22,8 @@ namespace YXERP.Common
         //七牛
         public static String bucket = System.Configuration.ConfigurationManager.AppSettings["QN_Bucket"] ?? "test-yunxiaokeji";
         public static string imgurl = System.Configuration.ConfigurationManager.AppSettings["QN_ImgUrl"] ?? "http://obo9ophyw.bkt.clouddn.com/";
+        public static Dictionary<string, object> QnDictionary = new Dictionary<string, object>();
+        public static object QNtokent=new object();
 
        /// <summary>
        /// 获取请求方ip
@@ -123,17 +125,35 @@ namespace YXERP.Common
 
         public static Dictionary<string, object> GetQNToken()
         {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
-            Config.Init(); 
-            //普通上传,只需要设置上传的空间名就可以了,第二个参数可以设定token过期时间
-            PutPolicy put = new PutPolicy(bucket, 3600);
-
-            //调用Token()方法生成上传的Token
-            string upToken = put.Token();
-            JsonDictionary.Add("uptoken", upToken);
-            JsonDictionary.Add("bucket", bucket);
-            JsonDictionary.Add("imgurl", imgurl);
-            return JsonDictionary;
+            lock (QNtokent)
+            { 
+                if (QnDictionary.ContainsKey("uptoken"))
+                {
+                    TimeSpan ts =
+                        new TimeSpan(Convert.ToDateTime(QnDictionary["ctime"]).Ticks).Subtract(
+                            new TimeSpan(DateTime.Now.Ticks)).Duration();
+                    if (ts.TotalMinutes > 55)
+                    {
+                        Config.Init();
+                        PutPolicy put = new PutPolicy(bucket, 3600);
+                        QnDictionary["uptoken"] = put.Token();
+                    }
+                    return QnDictionary;
+                }
+                else
+                {
+                    Config.Init();
+                    //普通上传,只需要设置上传的空间名就可以了,第二个参数可以设定token过期时间
+                    PutPolicy put = new PutPolicy(bucket, 3600);
+                    //调用Token()方法生成上传的Token
+                    string upToken = put.Token();
+                    QnDictionary.Add("uptoken", upToken);
+                    QnDictionary.Add("ctime", DateTime.Now);
+                    QnDictionary.Add("bucket", bucket);
+                    QnDictionary.Add("imgurl", imgurl);
+                }
+                return QnDictionary;
+            }
         } 
         public static string UploadAttachment(string filepath, string files = "orders")
         {

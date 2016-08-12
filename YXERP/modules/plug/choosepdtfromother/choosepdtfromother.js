@@ -70,20 +70,20 @@ define(function (require, exports, module) {
 
     //绑定事件
     PlugJS.prototype.bindEvent = function () {
-        var _self = this, url = "/plug/choosepdtfromother/productother.html", posturl = "/IntFactoryOrder/GetProductList";
+        var _self = this, url = "/plug/choosepdtfromother/productfromother.html", posturl = "/IntFactoryOrder/GetProductList";
         require.async("search", function () {
             $("#chooseproductfromotherSearch").searchKeys(function (keyWords) {
                 if (keyWords) {
                     $(".product-all .product-items").empty();
-                    _self.FindOtherPdt(posturl, url);
+                    _self.FindOtherPdt(keyWords,posturl, url);
                 } else {
                     $(".product-items").empty();
                 }
             });
         });
-        _self.FindOtherPdt(posturl, url);
+        _self.FindOtherPdt('',posturl, url);
     }
-    PlugJS.prototype.FindOtherPdt = function (posturl, url) {
+    PlugJS.prototype.FindOtherPdt = function (keyWords,posturl, url) { 
         var _self = this;
         Global.post(posturl, {
             clientid: _self.setting.wareid,
@@ -113,7 +113,7 @@ define(function (require, exports, module) {
             $("#pagerPdt").paginate({
                 total_count: data.totalCount,
                 count: data.pageCount,
-                start: Params.PageIndex,
+                start: _self.setting.pageIndex,
                 display: 5,
                 border: true,
                 border_color: '#fff',
@@ -127,7 +127,7 @@ define(function (require, exports, module) {
                 mouse: 'slide',
                 onChange: function (page) {
                     _self.setting.pageIndex = page;
-                    _self.FindOtherPdt(posturl, url);
+                    _self.FindOtherPdt(keyWords, posturl, url);
                 }
             });
         });

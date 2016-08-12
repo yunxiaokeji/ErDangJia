@@ -49,7 +49,9 @@ namespace YXERP.Controllers
         public JsonResult GetProductList(string clientid, int pageSize, int pageIndex)
         {
             OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(CurrentUser.Client.ClientCode, pageSize, pageIndex, clientid);
-            JsonDictionary.Add("item", item);
+            JsonDictionary.Add("items", item.orders);
+            JsonDictionary.Add("totalCount", item.totalCount);
+            JsonDictionary.Add("pageCount", item.pageCount);
             return new JsonResult
             {
                 Data = JsonDictionary,

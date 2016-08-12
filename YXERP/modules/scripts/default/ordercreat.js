@@ -107,8 +107,7 @@
             elementID: "city"
         });
 
-        $("#choosePDTOther").click(function () {
-            console.log(1);
+        $("#choosePDTOther").click(function () { 
                 choosePDtOther.createPDtOther({
                     title: "选择采购产品",
                     type: 1, //1智能工厂

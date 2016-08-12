@@ -850,6 +850,10 @@
     <Content Include="modules\plug\replys\replys.html" />
     <Content Include="modules\plug\replys\replys.js" />
     <Content Include="modules\plug\replys\style.css" />
+    <Content Include="modules\plug\choosepdtfromother\choosepdtfromother.js" />
+    <Content Include="modules\plug\choosepdtfromother\choosepdtfromother.html" />
+    <Content Include="modules\plug\choosepdtfromother\productfromother.html" />
+    <Content Include="modules\plug\choosepdtfromother\style.css" />
     <Content Include="modules\scripts\customer\activity.js" />
     <Content Include="modules\scripts\auction\buynow.js" />
     <Content Include="modules\scripts\customerrpt\customermaprpt.js" />

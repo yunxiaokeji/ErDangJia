@@ -2,8 +2,9 @@
     var Upload = require("upload"), ProductIco, ImgsIco,
         Global = require("global"),
         doT = require("dot"),
+        choosePDtOther = require("choosepdtfromother"),
         City = require("city"), CityObject,
-        Verify = require("verify"), VerifyObject;
+        Verify = require("verify"), VerifyObject; 
 
     var ObjectJS = {}, CacheCategory = [], CacheChildCategory = [], CacheItems = [];
 
@@ -105,7 +106,38 @@
             cityCode: "CHN",
             elementID: "city"
         });
-         
+
+        $("#choosePDTOther").click(function () {
+            console.log(1);
+                choosePDtOther.createPDtOther({
+                    title: "选择采购产品",
+                    type: 1, //1智能工厂
+                    clientid: _self.clientid,
+                    callback: function (products) {
+                        console.log(products);
+            //            //if (products.length > 0) {
+            //            //    var entity = {}, items = [];
+            //            //    entity.guid = wareid;
+            //            //    entity.type = 7;
+            //            //    for (var i = 0; i < products.length; i++) {
+            //            //        items.push({
+            //            //            ProductID: products[i].pid,
+            //            //            ProductDetailID: products[i].did,
+            //            //            BatchCode: products[i].batch,
+            //            //            DepotID: products[i].depotid,
+            //            //            SaleAttrValueString: products[i].remark,
+            //            //        });
+            //            //    }
+            //            //    entity.Products = items; 
+            //            //    Global.post("/ShoppingCart/AddShoppingCartBatchOut", { entity: JSON.stringify(entity) }, function (data) {
+            //            //        if (data.status) {
+            //            //            location.href = location.href;
+            //            //        }
+            //            //    });
+            //            //}
+                    }
+                });
+        });
     }
 
     //确认下单明细

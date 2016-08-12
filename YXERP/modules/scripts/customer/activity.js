@@ -11,8 +11,7 @@ define(function (require, exports, module) {
         ChooseUser = require("chooseuser"),
         moment = require("moment");
         require("daterangepicker");
-        require("pager");
-
+        require("pager"); 
     var Model = {};
 
     var ObjectJS = {};

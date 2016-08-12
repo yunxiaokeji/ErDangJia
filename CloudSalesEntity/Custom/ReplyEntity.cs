@@ -21,7 +21,7 @@ namespace CloudSalesEntity
         public string CreateUserID { get; set; }
 
         [Property("Lower")]
-        public string AgentID { get; set; }
+        public string AgentID { get; set; } 
 
         public Users CreateUser { get; set; }
 
@@ -37,6 +37,8 @@ namespace CloudSalesEntity
         public string FromReplyAgentID { get; set; }
 
         public Users FromReplyUser { get; set; }
+
+        public List<Attachment> Attachments { get; set; }
 
         public void FillData(System.Data.DataRow dr)
         {

@@ -1,12 +1,63 @@
-﻿/*讨论备忘*/
-.talk-body { }
-.talk-body .content-main { height:150px; position:relative; width:700px; }
-.talk-body .content-main .txt-content { height:148px; width:640px; background-color:#f7f7f7; border:solid 1px #eee; }
-.talk-body .content-main .txt-content:focus { border:solid 1px #318ae4;}
-.talk-body .content-main .btn-save { position:absolute; right:0; bottom:0px; }
+﻿
+/*讨论备忘*/
+.hight58{ height: 58px;}
+.borderEEE{border: 1px solid #eee;}
+.task-replys { width: 800px; }
+.task-replys .txt-content { height: 100px; }
+.task-replys .btn-save { position: absolute; right: 0; bottom: 0px; }
+.talk-title { border-bottom: solid 1px #ccc; height: 40px; line-height: 40px; color: #666; }
+.taskreply-box { height: 30px; overflow: hidden; border: 1px solid #ddd; padding: 10px 10px 0px 10px; border-radius: 3px; }
+.taskreply-box .txt-content {  border: none; height: 100px; width: 100%; border-bottom: 1px solid #ddd;  }
+.taskreply-box-hover { height: auto; border: 1px solid #318ae4; overflow: visible; }
+.reply-box .iconfont, .taskreply-box .iconfont { font-size: 22px; height: 28px; line-height: 30px; color: #999; cursor: pointer; margin-top: 5px; background-color: #fff; border: 0; }
+.reply-box .iconfont:hover, .taskreply-box .iconfont:hover { color: #4a98e7; }
+.task-replys .content-list { width: 100%; }
+.accessory { margin-top: 10px; }
+.accessory li { position: relative; float: left; margin-right: 40px; border: 1px solid #ddd; width: 120px; height: 80px; text-align: center; line-height: 80px; margin-bottom: 20px; padding: 1px; }
+.accessory li img { max-width: 120px; max-height: 80px; }
+.accessory li .delete { background: url(/modules/images/ico-delete.png) no-repeat; height: 20px; min-width: 20px; line-height: 20px; cursor: pointer; position: absolute; right: -10px; top: -10px; }
 
-.talk-body .talk-title { border-bottom: solid 1px #4a98e7; height:40px; line-height:40px; width: 700px; color:#666; }
-.talk-body .content-list { width: 700px; }
-.talk-body .content-list td{ border-bottom:dashed 1px #ccc; }
-.talk-body .content-list .user-avatar { width:35px; padding-top:20px; vertical-align:top; }
-.talk-body .content-list .user-avatar img{ width:24px; height:24px; border-radius:12px;  vertical-align:top; }
+.task-replys .content-list td { border-bottom: dashed 1px #ccc; }
+.task-replys .content-list .user-avatar { width: 35px; padding-top: 20px; vertical-align: top; }
+.task-replys .content-list .user-avatar img { width: 24px; height: 24px; border-radius: 12px; vertical-align: top; }
+.task-replys .content-list tr:not(:first-child) td { height: 35px; }
+.task-replys .content-list .reply-box { border: 1px solid #ddd; padding: 10px 10px 10px 10px; border-radius: 3px; }
+.task-replys .content-list .reply-box:hover { border: 1px solid #318ae4; }
+.task-replys .content-list .reply-box textarea { width: 100%; border: none; height: 60px; border-bottom: 1px solid #ddd; }
+
+/*上传*/
+/*.upload-file {margin-right:10px;}*/
+.upload-file li { float:left;position:relative;margin-right:20px;margin-bottom:10px;}
+.upload-file li img{ width:35px;height:40px;margin-right:3px;}
+.upload-file div{ font-size:10px;color:#aaa;line-height:20px;cursor:pointer;}
+.upload-file div span{ color:#aaa;}
+.upload-file 
+
+/*回复*/
+.logo-upload {width:60px;height:60px;float:left;margin-right:10px;position:absolute;z-index:100;}
+.logo-upload img{ margin:10px 0 0 13px;}
+.upload-lump {position:relative;left:13px;top:10px;width:35px;height:40px;}
+.information-upload { background-color:#fafafa;position:relative;margin-left:60px;}
+.information-upload .filename{color:#222;margin-top:7px;}
+.popup-download { height:60px;background-color:rgba(204,204,204,0.9);width:111px;z-index:100;top:0;left:60px;position:absolute;
+                  font-size:28px !important;text-align:center;color:#fff !important;line-height:60px !important;}
+
+
+/*删除 叉*/
+.ico-delete{ background:url(/modules/images/ico-delete.png) no-repeat; height:20px; min-width:20px; line-height:20px; cursor:pointer;
+    position: absolute;top: -8px;right: -8px;background-color: #fff;border-radius: 10px;}
+.ico-delete-file{position: absolute;top: -14px;right: -8px;font-size: 14px !important;
+                 height: 28px;line-height: 30px;color: #999;cursor: pointer;background-color: #fff;border: 0;margin-top: 5px;}
+.ico-delete-file .iconfont:hover {color:#4a98e7;}
+
+/*切换图片*/
+.enlarge-image-bgbox {width:100%;height:100%; position:fixed;top:0; left:0; background-color:#666;z-index:9999; opacity:0.9; }
+.enlarge-image-bgbox .iconfont{ float:right; color:#fff; font-size:20px; margin:10px 10px 0 0; cursor:pointer; }
+.enlarge-image-bgbox .iconfont:hover{ color:#4a98e7;  }
+.enlarge-image-box{ position:fixed; top:40px; bottom:40px; left:100px; right:100px; z-index:19999; }
+.left-enlarge-image,.right-enlarge-image {position:fixed;width:40px;height:100px; cursor:pointer;cursor:pointer;}
+.left-enlarge-image {left:100px;  background:url('/modules/images/ico-prev-image.png') no-repeat;background-size:cover;}
+.left-enlarge-image:hover {  background:url('/modules/images/ico-prev-image-hover.png') no-repeat;background-size:cover;}
+.right-enlarge-image { right:100px; background:url('/modules/images/ico-next-image.png') no-repeat;background-size:cover; }
+.right-enlarge-image:hover {  background:url('/modules/images/ico-next-image-hover.png') no-repeat;background-size:cover; }
+.enlarge-image-item{position:fixed;top:40px;bottom:40px;left:200px;right:200px; }

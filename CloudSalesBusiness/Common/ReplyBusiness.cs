@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CloudSalesEnum;
 using CloudSalesEntity;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace CloudSalesBusiness
 {
@@ -55,6 +56,40 @@ namespace CloudSalesBusiness
             return list;
         }
 
+        public static List<ReplyEntity> GetReplysByType(string guid, EnumLogObjectType type, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid)
+        {
+            List<ReplyEntity> list = new List<ReplyEntity>();
+
+            DataSet ds = CommonDAL.GetReplysByType(guid, (int)type,agentid, pageSize, pageIndex, ref totalCount, ref pageCount);
+            DataTable replys = ds.Tables["Replys"];
+            DataTable attachments = ds.Tables["Attachments"];
+            foreach (DataRow dr in replys.Rows)
+            {
+                ReplyEntity model = new ReplyEntity();
+                model.FillData(dr);
+                model.CreateUser = OrganizationBusiness.GetUserByUserID(model.CreateUserID, model.AgentID);
+                if (!string.IsNullOrEmpty(model.FromReplyID))
+                {
+                    model.FromReplyUser = OrganizationBusiness.GetUserByUserID(model.FromReplyUserID, model.FromReplyAgentID);
+                }
+
+                model.Attachments = new List<Attachment>();
+                if (attachments.Rows.Count > 0)
+                {
+                    foreach (DataRow dr2 in attachments.Select(" ReplyID='" + model.ReplyID + "'"))
+                    {
+                        Attachment attachment = new Attachment();
+                        attachment.FillData(dr2);
+                        model.Attachments.Add(attachment);
+                    }
+                }
+                list.Add(model);
+            }
+
+            return list;
+
+        }
+
         #endregion
 
         #region 添加.删除
@@ -79,7 +114,31 @@ namespace CloudSalesBusiness
             return "";
             
         }
+        public static bool AddReplyAttachments( string replyid, List<Attachment> attachments, string userid, string agentid,string clientid)
+        {
+            SqlConnection conn = new SqlConnection(CustomDAL.ConnectionString);
+            conn.Open();
+            SqlTransaction tran = conn.BeginTransaction();
 
+
+            foreach (var attachment in attachments)
+            {
+                if (!CommonDAL.AddReplyAttachments( replyid, attachment.Type,
+                    attachment.ServerUrl, attachment.FilePath, attachment.FileName, attachment.OriginalName, attachment.ThumbnailName, attachment.Size,
+                    userid, agentid,clientid, tran))
+                {
+                    tran.Rollback();
+                    conn.Dispose();
+
+                    return false;
+                }
+            }
+
+            tran.Commit();
+            conn.Dispose();
+
+            return true;
+        }
         public static bool DeleteReply(EnumLogObjectType type, string replyid)
         {
             string tablename = "";

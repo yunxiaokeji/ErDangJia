@@ -213,6 +213,13 @@
     <Content Include="modules\images\bg-industrylist.jpg" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
+    <Content Include="modules\images\ico-attachment-excel.png" />
+    <Content Include="modules\images\ico-attachment-pdf.png" />
+    <Content Include="modules\images\ico-attachment-ppt.png" />
+    <Content Include="modules\images\ico-attachment-psd.png" />
+    <Content Include="modules\images\ico-attachment-rar.png" />
+    <Content Include="modules\images\ico-attachment-txt.png" />
+    <Content Include="modules\images\ico-attachment-word.png" />
     <Content Include="modules\images\ico-category-close.png" />
     <Content Include="modules\images\ico-category.png" />
     <Content Include="modules\images\ico-checknotall.png" />
@@ -259,6 +266,7 @@
     <Content Include="modules\plug\colormark\colormark.js" />
     <Content Include="modules\plug\colormark\ico-ball.png" />
     <Content Include="modules\plug\colormark\style.css" />
+    <Content Include="modules\plug\e-smart-zoom-jquery.min.js" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\an_hui_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\ao_men_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\bei_jing_geo.json" />
@@ -311,6 +319,8 @@
     <Content Include="modules\plug\qiniustorage\plupload\plupload.min.js" />
     <Content Include="modules\plug\qiniustorage\qiniu\multiple.js" />
     <Content Include="modules\plug\qiniustorage\qiniu\qiniu.js" />
+    <Content Include="modules\plug\tip\style.css" />
+    <Content Include="modules\plug\tip\tip.js" />
     <Content Include="modules\plug\umeditor\net\config.json" />
     <Content Include="modules\plug\umeditor\net\controller.ashx" />
     <Content Include="modules\plug\umeditor\net\README.md" />

@@ -231,8 +231,8 @@ namespace YXERP.Controllers
             int totalCount = 0;
             int pageCount = 0;
 
-            var list = ReplyBusiness.GetReplys(guid, type, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID);
-
+            //var list = ReplyBusiness.GetReplys(guid, type, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID);
+            var list = ReplyBusiness.GetReplysByType(guid, type, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
@@ -244,14 +244,17 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult SavaReply(EnumLogObjectType type, string entity)
+        public JsonResult SavaReply(EnumLogObjectType type, string entity, string attchmentEntity="")
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             ReplyEntity model = serializer.Deserialize<ReplyEntity>(entity);
-
             string replyID = "";
             replyID = ReplyBusiness.CreateReply(type, model.GUID, model.Content, CurrentUser.UserID, CurrentUser.AgentID, model.FromReplyID, model.FromReplyUserID, model.FromReplyAgentID);
-
+            if (attchmentEntity != "")
+            {
+                model.Attachments = serializer.Deserialize<List<Attachment>>(attchmentEntity);
+                ReplyBusiness.AddReplyAttachments(replyID, model.Attachments, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
+            }
             List<ReplyEntity> list = new List<ReplyEntity>();
             if (!string.IsNullOrEmpty(replyID))
             {

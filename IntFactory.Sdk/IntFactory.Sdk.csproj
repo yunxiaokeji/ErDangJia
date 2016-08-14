@@ -33,8 +33,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -55,8 +56,13 @@
     <Compile Include="Business\OauthBusiness.cs" />
     <Compile Include="Business\TaskBusiness.cs" />
     <Compile Include="Business\UserBusiness.cs" />
+    <Compile Include="Entity\Client\CategoryEntity.cs" />
+    <Compile Include="Entity\Client\CategoryResult.cs" />
     <Compile Include="Entity\Client\ClientEntity.cs" />
     <Compile Include="Entity\Client\ClientResult.cs" />
+    <Compile Include="Entity\Client\ProcessCategoryEntity.cs" />
+    <Compile Include="Entity\Client\ProcessCategoryResult.cs" />
+    <Compile Include="Entity\Common\EnumCategoryType.cs" />
     <Compile Include="Entity\Customer\CustomerEntity.cs" />
     <Compile Include="Entity\Customer\CustomerResult.cs" />
     <Compile Include="Entity\Order\OrderEntity.cs" />
@@ -93,9 +99,7 @@
     <Compile Include="OperateResult\UpdateResult.cs" />
     <Compile Include="OperateResult\AddResult.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entity\Common\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

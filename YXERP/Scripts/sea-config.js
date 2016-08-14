@@ -10,6 +10,7 @@ seajs.config({
         "jquery": "/Scripts/jquery-1.11.1.js",
         "form": "/Scripts/jquery.form.js",
         "parser": "/Scripts/jquery.parser.js",
+        "smartzoom": "plug/e-smart-zoom-jquery.min.js",
         //颜色选择器
         "color": "plug/choosecolor/spectrum.js",
         //全局JS
@@ -40,7 +41,8 @@ seajs.config({
         //城市地区
         "city": "plug/city.js",
         //上传
-        "upload": "plug/upload/upload.js",
+        //"upload": "plug/upload/upload.js",
+        "upload": "plug/qiniustorage/qiniu/qiniu.js",
         //日志
         "logs": "plug/logs/logs.js",
         //备忘
@@ -72,7 +74,9 @@ seajs.config({
         //显示用户名片层
         "businesscard": "plug/businesscard/businesscard.js",
         //分享明道
-        "sharemingdao": "plug/sharemingdao/sharemingdao.js"
+        "sharemingdao": "plug/sharemingdao/sharemingdao.js",
+        //显示提示插件
+        "tip": "plug/tip/tip.js"
     }
 });
 

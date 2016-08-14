@@ -19,7 +19,7 @@ namespace YXERP.Controllers
 
         public ActionResult Index(string href = "")
         {
-            ViewBag.Herf = href;
+            ViewBag.Herf = href ;
             return View();
         }
 
@@ -28,7 +28,7 @@ namespace YXERP.Controllers
             ViewBag.MenuCode = id;
             return PartialView();
         }
-
+    
         public ActionResult Home()
         {
             ViewBag.UserCount = OrganizationBusiness.GetUsers(CurrentUser.AgentID).Count;

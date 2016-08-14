@@ -88,19 +88,19 @@ namespace CloudSalesBusiness
         {
             string activityid = Guid.NewGuid().ToString();
 
-            if (!string.IsNullOrEmpty(poster))
-            {
-                if (poster.IndexOf("?") > 0)
-                {
-                    poster = poster.Substring(0, poster.IndexOf("?"));
-                }
-                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(poster));
-                poster = FilePath + file.Name;
-                if (file.Exists)
-                {
-                    file.MoveTo(HttpContext.Current.Server.MapPath(poster));
-                }
-            }
+            //if (!string.IsNullOrEmpty(poster))
+            //{
+            //    if (poster.IndexOf("?") > 0)
+            //    {
+            //        poster = poster.Substring(0, poster.IndexOf("?"));
+            //    }
+            //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(poster));
+            //    poster = FilePath + file.Name;
+            //    if (file.Exists)
+            //    {
+            //        file.MoveTo(HttpContext.Current.Server.MapPath(poster));
+            //    }
+            //}
             bool bl = ActivityDAL.BaseProvider.CreateActivity(activityid, name, poster, begintime, endtime, address, ownerid,memberid, remark, userid, agentid, clientid);
             if (!bl)
             {

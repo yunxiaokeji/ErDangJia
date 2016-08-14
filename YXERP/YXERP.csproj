@@ -53,10 +53,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\Net.Sourceforge.Pinyin4j.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
       <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
@@ -69,6 +68,10 @@
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
       <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="Qiniu.4.0, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\Qiniu.4.0.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
@@ -125,14 +128,22 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\BaseAPIController.cs" />
+    <Compile Include="Areas\Api\Controllers\ClientController.cs" />
+    <Compile Include="Areas\Api\Controllers\StockController.cs" />
+    <Compile Include="Areas\Api\Controllers\UserController.cs" />
+    <Compile Include="Areas\Api\Models\FilterPurchase.cs" />
     <Compile Include="Common\Alipay\AlipayConfig.cs" />
     <Compile Include="Common\Alipay\AlipayCore.cs" />
     <Compile Include="Common\Alipay\AlipayNotify.cs" />
     <Compile Include="Common\Alipay\AlipaySubmit.cs" />
     <Compile Include="Common\Alipay\MD5.cs" />
+    <Compile Include="Common\ApiAuthorize.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\ExpandClass.cs" />
     <Compile Include="Common\MessageSend.cs" />
+    <Compile Include="Common\Signature.cs" />
     <Compile Include="Common\UserAuthorize.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AgentsController.cs" />
@@ -144,6 +155,7 @@
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InfomationController.cs" />
+    <Compile Include="Controllers\IntFactoryOrderController.cs" />
     <Compile Include="Controllers\MingDaoController.cs" />
     <Compile Include="Controllers\MyAccountController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -163,6 +175,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FilterProduct.cs" />
+    <Content Include="Common\ApiSetting.xml" />
     <Content Include="Content\homeico\active.png" />
     <Content Include="Content\homeico\buy.png" />
     <Content Include="Content\homeico\custom.png" />
@@ -186,6 +199,8 @@
     <Content Include="Content\menuico\stockmanage.png" />
     <Content Include="Content\menuico\systemSet.png" />
     <Content Include="DLL\JsonObject.dll" />
+    <Content Include="modules\css\createorder.css" />
+    <Content Include="modules\css\error.css" />
     <Content Include="modules\css\home\selectlogin.css" />
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />
@@ -198,6 +213,13 @@
     <Content Include="modules\images\bg-industrylist.jpg" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\ico-alipay.png" />
+    <Content Include="modules\images\ico-attachment-excel.png" />
+    <Content Include="modules\images\ico-attachment-pdf.png" />
+    <Content Include="modules\images\ico-attachment-ppt.png" />
+    <Content Include="modules\images\ico-attachment-psd.png" />
+    <Content Include="modules\images\ico-attachment-rar.png" />
+    <Content Include="modules\images\ico-attachment-txt.png" />
+    <Content Include="modules\images\ico-attachment-word.png" />
     <Content Include="modules\images\ico-category-close.png" />
     <Content Include="modules\images\ico-category.png" />
     <Content Include="modules\images\ico-checknotall.png" />
@@ -220,6 +242,7 @@
     <Content Include="modules\images\icondate.png" />
     <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
+    <Content Include="modules\images\img-noaccess.png" />
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\images\logo-weixin.png" />
     <Content Include="modules\images\none-img.png" />
@@ -243,6 +266,7 @@
     <Content Include="modules\plug\colormark\colormark.js" />
     <Content Include="modules\plug\colormark\ico-ball.png" />
     <Content Include="modules\plug\colormark\style.css" />
+    <Content Include="modules\plug\e-smart-zoom-jquery.min.js" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\an_hui_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\ao_men_geo.json" />
     <Content Include="modules\plug\echarts\util\mapData\rawData\geoJson\bei_jing_geo.json" />
@@ -285,6 +309,18 @@
     <Content Include="modules\css\iconfont\iconfont.woff" />
     <Content Include="modules\excelmodel\customer.json" />
     <Content Include="modules\excelmodel\product.json" />
+    <Content Include="modules\plug\qiniustorage\css\highlight.css" />
+    <Content Include="modules\plug\qiniustorage\css\main.css" />
+    <Content Include="modules\plug\qiniustorage\plupload\moxie.js" />
+    <Content Include="modules\plug\qiniustorage\plupload\moxie.min.js" />
+    <Content Include="modules\plug\qiniustorage\plupload\Moxie.swf" />
+    <Content Include="modules\plug\qiniustorage\plupload\plupload.dev.js" />
+    <Content Include="modules\plug\qiniustorage\plupload\plupload.full.min.js" />
+    <Content Include="modules\plug\qiniustorage\plupload\plupload.min.js" />
+    <Content Include="modules\plug\qiniustorage\qiniu\multiple.js" />
+    <Content Include="modules\plug\qiniustorage\qiniu\qiniu.js" />
+    <Content Include="modules\plug\tip\style.css" />
+    <Content Include="modules\plug\tip\tip.js" />
     <Content Include="modules\plug\umeditor\net\config.json" />
     <Content Include="modules\plug\umeditor\net\controller.ashx" />
     <Content Include="modules\plug\umeditor\net\README.md" />
@@ -295,6 +331,7 @@
     <Content Include="modules\excelmodel\stockout.json" />
     <Content Include="modules\excelmodel\orderdetailrpt.json" />
     <Content Include="modules\excelmodel\stockdetailrpt.json" />
+    <Content Include="Areas\Api\Views\Web.config" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -822,6 +859,7 @@
     <Content Include="modules\scripts\customer\create.js" />
     <Content Include="modules\scripts\customer\customerownrpt.js" />
     <Content Include="modules\scripts\customer\detail.js" />
+    <Content Include="modules\scripts\default\ordercreat.js" />
     <Content Include="modules\scripts\finance\detail.js" />
     <Content Include="modules\scripts\finance\payablebills.js" />
     <Content Include="modules\scripts\finance\orderbills.js" />
@@ -880,13 +918,17 @@
     <Content Include="modules\template\activity\activity_customers.html" />
     <Content Include="modules\template\common\choosemodules.html" />
     <Content Include="modules\plug\logs\logs.html" />
+    <Content Include="modules\template\common\qiniu-file-upload-img.html" />
+    <Content Include="modules\template\common\qiniu-file-upload.html" />
     <Content Include="modules\template\customer\customers.html" />
     <Content Include="modules\template\customer\customer-detail.html" />
     <Content Include="modules\plug\logs\logitem.html" />
     <Content Include="modules\template\customer\contacts.html" />
     <Content Include="modules\template\customer\contact-detail.html" />
     <Content Include="modules\template\customer\customers-card.html" />
+    <Content Include="modules\template\default\createorder-checkattr.html" />
     <Content Include="modules\template\default\feedback-add.html" />
+    <Content Include="modules\template\default\orders_child_list.html" />
     <Content Include="modules\template\finance\payable-detail.html" />
     <Content Include="modules\template\finance\payablebills.html" />
     <Content Include="modules\template\finance\storagebillingpays.html" />
@@ -1073,6 +1115,7 @@
     <Content Include="Views\StockRPT\StockDetailRPT.cshtml" />
     <Content Include="Views\MyAccount\WeiXinCallBack.cshtml" />
     <Content Include="Views\MyAccount\WeiXinBind.cshtml" />
+    <Content Include="Views\IntFactoryOrder\DownOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1234,6 +1277,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Content\tempfile\" />
     <Folder Include="Content\uploadFiles\" />
     <Folder Include="modules\plug\umeditor\net\Bin\" />
@@ -1263,6 +1307,10 @@
       <Project>{c9aca144-ea91-4fa5-a799-39d458af1fcb}</Project>
       <Name>CloudSalesTool</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IntFactory.Sdk\IntFactory.Sdk.csproj">
+      <Project>{bc180ed7-4c16-4974-89fb-0894016f58ff}</Project>
+      <Name>IntFactory.Sdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MD.SDK\MD.SDK.csproj">
       <Project>{c6cd2682-4dca-4ee8-a5e5-a0e117073390}</Project>
       <Name>MD.SDK</Name>
@@ -1270,6 +1318,10 @@
     <ProjectReference Include="..\WeiXin.Sdk\WeiXin.Sdk.csproj">
       <Project>{a01e43b8-fabf-4601-8894-4374026aa08c}</Project>
       <Name>WeiXin.Sdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YunXiaoService\YunXiaoService.csproj">
+      <Project>{28239182-0731-4e96-b9fe-e3c8a46335ca}</Project>
+      <Name>YunXiaoService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

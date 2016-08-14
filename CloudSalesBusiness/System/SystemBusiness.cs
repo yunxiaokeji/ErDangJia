@@ -569,7 +569,20 @@ namespace CloudSalesBusiness
             }
             return list;
         }
-        
+        public List<IntegerFeeChange> GetIntergeFeeList(int changetype, string customerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID, string beginTime, string endTime, string agentid = "")
+        {
+            DataSet ds = SystemDAL.BaseProvider.GetIntergeFeeList(changetype,customerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientID, beginTime,endTime,agentid);
+
+            List<IntegerFeeChange> list = new List<IntegerFeeChange>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                IntegerFeeChange model = new IntegerFeeChange();
+                model.CreateUser = OrganizationBusiness.GetUsers(agentid).Where(m => m.CreateUserID == model.CreateUserID).FirstOrDefault();
+                model.FillData(dr);
+                list.Add(model);
+            }
+            return list;
+        }
         public List<DepotSeat> GetDepotSeatsByWareID(string wareid, string clientid)
         {
             var ware = GetWareByID(wareid, clientid);
@@ -855,6 +868,12 @@ namespace CloudSalesBusiness
                 return id.ToString();
             }
             return string.Empty;
+        }
+
+        public bool InsertIntergeFeeChange(int changetype, decimal changefee, string customerid, string remark,
+            string userid, string agentid, string clientid)
+        {
+            return InsertIntergeFeeChange(changetype, changefee, customerid, remark, userid, agentid, clientid);
         }
 
         #endregion

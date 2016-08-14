@@ -66,7 +66,16 @@ namespace CloudSalesDAL
 
             return GetDataTable(sqlText, paras, CommandType.Text);
         }
+        public DataTable GetClientMemberLevelByOrigin(string origin, string clientid)
+        {
+            string sqlText = "select * from ClientMemberLevel where origin=@Origin and ClientID=@ClientID and Status=1";
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@Origin",origin),
+                                     new SqlParameter("@ClientID",clientid)
+                                   };
 
+            return GetDataTable(sqlText, paras, CommandType.Text);
+        }
         public DataTable GetClientIndustryByID(string clientIndustryID)
         {
             string sqlText = "select * from ClientsIndustry where ClientIndustryID=@clientIndustryID and Status=1";
@@ -213,6 +222,31 @@ namespace CloudSalesDAL
             return dt;
         }
 
+        public DataSet GetIntergeFeeList(int changetype, string customerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID, string beginTime, string endTime, string agentid = "")
+        {
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@totalCount",SqlDbType.Int),
+                                       new SqlParameter("@pageCount",SqlDbType.Int),
+                                       new SqlParameter("@ChangFeeType",changetype),
+                                       new SqlParameter("@CustomerID",customerid),
+                                       new SqlParameter("@AgentID",agentid),
+                                       new SqlParameter("@BeginTime",beginTime),
+                                       new SqlParameter("@EndTime",endTime),
+                                       new SqlParameter("@PageSize",pageSize),
+                                       new SqlParameter("@PageIndex",pageIndex),
+                                       new SqlParameter("@ClientID",clientID)
+                                   };
+            paras[0].Value = totalCount;
+            paras[1].Value = pageCount;
+
+            paras[0].Direction = ParameterDirection.InputOutput;
+            paras[1].Direction = ParameterDirection.InputOutput;
+            DataSet ds = GetDataSet("P_IntergeFeeChangePageList", paras, CommandType.StoredProcedure);
+            totalCount = Convert.ToInt32(paras[0].Value);
+            pageCount = Convert.ToInt32(paras[1].Value);
+            return ds;
+
+        }
         #endregion
 
         #region 添加
@@ -368,6 +402,23 @@ namespace CloudSalesDAL
             origin= ExecuteNonQuery("P_InsertClientMemberLevel", paras, CommandType.StoredProcedure);
             return Convert.ToString(paras[0].Value);
         }
+
+        public bool InsertIntergeFeeChange(int changetype, decimal changefee, string customerid, string remark, string userid, string agentid, string clientid)
+        { 
+            SqlParameter[] paras = {  
+                                     new SqlParameter("@ChangFeeType",changetype),
+                                     new SqlParameter("@ChangeFee",changefee),
+                                     new SqlParameter("@CustomerID",customerid),
+                                     new SqlParameter("@AgentID",agentid),
+                                     new SqlParameter("@CreateUserID" , userid),
+                                     new SqlParameter("@ClientID" , clientid),
+                                     new SqlParameter("@Reamrk" , remark)
+                                   };
+            bool bl = ExecuteNonQuery("P_InsertIntergeFeeChange", paras, CommandType.StoredProcedure) > 0;
+ 
+            return bl;
+        }
+
         #endregion
 
         #region 编辑/删除

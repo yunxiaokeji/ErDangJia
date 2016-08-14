@@ -1,11 +1,10 @@
 ﻿
 define(function (require, exports, module) {
-    var $ = require("jquery");
-
+    var $ = require("jquery"); 
     require("plug/upload/jquery.form.js");
     var Defaults = {
-        element: "#",		        //元素ID
-        buttonText: "上传",         //按钮文本
+        element: "#", //元素ID
+        buttonText: "上传", //按钮文本
         url: "/Plug/UploadFile",	//文件临时存储路径
         data: {},
         className: "ico-upload",
@@ -23,14 +22,15 @@ define(function (require, exports, module) {
     UPLoad.prototype.init = function () {
         var _self = this;
         if (_self.setting.element) {
-            var form = $('<form id="' + _self.setting.element.replace('#', '') + '_postForm" enctype="multipart/form-data"></form>'),
+            var form = $('<form src="' + _self.setting.url + '" id="' + _self.setting.element.replace('#', '') + '_postForm" enctype="multipart/form-data"></form>'),
                 file = $('<input type="file" name="file" id="' + _self.setting.element.replace('#', '') + '_fileUpLoad" ' + (_self.setting.multiple ? 'multiple="multiple"' : '') + ' style="display:none;" />'),
                 button = $('<input id="' + _self.setting.element.replace('#','') + '_buttonSubmit" class="' + (_self.setting.className || "ico-upload") + '" type="button" value="' + _self.setting.buttonText + '" />')
             form.append(file).append(button);
 
             $(_self.setting.element).append(form);
 
-            form.submit(function () {
+
+            form.submit(function() {
                 var options = {
                     target: _self.setting.target,
                     url: _self.setting.url,
@@ -42,13 +42,13 @@ define(function (require, exports, module) {
                 };
                 $(this).ajaxSubmit(options);
                 return false;
-            })
+            });
             button.click(function () {
                 file.click();
             });
-            file.change(function () {
+            file.change(function() {
                 form.submit();
-            })
+            });
         }
     };
     exports.createUpload = function (options) {

@@ -34,8 +34,8 @@ namespace YXERP.Controllers
         {
             return View();
         }
-
-        public ActionResult Login(string ReturnUrl, int Status = 0)
+        
+        public ActionResult Login(string ReturnUrl, int Status = 0,string name="")
         {
             if (Session["ClientManager"] != null)
             {
@@ -62,7 +62,7 @@ namespace YXERP.Controllers
                 }
             }
             ViewBag.Status = Status;
-            ViewBag.ReturnUrl = ReturnUrl ?? string.Empty;
+            ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name) ?? string.Empty;
             return View();
         }
         

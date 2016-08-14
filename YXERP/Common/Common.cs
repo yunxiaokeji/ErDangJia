@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using Qiniu.Conf;
+using Qiniu.IO;
+using Qiniu.RS;
 
 namespace YXERP.Common
 {
@@ -16,6 +19,12 @@ namespace YXERP.Common
         public static string AlipaySuccessPage = System.Configuration.ConfigurationManager.AppSettings["AlipaySuccessPage"] ?? string.Empty;
         public static string AlipayNotifyPage = System.Configuration.ConfigurationManager.AppSettings["AlipayNotifyPage"] ?? string.Empty;
 
+        //七牛
+        public static String bucket = System.Configuration.ConfigurationManager.AppSettings["QN_Bucket"] ?? "test-yunxiaokeji";
+        public static string imgurl = System.Configuration.ConfigurationManager.AppSettings["QN_ImgUrl"] ?? "http://obo9ophyw.bkt.clouddn.com/";
+        public static Dictionary<string, object> QnDictionary = new Dictionary<string, object>();
+        public static object QNtokent=new object();
+
        /// <summary>
        /// 获取请求方ip
        /// </summary>
@@ -24,6 +33,25 @@ namespace YXERP.Common
         public static string GetRequestIP()
         {
             return string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.Headers.Get("X-Real-IP")) ? System.Web.HttpContext.Current.Request.UserHostAddress : System.Web.HttpContext.Current.Request.Headers["X-Real-IP"];
+        }
+
+
+        public static string GetXmlNodeValue(string strNodeName, string strValueName)
+        {
+            try
+            {
+                string pathurl = System.Web.HttpContext.Current.Server.MapPath("~/Common/ApiSetting.xml");
+                System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.Load(pathurl);
+                System.Xml.XmlNode xNode = xmlDoc.SelectSingleNode("//" + strNodeName + "");
+                string strValue = xNode.Attributes[strValueName].Value;
+                return strValue;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+
         }
 
         /// <summary>
@@ -94,6 +122,78 @@ namespace YXERP.Common
                  HttpContext.Current.Session.Remove(mobilePhone);
             }
         }
+
+        public static Dictionary<string, object> GetQNToken()
+        {
+            lock (QNtokent)
+            { 
+                if (QnDictionary.ContainsKey("uptoken"))
+                {
+                    TimeSpan ts =
+                        new TimeSpan(Convert.ToDateTime(QnDictionary["ctime"]).Ticks).Subtract(
+                            new TimeSpan(DateTime.Now.Ticks)).Duration();
+                    if (ts.TotalMinutes > 55)
+                    {
+                        Config.Init();
+                        PutPolicy put = new PutPolicy(bucket, 3600);
+                        QnDictionary["uptoken"] = put.Token();
+                    }
+                    return QnDictionary;
+                }
+                else
+                {
+                    Config.Init();
+                    //普通上传,只需要设置上传的空间名就可以了,第二个参数可以设定token过期时间
+                    PutPolicy put = new PutPolicy(bucket, 3600);
+                    //调用Token()方法生成上传的Token
+                    string upToken = put.Token();
+                    QnDictionary.Add("uptoken", upToken);
+                    QnDictionary.Add("ctime", DateTime.Now);
+                    QnDictionary.Add("bucket", bucket);
+                    QnDictionary.Add("imgurl", imgurl);
+                }
+                return QnDictionary;
+            }
+        } 
+        public static string UploadAttachment(string filepath, string files = "orders")
+        {
+            string allFilePath = "";
+            Config.Init();
+            IOClient target = new IOClient();
+            PutExtra extra = new PutExtra();
+            Dictionary<string, object> param=GetQNToken(); 
+            //调用Token()方法生成上传的Token
+            string upToken = param["uptoken"].ToString();
+            //上传文件的路径
+            if (!string.IsNullOrEmpty(filepath))
+            {
+                string[] filepaths = filepath.Split(',');
+                foreach (string file in filepaths)
+                {
+                    if (!string.IsNullOrEmpty(file))
+                    {
+                        var fileExtension = file.Substring(file.LastIndexOf(".") + 1).ToLower();
+                        var key = files + (DateTime.Now.Year + "." + DateTime.Now.Month + "." + DateTime.Now.Day + "/") + GetTimeStamp() + "." + fileExtension;
+                        //调用PutFile()方法上传
+                        PutRet ret = target.PutFile(upToken, key, file, extra);
+                        if (ret.OK)
+                        {
+                            allFilePath += param["imgurl"] + ret.key + ",";
+                        }
+                    }
+                }
+            }
+            return allFilePath.TrimEnd(',');
+        }
+        /// <summary>  
+        /// 获取时间戳  
+        /// </summary>  
+        /// <returns></returns>  
+        public static string GetTimeStamp()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
+        } 
         #region 缓存
 
         #region 用户登录密码错误缓存
@@ -124,4 +224,5 @@ namespace YXERP.Common
         public int ErrorCount;
         public DateTime ForbidTime;
     }
+
 }

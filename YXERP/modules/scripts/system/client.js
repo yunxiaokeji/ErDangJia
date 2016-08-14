@@ -259,20 +259,17 @@
                 verifyType: "data-type",
                 regText: "data-text"
             });
-            //选择海报图片
-            PosterIco = Upload.createUpload({
-                element: "#Logo",
-                buttonText: "选择LOGO",
-                className: "",
-                data: { folder: '', action: 'add', oldPath: _self.item.Logo },
-                success: function (data, status) {
-                    if (data.Items.length > 0) {
-                        $("#posterDisImg").attr("src", data.Items[0]);
-                    } else {
-                        alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
-                    }
-                }
-            });
+            //选择公司Logo
+            PosterIco = Upload.uploader({
+                browse_button: 'Logo',
+                file_path: "/Content/UploadFiles/Client/",
+                picture_container: "orderImages", 
+                multi_selection: false,
+                maxSize: 1,
+                successItems: '#posterDisImg',
+                fileType: 1,
+                init: {}
+            }); 
         });
     }
 

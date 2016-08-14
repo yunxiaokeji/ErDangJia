@@ -5,8 +5,7 @@
         doT = require("dot"),
         ChooseUser = require("chooseuser"),
         Easydialog = require("easydialog");
-    require("pager");
-    require("replys");
+    require("pager"); 
     require("colormark");
 
     var ObjectJS = {}, CacheContacts = null;
@@ -25,11 +24,14 @@
         } else {
             $(".tab-nav-ul li").first().addClass("hover").data("first", "1");
             $("#navRemark").show();
-            $("#navRemark").getObjectReplys({
-                guid: _self.customerid,
-                type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-                pageSize: 10
-            });
+
+            require.async("replys", function () {
+                $("#navRemark").getObjectReplys({
+                    guid: _self.customerid,
+                    type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                    pageSize: 10
+                });
+            }); 
         }
 
         Global.post("/Customer/GetCustomerByID", { customerid: customerid }, function (data) {
@@ -211,10 +213,12 @@
                 
             } else if (_this.data("id") == "navRemark" && (!_this.data("first") || _this.data("first") == 0)) { /*备忘*/
                 _this.data("first", "1");
-                $("#navRemark").getObjectReplys({
-                    guid: _self.customerid,
-                    type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
-                    pageSize: 10
+                require.async("replys", function () {
+                    $("#navRemark").getObjectReplys({
+                        guid: _self.customerid,
+                        type: 1, /*1 客户 2订单 3活动 4产品 5员工 7机会 */
+                        pageSize: 10
+                    });
                 });
             } else if (_this.data("id") == "navContact" && (!_this.data("first") || _this.data("first") == 0)) { /*联系人*/
                 _this.data("first", "1");

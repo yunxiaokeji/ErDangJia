@@ -11,12 +11,13 @@ define(function (require, exports, module) {
     var LayoutObject = {};
     //初始化数据
     LayoutObject.init = function (href) {
-
+        var _self = this;
         if (href) {
             $("#windowItems li").removeClass("hover");
             $("#iframeHome").hide();
-
-            $("#windowItems").append('<li data-id="href" class="hover" title="新页面">新页面<span title="关闭" class="iconfont close">&#xe606;</span>'
+            var titleName = _self.getParam(href, 'name');
+            titleName = titleName != "" ? titleName : "新页面";
+            $("#windowItems").append('<li data-id="href" class="hover" title="' + titleName + '">' + titleName + '<span title="关闭" class="iconfont close">&#xe606;</span>'
                                    + '</li>');
             $("#iframeBox").append('<iframe id="iframehref" class="iframe-window" src="' + href + '"></iframe>');
 
@@ -29,7 +30,22 @@ define(function (require, exports, module) {
 
         $("#iframeBox").css("height", document.documentElement.clientHeight - 95);
     }
-
+    LayoutObject.getParam=function (url,name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
+        if (url == '') {
+            url = window.location.search;
+        } else {
+            url = url.replace('&amp;','&');
+            if (url.indexOf('?') > -1) {
+                url = url.substr(url.indexOf('?')+1);
+            }
+        } 
+        var r = url.substr(1).match(reg);
+        if (r != null && r.toString().length > 1) {
+            return unescape(r[2]);
+        }
+        return "";
+    }
     //绑定元素定位和样式
     LayoutObject.bindStyle = function () {
         var height = document.documentElement.clientHeight;

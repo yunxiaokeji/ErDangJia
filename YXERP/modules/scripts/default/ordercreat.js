@@ -111,7 +111,7 @@
                 choosePDtOther.createPDtOther({
                     title: "选择采购产品",
                     type: 1, //1智能工厂
-                    clientid: _self.clientid,
+                    clientid: '381c8429-dec0-4143-ad7f-6364e8f0e5e4',//_self.clientid,
                     callback: function (products) {
                         console.log(products);
             //            //if (products.length > 0) {

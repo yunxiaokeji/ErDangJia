@@ -86,7 +86,7 @@ define(function (require, exports, module) {
     PlugJS.prototype.FindOtherPdt = function (keyWords,posturl, url) { 
         var _self = this;
         Global.post(posturl, {
-            clientid: _self.setting.wareid,
+            clientid: _self.setting.clientid,
             keywords: keyWords,
             pageIndex: _self.setting.pageIndex,
             pageSize: _self.setting.pageSize

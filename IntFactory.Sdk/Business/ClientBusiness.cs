@@ -34,14 +34,28 @@ namespace IntFactory.Sdk.Business
                 return new List<ProcessCategoryEntity>();
             }
         }
+        public CategoryEntity GetCategoryByID(string categoryID)
+        {
+            var paras = new Dictionary<string, object>();
+            paras.Add("categoryID", categoryID);
 
+            CategoryResult result = HttpRequest.RequestServer<CategoryResult>(ApiOption.GetCategoryByID, paras);
+            if (result.error_code == 0)
+            {
+                return result.result;
+            }
+            else
+            {
+                return new CategoryEntity();
+            }
+        }
 
         public List<CategoryEntity> GetClientCategorys(string categoryid, EnumCategoryType type)
         {
             var paras = new Dictionary<string, object>();
             paras.Add("categoryID", categoryid);
             paras.Add("type", type); 
-            CategoryResult result= HttpRequest.RequestServer<CategoryResult>(ApiOption.GetClientCategorys, paras);
+            CategorysResult result= HttpRequest.RequestServer<CategorysResult>(ApiOption.GetClientCategorys, paras);
             if (result.error_code == 0)
             {
                 return result.result;

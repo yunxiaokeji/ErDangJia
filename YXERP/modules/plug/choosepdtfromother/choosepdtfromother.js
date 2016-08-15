@@ -46,12 +46,12 @@ define(function (require, exports, module) {
                             var _this = $(this);
                             if (_this.hasClass("ico-checked")) {
                                 var model = {
-                                    pid: _this.data("pid"),
-                                    did: _this.data("did"),
-                                    batch: _this.data("batch"),
-                                    wareid: _this.data("wareid"),
-                                    depotid: _this.data("depotid"),
-                                    remark: _this.data("remark")
+                                    pname: _this.data("pname"),
+                                    orderid: _this.data("orderid"),
+                                    clientid: _this.data("clientid"),
+                                    price: _this.data("price"),
+                                    code: _this.data("code"),
+                                    categoryid: _this.data("categoryid")
                                 };
                                 list.push(model);
                             }

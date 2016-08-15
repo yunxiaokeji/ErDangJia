@@ -30,7 +30,7 @@ namespace IntFactory.Sdk.Business
 
             return HttpRequest.RequestServer<OrderResult>(ApiOption.GetOrderDetailByID, paras);
         }
-
+    
         public AddResult CreateDHOrder(string zngcOrderID, decimal price, List<ProductDetailEntity> details, string zngcClientID, string yxOrderID)
         {
             var paras = new Dictionary<string, object>();

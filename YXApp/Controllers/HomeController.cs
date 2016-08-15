@@ -31,8 +31,8 @@ namespace YXApp.Controllers
 
         public ActionResult Register()
         {
-            ViewBag.CustomerID = "ca91e1be-1e02-4fa1-97c5-b4d00841d421";
-            ViewBag.ClientID = "e3aa5f69-0362-450d-a6f2-a9a055c11d59";
+            ViewBag.CustomerID = "9f127088-173c-4f24-834f-97c7c1612c46";// "ca91e1be-1e02-4fa1-97c5-b4d00841d421";
+            ViewBag.ClientID = "381c8429-dec0-4143-ad7f-6364e8f0e5e4";//"a89cbb94-e32b-4f99-bab9-2db1d9cff607";
             return View();
         }
 
@@ -132,6 +132,9 @@ namespace YXApp.Controllers
                     {
                         ClientResult zngcClientItem = ClientBusiness.BaseBusiness.GetClientInfo(zngcClientID);
                         Clients yxClientItem = UserService.GetClientDetail(model.ClientID);
+
+                        var zngcResult = CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", yxClientItem.CompanyName, yxClientItem.MobilePhone, zngcClientID,
+                                                   yxClientItem.AgentID, yxClientItem.ClientID, yxClientItem.ClientCode);
 
                         string providerID = ProductService.AddProviders(zngcClientItem.client.companyName, zngcClientItem.client.contactName,
                                                     zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,

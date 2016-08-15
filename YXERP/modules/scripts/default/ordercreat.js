@@ -35,16 +35,28 @@
         var _self = this;
         //保存
         $("#btnSave").click(function () {
-            if (!VerifyObject.isPass()) {
-                return false;
+            if ($(".tab-nav-ul li.hover").data('type') == 2) {
+                if (!VerifyObject.isPass()) {
+                    return false;
+                }
+                if ($(".category-item.hover").length != 1) {
+                    alert("请选择加工品类");
+                    return false;
+                }
+                if (!_self.checkPDTList()) {
+                    alert('请选择下单产品明细');
+                    return false;
+                }
+                _self.saveModel();
+            } else {
+                if ($('#pdtName').val().trim() == "") {
+                    alert('请选择产品！');
+                    return false;
+                } if (!_self.checkPDTList()) {
+                    alert('请选择产品规格尺码并填写数量');
+                    return false;
+                }
             }
-
-            if ($(".category-item.hover").length != 1) {
-                alert("请选择加工品类");
-                return;
-            }
-
-            _self.saveModel();
         });
 
         //大品类下拉
@@ -72,11 +84,16 @@
             if (!_this.hasClass("hover")) {
                 $(".ico-radiobox").removeClass("hover");
                 _this.addClass("hover");
-
-                _self.showAttrForOrder();
+                _self.showAttrForOrder(CacheCategory[_self.categoryValue.trim()], 'checkOrderType', 'childGoodsQuantity');
             }
         });
-
+        $(".tab-nav-ul li").click(function() {
+            var _this = $(this);
+            _this.siblings().removeClass("hover");
+            _this.addClass("hover");
+            $(".nav-partdiv").hide();
+            $("#" + _this.data("id")).show();
+        });
         //切换品类
         $(".category-item").click(function () {
             var _this = $(this);
@@ -112,44 +129,31 @@
                     title: "选择采购产品",
                     type: 1, //1智能工厂
                     clientid: '381c8429-dec0-4143-ad7f-6364e8f0e5e4',//_self.clientid,
-                    callback: function (products) {
-                        console.log(products);
-            //            //if (products.length > 0) {
-            //            //    var entity = {}, items = [];
-            //            //    entity.guid = wareid;
-            //            //    entity.type = 7;
-            //            //    for (var i = 0; i < products.length; i++) {
-            //            //        items.push({
-            //            //            ProductID: products[i].pid,
-            //            //            ProductDetailID: products[i].did,
-            //            //            BatchCode: products[i].batch,
-            //            //            DepotID: products[i].depotid,
-            //            //            SaleAttrValueString: products[i].remark,
-            //            //        });
-            //            //    }
-            //            //    entity.Products = items; 
-            //            //    Global.post("/ShoppingCart/AddShoppingCartBatchOut", { entity: JSON.stringify(entity) }, function (data) {
-            //            //        if (data.status) {
-            //            //            location.href = location.href;
-            //            //        }
-            //            //    });
-            //            //}
+                    callback: function (products) { 
+                        if (products.length > 0) {
+                            $('#pdtName').val(products[0].pname).data("categoryid", products[0].categoryid).data("orderid", products[0].orderid).data("code", products[0].code).data("price", products[0].price).show();
+                       
+                            Global.post("/IntFactoryOrder/GetZNGCCategorys", { categoryid: products[0].categoryid }, function (data) {
+                                if (data.items!=null ) {  
+                                    _self.showAttrForOrder(data.items, 'titleName','goodsQuantity');
+                                }
+                            });
+                        }
                     }
                 });
         });
     }
 
-    //确认下单明细
-    ObjectJS.showAttrForOrder = function () {
-        var _self = this;
+    //确认下单明细 goodsQuantity  childGoodsQuantity
+    ObjectJS.showAttrForOrder = function (categoryList,obj,contendid) {
+        //var _self = this;
         $(".productsalesattr").remove();
-        $("#childGoodsQuantity").empty();
-        CacheItems = [];
-        if ($(".ico-radiobox.hover").data('type') == 2) {
-            doT.exec("template/default/createorder-checkattr.html", function (template) {
-                var innerhtml = template(CacheCategory[_self.categoryValue.trim()]);
+        $("#" + contendid).empty();
+        CacheItems = []; 
+        if ($(".ico-radiobox.hover").data('type') == 2 || contendid == "goodsQuantity") {
+            doT.exec("template/default/createorder-checkattr.html", function (template) { 
+                var innerhtml = template(categoryList);
                 innerhtml = $(innerhtml);
-
                 //组合产品
                 innerhtml.find(".check-box").click(function () {
                     var _this = $(this).find(".checkbox");
@@ -206,7 +210,7 @@
                         });
                         isFirst = false;
                     });
-                    $("#childGoodsQuantity").empty();
+                    $("#" + contendid).empty();
                     //选择所有属性
                     if (bl) {
                         var layer = $(".productsalesattr").length, items = [];
@@ -226,7 +230,7 @@
                         doT.exec("template/default/orders_child_list.html", function (templateFun) {
                             var innerText = templateFun(tableModel);
                             innerText = $(innerText);
-                            $("#childGoodsQuantity").append(innerText);
+                            $("#" + contendid).append(innerText);
                             //数量必须大于0的数字
                             innerText.find(".quantity").change(function () {
                                 var _this = $(this);
@@ -264,8 +268,7 @@
                         });
                     }
                 });
-
-                $("#checkOrderType").after(innerhtml);
+                $("#"+obj).after(innerhtml); 
             });
         }
     };
@@ -286,7 +289,7 @@
         }
         if (isOnce) {
             _self.categoryValue = items[0].CategoryID;
-            _self.showAttrForOrder();
+            _self.showAttrForOrder(CacheCategory[_self.categoryValue.trim()], 'checkOrderType', 'childGoodsQuantity');
             isOnce = false;
         }
 
@@ -301,7 +304,7 @@
                 width: 78,
                 onChange: function (data) {
                     _self.categoryValue = data.value;
-                    _self.showAttrForOrder();
+                    _self.showAttrForOrder(CacheCategory[_self.categoryValue.trim()], 'checkOrderType', 'childGoodsQuantity');
                 }
             });
         });
@@ -362,6 +365,20 @@
             }
         });
     }
+
+    ObjectJS.checkPDTList = function () {
+        if ($(".tab-nav-ul li.hover").data('type') == 2 && $(".ico-radiobox.hover").data('type') == 1) {
+            return true;
+        }else {
+            var totalnum = 0;
+            $(".child-product-table .quantity").each(function () {
+                var _this = $(this);
+                totalnum += parseInt($(this).val());
+            }); 
+            return totalnum != 0;
+        }
+    }
+
 
     module.exports = ObjectJS;
 });

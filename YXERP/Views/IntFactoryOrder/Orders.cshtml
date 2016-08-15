@@ -1,0 +1,29 @@
+﻿@{
+    
+}
+@section css{
+    <link rel="stylesheet" href="/modules/css/shoppingcart.css" />
+}
+@section scripts{
+    <script type="text/javascript"> 
+        seajs.use(["scripts/default/orderslist"], function (obj) {
+            obj.init('@ViewBag.ClientID', '@Html.ToJSONString((List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)');
+        });
+    </script>
+}
+<div class="header-box">
+    <span class="header-title left">添加采购产品</span> 
+</div>
+<div class="search-header">
+    <div id="ddlProviders" class="left dropdown-module" style="width: 180px;"></div>
+</div><div class="content-body">
+    <div class="attr-filter"></div>
+    <div class="clear">
+        <ul class="productlist" id="productlist">
+
+        </ul>
+    </div>
+
+    <div id="pager" class="mTop20"></div>
+    
+</div>

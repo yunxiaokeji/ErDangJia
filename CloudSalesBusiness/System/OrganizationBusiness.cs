@@ -180,11 +180,11 @@ namespace CloudSalesBusiness
             //记录登录日志
             if (model != null)
             {
-                LogBusiness.AddLoginLog(loginname, true, model.Agents.IsDefault == 1 ? EnumSystemType.Client : EnumSystemType.Agent, operateip, model.UserID, model.AgentID, model.ClientID);
+                 LogBusiness.AddLoginLog(loginname, true, model.Agents.IsDefault == 1 ? EnumSystemType.Client : EnumSystemType.Agent, operateip, model.UserID, model.AgentID, model.ClientID);
             }
             else
             {
-                LogBusiness.AddLoginLog(loginname, false, EnumSystemType.Client, operateip, "", "", "");
+                 LogBusiness.AddLoginLog(loginname, false, EnumSystemType.Client, operateip, "", "", "");
             }
 
             return model;

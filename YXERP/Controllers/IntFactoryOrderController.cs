@@ -22,7 +22,14 @@ namespace YXERP.Controllers
             ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
             return View();
         }
-       
+        public ActionResult Orders(string id)
+        {
+            ViewBag.ClientID = id;
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            //ViewBag.Items = ClientBusiness.BaseBusiness.GetClientCategorys("", EnumCategoryType.Order);
+            //ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
+            return View();
+        }
         public JsonResult GetCityByPCode(string cityCode)
         {
             Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
@@ -52,6 +59,39 @@ namespace YXERP.Controllers
             JsonDictionary.Add("items", item.orders);
             JsonDictionary.Add("totalCount", item.totalCount);
             JsonDictionary.Add("pageCount", item.pageCount);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetZNGCCategorys(string categoryid)
+        { 
+            var obj = ClientBusiness.BaseBusiness.GetCategoryByID(categoryid);
+            JsonDictionary.Add("items", obj); 
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetOrderDetailByID(string clientid, string orderid, string categoryid)
+        {
+            var obj = OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
+            if (obj.error_code == 0)
+            {
+                var category = ClientBusiness.BaseBusiness.GetCategoryByID(categoryid);
+                JsonDictionary.Add("items", obj.order);
+                JsonDictionary.Add("category", category);
+            }
+            else
+            {
+                JsonDictionary.Add("items", "");
+                JsonDictionary.Add("category", "");
+                JsonDictionary.Add("errMsg", obj.error_message);
+            }
             return new JsonResult
             {
                 Data = JsonDictionary,

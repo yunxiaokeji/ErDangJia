@@ -75,6 +75,11 @@ namespace IntFactory.Sdk
         /// </summary>
         [Description("/api/client/getClientCategorys")]
         GetClientCategorys,
+         /// <summary>
+        /// 分类
+        /// </summary>
+        [Description("/api/client/getCategoryID")]
+        GetCategoryByID, 
         /// <summary>
         /// 加工品类
         /// </summary>

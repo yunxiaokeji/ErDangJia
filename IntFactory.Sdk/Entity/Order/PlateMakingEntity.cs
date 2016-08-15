@@ -16,6 +16,6 @@ namespace IntFactory.Sdk
 
         public string remark { get; set; }
 
-        public int type { get; set; }
+        public string type { get; set; }
     }
 }

@@ -76,15 +76,16 @@
             var _this = $(this);
             if (_this.data('is') == 1) {
                 _this.data('is', 2);
-                ObjectJS.clientID = "a89cbb94-e32b-4f99-bab9-2db1d9cff607";
-                alert("当前客户端ID：a89cbb94-e32b-4f99-bab9-2db1d9cff607");
+                //ObjectJS.clientID = "a89cbb94-e32b-4f99-bab9-2db1d9cff607";
+                //alert("当前客户端ID：a89cbb94-e32b-4f99-bab9-2db1d9cff607");
                 $("#loginCompany").html("-云销科技");
             } else {
                 _this.data('is', 1);
-                ObjectJS.clientID = "e3aa5f69-0362-450d-a6f2-a9a055c11d59";
-                alert("当前客户端ID：e3aa5f69-0362-450d-a6f2-a9a055c11d59");
+                //ObjectJS.clientID = "e3aa5f69-0362-450d-a6f2-a9a055c11d59";
+                //alert("当前客户端ID：e3aa5f69-0362-450d-a6f2-a9a055c11d59");
                 $("#loginCompany").html("-诸暨市大唐斯达特针纺织厂");
             }
+            alert(ObjectJS.clientID);
             ObjectJS.customerID = $(".customerid").val();
         });
 

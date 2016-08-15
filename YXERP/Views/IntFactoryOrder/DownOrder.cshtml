@@ -20,7 +20,7 @@
                 <span>大货下单</span>
             </div> 
         </li>
-        <li data-id="navDY" class="hide"  title="供应商按客户提供的样品定制下单,需要寄送样款"> 
+        <li data-id="navDY"  data-type="2" title="供应商按客户提供的样品定制下单,需要寄送样款"> 
             <div>
                 <span class="iconfont">&#xe60f;</span>
                 <span>打样下单</span>
@@ -31,16 +31,19 @@
     <div class="content-body">
         <div class="nav-partdiv" id="navDH">
             <ul class="table-add">
-                 <li>
+                <li id="titleName">
                     <span class="column-title">产品名称：</span>
                     <span class="hide" id="pdtOtherName">
                          <input  class="hide" type="text" maxlength="10" id="pdtName" readonly="readonly"  data-empty="必填" data-type="double" class="input verify" />
                      </span>
-                     <span><a class="btn" id="choosePDTOther">选择产品</a></span>
-                 </li>
-            </ul>
+                    <span><a class="btn" id="choosePDTOther">选择产品</a></span>
+                </li>
+                <li id="goodsQuantity">
+
+                </li>
+            </ul> 
         </div>
-        <div class="nav-partdiv" id="navDY">
+        <div class="nav-partdiv hide" id="navDY">
             <ul class="table-add"> 
                 <li>
                     <span class="column-title">加工品类：</span>
@@ -69,7 +72,7 @@
                         &nbsp;大货
                     </div>
                 </li>
-                <li id="childGoodsQuantity">
+                <li class="childGoodsQuantity">
 
                 </li>
                 <li>
@@ -127,11 +130,11 @@
                 </li>
 
             </ul>
-            <div class="mTop10">
-                <div class="btn right" id="btnSave">保存</div>
-            </div>
+            
         </div>
-
+        <div class="mTop10">
+            <div class="btn right" id="btnSave">保存</div>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="/Scripts/sea.js"></script>

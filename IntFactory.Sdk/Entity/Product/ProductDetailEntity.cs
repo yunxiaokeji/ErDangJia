@@ -31,5 +31,13 @@ namespace IntFactory.Sdk
         public string saleAttrValue{ get; set; }
 
         public string description { get; set; }
+
+        public string remark { get; set; }
+
+        public string xRemark { get; set; }
+
+        public string yRemark { get; set; }
+
+        public string xYRemark { get; set; }
     }
 }

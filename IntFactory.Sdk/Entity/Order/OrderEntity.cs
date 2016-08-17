@@ -44,8 +44,8 @@ namespace IntFactory.Sdk
 
         public List<ProductDetailEntity> details;
 
-        public List<ProductAttrEntity> attrLists;
+        public List<ProductAttrEntity> AttrLists;
 
-        public List<ProductAttrEntity> saleAttrs;
+        public List<ProductAttrEntity> SaleAttrs;
     }
 }

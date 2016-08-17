@@ -21,7 +21,7 @@
     ObjectJS.init = function (clientid, providers) {
         var _self = this;
         _self.clientid = clientid;
-        Params.clientid = clientid;
+       // Params.clientid = clientid;
         _self.providers = JSON.parse(providers.replace(/&quot;/g, '"')); 
         _self.bindEvent();  
     } 
@@ -40,8 +40,8 @@
                 isposition: true,
                 onChange: function (data) {
                     Params.pageIndex = 1;
-                    Params.providerid = data.value;
-                    _self.getList();
+                    Params.clientid = data.value;
+                    _self.getProducts();
                 }
             });
         });
@@ -52,52 +52,7 @@
                 _self.getProducts();
             });
         });
-        _self.getProducts();
-        ////搜索价格区间
-        //$("#searchprice").click(function () {
-        //    if (!!$("#beginprice").val() && !isNaN($("#beginprice").val())) {
-        //        Params.BeginPrice = $("#beginprice").val();
-        //        $("#attr-price .attrValues .price").removeClass("hover");
-        //    } else if (!$("#beginprice").val()) {
-        //        Params.BeginPrice = "";
-        //    } else {
-        //        $("#beginprice").val("");
-        //    }
-
-        //    if (!!$("#endprice").val() && !isNaN($("#endprice").val())) {
-        //        Params.EndPrice = $("#endprice").val();
-        //        $("#attr-price .attrValues .price").removeClass("hover");
-        //    } else if (!$("#endprice").val()) {
-        //        Params.EndPrice = "";
-        //    } else {
-        //        $("#endprice").val("");
-        //    }
-
-        //    _self.getProducts();
-        //});
-
-        ////排序
-        //$(".sort-item").click(function () {
-        //    var _this = $(this);
-        //    if (_this.hasClass("hover")) {
-        //        if (_this.find(".asc").hasClass("hover")) {
-        //            _this.find(".asc").removeClass("hover");
-        //            _this.find(".desc").addClass("hover");
-        //            Params.OrderBy = _this.data("column") + " desc ";
-        //        } else {
-        //            _this.find(".desc").removeClass("hover");
-        //            _this.find(".asc").addClass("hover");
-        //            Params.OrderBy = _this.data("column") + " asc ";
-        //        }
-        //    } else {
-        //        _this.addClass("hover").siblings().removeClass("hover");
-        //        _this.siblings().find(".hover").removeClass("hover");
-        //        _this.find(".desc").addClass("hover");
-        //        Params.OrderBy = _this.data("column") + " desc ";
-        //    }
-        //    _self.getProducts();
-        //});
-
+        _self.getProducts(); 
     }
 
     //绑定产品列表
@@ -105,16 +60,7 @@
         var _self = this;
         var attrs = [];
         $("#productlist").empty();
-        $("#productlist").append("<div class='data-loading' ><div>");
-         
-        //var opt = $.extend({
-        //    CategoryID: Params.CategoryID,
-        //    PageIndex: Params.PageIndex,
-        //    Keywords: Params.keyWords,
-        //    BeginPrice: Params.BeginPrice,
-        //    EndPrice: Params.EndPrice,
-        //    ClientID:_self.clientid
-        //}, params);
+        $("#productlist").append("<div class='data-loading' ><div>"); 
 
         Global.post("/IntFactoryOrder/GetProductList", Params, function (data) {
             $("#productlist").empty();
@@ -175,11 +121,8 @@
         //缓存产品信息
         if (!CacheProduct[oid]) {
             Global.post("/IntFactoryOrder/GetOrderDetailByID", { orderid: oid, clientid: obj.data('clientid'), categoryid: obj.data('categoryid') }, function (data) {
-                doT.exec("template/default/product-detail.html", function(templateFun) {
-                    var items = {};
-                    items.detail = data.items;
-                    items.category = data.category;
-                    CacheProduct[oid] = items;
+                doT.exec("template/default/product-detail.html", function(templateFun) { 
+                    CacheProduct[oid] = data.items;
                     var html = templateFun(data.items);
                     Easydialog.open({
                         container: {
@@ -190,14 +133,12 @@
 
                             }
                         }
-                    });
-                    _self.showAttrForOrder(data.category, 'pdttilel', 'productDetails');
-                    Easydialog.toPosition();
-                    //_self.bindDetail(CacheProduct[oid].detail, did);
-                    //_self.bindDetailEvent(CacheProduct[oid].detail, oid, did);
+                    }); 
+                    _self.showAttrForOrder(data.items, 'pdttilel', 'productAttr');
+                    Easydialog.toPosition(); 
                 });
             });
-       } else {
+        } else { 
             doT.exec("template/default/product-detail.html", function (templateFun) {
                 var html = templateFun(CacheProduct[oid]);
                 Easydialog.open({
@@ -210,145 +151,142 @@
                         }
                     }
                 });
-                _self.showAttrForOrder(CacheProduct[oid].category, 'pdttilel', 'productDetails');
-                Easydialog.toPosition();
-                //_self.bindDetail(CacheProduct[oid].detail, did);
-                //_self.bindDetailEvent(CacheProduct[oid].detail, oid, did);
+                _self.showAttrForOrder(CacheProduct[oid], 'pdttilel', 'productAttr');
+                Easydialog.toPosition(); 
             });
         }
     }
+    var CacheItems = [];
     //规格属性加载
     ObjectJS.showAttrForOrder = function (categoryList,obj,contendid) { 
         $(".productsalesattr").remove();
         $("#" + contendid).empty();
-        var CacheItems = []; 
-        if ($(".ico-radiobox.hover").data('type') == 2 || contendid == "goodsQuantity") {
-            doT.exec("template/default/createorder-checkattr.html", function (template) { 
-                var innerhtml = template(categoryList);
-                innerhtml = $(innerhtml);
-                //组合产品
-                innerhtml.find(".check-box").click(function () {
-                    var _this = $(this).find(".checkbox");
-                    if (_this.hasClass("hover")) {
-                        _this.removeClass("hover");
-                    } else {
-                        _this.addClass("hover");
-                    }
+        CacheItems = []; 
+        doT.exec("template/default/createorder-checkattr.html", function (template) { 
+            var innerhtml = template(categoryList);
+            innerhtml = $(innerhtml);
+            //组合产品
+            innerhtml.find(".check-box").click(function () {
+                var _this = $(this).find(".checkbox");
+                if (_this.hasClass("hover")) {
+                    _this.removeClass("hover");
+                } else {
+                    _this.addClass("hover");
+                }
 
-                    var bl = false, details = [], isFirst = true, xattr = [], yattr = [];
-                    $(".productsalesattr").each(function () {
-                        bl = false;
-                        var _attr = $(this), attrdetail = details;
-                        //组合规格
-                        _attr.find(".checkbox.hover").each(function () {
-                            bl = true;
-                            var _value = $(this);
-                            //首个规格
-                            if (isFirst) {
-                                var model = {};
-                                model.ids = _attr.data("id") + ":" + _value.data("id");
-                                model.saleAttr = _attr.data("id");
-                                model.attrValue = _value.data("id");
-                                model.xRemark = _value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "";
-                                model.yRemark = _value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "";
-                                model.xyRemark = "【" + _value.data("text") + "】";
-                                model.names = "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                                model.layer = 1;
-                                details.push(model);
+                var bl = false, details = [], isFirst = true, xattr = [], yattr = [];
+                $(".productsalesattr").each(function () {
+                    bl = false;
+                    var _attr = $(this), attrdetail = details;
+                    //组合规格
+                    _attr.find(".checkbox.hover").each(function () {
+                        bl = true;
+                        var _value = $(this);
+                        //首个规格
+                        if (isFirst) {
+                            var model = {};
+                            model.ids = _attr.data("id") + ":" + _value.data("id");
+                            model.saleAttr = _attr.data("id");
+                            model.attrValue = _value.data("id");
+                            model.xRemark = _value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "";
+                            model.yRemark = _value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "";
+                            model.xyRemark = "【" + _value.data("text") + "】";
+                            model.names = "【" + _attr.data("text") + "：" + _value.data("text") + "】";
+                            model.layer = 1;
+                            details.push(model);
 
-                            } else {
-                                for (var i = 0, j = attrdetail.length; i < j; i++) {
-                                    if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
-                                        var model = {};
-                                        model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
-                                        model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
-                                        model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
-                                        model.xRemark = attrdetail[i].xRemark + (_value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "");
-                                        model.yRemark = attrdetail[i].yRemark + (_value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "");
-                                        model.xyRemark = attrdetail[i].xyRemark + "【" + _value.data("text") + "】";
-                                        model.names = attrdetail[i].names + "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                                        model.layer = attrdetail[i].layer + 1;
-                                        details.push(model);
-                                    }
+                        } else {
+                            for (var i = 0, j = attrdetail.length; i < j; i++) {
+                                if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
+                                    var model = {};
+                                    model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
+                                    model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
+                                    model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
+                                    model.xRemark = attrdetail[i].xRemark + (_value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "");
+                                    model.yRemark = attrdetail[i].yRemark + (_value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "");
+                                    model.xyRemark = attrdetail[i].xyRemark + "【" + _value.data("text") + "】";
+                                    model.names = attrdetail[i].names + "【" + _attr.data("text") + "：" + _value.data("text") + "】";
+                                    model.layer = attrdetail[i].layer + 1;
+                                    details.push(model);
                                 }
-                            }
-                            //处理二维表
-                            if (_value.data("type") == 1 && xattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                                xattr.push("【" + _value.data("text") + "】");
-                            } else if (_value.data("type") == 2 && yattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                                yattr.push("【" + _value.data("text") + "】");
-                            }
-
-                        });
-                        isFirst = false;
-                    });
-                    $("#" + contendid).empty();
-                    //选择所有属性
-                    if (bl) {
-                        var layer = $(".productsalesattr").length, items = [];
-                        for (var i = 0, j = details.length; i < j; i++) {
-                            var model = details[i];
-                            if (model.layer == layer) {
-                                items.push(model);
-                                CacheItems[model.xyRemark] = model;
                             }
                         }
-                        var tableModel = {};
-                        tableModel.xAttr = xattr;
-                        tableModel.yAttr = yattr;
-                        tableModel.items = items;
+                        //处理二维表
+                        if (_value.data("type") == 1 && xattr.indexOf("【" + _value.data("text") + "】") < 0) {
+                            xattr.push("【" + _value.data("text") + "】");
+                        } else if (_value.data("type") == 2 && yattr.indexOf("【" + _value.data("text") + "】") < 0) {
+                            yattr.push("【" + _value.data("text") + "】");
+                        }
 
-                        //加载子产品
-                        doT.exec("template/default/orders_child_list.html", function (templateFun) {
-                            var innerText = templateFun(tableModel);
-                            innerText = $(innerText);
-                            $("#" + contendid).append(innerText);
-                            //数量必须大于0的数字
-                            innerText.find(".quantity").change(function () {
-                                var _this = $(this);
-                                if (!_this.val().isInt() || _this.val() <= 0) {
-                                    _this.val("0");
-                                }
+                    });
+                    isFirst = false;
+                });
+                $("#" + contendid).empty();
+                //选择所有属性
+                if (bl) {
+                    var layer = $(".productsalesattr").length, items = [];
+                    for (var i = 0, j = details.length; i < j; i++) {
+                        var model = details[i];
+                        if (model.layer == layer) {
+                            items.push(model);
+                            CacheItems[model.xyRemark] = model;
+                        }
+                    }
+                    var tableModel = {};
+                    tableModel.xAttr = xattr;
+                    tableModel.yAttr = yattr;
+                    tableModel.items = items;
 
-                                var total = 0;
-                                $(".child-product-table .tr-item").each(function () {
-                                    var _tr = $(this), totaly = 0;
-                                    if (!_tr.hasClass("total")) {
-                                        _tr.find(".quantity").each(function () {
+                    //加载子产品
+                    doT.exec("template/default/orders_child_list.html", function (templateFun) {
+                        var innerText = templateFun(tableModel);
+                        innerText = $(innerText);
+                        $("#" + contendid).append(innerText);
+                        //数量必须大于0的数字
+                        innerText.find(".quantity").change(function () {
+                            var _this = $(this);
+                            if (!_this.val().isInt() || _this.val() <= 0) {
+                                _this.val("0");
+                            }
+
+                            var total = 0;
+                            $(".child-product-table .tr-item").each(function () {
+                                var _tr = $(this), totaly = 0;
+                                if (!_tr.hasClass("total")) {
+                                    _tr.find(".quantity").each(function () {
+                                        var _this = $(this);
+                                        if (_this.val() > 0) {
+                                            totaly += _this.val() * 1;
+                                        }
+                                    });
+                                    _tr.find(".total-y").text(totaly);
+                                } else {
+                                    _tr.find(".total-y").each(function () {
+                                        var _td = $(this), totalx = 0;
+                                        $(".child-product-table .quantity[data-x='" + _td.data("x") + "']").each(function () {
                                             var _this = $(this);
                                             if (_this.val() > 0) {
-                                                totaly += _this.val() * 1;
+                                                totalx += _this.val() * 1;
                                             }
                                         });
-                                        _tr.find(".total-y").text(totaly);
-                                    } else {
-                                        _tr.find(".total-y").each(function () {
-                                            var _td = $(this), totalx = 0;
-                                            $(".child-product-table .quantity[data-x='" + _td.data("x") + "']").each(function () {
-                                                var _this = $(this);
-                                                if (_this.val() > 0) {
-                                                    totalx += _this.val() * 1;
-                                                }
-                                            });
-                                            total += totalx;
-                                            _td.text(totalx);
-                                        });
-                                        _tr.find(".total-xy").text(total);
-                                    }
-                                });
+                                        total += totalx;
+                                        _td.text(totalx);
+                                    });
+                                    _tr.find(".total-xy").text(total);
+                                }
                             });
                         });
-                    }
-                });
-                $("#"+obj).after(innerhtml); 
+                    });
+                }
             });
-        }
+            $(innerhtml).find(".column-title").css("width","50px");
+            $("#"+obj).after(innerhtml); 
+        }); 
     };
 
     //绑定加入购物车事件
     ObjectJS.bindDetailEvent = function (model, pid, did) {
         var _self = this;
-
         //选择规格
         $("#productDetails li").click(function () {
             var _this = $(this);

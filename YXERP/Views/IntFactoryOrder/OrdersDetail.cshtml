@@ -1,0 +1,80 @@
+﻿ @{
+     ViewBag.Title = "订单详情页";
+     var model = (IntFactory.Sdk.OrderEntity)ViewBag.Model;
+ }
+@section css{ 
+    <link href="/modules/css/downorder.css" rel="stylesheet" />
+}
+@section scripts{
+    <script type="text/javascript">
+        seajs.use(["scripts/default/orderdetail"], function(obj) {
+            obj.init('@(model.orderID)', '@Html.ToJSONString(model)');
+        });
+    </script>
+}
+    <div class="content-title">
+        <div class="left titlename">款式编码：@(model.intGoodsCode)</div>
+        <ul class="left mLeft20">
+            @*        <li>
+            <span class="left">加工品类：@(model.ProcessCategoryName)</span> 
+        </li> *@
+            <li title="订单类别">
+                <span class="left">类别：@(model.categoryName)</span>  
+            </li>
+        </ul>
+    </div>
+
+    <div class="content-body" style="padding: 10px; overflow: initial;">
+        <div class="order-info">
+            <div class="order-imgs-div left">
+                <div class="order-imgs">
+                    <img id="orderImage" src="@(string.IsNullOrEmpty(model.orderImage) ? "" : model.orderImage)" data-self="1"/>
+                </div>
+                <ul class="order-imgs-list">
+
+                </ul>
+            </div>
+            <ul class="moneyinfo left">
+                <li >
+                    <label class="bolder font16">@(string.IsNullOrEmpty(model.goodsName) ? "暂无款式名称" : model.goodsName)</label>
+                </li>
+                <li style="overflow: initial;" id="pdttitle">
+                    <div class="left">
+                        <span class="column-title " style="width: 50px; ">单价：</span>
+                        <label class="bolder red font14">
+                            @(model.finalPrice.ToString("f2"))
+                        </label>
+                    </div>
+                </li>
+                <li id="pdtAttr">
+                    
+                </li>
+                
+            </ul>
+            <div class="clear"></div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="content-body" style="padding: 20px 0 50px 10px;">
+        <div class="nav-partdiv " id="tab12">
+            <div class="table-title center" style="font-size: 16px; text-indent: 10px; padding-bottom: 10px;">制版信息</div>
+            <div id="navEngravingInfo" class="platemaking-content"></div>
+            <div class="mTop20 table-title center" style="font-size: 16px; text-indent: 10px;padding-bottom: 10px;">工艺说明</div>
+            <table class="table-items-detail tb-plates"></table>
+        </div>
+    </div>
+
+    @*图片放大*@
+    <div class="enlarge-image-bgbox hide">
+        <div class="close-enlarge-image iconfont">&#xe606;</div>
+        <span id="zoomInButton" class="zoom-botton iconfont mRight50">&#xe642;</span>
+        <span id="zoomOutButton" class="zoom-botton iconfont">&#xe641;</span>
+    </div>
+    <div id="pageContent" class="enlarge-image-box hide">
+        <div class="left-enlarge-image"></div>
+        <div class="right-enlarge-image"></div>
+        <div class="enlarge-image-item"></div>
+    </div>
+<div class="bottombtn" >确认采购</div>

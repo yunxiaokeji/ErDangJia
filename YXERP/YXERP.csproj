@@ -200,6 +200,7 @@
     <Content Include="Content\menuico\systemSet.png" />
     <Content Include="DLL\JsonObject.dll" />
     <Content Include="modules\css\createorder.css" />
+    <Content Include="modules\css\downorder.css" />
     <Content Include="modules\css\error.css" />
     <Content Include="modules\css\home\selectlogin.css" />
     <Content Include="modules\css\iconfont\demo.css" />
@@ -243,6 +244,8 @@
     <Content Include="modules\images\iconfilter.png" />
     <Content Include="modules\images\iconshare.png" />
     <Content Include="modules\images\img-noaccess.png" />
+    <Content Include="modules\images\img-noimg.jpg" />
+    <Content Include="modules\images\img-noimg.png" />
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\images\logo-weixin.png" />
     <Content Include="modules\images\none-img.png" />
@@ -864,6 +867,7 @@
     <Content Include="modules\scripts\customer\customerownrpt.js" />
     <Content Include="modules\scripts\customer\detail.js" />
     <Content Include="modules\scripts\default\ordercreat.js" />
+    <Content Include="modules\scripts\default\orderdetail.js" />
     <Content Include="modules\scripts\default\orderslist.js" />
     <Content Include="modules\scripts\finance\detail.js" />
     <Content Include="modules\scripts\finance\payablebills.js" />
@@ -933,6 +937,7 @@
     <Content Include="modules\template\customer\customers-card.html" />
     <Content Include="modules\template\default\createorder-checkattr.html" />
     <Content Include="modules\template\default\feedback-add.html" />
+    <Content Include="modules\template\default\platematring-orderdatail.html" />
     <Content Include="modules\template\default\product-detail.html" />
     <Content Include="modules\template\default\zngc-products.html" />
     <Content Include="modules\template\default\orders_child_list.html" />
@@ -1124,6 +1129,7 @@
     <Content Include="Views\MyAccount\WeiXinBind.cshtml" />
     <Content Include="Views\IntFactoryOrder\DownOrder.cshtml" />
     <Content Include="Views\IntFactoryOrder\Orders.cshtml" />
+    <Content Include="Views\IntFactoryOrder\OrdersDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

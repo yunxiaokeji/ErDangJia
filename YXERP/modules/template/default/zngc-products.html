@@ -4,13 +4,13 @@
 %}
 <li>
     <div class="product-item" >
-        <a class="btn-open-window productimg" data-url="/Products/ChooseDetail?orderid={%=item.ProductID%}&categoryid={%=item.categoryID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
+        <a class="btn-open-window productimg" data-url="/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
             <img  src="{%=item.orderImage%}" alt="" />
         </a>
         <h2 class="price">
             ￥{%=item.finalPrice.toFixed(2)%}
         </h2>
-        <a class="btn-open-window name" data-url="/Products/ChooseDetail?orderid={%=item.orderID%}&categoryid={%=item.categoryID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
+        <a class="btn-open-window name" data-url="/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
            {%=item.intGoodsCode%} &nbsp; {%=item.goodsName%} 
         </a> 
         <div class="btnAddCart" data-orderid="{%=item.orderID%}" data-code="{%= item.intGoodsCode %}" data-price="{%= item.finalPrice %}" data-categoryid="{%=item.categoryID%}"  data-clientid="{%=item.clientID%}" >

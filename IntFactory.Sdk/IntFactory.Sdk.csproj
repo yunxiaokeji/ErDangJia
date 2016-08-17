@@ -99,7 +99,16 @@
     <Compile Include="OperateResult\UpdateResult.cs" />
     <Compile Include="OperateResult\AddResult.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CloudSalesBusiness\CloudSalesBusiness.csproj">
+      <Project>{6322cb56-2693-4600-922d-0dec06a8f59c}</Project>
+      <Name>CloudSalesBusiness</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudSalesEntity\CloudSalesEntity.csproj">
+      <Project>{6e99de28-adb3-4c22-8de9-dea1e44c04bb}</Project>
+      <Name>CloudSalesEntity</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

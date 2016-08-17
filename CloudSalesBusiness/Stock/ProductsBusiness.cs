@@ -762,7 +762,16 @@ namespace CloudSalesBusiness
                 return Convert.ToInt32(obj) > 0;
             }
         }
-
+        public string IsExistCMProduct(string cmgoodscode, string cmgoodsid)
+        {
+            object obj = CommonBusiness.Select("Products", "  top 1 ProductID ", "CMGoodsID='" + cmgoodsid + "' and CMGoodscode='" + cmgoodscode + "' and Status<>9");
+            return obj != null ? obj.ToString() : "";
+        }
+        public string IsExistCMProductDetail(string remark, string cmgoodscode,string cmgoodsid)
+        {
+            object obj = CommonBusiness.Select("Products a join ProductDetail b on a.ProductID=b.ProductID ", " top 1 b.ProductDetailID ", "a.CMGoodsID='" + cmgoodsid + "' and b.remark='" + remark + "' and a.CMGoodscode='" + cmgoodscode + "' and Status<>9");
+            return obj != null ? obj.ToString() : "";
+        }
         public bool IsExistShapeCode(string code, string productid, string clientid)
         {
             if (string.IsNullOrEmpty(productid))
@@ -868,7 +877,23 @@ namespace CloudSalesBusiness
             }
 
             return model;
-        } 
+        }
+
+        public List<ProductDetail> GetProductDetailsByDids(string did)
+        {
+            string sqlWhere = " ProductDetailID in (" + did + ") and status<>9";
+            int totalCount = 0, pageCount = 0;
+            DataTable dt = CommonBusiness.GetPagerData("ProductDetail", "*", sqlWhere, "CustomerID", int.MaxValue, 1, out totalCount, out pageCount);
+
+            List<ProductDetail> list = new List<ProductDetail>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ProductDetail model = new ProductDetail();
+                model.FillData(dr);
+                list.Add(model);
+            }
+            return list;
+        }
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
@@ -877,27 +902,27 @@ namespace CloudSalesBusiness
         {
             lock (SingleLock)
             {
-                if (!string.IsNullOrEmpty(productImg))
-                {
-                    if (productImg.IndexOf("?") > 0)
-                    {
-                        productImg = productImg.Substring(0, productImg.IndexOf("?"));
-                    }
+                //if (!string.IsNullOrEmpty(productImg))
+                //{
+                //    if (productImg.IndexOf("?") > 0)
+                //    {
+                //        productImg = productImg.Substring(0, productImg.IndexOf("?"));
+                //    }
 
-                    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                    if (!directory.Exists)
-                    {
-                        directory.Create();
-                    }
+                //    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                //    if (!directory.Exists)
+                //    {
+                //        directory.Create();
+                //    }
 
-                    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
-                    productImg = FILEPATH + file.Name;
+                //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
+                //    productImg = FILEPATH + file.Name;
 
-                    if (file.Exists)
-                    {
-                        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
-                    }
-                }
+                //    if (file.Exists)
+                //    {
+                //        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
+                //    }
+                //}
 
                 var dal = new ProductsDAL();
                 string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
@@ -920,26 +945,26 @@ namespace CloudSalesBusiness
 
         public string AddProductDetails(string productid, string productCode, string shapeCode, string attrlist, string valuelist, string attrvaluelist, decimal price, decimal weight, decimal bigprice, string productImg, string remark, string description, string operateid, string clientid, out int result)
         {
-            if (!string.IsNullOrEmpty(productImg))
-            {
-                if (productImg.IndexOf("?") > 0)
-                {
-                    productImg = productImg.Substring(0, productImg.IndexOf("?"));
-                }
+            //if (!string.IsNullOrEmpty(productImg))
+            //{
+            //    if (productImg.IndexOf("?") > 0)
+            //    {
+            //        productImg = productImg.Substring(0, productImg.IndexOf("?"));
+            //    }
 
-                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                if (!directory.Exists)
-                {
-                    directory.Create();
-                }
+            //    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+            //    if (!directory.Exists)
+            //    {
+            //        directory.Create();
+            //    }
 
-                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
-                productImg = FILEPATH + file.Name;
-                if (file.Exists)
-                {
-                    file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
-                }
-            }
+            //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
+            //    productImg = FILEPATH + file.Name;
+            //    if (file.Exists)
+            //    {
+            //        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
+            //    }
+            //}
 
             var dal = new ProductsDAL();
             return dal.AddProductDetails(productid, productCode, shapeCode, attrlist, valuelist, attrvaluelist, price, weight, bigprice, productImg, remark, description, operateid, clientid, out result);

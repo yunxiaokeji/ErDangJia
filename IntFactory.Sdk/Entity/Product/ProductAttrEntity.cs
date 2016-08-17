@@ -8,10 +8,10 @@ namespace IntFactory.Sdk
 {
     public class ProductAttrEntity
     {
-        public string attrID { get; set; }
+        public string AttrID { get; set; }
 
-        public string attrName { get; set; }
+        public string AttrName { get; set; }
 
-        public List<AttrValueEntity> attrValues { get; set; }
+        public List<AttrValueEntity> AttrValues { get; set; }
     }
 }

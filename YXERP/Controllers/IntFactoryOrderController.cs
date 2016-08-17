@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using IntFactory.Sdk;
 using IntFactory.Sdk.Business;
 using CloudSalesBusiness;
+using Newtonsoft.Json;
 
 namespace YXERP.Controllers
 {
@@ -28,6 +29,21 @@ namespace YXERP.Controllers
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             //ViewBag.Items = ClientBusiness.BaseBusiness.GetClientCategorys("", EnumCategoryType.Order);
             //ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
+            return View();
+        }
+        public ActionResult OrdersDetail(string orderid,string clientid)
+        {
+            ViewBag.ClientID = clientid;
+            ViewBag.OrderID = orderid;
+            var obj= OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
+            if (obj.error_code == 0)
+            {
+                ViewBag.Model = obj.order;
+            }
+            else
+            {
+                ViewBag.Model=new OrderEntity();
+            }
             return View();
         }
         public JsonResult GetCityByPCode(string cityCode)
@@ -82,15 +98,39 @@ namespace YXERP.Controllers
             var obj = OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
             if (obj.error_code == 0)
             {
-                var category = ClientBusiness.BaseBusiness.GetCategoryByID(categoryid);
-                JsonDictionary.Add("items", obj.order);
-                JsonDictionary.Add("category", category);
+                JsonDictionary.Add("items", obj.order); 
             }
             else
             {
-                JsonDictionary.Add("items", "");
-                JsonDictionary.Add("category", "");
+                JsonDictionary.Add("items", ""); 
                 JsonDictionary.Add("errMsg", obj.error_message);
+            }
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult CreateOrderEDJ(string entity)
+        {
+            var ord= JsonConvert.DeserializeObject<OrderEntity>(entity);
+             
+            //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入
+            CloudSalesEntity.Products pdt=OrderBusiness.BaseBusiness.ZNGCAddProduct(ord,CurrentUser.AgentID,CurrentUser.ClientID,CurrentUser.UserID);
+            //2.生成采购单据
+
+            string purid = "";
+            //3.生成智能工厂单据
+            var result=OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details, ord.clientID, purid);
+            if (result.error_code == 0)
+            {
+                JsonDictionary.Add("result", 1);
+            }
+            else
+            {
+                JsonDictionary.Add("result", 0);
+                JsonDictionary.Add("errMsg", result.error_message);
             }
             return new JsonResult
             {

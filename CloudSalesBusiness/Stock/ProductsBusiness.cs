@@ -503,6 +503,11 @@ namespace CloudSalesBusiness
             return model;
         }
 
+        public string GetProviderIDByCMID(string clientid, string cmclientid)
+        {
+            object obj = CommonBusiness.Select("Providers", "  top 1 ProviderID ", "ClientID='" + clientid + "' and CMClientid='" + cmclientid + "' and Status<>9");
+            return obj != null ? obj.ToString() : "";
+        }
         public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID)
         {
             return ProductsDAL.BaseProvider.AddProviders(name, contact, mobile, email, cityCode, address, remark, cmClientID, cmClientCode, operateID, agentid, clientID);
@@ -769,7 +774,7 @@ namespace CloudSalesBusiness
         }
         public string IsExistCMProductDetail(string remark, string cmgoodscode,string cmgoodsid)
         {
-            object obj = CommonBusiness.Select("Products a join ProductDetail b on a.ProductID=b.ProductID ", " top 1 b.ProductDetailID ", "a.CMGoodsID='" + cmgoodsid + "' and b.remark='" + remark + "' and a.CMGoodscode='" + cmgoodscode + "' and Status<>9");
+            object obj = CommonBusiness.Select("Products a join ProductDetail b on a.ProductID=b.ProductID ", " top 1 b.ProductDetailID ", "a.CMGoodsID='" + cmgoodsid + "' and b.remark='" + remark + "' and a.CMGoodscode='" + cmgoodscode + "' and a.Status<>9  and b.Status<>9");
             return obj != null ? obj.ToString() : "";
         }
         public bool IsExistShapeCode(string code, string productid, string clientid)
@@ -898,7 +903,7 @@ namespace CloudSalesBusiness
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
                                  bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description,
-                                 List<ProductDetail> details, string operateid, string agentid, string clientid, out int result)
+                                 List<ProductDetail> details,string cmgoodsid,string cmgoodscode, string operateid, string agentid, string clientid, out int result)
         {
             lock (SingleLock)
             {
@@ -927,7 +932,7 @@ namespace CloudSalesBusiness
                 var dal = new ProductsDAL();
                 string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
                                         valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
-                                        productImg, shapeCode, description, operateid, clientid, out result);
+                                        productImg, shapeCode, cmgoodsid, cmgoodscode,description, operateid, clientid, out result);
                 //产品添加成功添加子产品
                 if (!string.IsNullOrEmpty(pid))
                 {

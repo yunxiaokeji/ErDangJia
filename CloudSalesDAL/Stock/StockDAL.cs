@@ -221,6 +221,24 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_SubmitOverflowDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
+        public static bool AddPurchaseDoc(string docid,string productid,  int doctype, string ids, string providerid,decimal totalfee, string remark, string wareid, string userid, string clientid)
+        {
+            SqlParameter[] paras = { 
+                                     new SqlParameter("@DocID",docid),
+                                     new SqlParameter("@ProductID",productid),
+                                     new SqlParameter("@DocCode",DateTime.Now.ToString("yyyyMMddHHmmssfff")),
+                                     new SqlParameter("@DocType",doctype),
+                                     new SqlParameter("@Remark" , remark),
+                                     new SqlParameter("@WareID" , wareid),
+                                     new SqlParameter("@ProductDetails" , ids),
+                                     new SqlParameter("@ProviderID" , providerid),
+                                     new SqlParameter("@TotalMoney" , totalfee),
+                                     new SqlParameter("@UserID" , userid),
+                                     new SqlParameter("@ClientID" , clientid)
+                                   };
+            return ExecuteNonQuery("P_AddPurchaseDoc", paras, CommandType.StoredProcedure) > 0;
+        }
+
         #endregion
 
         #region 编辑、删除

@@ -556,7 +556,7 @@ namespace YXERP.Controllers
                 id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
                                                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList, model.ValueList, model.AttrValueList,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
-                                                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
+                                                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails,model.CMGoodsID,model.CMGoodsCode, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
             }
             else
             {

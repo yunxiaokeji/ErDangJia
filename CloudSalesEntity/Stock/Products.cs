@@ -65,6 +65,8 @@ namespace CloudSalesEntity
 		private DateTime _updatetime= DateTime.Now;
 		private string _operateip="";
 		private string _clientid;
+        private string _cmgoodsid="";
+        private string _cmgoodscode="";
 		/// <summary>
 		/// 
 		/// </summary>
@@ -95,6 +97,16 @@ namespace CloudSalesEntity
 			set{ _productname=value;}
 			get{return _productname;}
 		}
+        public string CMGoodsID
+        {
+            set { _cmgoodsid = value; }
+            get { return _cmgoodsid; }
+        }
+        public string CMGoodsCode
+        {
+            set { _cmgoodscode = value; }
+            get { return _cmgoodscode; }
+        }
 		/// <summary>
 		/// 
 		/// </summary>

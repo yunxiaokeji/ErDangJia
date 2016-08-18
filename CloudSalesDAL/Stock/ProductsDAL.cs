@@ -602,7 +602,7 @@ namespace CloudSalesDAL
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price,
                          decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount,
-                         string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
+                         string productImg, string shapeCode,string cmgoodsid,string cmgoodscode, string description, string operateid, string clientid, out int result)
         {
             string id = "";
             result = 0;
@@ -637,7 +637,9 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ShapeCode",shapeCode),
                                        new SqlParameter("@Description",description),
                                        new SqlParameter("@CreateUserID",operateid),
-                                       new SqlParameter("@ClientID",clientid)
+                                       new SqlParameter("@ClientID",clientid),
+                                       new SqlParameter("@CMGoodsID",cmgoodsid), 
+                                       new SqlParameter("@CMGoodsCode",cmgoodscode), 
                                    };
             paras[0].Value = id;
             paras[0].Direction = ParameterDirection.InputOutput;

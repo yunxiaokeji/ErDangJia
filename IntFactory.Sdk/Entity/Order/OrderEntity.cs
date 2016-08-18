@@ -26,6 +26,8 @@ namespace IntFactory.Sdk
 
         public string platemaking;
 
+        public string goodsID;
+
         /// <summary>
         /// 订单样图缩约图
         /// </summary>

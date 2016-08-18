@@ -226,6 +226,7 @@
         var model = {
             OrderID: _self.model.orderID,
             GoodsName: _self.model.goodsName,
+            GoodsID: _self.model.goodsID,
             ClientID: _self.model.clientID,
             IntGoodsCode: _self.model.intGoodsCode,
             CategoryID: _self.model.categoryID,
@@ -250,7 +251,15 @@
                 });
             }
         });
-        console.log(model);
+        console.log(model); 
+        Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
+            if (data.id) {
+                alert("新增成功！");
+                window.location = location.href;
+            } else {
+                alert("网络异常,请稍后重试!");
+            }
+        });
     }
     module.exports = ObjectJS;
 })

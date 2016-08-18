@@ -53,21 +53,23 @@ namespace IntFactory.Sdk.Business
             paras.Add("opearid", userid);
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateOrder, paras);
         }
-        public Products ZNGCAddProduct(OrderEntity ord, string agentid, string clientid, string userid)
+        public string ZNGCAddProduct(OrderEntity ord, string agentid, string clientid, string userid,ref string dids)
         {
             int result = 0;
-            string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.clientID);
-            if (string.IsNullOrEmpty(pid)) 
+            string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.goodsID);
+            if (string.IsNullOrEmpty(pid))
             {
-                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode,ord.goodsName,"",false,ord.clientID,"","","",0,"",1,"","",""
-                    ,ord.finalPrice,ord.finalPrice,(decimal)0.00,true,false,1,0,0,(decimal)0.00,0,ord.orderImage,"","",null,userid,agentid,clientid,out result);
-            }
-            Products pdt= ProductsBusiness.BaseBusiness.GetProductByID(pid); 
+                string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(clientid, ord.clientID);
+                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "", "", 0, "", 1, "", "", ""
+                    , ord.finalPrice, ord.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, ord.orderImage, "", "", new List<ProductDetail>(), ord.goodsID, ord.intGoodsCode, userid, agentid, clientid, out result);
+            } 
             string detailids = "";
-            ord.details.ForEach(x=>
+            ord.details.ForEach(x =>
             {
-                string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark,ord.intGoodsCode, ord.clientID);
-                if (!string.IsNullOrEmpty(pid))
+                result = 0;
+                x.remark = x.remark.Replace("【", "[").Replace("】", "]");
+                string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, ord.intGoodsCode, ord.goodsID);
+                if (string.IsNullOrEmpty(did))
                 {
                     ProductDetail detail = new ProductDetail();
                     detail.Remark = x.remark;
@@ -79,18 +81,18 @@ namespace IntFactory.Sdk.Business
                     detail.CreateUserID = userid;
                     did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", "", "", "", ord.finalPrice,
                         (decimal) 0.00, ord.finalPrice, "", x.remark, "", userid, clientid, out result);
-                    if (result == 0)
-                    {
-                        detailids += "'" + did + "',";
+                    if (result == 1)
+                    { 
+                        detailids += "" + did + ":" + x.quantity + ",";
                     }
                 }
                 else
                 {
-                    detailids += "'" + did + "',";
+                    detailids += "" + did + ":"+x.quantity+",";
                 }
-            }); 
-            pdt.ProductDetails=ProductsBusiness.BaseBusiness.GetProductDetailsByDids(detailids);
-            return pdt;
+            });
+            dids = detailids.TrimEnd(','); 
+            return pid;
         }
 
     }

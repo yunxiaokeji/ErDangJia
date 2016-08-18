@@ -269,6 +269,19 @@ namespace CloudSalesBusiness
             return bl;
         }
 
+        public static string AddPurchaseDoc(string productid, string ids, string providerid, decimal totalfee, string remark, string wareid, string userid,string agentid, string clientid)
+        {
+            string guid = Guid.NewGuid().ToString();
+            bool bl = StockDAL.AddPurchaseDoc(guid,productid, (int)EnumDocType.RK, ids, providerid, totalfee, remark, wareid, userid, clientid);
+            if (bl)
+            {
+                //日志
+                LogBusiness.AddActionLog(CloudSalesEnum.EnumSystemType.Client, CloudSalesEnum.EnumLogObjectType.StockIn, EnumLogType.Create, "", userid, agentid, clientid);
+                return guid;
+            }
+            return "";
+        }
+
         public bool SubmitDamagedDoc(string ids, string remark, string userid, string operateip, string clientid)
         {
             string guid = Guid.NewGuid().ToString();

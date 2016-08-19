@@ -46,6 +46,7 @@ namespace CloudSalesEntity
         private decimal? _fee = 0M;
         private decimal? _freight = 0M;
         private int? _conveyancetype = 0;
+        private int _sourcetype = 1;
         private string _conveyancecompany;
         private string _conveyancecode = "";
         private string _personname = "";
@@ -90,7 +91,13 @@ namespace CloudSalesEntity
             get { return _status; }
         }
 
-        public string StatusStr { get; set; }
+	    public int SourceType
+	    {
+            set { _sourcetype = value; }
+            get { return _sourcetype; }
+	    }
+
+	    public string StatusStr { get; set; }
 
         /// <summary>
         /// 

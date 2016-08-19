@@ -31,7 +31,7 @@ namespace CloudSalesDAL
         }
 
 
-        public static DataSet GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
+        public static DataSet GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid,int sourcetype, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@TotalCount",SqlDbType.Int),
@@ -42,6 +42,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@EndTime", endtime),
                                        new SqlParameter("@KeyWords",keywords),
                                        new SqlParameter("@WareID", wareid),
+                                       new SqlParameter("@SourceType", sourcetype),
                                        new SqlParameter("@ProviderID", providerid),
                                        new SqlParameter("@PageSize",pageSize),
                                        new SqlParameter("@PageIndex",pageIndex),
@@ -221,7 +222,7 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_SubmitOverflowDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool AddPurchaseDoc(string docid,string productid,  int doctype, string ids, string providerid,decimal totalfee, string remark, string wareid, string userid, string clientid)
+        public static bool AddPurchaseDoc(string docid,string productid,  int doctype, string ids, string providerid,decimal totalfee, string remark, string wareid,int sourcetype, string userid, string clientid)
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@DocID",docid),
@@ -230,6 +231,7 @@ namespace CloudSalesDAL
                                      new SqlParameter("@DocType",doctype),
                                      new SqlParameter("@Remark" , remark),
                                      new SqlParameter("@WareID" , wareid),
+                                     new SqlParameter("@SourceType",sourcetype), 
                                      new SqlParameter("@ProductDetails" , ids),
                                      new SqlParameter("@ProviderID" , providerid),
                                      new SqlParameter("@TotalMoney" , totalfee),

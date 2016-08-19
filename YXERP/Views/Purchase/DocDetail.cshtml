@@ -12,11 +12,11 @@
 }
 <div class="header-box">
     <span class="header-title left">采购单号：@(model.DocCode)</span>
-    @if (model.Status < 2)
+    @if (model.Status < 2 && model.SourceType == 1)
     {
         <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" id="btnOver">完成采购单</div>
     }
-    @if (model.Status == 0)
+    @if (model.Status == 0 && model.SourceType == 1)
     {
         @*<div class="btnccc right @(ExpandClass.IsLimits(HttpContext.Current, "103029003"))" id="invalid">作废</div>*@
         <div class="btn999 right mRight10 @(ExpandClass.IsLimits(HttpContext.Current,"103029004"))" id="delete">删除</div>
@@ -42,7 +42,7 @@
             <li data-id="navStorageIn">入库明细</li>
         }
     </ul>
-    @if (model.Status < 2)
+    @if (model.Status < 2 && model.SourceType == 1)
     {
         <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" id="btnconfirm">入库登记</div>
     }

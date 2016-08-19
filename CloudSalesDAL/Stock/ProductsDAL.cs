@@ -308,7 +308,7 @@ namespace CloudSalesDAL
         public DataTable GetProviders(string clientid)
         {
             SqlParameter[] paras = { new SqlParameter("@ClientID", clientid) };
-            DataTable dt = GetDataTable("select ProviderID,Name from Providers where ClientID=@ClientID and Status<>9", paras, CommandType.Text);
+            DataTable dt = GetDataTable("select ProviderID,Name,CMClientID,CMClientCode from Providers where ClientID=@ClientID and Status<>9", paras, CommandType.Text);
             return dt;
 
         }

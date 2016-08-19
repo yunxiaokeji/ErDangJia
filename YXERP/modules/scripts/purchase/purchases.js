@@ -20,13 +20,15 @@ define(function (require, exports, module) {
         begintime: "",
         endtime: "",
         providerid: "",
+        sourcetype:-1,
         type: 1
     };
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (type, providers) {
+    ObjectJS.init = function (type, providers,sourcetype) {
         var _self = this;
         Params.type = type;
+        Params.sourcetype = sourcetype;
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         _self.bindEvent(providers);
         _self.getList();
@@ -53,6 +55,31 @@ define(function (require, exports, module) {
             $("#btnSubmit").html("提交采购单 ( " + data.Quantity + " ) ");
         });
 
+
+        require.async("dropdown", function () {
+            var sourceList = [
+                { Name: "本地采购", SourceType: "1" },
+                { Name: "在线下单", SourceType: "2" }
+            ];
+            var dropdown = $("#ddlSourceType").dropdown({
+                prevText: "订单来源-",
+                defaultText: "全部",
+                defaultValue: Params.sourcetype,
+                data: sourceList,
+                dataValue: "SourceType",
+                dataText: "Name",
+                width: "180",
+                isposition: true,
+                onChange: function (data) {
+                    Params.pageIndex = 1;
+                    Params.sourcetype = data.value;
+                    _self.getList();
+                }
+            });
+        });
+        //if (Params.sourcetype == 2) {
+            $("#ddlSourceType").hide();
+       // }
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({
                 prevText: "供应商-",
@@ -162,8 +189,7 @@ define(function (require, exports, module) {
                 _this.removeClass("hover");
                 $(".table-items-detail .checkbox").removeClass("hover");
             }
-        });
-
+        }); 
         //批量打印
         $("#printOrderOut").click(function () {
             var checks = $(".table-items-detail .checkbox.hover");
@@ -212,6 +238,9 @@ define(function (require, exports, module) {
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
+                    if (Params.sourcetype == 2) {
+                        innerText.find('.ico-dropdown').hide();
+                    }
                     $(".table-header").after(innerText);
                     _self.checkClick();
                     _self.dropdownul();

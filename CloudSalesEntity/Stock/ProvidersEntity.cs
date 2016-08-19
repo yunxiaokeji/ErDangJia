@@ -37,6 +37,10 @@ namespace CloudSalesEntity
 		private DateTime? _updatetime= DateTime.Now;
 		private string _operateip="";
 		private string _clientid;
+        private string _cmclientid;
+        private string _cmclientcode;
+
+        
 		/// <summary>
 		/// 
 		/// </summary>
@@ -133,6 +137,24 @@ namespace CloudSalesEntity
 			set{ _clientid=value;}
 			get{return _clientid;}
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        [Property("Lower")]
+        public string CMClientID
+        {
+            set { _cmclientid = value; }
+            get { return _cmclientid; }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Property("Lower")]
+        public string CMClientCode
+        {
+            set { _cmclientcode = value; }
+            get { return _cmclientcode; }
+        }
 		#endregion Model
 
         /// <summary>

@@ -1130,6 +1130,7 @@
     <Content Include="Views\IntFactoryOrder\DownOrder.cshtml" />
     <Content Include="Views\IntFactoryOrder\Orders.cshtml" />
     <Content Include="Views\IntFactoryOrder\OrdersDetail.cshtml" />
+    <Content Include="Views\IntFactoryOrder\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -253,11 +253,11 @@
         });
         console.log(model); 
         Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
-            if (data.id) {
+            if (data.result) {
                 alert("新增成功！");
-                window.location = location.href;
+                //window.location = location.href;
             } else {
-                alert("网络异常,请稍后重试!");
+                alert(data.error_message);
             }
         });
     }

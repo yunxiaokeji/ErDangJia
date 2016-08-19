@@ -17,9 +17,9 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        public static List<StorageDoc> GetPurchases(string userid, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        public static List<StorageDoc> GetPurchases(string userid, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid,int sourcetype, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
-            DataSet ds = StockDAL.GetPurchases(userid, (int)status, keywords, begintime, endtime, wareid, providerid, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
+            DataSet ds = StockDAL.GetPurchases(userid, (int)status, keywords, begintime, endtime, wareid, providerid, sourcetype,pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
 
             List<StorageDoc> list = new List<StorageDoc>();
             foreach (DataRow dr in ds.Tables[0].Rows)
@@ -269,10 +269,10 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public static string AddPurchaseDoc(string productid, string ids, string providerid, decimal totalfee, string remark, string wareid, string userid,string agentid, string clientid)
+        public static string AddPurchaseDoc(string productid, string ids, string providerid, decimal totalfee, string remark, string wareid,int sourcetype, string userid,string agentid, string clientid)
         {
             string guid = Guid.NewGuid().ToString();
-            bool bl = StockDAL.AddPurchaseDoc(guid,productid, (int)EnumDocType.RK, ids, providerid, totalfee, remark, wareid, userid, clientid);
+            bool bl = StockDAL.AddPurchaseDoc(guid,productid, (int)EnumDocType.RK, ids, providerid, totalfee, remark, wareid,sourcetype, userid, clientid);
             if (bl)
             {
                 //日志

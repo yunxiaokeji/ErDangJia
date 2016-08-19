@@ -21,7 +21,6 @@
     ObjectJS.init = function (clientid, providers) {
         var _self = this;
         _self.clientid = clientid;
-       // Params.clientid = clientid;
         _self.providers = JSON.parse(providers.replace(/&quot;/g, '"')); 
         _self.bindEvent();  
     } 
@@ -34,13 +33,13 @@
                 defaultText: "全部",
                 defaultValue: "",
                 data: _self.providers,
-                dataValue: "ProviderID",
+                dataValue: "CMClientID",
                 dataText: "Name",
                 width: "180",
                 isposition: true,
                 onChange: function (data) {
-                    Params.pageIndex = 1;
-                    Params.clientid = data.value;
+                    Params.pageIndex = 1; 
+                    Params.clientid = data.value; 
                     _self.getProducts();
                 }
             });
@@ -74,10 +73,10 @@
                         $(this).data("url", $(this).data("url") + "&type=" + _self.type + "&guid=" + _self.guid);
                     });
                     //加入购物车
-                    html.find(".btnAddCart").click(function () {
-                        var _this = $(this);
-                        _self.showDetail($(this));
-                    });
+                    //html.find(".btnAddCart").click(function () {
+                    //    var _this = $(this);
+                    //    _self.showDetail($(this));
+                    //});
 
                     $("#productlist").append(html);
                 });
@@ -108,7 +107,7 @@
             });
         });
     }
-
+    /*
     //加入购物车
     ObjectJS.showDetail = function (obj) {
         var _self = this;
@@ -283,7 +282,7 @@
             $("#"+obj).after(innerhtml); 
         }); 
     };
-
+ 
     //绑定加入购物车事件
     ObjectJS.bindDetailEvent = function (model, pid, did) {
         var _self = this;
@@ -378,6 +377,6 @@
 
         _self.isLoading = false;
     }
-
+    */
     module.exports = ObjectJS;
 });

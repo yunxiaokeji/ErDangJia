@@ -29,6 +29,7 @@ namespace YXERP.Controllers
             ViewBag.Type = (int)EnumSearchType.All;
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
+            ViewBag.SouceType = 1;
             return View("Purchases");
         }
 
@@ -44,7 +45,7 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Purchase/MyPurchase");
             }
-            ViewBag.Model = model;
+            ViewBag.Model = model; 
             return View();
         }
 
@@ -102,10 +103,10 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetPurchases(string keyWords, int pageIndex, int totalCount, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "")
+        public JsonResult GetPurchases(string keyWords, int pageIndex, int totalCount, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype=-1)
         {
             int pageCount = 0;
-            List<StorageDoc> list = StockBusiness.GetPurchases(type == 3 ? string.Empty : CurrentUser.UserID, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, providerid, PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
+            List<StorageDoc> list = StockBusiness.GetPurchases(type == 3 ? string.Empty : CurrentUser.UserID, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, providerid,sourcetype, PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("TotalCount", totalCount);
             JsonDictionary.Add("PageCount", pageCount);

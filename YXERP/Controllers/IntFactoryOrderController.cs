@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using IntFactory.Sdk;
 using IntFactory.Sdk.Business;
 using CloudSalesBusiness;
+using CloudSalesEnum;
 using Newtonsoft.Json;
 
 namespace YXERP.Controllers
@@ -15,7 +16,11 @@ namespace YXERP.Controllers
     {
         //
         // GET: /IntFactoryOrder/
-
+        /// <summary>
+        /// 需求单下载
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult DownOrder(string id)
         { 
             ViewBag.ClientID = id;
@@ -23,14 +28,39 @@ namespace YXERP.Controllers
             ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
             return View();
         }
+
+        /// <summary>
+        /// 打样单列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Orders(string id)
         {
             ViewBag.ClientID = id;
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
-            //ViewBag.Items = ClientBusiness.BaseBusiness.GetClientCategorys("", EnumCategoryType.Order);
-            //ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID); 
             return View();
         }
+
+        /// <summary>
+        /// 订购订单列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            ViewBag.Type = (int)EnumDocType.RK;
+            ViewBag.ZNGCID = "";
+            ViewBag.SouceType = 2;
+            ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            return View();
+        }
+
+        /// <summary>
+        /// 打样单详情
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <param name="clientid"></param>
+        /// <returns></returns>
         public ActionResult OrdersDetail(string orderid,string clientid)
         {
             ViewBag.ClientID = clientid;
@@ -39,6 +69,7 @@ namespace YXERP.Controllers
             if (obj.error_code == 0)
             {
                 ViewBag.Model = obj.order;
+                ViewBag.ClientID = obj.order.clientID;
             }
             else
             {
@@ -46,17 +77,7 @@ namespace YXERP.Controllers
             }
             return View();
         }
-        public JsonResult GetCityByPCode(string cityCode)
-        {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
-            var list = CommonBusiness.Citys.Where(c => c.PCode == cityCode);
-            JsonDictionary.Add("Items", list);
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
+
         public JsonResult CreateOrder(string entity,string clientid,string userid="")
         {
             Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
@@ -69,6 +90,7 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
         public JsonResult GetProductList(string clientid, int pageSize, int pageIndex)
         {
             OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(CurrentUser.Client.ClientCode, pageSize, pageIndex, clientid);
@@ -131,7 +153,7 @@ namespace YXERP.Controllers
                 };
             }
             //2.生成采购单据 
-            string purid = StockBusiness.AddPurchaseDoc(pid, dids, ord.clientID, totalFee, "", "", CurrentUser.UserID,
+            string purid = StockBusiness.AddPurchaseDoc(pid, dids, ord.clientID, totalFee, "", "", 2,CurrentUser.UserID,
                 CurrentUser.AgentID, CurrentUser.ClientID);
             if (string.IsNullOrEmpty(purid))
             {

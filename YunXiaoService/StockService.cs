@@ -50,7 +50,7 @@ namespace YunXiaoService
         //获取采购订单
         public static List<StorageDoc> GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
         {
-            return StockBusiness.GetPurchases(userid, (EnumDocStatus)Enum.Parse(typeof(EnumDocStatus), status.ToString()), keywords, begintime, endtime, wareid, providerid, pageSize,
+            return StockBusiness.GetPurchases(userid, (EnumDocStatus)Enum.Parse(typeof(EnumDocStatus), status.ToString()), keywords, begintime, endtime, wareid, providerid,-1, pageSize,
                  pageIndex, ref totalCount, ref pageCount, agentid, clientid);
         }
         /// <summary>

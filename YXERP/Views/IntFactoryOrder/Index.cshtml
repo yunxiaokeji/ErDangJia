@@ -12,13 +12,9 @@
     </script>
 }
 <div class="header-box">
-    <span class="header-title left">采购管理</span>
-    <div id="btnSubmit" data-id="103029001" data-name="新建采购" data-url="/Purchase/ConfirmPurchase" class="btn mLeft10 btn-open-window right">提交采购单(0)</div>
+    <span class="header-title left">历史订单</span>
     <div class=" right">
-        <span id="btnCreate" class="pLeft2 btn-add left btn-add btn-open-window"  data-id="103029001" data-name="新建采购" data-url="/Purchase/ChooseProducts" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >选择采购产品</span>
-        <div id="dropdown" class="bghulan rightraduis3 right " style="height:28px;width:20px;">
-            <span class="mTop8 mRight5 ico-dropdown-white right"></span>
-        </div>
+        <span id="btnCreate" class="pLeft2 btn-add left btn-add btn-open-window"   data-name="新建订购订单" data-url="/IntFactoryOrder/Orders/@ViewBag.ZNGCID"  >选择订购产品</span>
     </div>
 </div>
 <div class="search-header">
@@ -43,7 +39,7 @@
             <li data-id="2" class="">已入库</li>
         </ul>
     </div>
-   <div class="search-item">
+    <div class="search-item">
         <div class="name">仓库</div>
         <ul class="search-wares">
             <li data-id="" class="hover">全部</li>
@@ -81,10 +77,10 @@
         </ul>
         <div id="pager"></div>
         <div class="clear"></div>
-    </div>  
+    </div>
+</div>
 <ul class="dropdown-ul hide" id="auditDropdown" style="width:65px;">
-    <li class="btn-open-window @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" data-name="审核采购单" id="audit">审核</li>
-    <li class="@(ExpandClass.IsLimits(HttpContext.Current, "103029004"))" id="delete">删除</li>
+    <li class="btn-open-window @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" data-name="审核采购单" id="audit">审核</li> 
 </ul>
 
 <ul id="exceldropdown" class="dropdown-ul hide" style="width: 128px;">

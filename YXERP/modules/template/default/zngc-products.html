@@ -11,11 +11,14 @@
             ￥{%=item.finalPrice.toFixed(2)%}
         </h2>
         <a class="btn-open-window name" data-url="/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
-           {%=item.intGoodsCode%} &nbsp; {%=item.goodsName%} 
-        </a> 
-        <div class="btnAddCart" data-orderid="{%=item.orderID%}" data-code="{%= item.intGoodsCode %}" data-price="{%= item.finalPrice %}" data-categoryid="{%=item.categoryID%}"  data-clientid="{%=item.clientID%}" >
+           {%=item.intGoodsCode%} &nbsp; {%=item.goodsName%}
+        </a>
+        <h4 class="mLeft5">
+            供应商&nbsp;{%=item.clientName%}
+        </h4>
+        <!--<div class="btnAddCart" data-orderid="{%=item.orderID%}" data-code="{%= item.intGoodsCode %}" data-price="{%= item.finalPrice %}" data-categoryid="{%=item.categoryID%}"  data-clientid="{%=item.clientID%}" >
             选择产品
-        </div>
+        </div>-->
     </div>
 </li>
 {% } %}

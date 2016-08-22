@@ -9,7 +9,7 @@
     <td>
         <a class="btn-open-window" data-url="/Products/ChooseDetail?pid={%=item.ProductID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-id="{%=item.ProductID%}">{%=item.ProductName%}</a>
     </td>
-    <td>{%=item.CategoryName%}</td>
+    <td>{%=item.CategoryName!=null?item.CategoryName:""%}</td>
     <td>{%=item.ProviderName%}</td>
     <td>{%=item.BrandName%}</td>
     <td class="tRight">{%=item.CommonPrice.toFixed(2)%}</td>

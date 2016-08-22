@@ -60,6 +60,11 @@ namespace YXERP.Controllers
         {
             var model = new ProductsBusiness().GetProductByID(id);
             ViewBag.Model = model;
+            ViewBag.Catagory = ProductsBusiness.BaseBusiness.GetChildCategorysByID("",CurrentUser.ClientID);
+            //if (string.IsNullOrEmpty(model.CategoryID))
+            //{
+            //    ViewBag.Catagory = ProductsBusiness.BaseBusiness.GetCategorys(CurrentUser.ClientID);
+            //}
             ViewBag.BrandList = new ProductsBusiness().GetBrandList(CurrentUser.ClientID);
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.UnitList = new ProductsBusiness().GetClientUnits(CurrentUser.ClientID);

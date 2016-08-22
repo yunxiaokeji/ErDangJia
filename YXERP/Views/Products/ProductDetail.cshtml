@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "产品详情页";
     var model = (CloudSalesEntity.Products)ViewBag.Model;
+    var categorys = (List<CloudSalesEntity.Category>) ViewBag.Catagory;
 }
 @section css{
    <link href="/modules/css/products.css" rel="stylesheet" />
@@ -16,7 +17,7 @@
             var um = UE.getEditor('remark', {
                 autoHeightEnabled: true
             });
-            product.initEdit('@(model.ProductID)','@Html.ToJSONString(model)', um);
+            product.initEdit('@(model.ProductID)', '@Html.ToJSONString(model)', um, '@Html.ToJSONString(categorys)');
             
         });
     </script>
@@ -34,7 +35,8 @@
     <div id="productinfo">
         <ul class="table-add product-add">
             <li>
-                <span class="column-name">分类名称：</span><label>@(model.Category.CategoryName==""?"请选择":model.Category.CategoryName)</label>
+                <span class="column-name">分类名称：</span><label>@(model.Category.CategoryName)</label>
+                <input type="text" class="hand @(string.IsNullOrEmpty(model.Category.CategoryName)?"":"hide")" readonly="true" placeholder="请选择产品分类" id="chooseCategory" />
                 <input type="hidden" id="categoryID" value="@(model.CategoryID)" />
             </li>
             

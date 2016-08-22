@@ -28,7 +28,7 @@ define(function (require, exports, module) {
     ObjectJS.init = function (type, providers,sourcetype) {
         var _self = this;
         Params.type = type;
-        Params.sourcetype = sourcetype;
+      //  Params.sourcetype = sourcetype;
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         _self.bindEvent(providers);
         _self.getList();
@@ -61,7 +61,7 @@ define(function (require, exports, module) {
                 { Name: "本地采购", SourceType: "1" },
                 { Name: "在线下单", SourceType: "2" }
             ];
-            var dropdown = $("#ddlSourceType").dropdown({
+            var dropdown1 = $("#ddlSourceType").dropdown({
                 prevText: "订单来源-",
                 defaultText: "全部",
                 defaultValue: Params.sourcetype,
@@ -78,7 +78,7 @@ define(function (require, exports, module) {
             });
         });
         //if (Params.sourcetype == 2) {
-            $("#ddlSourceType").hide();
+        //    $("#ddlSourceType").hide();
        // }
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({
@@ -238,9 +238,9 @@ define(function (require, exports, module) {
                 doT.exec(template, function (templateFun) {
                     var innerText = templateFun(data.items);
                     innerText = $(innerText);
-                    if (Params.sourcetype == 2) {
-                        innerText.find('.ico-dropdown').hide();
-                    }
+                    //if (Params.sourcetype == 2) {
+                    //    innerText.find('.ico-dropdown').hide();
+                    //}
                     $(".table-header").after(innerText);
                     _self.checkClick();
                     _self.dropdownul();
@@ -471,7 +471,7 @@ define(function (require, exports, module) {
 
         depotbox.val(depotbox.data("id"));
     }
-
+    ObjectJS.InStock = [];
     //获取入库明细
     ObjectJS.getDocList = function () {
         var _self = this;
@@ -480,13 +480,97 @@ define(function (require, exports, module) {
             docid: _self.docid
         }, function (data) {
             doT.exec("template/purchase/purchases-details.html", function (templateFun) {
-                var innerText = templateFun(data.items);
+                var innerText = templateFun(data.items); 
+                _self.InStock = data.items;
                 innerText = $(innerText);
+                innerText.find('.shenhe').click(function () { 
+                    _self.auditStoragePartIn($(this).data('did'));
+                });
+
                 $("#navStorageIn").append(innerText);
             });
         });
     }
+    ObjectJS.getPartDetail = function (did) {
+        var _self = this;
+        var item = {};
+        for (var i = 0; i < _self.InStock.length; i++) { 
+            if (_self.InStock[i].DocID == did.toLowerCase()) {
+                item = _self.InStock[i];
+                break;
+            }
+        }
+        return item;
+    }
+    ObjectJS.auditStoragePartIn = function (did) {
+        var _self = this;
+        doT.exec("template/purchase/audit_storagein.html", function (template) {
+            var item = _self.getPartDetail(did); 
+            var innerText = template(item.Details);
+            Easydialog.open({
+                container: {
+                    id: "showAuditDocPartIn",
+                    header: "入库单审核",
+                    content: innerText,
+                    yesFn: function () {
+                        var details = "";
+                        $("#showAuditDocPartIn .list-item").each(function () {
+                            var _this = $(this);
+                            var quantity = _this.find(".quantity").val();
+                            if (quantity > 0 && _this.find("select").val()) {
+                                details += _this.data("id") + "-" + quantity + ":" + _this.find("select").val() + ",";
+                            }
+                        });
+                        if (details.length > 0 || $("#showAuditDocPartIn .checkbox").hasClass("hover")) {
+                            Global.post("/Purchase/AuditPurchase", {
+                                docid: _self.docid,
+                                doctype: 101,
+                                isover: $("#showAuditDocPartIn .checkbox").hasClass("hover") ? 1 : 0,
+                                details: details,
+                                remark: $("#expressRemark").val().trim()
+                            }, function (data) {
+                                if (data.status) {
+                                    alert("入库成功!", function () {
+                                        location.href = location.href;
+                                    });
+                                } else if (data.result == "10001") {
+                                    alert("您没有操作权限!")
+                                } else {
+                                    alert("审核入库失败！");
+                                }
+                            });
+                        } else {
+                            alert("请正确填写入库数量和货位！");
+                            return false;
+                        }
+                    },
+                    callback: function () {
 
+                    }
+                }
+            });
+            $("#showAuditDocPartIn .ruku").hide();
+            $("#showAuditDocPartIn .checkbox").click(function () {
+                var _this = $(this);
+                if (!_this.hasClass("hover")) {
+                    _this.addClass("hover");
+                } else {
+                    _this.removeClass("hover");
+                }
+            });
+            $("#showAuditDocPartIn").find(".quantity").change(function () {
+                var _this = $(this);
+                if (!_this.val().isInt() || _this.val() < 0) {
+                    _this.val("0");
+                }
+            });
+
+            $("#showAuditDocPartIn").find("select").each(function () {
+                var _this = $(this);
+                _self.bindDepot(_this);
+            });
+        });
+    };
     //绑定复选框点击事件
     ObjectJS.checkClick = function () {
         $(".checkbox").click(function () {

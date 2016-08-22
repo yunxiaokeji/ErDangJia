@@ -151,7 +151,9 @@ namespace CloudSalesEntity
 
 		#endregion Model
 
-        public int Complete { get; set; }
+        public int Complete { get; set; } 
+
+        public decimal CompleteMoney { get; set; }
 
         public int Status { get; set; }
 

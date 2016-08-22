@@ -67,6 +67,8 @@ seajs.config({
         "choosecustomer": "plug/choosecustomer/choosecustomer.js",
         //选择产品
         "chooseproduct": "plug/chooseproduct/chooseproduct.js",
+        //选择分类
+        "choosecategory": "plug/choosecategory/choosecategory.js",
         //选择第三方产品
         "choosepdtfromother": "plug/choosepdtfromother/choosepdtfromother.js",
         //选择下属

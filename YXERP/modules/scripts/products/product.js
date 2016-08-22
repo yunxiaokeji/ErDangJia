@@ -3,11 +3,12 @@ define(function (require, exports, module) {
     var Upload = require("upload"), ProductIco, ImgsIco,
         Global = require("global"),
         Verify = require("verify"), VerifyObject, DetailsVerify, editor,
-        doT = require("dot"),
+        doT = require("dot"), 
         Dialog = require("dialog"),
         Easydialog = require("easydialog");
     require("pager");
     require("switch");
+    require("choosecategory");
     var $ = require('jquery');
     require("parser")($);
     require("form")($);
@@ -226,7 +227,10 @@ define(function (require, exports, module) {
             alert("属性尚未设置值!");
             return false;
         }
-
+        if ($("#smallUnit").val() == "") {
+            alert("产品单位未选择，请选择后再保存!");
+            return false;
+        }
         var Product = {
             ProductID: _self.ProductID,
             ProductCode: $("#productCode").val().trim(),
@@ -536,11 +540,12 @@ define(function (require, exports, module) {
             !!callback && callback(data.Status);
         });
     }
-
+    Product.catagory = [];
     //初始化编辑页数据
-    Product.initEdit = function (productid,model, Editor) {
+    Product.initEdit = function (productid,model, Editor,catagory) {
         var _self = this;
-        editor = Editor;
+        editor = Editor; 
+        Product.catagory = JSON.parse(catagory.replace(/&quot;/g, '"'));
         try
         {
             model = JSON.parse(model.replace(/&quot;/g, '"'));
@@ -559,7 +564,16 @@ define(function (require, exports, module) {
 
     //获取详细信息
     Product.bindDetail = function (model) {
+        console.log(model);
         var _self = this;
+        $("#chooseCategory").chooseCategory({
+            layer: 10,
+            data: Product.catagory,
+            onCategroyChange: function (data) {
+                console.log(data.CategoryID);
+                $('#categoryID').val(data.CategoryID);
+            }
+        });
         _self.ProductID = model.ProductID;
         $("#productName").val(model.ProductName);
         $("#productCode").val(model.ProductCode);
@@ -623,8 +637,8 @@ define(function (require, exports, module) {
             successItems: '#productImg',
             fileType: 1,
             init: {}
-        }); 
-
+        });
+       
         //编码是否重复
         $("#productCode").blur(function () {
             var _this = $(this);

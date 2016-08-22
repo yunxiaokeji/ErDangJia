@@ -213,6 +213,8 @@
     <Content Include="modules\css\stock.css" />
     <Content Include="modules\images\bg-industrylist.jpg" />
     <Content Include="modules\images\bg-loginBackground.png" />
+    <Content Include="modules\images\changmeng-noreal-Logo.png" />
+    <Content Include="modules\images\changmeng.png" />
     <Content Include="modules\images\ico-alipay.png" />
     <Content Include="modules\images\ico-attachment-excel.png" />
     <Content Include="modules\images\ico-attachment-pdf.png" />
@@ -255,6 +257,9 @@
     <Content Include="modules\images\wx_logo64.png" />
     <Content Include="modules\plug\autocomplete\autocomplete.js" />
     <Content Include="modules\plug\autocomplete\style.css" />
+    <Content Include="modules\plug\choosecategory\choosecategory.css" />
+    <Content Include="modules\plug\choosecategory\choosecategory.html" />
+    <Content Include="modules\plug\choosecategory\choosecategory.js" />
     <Content Include="modules\plug\choosecolor\spectrum.css" />
     <Content Include="modules\plug\choosecolor\spectrum.js" />
     <Content Include="modules\plug\chooseproduct\chooseproductin.html" />

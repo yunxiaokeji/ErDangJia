@@ -310,6 +310,11 @@ namespace CloudSalesBusiness
             return bl;
         }
 
+        public bool AddDocPart(string orderid, string remarks, string nums, string userid, string clientid)
+        {
+            return StockDAL.AddDocPart(orderid, remarks, nums, userid, clientid);
+        }
+
         #endregion
 
         #region 编辑、删除
@@ -355,6 +360,11 @@ namespace CloudSalesBusiness
             return StockDAL.BaseProvider.AuditOverflowDoc(docid, userid, agentid, clientid, ref result, ref errinfo);
         }
 
+        public bool AuditDocPart(string docid, string originid, int isover, string details, string remark, string userid, string operateip, string agentid, string clientid, ref int result, ref string errinfo)
+        {
+            return StockDAL.AuditDocPart(docid, originid, isover, details, remark, userid, operateip, agentid, clientid,
+                ref result, ref errinfo);
+        }
         #endregion
     }
 }

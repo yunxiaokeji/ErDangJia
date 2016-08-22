@@ -10,9 +10,10 @@
         入库单号：{%=item.DocCode%}
     </td>
     <td class="tLeft">规格</td>
-    <td>入库数量</td>
+    <td>到货数量</td>
+    <td>实收数量</td>
     <td>入库日期</td>
-    <td>操作员人</td>
+    <td>操作员人</td> 
 </tr>
     {%
 	    for(var ii=0, jj=item.Details.length; ii < jj; ii++){
@@ -27,15 +28,22 @@
             <td class="tLeft bBottom">
                 {%=model.Remark%}
             </td>
-            <td class="bBottom bRight">
+            <td class="tLeft bBottom">
                 {%=model.Quantity%}
+            </td>
+            <td class="bBottom bRight">
+                {%=(item.Status==0?'0':model.Complete)%} 
             </td>
             {%if(ii==0){ %}
                 <td rowspan="{%= jj %}" class="bRight bBottom">
                    {%=item.CreateTime.toDate("yyyy-MM-dd")%}
                 </td>
-                <td rowspan="{%= jj %}" class="bBottom">
-                    {%= item.UserName%}
+                <td rowspan="{%= jj %}" class="uname  bBottom">
+                    <a class="center pTop5" style="display: inline-block">{%= item.UserName%} </a>
+                    {%if(item.Status==0){ %}
+                    <a class="btn shenhe right" style="color: white;" data-did="{%=model.DocID%}"   >审核</a>
+                    {%}%}
+                    <a class="clear"></a>
                 </td>
             {% } %}
         </tr>

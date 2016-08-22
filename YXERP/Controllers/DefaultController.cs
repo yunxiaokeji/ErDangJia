@@ -20,6 +20,8 @@ namespace YXERP.Controllers
         public ActionResult Index(string href = "")
         {
             ViewBag.Herf = href ;
+            string otherID = ((CloudSalesEntity.Users) Session["ClientManager"]).Client.OtherSysID;
+            ViewBag.OtherID =(string.IsNullOrEmpty(otherID) ? "" : otherID);
             return View();
         }
 

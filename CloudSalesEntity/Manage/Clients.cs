@@ -41,7 +41,7 @@ namespace CloudSalesEntity.Manage
         private int _authorizetype = 0;
 		private DateTime? _createtime= DateTime.Now;
         private string _createuserid;
-
+	    private string _othersysid;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -71,6 +71,12 @@ namespace CloudSalesEntity.Manage
 			set{ _companyname=value;}
 			get{return _companyname;}
 		}
+
+        public string OtherSysID
+        {
+            set { _othersysid = value; }
+            get { return _othersysid; }
+        }
 
         public string Logo
         {

@@ -169,6 +169,17 @@ namespace YXERP.Areas.Api.Controllers
             };
         }
 
+        public ActionResult AddStockPartIn(string orderid, string remarks, string nums)
+        { 
+            bool result =StockBusiness.BaseBusiness.AddDocPart(orderid, remarks, nums, "");
+            JsonDictionary.Add("result", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
 
         #region 出库单

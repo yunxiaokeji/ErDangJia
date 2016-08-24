@@ -66,7 +66,7 @@ namespace CloudSalesDAL.Manage
         #region 添加
 
         public string InsertClient(int registerType, int accountType, string account, string loginPwd, string clientName, string contactName, string mobile, string email, string industry, string cityCode, string address, string remark,
-                                          string companyid, string companyCode, string customerid, string operateid, out int result, out string userid)
+                                          string companyid, string companyCode, string customerid, string operateid, out int result, out string userid,string otherid="")
         {
             string clientid = Guid.NewGuid().ToString().ToLower();
             userid = Guid.NewGuid().ToString().ToLower();
@@ -89,6 +89,7 @@ namespace CloudSalesDAL.Manage
                                        new SqlParameter("@Address",address),
                                        new SqlParameter("@Description",remark),
                                        new SqlParameter("@CompanyID",companyid),
+                                       new SqlParameter("@OtherSysID",otherid),
                                        new SqlParameter("@CompanyCode",companyCode),
                                        new SqlParameter("@CustomerID",customerid),
                                        new SqlParameter("@CreateUserID",operateid)

@@ -342,7 +342,7 @@ namespace CloudSalesBusiness.Manage
         /// <param name="result">返回结果 0失败 1成功 2账号已存在</param>
         /// <returns>客户端ID</returns>
         public static string InsertClient(EnumRegisterType registerType, EnumAccountType accountType, string account, string loginPwd, string clientName, string contactName, string mobile, string email, string industry, string citycode, string address, string remark,
-                                          string companyid, string companyCode, string customerid, string operateid, out int result, out string userid)
+                                          string companyid, string companyCode, string customerid, string operateid, out int result, out string userid,string otherid="")
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, account);
 

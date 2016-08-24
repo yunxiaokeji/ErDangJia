@@ -7,8 +7,7 @@ using System.Web.Mvc;
 using YunXiaoService;
 using IntFactory.Sdk;
 using CloudSalesEnum;
-using CloudSalesEntity.Manage;
-using IntFactory.Sdk.Business;
+using CloudSalesEntity.Manage; 
 using CloudSalesEntity;
 using YXAPP.Common;
 

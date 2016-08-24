@@ -10,9 +10,9 @@
         入库单号：{%=item.DocCode%}
     </td>
     <td class="tLeft">规格</td>
-    <td>到货数量</td>
-    <td>实收数量</td>
-    <td>入库日期</td>
+    <td  class="center">到货数量</td>
+    <td  class="">实收数量</td>
+    <td  class="tLeft">入库日期</td>
     <td>操作员人</td> 
 </tr>
     {%
@@ -28,7 +28,7 @@
             <td class="tLeft bBottom">
                 {%=model.Remark%}
             </td>
-            <td class="tLeft bBottom">
+            <td class="center bBottom">
                 {%=model.Quantity%}
             </td>
             <td class="bBottom bRight">

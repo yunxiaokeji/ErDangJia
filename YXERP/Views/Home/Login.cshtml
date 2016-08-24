@@ -29,7 +29,7 @@
                 <div class="left headerTitle">云销科技</div>
                 <div class="clear"></div>
             </div>
-            <a class="btnRegister right" href="/Home/Register">注册</a>
+            <a class="btnRegister right" href="/Home/Register/@(ViewBag.OtherID)">注册</a>
        </div>
 
         <div class="main">
@@ -58,10 +58,9 @@
                 <div class="other-account">
                     <div class="other-text">使用其他账号登录</div>
                     <div class="accounts">
-                        <a class="mingdao" href="/Home/MDLogin?ReturnUrl=@ViewBag.ReturnUrl"></a>
-                        <a class="account-weixin mLeft10" href="/Home/WeiXinLogin?ReturnUrl=@ViewBag.ReturnUrl" title="微信账号登录">
-                            
-                        </a>
+                        <a class="mingdao " href="/Home/MDLogin?ReturnUrl=@ViewBag.ReturnUrl"></a>
+                        <a class="account-weixin mLeft10" href="/Home/WeiXinLogin?ReturnUrl=@ViewBag.ReturnUrl" title="微信账号登录"></a>
+                        <a class="account-changmeng mLeft10" href="/Home/CMLogin?ReturnUrl=@ViewBag.ReturnUrl" title="智能工厂账号登录"></a>
                     </div>
                 </div>
              

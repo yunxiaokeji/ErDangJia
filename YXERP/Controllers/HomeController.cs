@@ -11,6 +11,7 @@ using CloudSalesEntity;
 using CloudSalesBusiness.Manage;
 using CloudSalesEntity.Manage;
 using CloudSalesEnum;
+using YunXiaoService;
 
 namespace YXERP.Controllers
 {
@@ -25,8 +26,9 @@ namespace YXERP.Controllers
             return Redirect("/Default/Index");
         }
 
-        public ActionResult Register()
+        public ActionResult Register(string id="")
         {
+            ViewBag.OtherID = id;
             return View();
         }
 
@@ -35,7 +37,7 @@ namespace YXERP.Controllers
             return View();
         }
         
-        public ActionResult Login(string ReturnUrl, int Status = 0,string name="")
+        public ActionResult Login(string ReturnUrl, int Status = 0,string OtherID="",string name="")
         {
             if (Session["ClientManager"] != null)
             {
@@ -62,6 +64,7 @@ namespace YXERP.Controllers
                 }
             }
             ViewBag.Status = Status;
+            ViewBag.OtherID = OtherID;
             ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name) ?? string.Empty;
             return View();
         }
@@ -258,7 +261,60 @@ namespace YXERP.Controllers
 
             return Redirect("/Home/Login");
         }
-         
+
+        public ActionResult CMLogin(string ReturnUrl="")
+        {
+            return Redirect(IntFactory.Sdk.OauthBusiness.GetAuthorize(ReturnUrl));
+        }
+
+        public ActionResult CMCallBack(string sign, string userid,string clientid)
+        {
+            if (!IntFactory.Sdk.OauthBusiness.GetSign(userid).Equals(sign, StringComparison.OrdinalIgnoreCase))
+            {
+                return Redirect("/Home/Login");
+            }
+            string operateip = Common.Common.GetRequestIP();
+            var user = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(clientid, userid);
+            if (user.error_code <= 0)
+            {
+                var model = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
+                //已注册云销账户
+                if (model != null)
+                {
+                    //未注销
+                    if (model.Status.Value != 9)
+                    {
+                        Session["ClientManager"] = model; 
+                        return Redirect("/Default/Index");
+                    }
+                }
+                else
+                {
+                    int error = 0;  
+                    int result = 0;
+                    string tempuserid = "";
+                    Clients clientModel = new Clients();
+                    clientModel.CompanyName = user.client.companyName;
+                    clientModel.ContactName = user.client.contactName;
+                    clientModel.MobilePhone = user.client.mobilePhone;
+                    var tempclientid = ClientBusiness.InsertClient(EnumRegisterType.ZNGC, EnumAccountType.ZNGC, userid, "", user.client.companyName, user.client.contactName,
+                                                                user.client.mobilePhone, "", "", "", user.client.address, "", user.client.clientID, "", "", "", out result, out tempuserid);
+                    if (!string.IsNullOrEmpty(tempclientid))
+                    {
+                        var current = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
+                         
+                        if (string.IsNullOrEmpty(current.Avatar))
+                        {
+                            current.Avatar = user.client.logo;
+                        }
+                        Session["ClientManager"] = current;
+                        return Redirect("/Default/Index");
+                    } 
+                }
+            }
+            return Redirect("/Home/Login");
+        }
+
         #region Ajax
 
         //员工登录
@@ -350,7 +406,7 @@ namespace YXERP.Controllers
         }
 
         //主动注册客户端
-        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD,string code)
+        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD,string code,string otherID="")
         {
             int result = 0;
             Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
@@ -370,10 +426,24 @@ namespace YXERP.Controllers
                 {
                     string userid = "";
                     //自助注册
-                    ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result, out userid);
+                   var clientid= ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result, out userid, otherID);
 
                     if (result == 1)
                     {
+                        if (!string.IsNullOrEmpty(otherID))
+                        {
+                            IntFactory.Sdk.ClientResult zngcClientItem =IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(otherID);
+                            Clients yxClientItem = UserService.GetClientDetail(clientid);
+                            
+                            string providerID = ProductService.AddProviders(zngcClientItem.client.companyName,
+                                zngcClientItem.client.contactName,
+                                zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
+                                "", otherID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, clientid);
+                            var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", name,
+                                loginName, otherID,
+                                yxClientItem.AgentID, clientid, yxClientItem.ClientCode);
+
+                        }
                         string operateip = Common.Common.GetRequestIP();
                         int outResult;
                         CloudSalesEntity.Users user = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(loginName, loginPWD, out outResult, operateip);

@@ -241,18 +241,20 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddPurchaseDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool AddDocPart(string orderid,string remarks,string nums,string userid)
+        public static bool AddDocPart(string orderid, string remarks, string nums, string userid, ref string errinfo)
         {
             SqlParameter[] paras = {  
+                                     new SqlParameter("@ErrInfo",SqlDbType.NVarChar,500),
                                      new SqlParameter("@OrderID",orderid), 
                                      new SqlParameter("@BillingCode",DateTime.Now.ToString("yyyyMMddHHmmssfff")), 
                                      new SqlParameter("@Nums",nums),
                                      new SqlParameter("@Remarks",remarks),
                                      new SqlParameter("@UserID",userid)
-                                   }; 
+                                   };
+            paras[0].Value = errinfo;
             paras[0].Direction = ParameterDirection.InputOutput;
-            paras[1].Direction = ParameterDirection.InputOutput;
-            var bl = ExecuteNonQuery("P_InsertStoreDocPart", paras, CommandType.StoredProcedure) > 0; 
+            var bl = ExecuteNonQuery("P_InsertStoreDocPart", paras, CommandType.StoredProcedure) > 0;
+            errinfo = paras[0].Value.ToString();
             return bl;
         }
         public static bool AuditDocPart(string docid, string originid, int isover, string details, string remark, string userid, string operateip, string agentid, string clientid, ref int result, ref string errinfo)

@@ -12,7 +12,7 @@
 }
 <div class="header-box">
     <span class="header-title left">采购单号：@(model.DocCode)</span>
-    @if (model.Status < 2 )
+    @if (model.Status < 2 || model.Status == 3)
     {
         <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" id="btnOver">完成采购单</div>
     }
@@ -36,13 +36,13 @@
 </div>
 <div class="tab-nav">
     <ul class="tab-nav-ul left">
-        <li class="hover " data-id="navProduct">采购单明细</li>
-        @if (model.Status == 1 || model.Status == 2)
+        <li class="@(model.Status !=3?"hover":"") " data-id="navProduct">采购单明细</li>
+        @if (model.Status == 1 || model.Status == 2 || model.Status == 3)
         {
-            <li data-id="navStorageIn">入库明细</li>
+            <li class="@(model.Status ==3?"hover":"")" data-id="navStorageIn">入库明细</li>
         }
     </ul>
-    @if (model.Status < 2)
+    @if (model.Status < 2 || model.Status == 3)
     {
         <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103029002"))" id="btnconfirm">入库登记</div>
     }

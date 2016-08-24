@@ -166,6 +166,20 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult AuditDocPart(string docid, string originid, int isover, string details, string remark)
+        {
+            int result = 0;
+            string errinto = "";
+            bool bl = new StockBusiness().AuditDocPart(docid, originid, isover, details, remark, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID, ref result, ref errinto);
+            JsonDictionary.Add("status", bl);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+
         public JsonResult GetPurchasesDetails(string docid)
         {
             List<StorageDoc> list = StockBusiness.GetStorageDocDetails(docid, CurrentUser.AgentID);

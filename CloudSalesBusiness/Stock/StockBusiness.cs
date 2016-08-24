@@ -146,6 +146,9 @@ namespace CloudSalesBusiness
                         : doctype == 6 ? "已入库"
                         : "已审核";
                     break;
+                case 3:
+                    str ="待处理";
+                    break;
                 case 4:
                     str = "已作废";
                     break;
@@ -310,9 +313,9 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool AddDocPart(string orderid, string remarks, string nums, string userid="")
+        public bool AddDocPart(string orderid, string remarks, string nums, ref string errinfo,string userid="")
         {
-            return StockDAL.AddDocPart(orderid, remarks, nums, userid);
+            return StockDAL.AddDocPart(orderid, remarks, nums, userid,ref errinfo);
         }
 
         #endregion

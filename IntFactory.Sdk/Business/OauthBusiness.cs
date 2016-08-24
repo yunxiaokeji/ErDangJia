@@ -22,6 +22,17 @@ namespace IntFactory.Sdk
             return string.Format("{0}/auth/authorize.htm?client_id={1}&site=china&redirect_uri={2}}",
                 AppConfig.ApiUrl, AppConfig.AppKey, AppConfig.CallBackUrl);
         }
+        public static string GetAuthorize(string returnurl="")
+        {
+            string sign = GetSign(returnurl);
+            return string.Format("{0}/Home/authorize?sign={1}&redirect_uri={2}",
+                AppConfig.ApiUrl, sign, AppConfig.CallBackUrl);
+        }
+
+        public static string GetSign(string returnurl="")
+        {
+            return Signature.GetSignature(AppConfig.AppKey, AppConfig.AppSecret, string.IsNullOrEmpty(returnurl) ? AppConfig.CallBackUrl : returnurl);
+        }
 
         /// <summary>
         /// 通过code获取用户token

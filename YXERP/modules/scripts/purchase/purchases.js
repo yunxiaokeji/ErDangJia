@@ -301,7 +301,13 @@ define(function (require, exports, module) {
             }
 
         });
-
+        var lihover = $(".tab-nav-ul li.hover").data("id");
+        if (lihover == "navStorageIn") {
+            $(".nav-partdiv").hide();
+            $("#" + lihover).show();
+            $(".tab-nav-ul li.hover").data("first", "1");
+            _self.getDocList();
+        }
         //审核入库
         $("#btnconfirm").click(function () {
             _self.auditStorageIn();
@@ -522,8 +528,9 @@ define(function (require, exports, module) {
                             }
                         });
                         if (details.length > 0 || $("#showAuditDocPartIn .checkbox").hasClass("hover")) {
-                            Global.post("/Purchase/AuditPurchase", {
-                                docid: _self.docid,
+                            Global.post("/Purchase/AuditDocPart", {
+                                docid: did,
+                                originid: _self.docid,
                                 doctype: 101,
                                 isover: $("#showAuditDocPartIn .checkbox").hasClass("hover") ? 1 : 0,
                                 details: details,
@@ -588,7 +595,7 @@ define(function (require, exports, module) {
     //绑定下拉框点击事件
     ObjectJS.dropdownul = function () { 
         $(".dropdown").click(function () {
-            var _this = $(this);
+            var _this = $(this); 
             if (_this.data("status") == 0) {
                 $("#delete").show();
             } else {

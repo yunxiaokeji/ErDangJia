@@ -79,6 +79,10 @@ namespace CloudSalesEnum
         /// 微信
         /// </summary>
         WeiXin = 4,
+        /// <summary>
+        /// 厂盟
+        /// </summary>
+        ZNGC = 5
     }
 
     /// <summary>

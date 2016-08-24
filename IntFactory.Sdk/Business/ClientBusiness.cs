@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using IntFactory.Sdk.Entity.Client;
 
-namespace IntFactory.Sdk.Business
+namespace IntFactory.Sdk
 {
     public class ClientBusiness
     {
         public static ClientBusiness BaseBusiness = new ClientBusiness();
 
-        public ClientResult GetClientInfo(string zngcClientID)
+        public ClientResult GetClientInfo(string zngcClientID,string userid="")
         {
             var paras = new Dictionary<string, object>();
             paras.Add("clientID", zngcClientID);

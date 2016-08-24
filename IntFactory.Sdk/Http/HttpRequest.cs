@@ -25,7 +25,7 @@ namespace IntFactory.Sdk
             }
             else
             {
-                userID = "BC6802E9-285C-471C-8172-3867C87803E2";
+                userID = AppConfig.AppKey;// "BC6802E9-285C-471C-8172-3867C87803E2";
                 paras.Add("userID", userID);
             }
 

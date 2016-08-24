@@ -236,6 +236,7 @@
             code: $("#code").val(),
             companyName: $("#companyName").val(),
             name: $("#name").val(),
+            otherID:$("#OtherID").val(),
             loginPWD: $("#loginPWD").val()
 
         };

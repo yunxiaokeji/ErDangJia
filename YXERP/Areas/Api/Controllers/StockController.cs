@@ -170,9 +170,11 @@ namespace YXERP.Areas.Api.Controllers
         }
 
         public ActionResult AddStockPartIn(string orderid, string remarks, string nums)
-        { 
-            bool result =StockBusiness.BaseBusiness.AddDocPart(orderid, remarks, nums, "");
-            JsonDictionary.Add("result", result);
+        {
+            string errorinfo = "";
+            bool result =StockBusiness.BaseBusiness.AddDocPart(orderid, remarks, nums,ref errorinfo, "");
+            JsonDictionary.Add("result", result ? 1 : 0);
+            JsonDictionary["error_msg"] = errorinfo;
             return new JsonResult
             {
                 Data = JsonDictionary,

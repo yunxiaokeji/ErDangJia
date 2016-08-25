@@ -64,7 +64,13 @@ namespace YXERP.Controllers
                 }
             }
             ViewBag.Status = Status;
-            ViewBag.OtherID = OtherID;
+            string otherid = OtherID; 
+            //获取OtherSysID
+            if (!string.IsNullOrEmpty(ReturnUrl) && ReturnUrl.IndexOf("IntFactoryOrder") > -1 && string.IsNullOrEmpty(OtherID))
+            {
+                otherid = Common.Common.GetQueryString("id",ReturnUrl);
+            }
+            ViewBag.OtherID = otherid; 
             ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name) ?? string.Empty;
             return View();
         }
@@ -318,7 +324,7 @@ namespace YXERP.Controllers
         #region Ajax
 
         //员工登录
-        public JsonResult UserLogin(string userName, string pwd, string remember)
+        public JsonResult UserLogin(string userName, string pwd, string remember, string otherid = "")
         {
             int result = 0;
             Dictionary<string, object> resultObj = new Dictionary<string, object>();
@@ -333,6 +339,24 @@ namespace YXERP.Controllers
                 CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(userName, pwd, out outResult, operateip);
                 if (model != null)
                 {
+                    if (!string.IsNullOrEmpty(otherid))
+                    {
+                        IntFactory.Sdk.ClientResult zngcClientItem = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(otherid); 
+                        string providerID = ProductService.AddProviders(zngcClientItem.client.companyName,
+                            zngcClientItem.client.contactName,
+                            zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
+                            "", otherid, zngcClientItem.client.clientCode, "", model.Client.AgentID, model.ClientID);
+                        var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", model.Client.CompanyName,
+                            model.Client.MobilePhone, otherid,
+                             model.Client.AgentID, model.ClientID, model.Client.ClientCode);
+                        if (string.IsNullOrEmpty(model.Client.OtherSysID))
+                        {
+                            ClientBusiness.UpdateClientOtherid(otherid, model.ClientID);
+                            model.Client.OtherSysID = string.IsNullOrEmpty(model.Client.OtherSysID)
+                                ? otherid
+                                : model.Client.OtherSysID;
+                        }
+                    }
                     //保持登录状态
                     HttpCookie cook = new HttpCookie("yunxiao_erp_user");
                     cook["username"] = userName;

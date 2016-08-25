@@ -75,8 +75,7 @@
             else {
                 if ($("#loginSurePWD").val() != $("#loginPWD").val()) {
                     $("#loginSurePWD").next().fadeIn().find(".error-msg").html("密码不一致");
-                }
-                else {
+                } else {
                     
                     $("#loginSurePWD").next().hide().find(".error-msg").html("");
                 }
@@ -97,17 +96,21 @@
                 if (Global.validateMobilephone($("#loginName").val())) {
                     Global.post("/Home/IsExistLoginName", { loginName: $("#loginName").val() }, function (data) {
                         if (data.Result == 1) {
-                            $("#code-error").fadeIn().find(".error-msg").html("手机号已被注册");
-                            return;
-                        }
-                        else {
+                            $("#code-error").fadeIn().find(".error-msg").html("手机号已被注册"); 
+                            if ($("#OtherID").val() != "") {
+                                confirm("手机号已注册，登陆后自动授权供应商,是否前往登陆?", function() {
+                                    location.href = "/Home/Login?" + "OtherID=" + $("#OtherID").val();
+                                });
+                            } else {
+                                return;
+                            }
+                        } else {
                             $("#code-error").hide().find(".error-msg").html("");
 
                             ObjectJS.SendMobileMessage("btnSendMsg", $("#loginName").val());
                         }
                     });
-                }
-                else {
+                } else {
                     $("#code-error").fadeIn().find(".error-msg").html("请输入正确手机号");
                     return;
                 }

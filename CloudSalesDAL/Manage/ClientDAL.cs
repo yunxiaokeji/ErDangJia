@@ -147,7 +147,17 @@ namespace CloudSalesDAL.Manage
 
             return ExecuteNonQuery("M_UpdateClient", parms, CommandType.StoredProcedure) > 0;
         }
+        public bool UpdateClientOtherid(string otherid, string clientid)
+        {
+            SqlParameter[] parms = { 
+                                       new SqlParameter("@OtherID",otherid), 
+                                       new SqlParameter("@ClientiD",clientid)
+                                   };
 
+            string cmdText = "update Clients set  OtherSysID=OtherSysID+','+isnull(@OtherID,'') where ClientiD=@ClientiD";
+
+            return ExecuteNonQuery(cmdText, parms, CommandType.Text) > 0;
+        }
         public bool ClientAgentAuthorize(string agentID, int userQuantity, DateTime endTime)
         { 
         SqlParameter[] parms = { 

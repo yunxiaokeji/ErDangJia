@@ -47,6 +47,7 @@ define(function (require, exports, module) {
             Global.post("/Home/UserLogin", {
                 userName: $("#iptUserName").val(),
                 pwd: $("#iptPwd").val(),
+                otherid: $("#OtherID").val(),
                 remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0
             },
             function (data) {

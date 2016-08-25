@@ -424,6 +424,25 @@ namespace CloudSalesBusiness.Manage
             return flag;
         }
 
+        public static bool UpdateClientOtherid(string otherid, string clientid)
+        {
+            bool flag = ClientDAL.BaseProvider.UpdateClientOtherid(otherid, clientid);
+
+            if (flag)
+            {
+                if (Clients.ContainsKey(clientid))
+                {
+                    Clients[clientid] = GetClientDetailBase(clientid);
+                }
+                else
+                {
+                    GetClientDetail(clientid);
+                }
+            }
+
+            return flag;
+        }
+
         #endregion
 
     }

@@ -36,6 +36,11 @@ namespace YXERP.Controllers
         /// <returns></returns>
         public ActionResult Orders(string id)
         {
+            if (string.IsNullOrEmpty(CurrentUser.Client.OtherSysID))
+            {
+                Response.Write("<script>alert('您的账号暂未授权到智能工厂,不能使用在线下单功能，请授权后再使用.');location.href='/Default/Index';</script>");
+                Response.End(); 
+            }
             ViewBag.ClientID = id;
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID); 
             return View();

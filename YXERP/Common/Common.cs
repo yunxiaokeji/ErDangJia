@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using Qiniu.Conf;
 using Qiniu.IO;
@@ -217,6 +219,135 @@ namespace YXERP.Common
 
 
         #endregion
+
+
+        /// <summary>
+        /// 获取URL特定参数的值
+        /// </summary>
+        /// <param name="qname">参数名称</param>
+        /// <param name="queryString">URl</param>
+        /// <returns></returns>
+        public static string GetQueryString(string qname,string url)
+        { 
+            NameValueCollection col = GetQueryString(url);
+            try
+            {
+                return col[qname];
+            }
+            catch (Exception ex)
+            { 
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// 将查询字符串解析转换为名值集合.
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <returns></returns>
+        public static NameValueCollection GetQueryString(string url)
+        {
+            return GetQueryString(url, null, true);
+        }
+
+        /// <summary>
+        /// 将查询字符串解析转换为名值集合.
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <param name="encoding"></param>
+        /// <param name="isEncoded"></param>
+        /// <returns></returns>
+        public static NameValueCollection GetQueryString(string url, Encoding encoding, bool isEncoded)
+        {
+            NameValueCollection result = new NameValueCollection(StringComparer.OrdinalIgnoreCase);
+            if (string.IsNullOrEmpty(url))
+            {
+                return result;
+            }
+            string queryString = url;
+            int ind = url.IndexOf("?");
+            if (ind > -1)
+            {
+                result["baseurl"] = MyUrlDeCode(url.Substring(0, ind), encoding);
+                queryString = url.Substring(ind + 1, url.Length - ind-1);
+            }
+            
+            queryString = queryString.Replace("?", ""); 
+            
+            if (!string.IsNullOrEmpty(queryString))
+            {
+                int count = queryString.Length;
+                for (int i = 0; i < count; i++)
+                {
+                    int startIndex = i;
+                    int index = -1;
+                    while (i < count)
+                    {
+                        char item = queryString[i];
+                        if (item == '=')
+                        {
+                            if (index < 0)
+                            {
+                                index = i;
+                            }
+                        }
+                        else if (item == '&')
+                        {
+                            break;
+                        }
+                        i++;
+                    }
+                    string key = null;
+                    string value = null;
+                    if (index >= 0)
+                    {
+                        key = queryString.Substring(startIndex, index - startIndex);
+                        value = queryString.Substring(index + 1, (i - index) - 1);
+                    }
+                    else
+                    {
+                        key = queryString.Substring(startIndex, i - startIndex);
+                    }
+                    if (isEncoded)
+                    {
+                        result[MyUrlDeCode(key, encoding)] = MyUrlDeCode(value, encoding);
+                    }
+                    else
+                    {
+                        result[key] = value;
+                    }
+                    if ((i == (count - 1)) && (queryString[i] == '&'))
+                    {
+                        result[key] = string.Empty;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 解码URL.
+        /// </summary>
+        /// <param name="encoding">null为自动选择编码</param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string MyUrlDeCode(string str, Encoding encoding)
+        {
+            if (encoding == null)
+            {
+                Encoding utf8 = Encoding.UTF8;
+                //首先用utf-8进行解码                     
+                string code = HttpUtility.UrlDecode(str.ToUpper(), utf8);
+                //将已经解码的字符再次进行编码.
+                string encode = HttpUtility.UrlEncode(code, utf8).ToUpper();
+                if (str == encode)
+                    encoding = Encoding.UTF8;
+                else
+                    encoding = Encoding.GetEncoding("gb2312");
+            }
+            return HttpUtility.UrlDecode(str, encoding);
+        }
+
     }
 
     public class PwdErrorUserEntity

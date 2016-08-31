@@ -26,20 +26,36 @@
     } 
     //绑定事件
     ObjectJS.bindEvent = function () {
-        var _self = this; 
+        var _self = this;
+        var providerids = '';
+        for (var t = 0; t < _self.providers.length; t++) {
+            if (_self.providers[t].CMClientID != "" && _self.providers[t].CMClientID != null) {
+                providerids += "'" + _self.providers[t].CMClientID + "',";
+            }
+        } 
+        if (providerids != "") {
+            providerids = providerids.substring(1, providerids.length - 2);
+        } else {
+            providerids = "1";
+        } 
+        Params.clientid = providerids;
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({
                 prevText: "供应商-",
                 defaultText: "全部",
-                defaultValue: "",
+                defaultValue:"",
                 data: _self.providers,
                 dataValue: "CMClientID",
                 dataText: "Name",
                 width: "180",
                 isposition: true,
                 onChange: function (data) {
-                    Params.pageIndex = 1; 
-                    Params.clientid = data.value; 
+                    Params.pageIndex = 1;
+                    if (data.value == "") {
+                        Params.clientid = providerids;
+                    } else {
+                         Params.clientid = data.value;
+                    }
                     _self.getProducts();
                 }
             });

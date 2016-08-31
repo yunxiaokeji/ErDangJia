@@ -13,9 +13,8 @@ define(function (require, exports, module) {
         if ($(window.parent.document).find("#windowItems").length > 0) {
             window.top.location.href = location.href;
         }
-        _self.returnUrl = returnUrl;
-        ObjectJS.placeholderSupport();
-
+        _self.returnUrl = returnUrl.replace('&amp;','&');
+        ObjectJS.placeholderSupport(); 
         if (status == 2) {
             alert("您的账号已在其它地点登录，如不是本人操作，请及时通知管理员对账号冻结！");
         } else if (status == 1) {

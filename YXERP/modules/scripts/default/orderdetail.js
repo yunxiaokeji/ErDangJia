@@ -31,7 +31,7 @@
         //规格
         _self.showAttrForOrder(model, 'pdttitle', 'pdtAttr');
         _self.getPlateMakings();
-        $('.bottombtn').click(function() { _self.savePDT() });
+        $('.bottombtn').bind('click', function() { _self.savePDT() });
     } 
 
     //获取制版工艺说明
@@ -171,15 +171,21 @@
                                     _tr.find(".total-xy").text(total);
                                 }
                             });
-                        }); 
+                           
+                        });
+                        if (innerText.find(".quantity").length > 0) {
+                            $('#btnSubmit').show();
+                        } else {
+                            $('#btnSubmit').hide();
+                        }
                     });
                 }
             });
             $(innerhtml).find(".column-title").css("width", "50px");
             $("#" + obj).after(innerhtml);
             $('#' + contendid).css("height", "274px").css("overflow-y", "auto");
+            
         });
-      
     };
     //绑定样式图
     ObjectJS.bindOrderImages = function (orderimages) {
@@ -213,13 +219,14 @@
         });
     }
     ObjectJS.savePDT = function () {
+        $('.bottombtn').unbind('click');
         var _self = this;
         var totalnum = 0;
-        
         $(".child-product-table .quantity").each(function () { 
             totalnum += parseInt($(this).val());
         });
         if (totalnum == 0) {
+            $('.bottombtn').bind('click', function () { _self.savePDT() });
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
         }
@@ -250,15 +257,23 @@
                     Remark: item.names
                 });
             }
-        });
-        console.log(model); 
+        }); 
         Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
             if (data.result) {
-                alert("新增成功！");
-                //window.location = location.href;
+                if (confirm("新增成功,是否返回继续选购产品！")) {
+                    window.location = '/IntFactoryOrder/Orders';
+                }
+                $('.moneyinfo').find(".check-box").each(function (i, v) {
+                    if ($(v).find(".checkbox").hasClass("hover")) {
+                        $(v).find(".checkbox").removeClass("hover");
+                    }
+                });
+                $('#pdtAttr').html('');
+                $('#btnSubmit').hide();
             } else {
                 alert(data.error_message);
             }
+            $('.bottombtn').bind('click', function () { _self.savePDT() });
         });
     }
     module.exports = ObjectJS;

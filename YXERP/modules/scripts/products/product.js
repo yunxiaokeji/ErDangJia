@@ -563,14 +563,12 @@ define(function (require, exports, module) {
     }
 
     //获取详细信息
-    Product.bindDetail = function (model) {
-        console.log(model);
+    Product.bindDetail = function (model) { 
         var _self = this;
         $("#chooseCategory").chooseCategory({
             layer: 10,
             data: Product.catagory,
-            onCategroyChange: function (data) {
-                console.log(data.CategoryID);
+            onCategroyChange: function (data) { 
                 $('#categoryID').val(data.CategoryID);
             }
         });

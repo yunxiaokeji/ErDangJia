@@ -1,0 +1,108 @@
+﻿.topbar {
+    position:fixed;left:0;top:0;z-index:300;width:100%;
+}
+/*头部*/
+.header{width:100%;height:50px;background-color:#2F73B8;color:#BFD2F2;}
+.header .header-li{float:left;text-align:center;margin-top:15px;}
+.header .btnsearch{float:right;text-align:right;}
+.header .header-li{margin-top:15px;}
+.header .header-li:first-child div{float:left;margin-left:10px;font-size:16px;}
+.header .header-li .login-name{float:left;line-height:20px;margin-left:5px;width:110px;text-align:left;font-size:16px;}
+.header .btn-task-filtertype {position:relative;width:90px;margin:auto;}
+.header .btn-task-filtertype .iconfont{line-height:22px;font-size:20px;}
+.header .btn-menu {position:relative;}
+.header .li-task-filtertype {
+    margin-left: -141px;
+    margin-right: -36px;
+    width: 100%;
+}
+/*切换任务*/
+.task-filtertype{position:absolute;left:-20px; top:35px; z-index:302; box-shadow:0px 0px 5px #ccc;background-color:#fff;border-radius:2px;width:120px;text-align:center;display:none;}
+.task-filtertype li{height:40px;line-height:40px; color:#666;}
+/*遮罩*/
+.shade { width:100%;height:100%;top:0; position:fixed;z-index:1002;background-color:rgba(143,143,143,0.6);display:none;}
+.search {width:100%;background-color:rgb(143,143,143);position:fixed;top:0;z-index:1002;display:none;}
+.search .search-box { margin-right:70px;background-color:#fff;border-bottom:1px solid #ddd;}
+.search .search-box .iconfont {
+    font-size:22px;
+    color:#999;
+    margin-left:10px;
+}
+.search .search-box .txt-search{border:none; width:80%;padding:15px 0; color:#666;font-size:16px;}
+.search .btn-search {color:#333;height:30px;line-height:30px; position:fixed;top:11px;right:15px;font-size:20px;}
+/*退出下拉*/
+.menu-box {position:absolute;top:33px; height:44px;line-height:60px;width:100%;z-index:302; box-shadow:0 0 5px #ccc;background-color:#fff;border-radius:2px;display:none; }
+.menu-box li{text-align:center;color:#333;line-height:44px;}
+.menu-box li a{text-align:center;color:#666;}
+/*进行状态*/
+.task-status{width:100%;background-color:#fff;padding:8px 0;position:fixed;bottom:0;z-index:300;border-top:1px solid #ddd;}
+.task-status li{width:33%;float:left;}
+.task-status .ico-status{text-align:center;color:#777;font-size:20px;}
+.task-status li a{margin-top:5px;text-align:center;color:#777;display:inline-block;width:100%;font-size:14px;}
+.task-status .hover a,.task-status .hover div{color:#4a98e7;}
+/*选择条件的css样式*/
+.filter-task{width:100%;background-color:#fff;}
+.filter-task li{width:33%;float:left;border:1px solid #ddd;border-left:none; margin-left:-1px;text-align:center;line-height:40px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.filter-task a{color:#888;}
+ .filter-task li .iconfont {color:#888; }
+/*选项下拉*/
+.dropdownlist { position:relative;}
+/*类型下拉*/
+.dropdownlist ul{box-shadow:0 0 5px #ccc;border-radius:2px;}/*边框阴影*/
+.dropdownlist li{color:#666;padding-top:12px;padding-bottom:12px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.dropdownlist .order-type{border-bottom:1px solid #ccc;border-right:1px solid #ccc;}
+/*流程下拉*/
+.dropdownlist .task-colormark{border:1px solid #ccc;border-top:0;left:33%;}
+.dropdownlist .task-colormark .lable-color {
+    width:16px;
+    height:16px;
+    border-radius:8px;
+    margin-right:5px;
+    display:inline-block;
+    vertical-align:bottom;
+}
+/*筛选下拉*/
+.dropdownlist .screen-type{border:1px solid #ccc;border-top:0;left:50%;}
+/*排序下拉*/
+.dropdownlist .task-sort{border:1px solid #ccc;border-top:0;left:66%;width:34%!important;}
+/*列表*/
+.dropdownlist .potion{width:33%;text-align:center;border-bottom:1px solid #ccc;border-right:1px solid #ccc;background-color:#fff;position:absolute;z-index:299;display:none;top:-1px; }
+.list {margin-top:60px;padding-bottom:60px;}
+.list .listabove{width:100%;border-bottom:1px solid #eee;display:table;}
+.list .listabove li { display:table-cell;vertical-align:top;}
+.list .listabove li:first-child{padding:5px 10px; width:110px;}
+.list .last-stage .iconfont{margin-left:20px;}
+.list li .btn-acceptTaskTime,.list li .btn-finishTask{margin-right:10px;padding:5px 10px;background-color:#4a98e7;border-radius:2px;color:#fff;margin-left:10px;text-align:center;width:60px;border:0;}
+.list li .tag-make { width:16px;height:16px;margin-right:10px;border-radius:8px;margin-top:3px;}
+.list li .order-type-label{margin-left:5px;float:right;margin-right:10px;}
+.list li:first-child img{width:110px;height:110px;}
+
+/*标记颜色*/
+.list li .write-tag{border:1px solid #ccc;background-color:#fff;}
+.list li .red-tag{background-color:#FF7C7C;}
+.list li .green-tag{background-color:#3BB3FF;}
+.list li .purple-tag{background-color:#9F74FF;}
+.list li .orange-tag{background-color:#FFC85D;}
+.list li .yellow-tag{background-color:#FFF65F;}
+/*类型*/
+.list .last-stage .shape{ margin-top:150px;color:#999;margin-right:10px;}
+/*状态图标(不同的图标颜色不同)*/
+.list .details .status-proceed { color:#49b3f5;}
+/*信息文字*/
+.list .center-list-task .details {margin-top:12px;height:40px;}
+.list .center-list-task .stage {line-height:30px;}
+.list .center-list-task a {font-size:16px; }
+/*返回顶部*/
+.getback { position:fixed;z-index:555;color:#666;right:10px;bottom:20px;display:none;}
+.getback span{right:10%;}
+/*提示*/
+.list .prompt { text-align:center;color:#999;margin-bottom:30px;}
+/*图标*/
+.iconfont-search {font-size:26px;color:#fff;margin-right:10px;}
+.ico-status {color:#666;}
+.iconfont-select {color:#666;}
+.iconfont-details {color:#e0183e;font-size:18px;margin-right:5px;float:left;}
+.iconfont-stage {color:#999;}
+.iconfont-back {font-size:30px;text-align:center;}
+
+

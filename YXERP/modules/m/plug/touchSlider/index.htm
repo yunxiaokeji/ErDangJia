@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>兼容PC手机可拖动jQuery焦点图 - 站长素材</title>
+<link href="css/sytyle.css" rel="stylesheet">
+<script src="js/jquery-1.js"></script>
+<script src="js/jquery_002.js"></script>
+<script src="js/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //$(".main_visual").hover(function () {
+        //    $("#btn_prev,#btn_next").fadeIn()
+        //}, function () {
+        //    $("#btn_prev,#btn_next").fadeOut()
+        //});
+
+        $dragBln = false;
+
+        $(".main_image").touchSlider({
+            flexible: true,
+            speed: 200,
+            //btn_prev: $("#btn_prev"),
+            //btn_next: $("#btn_next"),
+            paging: $(".flicking_con a"),
+            counter: function (e) {
+                $(".flicking_con a").removeClass("on").eq(e.current - 1).addClass("on");
+            }
+        });
+
+        //$(".main_image").bind("mousedown", function () {
+        //    $dragBln = false;
+        //});
+
+        //$(".main_image").bind("dragstart", function () {
+        //    $dragBln = true;
+        //});
+
+        //$(".main_image a").click(function () {
+        //    if ($dragBln) {
+        //        return false;
+        //    }
+        //});
+
+        //timer = setInterval(function () {
+        //    $("#btn_next").click();
+        //}, 5000);
+
+        //$(".main_visual").hover(function () {
+        //    clearInterval(timer);
+        //}, function () {
+        //    timer = setInterval(function () {
+        //        $("#btn_next").click();
+        //    }, 5000);
+        //});
+
+        //$(".main_image").bind("touchstart", function () {
+        //    clearInterval(timer);
+        //}).bind("touchend", function () {
+        //    timer = setInterval(function () {
+        //        $("#btn_next").click();
+        //    }, 5000);
+        //});
+
+    });
+</script>
+</head>
+<body>
+<div class="main_visual">
+  <div class="flicking_con">
+  <a class="on" href="#@">1</a>
+  <a href="#@">2</a>
+  <a href="#@">3</a>
+  <a href="#@">4</a>
+  </div>
+  <div class="main_image">
+    <ul>
+      <li> <img src="images/20141206093912_0947.jpg"></li>
+      <li> <img src="images/20141206093851_5791.jpg"></li>
+      <li> <img src="images/20141206092732_4208.jpg"></li>
+      <li> <img src="images/20141206093851_5791.jpg"></li>
+    </ul>
+  </div>
+<script>
+//$(".main_image img").each(function () {
+//	var ww = $(".main_image").width();
+//	var w = $(this).width();
+//	var ml = Math.round((parseInt(ww) - parseInt(w)) / 2);
+//	$(this).css({ marginLeft: ml + "px" })
+//})
+</script> 
+</div>
+</body>
+</html>

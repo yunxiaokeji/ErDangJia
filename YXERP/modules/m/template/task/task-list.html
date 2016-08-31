@@ -1,0 +1,27 @@
+﻿{%
+    for(var i=0;i<$data.length;i++)
+    { 
+    var item=$data[i];
+%}
+        <ul class="listabove row">
+            <li style="">
+                <a href="/Task/Detail/{%=item.orderID%}"><img class="task-list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.orderImage%}' /></a>
+            </li>     
+            <li class="center-list-task">
+                <!--任务详情-->
+                <div>
+                    <div class="details">   
+                         <a class="color333 Long width100" href="/Task/Detail/{%=item.orderID%}">{%=item.goodsName%}</a>
+                    </div>
+                    <div class="stage">已销售1100件</div>
+                    <div class="stage">
+                        <div class="left blue">￥ {%=item.finalPrice%}</div>
+                        <div class="btn right mRight5" >立即下单</div>
+                        <div class="clear"></div>
+                    </div>                                              
+                    <div class="clear"></div>
+                </div>                                                
+            </li>
+        </ul>
+{%}%}
+

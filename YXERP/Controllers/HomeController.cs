@@ -70,11 +70,23 @@ namespace YXERP.Controllers
             {
                 otherid = Common.Common.GetQueryString("id",ReturnUrl);
             }
-            ViewBag.OtherID = otherid; 
-            ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name) ?? string.Empty;
+            ViewBag.OtherID = otherid;
+            ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
+            if (!string.IsNullOrEmpty(otherid) && Status==0)
+            {
+                return View("SelectLogin");
+            }
             return View();
         }
-        
+
+        public ActionResult SelectLogin(string ReturnUrl, int Status = 0, string otherid = "")
+        {
+            ViewBag.OtherID = otherid;
+            ViewBag.Status = Status;
+            ViewBag.ReturnUrl = ReturnUrl;
+            return View();
+        }
+
         public ActionResult Logout(int Status = 0)
         {
             HttpCookie cook = Request.Cookies["yunxiao_erp_user"];

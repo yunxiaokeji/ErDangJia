@@ -99,7 +99,7 @@
                             $("#code-error").fadeIn().find(".error-msg").html("手机号已被注册"); 
                             if ($("#OtherID").val() != "") {
                                 confirm("手机号已注册，登陆后自动授权供应商,是否前往登陆?", function() {
-                                    location.href = "/Home/Login?" + "OtherID=" + $("#OtherID").val();
+                                    location.href = "/Home/Login?ststus=-1&" + "OtherID=" + $("#OtherID").val();
                                 });
                             } else {
                                 return;

@@ -154,7 +154,7 @@ namespace CloudSalesDAL.Manage
                                        new SqlParameter("@ClientiD",clientid)
                                    };
 
-            string cmdText = "update Clients set  OtherSysID=OtherSysID+','+isnull(@OtherID,'') where ClientiD=@ClientiD";
+            string cmdText = "update Clients set  OtherSysID=@OtherID+','+isnull(OtherSysID,'') where ClientiD=@ClientiD";
 
             return ExecuteNonQuery(cmdText, parms, CommandType.Text) > 0;
         }

@@ -10,8 +10,10 @@ define(function (require, exports, module) {
 
     var LayoutObject = {};
     //初始化数据
-    LayoutObject.init = function (href) {
+    LayoutObject.init = function (href,remainDay, remainDate) {
         var _self = this;
+        LayoutObject.remainDay = remainDay;
+        LayoutObject.remainDate = remainDate;
         if (href) {
             $("#windowItems li").removeClass("hover");
             $("#iframeHome").hide();
@@ -30,12 +32,12 @@ define(function (require, exports, module) {
 
         $("#iframeBox").css("height", document.documentElement.clientHeight - 95);
     }
-    LayoutObject.getParam=function (url,name) {
+    LayoutObject.getParam = function (url, name) { 
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
         if (url == '') {
             url = window.location.search;
         } else {
-            url = url.replace('&amp;','&');
+            url = url.replace('&amp;', '&'); 
             if (url.indexOf('?') > -1) {
                 url = url.substr(url.indexOf('?')+1);
             }
@@ -64,6 +66,9 @@ define(function (require, exports, module) {
     //绑定事件
     LayoutObject.bindEvent = function () {
         var _self = this;
+        setTimeout(function () {
+            _self.authorWarn();
+        }, 500);
         //调整浏览器窗体
         $(window).resize(function () {
             _self.bindStyle();
@@ -319,7 +324,6 @@ define(function (require, exports, module) {
         });
 
         $("#modulesMenu li").first().click();
-
     }
 
     //打开新窗口
@@ -388,6 +392,40 @@ define(function (require, exports, module) {
         } 
     }
 
+    //授权快到期提示
+    LayoutObject.authorWarn = function () { 
+        if (LayoutObject.remainDay <= 20) {
+            var authorWarn = Global.getCookie('authorWarn');
+            if (authorWarn != "1") {
+                var data = { remainDay: LayoutObject.remainDay, remainDate: LayoutObject.remainDate };
+                doT.exec("/template/default/author-page.html", function(template) {
+                    var innerHtml = template(data);
+                    Easydialog.open({
+                        container: {
+                            id: "author-box",
+                            header: LayoutObject.remainDay > 0 ? "授权快到期" : "授权已超期",
+                            content: innerHtml
+                        }
+                    });
+                    $("#ExtendNow").click( function () {
+                        LayoutObject.openWindows($(this));
+                        Easydialog.close(); 
+                    });
+
+                    $('.no-hint').click(function() {
+                        var _this = $(this);
+                        if ($(".author-lump").hasClass('hover')) {
+                            $(".author-lump").removeClass('hover');
+                            Global.delCookie('authorWarn');
+                        } else {
+                            $(".author-lump").addClass('hover');
+                            Global.setCookie('authorWarn', '1');
+                        }
+                    });
+                });
+            }
+        }
+    }
     //待办小红点
     LayoutObject.bindUpcomings = function () {
         return;

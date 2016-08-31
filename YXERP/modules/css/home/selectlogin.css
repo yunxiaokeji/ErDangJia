@@ -2,9 +2,10 @@
 background-color:#ededed;
 }
 /*头部*/
-.header {padding:15px 20px 15px 60px;margin-right:10px;background:url(/modules/images/logo_login.png) no-repeat 20px 14px ;
+.header {padding:15px 20px 15px 41px;margin-right:10px;background:url(/modules/images/logo_login.png) no-repeat 15px 15px ;background-size: 26px 26px;
          line-height:32px;background-color:rgba(255,255,255,0.7);position:fixed;width:100%;box-sizing:border-box;left:0;top:0;
          z-index:100}
+.header .headerTitle {margin-left: 5px;color: #4a98e7;text-align: center;font-size: 16px;font-weight: bold;line-height: 24px;}
 .header span { font-size:16px;color:#666;display:block;}
 .header span:nth-child(2){margin-top:-2px;}
 .header span:nth-child(2) a{ background-color:#4a98e7;padding: 5px 10px;color:#fff; font-size:14px;border-radius:3px;border: #4a98e7 solid 1px;transition:background-color 0.2s;}
@@ -14,12 +15,12 @@ background-color:#ededed;
 
 .ali-login {margin:40px auto;padding:60px 80px 20px 80px;text-align:center;border-right:1px solid #ccc;}
 
-.ali-login .btn{margin-top:60px;padding:12px 55px;color:#fff;background-color:#ffad55;border-radius:3px;font-size:16px;cursor:pointer;}
+.ali-login .btn{margin-top:40px;padding:12px 55px;color:#fff;background-color:#ffad55;border-radius:3px;font-size:16px;cursor:pointer;}
 
 
 .bind-account {margin:40px auto;padding:60px 60px 20px 60px;text-align:center;}
 
-.bind-account .btn{margin-top:60px;padding:12px 35px;color:#fff;background-color:#5d9cec;border-radius:3px;font-size:16px;cursor:pointer;}
+.bind-account .btn{margin-top:40px;padding:12px 35px;color:#fff;background-color:#5d9cec;border-radius:3px;font-size:16px;cursor:pointer;}
 
 .select-login .des {margin-top:20px;color:#999;font-size:14px;}
 

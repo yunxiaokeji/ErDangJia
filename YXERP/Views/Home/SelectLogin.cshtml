@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "请选择绑定已有帐户，或直接注册使用";
+
+    Layout = null;
+}
+<title>请选择绑定已有帐户，或直接进入使用</title>
+<link href="/modules/css/base.css" rel="stylesheet" /> 
+<link href="/modules/css/home/selectlogin.css" rel="stylesheet" />
+
+<div class="header">
+    <div class="left headerTitle">云销科技</div> 
+    <div class="clear"></div>
+</div>
+<div class="select-login">
+    <div class="left ali-login">
+         <div><img src="/modules/images/ico-account-login.png" /></div>
+        <div class="des">已有账户进行绑定</div>
+        <div class="btn" id="bindbtn">绑定已有账户</div>
+    </div>
+
+    <div class="left bind-account">
+        <div><img src="/modules/images/ico-reg.png"/>
+        </div>
+        <div class="des">注册新账户登录</div>
+        <div id="regbtn" class="btn">注册新账户</div>
+    </div>
+    <div class="clear"></div>
+</div>
+<script src="/Scripts/jquery-1.11.1.js"></script>
+<script type="text/javascript">
+    var id = '@(ViewBag.OtherID)';
+    var url = '@(ViewBag.ReturnUrl)';
+    url = url.replace('&', '%26');
+    $('#bindbtn').click(function () {
+        location.href = '/Home/Login?Status=-1&OtherID=' + id + '&ReturnUrl=' + url;
+    });
+    $('#regbtn').click(function () {
+        location.href = '/Home/Register?OtherID=' + id;
+    });
+</script>

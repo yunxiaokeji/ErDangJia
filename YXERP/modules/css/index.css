@@ -126,6 +126,17 @@ nav .action-items .point { width:6px; height:6px; border-radius:3px; background-
 
 
 
+/*授权到期页面*/
+.author-box { width:600px;padding-bottom:10px;}
+.autnor-msg li:first-child { margin-top:20px;}
+.autnor-msg li,.autnor-msg li span { font-size:16px;line-height:40px;}
+.autnor-msg li:last-child { font-size:12px;}
+.author-footer div {display:inline-block;}
+.author-footer .renewal { width:120px;line-height:50px;text-align:center;cursor:pointer;border-radius:5px;font-size:16px;}
+.author-lump { width:10px;height:10px;display:inline-block;border:1px solid #ccc;}
+.author-lump.hover { background-color:#4a98e7;border-color:#4a98e7;}
+.author-footer div:first-child { background-color:#4a98e7;color:#fff;border:1px solid #3a98e7;margin:0 10px 0 360px;}
+
 
 
 

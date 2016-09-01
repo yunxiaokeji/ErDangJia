@@ -25,7 +25,7 @@ header .task-text {color:#373737;text-align:center;}
 .confirm-bottom .close { padding:5px 40px; color:#999; border:none; cursor:pointer; display:inline-block; }
 .confirm-bottom .close:hover {color:#4a98e7; }
 
-.btn {  padding:5px 10px; background-color:#4a98e7; color:#fff; border:none; display:inline-block; border-radius:2px; line-height:18px;}
+.btn {  padding:5px 10px; background-color:#4a98e7; color:#fff; border:none; display:inline-block; border-radius:2px; line-height:18px;cursor:pointer;}
 
 .header-btn {background-color:#2F73B8;border:1px solid #fff; color:#fff;text-align:center;font-size:16px;padding:6px; border-radius:2px;width:80px;
                                                               -webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;}
@@ -109,4 +109,106 @@ header .task-text {color:#373737;text-align:center;}
 
 .prompt {
 line-height:60px;
+}
+
+.overlay-addOrder {
+    position:fixed;
+    left:0px;
+    top:0px;
+    z-index:1000;
+    width:100%;
+    height:100%;
+    background-color:rgba(0,0,0,0.65);
+    display:none;   
+}
+
+.overlay-addOrder .style-content {
+    background-color:#fff;
+    position:absolute;
+    bottom:0;
+    left:0;
+    height:0px;
+    width:100%;
+}
+
+.overlay-addOrder .style-main {
+    position:relative;
+    padding:20px 10px 60px 10px;
+}
+
+.overlay-addOrder .style-main .style-detail {
+    margin-left:135px;
+}
+
+.overlay-addOrder .style-main .style-title {
+    line-height:20px;
+    height:40px;
+    width:90%;
+    word-break:break-all;
+}
+
+.overlay-addOrder .style-main .style-img {
+    padding:5px 10px;
+    border-radius:5px;
+    position:absolute;
+    left:10px;
+    top:-15px;
+    border:1px solid #eee;
+    background-color:#fff;
+}
+
+.style-main .style-img img {
+    width:100px;
+    height:120px;
+} 
+
+
+.overlay-addOrder .style-main .close {
+    font-size:24px;
+    position:absolute;
+    right:8px;
+    top:5px;
+}
+
+.overlay-addOrder .style-attr {
+    height:265px;
+    overflow-y:auto;
+    margin-top:15px;
+}
+
+.overlay-addOrder .style-attr .attr-title {
+    font-size:16px;
+    line-height:40px;
+}
+
+.overlay-addOrder .style-attr .attr-ul {
+    padding:15px 0;
+    border-bottom:1px solid #eee;
+}
+
+.overlay-addOrder .style-attr .attr-ul li {
+    float:left;
+    margin-right:20px;
+    padding:5px 15px;
+    text-align:center;
+    border-radius:3px;
+    background-color:#eee;
+    cursor:pointer;
+}
+
+.overlay-addOrder .style-attr .attr-ul .select {
+    background-color:#4a98e7;
+    color:#fff;
+}
+
+.overlay-addOrder .btn-sureAdd {
+    position:fixed;
+    width:100%;
+    bottom:0;
+    left:0;
+    z-index:2000;
+    background-color:#4a98e7;
+    color:#fff;
+    text-align:center;
+    line-height:50px;
 }

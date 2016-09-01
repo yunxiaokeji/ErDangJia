@@ -8,7 +8,7 @@
 .header .header-li{margin-top:15px;}
 .header .header-li:first-child div{float:left;margin-left:10px;font-size:16px;}
 .header .header-li .login-name{float:left;line-height:20px;margin-left:5px;width:110px;text-align:left;font-size:16px;}
-.header .btn-task-filtertype {position:relative;width:90px;margin:auto;}
+.header .btn-task-filtertype {position:relative;width:120px;margin:auto;}
 .header .btn-task-filtertype .iconfont{line-height:22px;font-size:20px;}
 .header .btn-menu {position:relative;}
 .header .li-task-filtertype {

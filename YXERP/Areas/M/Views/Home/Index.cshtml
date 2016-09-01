@@ -3,13 +3,13 @@
     var v = DateTime.Now.Ticks;
 }
 @section css{
-    <link href="/modules/m/css/task/list.css" rel="stylesheet" />
+    <link href="/modules/m/css/style/list.css" rel="stylesheet" />
 }
 
 @section scripts{
     <script type="text/javascript">
-        seajs.use("/modules/m/scripts/task/list.js", function (data) {
-            data.init();
+        seajs.use("/modules/m/scripts/style/list.js", function (data) {
+            data.init('@Html.ToJSONString((List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)');
         });
 </script>
 }
@@ -17,7 +17,7 @@
 <div class="search"> 
     <div class="search-box">
         <span class="iconfont">&#xe605;</span>
-        <input type="text" class="txt-search" placeholder="请输入任务名称搜索" />
+        <input type="text" class="txt-search" placeholder="请输入款式名称搜索" />
     </div>
     <div class="btn-search">确定</div>
 </div>
@@ -34,11 +34,10 @@
     </li>
     <li class="header-li li-task-filtertype">
         <div class="btn-task-filtertype">
-        <div class="left font16">供应商1</div>
+        <div class="left font16">供应商-全部</div>
         <div class="iconfont left">&#xe61c;</div>
         <ul class="task-filtertype">
-            <li data-filtertype="1">供应商1</li>
-            <li data-filtertype="2">供应商2</li>
+            <li data-id="-1">全部</li>
         </ul>
         </div>
     </li>
@@ -101,6 +100,43 @@
  
 <div class="getback">
     <div class="iconfont-back iconfont">&#xe643;</div>
+</div>
+
+<div class="overlay-addOrder">
+   @* <div class="style-content">
+        <div class="style-main">
+            <div class="style-detail">
+                <div class="style-title">12345678123456781234567812345678</div>
+                <div class="blue mTop30"><span class="font18">￥</span> <span class="bold">1299</span></div>
+            </div>
+            <div class="style-img">
+                <img src="/modules/m/images/img-noimg.png"/>
+            </div>
+            <div class="close iconfont">
+                &#xe628;
+            </div>
+            <div class="style-attr">
+                <div class="attr-title">款式尺码</div>
+                <div class="attr-rule attr-ul">
+                    <ul>
+                        <li class="select">M</li>
+                        <li>L</li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div class="attr-title">款式颜色</div>
+                <div class="attr-color attr-ul">
+                    <ul>
+                        <li>红色</li>
+                        <li class="select">白色</li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div class="attr-title">所选款式</div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-sureAdd">确定</div>*@
 </div>
 
 

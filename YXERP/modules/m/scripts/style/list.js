@@ -1,5 +1,5 @@
 ﻿define(function (require,exports,module) {
-    var Global = require("global"),
+    var Global = require("m_global"),
         doT = require("dot");
 
     var Params = {
@@ -17,10 +17,14 @@
     var ObjectJS = {};
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
-    ObjectJS.init = function () {
+    ObjectJS.init = function (providers) {
+        providers = JSON.parse(providers.replace(/&quot;/g, '"'));
+        for (var i = 0; i < providers.length; i++) {
+            var p=providers[i];
+            $(".task-filtertype").append('<li data-id="' + p.ProviderID + '">' + p.Name + '</li>');
+        }
         ObjectJS.bindEvent();
-        ObjectJS.getList();
-        //ObjectJS.getTaskLableColors();        
+        ObjectJS.getList();  
     };
 
     ObjectJS.bindEvent = function () {
@@ -181,103 +185,54 @@
         });
     };
 
-    //绑定时间控件
-    ObjectJS.bindTimerPicker = function () {        
-        var defaultParas = {
-            preset: 'datetime',
-            theme: 'android-ics light', //皮肤样式
-            display: 'modal', //显示方式 
-            mode: 'scroller', //日期选择模式
-            lang: 'zh',
-            onSelect: function (date) {
-                taskParms.endTime = date;
-                var _this = $(this);
-                taskParms.taskID = _this.data("id");
-                ObjectJS.showConfirmForm(0);
-                _this.val("接受任务");
-            }
-        };
-        $(".btn-acceptTaskTime").mobiscroll().datetime(defaultParas);
-    }
-
-    //设置任务到期时间
-    ObjectJS.setTaskEndTime = function () {
-        Global.post("/Task/UpdateTaskEndTime", taskParms, function (data) {
-            if (data == 1) {                
-                $("#btnAcceptTaskTime_" + taskParms.taskID).remove();
-                $("#iconFontDetails_" + taskParms.taskID).html("&#xe621;").addClass("color333");
-            } else if (data == 0) {
-                alert("失败",2);
-            } else if (data == 2) {
-                alert("有前面阶段任务未完成", 2);
-            } else if (data == 3) {
-                alert("没有权限", 2);
-            } else if (data == 4) {
-                alert("任务没有接受，不能设置完成", 2);
-            } else if (data == 5) {
-                alert("任务有未完成步骤", 2);
-            }
-        });
-    }
-
-    //标记完成任务
-    ObjectJS.finishTask = function () {
-        Global.post("/Task/FinishTask", taskParms, function (data) {
-            if (data == 1) {                
-                $("#btnFinishTask_" + taskParms.taskID).remove();
-                $("#iconFontDetails_" + taskParms.taskID).html("&#xe61f;");
-            } else if (data == 0) {
-                alert("失败", 2);
-            } else if (data == 2) {
-                alert("有前面阶段任务未完成", 2);
-            } else if (data == 3) {
-                alert("没有权限", 2);
-            } else if (data == 4) {
-                alert("任务没有接受，不能设置完成", 2);
-            } else if (data == 5) {
-                alert("任务有未完成步骤", 2);
-            }
-        });
-    }
-
-    //接受任务、标记任务完成的弹出浮层
-    ObjectJS.showConfirmForm = function (showStatus) {
-        var alertMsg = showStatus == 0 ? "任务到期时间不可逆,确定设置?" : "标记完成的任务不可逆,确定设置?";
-        confirm(alertMsg, function () {
-            if (showStatus == 0) {
-                ObjectJS.setTaskEndTime();
-            } else {
-                ObjectJS.finishTask();
-            }
-        }, "设置");
-    }
-
     ObjectJS.getList = function (noEmpty) {
-        ObjectJS.IsLoading = true;
         if (!noEmpty) {
             $(".list").empty();
         }
         //获取任务列表(页面加载)
         $(".list").append('<div class="data-loading"></div>');
         $.post("/IntFactoryOrder/GetProductList", Params, function (data) {
-            //获取用户名
-            $(".login-name").text(data.userName);
-            //判断有无数据
+            $(".data-loading").remove();
             if (data.items.length == 0) {
                 $(".list").append("<div class='nodata-txt'>暂无数据 !</div>");
             } else {
-                //分页数据
                 ObjectJS.PageCount = data.pageCount;
-                //引用doT模板
-                doT.exec("m/template/task/task-list.html", function (code) {
-                    var $result = code(data.items);                        
-                    $(".list").append($result);
-                   
-                    if (Params.filtertype!=1) {
-                        $(".btn-acceptTaskTime").hide();
-                        $(".btn-finishTask").hide();
-                    }
+                doT.exec("m/template/style/style-list.html", function (code) {
+                    var innerHtml = code(data.items);
+                    innerHtml = $(innerHtml);
+                    $(".list").append(innerHtml);
 
+                    innerHtml.find(".btn-addOrder").click(function () {
+                        doT.exec("m/template/style/style-buy.html", function (code) {
+                            var innerHtml = code({});
+                            $(".overlay-addOrder").html(innerHtml).show();
+                            $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
+
+                            $(".overlay-addOrder").click(function (e) {
+                                if (!$(e.target).parents().hasClass("style-content") && !$(e.target).hasClass("style-content")) {
+                                    $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
+                                        $(".overlay-addOrder").hide();
+                                    });
+                                }
+                            });
+
+                            $(".overlay-addOrder .close").click(function () {
+                                $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200,function(){
+                                    $(".overlay-addOrder").hide();
+                                });
+                            });
+
+                            $(".overlay-addOrder .attr-ul li").click(function () {
+                                var _self = $(this);
+                                if (_self.hasClass("select")) {
+                                    _self.removeClass("select");
+                                } else {
+                                    _self.addClass("select");
+                                }
+                            });
+                        });
+                       
+                    });
                     //延迟加载图片
                     $(".task-list-img").each(function () {
                         var _this = $(this);
@@ -287,33 +242,7 @@
                     });
 
                 });
-                
-                ObjectJS.IsLoading = false;
             }
-            $(".data-loading").remove();
-        });
-    };
-
-    ObjectJS.getTaskLableColors=function(){
-        $.post("/Task/GetTaskLableColors", null, function (data) {
-            data = JSON.parse(data);
-            var items = data.items;
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                var html = '';
-                html += '<li data-id="' + item.ColorID + '"><span class="lable-color" style="background-color:' + item.ColorValue + '"></span><span>' + item.ColorName + '</span></li>';
-
-                $(".task-colormark").append(html);
-            }
-            //任务颜色标记切换
-            $(".task-colormark li").click(function () {
-                $(".colormark-span").text($(this).text());
-                $(this).parent().hide();
-
-                Params.pageIndex = 1;
-                Params.colorMark = $(this).data("id");
-                ObjectJS.getList();
-            });
             
         });
     };

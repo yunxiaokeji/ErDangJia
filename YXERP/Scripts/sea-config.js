@@ -15,6 +15,7 @@ seajs.config({
         "color": "plug/choosecolor/spectrum.js",
         //全局JS
         "global": "scripts/global.js",
+        "m_global": "m/scripts/global.js",
         //HTML模板引擎
         "dot": "plug/doT.js",
         //分页控件

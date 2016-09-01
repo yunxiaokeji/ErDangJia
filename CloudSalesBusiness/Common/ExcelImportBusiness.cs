@@ -55,11 +55,16 @@ namespace CloudSalesBusiness
             return handleCount > 0 ? "" : "导入失败,请联系管理员";
         }
 
-        public static string AddProduct(List<Products> list, string agentid = "")
+        public static string AddProduct(List<Products> list, string agentid = "",int type=2)
         {
             string mes = "";
             list.ForEach(x =>
             {
+                if (type == 1 && new ProductsBusiness().GetProductCount(x.ClientID) >= 100)
+                {
+                    mes += mes + "免费版本，有效添加产品总数<=100个,系统产品已超出，新增失败";
+                    return;
+                }
                 int result = 0;
                 string pid
                     = ProductsBusiness.BaseBusiness.AddProduct(x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.ProviderID, x.BrandID,

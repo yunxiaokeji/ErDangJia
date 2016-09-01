@@ -127,12 +127,12 @@
         _close.click(function () {
             _layer.remove();
             window_confirm.remove();
-            cancel && cancel();
+            cancel && cancel(); 
         });
         _confirm.click(function () {
             _layer.remove();
             window_confirm.remove();
-            confirm && confirm();
+            confirm && confirm(); 
         });
     }
 

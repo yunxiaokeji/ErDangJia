@@ -13,15 +13,15 @@ background-color:#ededed;
 
 .select-login {width:660px;margin:120px auto;background-color:#fff;border:1px solid #ccc;}
 
-.ali-login {margin:40px auto;padding:60px 80px 20px 80px;text-align:center;border-right:1px solid #ccc;}
+.ali-login {margin:40px auto;padding:60px 80px 20px 90px;text-align:center;border-right:1px solid #ccc;}
 
-.ali-login .btn{margin-top:40px;padding:12px 55px;color:#fff;background-color:#ffad55;border-radius:3px;font-size:16px;cursor:pointer;}
+.ali-login .btn{margin-top:40px;padding:12px 35px;color:#999;border: solid 1px #ccc; background-color:#ffffff;border-radius:3px;font-size:16px;cursor:pointer;}
 
 
-.bind-account {margin:40px auto;padding:60px 60px 20px 60px;text-align:center;}
+.bind-account {margin:40px auto;padding:60px 90px 20px 80px;text-align:center;}
 
 .bind-account .btn{margin-top:40px;padding:12px 35px;color:#fff;background-color:#5d9cec;border-radius:3px;font-size:16px;cursor:pointer;}
 
 .select-login .des {margin-top:20px;color:#999;font-size:14px;}
 
-.btn:hover { background-color:#2F73B8; }
+.btn:hover { background-color:#2F73B8;color: #fff;}

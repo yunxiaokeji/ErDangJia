@@ -298,6 +298,7 @@
     <Content Include="modules\m\scripts\global.js" />
     <Content Include="modules\m\scripts\style\detail.js" />
     <Content Include="modules\m\scripts\style\list.js" />
+    <Content Include="modules\m\template\order\platematrings.html" />
     <Content Include="modules\m\template\style\style-list.html" />
     <Content Include="modules\m\template\style\style-buy.html" />
     <Content Include="modules\plug\autocomplete\autocomplete.js" />
@@ -393,6 +394,7 @@
     <Content Include="modules\m\plug\touchSlider\images\Thumbs.db" />
     <Content Include="Areas\M\Views\_ViewStart.cshtml" />
     <Content Include="Areas\M\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\M\Views\Home\Detail.cshtml" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

@@ -3,16 +3,18 @@
         Verify = require("verify"), VerifyInvoice,
         Global = require("global"),
         doT = require("dot"),
+        Easydialog = require("easydialog"),
         Upload = require("upload") ;
     require("pager"); 
 
     var ObjectJS = {}, CacheItems=[];
 
-    ObjectJS.init = function (orderid,  model) {
+    ObjectJS.init = function (orderid,  model,citycode) {
         var _self = this;
         _self.orderid = orderid; 
         _self.model = JSON.parse(model.replace(/&quot;/g, '"')); 
-        _self.bindStyle(_self.model);  
+        _self.bindStyle(_self.model);
+        _self.CityCode = citycode;
     }
 
     ObjectJS.bindStyle = function (model) {
@@ -34,7 +36,11 @@
         $('.bottombtn').bind('click', function () { _self.savePDT() });
         if (window.screen.width < 1400) {
             $('.moneyinfo').css("width", "720px");
-        } 
+        }
+        CityInvoice = City.createCity({
+            cityCode: _self.CityCode,
+            elementID: "citySpan"
+        });
     } 
 
     //获取制版工艺说明
@@ -236,22 +242,50 @@
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
         }
+        var openhtml = '<ul class="table-add">' +
+            '<li> <span class="width80">联系人：</span> <span><input type="text" id="ContactName" class="verify" value="' + $('#iptcontactName').val() + '" data-empty="联系人不能为空!"></span> </li>' +
+            '<li> <span class="width80">联系电话：</span> <span><input type="text" id="MobilePhone" class="verify" value="' + $('#iptmobilePhone').val() + '" maxlength="11" data-empty="电话不能为空!"></span> </li>' +
+            '<li> <span class="width80">地址：</span> <span id="citySpan"></span></li>' +
+            '<li> <span class="width80"></span> <span><input type="text" placeholder="详细地址..." class="width300" id="Address" value="' + $('#iptaddress').val() + '"></span> </li>' +
+            '</ul>';
+        Easydialog.open({
+            container: {
+                id: "orderinfo-box",
+                header: "收货信息确认",
+                content: openhtml,
+                yesFn: function () {
+                    _self.submitOrder($('#ContactName').val(),$('#MobilePhone').val(),CityInvoice.getCityCode(),$('#Address').val());
+                }
+            }
+        });
+        CityInvoice = City.createCity({
+            cityCode: _self.CityCode,
+            elementID: "citySpan"
+        });
+        $('.bottombtn').bind('click', function () { _self.savePDT() });
+    }
+    ObjectJS.submitOrder = function (personname,mobiletele,citycode,address) {
+        var _self = this;
         var model = {
             OrderID: _self.model.orderID,
+            PersonName:personname,
+            MobileTele:mobiletele,
+            CityCode: citycode,
+            Address: address,
             GoodsName: _self.model.goodsName,
             GoodsID: _self.model.goodsID,
             ClientID: _self.model.clientID,
             IntGoodsCode: _self.model.intGoodsCode,
             CategoryID: _self.model.categoryID,
-            FinalPrice: _self.model.finalPrice, 
-            OrderImage: _self.model.orderImage, 
+            FinalPrice: _self.model.finalPrice,
+            OrderImage: _self.model.orderImage,
             Details: []
         };
         //大货单遍历下单明细 
         $(".child-product-table .quantity").each(function () {
             var _this = $(this);
-            if (_this.val() > 0) { 
-                var item = CacheItems[_this.data("remark")]; 
+            if (_this.val() > 0) {
+                var item = CacheItems[_this.data("remark")];
                 model.Details.push({
                     SaleAttr: item.saleAttr,
                     AttrValue: item.attrValue,
@@ -263,29 +297,21 @@
                     Remark: item.names
                 });
             }
-        }); 
+        });
         Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
             if (data.result) {
                 confirm("新增成功,是否返回继续选购产品！",
-                    function() {
-                         $('#btnback').click();
+                    function () {
+                        $('#btnback').click();
                     },
-                    function () { 
+                    function () {
                         $('#btndetail').parent().data("id", data.PurchaseID);
-                        $('#btndetail').parent().data("url", $('#btndetail').parent().data("url")+data.PurchaseID);
-                        $('#btndetail').click();
-                    //$('.moneyinfo').find(".check-box").each(function (i, v) {
-                    //    if ($(v).find(".checkbox").hasClass("hover")) {
-                    //        $(v).find(".checkbox").removeClass("hover");
-                    //    }
-                    //});
-                    //$('#pdtAttr').html('');
-                    //$('#btnSubmit').hide();
-                }); 
+                        $('#btndetail').parent().data("url", $('#btndetail').parent().data("url") + data.PurchaseID);
+                        $('#btndetail').click(); 
+                    });
             } else {
                 alert(data.error_message);
             }
-            $('.bottombtn').bind('click', function () { _self.savePDT() });
         });
     }
     module.exports = ObjectJS;

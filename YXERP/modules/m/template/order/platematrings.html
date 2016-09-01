@@ -1,0 +1,40 @@
+﻿{%
+    var TypeName="";
+	for(var i=0, j=$data.length; i < j; i++){
+	var item = $data[i];
+    var isLast=0;
+    if($data[i+1]){
+        if($data[i+1].type!=item.type){
+            isLast=1;
+        }
+    }else{
+        isLast=1;
+    }
+%}
+{%if(TypeName!=item.type){ %}
+<div class="doc-item">
+    <div class="doc-header">
+        <span class="">工艺类型：{%=item.type%}</span>
+        <div class="lump"></div>
+    </div>
+    <div class="doc-content hide">
+    {% TypeName=item.type;}%}
+        <ul>
+            <li class="">
+                <span style="display:inline-block;width:60px;">图标：</span>
+                <img style="width:30px;height:30px;vertical-align:middle" src="{%=item.icon?item.icon:'/modules/images/img-noimg.png'%}" />
+            </li>
+            <li class="mRight10 long" style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:60px;">名称：</span>
+                {%=item.title%} 
+            </li>
+            <li style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:60px;">描述：</span>
+                {%=item.remark%}
+            </li>
+            <div class="clear"></div>
+        </ul>
+{%if(isLast==1){%}
+    </div>
+</div>
+{%}}%}

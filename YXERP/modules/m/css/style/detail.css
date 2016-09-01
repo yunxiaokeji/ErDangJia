@@ -164,8 +164,15 @@ nav ul .menuchecked{border-bottom:5px solid #4a98e7;color:#4a98e7;height:41px;}
 .log-status .log-box li:last-child {vertical-align:top;line-height:26px;padding-left:10px;}
 .log-box li:last-child p:last-child { color:#999;}
 
-.getback { position:fixed;z-index:55555;color:#666;right:-5px;bottom:90px;display:none;}
-.getback .iconfont-back { font-size:30px;text-align:center;}
+.btn-addOrder {
+    width:120px;
+    text-align:center;
+    font-size:16px;
+    color:#fff;
+    background-color:#4a98e7;
+}
 @media screen and (max-width:358px) {
     .goods-items tr td span, .goods-items tr td { font-size: 11px; }
 }
+
+

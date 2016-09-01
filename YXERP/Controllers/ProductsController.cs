@@ -78,7 +78,7 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult ProductList() 
+        public ActionResult ProductList()
         {
             return View();
         }
@@ -558,10 +558,24 @@ namespace YXERP.Controllers
             string id = "";
             if (string.IsNullOrEmpty(model.ProductID))
             {
-                id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
-                                                        model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList, model.ValueList, model.AttrValueList,
-                                                        model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
-                                                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, model.ProductDetails,model.CMGoodsID,model.CMGoodsCode, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, out result);
+                if (CurrentUser.Client.AuthorizeType == 1 && new ProductsBusiness().GetProductCount(CurrentUser.ClientID)>=100)
+                {
+                    result = -1;
+                    JsonDictionary.Add("ErrMsg", "免费版本，有效添加产品总数<=100个,系统产品已超出，新增失败");
+                }
+                else
+                {
+                    id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName,
+                        model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID,
+                        model.UnitID,
+                        model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList,
+                        model.ValueList, model.AttrValueList,
+                        model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1,
+                        model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
+                        model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode,
+                        model.Description, model.ProductDetails, model.CMGoodsID, model.CMGoodsCode, CurrentUser.UserID,
+                        CurrentUser.AgentID, CurrentUser.ClientID, out result);
+                }
             }
             else
             {
@@ -930,7 +944,7 @@ namespace YXERP.Controllers
                     {
                         if (list.Count > 0)
                         { 
-                            mes += ExcelImportBusiness.AddProduct(list, CurrentUser.AgentID);
+                            mes += ExcelImportBusiness.AddProduct(list, CurrentUser.AgentID,CurrentUser.Client.AuthorizeType);
                         }
                         if (!string.IsNullOrEmpty(mes))
                         {

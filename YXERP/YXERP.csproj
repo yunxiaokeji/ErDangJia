@@ -212,6 +212,7 @@
     <Content Include="modules\css\sales.css" />
     <Content Include="modules\css\report.css" />
     <Content Include="modules\css\stock.css" />
+    <Content Include="modules\images\author-image.png" />
     <Content Include="modules\images\bg-industrylist.jpg" />
     <Content Include="modules\images\bg-loginBackground.png" />
     <Content Include="modules\images\changmeng-noreal-Logo.png" />
@@ -253,6 +254,7 @@
     <Content Include="modules\images\img-noaccess.png" />
     <Content Include="modules\images\img-noimg.jpg" />
     <Content Include="modules\images\img-noimg.png" />
+    <Content Include="modules\images\img-nouse.png" />
     <Content Include="modules\images\loginBackground.png" />
     <Content Include="modules\images\logo-weixin.png" />
     <Content Include="modules\images\none-img.png" />

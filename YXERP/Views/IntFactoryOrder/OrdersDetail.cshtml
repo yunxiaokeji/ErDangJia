@@ -22,16 +22,17 @@
                 <span class="left">类别：@(model.categoryName)</span>  
             </li>
         </ul>
-        <a class="btn-back right mTop5" title="返回" href="/IntFactoryOrder/Orders">返回</a>
+        <a class="btn-back right mTop5" title="返回" href="/IntFactoryOrder/Orders"><span id="btnback">返回</span></a>
+        
     </div>
 
-    <div class="content-body" style="padding: 10px; overflow: initial;">
+    <div class="content-body" style="padding-top: 10px; overflow: initial;">
         <div class="order-info">
             <div class="order-imgs-div left">
                 <div class="order-imgs">
                     <img id="orderImage" src="@(string.IsNullOrEmpty(model.orderImage) ? "" : model.orderImage)" data-self="1"/>
                 </div>
-                <ul class="order-imgs-list">
+                <ul class="order-imgs-list pLeft10">
 
                 </ul>
             </div>
@@ -62,13 +63,13 @@
 
     <div class="content-body" style="padding: 20px 0 50px 10px;">
         <div class="nav-partdiv " id="tab12">
-            <div class="table-title center" style="font-size: 16px; text-indent: 10px; padding-bottom: 10px;">制版信息</div>
+            <div class="table-title tLeft" style="background-color: #f6f6f3;font-size: 17px; text-indent: 10px; padding: 5px 0px;">制版信息</div>
             <div id="navEngravingInfo" class="platemaking-content"></div>
-            <div class="mTop20 table-title center" style="font-size: 16px; text-indent: 10px;padding-bottom: 10px;">工艺说明</div>
+            <div class="mTop20 table-title tLeft" style="background-color: #f6f6f3;font-size: 17px; text-indent: 10px;padding: 5px 0px;">工艺说明</div>
             <table class="table-items-detail tb-plates"></table>
         </div>
     </div>
-
+    <a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情" href="/IntFactoryOrder/Orders"><span id="btndetail">查看采购详情</span></a>
     @*图片放大*@
     <div class="enlarge-image-bgbox hide">
         <div class="close-enlarge-image iconfont">&#xe606;</div>

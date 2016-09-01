@@ -3,18 +3,8 @@
 /*订单详情-订单状态记录*/
 .main-content { 
 }
-.content-title {
-    height: 40px;
-    line-height: 38px;
-    border-bottom: solid 1px #eee;
-    background-color: #fff;
-    margin: 0px;
-    padding: 0 10px 0 30px;
-}
-.content-title .titlename {
-    font-size: 14px;
-    color: #666;
-}
+.content-title {height: 40px;line-height: 38px;border-bottom: solid 1px #eee;background-color: #fff;margin: 0px;padding: 0 10px 0 20px;}
+.content-title .titlename {font-size: 14px;color: #666;}
 .status-items {  }
 .status-items li{ float:left;  position:relative; height:40px; margin-left:-24px; }
 .status-items span { line-height:16px; display:block; color:#999; text-align:center; }
@@ -70,7 +60,7 @@
                                      vertical-align:middle;
                                      } 
 /*position: fixed;right: 0;bottom: 0px;z-index: 1002;*/
-.bottombtn {float: right;margin-right: 20px; padding: 5px 15px; background-color: #4a98e7; color: #fff;font-size: 14px; border: none; cursor: pointer; display: inline-block; border-radius: 2px; line-height: 24px; 
+.bottombtn {float: left;margin-left: 20px; padding: 5px 15px; background-color: #4a98e7; color: #fff;font-size: 14px; border: none; cursor: pointer; display: inline-block; border-radius: 2px; line-height: 24px; 
        -moz-transition: all 0.3s; -webkit-transition: all 0.3s; -o-transition: all 0.3s; }
 .bottombtn:hover { background-color:#2F73B8; }
 
@@ -91,8 +81,8 @@
 
 
 /*订单信息*/
-.order-info .moneyinfo { min-width:520px; margin-left:30px; }
-.order-info .moneyinfo li{ line-height:25px; clear:both;padding:5px; overflow:auto; }
+.order-info .moneyinfo { min-width:720px; margin-left:30px; }
+.order-info .moneyinfo li{ line-height:25px; clear:both;padding:3px; overflow:auto; }
 .order-info .moneyinfo li .column-title{ width:80px; float:left; color:#666; }
 
 .order-info .cutomerinfo {  border-left:solid 1px #f6f6f6; margin-top:20px; padding:0 50px 20px 50px; max-width:400px; }
@@ -113,12 +103,7 @@
 .total-item.hover { background-color:#fafafa; }
 
 .sample-report { cursor:pointer;}
-
-
-/*翻单次数*/
-.repeatorder-times {width:20px;height:20px;border-radius:50%;border:1px solid #ccc;text-align:center;line-height:20px;margin-top:14px;color:#fff;background-color:#ccc;}
  
-
 /*价格区间设置*/
 .price-range-box { 
     background-color:#fff;

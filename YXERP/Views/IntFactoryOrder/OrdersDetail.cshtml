@@ -8,7 +8,7 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["scripts/default/orderdetail"], function(obj) {
-            obj.init('@(model.orderID)', '@Html.ToJSONString(model)');
+            obj.init('@(model.orderID)', '@Html.ToJSONString(model)','@(ViewBag.CityCode)');
         });
     </script>
 }
@@ -22,7 +22,7 @@
                 <span class="left">类别：@(model.categoryName)</span>  
             </li>
         </ul>
-        <a class="btn-back right mTop5" title="返回" href="/IntFactoryOrder/Orders"><span id="btnback">返回</span></a>
+        <a class="btn-back right mTop5" title="返回" href="/IntFactoryOrder/Orders"><span id="btnback" style="color: #ffffff;">返回</span></a>
         
     </div>
 
@@ -80,4 +80,7 @@
         <div class="left-enlarge-image"></div>
         <div class="right-enlarge-image"></div>
         <div class="enlarge-image-item"></div>
-    </div> 
+    </div>
+<input type="text" hidden="hidden" id="iptcontactName" value="@(ViewBag.ContactName)" data-empty="联系人不能为空!"> 
+<input type="text" hidden="hidden" id="iptmobilePhone" value="@(ViewBag.MobilePhone)" maxlength="11" data-empty="电话不能为空!"> 
+<input type="text" hidden="hidden" placeholder="详细地址..." class="width300" id="iptaddress" value="@(ViewBag.Address)"> 

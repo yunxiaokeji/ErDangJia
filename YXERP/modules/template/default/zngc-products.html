@@ -1,24 +1,28 @@
 ﻿{%
 	for(var i=0, j=$data.length; i < j; i++){
-	var item = $data[i];
+    var item = $data[i];
+    var titlename=item.intGoodsCode+" "+item.goodsName;
+    var goodname=(titlename.length>17?titlename.substring(0,17)+"...":titlename);
 %}
-<li>
-    <div class="product-item" >
-        <a class="btn-open-window productimg" data-url="/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
-            <img  src="{%=item.orderImage%}" alt="" />
+<li >
+    <div class="product-item" style="height: 320px;" >
+        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}" data-url="/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
+            <img  src="{%=item.orderImage%}" alt=""/>
         </a>
         <h2 class="price">
             ￥{%=item.finalPrice.toFixed(2)%}
         </h2>
-        <a class="btn-open-window name" data-url="/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
-           {%=item.intGoodsCode%} &nbsp; {%=item.goodsName%}
+        <a class="btn-open-window name" data-url="/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}">
+            {%=goodname%}
         </a>
-        <h4 class="mLeft5">
-            供应商&nbsp;{%=item.clientName%}
-        </h4>
-        <!--<div class="btnAddCart" data-orderid="{%=item.orderID%}" data-code="{%= item.intGoodsCode %}" data-price="{%= item.finalPrice %}" data-categoryid="{%=item.categoryID%}"  data-clientid="{%=item.clientID%}" >
-            选择产品
-        </div>-->
+        <div class="mLeft5 mTop5 color666" title="供应商:{%=item.clientName%}">
+            <div class="left">
+                <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;"> 
+            </div>
+            
+            <div class="left" style="height: 16px;">&nbsp;{%=(item.clientName.length>16?item.clientName.substring(0,16)+"...":item.clientName)%}</div>
+            <div class="clear"></div>
+        </div> 
     </div>
 </li>
 {% } %}

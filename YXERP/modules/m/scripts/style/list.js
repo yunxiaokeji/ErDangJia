@@ -1,7 +1,7 @@
 ﻿define(function (require,exports,module) {
     var Global = require("m_global"),
         doT = require("dot");
-
+    var City = require("city"), CityInvoice;
     var Params = {
         pageSize: 5,
         pageIndex: 1        
@@ -18,9 +18,11 @@
     var cacheOrder = [];
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
-    ObjectJS.init = function (providers) {
+    ObjectJS.init = function (providers,user) {
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
-        for (var i = 0; i < providers.length; i++) {
+        user = JSON.parse(user.replace(/&quot;/g, '"'));
+        ObjectJS.user = user;
+        for (var i = 0; i < providers.length; i++) {    
             var p=providers[i];
             $(".task-filtertype").append('<li data-id="' + p.ProviderID + '">' + p.Name + '</li>');
         }
@@ -143,7 +145,6 @@
 
         //任务状态切换
         $(".task-status li").click(function () {
-            
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover").siblings().removeClass("hover");
@@ -216,6 +217,12 @@
                                     doT.exec("m/template/style/style-buy.html", function (code) {
                                         var innerHtml = code(cacheOrder[id]);
                                         innerHtml = $(innerHtml);
+
+                                        innerHtml.find("#customerName").val(ObjectJS.user.Name);
+                                        innerHtml.find("#customerTel").val(ObjectJS.user.MobilePhone);
+                                        innerHtml.find("#customerAddress").val(ObjectJS.user.Address);
+
+
                                         $(".overlay-addOrder").html(innerHtml).show();
                                         
                                         $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
@@ -275,6 +282,10 @@
                                         $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
                                             var model = {
                                                 OrderID: cacheOrder[id].orderID,
+                                                PersonName: $("#customerName").val(),
+                                                MobileTele: $("#customerTel").val(),
+                                                CityCode: CityInvoice.getCityCode(),
+                                                Address: $("#customerAddress").val(),
                                                 GoodsName: cacheOrder[id].goodsName,
                                                 GoodsID: cacheOrder[id].goodsID,
                                                 ClientID: cacheOrder[id].clientID,
@@ -288,6 +299,10 @@
                                             return false;
                                         });
 
+                                        CityInvoice = City.createCity({
+                                            cityCode: ObjectJS.user.CityCode,
+                                            elementID: "citySpan"
+                                        });
                                     });
                                 } else {
                                     alert("请重新尝试");
@@ -369,9 +384,13 @@
                                     return false;
                                 });
 
+                                CityInvoice = City.createCity({
+                                    elementID: "citySpan"
+                                });
                             });
                         }
                     });
+
                     //延迟加载图片
                     $(".task-list-img").each(function () {
                         var _this = $(this);
@@ -392,7 +411,7 @@
             totalnum += parseInt($(this).val());
         });
         if (totalnum == 0) {
-            alert("请选择颜色尺码，并填写对应采购数量");
+            alert("请选择颜色尺码，并填写对应采购数量", 2);
             return false;
         }
         //大货单遍历下单明细 
@@ -416,6 +435,9 @@
         Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
             if (data.result) {
                 alert("下单成功");
+                $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
+                    $(".overlay-addOrder").hide();
+                });
             } else {
                 alert(data.error_message);
             }

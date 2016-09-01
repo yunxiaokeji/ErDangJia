@@ -13,8 +13,13 @@ namespace YXERP.Areas.M.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID); 
-
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            CloudSalesEntity.Users users = new CloudSalesEntity.Users();
+            users.Name = CurrentUser.Client.ContactName;
+            users.MobilePhone = CurrentUser.Client.MobilePhone;
+            users.CityCode = CurrentUser.Client.CityCode;
+            users.Address = CurrentUser.Client.Address;
+            ViewBag.baseUser = users;
             return View();
         }
 

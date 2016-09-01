@@ -194,6 +194,8 @@ line-height:60px;
     border-radius:3px;
     background-color:#eee;
     cursor:pointer;
+    min-width:50px;
+    margin-top:5px;
 }
 
 .overlay-addOrder .style-attr .attr-ul .select {

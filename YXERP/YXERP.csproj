@@ -136,6 +136,7 @@
     <Compile Include="Areas\Api\Controllers\UserController.cs" />
     <Compile Include="Areas\Api\Models\FilterPurchase.cs" />
     <Compile Include="Areas\M\Controllers\HomeController.cs" />
+    <Compile Include="Areas\M\Controllers\IntFactoryOrdersController.cs" />
     <Compile Include="Areas\M\MAreaRegistration.cs" />
     <Compile Include="Common\Alipay\AlipayConfig.cs" />
     <Compile Include="Common\Alipay\AlipayCore.cs" />

@@ -1,36 +1,55 @@
-﻿
+﻿{%
 var item=$data;
-
+%}
 <div class="style-content">
         <div class="style-main">
             <div class="style-detail">
-                <div class="style-title">12345678123456781234567812345678</div>
-                <div class="blue mTop30"><span class="font18">￥</span> <span class="bold">1299</span></div>
+                <div class="style-title">{%=item.intGoodsCode+item.goodsName%}</div>
+                <div class="blue mTop30"><span class="font18">￥</span> <span class="bold">{%=item.finalPrice%}</span></div>
             </div>
             <div class="style-img">
-                <img src="/modules/m/images/img-noimg.png"/>
+                <img onerror="this.src='/modules/m/images/img-noimg.png'" src="{%=!item.orderImage?'/modules/m/images/img-noimg.png':item.orderImage%}"/>
             </div>
             <div class="close iconfont">
                 &#xe628;
             </div>
             <div class="style-attr">
-                <div class="attr-title">款式尺码</div>
-                <div class="attr-rule attr-ul">
-                    <ul>
-                        <li class="select">M</li>
-                        <li>L</li>
-                    </ul>
-                    <div class="clear"></div>
+                <div class="productsalesattr">
+                    <div class="attr-title" data-id="{%=item.AttrLists[0].AttrID%}">{%=item.AttrLists[0].AttrName%}</div>
+                    <div class="attr-rule attr-ul">
+                        <ul>
+                            {%
+                                for(var i=0;i<item.AttrLists[0].AttrValues.length;i++){
+                                    var attr=item.AttrLists[0].AttrValues[i];
+                            %}
+                                   <li data-id="{%=attr.ValueID%}" data-text="{%=attr.ValueName%}" data-type="1">
+                                       {%=attr.ValueName%}
+                                   </li>
+                            {%}%}
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
                 </div>
-                <div class="attr-title">款式颜色</div>
-                <div class="attr-color attr-ul">
-                    <ul>
-                        <li>红色</li>
-                        <li class="select">白色</li>
-                    </ul>
-                    <div class="clear"></div>
+                <div class="productsalesattr">
+                    <div class="attr-title" data-id="{%=item.SaleAttrs[0].AttrID%}">{%=item.SaleAttrs[0].AttrName%}</div>
+                    <div class="attr-color attr-ul">
+                        <ul>
+                            {%
+                                for(var i=0;i<item.SaleAttrs[0].AttrValues.length;i++){
+                                    var attr=item.SaleAttrs[0].AttrValues[i];
+                            %}
+                                   <li data-id="{%=attr.ValueID%}" data-text="{%=attr.ValueName%}" data-type="2">
+                                       {%=attr.ValueName%}
+                                   </li>
+                            {%}%}
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
                 </div>
-                <div class="attr-title">所选款式</div>
+                <div>
+                    <div class="attr-title">所选款式</div>
+                    <div class="attr-box"></div>
+                </div>
             </div>
         </div>
     </div>

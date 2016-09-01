@@ -215,10 +215,9 @@
                                     cacheOrder[id] = data.result.order;
                                     doT.exec("m/template/style/style-buy.html", function (code) {
                                         var innerHtml = code(cacheOrder[id]);
+                                        innerHtml = $(innerHtml);
                                         $(".overlay-addOrder").html(innerHtml).show();
-                                        var height = $(document).height();
-                                        $(".overlay-addOrder").css("height", height + "px");
-                                        $(document).scrollTop(height - $(window).height());
+                                        
                                         $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
 
                                         $(".overlay-addOrder").unbind().click(function (e) {
@@ -242,115 +241,53 @@
                                             } else {
                                                 _self.addClass("select");
                                             }
-                                            var bl = false, details = [], isFirst = true, xattr = [], yattr = [];
-                                            $(".productsalesattr").each(function () {
-                                                bl = false;
-                                                var _attr = $(this), attrdetail = details;
-                                                //组合规格
-                                                _attr.find(".attr-ul ul li.select").each(function () {
-                                                    bl = true;
-                                                    var _value = $(this);
-                                                    //首个规格
-                                                    if (isFirst) {
-                                                        var model = {};
-                                                        model.ids = _attr.data("id") + ":" + _value.data("id");
-                                                        model.saleAttr = _attr.data("id");
-                                                        model.attrValue = _value.data("id");
-                                                        model.xRemark = _value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "";
-                                                        model.yRemark = _value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "";
-                                                        model.xyRemark = "【" + _value.data("text") + "】";
-                                                        model.names = "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                                                        model.layer = 1;
-                                                        details.push(model);
-                                                    } else {
-                                                        for (var i = 0, j = attrdetail.length; i < j; i++) {
-                                                            if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
-                                                                var model = {};
-                                                                model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
-                                                                model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
-                                                                model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
-                                                                model.xRemark = attrdetail[i].xRemark + (_value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "");
-                                                                model.yRemark = attrdetail[i].yRemark + (_value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "");
-                                                                model.xyRemark = attrdetail[i].xyRemark + "【" + _value.data("text") + "】";
-                                                                model.names = attrdetail[i].names + "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                                                                model.layer = attrdetail[i].layer + 1;
-                                                                details.push(model);
-                                                            }
-                                                        }
-                                                    }
-                                                    //处理二维表
-                                                    if (_value.data("type") == 1 && xattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                                                        xattr.push("【" + _value.data("text") + "】");
-                                                    } else if (_value.data("type") == 2 && yattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                                                        yattr.push("【" + _value.data("text") + "】");
-                                                    }
-                                                });
-                                                isFirst = false;
-                                            });
                                             $(".attr-box").empty();
-                                            //选择所有属性
-                                            if (bl) {
-                                                var layer = $(".productsalesattr").length, items = [];
-                                                for (var i = 0, j = details.length; i < j; i++) {
-                                                    var model = details[i];
-                                                    if (model.layer == layer) {
-                                                        items.push(model);
-                                                        CacheItems[model.xyRemark] = model;
-                                                    }
-                                                }
-                                                var tableModel = {};
-                                                tableModel.xAttr = xattr;
-                                                tableModel.yAttr = yattr;
-                                                tableModel.items = items;
+                                            $(".attr-box").append("<table class='table-list'></table>");
+                                            $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>');
+                                            $(".attr-ul .color.select").each(function () {
+                                                var _this = $(this);
+                                                $(".attr-ul .size.select").each(function () {
+                                                    var dataAttr = $("#colorBox").data('id') + ',' + $("#attrBox").data('id');
+                                                    var dataValue = _this.data('id') + ',' + $(this).data('id');
+                                                    var dataAttrValue = $("#colorBox").data('id') + ":" + _this.data('id') + "," + $("#attrBox").data('id') + $(this).data('id');
+                                                    var description = '【尺码:' + $(this).data('value') + '】【颜色:' + _this.data('value') + '】';
 
-                                                //加载子产品
-                                                doT.exec("template/default/orders_child_list.html", function (templateFun) {
-                                                    var innerText = templateFun(tableModel);
-                                                    innerText = $(innerText);
-                                                    $(".attr-box").append(innerText);
-                                                    //数量必须大于0的数字
-                                                    innerText.find(".quantity").change(function () {
-                                                        var _this = $(this);
-                                                        if (!_this.val().isInt() || _this.val() <= 0) {
-                                                            _this.val("0");
-                                                        }
+                                                    var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrAndvalue='" + dataAttrValue + "' data-xremark='【" + $(this).data('value') + "】' data-yremark='【" + _this.data('value') + "】' data-xyremark='【" + $(this).data('value') + "】【" + _this.data('value') + "】' data-remark='" + description + "'></tr>");
+                                                    trHtml.append("<td class='tLeft'>" + description + "</td>");
+                                                    trHtml.append("<td class='center'><input style='width:50px;' class='quantity center' type='text' value='0' /></td>");
+                                                    trHtml.append("<td class='iconfont center' style='font-size:30px;color:#4a98e7;'>&#xe651;</td>");
 
-                                                        var total = 0;
-                                                        $(".child-product-table .tr-item").each(function () {
-                                                            var _tr = $(this), totaly = 0;
-                                                            if (!_tr.hasClass("total")) {
-                                                                _tr.find(".quantity").each(function () {
-                                                                    var _this = $(this);
-                                                                    if (_this.val() > 0) {
-                                                                        totaly += _this.val() * 1;
-                                                                    }
-                                                                });
-                                                                _tr.find(".total-y").text(totaly);
-                                                            } else {
-                                                                _tr.find(".total-y").each(function () {
-                                                                    var _td = $(this), totalx = 0;
-                                                                    $(".child-product-table .quantity[data-x='" + _td.data("x") + "']").each(function () {
-                                                                        var _this = $(this);
-                                                                        if (_this.val() > 0) {
-                                                                            totalx += _this.val() * 1;
-                                                                        }
-                                                                    });
-                                                                    total += totalx;
-                                                                    _td.text(totalx);
-                                                                });
-                                                                _tr.find(".total-xy").text(total);
-                                                            }
-                                                        });
-
+                                                    trHtml.find('.iconfont').click(function () {
+                                                        $(this).parents('tr').remove();
+                                                        return false;
                                                     });
-                                                    //if (innerText.find(".quantity").length > 0) {
-                                                    //    $('#btnSubmit').show();
-                                                    //} else {
-                                                    //    $('#btnSubmit').hide();
-                                                    //}
+                                                    trHtml.find('.quantity').change(function () {
+                                                        var _this = $(this);
+                                                        if (!_this.val().isInt() || _this.val() < 0) {
+                                                            _this.val(0);
+                                                        }
+                                                    });
+                                                    $(".attr-box .table-list").append(trHtml);
                                                 });
-                                            }
+                                            });
                                         });
+
+                                        $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
+                                            var model = {
+                                                OrderID: cacheOrder[id].orderID,
+                                                GoodsName: cacheOrder[id].goodsName,
+                                                GoodsID: cacheOrder[id].goodsID,
+                                                ClientID: cacheOrder[id].clientID,
+                                                IntGoodsCode: cacheOrder[id].intGoodsCode,
+                                                CategoryID: cacheOrder[id].categoryID,
+                                                FinalPrice: cacheOrder[id].finalPrice,
+                                                OrderImage: cacheOrder[id].orderImage,
+                                                Details: []
+                                            };
+                                            ObjectJS.createOrders(model);
+                                            return false;
+                                        });
+
                                     });
                                 } else {
                                     alert("请重新尝试");
@@ -359,7 +296,9 @@
                         } else {
                             doT.exec("m/template/style/style-buy.html", function (code) {
                                 var innerHtml = code(cacheOrder[id]);
+                                innerHtml = $(innerHtml);
                                 $(".overlay-addOrder").html(innerHtml).show();
+
                                 $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
 
                                 $(".overlay-addOrder").unbind().click(function (e) {
@@ -369,11 +308,13 @@
                                         });
                                     }
                                 });
+
                                 $(".overlay-addOrder .close").unbind().click(function () {
                                     $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
                                         $(".overlay-addOrder").hide();
                                     });
                                 });
+
                                 $(".overlay-addOrder .attr-ul li").unbind().click(function () {
                                     var _self = $(this);
                                     if (_self.hasClass("select")) {
@@ -381,116 +322,53 @@
                                     } else {
                                         _self.addClass("select");
                                     }
-
-                                    var bl = false, details = [], isFirst = true, xattr = [], yattr = [];
-                                    $(".productsalesattr").each(function () {
-                                        bl = false;
-                                        var _attr = $(this), attrdetail = details;
-                                        //组合规格
-                                        _attr.find("li.hover").each(function () {
-                                            bl = true;
-                                            var _value = $(this);
-                                            //首个规格
-                                            if (isFirst) {
-                                                var model = {};
-                                                model.ids = _attr.data("id") + ":" + _value.data("id");
-                                                model.saleAttr = _attr.data("id");
-                                                model.attrValue = _value.data("id");
-                                                model.xRemark = _value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "";
-                                                model.yRemark = _value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "";
-                                                model.xyRemark = "【" + _value.data("text") + "】";
-                                                model.names = "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                                                model.layer = 1;
-                                                details.push(model);
-                                            } else {
-                                                for (var i = 0, j = attrdetail.length; i < j; i++) {
-                                                    if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
-                                                        var model = {};
-                                                        model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
-                                                        model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
-                                                        model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
-                                                        model.xRemark = attrdetail[i].xRemark + (_value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "");
-                                                        model.yRemark = attrdetail[i].yRemark + (_value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "");
-                                                        model.xyRemark = attrdetail[i].xyRemark + "【" + _value.data("text") + "】";
-                                                        model.names = attrdetail[i].names + "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                                                        model.layer = attrdetail[i].layer + 1;
-                                                        details.push(model);
-                                                    }
-                                                }
-                                            }
-                                            //处理二维表
-                                            if (_value.data("type") == 1 && xattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                                                xattr.push("【" + _value.data("text") + "】");
-                                            } else if (_value.data("type") == 2 && yattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                                                yattr.push("【" + _value.data("text") + "】");
-                                            }
-                                        });
-                                        isFirst = false;
-                                    });
                                     $(".attr-box").empty();
-                                    //选择所有属性
-                                    if (bl) {
-                                        var layer = $(".productsalesattr").length, items = [];
-                                        for (var i = 0, j = details.length; i < j; i++) {
-                                            var model = details[i];
-                                            if (model.layer == layer) {
-                                                items.push(model);
-                                                CacheItems[model.xyRemark] = model;
-                                            }
-                                        }
-                                        var tableModel = {};
-                                        tableModel.xAttr = xattr;
-                                        tableModel.yAttr = yattr;
-                                        tableModel.items = items;
+                                    $(".attr-box").append("<table class='table-list'></table>");
+                                    $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>');
+                                    $(".attr-ul .color.select").each(function () {
+                                        var _this = $(this);
+                                        $(".attr-ul .size.select").each(function () {
+                                            var dataAttr = $("#colorBox").data('id') + ',' + $("#attrBox").data('id');
+                                            var dataValue = _this.data('id') + ',' + $(this).data('id');
+                                            var dataAttrValue = $("#colorBox").data('id') + ":" + _this.data('id') + "," + $("#attrBox").data('id') + $(this).data('id');
+                                            var description = '【尺码:' + $(this).data('value') + '】【颜色:' + _this.data('value') + '】';
 
-                                        //加载子产品
-                                        doT.exec("template/default/orders_child_list.html", function (templateFun) {
-                                            var innerText = templateFun(tableModel);
-                                            innerText = $(innerText);
-                                            $(".attr-box").append(innerText);
-                                            //数量必须大于0的数字
-                                            innerText.find(".quantity").change(function () {
-                                                var _this = $(this);
-                                                if (!_this.val().isInt() || _this.val() <= 0) {
-                                                    _this.val("0");
-                                                }
+                                            var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrAndvalue='" + dataAttrValue + "' data-xremark='【" + $(this).data('value') + "】' data-yremark='【" + _this.data('value') + "】' data-xyremark='【" + $(this).data('value') + "】【" + _this.data('value') + "】' data-remark='" + description + "'></tr>");
+                                            trHtml.append("<td class='tLeft'>" + description + "</td>");
+                                            trHtml.append("<td class='center'><input style='width:50px;' class='quantity center' type='text' value='0' /></td>");
+                                            trHtml.append("<td class='iconfont center' style='font-size:30px;color:#4a98e7;'>&#xe651;</td>");
 
-                                                var total = 0;
-                                                $(".child-product-table .tr-item").each(function () {
-                                                    var _tr = $(this), totaly = 0;
-                                                    if (!_tr.hasClass("total")) {
-                                                        _tr.find(".quantity").each(function () {
-                                                            var _this = $(this);
-                                                            if (_this.val() > 0) {
-                                                                totaly += _this.val() * 1;
-                                                            }
-                                                        });
-                                                        _tr.find(".total-y").text(totaly);
-                                                    } else {
-                                                        _tr.find(".total-y").each(function () {
-                                                            var _td = $(this), totalx = 0;
-                                                            $(".child-product-table .quantity[data-x='" + _td.data("x") + "']").each(function () {
-                                                                var _this = $(this);
-                                                                if (_this.val() > 0) {
-                                                                    totalx += _this.val() * 1;
-                                                                }
-                                                            });
-                                                            total += totalx;
-                                                            _td.text(totalx);
-                                                        });
-                                                        _tr.find(".total-xy").text(total);
-                                                    }
-                                                });
-
+                                            trHtml.find('.iconfont').click(function () {
+                                                $(this).parents('tr').remove();
+                                                return false;
                                             });
-                                            //if (innerText.find(".quantity").length > 0) {
-                                            //    $('#btnSubmit').show();
-                                            //} else {
-                                            //    $('#btnSubmit').hide();
-                                            //}
+                                            trHtml.find('.quantity').change(function () {
+                                                var _this = $(this);
+                                                if (!_this.val().isInt() || _this.val() < 0) {
+                                                    _this.val(0);
+                                                }
+                                            });
+                                            $(".attr-box .table-list").append(trHtml);
                                         });
-                                    }
+                                    });
                                 });
+
+                                $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
+                                    var model = {
+                                        OrderID: cacheOrder[id].orderID,
+                                        GoodsName: cacheOrder[id].goodsName,
+                                        GoodsID: cacheOrder[id].goodsID,
+                                        ClientID: cacheOrder[id].clientID,
+                                        IntGoodsCode: cacheOrder[id].intGoodsCode,
+                                        CategoryID: cacheOrder[id].categoryID,
+                                        FinalPrice: cacheOrder[id].finalPrice,
+                                        OrderImage: cacheOrder[id].orderImage,
+                                        Details: []
+                                    };
+                                    ObjectJS.createOrders(model);
+                                    return false;
+                                });
+
                             });
                         }
                     });
@@ -501,10 +379,46 @@
                             _this.attr("src", _this.data("src") + "?imageView2/1/w/120/h/120");
                         }, 1000)
                     });
-
                 });
             }
             
+        });
+    };
+
+    ObjectJS.createOrders = function (model) {
+        var _self = this;
+        var totalnum = 0;
+        $(".attr-box .table-list .quantity").each(function () {
+            totalnum += parseInt($(this).val());
+        });
+        if (totalnum == 0) {
+            alert("请选择颜色尺码，并填写对应采购数量");
+            return false;
+        }
+        //大货单遍历下单明细 
+        $(".attr-box .table-list .quantity").each(function () {
+            var _this = $(this);
+            var _thisTr = _this.parents('tr');
+            if (_this.val() > 0) {
+                model.Details.push({
+                    SaleAttr: _thisTr.data('attr'),
+                    AttrValue: _thisTr.data('value'),
+                    SaleAttrValue: _thisTr.data('attrandvalue'),
+                    Quantity: _this.val(),
+                    XRemark: _thisTr.data('xremark'),
+                    YRemark: _thisTr.data('yremark'),
+                    XYRemark: _thisTr.data('xyremark'),
+                    Remark: _thisTr.data('remark')
+                });
+            }
+        });
+
+        Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
+            if (data.result) {
+                alert("下单成功");
+            } else {
+                alert(data.error_message);
+            }
         });
     };
 

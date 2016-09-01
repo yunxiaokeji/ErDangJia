@@ -111,6 +111,10 @@ header .task-text {color:#373737;text-align:center;}
 line-height:60px;
 }
 
+/*返回顶部*/
+.getback { position:fixed;z-index:555;color:#666;right:10px;bottom:20px;display:none;}
+.getback span{right:10%;}
+
 .overlay-addOrder {
     position:fixed;
     left:0px;

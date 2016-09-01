@@ -92,9 +92,7 @@
 .list .center-list-task .details {margin-top:12px;height:40px;}
 .list .center-list-task .stage {line-height:30px;}
 .list .center-list-task a {font-size:16px; }
-/*返回顶部*/
-.getback { position:fixed;z-index:555;color:#666;right:10px;bottom:20px;display:none;}
-.getback span{right:10%;}
+
 /*提示*/
 .list .prompt { text-align:center;color:#999;margin-bottom:30px;}
 /*图标*/

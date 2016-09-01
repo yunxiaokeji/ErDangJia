@@ -33,7 +33,7 @@ namespace IntFactory.Sdk.Business
             return HttpRequest.RequestServer<OrderResult>(ApiOption.GetOrderDetailByID, paras);
         }
     
-        public AddResult CreateDHOrder(string zngcOrderID, decimal price, List<ProductDetailEntity> details, string zngcClientID, string yxOrderID)
+        public AddResult CreateDHOrder(string zngcOrderID, decimal price, List<ProductDetailEntity> details, string zngcClientID, string yxOrderID,string clientid="",string personname="",string mobiletele="",string citycode="",string address="")
         {
             var paras = new Dictionary<string, object>();
             paras.Add("orderID", zngcOrderID);
@@ -41,6 +41,11 @@ namespace IntFactory.Sdk.Business
             paras.Add("details", JsonConvert.SerializeObject(details).ToString());
             paras.Add("clientID", zngcClientID);
             paras.Add("yxOrderID", yxOrderID);
+            paras.Add("yxClientID", clientid);
+            paras.Add("personname", personname);
+            paras.Add("mobiletele", mobiletele);
+            paras.Add("cityCode", citycode);
+            paras.Add("address", address);
 
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateDHOrder, paras);
         }

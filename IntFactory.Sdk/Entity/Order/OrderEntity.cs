@@ -30,6 +30,13 @@ namespace IntFactory.Sdk
 
         public string goodsID;
 
+        public string personName;
+
+        public string mobileTele;
+
+        public string cityCode;
+
+        public string address;
         /// <summary>
         /// 订单样图缩约图
         /// </summary>

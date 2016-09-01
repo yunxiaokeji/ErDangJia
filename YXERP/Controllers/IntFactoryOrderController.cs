@@ -70,6 +70,10 @@ namespace YXERP.Controllers
         {
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;
+            ViewBag.CityCode =  CurrentUser.Client.CityCode;
+            ViewBag.ContactName =  CurrentUser.Client.ContactName;
+            ViewBag.MobilePhone =  CurrentUser.Client.MobilePhone;
+            ViewBag.Address = CurrentUser.Client.Address;
             var obj= OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
             if (obj.error_code == 0)
             {
@@ -173,7 +177,7 @@ namespace YXERP.Controllers
             JsonDictionary.Add("PurchaseID", purid);
             //3.生成智能工厂单据
             var result = OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
-                    ord.clientID, purid);
+                    ord.clientID, purid, CurrentUser.ClientID,ord.personName, ord.mobileTele, ord.cityCode, ord.address);
             if (result.error_code == 0)
             {
                 JsonDictionary.Add("OtherOrderID", result.id);

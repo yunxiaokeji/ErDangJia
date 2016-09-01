@@ -713,6 +713,12 @@ namespace CloudSalesBusiness
             return dt;
         }
 
+        public int GetProductCount(string clientid)
+        {
+            var result=CommonBusiness.Select("Products", "count(1)", " Status!=9 and ClientID='" + clientid + "'");
+            return Convert.ToInt32(result);
+        }
+
         public Products GetProductByID(string productid)
         {
             var dal = new ProductsDAL();
@@ -767,14 +773,14 @@ namespace CloudSalesBusiness
                 return Convert.ToInt32(obj) > 0;
             }
         }
-        public string IsExistCMProduct(string cmgoodscode, string cmgoodsid)
+        public string IsExistCMProduct(string cmgoodscode, string cmgoodsid ,string clientid)
         {
-            object obj = CommonBusiness.Select("Products", "  top 1 ProductID ", "CMGoodsID='" + cmgoodsid + "' and CMGoodscode='" + cmgoodscode + "' and Status<>9");
+            object obj = CommonBusiness.Select("Products", "  top 1 ProductID ", "CMGoodsID='" + cmgoodsid + "' and CMGoodscode='" + cmgoodscode + "' and Status<>9 and ClientID='" + clientid + "'");
             return obj != null ? obj.ToString() : "";
         }
-        public string IsExistCMProductDetail(string remark, string cmgoodscode,string cmgoodsid)
+        public string IsExistCMProductDetail(string remark, string cmgoodscode,string cmgoodsid,string clientid)
         {
-            object obj = CommonBusiness.Select("Products a join ProductDetail b on a.ProductID=b.ProductID ", " top 1 b.ProductDetailID ", "a.CMGoodsID='" + cmgoodsid + "' and b.remark='" + remark + "' and a.CMGoodscode='" + cmgoodscode + "' and a.Status<>9  and b.Status<>9");
+            object obj = CommonBusiness.Select("Products a join ProductDetail b on a.ProductID=b.ProductID ", " top 1 b.ProductDetailID ", "a.CMGoodsID='" + cmgoodsid + "' and b.remark='" + remark + "' and a.CMGoodscode='" + cmgoodscode + "' and a.Status<>9  and b.Status<>9 and a.CLientID='" + clientid + "'");
             return obj != null ? obj.ToString() : "";
         }
         public bool IsExistShapeCode(string code, string productid, string clientid)

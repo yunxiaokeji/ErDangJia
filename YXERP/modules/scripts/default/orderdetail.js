@@ -31,7 +31,10 @@
         //规格
         _self.showAttrForOrder(model, 'pdttitle', 'pdtAttr');
         _self.getPlateMakings();
-        $('.bottombtn').bind('click', function() { _self.savePDT() });
+        $('.bottombtn').bind('click', function () { _self.savePDT() });
+        if (window.screen.width < 1400) {
+            $('.moneyinfo').css("width", "720px");
+        } 
     } 
 
     //获取制版工艺说明
@@ -191,15 +194,18 @@
     ObjectJS.bindOrderImages = function (orderimages) {
         var _self = this;
         var images = orderimages.split(",");
-        _self.images = images;
-
-        for (var i = 0; i < images.length; i++) {
-            if (images[i]) {
-                if (i == 0) {
-                    $("#orderImage").attr("src", images[i].split("?")[0]);
+        _self.images = images; 
+        if (orderimages == null || orderimages=="" || images.length == 0) {
+            $(".order-imgs-list").html('<li class="hover"><img src="/modules/images/none-img.png"></li>');
+        } else {
+            for (var i = 0; i < images.length; i++) {
+                if (images[i]) {
+                    if (i == 0) {
+                        $("#orderImage").attr("src", images[i].split("?")[0]);
+                    }
+                    var img = $('<li class="' + (i == 0 ? 'hover' : "") + '"><img src="' + images[i] + '" /></li>');
+                    $(".order-imgs-list").append(img);
                 }
-                var img = $('<li class="' + (i == 0 ? 'hover' : "") + '"><img src="' + images[i] + '" /></li>');
-                $(".order-imgs-list").append(img);
             }
         }
         $(".order-imgs-list img").parent().click(function () {
@@ -260,16 +266,22 @@
         }); 
         Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
             if (data.result) {
-                if (confirm("新增成功,是否返回继续选购产品！")) {
-                    window.location = '/IntFactoryOrder/Orders';
-                }
-                $('.moneyinfo').find(".check-box").each(function (i, v) {
-                    if ($(v).find(".checkbox").hasClass("hover")) {
-                        $(v).find(".checkbox").removeClass("hover");
-                    }
-                });
-                $('#pdtAttr').html('');
-                $('#btnSubmit').hide();
+                confirm("新增成功,是否返回继续选购产品！",
+                    function() {
+                         $('#btnback').click();
+                    },
+                    function () { 
+                        $('#btndetail').parent().data("id", data.PurchaseID);
+                        $('#btndetail').parent().data("url", $('#btndetail').parent().data("url")+data.PurchaseID);
+                        $('#btndetail').click();
+                    //$('.moneyinfo').find(".check-box").each(function (i, v) {
+                    //    if ($(v).find(".checkbox").hasClass("hover")) {
+                    //        $(v).find(".checkbox").removeClass("hover");
+                    //    }
+                    //});
+                    //$('#pdtAttr').html('');
+                    //$('#btnSubmit').hide();
+                }); 
             } else {
                 alert(data.error_message);
             }

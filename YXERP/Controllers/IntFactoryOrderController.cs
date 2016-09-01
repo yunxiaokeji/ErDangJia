@@ -156,7 +156,7 @@ namespace YXERP.Controllers
                     Data = JsonDictionary,
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
-            }
+            } 
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(pid, dids, ord.clientID, totalFee, "", "", 2,CurrentUser.UserID,
                 CurrentUser.AgentID, CurrentUser.ClientID);
@@ -170,11 +170,13 @@ namespace YXERP.Controllers
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
+            JsonDictionary.Add("PurchaseID", purid);
             //3.生成智能工厂单据
             var result = OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
                     ord.clientID, purid);
             if (result.error_code == 0)
             {
+                JsonDictionary.Add("OtherOrderID", result.id);
                 JsonDictionary.Add("result", 1);
             } 
             else

@@ -53,10 +53,10 @@ namespace IntFactory.Sdk.Business
             paras.Add("opearid", userid);
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateOrder, paras);
         }
-        public string ZNGCAddProduct(OrderEntity ord, string agentid, string clientid, string userid,ref string dids)
+        public string ZNGCAddProduct(OrderEntity ord, string agentid, string clientid, string userid,ref string dids )
         {
             int result = 0;
-            string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.goodsID);
+            string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.goodsID, clientid);
             if (string.IsNullOrEmpty(pid))
             {
                 string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(clientid, ord.clientID);
@@ -68,7 +68,7 @@ namespace IntFactory.Sdk.Business
             {
                 result = 0;
                 x.remark = x.remark.Replace("【", "[").Replace("】", "]");
-                string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, ord.intGoodsCode, ord.goodsID);
+                string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, ord.intGoodsCode, ord.goodsID, clientid);
                 if (string.IsNullOrEmpty(did))
                 {
                     ProductDetail detail = new ProductDetail();

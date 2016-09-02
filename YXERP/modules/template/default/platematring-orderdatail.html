@@ -3,7 +3,7 @@
 	for(var i=0, j=$data.length; i < j; i++){
 	var item = $data[i];
 %}
-    {% if(TypeName!=item.TypeName){ %}
+    {% if(TypeName!=item.type){ %}
     <tr class="mTop20 item-header">
         <td class="font14 pLeft10 tLeft bold width150">类型：{%=item.type%}</td>
         <td class="width150 tLeft bold">名称</td>                    

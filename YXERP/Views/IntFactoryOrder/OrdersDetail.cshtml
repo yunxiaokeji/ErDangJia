@@ -21,6 +21,9 @@
             <li title="订单类别">
                 <span class="left">类别：@(model.categoryName)</span>  
             </li>
+             <li title="供应商">
+                <span class="left">供应商：@(model.clientName)&nbsp;@(model.clientMobile)</span>  
+            </li>
         </ul>
         <a class="btn-back right mTop5" title="返回" href="/IntFactoryOrder/Orders"><span id="btnback" style="color: #ffffff;">返回</span></a>
         
@@ -63,9 +66,9 @@
 
     <div class="content-body" style="padding: 20px 0 50px 10px;">
         <div class="nav-partdiv " id="tab12">
-            <div class="table-title tLeft" style="background-color: #f6f6f3;font-size: 17px; text-indent: 10px; padding: 5px 0px;">制版信息</div>
+            <div class="table-title tLeft" style="font-size: 17px; text-indent: 10px; padding: 5px 0px;">制版信息</div>
             <div id="navEngravingInfo" class="platemaking-content"></div>
-            <div class="mTop20 table-title tLeft" style="background-color: #f6f6f3;font-size: 17px; text-indent: 10px;padding: 5px 0px;">工艺说明</div>
+            <div class="mTop20 table-title tLeft" style="font-size: 17px; text-indent: 10px;padding: 5px 0px;">工艺说明</div>
             <table class="table-items-detail tb-plates"></table>
         </div>
     </div>

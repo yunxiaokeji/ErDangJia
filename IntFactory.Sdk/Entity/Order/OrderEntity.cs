@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace IntFactory.Sdk
@@ -14,7 +15,13 @@ namespace IntFactory.Sdk
 
         public string clientID;
 
+        public string clientCode;
+
         public string clientName;
+
+        public string clientContactName;
+
+        public string clientMobile;
 
         public string goodsName;
 
@@ -29,6 +36,8 @@ namespace IntFactory.Sdk
         public string platemaking;
 
         public string goodsID;
+
+        public string logo;
 
         public string personName;
 

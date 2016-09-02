@@ -299,7 +299,9 @@
     <Content Include="modules\m\scripts\global.js" />
     <Content Include="modules\m\scripts\style\detail.js" />
     <Content Include="modules\m\scripts\style\list.js" />
-    <Content Include="modules\m\template\task\task-list.html" />
+    <Content Include="modules\m\template\order\platematrings.html" />
+    <Content Include="modules\m\template\style\style-buy.html" />
+    <Content Include="modules\m\template\style\style-list.html" />
     <Content Include="modules\plug\autocomplete\autocomplete.js" />
     <Content Include="modules\plug\autocomplete\style.css" />
     <Content Include="modules\plug\choosecategory\choosecategory.css" />

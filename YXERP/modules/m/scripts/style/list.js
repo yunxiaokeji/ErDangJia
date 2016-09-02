@@ -18,6 +18,7 @@
     var ObjectJS = {};
     var cacheOrder = [];
     var isCreateOrder = false;
+    var isShowOrder = false;
 
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
@@ -36,20 +37,22 @@
     ObjectJS.bindEvent = function () {
         //滚动加载数据
         $(window).scroll(function () {
-            if (document.body.scrollTop > 30) {
-                $(".getback").slideDown("slow");
-            } else {
-                $(".getback").slideUp("slow");
-            }
-            var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
-            if (bottom <= 200) {
-                if (!ObjectJS.IsLoading) {
-                    Params.pageIndex++;
-                    if (Params.pageIndex <= ObjectJS.PageCount) {
-                        ObjectJS.getList(true);
-                    } else {
-                        $(".prompt").remove();
-                        $(".list").append('<div class="prompt">已经是最后一条啦</div>');
+            if ($(".overlay-addOrder").css('display') == 'none') {
+                if (document.body.scrollTop > 30) {
+                    $(".getback").slideDown("slow");
+                } else {
+                    $(".getback").slideUp("slow");
+                }
+                var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
+                if (bottom <= 200) {
+                    if (!ObjectJS.IsLoading) {
+                        Params.pageIndex++;
+                        if (Params.pageIndex <= ObjectJS.PageCount) {
+                            ObjectJS.getList(true);
+                        } else {
+                            $(".prompt").remove();
+                            $(".list").append('<div class="prompt">已经是最后一条啦</div>');
+                        }
                     }
                 }
             }
@@ -94,7 +97,6 @@
                 }
             } else {
                 $(".search").hide();
-
                 Params.keyWords = "";
                 ObjectJS.getList();
             }
@@ -141,7 +143,7 @@
         $(".task-filtertype li").click(function () {
             $(".btn-task-filtertype div:first").text($(this).text());
             $(this).parent().hide();
-
+            Params.pageIndex = 1;
             Params.filtertype = $(this).data("filtertype");
             ObjectJS.getList();
         });
@@ -196,6 +198,7 @@
         }
         //获取任务列表(页面加载)
         $(".list").append('<div class="data-loading"></div>');
+
         $.post("/IntFactoryOrder/GetProductList", Params, function (data) {
             $(".data-loading").remove();
             if (data.items.length == 0) {
@@ -209,21 +212,27 @@
 
                     innerHtml.find(".btn-addOrder").click(function () {
                         var _this = $(this);
-                        var id = _this.data('orderid');
-                        if (!cacheOrder[id]) {
-                            Global.post("../IntFactoryOrders/GetOrderDetail", {
-                                orderID: id,
-                                clientID: _this.data('clientid')
-                            }, function (data) {
-                                if (data.result.error_code == 0) {
-                                    cacheOrder[id] = data.result.order;
-                                    ObjectJS.showCreateOrderLayer(id);
-                                } else {
-                                    alert("请重新尝试");
-                                }
-                            });
+                        if (!isShowOrder) {
+                            var id = _this.data('orderid');
+                            if (!cacheOrder[id]) {
+                                isShowOrder = true;
+                                Global.post("../IntFactoryOrders/GetOrderDetail", {
+                                    orderID: id,
+                                    clientID: _this.data('clientid')
+                                }, function (data) {
+                                    isShowOrder = false;
+                                    if (data.result.error_code == 0) {
+                                        cacheOrder[id] = data.result.order;
+                                        ObjectJS.showCreateOrderLayer(id);
+                                    } else {
+                                        alert("请重新尝试");
+                                    }
+                                });
+                            } else {
+                                ObjectJS.showCreateOrderLayer(id);
+                            }
                         } else {
-                            ObjectJS.showCreateOrderLayer(id);
+                            alert("正在加载，清稍等");
                         }
                     });
 
@@ -254,7 +263,7 @@
 
                 var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrandvalue='" + dataAttrValue + "' data-xremark='【" + _this.data('value') + "】' data-yremark='【" + $(this).data('value') + "】' data-xyremark='【" + _this.data('value') + "】【" + $(this).data('value') + "】' data-remark='" + description + "'></tr>");
                 trHtml.append("<td class='tLeft'>" + description + "</td>");
-                trHtml.append("<td class='center'><input style='width:50px;' class='quantity center' type='text' value='0' /></td>");
+                trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' class='quantity center' type='text' value='0' /></td>");
                 trHtml.append("<td class='iconfont center' style='font-size:30px;color:#4a98e7;'>&#xe651;</td>");
 
                 trHtml.find('.iconfont').click(function () {

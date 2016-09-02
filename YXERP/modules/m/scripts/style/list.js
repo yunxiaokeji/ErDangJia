@@ -3,6 +3,7 @@
     var Global = require("m_global"),
         doT = require("dot");
     var Params = {
+        clientid: "",
         pageSize: 5,
         pageIndex: 1,
         keyWords: ""
@@ -26,10 +27,20 @@
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;
-        for (var i = 0; i < providers.length; i++) {    
-            var p=providers[i];
-            $(".task-filtertype").append('<li data-id="' + p.ProviderID + '">' + p.Name + '</li>');
+        var providerids = "";
+        for (var i = 0; i < providers.length; i++) {              
+            var p = providers[i];
+            if (p.CMClientID != "" && p.CMClientID != null) {
+                providerids += "'" + p.CMClientID + "',";
+                $(".task-filtertype").append('<li data-id="' + p.CMClientID + '">' + p.Name + '</li>');
+            }           
         }
+        if (providerids != "") {
+            providerids = providerids.substring(1, providerids.length - 2);
+        } else {
+            providerids = "1";
+        }
+        Params.clientid = providerids;
         ObjectJS.bindEvent();
         ObjectJS.getList();  
     };
@@ -144,7 +155,21 @@
             $(".btn-task-filtertype div:first").text($(this).text());
             $(this).parent().hide();
             Params.pageIndex = 1;
-            Params.filtertype = $(this).data("filtertype");
+            Params.clientid = $(this).data("id");
+            if ($(this).data("id") == '-1') {
+                var id = "";
+                $(".task-filtertype li").each(function () {
+                    var _this = $(this);
+                    if (_this.data("id") != '-1') {
+                        if (_this.index() != $(".task-filtertype li").length - 1) {
+                            id += _this.data("id") + '\',\'';
+                        } else {
+                            id += _this.data("id");
+                        }
+                    }
+                });
+                Params.clientid = id;
+            }
             ObjectJS.getList();
         });
 

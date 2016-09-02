@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace IntFactory.Sdk
@@ -29,6 +30,8 @@ namespace IntFactory.Sdk
         public string platemaking;
 
         public string goodsID;
+
+        public string logo;
 
         public string personName;
 

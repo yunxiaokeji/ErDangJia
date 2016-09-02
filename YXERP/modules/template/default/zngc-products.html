@@ -3,6 +3,7 @@
     var item = $data[i];
     var titlename=item.intGoodsCode+" "+item.goodsName;
     var goodname=(titlename.length>17?titlename.substring(0,17)+"...":titlename);
+    var imgurl=(item.logo!="" && item.logo!=null)? item.logo:"/modules/images/ico-provider.png";
 %}
 <li >
     <div class="product-item" style="height: 320px;" >
@@ -17,7 +18,7 @@
         </a>
         <div class="mLeft5 mTop5 color666" title="供应商:{%=item.clientName%}">
             <div class="left">
-                <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;"> 
+                <img src="{%=imgurl%}" style="width: 16px; height: 16px; display: inline-block;"> 
             </div>
             
             <div class="left" style="height: 16px;">&nbsp;{%=(item.clientName.length>16?item.clientName.substring(0,16)+"...":item.clientName)%}</div>

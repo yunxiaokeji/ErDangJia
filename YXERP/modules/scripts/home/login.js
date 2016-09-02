@@ -72,6 +72,9 @@ define(function (require, exports, module) {
                 else if (data.result == -1) {
                     $(".registerErr").html("账号已冻结，请" + data.forbidTime + "分钟后再试").slideDown();
                 }
+                else if (data.result == 11) {
+                    location.href = "/m/home/index";
+                }
             });
         });
 

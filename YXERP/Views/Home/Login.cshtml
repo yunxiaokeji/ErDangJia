@@ -31,12 +31,10 @@
             </div>
             <a class="btnRegister right" href="/Home/Register/@(ViewBag.OtherID)">注册</a>
        </div>
-
         <div class="main">
              <div class="loginTitle">登录</div>
             <div class="login">
                 <div class="registerErr hide"></div>
-                <input id="OtherID" hidden="hidden" class="hide" type="text" value="@(ViewBag.OtherID)">
                 <div class="loginbar">
                     <input type="text" class="input icoUserName" id="iptUserName" placeholder="请输入账号" value="@ViewBag.UserName" maxlength="25"/>
                 </div>
@@ -44,13 +42,12 @@
                     <input type="password" class="input icoUserPwd" id="iptPwd"/>
                     <div class="txtBoxPassword">请输入密码</div>
                 </div>
-
                 <div class="remember-box">
                     <div class="cb-remember-password ico-check ">
                         一周内保持登录
                     </div>
-
                     <div class="right pRight5"><a href="/Home/FindPassword" class="linkRegister">忘记密码?</a></div>
+                    <div class="clear"></div>
                 </div>
 
                 <div class="btnLogin" id="btnLogin">登录</div>
@@ -70,5 +67,6 @@
             Copyright©2015-2016 <a href="http://www.yunxiaokeji.com">云销科技</a> 沪ICP备15042543号-2
         </div>
     </div>
+    <input id="OtherID" hidden="hidden" class="hide" type="text" value="@(ViewBag.OtherID)">
 </body>
 </html>

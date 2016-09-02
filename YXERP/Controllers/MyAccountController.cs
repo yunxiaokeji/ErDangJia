@@ -218,7 +218,7 @@ namespace YXERP.Controllers
 
         public JsonResult UpdateUserAccount(string loginName, string loginPwd)
         {
-            bool bl = OrganizationBusiness.UpdateUserAccount(CurrentUser.UserID, loginName, loginPwd, CurrentUser.AgentID, CurrentUser.ClientID);
+            bool bl = OrganizationBusiness.UpdateUserAccount(CurrentUser.UserID, loginName, loginPwd, CurrentUser.AgentID, CurrentUser.ClientID, !string.IsNullOrEmpty(loginPwd));
             JsonDictionary.Add("Result", bl);
 
             if (bl) {

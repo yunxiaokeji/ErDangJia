@@ -29,6 +29,9 @@ namespace YXERP.Controllers
         public ActionResult Register(string id="")
         {
             ViewBag.OtherID = id;
+            string loginUrl="/home/index";
+            ViewBag.LoginUrl = loginUrl;
+
             return View();
         }
 
@@ -53,7 +56,6 @@ namespace YXERP.Controllers
                     CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(cook["username"], cook["pwd"],out result, operateip);
                     if (model != null)
                     {
-
                         Session["ClientManager"] = model;
                         return Redirect("/Default/Index");
                     }
@@ -367,6 +369,11 @@ namespace YXERP.Controllers
                             model.Client.OtherSysID = string.IsNullOrEmpty(model.Client.OtherSysID)
                                 ? otherid
                                 : model.Client.OtherSysID;
+
+                            if (YXERP.Common.Common.IsMobileDevice())
+                            {
+                                result = 11;
+                            }
                         }
                     }
                     //保持登录状态
@@ -478,6 +485,11 @@ namespace YXERP.Controllers
                             var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", name,
                                 loginName, otherID,
                                 yxClientItem.AgentID, clientid, yxClientItem.ClientCode);
+
+                            if (YXERP.Common.Common.IsMobileDevice())
+                            {
+                                result = 11;
+                            }
 
                         }
                         string operateip = Common.Common.GetRequestIP();

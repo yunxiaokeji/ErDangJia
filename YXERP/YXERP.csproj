@@ -178,7 +178,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FilterProduct.cs" />
-    <Content Include="Common\ApiSetting.xml" />
     <Content Include="Content\homeico\active.png" />
     <Content Include="Content\homeico\buy.png" />
     <Content Include="Content\homeico\custom.png" />
@@ -205,6 +204,7 @@
     <Content Include="modules\css\createorder.css" />
     <Content Include="modules\css\downorder.css" />
     <Content Include="modules\css\error.css" />
+    <Content Include="modules\css\home\register.css" />
     <Content Include="modules\css\home\selectlogin.css" />
     <Content Include="modules\css\iconfont\demo.css" />
     <Content Include="modules\css\iconfont\demo.html" />

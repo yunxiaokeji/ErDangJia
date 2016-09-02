@@ -106,6 +106,31 @@ padding:8px;background-color:#ffd0d0;color:red;position:absolute;left:331px;top:
     position:absolute;top:0px;left:0px;width:308px;height:40px;line-height:40px; color:#999; text-indent:31px;display:block;
 }
 
+@media only screen and ( max-width:450px) {
+    .login-body .main {
+        margin:60px auto;
+        background:none;
+        width:300px;
+        padding:30px 20px 60px 20px;
+        background-color:#fff;
+    }
+
+    .login-body .main .login {
+    width:auto;
+    }
+
+    .login-body .loginbar .input {
+     width:280px;
+    }
+
+    .login-body .copyright {
+        display:none;
+    }
+
+    .btnLogin {
+    width:290px;
+    }
+}
 
 
 

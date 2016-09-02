@@ -45,8 +45,7 @@
         var _self = this;
         $(".tb-plates").html('');
         $(".tb-plates").html("<tr><td colspan='5'><div class='data-loading'><div></td></tr>"); 
-        $(".tb-plates").html('');
-        console.log(_self.model.plateMakings);
+        $(".tb-plates").html(''); 
         var PlateMakings = _self.model.plateMakings; 
         if (PlateMakings.length > 0) {
             doT.exec("template/default/platematring-orderdatail.html", function (template) {

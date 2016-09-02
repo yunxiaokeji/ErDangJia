@@ -34,7 +34,7 @@
             var p = providers[i];
             if (p.CMClientID != "" && p.CMClientID != null) {
                 providerids += "'" + p.CMClientID + "',";
-                $(".task-filtertype").append('<li data-id="' + p.CMClientID + '">' + p.Name + '</li>');
+                $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
             }           
         }
         if (providerids != "") {
@@ -158,7 +158,7 @@
             $(this).parent().hide();
             Params.pageIndex = 1;
             Params.clientid = $(this).data("id");
-            Params.providerid = $(this).data("id");
+            Params.providerid = $(this).data("providerid");
 
             if ($(this).data("id") == '-1') {
                 var id = "";

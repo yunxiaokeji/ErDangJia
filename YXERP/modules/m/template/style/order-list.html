@@ -11,13 +11,13 @@
 %}
         <ul class="listabove row">
             <li style="">
-                <a href="/m/home/Detail?orderid={%=item.orderID%}&clientid={%=item.clientID%}"><img class="task-list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.orderImage%}' /></a>
+                <a><img class="task-list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.orderImage%}' /></a>
             </li>     
             <li class="center-list-task">
                 <!--任务详情-->
                 <div class="mTop4">
                     <div class="details" style="margin-top:0;height:initial;">   
-                        <a class="color333 left Long width100" href="/Task/Detail/{%=item.orderID%}">{%=item.Details[0].ProductName%}</a>
+                        <a class="color333 left Long width100">{%=item.Details[0].ProductName%}</a>
                         <div class="right blue mRight10">￥{%=item.TotalMoney%}</div>
                         <div class="clear"></div>
                     </div>

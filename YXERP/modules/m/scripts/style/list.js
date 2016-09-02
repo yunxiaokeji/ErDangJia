@@ -1,7 +1,7 @@
 ﻿define(function (require,exports,module) {
+    var City = require("city"), CityInvoice;
     var Global = require("m_global"),
         doT = require("dot");
-    var City = require("city"), CityInvoice;
     var Params = {
         pageSize: 5,
         pageIndex: 1,

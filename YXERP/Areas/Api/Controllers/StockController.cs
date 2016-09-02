@@ -172,6 +172,7 @@ namespace YXERP.Areas.Api.Controllers
         public ActionResult AddStockPartIn(string orderid, string remarks, string nums)
         {
             string errorinfo = "";
+            remarks = remarks.Replace("【", "[").Replace("】", "]");
             bool result =StockBusiness.BaseBusiness.AddDocPart(orderid, remarks, nums,ref errorinfo, "");
             JsonDictionary.Add("result", result ? 1 : 0);
             JsonDictionary["error_msg"] = errorinfo;

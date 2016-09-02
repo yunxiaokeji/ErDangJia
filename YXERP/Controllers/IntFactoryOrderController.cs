@@ -68,12 +68,13 @@ namespace YXERP.Controllers
         /// <returns></returns>
         public ActionResult OrdersDetail(string orderid,string clientid)
         {
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.ClientID);
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;
-            ViewBag.CityCode =  CurrentUser.Client.CityCode;
-            ViewBag.ContactName =  CurrentUser.Client.ContactName;
-            ViewBag.MobilePhone =  CurrentUser.Client.MobilePhone;
-            ViewBag.Address = CurrentUser.Client.Address;
+            ViewBag.CityCode = client.CityCode;
+            ViewBag.ContactName = client.ContactName;
+            ViewBag.MobilePhone = client.MobilePhone;
+            ViewBag.Address = client.Address;
             var obj= OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
             if (obj.error_code == 0)
             {
@@ -176,9 +177,13 @@ namespace YXERP.Controllers
             }
             JsonDictionary.Add("PurchaseID", purid);
             //3.生成智能工厂单据
+            ord.details.ForEach(x =>
+            { 
+                x.remark = x.remark.Replace("[", "【").Replace("]", "】");
+            });
             var result = OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
                     ord.clientID, purid, CurrentUser.ClientID,ord.personName, ord.mobileTele, ord.cityCode, ord.address);
-            if (result.error_code == 0)
+            if (!string.IsNullOrEmpty(result.id))
             {
                 JsonDictionary.Add("OtherOrderID", result.id);
                 JsonDictionary.Add("result", 1);

@@ -34,7 +34,7 @@
         _self.showAttrForOrder(model, 'pdttitle', 'pdtAttr');
         _self.getPlateMakings();
         $('.bottombtn').bind('click', function () { _self.savePDT() });
-        if (window.screen.width < 1400) {
+        if (window.screen.width < 1500) {
             $('.moneyinfo').css("width", "720px");
         }
         CityInvoice = City.createCity({
@@ -214,21 +214,20 @@
                 }
             }
         }
-        $(".order-imgs-list img").parent().click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.siblings().removeClass("hover");
-                _this.addClass("hover");
+        $(".order-imgs-list li").click(function () {
+            var _this = $(this); 
+            _this.siblings().removeClass("hover");
+            _this.addClass("hover");
 
-                $("#orderImage").attr("src", _this.find("img").attr("src").split("?")[0]);
+            $("#orderImage").attr("src", _this.find("img").attr("src").split("?")[0]);
 
-                if ($("#orderImage").width() > $("#orderImage").height()) {
-                    $("#orderImage").css("width", 350);
-                } else {
-                    $("#orderImage").css("height", 350);
-                }
-            }
-        });
+            if ($("#orderImage").width() > $("#orderImage").height()) {
+                $("#orderImage").css("width", 350);
+            } else {
+                $("#orderImage").css("height", 350);
+            } 
+        }); 
+        $($(".order-imgs-list .hover")).click();
     }
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');

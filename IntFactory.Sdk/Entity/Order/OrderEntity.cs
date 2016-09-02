@@ -15,7 +15,13 @@ namespace IntFactory.Sdk
 
         public string clientID;
 
+        public string clientCode;
+
         public string clientName;
+
+        public string clientContactName;
+
+        public string clientMobile;
 
         public string goodsName;
 

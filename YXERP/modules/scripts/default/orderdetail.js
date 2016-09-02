@@ -4,7 +4,8 @@
         Global = require("global"),
         doT = require("dot"),
         Easydialog = require("easydialog"),
-        Upload = require("upload") ;
+        Upload = require("upload");
+    require("smartzoom");
     require("pager"); 
 
     var ObjectJS = {}, CacheItems=[];
@@ -34,13 +35,9 @@
         _self.showAttrForOrder(model, 'pdttitle', 'pdtAttr');
         _self.getPlateMakings();
         $('.bottombtn').bind('click', function () { _self.savePDT() });
-        if (window.screen.width < 1500) {
-            $('.moneyinfo').css("width", "720px");
-        }
-        CityInvoice = City.createCity({
-            cityCode: _self.CityCode,
-            elementID: "citySpan"
-        });
+        //if (window.screen.width < 1500) {
+            $('.moneyinfo').css("width", "740px");
+        //} 
     } 
 
     //获取制版工艺说明
@@ -48,7 +45,8 @@
         var _self = this;
         $(".tb-plates").html('');
         $(".tb-plates").html("<tr><td colspan='5'><div class='data-loading'><div></td></tr>"); 
-        $(".tb-plates").html(''); 
+        $(".tb-plates").html('');
+        console.log(_self.model.plateMakings);
         var PlateMakings = _self.model.plateMakings; 
         if (PlateMakings.length > 0) {
             doT.exec("template/default/platematring-orderdatail.html", function (template) {
@@ -228,7 +226,69 @@
             } 
         }); 
         $($(".order-imgs-list .hover")).click();
+
+        //图片放大功能
+        var width = document.documentElement.clientWidth, height = document.documentElement.clientHeight;
+        $("#orderImage").click(function () {
+            if ($(this).attr("src")) {
+                $(".enlarge-image-bgbox,.enlarge-image-box").fadeIn();
+                $(".right-enlarge-image,.left-enlarge-image").css({ "top": height / 2 - 80 })
+
+                $(".enlarge-image-item").append('<img id="enlargeImage" src="' + $(this).attr("src") + '"/>');
+                $('#enlargeImage').smartZoom({ 'containerClass': 'zoomableContainer' });
+
+                $(".close-enlarge-image").unbind().click(function () {
+                    $(".enlarge-image-bgbox,.enlarge-image-box").fadeOut();
+                    $(".enlarge-image-item").empty();
+                });
+                $(".enlarge-image-bgbox").unbind().click(function () {
+                    $(".enlarge-image-bgbox,.enlarge-image-box").fadeOut();
+                    $(".enlarge-image-item").empty();
+                });
+                $(".zoom-botton").unbind().click(function (e) {
+                    var scaleToAdd = 0.8;
+                    if (e.target.id == 'zoomOutButton')
+                        scaleToAdd = -scaleToAdd;
+                    $('#enlargeImage').smartZoom('zoom', scaleToAdd);
+                    return false;
+                });
+
+                $(".left-enlarge-image").unbind().click(function () {
+                    var ele = $(".order-imgs-list .hover").prev();
+                    if (ele && ele.find("img").attr("src")) {
+                        var _img = ele.find("img");
+                        $(".order-imgs-list .hover").removeClass("hover");
+                        ele.addClass("hover"); 
+                        $("#orderImage").attr("src", _img.attr("src").split("?")[0]);
+                        $(".enlarge-image-item").empty();
+                        $(".enlarge-image-item").append('<img id="enlargeImage" src="' + _img.attr("src").split("?")[0] + '"/>');
+                        $('#enlargeImage').smartZoom({ 'containerClass': 'zoomableContainer' });
+                    }
+                });
+
+                $(".right-enlarge-image").unbind().click(function () {
+                    var ele = $(".order-imgs-list .hover").next();
+                    if (ele && ele.find("img").attr("src")) {
+                        var _img = ele.find("img");
+                        $(".order-imgs-list .hover").removeClass("hover");
+                        ele.addClass("hover"); 
+                        $("#orderImage").attr("src", _img.attr("src"));
+                        $(".enlarge-image-item").empty();
+                        $(".enlarge-image-item").append('<img id="enlargeImage" src="' + _img.attr("src").split("?")[0] + '"/>');
+                        $('#enlargeImage').smartZoom({ 'containerClass': 'zoomableContainer' });
+                    }
+                });
+            }
+        });
+
+
+        if ($("#orderImage").width() > $("#orderImage").height()) {
+            $("#orderImage").css("width", 350);
+        } else {
+            $("#orderImage").css("height", 350);
+        }
     }
+
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');
         var _self = this;

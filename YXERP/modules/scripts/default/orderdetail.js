@@ -189,7 +189,7 @@
             });
             $(innerhtml).find(".column-title").css("width", "50px");
             $("#" + obj).after(innerhtml);
-            $('#' + contendid).css("height", "274px").css("overflow-y", "auto");
+            $('#' + contendid).css("max-height", "274px").css("overflow-y", "auto");
             
         });
     };

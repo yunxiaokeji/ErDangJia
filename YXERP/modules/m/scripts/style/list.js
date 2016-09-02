@@ -4,7 +4,8 @@
     var City = require("city"), CityInvoice;
     var Params = {
         pageSize: 5,
-        pageIndex: 1        
+        pageIndex: 1,
+        keyWords: ""
     };
     
     var taskParms = {

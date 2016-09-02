@@ -527,6 +527,10 @@ define(function (require, exports, module) {
                                 details += _this.data("id") + "-" + quantity + ":" + _this.find("select").val() + ",";
                             }
                         });
+                        if ($("#showAuditDocPartIn .checkbox").hasClass("hover") && $('#navStorageIn .shenhe').length > 1) {
+                            alert("存在多个未审核的单据，不能强制完成采购");
+                            return false;
+                        } 
                         if (details.length > 0 || $("#showAuditDocPartIn .checkbox").hasClass("hover")) {
                             Global.post("/Purchase/AuditDocPart", {
                                 docid: did,

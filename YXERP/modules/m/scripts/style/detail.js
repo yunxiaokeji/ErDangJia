@@ -1,13 +1,15 @@
 ﻿define(function (require, exports, module) {
     var Global = require("global"),
         Upload = require("upload"),
-        doT = require("dot")
+        doT = require("dot");
+    var Common = require("/modules/m/scripts/style/createordergoods.js");
 
     var ObjectJS = {};
-    ObjectJS.init = function (orderImagesCount, order) {
+    ObjectJS.init = function (orderImagesCount, order,user) {
         ObjectJS.orderImagesCount = orderImagesCount;
         var jsonOrder = JSON.parse(order.replace(/&quot;/g, '"'));
         ObjectJS.order = jsonOrder;
+        ObjectJS.user = JSON.parse(user.replace(/&quot;/g, '"'));
 
         ObjectJS.bindEvent();
 
@@ -85,6 +87,10 @@
         //点击回到顶部
         $(".getback").click(function () {
             $('html, body').animate({ scrollTop: 0 }, 'slow');
+        });
+        //下单
+        $(".btn-addOrder").click(function () {
+            Common.showOrderGoodsLayer(ObjectJS.order, ObjectJS.user);
         });
     }
 

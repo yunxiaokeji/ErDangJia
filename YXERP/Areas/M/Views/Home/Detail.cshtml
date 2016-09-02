@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "款式详情";
     var order = (IntFactory.Sdk.OrderEntity)ViewBag.Order;
+    var user = (CloudSalesEntity.Users)ViewBag.baseUser;
     string[] imagesUrl = { };
     if (order.orderImages.Length != 0)
     {
@@ -21,7 +22,8 @@
             seajs.use("/modules/m/scripts/style/detail", function (obj) {
                 obj.init(
                     '@(imagesUrl.Length)',
-                    '@Html.ToJSONString(order)'
+                    '@Html.ToJSONString(order)',
+                    '@Html.ToJSONString(user)'
                  );
             });
         })
@@ -105,7 +107,7 @@
             <div class="mTop10 tb-plates"></div>
        </div>
     </div>
-
+<div class="overlay-addOrder"></div>
 
 
     

@@ -346,7 +346,7 @@ namespace CloudSalesBusiness.Manage
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, account);
 
-            string clientid = ClientDAL.BaseProvider.InsertClient((int)registerType, (int)accountType, account, loginPwd, clientName, contactName, mobile, email, industry, citycode, address, remark, companyid, companyCode, customerid, operateid, out result, out userid);
+            string clientid = ClientDAL.BaseProvider.InsertClient((int)registerType, (int)accountType, account, loginPwd, clientName, contactName, mobile, email, industry, citycode, address, remark, companyid, companyCode, customerid, operateid, out result, out userid, otherid);
 
             return clientid;
         }

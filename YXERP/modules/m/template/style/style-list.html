@@ -2,6 +2,7 @@
     for(var i=0;i<$data.length;i++)
     { 
     var item=$data[i];
+    console.log(item);
 %}
         <ul class="listabove row">
             <li style="">
@@ -11,7 +12,7 @@
                 <!--任务详情-->
                 <div>
                     <div class="details">   
-                         <a class="color333 Long width100" href="/Task/Detail/{%=item.orderID%}">{%=item.goodsName%}</a>
+                         <a class="color333 Long width100" href="/m/home/Detail?orderid={%=item.orderID%}&clientid={%=item.clientID%}"">{%=item.goodsName%}</a>
                     </div>
                     <div class="stage">已销售1100件</div>
                     <div class="stage">

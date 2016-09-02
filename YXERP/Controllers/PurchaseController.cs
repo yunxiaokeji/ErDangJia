@@ -103,10 +103,10 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetPurchases(string keyWords, int pageIndex, int totalCount, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype=-1)
+        public JsonResult GetPurchases(string keyWords, int pageIndex, int totalCount, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype=-1,int pageSize=10)
         {
             int pageCount = 0;
-            List<StorageDoc> list = StockBusiness.GetPurchases(type == 3 ? string.Empty : CurrentUser.UserID, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, providerid,sourcetype, PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
+            List<StorageDoc> list = StockBusiness.GetPurchases(type == 3 ? string.Empty : CurrentUser.UserID, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, providerid, sourcetype, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("TotalCount", totalCount);
             JsonDictionary.Add("PageCount", pageCount);

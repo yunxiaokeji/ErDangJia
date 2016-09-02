@@ -9,7 +9,10 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use("/modules/m/scripts/style/list.js", function (data) {
-            data.init('@Html.ToJSONString((List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)', '@Html.ToJSONString((CloudSalesEntity.Users)ViewBag.baseUser)');
+            data.init(
+                '@Html.ToJSONString((List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)',
+                '@Html.ToJSONString((CloudSalesEntity.Users)ViewBag.baseUser)'
+            );
         });
 </script>
 }

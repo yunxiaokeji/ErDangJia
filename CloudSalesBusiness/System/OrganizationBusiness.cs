@@ -611,9 +611,12 @@ namespace CloudSalesBusiness
 
         #region 编辑/删除
 
-        public static bool UpdateUserAccount(string userid, string loginName, string loginPwd, string agentid, string clientid)
+        public static bool UpdateUserAccount(string userid, string loginName, string loginPwd, string agentid, string clientid,bool changetype=true)
         {
-            loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, loginName);
+            if (changetype)
+            {
+                loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, loginName);
+            }
             bool flag = OrganizationDAL.BaseProvider.UpdateUserAccount(userid, loginName, loginPwd, agentid, clientid);
 
             if (flag)

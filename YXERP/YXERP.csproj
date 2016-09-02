@@ -272,8 +272,8 @@
     <Content Include="modules\m\css\iconfont\iconfont.css" />
     <Content Include="modules\m\css\iconfont\iconfont.svg" />
     <Content Include="modules\m\css\layout.css" />
-    <Content Include="modules\m\css\task\detail.css" />
-    <Content Include="modules\m\css\task\list.css" />
+    <Content Include="modules\m\css\style\detail.css" />
+    <Content Include="modules\m\css\style\list.css" />
     <Content Include="modules\m\images\defaultavatar.png" />
     <Content Include="modules\m\images\ico-delete.png" />
     <Content Include="modules\m\images\ico-home.png" />
@@ -296,8 +296,9 @@
     <Content Include="modules\m\plug\touchSlider\js\jquery-1.js" />
     <Content Include="modules\m\plug\touchSlider\js\jquery.js" />
     <Content Include="modules\m\plug\touchSlider\js\jquery_002.js" />
-    <Content Include="modules\m\scripts\task\detail.js" />
-    <Content Include="modules\m\scripts\task\list.js" />
+    <Content Include="modules\m\scripts\global.js" />
+    <Content Include="modules\m\scripts\style\detail.js" />
+    <Content Include="modules\m\scripts\style\list.js" />
     <Content Include="modules\m\template\task\task-list.html" />
     <Content Include="modules\plug\autocomplete\autocomplete.js" />
     <Content Include="modules\plug\autocomplete\style.css" />

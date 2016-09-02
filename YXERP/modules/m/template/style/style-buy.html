@@ -15,7 +15,7 @@ var item=$data;
         </div>
         <div class="style-attr">
             <div class="productsalesattr">
-                <div class="attr-title" id="colorBox" data-id="{%=item.AttrLists[0].AttrID%}">{%=item.AttrLists[0].AttrName%}</div>
+                <div class="attr-title" data-type="1" id="colorBox" data-id="{%=item.AttrLists[0].AttrID%}">{%=item.AttrLists[0].AttrName%}</div>
                 <div class="attr-rule attr-ul">
                     <ul class="attr-item">
                         {%
@@ -26,12 +26,13 @@ var item=$data;
                                     {%=attr.ValueName%}
                                 </li>
                         {%}%}
+                        <li style="background-color:initial;padding:initial;"><input type="text" style="padding:4px 2px;" class="center width50 layout-attr" placeholder="自定义" /></li>
                     </ul>
                     <div class="clear"></div>
                 </div>
             </div>
             <div class="productsalesattr">
-                <div class="attr-title" id="attrBox" data-id="{%=item.SaleAttrs[0].AttrID%}">{%=item.SaleAttrs[0].AttrName%}</div>
+                <div class="attr-title" data-type="2" id="attrBox" data-id="{%=item.SaleAttrs[0].AttrID%}">{%=item.SaleAttrs[0].AttrName%}</div>
                 <div class="attr-color attr-ul">
                     <ul class="attr-item">
                         {%
@@ -42,6 +43,7 @@ var item=$data;
                                     {%=attr.ValueName%}
                                 </li>
                         {%}%}
+                        <li style="background-color:initial;padding:initial;"><input type="text" style="padding:4px 2px;" class="center width50 layout-attr" placeholder="自定义" /></li>
                     </ul>
                     <div class="clear"></div>
                 </div>

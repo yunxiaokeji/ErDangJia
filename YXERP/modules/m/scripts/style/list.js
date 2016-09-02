@@ -241,42 +241,14 @@
                                             });
                                         });
 
-                                        $(".overlay-addOrder .attr-ul li").unbind().click(function () {
+                                        $(".overlay-addOrder .attr-ul li.size,.overlay-addOrder .attr-ul li.color").unbind().click(function () {
                                             var _self = $(this);
                                             if (_self.hasClass("select")) {
                                                 _self.removeClass("select");
                                             } else {
                                                 _self.addClass("select");
                                             }
-                                            $(".attr-box").empty();
-                                            $(".attr-box").append("<table class='table-list'></table>");
-                                            $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>');
-                                            $(".attr-ul .color.select").each(function () {
-                                                var _this = $(this);
-                                                $(".attr-ul .size.select").each(function () {
-                                                    var dataAttr = $("#colorBox").data('id') + ',' + $("#attrBox").data('id');
-                                                    var dataValue = _this.data('id') + ',' + $(this).data('id');
-                                                    var dataAttrValue = $("#colorBox").data('id') + ":" + _this.data('id') + "," + $("#attrBox").data('id') + $(this).data('id');
-                                                    var description = '【尺码:' + $(this).data('value') + '】【颜色:' + _this.data('value') + '】';
-
-                                                    var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrAndvalue='" + dataAttrValue + "' data-xremark='【" + $(this).data('value') + "】' data-yremark='【" + _this.data('value') + "】' data-xyremark='【" + $(this).data('value') + "】【" + _this.data('value') + "】' data-remark='" + description + "'></tr>");
-                                                    trHtml.append("<td class='tLeft'>" + description + "</td>");
-                                                    trHtml.append("<td class='center'><input style='width:50px;' class='quantity center' type='text' value='0' /></td>");
-                                                    trHtml.append("<td class='iconfont center' style='font-size:30px;color:#4a98e7;'>&#xe651;</td>");
-
-                                                    trHtml.find('.iconfont').click(function () {
-                                                        $(this).parents('tr').remove();
-                                                        return false;
-                                                    });
-                                                    trHtml.find('.quantity').change(function () {
-                                                        var _this = $(this);
-                                                        if (!_this.val().isInt() || _this.val() < 0) {
-                                                            _this.val(0);
-                                                        }
-                                                    });
-                                                    $(".attr-box .table-list").append(trHtml);
-                                                });
-                                            });
+                                            ObjectJS.createOrderDetails();
                                         });
 
                                         $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
@@ -299,6 +271,39 @@
                                             return false;
                                         });
 
+                                        innerHtml.find('.layout-attr').change(function () {
+                                            var _this = $(this);
+                                            var isContinue = true;
+                                            var _thisTitle=_this.parents('.productsalesattr').find('.attr-title');
+                                            if (!_this.val().trim()) {
+                                                _this.val('');
+                                                return false;
+                                            }
+                                            _this.parent().siblings().each(function () {
+                                                var obj = $(this);
+                                                if (_this.val().trim() == obj.text().trim()) {
+                                                    alert(obj.data('type') == 1 ? "" + _thisTitle.text() + "已存在" : "" + _thisTitle.text() + "已存在");
+                                                    isContinue = false;
+                                                    return false;
+                                                }
+                                            });
+                                            if (isContinue) {
+                                                var attrObj = $("<li class='" + (_thisTitle.data('type') == 1 ? "size" : "color") + "' data-type='" + _thisTitle.data('type') + "' data-id='|' data-value='" + _this.val().trim() + "'>" + _this.val().trim() + "</li>");
+                                                attrObj.click(function () {
+                                                    var _self = $(this);
+                                                    if (_self.hasClass("select")) {
+                                                        _self.removeClass("select");
+                                                    } else {
+                                                        _self.addClass("select");
+                                                    }
+                                                    ObjectJS.createOrderDetails();
+                                                });
+                                                _this.parent().before(attrObj);
+                                                attrObj.click();
+                                                _this.val('');
+                                            }
+                                        });
+
                                         CityInvoice = City.createCity({
                                             cityCode: ObjectJS.user.CityCode,
                                             elementID: "citySpan"
@@ -312,6 +317,12 @@
                             doT.exec("m/template/style/style-buy.html", function (code) {
                                 var innerHtml = code(cacheOrder[id]);
                                 innerHtml = $(innerHtml);
+
+                                innerHtml.find("#customerName").val(ObjectJS.user.Name);
+                                innerHtml.find("#customerTel").val(ObjectJS.user.MobilePhone);
+                                innerHtml.find("#customerAddress").val(ObjectJS.user.Address);
+
+
                                 $(".overlay-addOrder").html(innerHtml).show();
 
                                 $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
@@ -330,47 +341,23 @@
                                     });
                                 });
 
-                                $(".overlay-addOrder .attr-ul li").unbind().click(function () {
+                                $(".overlay-addOrder .attr-ul li.size,.overlay-addOrder .attr-ul li.color").unbind().click(function () {
                                     var _self = $(this);
                                     if (_self.hasClass("select")) {
                                         _self.removeClass("select");
                                     } else {
                                         _self.addClass("select");
                                     }
-                                    $(".attr-box").empty();
-                                    $(".attr-box").append("<table class='table-list'></table>");
-                                    $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>');
-                                    $(".attr-ul .color.select").each(function () {
-                                        var _this = $(this);
-                                        $(".attr-ul .size.select").each(function () {
-                                            var dataAttr = $("#colorBox").data('id') + ',' + $("#attrBox").data('id');
-                                            var dataValue = _this.data('id') + ',' + $(this).data('id');
-                                            var dataAttrValue = $("#colorBox").data('id') + ":" + _this.data('id') + "," + $("#attrBox").data('id') + $(this).data('id');
-                                            var description = '【尺码:' + $(this).data('value') + '】【颜色:' + _this.data('value') + '】';
-
-                                            var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrAndvalue='" + dataAttrValue + "' data-xremark='【" + $(this).data('value') + "】' data-yremark='【" + _this.data('value') + "】' data-xyremark='【" + $(this).data('value') + "】【" + _this.data('value') + "】' data-remark='" + description + "'></tr>");
-                                            trHtml.append("<td class='tLeft'>" + description + "</td>");
-                                            trHtml.append("<td class='center'><input style='width:50px;' class='quantity center' type='text' value='0' /></td>");
-                                            trHtml.append("<td class='iconfont center' style='font-size:30px;color:#4a98e7;'>&#xe651;</td>");
-
-                                            trHtml.find('.iconfont').click(function () {
-                                                $(this).parents('tr').remove();
-                                                return false;
-                                            });
-                                            trHtml.find('.quantity').change(function () {
-                                                var _this = $(this);
-                                                if (!_this.val().isInt() || _this.val() < 0) {
-                                                    _this.val(0);
-                                                }
-                                            });
-                                            $(".attr-box .table-list").append(trHtml);
-                                        });
-                                    });
+                                    ObjectJS.createOrderDetails();
                                 });
 
                                 $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
                                     var model = {
                                         OrderID: cacheOrder[id].orderID,
+                                        PersonName: $("#customerName").val(),
+                                        MobileTele: $("#customerTel").val(),
+                                        CityCode: CityInvoice.getCityCode(),
+                                        Address: $("#customerAddress").val(),
                                         GoodsName: cacheOrder[id].goodsName,
                                         GoodsID: cacheOrder[id].goodsID,
                                         ClientID: cacheOrder[id].clientID,
@@ -384,7 +371,41 @@
                                     return false;
                                 });
 
+                                innerHtml.find('.layout-attr').change(function () {
+                                    var _this = $(this);
+                                    var isContinue = true;
+                                    var _thisTitle = _this.parents('.productsalesattr').find('.attr-title');
+                                    if (!_this.val().trim()) {
+                                        _this.val('');
+                                        return false;
+                                    }
+                                    _this.parent().siblings().each(function () {
+                                        var obj = $(this);
+                                        if (_this.val().trim() == obj.text().trim()) {
+                                            alert(obj.data('type') == 1 ? "" + _thisTitle.text() + "已存在" : "" + _thisTitle.text() + "已存在");
+                                            isContinue = false;
+                                            return false;
+                                        }
+                                    });
+                                    if (isContinue) {
+                                        var attrObj = $("<li class='" + (_thisTitle.data('type') == 1 ? "size" : "color") + "' data-type='" + _thisTitle.data('type') + "' data-id='|' data-value='" + _this.val().trim() + "'>" + _this.val().trim() + "</li>");
+                                        attrObj.click(function () {
+                                            var _self = $(this);
+                                            if (_self.hasClass("select")) {
+                                                _self.removeClass("select");
+                                            } else {
+                                                _self.addClass("select");
+                                            }
+                                            ObjectJS.createOrderDetails();
+                                        });
+                                        _this.parent().before(attrObj);
+                                        attrObj.click();
+                                        _this.val('');
+                                    }
+                                });
+
                                 CityInvoice = City.createCity({
+                                    cityCode: ObjectJS.user.CityCode,
                                     elementID: "citySpan"
                                 });
                             });
@@ -401,6 +422,38 @@
                 });
             }
             
+        });
+    };
+
+    ObjectJS.createOrderDetails = function () {
+        $(".attr-box").empty();
+        $(".attr-box").append("<table class='table-list'></table>");
+        $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>');
+        $(".attr-ul .color.select").each(function () {
+            var _this = $(this);
+            $(".attr-ul .size.select").each(function () {
+                var dataAttr = $("#colorBox").data('id') + ',' + $("#attrBox").data('id');
+                var dataValue = _this.data('id') + ',' + $(this).data('id');
+                var dataAttrValue = $("#colorBox").data('id') + ":" + _this.data('id') + "," + $("#attrBox").data('id') + $(this).data('id');
+                var description = '【尺码:' + $(this).data('value') + '】【颜色:' + _this.data('value') + '】';
+
+                var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrAndvalue='" + dataAttrValue + "' data-xremark='【" + $(this).data('value') + "】' data-yremark='【" + _this.data('value') + "】' data-xyremark='【" + $(this).data('value') + "】【" + _this.data('value') + "】' data-remark='" + description + "'></tr>");
+                trHtml.append("<td class='tLeft'>" + description + "</td>");
+                trHtml.append("<td class='center'><input style='width:50px;' class='quantity center' type='text' value='0' /></td>");
+                trHtml.append("<td class='iconfont center' style='font-size:30px;color:#4a98e7;'>&#xe651;</td>");
+
+                trHtml.find('.iconfont').click(function () {
+                    $(this).parents('tr').remove();
+                    return false;
+                });
+                trHtml.find('.quantity').change(function () {
+                    var _this = $(this);
+                    if (!_this.val().isInt() || _this.val() < 0) {
+                        _this.val(0);
+                    }
+                });
+                $(".attr-box .table-list").append(trHtml);
+            });
         });
     };
 

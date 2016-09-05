@@ -164,6 +164,9 @@
                     }
                 });
                 Params.clientid = id;
+            }
+        });
+
         //列表排序
         $(".sort-item").click(function () {
             var _self = $(this);

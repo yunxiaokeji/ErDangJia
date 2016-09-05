@@ -20,22 +20,14 @@
         <input type="text" class="txt-search" placeholder="请输入款式名称搜索" />
     </div>
     <div class="btn-search">确定</div>
+
 </div>
 <div class="topbar">
-    <ul class="header">
-        <li class="btn-menu header-li">
-            <div class="iconfont iconfont-menu">&#xe60d;</div>
-            <span class="login-name long"></span>
-            <ul class="menu-box">
-                <li>
-                    <a href="/Home/Logout">退出</a>
-                </li>
-            </ul>
-        </li>
-        <li class="header-li li-task-filtertype">
+    <div class="header">
+        <div class="header-li li-task-filtertype">
             <div class="btn-task-filtertype">
-            <div class="left font16">全部</div>
-            <div class="iconfont left">&#xe61c;</div>
+            <div class="font16">供应商-全部</div>
+            <div class="iconfont">&#xe61c;</div>
             <ul class="task-filtertype">
                 <li data-id="-1">全部</li>
                 <li data-id="0">待审核</li>
@@ -44,44 +36,13 @@
                 <li data-id="2">已入库</li>
             </ul>
             </div>
-        </li>
-        <li class="header-li  btnsearch" style="margin-top:10px;">
+        </div>
+        <div class="btnsearch">
             <div class="iconfont iconfont-search">&#xe605;</div>
-        </li>
-    </ul>
-    @*<ul class="filter-task">
-        <li class="type" data-id="order-type">
-            <a class="type-span">订单类型</a>
-            <i class="iconfont-select iconfont">&#xe61c;</i>
-        </li>
-        <li class="type" data-id="task-colormark">
-            <a class="colormark-span">颜色标记</a>
-            <i class="iconfont-select iconfont">&#xe61c;</i>
-        </li>
-        <li class="select-sort" data-id="task-sort" style="border-right:none;width:34%">
-            <a class="sort-span">排序</a>        
-            <i class="iconfont-select iconfont">&#xe61c;</i>    
-        </li> 
-        <div class="clear"></div>
-    </ul>*@
-    <div class="dropdownlist"> 
-        <ul class="potion order-type">             
-            <li data-id="-1">全部</li>                 
-            <li data-id="1">打样</li>
-            <li data-id="2">大货</li>                        
-        </ul>
-        <ul class="potion task-colormark">             
-            <li data-id="-1">全部</li>                                  
-        </ul>   
-        <ul class="potion task-sort">                                        
-            <li class="tasktime" data-takepo="1" data-id="1">到期时间正序</li>
-            <li class="tasktime" data-takepo="0" data-id="1">到期时间倒序</li>
-            <li class="tasktime" data-takepo="1" data-id="0">创建时间正序</li>
-            <li class="tasktime" data-takepo="0" data-id="0">创建时间倒序</li>
-        </ul>  
+        </div>
     </div>
 </div>
-<div class="list"></div>
+<div class="list" style="margin-top:60px;"></div>
 <ul class="task-status">
     <li data-status="0">
         <a href="../Home/Index">

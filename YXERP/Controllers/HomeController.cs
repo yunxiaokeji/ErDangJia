@@ -348,6 +348,7 @@ namespace YXERP.Controllers
 
             if (pwdErrorUser == null || (pwdErrorUser.ErrorCount < 3 && pwdErrorUser.ForbidTime<DateTime.Now) )
             {
+                result = 1;
                 string operateip = string.IsNullOrEmpty(Request.Headers.Get("X-Real-IP")) ? Request.UserHostAddress : Request.Headers["X-Real-IP"];
                 int outResult;
                 CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(userName, pwd, out outResult, operateip);
@@ -386,7 +387,7 @@ namespace YXERP.Controllers
 
                     Session["ClientManager"] = model;
                     Common.Common.CachePwdErrorUsers.Remove(userName);
-                    result = 1;
+                    
                 }
                 else
                 {

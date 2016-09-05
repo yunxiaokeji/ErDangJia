@@ -25,117 +25,50 @@
     <div class="btn-search">确定</div>
 </div>
 <div class="topbar">
-<ul class="header">
-    <li class="btn-menu header-li">
-        <div class="iconfont iconfont-menu">&#xe60d;</div>
-        <span class="login-name long"></span>
-        <ul class="menu-box">
-            <li>
-                <a href="/Home/Logout">退出</a>
-            </li>
-        </ul>
-    </li>
-    <li class="header-li li-task-filtertype">
-        <div class="btn-task-filtertype">
-        <div class="left font16">供应商-全部</div>
-        <div class="iconfont left">&#xe61c;</div>
-        <ul class="task-filtertype">
-            <li data-id="-1">全部</li>
-        </ul>
+    <div class="header">
+        <div class="header-li li-task-filtertype">
+            <div class="btn-task-filtertype">
+            <div class="font16">供应商-全部</div>
+            <div class="iconfont">&#xe61c;</div>
+            <ul class="task-filtertype">
+                <li data-id="-1">全部</li>
+            </ul>
+            </div>
         </div>
-    </li>
-    <li class="header-li  btnsearch" style="margin-top:10px;">
-        <div class="iconfont iconfont-search">&#xe605;</div>
-    </li>
-</ul>
- 
-@*<ul class="filter-task">
-    <li class="type" data-id="order-type">
-        <a class="type-span">订单类型</a>
-        <i class="iconfont-select iconfont">&#xe61c;</i>
-    </li>
-    <li class="type" data-id="task-colormark">
-        <a class="colormark-span">颜色标记</a>
-        <i class="iconfont-select iconfont">&#xe61c;</i>
-    </li>
-    <li class="select-sort" data-id="task-sort" style="border-right:none;width:34%">
-        <a class="sort-span">排序</a>        
-        <i class="iconfont-select iconfont">&#xe61c;</i>    
-    </li> 
+        <div class="btnsearch">
+            <div class="iconfont iconfont-search">&#xe605;</div>
+        </div>
+    </div>
+</div>
+<div class="filter-list">
+    <div class="sort-item mLeft10 hover" data-isactive="1">上架时间
+        <span class="asc"></span>
+        <span class="desc hover"></span>
+    </div>
+    <div class="sort-item mLeft50" style="width:60px;">价格
+         <span class="asc"></span>
+        <span class="desc"></span>
+    </div>
     <div class="clear"></div>
-</ul>*@
-
-<div class="dropdownlist"> 
-    <ul class="potion order-type">             
-        <li data-id="-1">全部</li>                 
-        <li data-id="1">打样</li>
-        <li data-id="2">大货</li>                        
-    </ul>
-    <ul class="potion task-colormark">             
-        <li data-id="-1">全部</li>                                  
-    </ul>   
-    <ul class="potion task-sort">                                        
-        <li class="tasktime" data-takepo="1" data-id="1">到期时间正序</li>
-        <li class="tasktime" data-takepo="0" data-id="1">到期时间倒序</li>
-        <li class="tasktime" data-takepo="1" data-id="0">创建时间正序</li>
-        <li class="tasktime" data-takepo="0" data-id="0">创建时间倒序</li>
-    </ul>  
 </div>
-</div>
-
 <div class="list"><div class="clear"></div></div>
  
 <ul class="task-status">
     <li data-status="0" class="hover">
-        <div class="ico-status iconfont">&#xe61e;</div>
+        <div class="ico-status iconfont">&#xe64e;</div>
         <a>款式</a>
     </li>
     <li data-status="1">
-        <div class="ico-status iconfont">&#xe621;</div>
+        <div class="ico-status iconfont">&#xe629;</div>
         <a>订单</a>
     </li>
     <li data-status="2" style="width:34%;">
-        <div class="ico-status iconfont">&#xe61f;</div>
+        <div class="ico-status iconfont">&#xe601;</div>
         <a>我的</a>
     </li>
     <div class="clear"></div>
 </ul>
 
-<div class="overlay-addOrder">
-   @* <div class="style-content">
-        <div class="style-main">
-            <div class="style-detail">
-                <div class="style-title">12345678123456781234567812345678</div>
-                <div class="blue mTop30"><span class="font18">￥</span> <span class="bold">1299</span></div>
-            </div>
-            <div class="style-img">
-                <img src="/modules/m/images/img-noimg.png"/>
-            </div>
-            <div class="close iconfont">
-                &#xe628;
-            </div>
-            <div class="style-attr">
-                <div class="attr-title">款式尺码</div>
-                <div class="attr-rule attr-ul">
-                    <ul>
-                        <li class="select">M</li>
-                        <li>L</li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <div class="attr-title">款式颜色</div>
-                <div class="attr-color attr-ul">
-                    <ul>
-                        <li>红色</li>
-                        <li class="select">白色</li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <div class="attr-title">所选款式</div>
-            </div>
-        </div>
-    </div>
-    <div class="btn-sureAdd">确定</div>*@
-</div>
+<div class="overlay-addOrder"></div>
 
 

@@ -178,42 +178,41 @@
             ObjectJS.getList();
         });
 
-        //任务状态切换
-        $(".task-status li").click(function () {
-            var _this = $(this);
-            if (!_this.hasClass("hover")) {
-                _this.addClass("hover").siblings().removeClass("hover");
+        //列表排序
+        $(".sort-item").click(function () {
+            var _self = $(this);
+            if (!_self.hasClass("hover")) {
+                _self.addClass("hover").siblings().removeClass("hover");
             }
+            var isasc = _self.data("isasc");
+            var isactive = _self.attr("data-isactive");
+            var orderbycloumn = _self.data("orderbycloumn");
+            $(".filter-list div[data-isactive='1']").data("isactive", 0).find("span").removeClass("hover");
 
-            Params.pageIndex = 1;
-            Params.finishStatus = $(this).data("status");
-            ObjectJS.getList();
-        });
+            if (isactive == 1) {
+                if (isasc == 1) {
+                    _self.find(".asc").removeClass("hover");
+                    _self.find(".desc").addClass("hover");
+                } else {
+                    _self.find(".desc").removeClass("hover");
+                    _self.find(".asc").addClass("hover");
+                }
+                isasc = isasc == 1 ? 0 : 1;
+            } else {
+                if (isasc == 1) {
+                    _self.find(".desc").removeClass("hover");
+                    _self.find(".asc").addClass("hover");
+                } else {
+                    _self.find(".asc").removeClass("hover");
+                    _self.find(".desc").addClass("hover");
+                }
+            }
+            _self.data("isasc", isasc).attr("data-isactive", 1);
 
-        //显示过滤下拉框
-        $(".filter-task li").click(function () {
-            var slideLi = $("." + $(this).data("id"));
-            slideLi.slideToggle(400).siblings().slideUp("slow");
-        });
-
-        //订单类型切换
-        $(".order-type li").click(function () {
-            $(".type-span").text($(this).text());
-            $(this).parent().hide();
-
-            Params.pageIndex = 1;
-            Params.orderType = $(this).data("id");
-            ObjectJS.getList();
-        });
-
-        //任务排序
-        $(".task-sort li").click(function () {
-            $(".sort-span").text($(this).text());
-            $(this).parent().hide();
-            
-            Params.isAsc = $(this).data("takepo");
-            Params.taskOrderColumn = $(this).data("id");
-            ObjectJS.getList();
+            //Params.isAsc = isasc;
+            //Params.taskOrderColumn = orderbycloumn;
+            //Params.pageIndex = 1;
+            //ObjectJS.getList();
         });
         
         //返回顶部

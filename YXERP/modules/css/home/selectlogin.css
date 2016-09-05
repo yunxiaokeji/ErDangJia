@@ -25,3 +25,18 @@ background-color:#ededed;
 .select-login .des {margin-top:20px;color:#999;font-size:14px;}
 
 .btn:hover { background-color:#2F73B8;color: #fff;}
+
+@media only screen and ( max-width:450px) {
+    .select-login {
+    width:340px;
+    margin:100px auto;
+    }
+
+    .ali-login,.bind-account {
+    padding:30px 15px 20px 15px;
+    }
+
+    .ali-login img,.bind-account  img{
+    max-width:100px;
+    }
+}

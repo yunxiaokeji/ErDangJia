@@ -22,16 +22,16 @@
     //绑定事件
     ObjectJS.bindEvent = function () {
         if (ObjectJS.orderImagesCount > 0) {
-            if (ObjectJS.orderImagesCount > 1) {
-                $(".main_image").touchSlider({
-                    flexible: true,
-                    speed: 200,
-                    paging: $(".flicking_con a"),
-                    counter: function (e) {
-                        $(".flicking_con a").removeClass("on").eq(e.current - 1).addClass("on");
-                    }
-                });
-            }
+            //if (ObjectJS.orderImagesCount > 1) {
+            //    $(".main_image").touchSlider({
+            //        flexible: true,
+            //        speed: 200,
+            //        paging: $(".flicking_con a"),
+            //        counter: function (e) {
+            //            $(".flicking_con a").removeClass("on").eq(e.current - 1).addClass("on");
+            //        }
+            //    });
+            //}
 
             ObjectJS.setImagesSize();
         }

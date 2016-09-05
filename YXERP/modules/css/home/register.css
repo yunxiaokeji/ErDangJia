@@ -44,7 +44,7 @@ border:none; cursor:pointer; display:inline-block; border-radius:3px; width:320p
 .register-remember-box .cb-remember-password { cursor:pointer; padding-left:2px; color:#999; }
 
 @media only screen and ( max-width:450px) {
-    .register-body .main {margin: 30px auto;width: 280px; }
+    .register-body .main {margin: 50px auto;width: 280px; }
     .register-body .loginbar .input { width: 268px; }
     .btnRegister { width: 280px; }
     .icoMobileCode {

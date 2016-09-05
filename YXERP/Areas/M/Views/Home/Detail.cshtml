@@ -8,7 +8,6 @@
         imagesUrl = order.orderImages.Trim(',').Split(',');
     }
 }
-
 @section css{
     <link href="/modules/m/css/style/detail.css" rel="stylesheet" />
     <link href="/modules/m/plug/touchSlider/css/style.css" rel="stylesheet" />
@@ -36,77 +35,84 @@
         </div>
     </header>
 
-    <div class="main_visual mTop50">
-        <div class="flicking_con">
+<div class="main_visual mTop50">
+    <div class="flicking_con">
+        @{
+            if (imagesUrl.Length > 1)
+            {
+                for (int i = 0; i < imagesUrl.Length; i++)
+                {
+                    <a class="@(i == 0 ? "on" : "")" href="javascript:void(0);"></a>
+                }
+            }
+        }
+    </div>
+    <div class="main_image">
+        <ul>
             @{
-                if (imagesUrl.Length > 1)
+                if (imagesUrl.Length > 0)
                 {
                     for (int i = 0; i < imagesUrl.Length; i++)
                     {
-                        <a class="@(i == 0 ? "on" : "")" href="javascript:void(0);"></a>
+                        <li><img src="@(imagesUrl[i])"></li>
                     }
                 }
             }
-        </div>
-        <div class="main_image">
-            <ul>
-                @{
-                    if (imagesUrl.Length > 0)
-                    {
-                        for (int i = 0; i < imagesUrl.Length; i++)
-                        {
-                            <li><img src="@(imagesUrl[i])"></li>
-                        }
-                    }
-                }
-            </ul>
-            <div class="clear"></div>
-        </div>
-    </div>
-    
-    <!--任务信息-->
-    <div class="task-info">
-        <div class="main-info">
-            <ul class="mLeft10 mRight10">
-                <li class="long" style="display:block;">
-                    <div class="task-code base-info">@order.goodsName</div>
-                </li>
-                <li>
-                    <div class="left blue">￥ <span style="font-size:26px;">@order.finalPrice.ToString("f2")</span></div>
-                    <div class="btn-addOrder right">立即下单</div>
-                    <div class="clear"></div>
-                </li>
-            </ul>
-        </div>
-        <div class="clear"></div>
-    </div>
-
-    <!--菜单-->
-    <nav>
-        <ul>
-             <li  class="menuchecked" data-classname="plate-info"><i class="iconfont">&#xe617;</i>制版信息</li>
-            <li   data-classname="plate-des"><i class="iconfont">&#xe647;</i>工艺说明</li>
         </ul>
         <div class="clear"></div>
-    </nav>
-
-    <div class="main-box">
-        <div class="plate-info">
-            @{
-                if (!string.IsNullOrEmpty(order.platemaking))
-                {
-                    <div class="platemakingBody">@(new MvcHtmlString(Server.UrlDecode(order.platemaking)))</div>
-                }
-                else
-                {
-                    <div class="nodata-txt">暂无制版信息</div>
-                }
-            }
-        </div>
-        <div class="plate-des hide">
-            <div class="mTop10 tb-plates"></div>
-       </div>
     </div>
+</div>
+    
+<!--任务信息-->
+<div class="task-info">
+    <div class="main-info">
+        <ul class="mLeft10 mRight10">
+            <li class="long" style="display:block;">
+                <div class="task-code base-info">@order.goodsName</div>
+            </li>
+            <li class="long" style="display:block;">
+                <div class="task-code base-info">
+                     <div class="left" style="padding-top:3px;"><img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;"></div>
+                    <div class="left mLeft5">@order.clientName</div>
+                </div>
+            </li>
+            <li>
+                <div class="left blue">￥ <span style="font-size:26px;">@order.finalPrice.ToString("f2")</span></div>
+                <div class="btn-addOrder right">立即下单</div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<!--菜单-->
+<nav>
+    <ul>
+            <li  class="menuchecked" data-classname="plate-info"><i class="iconfont">&#xe617;</i>制版信息</li>
+        <li   data-classname="plate-des"><i class="iconfont">&#xe647;</i>工艺说明</li>
+    </ul>
+    <div class="clear"></div>
+</nav>
+
+<div class="main-box">
+    <div class="plate-info">
+        @{
+            if (!string.IsNullOrEmpty(order.platemaking))
+            {
+                <div class="platemakingBody">@(new MvcHtmlString(Server.UrlDecode(order.platemaking)))</div>
+            }
+            else
+            {
+                <div class="nodata-txt">暂无制版信息</div>
+            }
+        }
+    </div>
+    <div class="plate-des hide">
+        <div class="mTop10 tb-plates"></div>
+    </div>
+</div>
+
 <div class="overlay-addOrder"></div>
 
 

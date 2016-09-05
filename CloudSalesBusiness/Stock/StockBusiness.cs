@@ -313,9 +313,9 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool AddDocPart(string orderid, string remarks, string nums, ref string errinfo,string userid="")
+        public bool AddDocPart(string orderid, string remarks, string nums, ref string errinfo, string userid = "", string zngcAutoID="")
         {
-            return StockDAL.AddDocPart(orderid, remarks, nums, userid,ref errinfo);
+            return StockDAL.AddDocPart(orderid, remarks, nums, userid,zngcAutoID,ref errinfo);
         }
 
         #endregion

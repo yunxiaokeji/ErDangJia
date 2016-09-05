@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "个人中心";
+    var user = (CloudSalesEntity.Users)ViewBag.baseUser;
+}
+@section css{
+    <link href="/modules/m/css/style/list.css" rel="stylesheet" />
+}
+
+@section scripts{
+
+}
+<div class="account-header">
+    <div class="account-avator center">
+        <img onerror="this.src='/modules/images/defaultavatar.png'" src="@(!string.IsNullOrEmpty(user.Avatar)?user.Avatar:"/modules/images/defaultavatar.png")" style="width:100px;height:100px;border-radius:50%;" />
+    </div>
+    <div class="account-name center" style="color:#fff;font-size:18px;margin-top:20px;">
+        @user.Name
+    </div>
+</div>
+<div class="center mTop20">
+    <a href="/Home/Logout" class="exit-sys">退出</a>
+</div>
+<ul class="task-status">
+    <li data-status="0">
+        <a href="../Home/Index">
+            <div class="ico-status iconfont">&#xe61e;</div>
+            款式
+        </a>
+    </li>
+    <li data-status="1">
+        <a href="../Orders/List">
+            <div class="ico-status iconfont">&#xe621;</div>
+            订单
+        </a>
+    </li>
+    <li data-status="2" class="hover" style="width:34%;">
+        <a href="../Account/Index">
+            <div class="ico-status iconfont">&#xe61f;</div>
+            我的
+        </a>
+    </li>
+    <div class="clear"></div>
+</ul>

@@ -22,18 +22,21 @@
                         <div class="clear"></div>
                     </div>
                     <div class="stage">
-                        下单量：
-                        <span>
+                        <span class="width80 long left">下单数量：</span>
+                        <span class="long left">
                             {%=totalquantity%}
                         </span>
+                        <div class="clear"></div>
                     </div>
                     <div class="stage">
-                        订单进度：
-                        <span>{%=item.StatusStr%}</span>
+                        <span class="width80 long left">订单进度：</span>
+                        <span class="long left">{%=item.StatusStr%}</span>
+                        <div class="clear"></div>
                     </div>             
                     <div class="stage">
-                        下单时间：
-                        <span>{%=item.CreateTime.toDate('yyyy-MM-dd hh:mm:ss')%}</span>
+                        <span class="width80 long left">下单时间：</span>
+                        <span class="long left">{%=item.CreateTime.toDate('yyyy-MM-dd')%}</span>
+                        <div class="clear"></div>
                     </div>                                              
                     <div class="clear"></div>
                 </div>                                                

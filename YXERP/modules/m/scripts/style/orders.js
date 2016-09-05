@@ -1,40 +1,23 @@
 ﻿define(function (require,exports,module) {
-    var Common = require("/modules/m/scripts/style/createordergoods.js");
     var Global = require("m_global"),
         doT = require("dot");
     var Params = {
-        clientid: "",/*款式中供应商ID*/
         pageSize: 5,
         pageIndex: 1,
         keyWords: "",
-        sourcetype: 2,
-        totalCount: 0
+        type: 3,/*获取所有采购单*/
+        totalCount: 0,
+        status: -1
     };
 
     var ObjectJS = {};
-    var cacheOrder = [];
     var isShowOrder = false;
 
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
-    ObjectJS.init = function (providers,user) {
-        providers = JSON.parse(providers.replace(/&quot;/g, '"'));
+    ObjectJS.init = function (user) {
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;
-        var providerids = "";
-        for (var i = 0; i < providers.length; i++) {              
-            var p = providers[i];
-            if (p.CMClientID != "" && p.CMClientID != null) {
-                providerids += "'" + p.CMClientID + "',";
-                $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
-            }
-        }
-        if (providerids != "") {
-            providerids = providerids.substring(1, providerids.length - 2);
-        } else {
-            providerids = "1";
-        }
-        Params.clientid = providerids;
         ObjectJS.bindEvent();
         ObjectJS.getList();  
     };
@@ -42,22 +25,20 @@
     ObjectJS.bindEvent = function () {
         //滚动加载数据
         $(window).scroll(function () {
-            if ($(".overlay-addOrder").css('display') == 'none') {
-                if (document.body.scrollTop > 30) {
-                    $(".getback").slideDown("slow");
-                } else {
-                    $(".getback").slideUp("slow");
-                }
-                var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
-                if (bottom <= 200) {
-                    if (!ObjectJS.IsLoading) {
-                        Params.pageIndex++;
-                        if (Params.pageIndex <= ObjectJS.PageCount) {
-                            ObjectJS.getList(true);
-                        } else {
-                            $(".prompt").remove();
-                            $(".list").append('<div class="prompt">已经是最后一条啦</div>');
-                        }
+            if (document.body.scrollTop > 30) {
+                $(".getback").slideDown("slow");
+            } else {
+                $(".getback").slideUp("slow");
+            }
+            var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
+            if (bottom <= 200) {
+                if (!ObjectJS.IsLoading) {
+                    Params.pageIndex++;
+                    if (Params.pageIndex <= ObjectJS.PageCount) {
+                        ObjectJS.getList(true);
+                    } else {
+                        $(".prompt").remove();
+                        $(".list").append('<div class="prompt">已经是最后一条啦</div>');
                     }
                 }
             }
@@ -95,7 +76,6 @@
                     Params.pageIndex = 1;
                     Params.keyWords = txt;
                     ObjectJS.getList();
-
                 } else {
                     $(".search").hide();
                 }
@@ -110,7 +90,6 @@
 
         //搜索内容发生变化
         $(".txt-search").keyup(function () {
-            
             var changeAfter = $(".txt-search").val();
             if (changeAfter == "") {
                 $(".cencal").text("取消");
@@ -149,22 +128,7 @@
             $(".btn-task-filtertype div:first").text($(this).text());
             $(this).parent().hide();
             Params.pageIndex = 1;
-            Params.clientid = $(this).data("id");
-
-            if ($(this).data("id") == '-1') {
-                var id = "";
-                $(".task-filtertype li").each(function () {
-                    var _this = $(this);
-                    if (_this.data("id") != '-1') {
-                        if (_this.index() != $(".task-filtertype li").length - 1) {
-                            id += _this.data("id") + '\',\'';
-                        } else {
-                            id += _this.data("id");
-                        }
-                    }
-                });
-                Params.clientid = id;
-            }
+            Params.status = $(this).data('id');
             ObjectJS.getList();
         });
 
@@ -206,9 +170,8 @@
         }
         //获取任务列表(页面加载)
         $(".list").append('<div class="data-loading"></div>');
-        var template = "m/template/style/style-list.html";
-        var control = "/IntFactoryOrder/GetProductList";
-
+        var template = "m/template/style/order-list.html";
+        var control = "/Purchase/GetPurchases";
         $.post(control, Params, function (data) {
             $(".data-loading").remove();
             if (data.items.length == 0) {
@@ -220,32 +183,6 @@
                     innerHtml = $(innerHtml);
                     $(".list").append(innerHtml);
 
-                    innerHtml.find(".btn-addOrder").click(function () {
-                        var _this = $(this);
-                        if (!isShowOrder) {
-                            var id = _this.data('orderid');
-                            if (!cacheOrder[id]) {
-                                isShowOrder = true;
-                                Global.post("../IntFactoryOrders/GetOrderDetail", {
-                                    orderID: id,
-                                    clientID: _this.data('clientid')
-                                }, function (data) {
-                                    isShowOrder = false;
-                                    if (data.result.error_code == 0) {
-                                        cacheOrder[id] = data.result.order;
-                                        Common.showOrderGoodsLayer(cacheOrder[id], ObjectJS.user);
-                                    } else {
-                                        alert("请重新尝试",2);
-                                    }
-                                });
-                            } else {
-                                Common.showOrderGoodsLayer(cacheOrder[id], ObjectJS.user);
-                            }
-                        } else {
-                            alert("正在加载，清稍等",2);
-                        }
-                    });
-
                     //延迟加载图片
                     $(".task-list-img").each(function () {
                         var _this = $(this);
@@ -255,7 +192,6 @@
                     });
                 });
             }
-
         });
     };
     

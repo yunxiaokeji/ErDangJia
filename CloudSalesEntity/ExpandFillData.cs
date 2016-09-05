@@ -68,7 +68,6 @@ namespace CloudSalesEntity
                                         : "",
                                         null);
                                 }
-
                             }
                             else
                             {
@@ -91,7 +90,6 @@ namespace CloudSalesEntity
                             break;
                     }
                 }
-
             }
         }
     }

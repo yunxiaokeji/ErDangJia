@@ -1,16 +1,13 @@
 ﻿@{
-    ViewBag.Title="款式中心";
-    var v = DateTime.Now.Ticks;
+    ViewBag.Title = "订单列表";    
 }
 @section css{
-    <link href="/modules/m/css/style/list.css" rel="stylesheet" />
+    <link href="/modules/m/css/style/list.css" rel="stylesheet" />    
 }
-
 @section scripts{
     <script type="text/javascript">
-        seajs.use("/modules/m/scripts/style/list.js", function (data) {
+        seajs.use("/modules/m/scripts/style/orders.js", function (data) {
             data.init(
-                '@Html.ToJSONString((List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers)',
                 '@Html.ToJSONString((CloudSalesEntity.Users)ViewBag.baseUser)'
             );
         });
@@ -37,10 +34,14 @@
         </li>
         <li class="header-li li-task-filtertype">
             <div class="btn-task-filtertype">
-            <div class="left font16">供应商-全部</div>
+            <div class="left font16">全部</div>
             <div class="iconfont left">&#xe61c;</div>
             <ul class="task-filtertype">
                 <li data-id="-1">全部</li>
+                <li data-id="0">待审核</li>
+                <li data-id="3">待处理</li>
+                <li data-id="1">部分入库</li>
+                <li data-id="2">已入库</li>
             </ul>
             </div>
         </li>
@@ -82,13 +83,13 @@
 </div>
 <div class="list"></div>
 <ul class="task-status">
-    <li data-status="0" class="hover">
+    <li data-status="0">
         <a href="../Home/Index">
             <div class="ico-status iconfont">&#xe61e;</div>
             款式
         </a>
     </li>
-    <li data-status="1">
+    <li data-status="1" class="hover">
         <a href="../Orders/List">
             <div class="ico-status iconfont">&#xe621;</div>
             订单
@@ -102,41 +103,3 @@
     </li>
     <div class="clear"></div>
 </ul>
-<div class="overlay-addOrder">
-   @* <div class="style-content">
-        <div class="style-main">
-            <div class="style-detail">
-                <div class="style-title">12345678123456781234567812345678</div>
-                <div class="blue mTop30"><span class="font18">￥</span> <span class="bold">1299</span></div>
-            </div>
-            <div class="style-img">
-                <img src="/modules/m/images/img-noimg.png"/>
-            </div>
-            <div class="close iconfont">
-                &#xe628;
-            </div>
-            <div class="style-attr">
-                <div class="attr-title">款式尺码</div>
-                <div class="attr-rule attr-ul">
-                    <ul>
-                        <li class="select">M</li>
-                        <li>L</li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <div class="attr-title">款式颜色</div>
-                <div class="attr-color attr-ul">
-                    <ul>
-                        <li>红色</li>
-                        <li class="select">白色</li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <div class="attr-title">所选款式</div>
-            </div>
-        </div>
-    </div>
-    <div class="btn-sureAdd">确定</div>*@
-</div>
-
-

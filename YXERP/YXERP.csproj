@@ -135,8 +135,10 @@
     <Compile Include="Areas\Api\Controllers\StockController.cs" />
     <Compile Include="Areas\Api\Controllers\UserController.cs" />
     <Compile Include="Areas\Api\Models\FilterPurchase.cs" />
+    <Compile Include="Areas\M\Controllers\AccountController.cs" />
     <Compile Include="Areas\M\Controllers\HomeController.cs" />
     <Compile Include="Areas\M\Controllers\IntFactoryOrdersController.cs" />
+    <Compile Include="Areas\M\Controllers\OrdersController.cs" />
     <Compile Include="Areas\M\MAreaRegistration.cs" />
     <Compile Include="Common\Alipay\AlipayConfig.cs" />
     <Compile Include="Common\Alipay\AlipayCore.cs" />
@@ -301,6 +303,7 @@
     <Content Include="modules\m\scripts\style\createordergoods.js" />
     <Content Include="modules\m\scripts\style\detail.js" />
     <Content Include="modules\m\scripts\style\list.js" />
+    <Content Include="modules\m\scripts\style\orders.js" />
     <Content Include="modules\m\template\order\platematrings.html" />
     <Content Include="modules\m\template\style\style-buy.html" />
     <Content Include="modules\m\template\style\style-list.html" />
@@ -399,6 +402,8 @@
     <Content Include="Areas\M\Views\_ViewStart.cshtml" />
     <Content Include="Areas\M\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\M\Views\Home\Detail.cshtml" />
+    <Content Include="Areas\M\Views\Orders\List.cshtml" />
+    <Content Include="Areas\M\Views\Account\Index.cshtml" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

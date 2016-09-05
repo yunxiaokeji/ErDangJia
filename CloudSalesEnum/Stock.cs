@@ -71,6 +71,8 @@ namespace CloudSalesEnum
         AuditPart = 1,
         [DescriptionAttribute("已审核")]
         AuditAll = 2,
+        [DescriptionAttribute("待处理")]
+        AuditWait = 3,
         [DescriptionAttribute("已作废")]
         Invalid = 4,
         [DescriptionAttribute("已删除")]

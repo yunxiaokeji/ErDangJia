@@ -83,7 +83,7 @@
                 _this.parent().siblings().each(function () {
                     var obj = $(this);
                     if (_this.val().trim() == obj.text().trim()) {
-                        alert(obj.data('type') == 1 ? "" + _thisTitle.text() + "已存在" : "" + _thisTitle.text() + "已存在");
+                        alert(obj.data('type') == 1 ? "" + _thisTitle.text() + "已存在" : "" + _thisTitle.text() + "已存在", 2);
                         isContinue = false;
                         return false;
                     }
@@ -124,7 +124,6 @@
             });
         });
     };
-
 
     ObjectJS.createOrderGoods = function () {
         $(".attr-box").empty();
@@ -198,7 +197,7 @@
                         $(".overlay-addOrder").hide();
                     });
                 } else {
-                    alert(data.error_message);
+                    alert(data.error_message, 2);
                 }
             });
         }

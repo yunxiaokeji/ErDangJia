@@ -23,7 +23,7 @@
         _self.clientid = clientid;
         _self.providers = JSON.parse(providers.replace(/&quot;/g, '"')); 
         _self.bindEvent();  
-    } 
+    }
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;

@@ -241,13 +241,14 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddPurchaseDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool AddDocPart(string orderid, string remarks, string nums, string userid, ref string errinfo)
+        public static bool AddDocPart(string orderid, string remarks, string nums, string userid,string zngcAutoID, ref string errinfo)
         {
             SqlParameter[] paras = {  
                                      new SqlParameter("@ErrInfo",SqlDbType.NVarChar,500),
                                      new SqlParameter("@OrderID",orderid), 
                                      new SqlParameter("@BillingCode",DateTime.Now.ToString("yyyyMMddHHmmssfff")), 
                                      new SqlParameter("@Nums",nums),
+                                     new SqlParameter("@AutoID",zngcAutoID),
                                      new SqlParameter("@Remarks",remarks),
                                      new SqlParameter("@UserID",userid)
                                    };

@@ -72,7 +72,7 @@
 /*状态图标(不同的图标颜色不同)*/
 .list .details .status-proceed { color:#49b3f5;}
 /*信息文字*/
-.list .center-list-task .details {margin-top:12px;height:40px;}
+.list .center-list-task .details {margin-top:12px;height:40px;overflow:hidden;}
 .list .center-list-task .stage {line-height:30px;}
 .list .center-list-task a {font-size:16px; }
 

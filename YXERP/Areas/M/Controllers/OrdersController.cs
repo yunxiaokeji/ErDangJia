@@ -25,11 +25,11 @@ namespace YXERP.Areas.M.Controllers
 
         public ActionResult Detail(string id)
         {
-            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
-            if (string.IsNullOrEmpty(id) || model == null)
+            if (string.IsNullOrEmpty(id))
             {
-                return Redirect("List");
+                return Redirect("/M/Orders/List");                
             }
+            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
             ViewBag.Model = model;
             return View();
         }

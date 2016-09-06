@@ -30,31 +30,27 @@
             <li class="">
                 <div class="">
                     <span style="width:90px;display:inline-block;">状态：</span>
-                    <span>@(model.StatusStr)</span>
+                    <span class="color333">@(model.StatusStr)</span>
                 </div>
-                <div>
+@*                <div>
                     <span style="width:90px;display:inline-block;">仓库：</span>
                     <span>@(model.WareHouse != null ? model.WareHouse.Name : "--")</span>
                 </div>
                 <div class="">
                     <span style="width:90px;display:inline-block;">采购员：</span>
                     <span>@(model.CreateUser.Name)</span>
-                </div>
-                <div class="">
-                    <span style="width:90px;display:inline-block;">创建日期：</span>
-                    <span>@(model.CreateTime.ToString("yyyy-MM-dd"))</span>
-                </div>
+                </div>*@
                 <div class="">
                     <span style="width:90px;display:inline-block;">已采购金额：</span>
-                    <span>@(model.RealMoney.ToString("f2"))</span>
+                    <span class="color333">@(model.RealMoney.ToString("f2"))</span>
                 </div>
                 <div class="">
                     <span style="width:90px;display:inline-block;">采购总金额：</span>
-                    <span>@(model.TotalMoney.ToString("f2"))</span>
+                    <span class="color333">@(model.TotalMoney.ToString("f2"))</span>
                 </div>
-                <div>
-                    <span style="width:90px;display:inline-block;">备注：</span>
-                    <span>@(model.Remark)</span>
+                <div class="">
+                    <span style="width:90px;display:inline-block;">创建日期：</span>
+                    <span class="color333">@(model.CreateTime.ToString("yyyy-MM-dd"))</span>
                 </div>
             </li>
         </ul>
@@ -65,7 +61,8 @@
 <!--菜单-->
 <nav>
     <ul>
-        <li  class="menuchecked" data-classname="order-details"><i class="iconfont">&#xe617;</i>订单明细</li>
+        <li class="menuchecked" data-classname="order-details"><i class="iconfont">&#xe617;</i>订单明细</li>
+        <li class="" data-classname="order-remark"><i class="iconfont" style="font-size:20px;">&#xe635;</i>备注</li>
     </ul>
     <div class="clear"></div>
 </nav>
@@ -75,6 +72,16 @@
         <div class="tb-order-detail">
 
         </div>
+    </div>
+    <div class="order-remark hide" style="padding:5px 10px">
+        @if (string.IsNullOrEmpty(model.Remark))
+        {
+            <div class="nodata-txt">暂无数据</div>
+        }
+        else
+        {
+            @(model.Remark)
+        }
     </div>
 </div>
 

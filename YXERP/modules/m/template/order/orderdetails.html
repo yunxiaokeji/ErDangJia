@@ -4,7 +4,12 @@
 %}
 <div class="doc-item">
     <div class="doc-header">
-        <span class="">{%=item.ProductName%}</span>
+        <div style="display:table;width:100%;">
+            <div style="display:table-cell;">
+                <div style="height:50px;overflow:hidden;">{%=item.ProductName%}</div>
+            </div>
+            <div class="tRight" style="width:50px;display:table-cell;padding-right:15px;">{%=item.Quantity%}</div>
+        </div>
         <div class="lump"></div>
     </div>
     <div class="doc-content hide">
@@ -16,10 +21,6 @@
             <li class="mRight10" style="width:100%;word-break:break-all;">
                 <span style="display:inline-block;width:80px;">单位：</span>
                 {%=!item.UnitName?"--":item.UnitName%}
-            </li>
-            <li style="width:100%;word-break:break-all;">
-                <span style="display:inline-block;width:80px;">数量：</span>                
-                {%=item.Quantity%}
             </li>
             <li style="width:100%;word-break:break-all;">
                 <span style="display:inline-block;width:80px;">采购价：</span>       

@@ -108,7 +108,7 @@ header .task-text {color:#373737;text-align:center;}
 .nodata-txt { padding: 40px 0px; font-size: 16px; text-align: center; color: #666; background-color:#fff; }
 
 /*图片loading*/
-.data-loading { padding: 80px 0px; font-size: 16px;text-align: center; color: #666; background:url(/modules/images/ico-loading.gif) no-repeat center center;background-size:45px 45px; background-color:#fff; }
+.data-loading { padding: 80px 0px; font-size: 16px;text-align: center; color: #666; background:url(/modules/m/images/ico-loading.gif) no-repeat center center;background-size:45px 45px; background-color:#fff; }
 
 .prompt {
 line-height:60px;

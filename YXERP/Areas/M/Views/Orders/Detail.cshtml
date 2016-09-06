@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "订单详情";
+    var model = (CloudSalesEntity.StorageDoc)ViewBag.Model;
+}
+@section css{
+    <link href="/modules/m/css/style/detail.css" rel="stylesheet" />
+}
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            seajs.use("/modules/m/scripts/style/orderdetail", function (obj) {
+                obj.init(
+                    '@(Html.ToJSONString(model))'
+                    );
+            });
+        });
+    </script>
+}
+<header>
+    <a class="btn-return" href = "javascript:if(history.length>1){ history.go(-1);} else{location.href='/M/Orders/List'}"><i class="return-icon iconfont">&#xe60a;</i></a>
+    <div class="mLeft50 font16">
+        订单详情-@(model.DocCode)
+    </div>
+</header>
+    
+<!--任务信息-->
+<div class="task-info" style="margin-top:50px;">
+    <div class="main-info">
+        <ul class="mLeft10 mRight10">
+            <li class="">
+                <div class="">
+                    <span style="width:90px;display:inline-block;">状态：</span>
+                    <span>@(model.StatusStr)</span>
+                </div>
+                <div>
+                    <span style="width:90px;display:inline-block;">仓库：</span>
+                    <span>@(model.WareHouse != null ? model.WareHouse.Name : "--")</span>
+                </div>
+                <div class="">
+                    <span style="width:90px;display:inline-block;">采购员：</span>
+                    <span>@(model.CreateUser.Name)</span>
+                </div>
+                <div class="">
+                    <span style="width:90px;display:inline-block;">创建日期：</span>
+                    <span>@(model.CreateTime.ToString("yyyy-MM-dd"))</span>
+                </div>
+                <div class="">
+                    <span style="width:90px;display:inline-block;">已采购金额：</span>
+                    <span>@(model.RealMoney.ToString("f2"))</span>
+                </div>
+                <div class="">
+                    <span style="width:90px;display:inline-block;">采购总金额：</span>
+                    <span>@(model.TotalMoney.ToString("f2"))</span>
+                </div>
+                <div>
+                    <span style="width:90px;display:inline-block;">备注：</span>
+                    <span>@(model.Remark)</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<!--菜单-->
+<nav>
+    <ul>
+        <li  class="menuchecked" data-classname="order-details"><i class="iconfont">&#xe617;</i>订单明细</li>
+    </ul>
+    <div class="clear"></div>
+</nav>
+
+<div class="main-box">
+    <div class="order-details">
+        <div class="tb-order-detail">
+
+        </div>
+    </div>
+</div>
+
+<div class="overlay-addOrder"></div>
+
+
+    

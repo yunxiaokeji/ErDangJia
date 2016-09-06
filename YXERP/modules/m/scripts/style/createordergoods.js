@@ -128,7 +128,7 @@
     ObjectJS.createOrderGoods = function () {
         $(".attr-box").empty();
         $(".attr-box").append('<table class="table-list"></table>');
-        $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>');
+        $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td class="tRight">操作</td></tr>');
         $(".attr-ul .size.select").each(function () {
             var _this = $(this);
             $(".attr-ul .color.select").each(function () {
@@ -140,7 +140,7 @@
                 var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrandvalue='" + dataAttrValue + "' data-xremark='【" + _this.data('value') + "】' data-yremark='【" + $(this).data('value') + "】' data-xyremark='【" + _this.data('value') + "】【" + $(this).data('value') + "】' data-remark='" + description + "'></tr>");
                 trHtml.append("<td class='tLeft'>" + description + "</td>");
                 trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' class='quantity center' type='text' value='0' /></td>");
-                trHtml.append("<td class='iconfont center' style='font-size:30px;color:#4a98e7;'>&#xe651;</td>");
+                trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
 
                 trHtml.find('.iconfont').click(function () {
                     $(this).parents('tr').remove();

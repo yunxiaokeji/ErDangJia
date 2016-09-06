@@ -251,7 +251,7 @@
                                 Common.showOrderGoodsLayer(cacheOrder[id], ObjectJS.user);
                             }
                         } else {
-                            alert("正在加载，清稍等",2);
+                            alert("正在加载，请稍等",2);
                         }
                     });
 

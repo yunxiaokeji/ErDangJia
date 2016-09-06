@@ -26,7 +26,6 @@ var item=$data;
                                     {%=attr.ValueName%}
                                 </li>
                         {%}%}
-                        <li style="background-color:initial;padding:initial;"><input type="text" style="padding:4px 2px;" class="center width50 layout-attr" placeholder="自定义" /></li>
                         <div class="clear"></div>
                     </ul>
                     <div class="show-more width50 mTop10 center" style="border:1px solid #ddd;color:#0026ff;padding:5px 15px;border-radius:3px;">更多+</div>
@@ -44,7 +43,6 @@ var item=$data;
                                     {%=attr.ValueName%}
                                 </li>
                         {%}%}
-                        <li style="background-color:initial;padding:initial;"><input type="text" style="padding:4px 2px;" class="center width50 layout-attr" placeholder="自定义" /></li>
                         <div class="clear"></div>
                     </ul>
                     <div class="show-more width50 mTop10 center" style="border:1px solid #ddd;color:#0026ff;padding:5px 15px;border-radius:3px;">更多+</div>
@@ -54,15 +52,30 @@ var item=$data;
                 <div class="attr-title">所选款式</div>
                 <div class="attr-box">
                     <table class='table-list'>
-                        <tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>
+                        <tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td class="tRight">操作</td></tr>
                     </table>
                 </div>
             </div>
             <div class="mTop15 pBottom20">
-                <div class="attr-title">收货信息</div>
-                <ul>
+                <div class="attr-title">
+                    收货信息
+                </div>
+                <div class="customer-base-info" style="width:100%;display:table;height:60px;">
+                    <div class="iconfont" style="display:table-cell;vertical-align:middle;width:30px;font-size:20px;color:#888;">&#xe657;</div>
+                    <div style="display:table-cell;">
+                        <div style="line-height:30px;" class="row">
+                            <div class="left">收货人：</div>
+                            <div class="left" id="showCustomerName"></div>
+                            <div class="right" id="showCustomerTel"></div>
+                        </div>
+                        <div style="line-height:30px;" id="showCustomerAddress">
+                        </div>
+                    </div>
+                    <div class="ico-edit iconfont tRight" style="display:table-cell;padding:0 10px;vertical-align:middle;width:30px;"></div>
+                </div>
+                <ul class="edit-customer hide">
                     <li class="mTop10">
-                        <span class="width80" style="display:inline-block;">客户名称：</span>
+                        <span class="width80" style="display:inline-block;">收货人：</span>
                         <span>
                             <input type="text" maxlength="20" id="customerName" value="" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" />
                         </span>
@@ -81,6 +94,10 @@ var item=$data;
                     <li class="mTop10">
                         <span class="width80" style="display:inline-block;">详细地址：</span>
                         <span><input type="text" maxlength="50" id="customerAddress" value="" placeholder="详细地址" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" /></span>
+                    </li>
+                    <li class="mTop10 tRight" style="width:280px;">
+                        <span class="btn save-customer" data-type="save">保存</span>
+                        <span class="btn999 cancel-customer" data-type="cancel">取消</span>
                     </li>
                 </ul>
             </div>

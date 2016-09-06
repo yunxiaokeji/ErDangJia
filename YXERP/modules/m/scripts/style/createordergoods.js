@@ -9,9 +9,19 @@
             var innerHtml = code(modle);
             innerHtml = $(innerHtml);
 
-            innerHtml.find("#customerName").val(user.Name);
-            innerHtml.find("#customerTel").val(user.MobilePhone);
-            innerHtml.find("#customerAddress").val(user.Address);
+            /*编辑发货信息*/
+            innerHtml.find("#customerName").val(user.Name)
+                                            .data('value', user.Name);
+            innerHtml.find("#customerTel").val(user.MobilePhone)
+                                            .data('value', user.MobilePhone);
+            innerHtml.find("#customerAddress").val(user.Address)
+                                                .data('value', user.Address);
+            innerHtml.find("#citySpan").data('value', user.CityCode);
+
+            /*展示发货信息*/
+            innerHtml.find("#showCustomerName").text(user.Name);
+            innerHtml.find("#showCustomerTel").text(user.MobilePhone);
+            innerHtml.find("#showCustomerAddress").text(user.Address);
 
             $(".overlay-addOrder").html(innerHtml).show();
 
@@ -53,56 +63,94 @@
             });
 
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
-                var model = {
-                    OrderID: modle.orderID,
-                    PersonName: $("#customerName").val(),
-                    MobileTele: $("#customerTel").val(),
-                    CityCode: CityInvoice.getCityCode(),
-                    Address: $("#customerAddress").val(),
-                    GoodsName: modle.goodsName,
-                    GoodsID: modle.goodsID,
-                    ClientID: modle.clientID,
-                    IntGoodsCode: modle.intGoodsCode,
-                    CategoryID: modle.categoryID,
-                    FinalPrice: modle.finalPrice,
-                    OrderImage: modle.orderImage,
-                    Details: []
-                };
-                ObjectJS.createOrders(model);
+                if ($('.edit-customer').css('display') == 'none') {
+                    var model = {
+                        OrderID: modle.orderID,
+                        PersonName: $("#customerName").val(),
+                        MobileTele: $("#customerTel").val(),
+                        CityCode: CityInvoice.getCityCode(),
+                        Address: $("#customerAddress").val(),
+                        GoodsName: modle.goodsName,
+                        GoodsID: modle.goodsID,
+                        ClientID: modle.clientID,
+                        IntGoodsCode: modle.intGoodsCode,
+                        CategoryID: modle.categoryID,
+                        FinalPrice: modle.finalPrice,
+                        OrderImage: modle.orderImage,
+                        Details: []
+                    };
+                    ObjectJS.createOrders(model);
+                } else {
+                    alert('请先保存收货信息', 2);
+                }
                 return false;
             });
 
-            innerHtml.find('.layout-attr').change(function () {
+            /*自定义规格*/
+            //innerHtml.find('.layout-attr').change(function () {
+            //    var _this = $(this);
+            //    var isContinue = true;
+            //    var _thisTitle = _this.parents('.productsalesattr').find('.attr-title');
+            //    if (!_this.val().trim()) {
+            //        _this.val('');
+            //        return false;
+            //    }
+            //    _this.parent().siblings().each(function () {
+            //        var obj = $(this);
+            //        if (_this.val().trim() == obj.text().trim()) {
+            //            alert(obj.data('type') == 1 ? "" + _thisTitle.text() + "已存在" : "" + _thisTitle.text() + "已存在", 2);
+            //            isContinue = false;
+            //            return false;
+            //        }
+            //    });
+            //    if (isContinue) {
+            //        var attrObj = $("<li class='" + (_thisTitle.data('type') == 1 ? "size" : "color") + "' data-type='" + _thisTitle.data('type') + "' data-id='|' data-value='" + _this.val().trim() + "'>" + _this.val().trim() + "</li>");
+            //        attrObj.click(function () {
+            //            var _self = $(this);
+            //            if (_self.hasClass("select")) {
+            //                _self.removeClass("select");
+            //            } else {
+            //                _self.addClass("select");
+            //            }
+            //            ObjectJS.createOrderGoods();
+            //        });
+            //        _this.parent().before(attrObj);
+            //        attrObj.click();
+            //        _this.val('');
+            //    }
+            //});
+
+            innerHtml.find('.customer-base-info .ico-edit').click(function () {
                 var _this = $(this);
-                var isContinue = true;
-                var _thisTitle = _this.parents('.productsalesattr').find('.attr-title');
-                if (!_this.val().trim()) {
-                    _this.val('');
-                    return false;
-                }
-                _this.parent().siblings().each(function () {
-                    var obj = $(this);
-                    if (_this.val().trim() == obj.text().trim()) {
-                        alert(obj.data('type') == 1 ? "" + _thisTitle.text() + "已存在" : "" + _thisTitle.text() + "已存在", 2);
-                        isContinue = false;
-                        return false;
-                    }
-                });
-                if (isContinue) {
-                    var attrObj = $("<li class='" + (_thisTitle.data('type') == 1 ? "size" : "color") + "' data-type='" + _thisTitle.data('type') + "' data-id='|' data-value='" + _this.val().trim() + "'>" + _this.val().trim() + "</li>");
-                    attrObj.click(function () {
-                        var _self = $(this);
-                        if (_self.hasClass("select")) {
-                            _self.removeClass("select");
-                        } else {
-                            _self.addClass("select");
-                        }
-                        ObjectJS.createOrderGoods();
+                $(".customer-base-info").hide();
+                $(".edit-customer").show();
+            });
+
+            innerHtml.find('.save-customer,.cancel-customer').click(function () {
+                var _this = $(this);
+                $(".customer-base-info").show();
+                $(".edit-customer").hide();
+                if (_this.data('type') == 'save') {
+                    /*保存*/
+                    $("#customerName").data('value', $("#customerName").val());
+                    $("#customerTel").data('value', $("#customerTel").val());
+                    $("#customerAddress").data('value', $("#customerAddress").val());
+                    $("#citySpan").data('value', CityInvoice.getCityCode());
+                } else {
+                    /*取消*/
+                    $("#customerName").val($("#customerName").data('value'));
+                    $("#customerTel").val($("#customerTel").data('value'))
+                    $("#customerAddress").val($("#customerAddress").data('value'))
+                    $("#citySpan").html('').data($("#citySpan").data('value'));
+                    CityInvoice = City.createCity({
+                        cityCode: $("#citySpan").data('value'),
+                        elementID: "citySpan"
                     });
-                    _this.parent().before(attrObj);
-                    attrObj.click();
-                    _this.val('');
                 }
+                /*更改发货信息显示*/
+                $("#showCustomerName").text($("#customerName").val());
+                $("#showCustomerTel").text($("#customerTel").val());
+                $("#showCustomerAddress").text($("#customerAddress").val());
             });
 
             innerHtml.find(".show-more").click(function () {
@@ -117,7 +165,6 @@
                     _this.text("更多+");
                 }
             });
-
             CityInvoice = City.createCity({
                 cityCode: user.CityCode,
                 elementID: "citySpan"

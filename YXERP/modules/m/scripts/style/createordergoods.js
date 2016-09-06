@@ -139,7 +139,7 @@
 
                 var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrandvalue='" + dataAttrValue + "' data-xremark='【" + _this.data('value') + "】' data-yremark='【" + $(this).data('value') + "】' data-xyremark='【" + _this.data('value') + "】【" + $(this).data('value') + "】' data-remark='" + description + "'></tr>");
                 trHtml.append("<td class='tLeft'>" + description + "</td>");
-                trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' class='quantity center' type='text' value='0' /></td>");
+                trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' class='quantity center' type='tel' value='' /></td>");
                 trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
 
                 trHtml.find('.iconfont').click(function () {
@@ -162,7 +162,7 @@
         if (!isCreateOrder) {
             var totalnum = 0;
             $(".attr-box .table-list .quantity").each(function () {
-                totalnum += parseInt($(this).val());
+                totalnum += parseInt(!$(this).val() ? 0 : $(this).val());
             });
             if (totalnum == 0) {
                 alert("请选择颜色尺码，并填写对应采购数量", 2);

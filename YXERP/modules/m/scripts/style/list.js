@@ -17,7 +17,7 @@
 
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
-    ObjectJS.init = function (providers,user) {
+    ObjectJS.init = function (providers, user) {
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;

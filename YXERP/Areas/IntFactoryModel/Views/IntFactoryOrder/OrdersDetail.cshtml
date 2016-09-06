@@ -1,0 +1,86 @@
+﻿ @{
+     ViewBag.Title = "订单详情页";
+     var model = (IntFactory.Sdk.OrderEntity)ViewBag.Model;
+ }
+@section css{ 
+    <link href="/modules/css/downorder.css" rel="stylesheet" />
+}
+@section scripts{
+    <script type="text/javascript">
+        seajs.use(["/modules/intfactoryorder/scripts/orderdetail"], function (obj) {
+            obj.init('@(model.orderID)', '@Html.ToJSONString(model)','@(ViewBag.CityCode)');
+        });
+    </script>
+}
+    <div class="content-title">
+        <div class="left titlename">款式编码：@(model.intGoodsCode)</div>
+        <ul class="left mLeft20"> 
+            <li title="订单类别">
+                <span class="left">类别：@(model.categoryName)</span>  
+            </li>
+             <li title="供应商">
+                <span class="left">供应商：@(model.clientName)&nbsp;@(model.clientMobile)</span>  
+            </li>
+        </ul>
+        <a class="btn-back right mTop5" title="返回" href="/IntFactoryModel/IntFactoryOrder/Orders"><span id="btnback" style="color: #ffffff;">返回</span></a>
+        
+    </div>
+
+    <div class="content-body" style="padding-top: 10px; overflow: initial;">
+        <div class="order-info">
+            <div class="order-imgs-div left">
+                <div class="order-imgs">
+                    <img id="orderImage" src="@(string.IsNullOrEmpty(model.orderImage) ? "" : model.orderImage)" data-self="1"/>
+                </div>
+                <ul class="order-imgs-list pLeft10">
+
+                </ul>
+            </div>
+            <ul class="moneyinfo left">
+                <li >
+                    <label class="bolder font16">@(string.IsNullOrEmpty(model.goodsName) ? "暂无款式名称" : model.goodsName)</label>
+                </li>
+                <li style="overflow: initial;" id="pdttitle">
+                    <div class="left">
+                        <span class="column-title " style="width: 50px; ">单价：</span>
+                        <label class="bolder red font14">
+                            @(model.finalPrice.ToString("f2"))
+                        </label>
+                    </div>
+                </li>
+                <li id="pdtAttr">
+                    
+                </li>
+                 <li id="btnSubmit" class="hide">
+                    <div class="bottombtn" >确认采购</div>
+                </li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="content-body" style="padding: 20px 0 50px 10px;">
+        <div class="nav-partdiv " id="tab12">
+            <div class="table-title tLeft" style="font-size: 17px; text-indent: 10px; padding: 5px 0px;">制版信息</div>
+            <div id="navEngravingInfo" class="platemaking-content"></div>
+            <div class="mTop20 table-title tLeft" style="font-size: 17px; text-indent: 10px;padding: 5px 0px;">工艺说明</div>
+            <table class="table-items-detail tb-plates"></table>
+        </div>
+    </div>
+    <a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情" href="/IntFactoryOrder/Orders"><span id="btndetail">查看采购详情</span></a>
+    @*图片放大*@
+    <div class="enlarge-image-bgbox hide">
+        <div class="close-enlarge-image iconfont">&#xe606;</div>
+        <span id="zoomInButton" class="zoom-botton iconfont mRight50">&#xe642;</span>
+        <span id="zoomOutButton" class="zoom-botton iconfont">&#xe641;</span>
+    </div>
+    <div id="pageContent" class="enlarge-image-box hide">
+        <div class="left-enlarge-image"></div>
+        <div class="right-enlarge-image"></div>
+        <div class="enlarge-image-item"></div>
+    </div>
+<input type="text" hidden="hidden" id="iptcontactName" value="@(ViewBag.ContactName)" data-empty="联系人不能为空!"> 
+<input type="text" hidden="hidden" id="iptmobilePhone" value="@(ViewBag.MobilePhone)" maxlength="11" data-empty="电话不能为空!"> 
+<input type="text" hidden="hidden" placeholder="详细地址..." class="width300" id="iptaddress" value="@(ViewBag.Address)"> 

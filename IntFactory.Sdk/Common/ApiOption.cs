@@ -85,8 +85,12 @@ namespace IntFactory.Sdk
         /// </summary>
         [Description("/api/client/getProcessCategorys")]
         GetProcessCategorys,
+        /// <summary>
+        /// 分类
+        /// </summary>
+        [Description("/api/client/getAllCategorys")]
+        GetAllCategorys,
 
-        
         [Description("/api/client/getClientInfo")]
         GetClientInfo
     }

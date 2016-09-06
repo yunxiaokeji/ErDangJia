@@ -23,6 +23,12 @@ namespace IntFactory.Sdk
 
         public string clientMobile;
 
+        public string clientUserLables;
+
+        public string clientUserNum;
+
+        public string clientCity;
+
         public string goodsName;
 
         public string intGoodsCode;

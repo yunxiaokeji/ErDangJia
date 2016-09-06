@@ -136,6 +136,8 @@
     <Compile Include="Areas\Api\Controllers\UserController.cs" />
     <Compile Include="Areas\Api\Models\FilterPurchase.cs" />
     <Compile Include="Areas\M\Controllers\AccountController.cs" />
+    <Compile Include="Areas\IntFactoryModel\Controllers\IntFactoryOrderController.cs" />
+    <Compile Include="Areas\IntFactoryModel\IntFactoryModelAreaRegistration.cs" />
     <Compile Include="Areas\M\Controllers\HomeController.cs" />
     <Compile Include="Areas\M\Controllers\IntFactoryOrdersController.cs" />
     <Compile Include="Areas\M\Controllers\OrdersController.cs" />
@@ -223,6 +225,7 @@
     <Content Include="modules\images\changmeng-noreal-Logo.png" />
     <Content Include="modules\images\changmeng.png" />
     <Content Include="modules\images\ico-account-login.png" />
+    <Content Include="modules\images\ico-address.png" />
     <Content Include="modules\images\ico-alipay.png" />
     <Content Include="modules\images\ico-attachment-excel.png" />
     <Content Include="modules\images\ico-attachment-pdf.png" />
@@ -241,6 +244,7 @@
     <Content Include="modules\images\ico-loading.gif" />
     <Content Include="modules\images\ico-provider.png" />
     <Content Include="modules\images\ico-reg.png" />
+    <Content Include="modules\images\ico-usernum.png" />
     <Content Include="modules\images\ico-wechat.png" />
     <Content Include="modules\images\ico-changmenghover.png" />
     <Content Include="modules\images\iconreport.png" />
@@ -269,6 +273,14 @@
     <Content Include="modules\images\weixin-hover-38.png" />
     <Content Include="modules\images\wx-code.jpg" />
     <Content Include="modules\images\wx_logo64.png" />
+    <Content Include="modules\intfactoryorder\scripts\ordercreat.js" />
+    <Content Include="modules\intfactoryorder\scripts\orderdetail.js" />
+    <Content Include="modules\intfactoryorder\scripts\orderslist.js" />
+    <Content Include="modules\intfactoryorder\template\orderdetail\createorder-checkattr.html" />
+    <Content Include="modules\intfactoryorder\template\orderdetail\orders_child_list.html" />
+    <Content Include="modules\intfactoryorder\template\orderdetail\platematring-orderdatail.html" />
+    <Content Include="modules\intfactoryorder\template\orders\product-detail.html" />
+    <Content Include="modules\intfactoryorder\template\orders\zngc-products.html" />
     <Content Include="modules\m\css\base.css" />
     <Content Include="modules\m\css\iconfont\demo.css" />
     <Content Include="modules\m\css\iconfont\demo.html" />
@@ -404,6 +416,13 @@
     <Content Include="Areas\M\Views\Home\Detail.cshtml" />
     <Content Include="Areas\M\Views\Orders\List.cshtml" />
     <Content Include="Areas\M\Views\Account\Index.cshtml" />
+    <Content Include="Areas\IntFactoryModel\Views\Web.config" />
+    <Content Include="Areas\IntFactoryModel\Views\IntFactoryOrder\DownOrder.cshtml" />
+    <Content Include="Areas\IntFactoryModel\Views\IntFactoryOrder\Index.cshtml" />
+    <Content Include="Areas\IntFactoryModel\Views\IntFactoryOrder\Orders.cshtml" />
+    <Content Include="Areas\IntFactoryModel\Views\IntFactoryOrder\OrdersDetail.cshtml" />
+    <Content Include="Areas\IntFactoryModel\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\IntFactoryModel\Views\_ViewStart.cshtml" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -1364,6 +1383,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Api\Views\Shared\" />
+    <Folder Include="Areas\IntFactoryModel\Models\" />
     <Folder Include="Areas\M\Models\" />
     <Folder Include="Content\tempfile\" />
     <Folder Include="Content\uploadFiles\" />

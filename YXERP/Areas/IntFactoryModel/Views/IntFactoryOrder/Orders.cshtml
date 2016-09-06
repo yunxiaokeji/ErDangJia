@@ -1,0 +1,63 @@
+﻿@{
+    var plist = (List<CloudSalesEntity.ProvidersEntity>) ViewBag.Providers;
+    ViewBag.Title = "智能工厂--在线下单";
+}
+@section css{
+    <link rel="stylesheet" href="/modules/css/shoppingcart.css"/>
+    <style>
+        .dropdown-ul li:hover {color: #4a98e7;background-color: #ccc;}
+        .divcenter {width: 1190px;margin: 0 auto;}
+        .divcategory {margin: 0 auto;position: absolute;z-index: 666;width: 774px;height: 302px;background-color: #ffffff;
+            overflow: hidden;border: 1px solid #bbb;}
+        .divcategory dl {float: left;margin: 0 20px;width: 210px;height: 240px;}
+        .divcategory dl dt {margin-bottom: 6px;padding: 10px 0;font-size: 14px;border-bottom: 1px solid #1759c2;cursor: pointer;overflow: hidden; }
+        .divcategory dl dd {float: left;margin-right: 15px;width: 60px;height: 24px;line-height: 2;overflow: hidden;cursor: pointer;}
+        .divcategory dl dd a:hover { color: #4a98e7;text-decoration:underline; }
+        .mRight0 { margin-right: 0px; }
+    </style>
+}
+@section scripts{
+    <script type="text/javascript"> 
+        seajs.use(["/modules/intfactoryorder/scripts/orderslist"], function (obj) {
+            obj.init('@ViewBag.ClientID');
+        });
+    </script>
+}
+<div style="height: 100px;z-index: 1;">
+    <div class="divcenter pTop5">
+        <div class="left">智能工厂-客户端</div>
+         @if (ViewBag.LogStatus == 0)
+        {
+            <a class="btn right" href="/Home/Register"  data-name="注册">注册</a>  
+            <a class="right mRight10" href="/Home/Login" style="padding: 5px 10px;border-radius: 2px;line-height: 16px;background-color: #ffffff; color: #000; border: 1px solid #ccc;" data-name="登陆">登陆</a>
+        }
+        <div class="searth-module right mRight50 mTop30" data-text="款号/名称模糊搜索..." data-width="180"> </div>
+       
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="header-box" style="z-index: 1;background-color: #4a98e7; padding: 0px 20px;">
+    <div class="divcenter">
+        <div class="header-title left pLeft10" id="spanCategory" style="padding-right: 10px; color: #999; background-color: #ffffff; font-size: 14px; cursor: pointer;">所有类目
+         <div class="divcategory hide"></div>
+        </div>
+        @if (ViewBag.LogStatus > 0)
+        { 
+            <a class="btn right btn-open-window" data-url="/Purchase/Purchases" data-id="103020200" data-name="产品采购">采购订单</a>
+        } 
+        <span class="clear"></span>
+    </div>
+    
+</div> 
+<div style="z-index: 1;">
+    <div class="content-body divcenter">
+        <div class="attr-filter"></div>
+        <div class="clear">
+            <ul class="productlist" id="productlist">
+
+            </ul>
+        </div>
+
+        <div id="pager" class="mTop20"></div>
+    </div>
+</div> 

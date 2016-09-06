@@ -11,6 +11,7 @@ namespace IntFactory.Sdk
     {
         public static ClientBusiness BaseBusiness = new ClientBusiness();
 
+        public List<CategoryEntity>  CategoryList;
         public ClientResult GetClientInfo(string zngcClientID,string userid="")
         {
             var paras = new Dictionary<string, object>();
@@ -36,17 +37,48 @@ namespace IntFactory.Sdk
         }
         public CategoryEntity GetCategoryByID(string categoryID)
         {
-            var paras = new Dictionary<string, object>();
-            paras.Add("categoryID", categoryID);
+            var list = GetAllCategory();
+            return list.Where(x => x.CategoryID == categoryID).FirstOrDefault();
+            //var paras = new Dictionary<string, object>();
+            //paras.Add("categoryID", categoryID);
 
-            CategoryResult result = HttpRequest.RequestServer<CategoryResult>(ApiOption.GetCategoryByID, paras);
-            if (result.error_code == 0)
+            //CategoryResult result = HttpRequest.RequestServer<CategoryResult>(ApiOption.GetCategoryByID, paras);
+            //if (result.error_code == 0)
+            //{
+            //    return result.result;
+            //}
+            //else
+            //{
+            //    return new CategoryEntity();
+            //}
+        }
+
+        public List<CategoryEntity> GetAllCategory(int layerid = -1, EnumCategoryType type = EnumCategoryType.All)
+        {
+            var list=new List<CategoryEntity>();
+            if (CategoryList != null && CategoryList.Count != 0)
             {
-                return result.result;
+                list = CategoryList;
             }
             else
             {
-                return new CategoryEntity();
+                var paras = new Dictionary<string, object>();
+                paras.Add("layerid", layerid);
+                paras.Add("type", type);
+                CategorysResult result = HttpRequest.RequestServer<CategorysResult>(ApiOption.GetAllCategorys, paras);
+                if (result.error_code == 0)
+                {
+                    CategoryList = result.result;
+                    list = CategoryList; 
+                } 
+            } 
+            if (layerid > -1)
+            {
+                return list.Where(x => x.Layers == layerid).ToList();
+            }
+            else
+            {
+                return list;
             }
         }
 

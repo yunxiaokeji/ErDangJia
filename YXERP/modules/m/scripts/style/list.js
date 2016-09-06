@@ -150,7 +150,6 @@
             $(this).parent().hide();
             Params.pageIndex = 1;
             Params.clientid = $(this).data("id");
-
             if ($(this).data("id") == '-1') {
                 var id = "";
                 $(".task-filtertype li").each(function () {
@@ -165,6 +164,7 @@
                 });
                 Params.clientid = id;
             }
+            ObjectJS.getList();
         });
 
         //列表排序

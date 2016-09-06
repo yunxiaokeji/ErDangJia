@@ -164,6 +164,8 @@ nav ul .menuchecked{border-bottom:5px solid #4a98e7;color:#4a98e7;height:41px;}
 .log-status .log-box li:last-child {vertical-align:top;line-height:26px;padding-left:10px;}
 .log-box li:last-child p:last-child { color:#999;}
 
+.show-attr-box { height:68px;overflow:hidden;}
+
 .btn-addOrder {
     width:120px;
     text-align:center;

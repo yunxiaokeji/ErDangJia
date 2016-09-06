@@ -23,5 +23,16 @@ namespace YXERP.Areas.M.Controllers
             return View();
         }
 
+        public ActionResult Detail(string id)
+        {
+            var model = StockBusiness.GetStorageDetail(id, CurrentUser.AgentID, CurrentUser.ClientID);
+            if (string.IsNullOrEmpty(id) || model == null)
+            {
+                return Redirect("List");
+            }
+            ViewBag.Model = model;
+            return View();
+        }
+
     }
 }

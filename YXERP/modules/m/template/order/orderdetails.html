@@ -1,0 +1,44 @@
+﻿{%
+	for(var i=0, j=$data.length; i < j; i++){
+    var item=$data[i];
+%}
+<div class="doc-item">
+    <div class="doc-header">
+        <span class="">{%=item.ProductName%}</span>
+        <div class="lump"></div>
+    </div>
+    <div class="doc-content hide">
+        <ul>
+            <li class="mRight10" style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:80px;">规格：</span>
+                {%=item.Remark%}
+            </li>
+            <li class="mRight10" style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:80px;">单位：</span>
+                {%=!item.UnitName?"--":item.UnitName%}
+            </li>
+            <li style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:80px;">数量：</span>                
+                {%=item.Quantity%}
+            </li>
+            <li style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:80px;">采购价：</span>       
+                {%=item.Price.toFixed(2)%}         
+            </li>
+            <li style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:80px;">入库量：</span>       
+                {%=item.Complete%}         
+            </li>
+            <li style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:80px;">入库合计：</span>       
+                {%=(item.Complete*item.Price).toFixed(2)%}        
+            </li>
+            <li style="width:100%;word-break:break-all;">
+                <span style="display:inline-block;width:80px;">采购合计：</span>       
+                {%=item.TotalMoney.toFixed(2)%}         
+            </li>
+            <div class="clear"></div>
+        </ul>
+    </div>
+</div>
+{%}%}

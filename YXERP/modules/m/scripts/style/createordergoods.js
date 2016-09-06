@@ -127,7 +127,7 @@
 
     ObjectJS.createOrderGoods = function () {
         $(".attr-box").empty();
-        $(".attr-box").append("<table class='table-list'></table>");
+        $(".attr-box").append('<table class="table-list"></table>');
         $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td>操作</td></tr>');
         $(".attr-ul .size.select").each(function () {
             var _this = $(this);

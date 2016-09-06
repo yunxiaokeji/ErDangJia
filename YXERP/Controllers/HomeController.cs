@@ -370,11 +370,6 @@ namespace YXERP.Controllers
                             model.Client.OtherSysID = string.IsNullOrEmpty(model.Client.OtherSysID)
                                 ? otherid
                                 : model.Client.OtherSysID;
-
-                            if (YXERP.Common.Common.IsMobileDevice())
-                            {
-                                result = 11;
-                            }
                         }
                     }
                     //保持登录状态
@@ -387,7 +382,10 @@ namespace YXERP.Controllers
 
                     Session["ClientManager"] = model;
                     Common.Common.CachePwdErrorUsers.Remove(userName);
-                    
+                    if (YXERP.Common.Common.IsMobileDevice())
+                    {
+                        result = 11;
+                    }
                 }
                 else
                 {

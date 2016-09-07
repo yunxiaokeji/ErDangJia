@@ -2,8 +2,46 @@
      ViewBag.Title = "订单详情页";
      var model = (IntFactory.Sdk.OrderEntity)ViewBag.Model;
  }
-@section css{ 
-    <link href="/modules/css/downorder.css" rel="stylesheet" />
+@section css{
+    <link href="/modules/css/downorder.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/modules/intfactoryorder/css/intfactoryorders.css"/>
+    <style>
+        
+        
+.login-body{ background:url(/modules/images/loginMainBackground.jpg) no-repeat right bottom; background-size:cover; width:100%; height:100%;}
+
+.login-body .main{ margin:0px auto; width:320px;background-color:#fff;padding:15px 30px 60px 40px;opacity:0.9;
+background:url(/modules/images/bg-loginBackground.png) no-repeat left top; background-size:100% 100%;
+
+} 
+
+.login-body .headerTitle {margin-left:5px; color:#4a98e7; text-align:center; font-size:16px;font-weight:bold; line-height:24px;}
+
+.login-body .main .login{ width:320px;margin-top:15px;}
+
+.login-body .main .login .loginbar{ width:100%;height:40px; margin:10px 0px; background-color:#fff;position:relative;}
+     
+.login-body .loginbar .input{ width:308px;height:40px; border:solid 1px #ccc;color:#333;  text-indent:26px;}
+
+.icoUserName { background:url(/modules/images/ico-name.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoUserPwd { background:url(/modules/images/ico-pwd.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoMobileCode { background:url(/modules/images/ico-mobilecode.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoUserCompany { background:url(/modules/images/ico-company.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoName { background:url(/modules/images/ico-username.png) no-repeat 7px 11px;border-radius:3px;}
+
+.icoSurePwd { background:url(/modules/images/ico-surepwd.png) no-repeat 7px 11px;border-radius:3px;}
+
+.remember-box { height:30px; margin-top:20px; }
+
+.remember-box .cb-remember-password { cursor:pointer; padding-left:2px; color:#666; }
+
+.btnLogin { height:40px;line-height:40px; background-color:#4A98E7 ; color:#fff; font-size:16px; text-align:center;
+border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radius:3px; width:320px;}
+    </style>
 }
 @section scripts{
     <script type="text/javascript">
@@ -12,7 +50,8 @@
         });
     </script>
 }
-    <div class="content-title">
+ 
+    <div class="content-title divcenter">
         <div class="left titlename">款式编码：@(model.intGoodsCode)</div>
         <ul class="left mLeft20"> 
             <li title="订单类别">
@@ -26,7 +65,7 @@
         
     </div>
 
-    <div class="content-body" style="padding-top: 10px; overflow: initial;">
+    <div class="content-body divcenter" style="padding-top: 10px; overflow: initial;">
         <div class="order-info">
             <div class="order-imgs-div left">
                 <div class="order-imgs">
@@ -61,15 +100,15 @@
         <div class="clear"></div>
     </div>
 
-    <div class="content-body" style="padding: 20px 0 50px 10px;">
+    <div class="content-body divcenter" style="padding: 20px 0 50px 10px;">
         <div class="nav-partdiv " id="tab12">
             <div class="table-title tLeft" style="font-size: 17px; text-indent: 10px; padding: 5px 0px;">制版信息</div>
             <div id="navEngravingInfo" class="platemaking-content"></div>
-            <div class="mTop20 table-title tLeft" style="font-size: 17px; text-indent: 10px;padding: 5px 0px;">工艺说明</div>
-            <table class="table-items-detail tb-plates"></table>
+            <div class="mTop20 table-title tLeft hide" style="font-size: 17px; text-indent: 10px;padding: 5px 0px;">工艺说明</div>
+            <table class="table-items-detail tb-plates hide"></table>
         </div>
     </div>
-    <a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情" href="/IntFactoryOrder/Orders"><span id="btndetail">查看采购详情</span></a>
+    <a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情"><span id="btndetail">查看采购详情</span></a>
     @*图片放大*@
     <div class="enlarge-image-bgbox hide">
         <div class="close-enlarge-image iconfont">&#xe606;</div>
@@ -82,5 +121,6 @@
         <div class="enlarge-image-item"></div>
     </div>
 <input type="text" hidden="hidden" id="iptcontactName" value="@(ViewBag.ContactName)" data-empty="联系人不能为空!"> 
-<input type="text" hidden="hidden" id="iptmobilePhone" value="@(ViewBag.MobilePhone)" maxlength="11" data-empty="电话不能为空!"> 
+<input type="text" hidden="hidden" id="iptmobilePhone" value="@(ViewBag.MobilePhone)" maxlength="11" data-empty="电话不能为空!">
 <input type="text" hidden="hidden" placeholder="详细地址..." class="width300" id="iptaddress" value="@(ViewBag.Address)"> 
+<input hidden="hidden" id="ipturl" type="text" style="display: none;" value="@(ViewBag.Url)"/>

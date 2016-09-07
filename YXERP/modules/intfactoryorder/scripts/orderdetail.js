@@ -16,9 +16,11 @@
         _self.model = JSON.parse(model.replace(/&quot;/g, '"')); 
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
+        console.log(_self.model);
     }
 
     ObjectJS.bindStyle = function (model) {
+        
         var _self = this; 
         if (model.platemaking) {
             $("#navEngravingInfo").html(decodeURI(model.platemaking));
@@ -298,21 +300,111 @@
         if (totalnum == 0) {
             $('.bottombtn').bind('click', function () { _self.savePDT() });
             alert("请选择颜色尺码，并填写对应采购数量");
-            return false;
+            
         }
+        Global.post("/IntFactoryModel/IntFactoryOrder/IsLogin", null, function(data) {
+            if (data.result) {
+                _self.showUserInfo();
+            } else {
+                $('#orderlogin-box').empty();
+                var openhtml = '<div class="login-body"><div class="main"><div class="login">' +
+                    '<div class="registerErr hide"></div>' +
+                    '<div class="loginbar">' +
+                        '<input type="text" class="input icoUserName" id="iptUserName" placeholder="请输入账号" maxlength="25"/>'+
+                    '</div>' +
+                    '<div class="loginbar" style="position:relative;"><input type="password" class="input icoUserPwd" id="iptPwd"/>'+
+                    '</div>'+
+                    '<div class="remember-box">'+
+                        '<div class="cb-remember-password ico-check ">一周内保持登录</div>' +
+                        '<div class="right pRight5"><a href="/Home/FindPassword" class="linkRegister">忘记密码?</a></div>'+
+                    '<div class="clear"></div>' +
+                '</div>'+
+                '<div class="btnLogin" id="btnLogin">登录</div></div>';
+                Easydialog.open({
+                    container: {
+                        id: "orderlogin-box",
+                        header: "<a style='font-size:18px;'>账号登录</a>",
+                        content: openhtml 
+                    }
+                });
+                //登录 
+                $('#orderlogin-box').find("#btnLogin").click(function () {
+                    if (!$("#iptUserName").val()) {
+                        $(".registerErr").html("请输入账号").slideDown();
+                        return;
+                    }
+                    if (!$("#iptPwd").val()) {
+                        $(".registerErr").html("请输入密码").slideDown();
+                        return;
+                    }
+                    $(this).html("登录中...").attr("disabled", "disabled");
+                    Global.post("/Home/UserLogin", {
+                        userName: $("#iptUserName").val(),
+                        pwd: $("#iptPwd").val(),
+                        otherid: $("#OtherID").val(),
+                        remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0,
+                        bindAccountType: 10000
+                    },
+                    function (data) {
+                        $("#btnLogin").html("登录").removeAttr("disabled");
+                        if (data.result == 1) {
+                            Easydialog.close();
+                            Global.post("/IntFactoryModel/IntFactoryOrder/LoginCallBack", {
+                                sign: data.sign,
+                                uid: data.uid,
+                                aid: data.aid
+                            }, function(dresult) {
+                                _self.CityCode = dresult.ccode;
+                                $('#iptaddress').val(dresult.address);
+                                $('#iptmobilePhone').val(dresult.mphone);
+                                $('#iptcontactName').val(dresult.cname);
+                                _self.showUserInfo();
+                            });
+                        }
+                        else if (data.result == 0) {
+                            $(".registerErr").html("账号或密码有误").slideDown();
+                        }
+                        else if (data.result == 2) {
+                            $(".registerErr").html("密码输入错误超过3次，请2小时后再试").slideDown();
+                        }
+                        else if (data.result == 3) {
+                            $(".registerErr").html("账号或密码有误,您还有" + (3 - parseInt(data.errorCount)) + "错误机会").slideDown();
+                        }
+                        else if (data.result == -1) {
+                            $(".registerErr").html("账号已冻结，请" + data.forbidTime + "分钟后再试").slideDown();
+                        }
+                        
+                    });
+                });
+                //记录密码
+                $('#orderlogin-box').find(".cb-remember-password").click(function () {
+                    console.log(1);
+                    var _this = $(this);
+                    if (_this.hasClass("ico-check")) {
+                        _this.removeClass("ico-check").addClass("ico-checked");
+                    } else {
+                        _this.removeClass("ico-checked").addClass("ico-check");
+                    }
+                });
+            }
+        });
+        $('.bottombtn').bind('click', function () { _self.savePDT() });
+    }
+    ObjectJS.showUserInfo = function () {
+        var _self = this;
         var openhtml = '<ul class="table-add">' +
-            '<li> <span class="width80">联系人：</span> <span><input type="text" id="ContactName" class="verify" value="' + $('#iptcontactName').val() + '" data-empty="联系人不能为空!"></span> </li>' +
-            '<li> <span class="width80">联系电话：</span> <span><input type="text" id="MobilePhone" class="verify" value="' + $('#iptmobilePhone').val() + '" maxlength="11" data-empty="电话不能为空!"></span> </li>' +
-            '<li> <span class="width80">地址：</span> <span id="citySpan"></span></li>' +
-            '<li> <span class="width80"></span> <span><input type="text" placeholder="详细地址..." class="width300" id="Address" value="' + $('#iptaddress').val() + '"></span> </li>' +
-            '</ul>';
+                   '<li> <span class="width80">联系人：</span> <span><input type="text" id="ContactName" class="verify" value="' + $('#iptcontactName').val() + '" data-empty="联系人不能为空!"></span> </li>' +
+                   '<li> <span class="width80">联系电话：</span> <span><input type="text" id="MobilePhone" class="verify" value="' + $('#iptmobilePhone').val() + '" maxlength="11" data-empty="电话不能为空!"></span> </li>' +
+                   '<li> <span class="width80">地址：</span> <span id="citySpan"></span></li>' +
+                   '<li> <span class="width80"></span> <span><input type="text" placeholder="详细地址..." class="width300" id="Address" value="' + $('#iptaddress').val() + '"></span> </li>' +
+                   '</ul>';
         Easydialog.open({
             container: {
                 id: "orderinfo-box",
                 header: "收货信息确认",
                 content: openhtml,
                 yesFn: function () {
-                    _self.submitOrder($('#ContactName').val(),$('#MobilePhone').val(),CityInvoice.getCityCode(),$('#Address').val());
+                    _self.submitOrder($('#ContactName').val(), $('#MobilePhone').val(), CityInvoice.getCityCode(), $('#Address').val());
                 }
             }
         });
@@ -320,8 +412,7 @@
             cityCode: _self.CityCode,
             elementID: "citySpan"
         });
-        $('.bottombtn').bind('click', function () { _self.savePDT() });
-    }
+    };
     ObjectJS.submitOrder = function (personname,mobiletele,citycode,address) {
         var _self = this;
         var model = {
@@ -333,6 +424,12 @@
             GoodsName: _self.model.goodsName,
             GoodsID: _self.model.goodsID,
             ClientID: _self.model.clientID,
+            ClientName: _self.model.clientName,
+            ClientMobile: _self.model.clientMobile,
+            ClientCity: _self.model.clientCity,
+            ClientCode: _self.model.clientCode,
+            ClientContactName: _self.model.clientContactName,
+            ClientCityCode: _self.model.clientCityCode,
             IntGoodsCode: _self.model.intGoodsCode,
             CategoryID: _self.model.categoryID,
             FinalPrice: _self.model.finalPrice,
@@ -356,16 +453,16 @@
                 });
             }
         });
+        window.open($('#ipturl').val() + $('#btndetail').parent().data("url") + "dbff2c22-6c81-4bf6-872a-2d2c7eeaa790", "", "fullscreen=1");
         Global.post("/IntFactoryModel/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
-            if (data.result) {
+            if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",
                     function () {
                         $('#btnback').click();
                     },
-                    function () {
-                        $('#btndetail').parent().data("id", data.PurchaseID);
-                        $('#btndetail').parent().data("url", $('#btndetail').parent().data("url") + data.PurchaseID);
-                        $('#btndetail').click(); 
+                    function () { 
+                        //$('#btndetail').parent().attr("href", $('#ipturl').val() + '/Purchase/DocDetail?id=dbff2c22-6c81-4bf6-872a-2d2c7eeaa790');
+                        //$('#btndetail').click();
                     });
             } else {
                 alert(data.error_message);

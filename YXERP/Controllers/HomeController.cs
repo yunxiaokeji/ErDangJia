@@ -39,8 +39,8 @@ namespace YXERP.Controllers
         {
             return View();
         }
-        
-        public ActionResult Login(string ReturnUrl, int Status = 0,string OtherID="",string name="")
+
+        public ActionResult Login(string ReturnUrl, int Status = 0, string OtherID = "", string name = "", int BindAccountType = 0)
         {
             if (Session["ClientManager"] != null)
             {
@@ -72,6 +72,7 @@ namespace YXERP.Controllers
             {
                 otherid = Common.Common.GetQueryString("id",ReturnUrl);
             }
+            ViewBag.BindAccountType = BindAccountType;
             ViewBag.OtherID = otherid;
             ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
             if (!string.IsNullOrEmpty(otherid) && Status==0)
@@ -99,7 +100,36 @@ namespace YXERP.Controllers
             }
 
             Session["ClientManager"] = null;
+            Session["KSManager"] = null;
             return Redirect("/Home/Login?Status=" + Status);
+        }
+        public JsonResult GetSign(string ReturnUrl)
+        {
+            Dictionary<string, object> resultObj = new Dictionary<string, object>();
+            resultObj.Add("sign", YXERP.Common.Signature.GetSignature(Common.Common.YXAgentID, Common.Common.YXClientID, ReturnUrl));
+
+            return new JsonResult
+            {
+                Data = resultObj,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public ActionResult Authorize(string sign, string ReturnUrl)
+        {
+            if (!string.IsNullOrEmpty(sign) && !string.IsNullOrEmpty(ReturnUrl))
+            {
+                if (sign.Equals(YXERP.Common.Signature.GetSignature(Common.Common.YXAgentID, Common.Common.YXClientID, ReturnUrl), StringComparison.OrdinalIgnoreCase))
+                {
+                    ViewBag.Status = 0;
+                    ViewBag.ReturnUrl = ReturnUrl ?? string.Empty;
+                    ViewBag.BindAccountType = 10000;
+                    return View("Login");
+                }
+            }
+
+            Response.Write("<script>alert('参数有误');location.href='http://edj.yunxiaokeji.com';</script>");
+            Response.End();
+            return View("Login");
         }
 
         public ActionResult Terms() 
@@ -338,7 +368,7 @@ namespace YXERP.Controllers
         #region Ajax
 
         //员工登录
-        public JsonResult UserLogin(string userName, string pwd, string remember, string otherid = "")
+        public JsonResult UserLogin(string userName, string pwd, string remember, int bindAccountType, string otherid = "")
         {
             int result = 0;
             Dictionary<string, object> resultObj = new Dictionary<string, object>();
@@ -384,10 +414,16 @@ namespace YXERP.Controllers
                     cook["status"] = remember;
                     cook.Expires = DateTime.Now.AddDays(7);
                     Response.Cookies.Add(cook);
-
+                    if (bindAccountType == 10000)
+                    {
+                        resultObj.Add("sign",YXERP.Common.Signature.GetSignature(Common.Common.YXAgentID, Common.Common.YXClientID, model.UserID));
+                    } 
                     Session["ClientManager"] = model;
+                     
                     Common.Common.CachePwdErrorUsers.Remove(userName);
-                    
+                    resultObj.Add("uid", model.UserID);
+                    resultObj.Add("aid", model.AgentID);
+                    resultObj.Add("id", model.ClientID);
                 }
                 else
                 {
@@ -426,8 +462,7 @@ namespace YXERP.Controllers
             }
 
            
-            resultObj.Add("result",result);
-
+            resultObj.Add("result",result); 
             return new JsonResult
             {
                 Data = resultObj,

@@ -135,6 +135,7 @@
     <Compile Include="Areas\Api\Controllers\StockController.cs" />
     <Compile Include="Areas\Api\Controllers\UserController.cs" />
     <Compile Include="Areas\Api\Models\FilterPurchase.cs" />
+    <Compile Include="Areas\IntFactoryModel\Controllers\BaseController.cs" />
     <Compile Include="Areas\M\Controllers\AccountController.cs" />
     <Compile Include="Areas\IntFactoryModel\Controllers\IntFactoryOrderController.cs" />
     <Compile Include="Areas\IntFactoryModel\IntFactoryModelAreaRegistration.cs" />
@@ -273,6 +274,7 @@
     <Content Include="modules\images\weixin-hover-38.png" />
     <Content Include="modules\images\wx-code.jpg" />
     <Content Include="modules\images\wx_logo64.png" />
+    <Content Include="modules\intfactoryorder\css\intfactoryorders.css" />
     <Content Include="modules\intfactoryorder\scripts\ordercreat.js" />
     <Content Include="modules\intfactoryorder\scripts\orderdetail.js" />
     <Content Include="modules\intfactoryorder\scripts\orderslist.js" />

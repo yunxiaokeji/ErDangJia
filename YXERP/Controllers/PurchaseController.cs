@@ -23,13 +23,13 @@ namespace YXERP.Controllers
             return View("Purchase");
         }
 
-        public ActionResult Purchases()
+        public ActionResult Purchases(int souceType=-1)
         {
             ViewBag.Title = "所有采购";
             ViewBag.Type = (int)EnumSearchType.All;
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
             ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
-            ViewBag.SouceType = 1;
+            ViewBag.SouceType = souceType;
             return View("Purchases");
         }
 

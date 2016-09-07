@@ -308,7 +308,7 @@ namespace YXERP.Common
                     {
                         key = queryString.Substring(startIndex, i - startIndex);
                     }
-                    if (isEncoded)
+                    if (isEncoded && value!=null)
                     {
                         result[MyUrlDeCode(key, encoding)] = MyUrlDeCode(value, encoding);
                     }

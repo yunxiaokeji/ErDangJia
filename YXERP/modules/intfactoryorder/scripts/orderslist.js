@@ -9,10 +9,11 @@
     var Params = {
         categoryID: "",
         clientid: "",
-        BeginPrice: "",
-        EndPrice: "",
+        beginPrice: "",
+        endPrice: "",
+        orderBy:"",
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 12,
         keyWords: "" 
     }
 
@@ -66,16 +67,71 @@
                 _self.getProducts();
             });
         });
-        $('#spanCategory').mouseover(function () {
-            var xy = $(this).position();
+        //分类
+        $('#divCategory').mouseover(function () {
+            var xy = $(this).position(); 
             $('.divcategory').css("left", xy.left);
+            $('.divcategory').css("top", xy.top + $(this).height());
             $('.divcategory').show();
         }).mouseout(function () { 
             $('.divcategory').hide();
         });
+        //价格区间
+        $('#pricerange').mouseover(function () {
+            $(this).addClass("btnlihover");
+            $('#btnPriceRange').show();
+        }).mouseout(function () {
+            $(this).removeClass("btnlihover");
+            $('#btnPriceRange').hide();
+        });
+        //价格排序
+        $('#liprice').mouseover(function () { 
+            $('.divprice').show();
+        }).mouseout(function () {
+            $('.divprice').hide();
+        });
+
+        $('.seachul li').click(function () {
+            var _this = $(this); 
+            if (!_this.find(".link").hasClass("hover")) {
+                $('.seachul li .link').removeClass("hover");
+                $(_this.find(".link")).addClass("hover");
+            }
+            if (_this.data("name") == "sales" || _this.data("zh")) {
+                Params.orderBy = _this.data("desc");
+                _self.getProducts();
+            } 
+        });
+
+        $('.divprice li').click(function () { 
+            Params.orderBy = $(this).data("desc");
+            $(this).parent().parent().find('.link').html($(this).find('.link').html());
+            $('.seachul li .link').removeClass("hover");
+            $(this).parent().parent().find('.link').addClass("hover");
+            _self.getProducts();
+        });
+     
         $('#spanCategory').click(function() {
             Params.categoryID = '';
             _self.getProducts();
+        });
+        $('#btnPriceRange').click(function () {
+            var beginp = $('#beginprice').val();
+            var endp = $('#endprice').val();
+            if ((beginp != "" && isNaN(Number(beginp))) || (endp != "" && isNaN(Number(endp)))) {
+                alert('价格格式输入有误，请重新输入');
+            } else {
+                Params.beginPrice = beginp;
+                Params.endPrice = endp;
+                _self.getProducts();
+            }
+        });
+        var rurl = $('#ipturl').val() + '/IntFactoryModel/IntFactoryOrder/CallBackView';
+        Global.post("/Home/GetSign", { ReturnUrl: rurl }, function (data) { 
+            $('#loga').attr("href", '/Home/Authorize?sign=' + data.sign + '&ReturnUrl=' + rurl); 
+        });
+        $('#cgbtn').click(function () {
+            window.open($('#ipturl').val() + '/Purchase/Purchases?souceType=2', "", "fullscreen=1");
         });
         _self.getAllCategory();
         _self.getProducts(); 
@@ -93,13 +149,9 @@
             if (data.items.length > 0) {
                 doT.exec("intfactoryorder/template/orders/zngc-products.html", function (templateFun) {
                     var html = templateFun(data.items);
-                    html = $(html);
-
-                    //打开产品详情页
-                    html.find(".productimg,.name").each(function () {
-                        $(this).data("url", $(this).data("url") + "&type=" + _self.type + "&guid=" + _self.guid);
-                    }); 
-                    $("#productlist").append(html);
+                    html = $(html); 
+                    $("#productlist").append(html); 
+                    
                 });
             } else {
                 $("#productlist").append("<div class='nodata-box' >暂无数据!</div>");
@@ -136,7 +188,7 @@
                 var html = ""; 
                 for (var i = 0; i < data.items.length; i++) { 
                     var item = data.items[i];
-                    html += "<dl><dt><a  data-id='" + item.CategoryID + "'>" + item.CategoryName + "</a></dt>";
+                    html += "<dl><dt><a  data-id='" + item.CategoryID + "' style='font-size: 14px;'>" + item.CategoryName + "</a></dt>";
                     for (var j = 0; j < item.ChildCategory.length; j++) {
                         var childcate = item.ChildCategory[j];
                         html += "<dd ";
@@ -154,6 +206,7 @@
             }
             $(".divcategory").find('a').click(function() {
                 Params.categoryID = $(this).data("id");
+                Params.orderBy = "";
                 _self.getProducts();
                 $('.divcategory').hide();
             });

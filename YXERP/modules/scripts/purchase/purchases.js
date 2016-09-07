@@ -28,7 +28,7 @@ define(function (require, exports, module) {
     ObjectJS.init = function (type, providers,sourcetype) {
         var _self = this;
         Params.type = type;
-      //  Params.sourcetype = sourcetype;
+        Params.sourcetype = sourcetype;
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         _self.bindEvent(providers);
         _self.getList();
@@ -77,9 +77,9 @@ define(function (require, exports, module) {
                 }
             });
         });
-        //if (Params.sourcetype == 2) {
-        //    $("#ddlSourceType").hide();
-       // }
+        if (Params.sourcetype == 2) {
+            $("#ddlSourceType").hide();
+        }
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({
                 prevText: "供应商-",

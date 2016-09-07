@@ -20,10 +20,10 @@ namespace YXERP.Controllers
         public ActionResult Index(string href = "",string name="")
         { 
             ViewBag.Herf = string.IsNullOrEmpty(href) ? "" : href + (string.IsNullOrEmpty(name) ? "" : "&name=" + name);
-            string otherID = ((CloudSalesEntity.Users) Session["ClientManager"]).Client.OtherSysID;
+            string otherID =CurrentUser.Client.OtherSysID;
             ViewBag.OtherID =(string.IsNullOrEmpty(otherID) ? "" : otherID);
-            ViewBag.RemainDay = Math.Ceiling((((CloudSalesEntity.Users)Session["ClientManager"]).Client.EndTime - DateTime.Now).TotalDays);
-            ViewBag.RemainDate = ((CloudSalesEntity.Users)Session["ClientManager"]).Client.EndTime.Date.ToString("yyyy-MM-dd");
+            ViewBag.RemainDay =Math.Ceiling((CurrentUser.Client.EndTime - DateTime.Now).TotalDays);
+            ViewBag.RemainDate =  CurrentUser.Client.EndTime.Date.ToString("yyyy-MM-dd");
             return View();
         }
 

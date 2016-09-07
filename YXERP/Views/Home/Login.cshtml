@@ -17,7 +17,7 @@
     <script type="text/javascript" src="/Scripts/sea-config.js?v=@(ExpandClass.Version)"></script>
     <script type="text/javascript">
         seajs.use(["scripts/home/login"], function (home) {
-            home.init('@(ViewBag.Status)', '@(ViewBag.ReturnUrl)');
+            home.init('@(ViewBag.Status)','@(ViewBag.BindAccountType)', '@(ViewBag.ReturnUrl)');
         });
     </script>
 </head>
@@ -51,16 +51,19 @@
                 </div>
 
                 <div class="btnLogin" id="btnLogin">登录</div>
-
-                <div class="other-account">
-                    <div class="other-text">使用其他账号登录</div>
-                    <div class="accounts">
-                        <a class="mingdao " href="/Home/MDLogin?ReturnUrl=@ViewBag.ReturnUrl"></a>
-                        <a class="account-weixin mLeft10" href="/Home/WeiXinLogin?ReturnUrl=@ViewBag.ReturnUrl" title="微信账号登录"></a>
-                        <a class="account-changmeng mLeft10" href="/Home/CMLogin?ReturnUrl=@ViewBag.ReturnUrl" title="智能工厂账号登录"></a>
-                    </div>
-                </div>
-             
+                @{
+                    if (ViewBag.BindAccountType != 10000)
+                    {
+                        <div class="other-account">
+                            <div class="other-text">使用其他账号登录</div>
+                            <div class="accounts">
+                                <a class="mingdao " href="/Home/MDLogin?ReturnUrl=@ViewBag.ReturnUrl"></a>
+                                <a class="account-weixin mLeft10" href="/Home/WeiXinLogin?ReturnUrl=@ViewBag.ReturnUrl" title="微信账号登录"></a>
+                                <a class="account-changmeng mLeft10" href="/Home/CMLogin?ReturnUrl=@ViewBag.ReturnUrl" title="智能工厂账号登录"></a>
+                            </div>
+                        </div>
+                    }
+                }
             </div>
         </div>
         <div class="copyright">

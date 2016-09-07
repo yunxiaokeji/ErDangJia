@@ -40,7 +40,7 @@
                 if (!$(e.target).parents().hasClass("style-content") && !$(e.target).hasClass("style-content")) {
                     $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
                         $("body,html").removeClass('ohidden');
-                        $(".overlay-addOrder").hide();
+                        $(".overlay-addOrder").fadeOut();
                     });
                 }
             });
@@ -48,7 +48,7 @@
             $(".overlay-addOrder .close").unbind().click(function () {
                 $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
                     $("body,html").removeClass('ohidden');
-                    $(".overlay-addOrder").hide();
+                    $(".overlay-addOrder").fadeOut();;
                 });
             });
 
@@ -241,7 +241,7 @@
                     alert("下单成功");
                     $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
                         $("body,html").removeClass('ohidden');
-                        $(".overlay-addOrder").hide();
+                        $(".overlay-addOrder").fadeOut();;
                     });
                 } else {
                     alert(data.error_message, 2);

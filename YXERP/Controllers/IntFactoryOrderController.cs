@@ -101,9 +101,9 @@ namespace YXERP.Controllers
             };
         }
 
-        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex)
+        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex, string orderByColumn = "", int isAsc = 0)
         {
-            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(CurrentUser.Client.ClientCode, pageSize, pageIndex, clientid, keyWords);
+            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(CurrentUser.Client.ClientCode, pageSize, pageIndex, clientid, keyWords,orderByColumn,isAsc);
             JsonDictionary.Add("items", item.orders);
             JsonDictionary.Add("totalCount", item.totalCount);
             JsonDictionary.Add("pageCount", item.pageCount);

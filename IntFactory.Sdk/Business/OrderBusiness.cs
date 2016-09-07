@@ -13,12 +13,14 @@ namespace IntFactory.Sdk.Business
     {
         public static OrderBusiness BaseBusiness = new OrderBusiness();
 
-        public OrderListResult GetOrdersByYXClientCode(string yxClientCode, int pageSize, int pageIndex, string zngcClientID = "", string keyWords = "")
+        public OrderListResult GetOrdersByYXClientCode(string yxClientCode, int pageSize, int pageIndex, string zngcClientID = "", string keyWords = "", string orderByColumn = "", int isAsc = 0)
         {
             var paras = new Dictionary<string, object>();
             paras.Add("yxClientCode", yxClientCode);
             paras.Add("clientID", zngcClientID);
             paras.Add("keywords", keyWords);
+            paras.Add("isAsc", isAsc);
+            paras.Add("orderByColumn", orderByColumn);
             paras.Add("pageSize", pageSize);
             paras.Add("pageIndex", pageIndex);
 

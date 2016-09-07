@@ -51,6 +51,7 @@ select option{ padding:2px; }
 .bRed { border-color:red !important; }
 .borderccc{ border:solid 1px #ccc;}
 /*字体*/
+.font11 {font-size:11px; }
 .font10 {font-size:13px; }
 .font14 {font-size:14px; }
 .font16 {font-size:16px; }

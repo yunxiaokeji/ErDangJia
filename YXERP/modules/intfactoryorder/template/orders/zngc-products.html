@@ -4,8 +4,8 @@
     var titlename=item.intGoodsCode+" "+item.goodsName;
     var goodname=(titlename.length>17?titlename.substring(0,17)+"...":titlename); 
 %}
-<li >
-    <div class="product-item" style="height: 360px;" >
+<li style="padding: 20px;">
+    <div class="product-item"  >
         <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}" href="/IntFactoryModel/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
             <img  src="{%=item.orderImage%}" alt=""/>
         </a>

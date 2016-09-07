@@ -19,6 +19,10 @@ namespace IntFactory.Sdk
 
         public string clientName;
 
+        public string clientCityCode;
+
+        public string clientAdress; 
+
         public string clientContactName;
 
         public string clientMobile;

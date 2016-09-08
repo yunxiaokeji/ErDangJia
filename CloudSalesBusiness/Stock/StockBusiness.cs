@@ -313,7 +313,7 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public bool AddDocPart(string orderid, string remarks, string nums, ref string errinfo, string userid = "", string zngcAutoID="")
+        public int AddDocPart(string orderid, string remarks, string nums, ref string errinfo, string userid = "", string zngcAutoID="")
         {
             return StockDAL.AddDocPart(orderid, remarks, nums, userid,zngcAutoID,ref errinfo);
         }

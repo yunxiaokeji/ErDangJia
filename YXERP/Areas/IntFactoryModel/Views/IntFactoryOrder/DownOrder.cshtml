@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Newtonsoft.Json
+@{
     //Layout = null;
     ViewBag.Title = "新建订单"; 
     var categoryItems = (List<IntFactory.Sdk.CategoryEntity>)ViewBag.Items;
@@ -8,19 +9,19 @@
 <link href="/modules/plug/laydate/need/laydate.css" rel="stylesheet" />
  @*margin: auto;*@
 <div style="max-width: 1200px;">
-<div class="tab-nav">
-    <ul class="tab-nav-ul left">
-        <li data-id="navDH" class="hover" title="供应商已有成品款式下单" data-type="1"> 
-            <div>
-                <span class="iconfont">&#xe62c;</span>
-                <span>大货下单</span>
-            </div> 
-        </li>
-        <li data-id="navDY"  data-type="2" title="供应商按客户提供的样品定制下单,需要寄送样款"> 
-            <div>
-                <span class="iconfont">&#xe60f;</span>
-                <span>打样下单</span>
-            </div>
+    <div class="tab-nav">
+        <ul class="tab-nav-ul left">
+            <li data-id="navDH" class="hover" title="供应商已有成品款式下单" data-type="1">
+                <div>
+                    <span class="iconfont">&#xe62c;</span>
+                    <span>大货下单</span>
+                </div>
+            </li>
+            <li data-id="navDY" data-type="2" title="供应商按客户提供的样品定制下单,需要寄送样款">
+                <div>
+                    <span class="iconfont">&#xe60f;</span>
+                    <span>打样下单</span>
+                </div>
             </li>
         </ul>
     </div>
@@ -37,13 +38,20 @@
                 <li id="goodsQuantity">
 
                 </li>
-            </ul> 
+            </ul>
         </div>
         <div class="nav-partdiv hide" id="navDY">
-            <ul class="table-add"> 
+            <ul class="table-add">
+                <li>
+                    <span class="column-title">工厂：</span>
+                    <span> 
+                        <div id="ddlProviders" class="left dropdown-module" style="width: 180px;"></div> 
+                    </span>
+                    
+                </li>
                 <li>
                     <span class="column-title">加工品类：</span>
-                    <span>
+                    <span id="presscatergorylist">
                     @foreach (var item in (List<IntFactory.Sdk.ProcessCategoryEntity>) ViewBag.Categorys)
                     {
                         <span class="category-item" data-id="@(item.CategoryID)">@item.Name</span>
@@ -68,7 +76,7 @@
                         &nbsp;大货
                     </div>
                 </li>
-                <li class="childGoodsQuantity">
+                <li class="childGoodsQuantity" id="childGoodsQuantity">
 
                 </li>
                 <li>
@@ -126,18 +134,19 @@
                 </li>
 
             </ul>
-            
+
         </div>
         <div class="mTop10">
             <div class="btn right" id="btnSave">保存</div>
         </div>
     </div>
 </div>
+<input type="text" id="tempProviders" hidden="hidden" value="@(JsonConvert.SerializeObject(ViewBag.Providers))">
 <script type="text/javascript" src="/Scripts/sea.js"></script>
 <script type="text/javascript" src="/Scripts/sea-config.js"></script>
 <script src="/modules/plug/laydate/laydate.js"></script>
     <script type="text/javascript">
-    seajs.use(["scripts/default/ordercreat"], function (ObjectJS) {
+        seajs.use(["/modules/intfactoryorder/scripts/ordercreat"], function (ObjectJS) {
         ObjectJS.init('', '@(ViewBag.ClientID)', '@Html.ToJSONString(categoryItems)');
     });
     var myDate = new Date();

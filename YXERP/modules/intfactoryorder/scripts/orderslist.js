@@ -28,21 +28,21 @@
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-        var providerids = '';
-        for (var t = 0; t < _self.providers.length; t++) {
-            if (_self.providers[t].CMClientID != "" && _self.providers[t].CMClientID != null) {
-                providerids += "'" + _self.providers[t].CMClientID + "',";
-            }
-        } 
-        if (providerids != "") {
-            providerids = providerids.substring(1, providerids.length - 2);
-        } 
+        var providerids = '-1';
+        //for (var t = 0; t < _self.providers.length; t++) {
+        //    if (_self.providers[t].CMClientID != "" && _self.providers[t].CMClientID != null) {
+        //        providerids += "''" + _self.providers[t].CMClientID + "'',";
+        //    }
+        //} 
+        //if (providerids != "") {
+        //    providerids = providerids.substring(2, providerids.length - 3);
+        //} 
         Params.clientid = providerids;
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({
                 prevText: "供应商-",
                 defaultText: "全部",
-                defaultValue:"",
+                defaultValue:"-1",
                 data: _self.providers,
                 dataValue: "CMClientID",
                 dataText: "Name",

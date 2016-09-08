@@ -18,16 +18,16 @@
     ObjectJS.IsLoading = false;
     ObjectJS.init = function (providers, user) {
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
-        user = JSON.parse(user.replace(/&quot;/g, '"'));
-        ObjectJS.user = user;
         for (var i = 0; i < providers.length; i++) {              
             var p = providers[i];
             if (p.CMClientID != "" && p.CMClientID != null) {
                 $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
             }
         }
-
+        user = JSON.parse(user.replace(/&quot;/g, '"'));
+        ObjectJS.user = user;
         Params.clientid = "-1";
+
         ObjectJS.bindEvent();
         ObjectJS.getList();  
     };
@@ -41,16 +41,20 @@
                 } else {
                     $(".getback").slideUp("slow");
                 }
+
                 var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
-                if (bottom <= 200) {
+                if (bottom <= 60) {
                     if (!ObjectJS.IsLoading) {
-                        Params.pageIndex++;
-                        if (Params.pageIndex <= ObjectJS.PageCount) {
-                            ObjectJS.getList(true);
-                        } else {
-                            $(".prompt").remove();
-                            $(".list").append('<div class="prompt">已经是最后一条啦</div>');
-                        }
+                        setTimeout(function () {
+                            Params.pageIndex++;
+                            if (Params.pageIndex <= ObjectJS.PageCount) {
+                                ObjectJS.getList();
+                            }
+                            //else {
+                            //    $(".prompt").remove();
+                            //    $(".list").append('<div class="prompt">已经是最后一条啦</div>');
+                            //}
+                        }, 300);
                     }
                 }
             }
@@ -201,21 +205,20 @@
         });
     };
 
-    ObjectJS.getList = function (noEmpty) {
-        if (!noEmpty) {
+    ObjectJS.getList = function () {
+        IsLoading = true;
+        if (Params.pageIndex == 1) {
             $(".list").empty();
         }
-        //获取任务列表(页面加载)
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/style-list.html";
-        var control = "/IntFactoryOrder/GetProductList";
-
+        var control = "/IntFactoryModel/IntFactoryOrder/GetProductList";
         $.post(control, Params, function (data) {
             $(".data-loading").remove();
+            
             if (data.items.length == 0) {
                 $(".list").append("<div class='nodata-txt'>暂无数据 !</div>");
             } else {
-                ObjectJS.PageCount = data.pageCount || data.PageCount;
                 doT.exec(template, function (code) {
                     var innerHtml = code(data.items);
                     innerHtml = $(innerHtml);
@@ -255,6 +258,8 @@
                         }, 1000)
                     });
                 });
+                ObjectJS.PageCount = data.pageCount;
+                IsLoading = false;
             }
 
         });

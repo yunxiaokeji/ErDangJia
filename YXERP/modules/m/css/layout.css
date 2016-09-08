@@ -67,7 +67,7 @@ header .task-text {color:#373737;text-align:center;}
 
 .table-list .tr-header{ height:35px; text-align:center; }
 .table-list .tr-header td{ height:35px; border-bottom:solid 2px #e6e6e6;  font-weight:bold; color:#666; padding:0 5px;
-                           white-space:nowrap; overflow: hidden; text-overflow:ellipsis; }
+                           white-space:normal; overflow: hidden; text-overflow:ellipsis; }
 
 .table-list tr:not(:first-child){ height:35px; cursor:pointer; }
 .table-list tr:not(:first-child):hover { background-color: #f6f6f6; }
@@ -108,6 +108,14 @@ header .task-text {color:#373737;text-align:center;}
 .table-items-detail a { color:#333; }
 .table-items-detail a:hover { color:red; }
 .table-items-detail td img { max-width:120px;max-height:120px;}
+
+/*新建样式*/
+.table-add {  border-bottom:solid 1px #eee; padding:0 20px 20px 20px; }
+.table-add li{ line-height:25px; margin-top:5px;  padding: 2px 0px;}
+.table-add li input[type="text"],.table-add li input[type="password"]{ height:20px; line-height:20px; padding:2px 5px; width:150px; }
+.table-add li textarea {resize:none; height:80px; line-height:20px; padding:1px 5px; border:solid 1px #ccc; width:300px; border-radius:2px;}
+.table-add span {  display:inline-block; vertical-align:top;}
+.table-add .column-title { color:#999; width:100px;}
 
 /*暂无数据*/
 .nodata-txt { padding: 40px 0px; font-size: 16px; text-align: center; color: #666; background-color:#fff; }

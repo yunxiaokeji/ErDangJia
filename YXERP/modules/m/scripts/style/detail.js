@@ -45,44 +45,13 @@
             var classname = _this.data("classname");
             ModuleType = classname;
             $(".main-box ." + classname).show().siblings().hide();
-            var isGet = _this.data("isget");
-            if (classname == "plate-des") {
-                if (!isGet) {
-                    ObjectJS.getPlateMakings();
-                    _this.data("isget", "1");
-                }
-            }
-
-            ////讨论
-            //if (classname == "talk-status") {
-            //    if (!isGet) {
-            //        ObjectJS.getTaskReplys();
-            //        _this.data("isget", "1");
-            //    }
-            //}
-            ////材料
-            //else if (classname == "shop-status") {
-            //    if (!isGet) {
-            //        ObjectJS.GetOrderDetailsByOrderID();
-            //        _this.data("isget", "1");
-            //    }
-            //}
-            ////工艺说明
-            //else if (classname == "print-status") {
+            //var isGet = _this.data("isget");
+            //if (classname == "plate-des") {
             //    if (!isGet) {
             //        ObjectJS.getPlateMakings();
             //        _this.data("isget", "1");
             //    }
             //}
-            ////日志
-            //else if (classname == "log-status") {
-            //    if (!isGet) {
-            //        ObjectJS.getTaskLogs();
-            //        _this.data("isget", "1");
-            //    }
-                    
-            //}
-
         });
         //点击回到顶部
         $(".getback").click(function () {

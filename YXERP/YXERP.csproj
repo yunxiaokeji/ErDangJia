@@ -421,7 +421,6 @@
     <Content Include="Areas\M\Views\Home\Detail.cshtml" />
     <Content Include="Areas\M\Views\Orders\List.cshtml" />
     <Content Include="Areas\M\Views\Account\Index.cshtml" />
-    <Content Include="Areas\IntFactoryModel\Views\Web.config" />
     <Content Include="Areas\IntFactoryModel\Views\IntFactoryOrder\DownOrder.cshtml" />
     <Content Include="Areas\IntFactoryModel\Views\IntFactoryOrder\Index.cshtml" />
     <Content Include="Areas\IntFactoryModel\Views\IntFactoryOrder\Orders.cshtml" />
@@ -429,6 +428,7 @@
     <Content Include="Areas\IntFactoryModel\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\IntFactoryModel\Views\_ViewStart.cshtml" />
     <Content Include="Areas\M\Views\Orders\Detail.cshtml" />
+    <Content Include="Areas\IntFactoryModel\Views\Web.config" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

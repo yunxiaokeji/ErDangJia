@@ -4,13 +4,10 @@
         doT = require("dot");
     var Params = {
         clientid: "",/*款式中供应商ID*/
-        pageSize: 5,
+        keyWords: "",
         pageIndex: 1,
         pageSize: 5,
-        orderByColumn: "",
-        isAsc: 0,
-        sourcetype: 2,
-        totalCount: 0
+        orderby: ""
     };
 
     var ObjectJS = {};
@@ -23,20 +20,14 @@
         providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;
-        var providerids = "";
         for (var i = 0; i < providers.length; i++) {              
             var p = providers[i];
             if (p.CMClientID != "" && p.CMClientID != null) {
-                providerids += "'" + p.CMClientID + "',";
                 $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
             }
         }
-        if (providerids != "") {
-            providerids = providerids.substring(1, providerids.length - 2);
-        } else {
-            providerids = "1";
-        }
-        Params.clientid = providerids;
+
+        Params.clientid = "-1";
         ObjectJS.bindEvent();
         ObjectJS.getList();  
     };
@@ -152,20 +143,20 @@
             $(this).parent().hide();
             Params.pageIndex = 1;
             Params.clientid = $(this).data("id");
-            if ($(this).data("id") == '-1') {
-                var id = "";
-                $(".task-filtertype li").each(function () {
-                    var _this = $(this);
-                    if (_this.data("id") != '-1') {
-                        if (_this.index() != $(".task-filtertype li").length - 1) {
-                            id += _this.data("id") + '\',\'';
-                        } else {
-                            id += _this.data("id");
-                        }
-                    }
-                });
-                Params.clientid = id;
-            }
+            //if ($(this).data("id") == '-1') {
+            //    var id = "";
+            //    $(".task-filtertype li").each(function () {
+            //        var _this = $(this);
+            //        if (_this.data("id") != '-1') {
+            //            if (_this.index() != $(".task-filtertype li").length - 1) {
+            //                id += _this.data("id") + '\',\'';
+            //            } else {
+            //                id += _this.data("id");
+            //            }
+            //        }
+            //    });
+            //    Params.clientid = id;
+            //}
             ObjectJS.getList();
         });
 
@@ -199,8 +190,7 @@
             }
             _self.data("isasc", isasc).attr("data-isactive", 1);
 
-            Params.isAsc = isasc;
-            Params.orderByColumn = orderbycloumn;
+            Params.orderby = orderbycloumn+(isasc==1?" asc":" desc");
             Params.pageIndex = 1;
             ObjectJS.getList();
         });

@@ -15,8 +15,7 @@
         _self.orderid = orderid; 
         _self.model = JSON.parse(model.replace(/&quot;/g, '"')); 
         _self.bindStyle(_self.model);
-        _self.CityCode = citycode;
-        console.log(_self.model);
+        _self.CityCode = citycode; 
     }
 
     ObjectJS.bindStyle = function (model) {
@@ -81,11 +80,11 @@
                 var bl = false, details = [], isFirst = true, xattr = [], yattr = [];
                 $(".productsalesattr").each(function () {
                     bl = false;
-                    var _attr = $(this), attrdetail = details;
-                    //组合规格
+                    var _attr = $(this), attrdetail = details; 
+                    //组合规格 
                     _attr.find(".checkbox.hover").each(function () {
                         bl = true;
-                        var _value = $(this);
+                        var _value = $(this); 
                         //首个规格
                         if (isFirst) {
                             var model = {};
@@ -100,7 +99,7 @@
                             details.push(model);
 
                         } else {
-                            for (var i = 0, j = attrdetail.length; i < j; i++) {
+                            for (var i = 0, j = attrdetail.length; i < j; i++) { 
                                 if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
                                     var model = {};
                                     model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
@@ -125,7 +124,7 @@
                     });
                     isFirst = false;
                 });
-                $("#" + contendid).empty();
+                $("#" + contendid).empty(); 
                 //选择所有属性
                 if (bl) {
                     var layer = $(".productsalesattr").length, items = [];
@@ -377,8 +376,7 @@
                     });
                 });
                 //记录密码
-                $('#orderlogin-box').find(".cb-remember-password").click(function () {
-                    console.log(1);
+                $('#orderlogin-box').find(".cb-remember-password").click(function () { 
                     var _this = $(this);
                     if (_this.hasClass("ico-check")) {
                         _this.removeClass("ico-check").addClass("ico-checked");
@@ -439,7 +437,7 @@
         //大货单遍历下单明细 
         $(".child-product-table .quantity").each(function () {
             var _this = $(this);
-            if (_this.val() > 0) {
+            if (_this.val() > 0) { 
                 var item = CacheItems[_this.data("remark")];
                 model.Details.push({
                     SaleAttr: item.saleAttr,
@@ -453,16 +451,17 @@
                 });
             }
         });
-        window.open($('#ipturl').val() + $('#btndetail').parent().data("url") + "dbff2c22-6c81-4bf6-872a-2d2c7eeaa790", "", "fullscreen=1");
         Global.post("/IntFactoryModel/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",
                     function () {
                         $('#btnback').click();
                     },
-                    function () { 
-                        //$('#btndetail').parent().attr("href", $('#ipturl').val() + '/Purchase/DocDetail?id=dbff2c22-6c81-4bf6-872a-2d2c7eeaa790');
-                        //$('#btndetail').click();
+                    function () {
+                        $('#btndetail').parent().attr("href", $('#ipturl').val() + '/Purchase/DocDetail/' + data.PurchaseID);
+                        //window.open($('#ipturl').val() + $('#btndetail').parent().data("url") + "PurchaseID", "", "fullscreen=1");
+
+                        $('#btndetail').click();
                     });
             } else {
                 alert(data.error_message);

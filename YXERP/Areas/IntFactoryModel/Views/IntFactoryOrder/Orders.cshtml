@@ -20,7 +20,10 @@
 }
 <div style="height: 100px;">
     <div class="divcenter pTop5">
-        <div class="left">智能工厂-客户端</div>
+        <div class="left">
+            <span><img src="/modules/intfactoryorder/images/ico-cmlogo.png" style="width: 50px; height: 50px;"/></span>
+             <span>智能工厂-客户端</span>
+        </div>
          @if (ViewBag.LogStatus == 0)
         {
             <a class="btn right mRight20" href="/Home/Register?ReturnUrl=@(ViewBag.Url)/IntFactoryModel/IntFactoryOrder/Orders"  data-name="注册">注册</a>  
@@ -54,7 +57,7 @@
             <li title="综合排序" class="font11" data-name="zh" data-desc=""><span class="link hover">综合排序</span></li>
             <li title="销量从高到低" class="font11" data-name="sales" data-desc="Goods.SaleCount desc"><span class="link">销量</span></li>
             <li title="价格从高到低" class="font11" data-name="price" data-desc="" id="liprice" style="position: relative;">
-                <span class="link">价格</span>
+                <span class="link" id="parentprice">价格</span>
                 <span class="icon icon-btn-arrow-2-h"></span>
                 <ul class="divprice hide">
                     <li data-desc="Goods.Price desc"><span class="link" >价格从高到底</span></li>

@@ -13,11 +13,10 @@
         var _self = this;
         _self.customerid = customerid;
         _self.clientid = clientid;
-
+        _self.providerid = "";
         if ($(".category-item").length == 1) {
             $(".category-item").addClass("hover");
         }
-
         if (categoryitem != null) {
             var categoryitems = JSON.parse(categoryitem.replace(/&quot;/g, '"'));
             ObjectJS.categoryitems = categoryitems;
@@ -28,6 +27,7 @@
             _self.categoryValue = "";
         }
         _self.bindEvent('');
+       
     }
 
     //绑定事件
@@ -57,8 +57,24 @@
                     return false;
                 }
             }
+        }); 
+        _self.providers = JSON.parse($('#tempProviders').val().replace(/&quot;/g, '"')); 
+        require.async("dropdown", function () {
+            $("#ddlProviders").dropdown({
+                prevText: "供应商-",
+                defaultText: "请选择",
+                defaultValue: "",
+                data: _self.providers,
+                dataValue: "CMClientID",
+                dataText: "Name",
+                width: "180",
+                isposition: true,
+                onChange: function (data) {
+                    _self.providerid = data.value;
+                    _self.getPressCategory(data.value)
+                }
+            });
         });
-
         //大品类下拉
         require.async("dropdown", function () {
             $(".bigcategory").dropdown({
@@ -128,7 +144,7 @@
                 choosePDtOther.createPDtOther({
                     title: "选择采购产品",
                     type: 1, //1智能工厂
-                    clientid: '381c8429-dec0-4143-ad7f-6364e8f0e5e4',//_self.clientid,
+                    clientid:_self.clientid,
                     callback: function (products) { 
                         if (products.length > 0) {
                             $('#pdtName').val(products[0].pname).data("categoryid", products[0].categoryid).data("orderid", products[0].orderid).data("code", products[0].code).data("price", products[0].price).show();
@@ -146,14 +162,13 @@
 
     //确认下单明细 goodsQuantity  childGoodsQuantity
     ObjectJS.showAttrForOrder = function (categoryList,obj,contendid) {
-        //var _self = this;
         $(".productsalesattr").remove();
         $("#" + contendid).empty();
         CacheItems = []; 
         if ($(".ico-radiobox.hover").data('type') == 2 || contendid == "goodsQuantity") {
-            doT.exec("template/default/createorder-checkattr.html", function (template) { 
+            doT.exec("intfactoryorder/template/orderdetail/createorder-checkattr.html", function (template) {
                 var innerhtml = template(categoryList);
-                innerhtml = $(innerhtml);
+                innerhtml = $(innerhtml); ;
                 //组合产品
                 innerhtml.find(".check-box").click(function () {
                     var _this = $(this).find(".checkbox");
@@ -227,9 +242,10 @@
                         tableModel.items = items;
 
                         //加载子产品
-                        doT.exec("template/default/orders_child_list.html", function (templateFun) {
+                        doT.exec("intfactoryorder/template/orderdetail/orders_child_list.html", function (templateFun) {
                             var innerText = templateFun(tableModel);
                             innerText = $(innerText);
+                            console.log(innerText);
                             $("#" + contendid).append(innerText);
                             //数量必须大于0的数字
                             innerText.find(".quantity").change(function () {
@@ -267,7 +283,7 @@
                             });
                         });
                     }
-                });
+                }); 
                 $("#"+obj).after(innerhtml); 
             });
         }
@@ -281,7 +297,7 @@
         $('.ordercategory').empty();
 
         var items = CacheChildCategory[_self.bigCategoryValue];
-
+       
         for (var i = 0; i < items.length; i++) {
             if (!CacheCategory[items[i].CategoryID]) {
                 CacheCategory[items[i].CategoryID] = items[i];
@@ -291,8 +307,7 @@
             _self.categoryValue = items[0].CategoryID;
             _self.showAttrForOrder(CacheCategory[_self.categoryValue.trim()], 'checkOrderType', 'childGoodsQuantity');
             isOnce = false;
-        }
-
+        } 
         require.async("dropdown", function () {
             $(".ordercategory").dropdown({
                 prevText: "",
@@ -356,7 +371,7 @@
             });
         }
 
-        Global.post("/IntFactoryOrder/CreateOrder", { entity: JSON.stringify(model), clientid: _self.clientid }, function (data) {
+        Global.post("/IntFactoryModel/IntFactoryOrder/CreateOrder", { entity: JSON.stringify(model), clientid: _self.clientid }, function (data) {
             if (data.id) {
                 alert("新增成功！");
                 window.location = location.href;
@@ -365,7 +380,24 @@
             }
         });
     }
-
+    ObjectJS.getPressCategory = function () {
+        var _self = this;
+        Global.post("/IntFactoryModel/IntFactoryOrder/GetProcessCategorys", { zngcclientid: _self.providerid }, function (data) {
+            var html = "";
+            for (var i = 0; i < data.items.length; i++) {
+                html += '<span class="category-item ' + (i == 0 ? "hover" : "") + '" data-id="' + data.items[i].CategoryID + '">' + data.items[i].Name + '</span>';
+            }
+            $('#presscatergorylist').html(html);
+            $('.category-item').click(function () {
+                cons
+                var _this = $(this);
+                if (!_this.hasClass("hover")) {
+                    $(".category-item").removeClass("hover");
+                    _this.addClass("hover");
+                }
+            });
+        });
+    }
     ObjectJS.checkPDTList = function () {
         if ($(".tab-nav-ul li.hover").data('type') == 2 && $(".ico-radiobox.hover").data('type') == 1) {
             return true;

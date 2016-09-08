@@ -28,21 +28,21 @@
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-        var providerids = '';
-        for (var t = 0; t < _self.providers.length; t++) {
-            if (_self.providers[t].CMClientID != "" && _self.providers[t].CMClientID != null) {
-                providerids += "'" + _self.providers[t].CMClientID + "',";
-            }
-        } 
-        if (providerids != "") {
-            providerids = providerids.substring(1, providerids.length - 2);
-        } 
+        var providerids = '-1';
+        //for (var t = 0; t < _self.providers.length; t++) {
+        //    if (_self.providers[t].CMClientID != "" && _self.providers[t].CMClientID != null) {
+        //        providerids += "''" + _self.providers[t].CMClientID + "'',";
+        //    }
+        //} 
+        //if (providerids != "") {
+        //    providerids = providerids.substring(2, providerids.length - 3);
+        //} 
         Params.clientid = providerids;
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({
                 prevText: "供应商-",
                 defaultText: "全部",
-                defaultValue:"",
+                defaultValue:"-1",
                 data: _self.providers,
                 dataValue: "CMClientID",
                 dataText: "Name",
@@ -97,7 +97,8 @@
                 $('.seachul li .link').removeClass("hover");
                 $(_this.find(".link")).addClass("hover");
             }
-            if (_this.data("name") == "sales" || _this.data("zh")) {
+            if (_this.data("name") == "sales" || _this.data("name")=="zh") {
+                $('#parentprice').html('价格');
                 Params.orderBy = _this.data("desc");
                 _self.getProducts();
             } 
@@ -105,9 +106,9 @@
 
         $('.divprice li').click(function () { 
             Params.orderBy = $(this).data("desc");
-            $(this).parent().parent().find('.link').html($(this).find('.link').html());
-            $('.seachul li .link').removeClass("hover");
-            $(this).parent().parent().find('.link').addClass("hover");
+            $('#parentprice').html($(this).find('.link').html()); 
+            $('.seachul li .link').removeClass("hover"); 
+            $('#parentprice').addClass("hover");
             _self.getProducts();
         });
      
@@ -115,7 +116,7 @@
             Params.categoryID = '';
             _self.getProducts();
         });
-        $('#btnPriceRange').click(function () {
+        $('#btnPriceRange').click(function () { 
             var beginp = $('#beginprice').val();
             var endp = $('#endprice').val();
             if ((beginp != "" && isNaN(Number(beginp))) || (endp != "" && isNaN(Number(endp)))) {
@@ -144,6 +145,14 @@
         $("#productlist").empty();
         $("#productlist").append("<div class='data-loading' ><div>"); 
 
+        var beginp = $('#beginprice').val();
+        var endp = $('#endprice').val();
+        if (beginp == "") {
+            Params.beginPrice = beginp;
+        }
+        if (endp == "") {
+            Params.endPrice = endp;
+        }
         Global.post("/IntFactoryModel/IntFactoryOrder/GetProductList", Params, function (data) {
             $("#productlist").empty();
             if (data.items.length > 0) {
@@ -154,7 +163,7 @@
                     
                 });
             } else {
-                $("#productlist").append("<div class='nodata-box' >暂无数据!</div>");
+                $("#productlist").append("<div class='nodata-div'>暂无数据!</div>");
             }
 
             $("#pager").paginate({

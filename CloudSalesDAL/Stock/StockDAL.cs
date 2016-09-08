@@ -241,7 +241,7 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddPurchaseDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool AddDocPart(string orderid, string remarks, string nums, string userid,string zngcAutoID, ref string errinfo)
+        public static int AddDocPart(string orderid, string remarks, string nums, string userid,string zngcAutoID, ref string errinfo)
         {
             SqlParameter[] paras = {  
                                      new SqlParameter("@ErrInfo",SqlDbType.NVarChar,500),
@@ -254,7 +254,7 @@ namespace CloudSalesDAL
                                    };
             paras[0].Value = errinfo;
             paras[0].Direction = ParameterDirection.InputOutput;
-            var bl = ExecuteNonQuery("P_InsertStoreDocPart", paras, CommandType.StoredProcedure) > 0;
+            var bl = ExecuteNonQuery("P_InsertStoreDocPart", paras, CommandType.StoredProcedure) ;
             errinfo = paras[0].Value.ToString();
             return bl;
         }

@@ -41,3 +41,4 @@
 .product-item .name:hover { text-decoration:underline; color:#B10000; }
 .product-item .sales-stock { padding:5px; position:absolute; bottom:0px; width:220px; }
 .product-item .sales-stock span{ color:#999; }  
+.nodata-div{margin-top:20px;padding: 30px 0px;font-size: 16px;text-align: center;color: #666;border: solid 1px #ccc;box-sizing:border-box;-moz-box-sizing:border-box; -webkit-box-sizing:border-box; width:1190px;}

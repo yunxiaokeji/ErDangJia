@@ -27,6 +27,12 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
             ViewBag.ClientID = id;
             ViewBag.Items = ClientBusiness.BaseBusiness.GetClientCategorys("", EnumCategoryType.Order);
             ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
+            var clientid = "";
+            if (CurrentUser != null)
+            {
+                clientid = CurrentUser.ClientID;
+            }
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(clientid); 
             return View();
         }
 
@@ -36,16 +42,18 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         public ActionResult Orders(string id)
-        { 
+        {
             var Status = 0;
+            var clientid = ""; 
             if (CurrentUser != null)
             {
                 Status = 1;
+                clientid = CurrentUser.ClientID;
             } 
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = id;
             ViewBag.LogStatus=Status;
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders("-1"); 
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(clientid); 
             return View();
         }
         public ActionResult CallBackView(string sign, string uid = "", string aid = "")
@@ -126,7 +134,29 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
             }
             return View();
         }
-        
+
+        public JsonResult GetProcessCategorys(string zngcclientid)
+        {
+            var result = ClientBusiness.BaseBusiness.GetProcessCategorys(zngcclientid);
+            JsonDictionary.Add("items", result);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult CreateOrder(string entity,string clientid,string userid="")
+        { 
+            AddResult result = OrderBusiness.BaseBusiness.CreateOrder(entity, clientid, userid);
+            JsonDictionary.Add("id", result.id);
+            JsonDictionary.Add("err_msg", result.error_message);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
         public JsonResult LoginCallBack(string sign, string uid = "", string aid = "")
         {
             SetSession(uid, aid);
@@ -151,18 +181,7 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
-        public JsonResult CreateOrder(string entity,string clientid,string userid="")
-        { 
-            AddResult result = OrderBusiness.BaseBusiness.CreateOrder(entity, clientid, userid);
-            JsonDictionary.Add("id", result.id);
-            JsonDictionary.Add("err_msg", result.error_message);
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
+      
         public JsonResult GetAllCateGory()
         { 
             var result = ClientBusiness.BaseBusiness.GetAllCategory(1,EnumCategoryType.Order);

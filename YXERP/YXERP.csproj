@@ -275,6 +275,7 @@
     <Content Include="modules\images\wx-code.jpg" />
     <Content Include="modules\images\wx_logo64.png" />
     <Content Include="modules\intfactoryorder\css\intfactoryorders.css" />
+    <Content Include="modules\intfactoryorder\images\ico-cmlogo.png" />
     <Content Include="modules\intfactoryorder\scripts\ordercreat.js" />
     <Content Include="modules\intfactoryorder\scripts\orderdetail.js" />
     <Content Include="modules\intfactoryorder\scripts\orderslist.js" />

@@ -173,9 +173,9 @@ namespace YXERP.Areas.Api.Controllers
         {
             string errorinfo = "";
             remarks = remarks.Replace("【", "[").Replace("】", "]");
-            bool result = StockBusiness.BaseBusiness.AddDocPart(orderid, remarks, nums, ref errorinfo, "", zngcAutoID);
-            JsonDictionary.Add("result", result ? 1 : 0);
-            JsonDictionary["error_msg"] = errorinfo;
+            int result = StockBusiness.BaseBusiness.AddDocPart(orderid, remarks, nums, ref errorinfo, "", zngcAutoID);
+            JsonDictionary.Add("result", result );
+            JsonDictionary["error_message"] = errorinfo;
             return new JsonResult
             {
                 Data = JsonDictionary,

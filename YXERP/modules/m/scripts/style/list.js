@@ -6,7 +6,9 @@
         clientid: "",/*款式中供应商ID*/
         pageSize: 5,
         pageIndex: 1,
-        keyWords: "",
+        pageSize: 5,
+        orderByColumn: "",
+        isAsc: 0,
         sourcetype: 2,
         totalCount: 0
     };
@@ -197,10 +199,10 @@
             }
             _self.data("isasc", isasc).attr("data-isactive", 1);
 
-            //Params.isAsc = isasc;
-            //Params.taskOrderColumn = orderbycloumn;
-            //Params.pageIndex = 1;
-            //ObjectJS.getList();
+            Params.isAsc = isasc;
+            Params.orderByColumn = orderbycloumn;
+            Params.pageIndex = 1;
+            ObjectJS.getList();
         });
         
         //返回顶部

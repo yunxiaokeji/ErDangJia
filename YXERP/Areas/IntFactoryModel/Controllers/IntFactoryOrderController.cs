@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace YXERP.Areas.IntFactoryModel.Controllers
 {
-    public class IntFactoryOrderController : Controller
+    public class IntFactoryOrderController : BaseController
     {
         
         //
@@ -35,12 +35,45 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Orders(string id,int status=0)
-        {
+        public ActionResult Orders(string id)
+        { 
+            var Status = 0;
+            if (CurrentUser != null)
+            {
+                Status = 1;
+            } 
+            ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = id;
-            ViewBag.LogStatus = status;
+            ViewBag.LogStatus=Status;
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders("-1"); 
             return View();
+        }
+        public ActionResult CallBackView(string sign, string uid = "", string aid = "")
+        {
+            SetSession(uid, aid);
+            return Redirect("/IntFactoryModel/IntFactoryOrder/Orders");
+        }
+        public void SetSession(string uid = "", string aid = "")
+        {
+            if (!string.IsNullOrEmpty(uid) && !string.IsNullOrEmpty(aid) )
+            {
+                if (CurrentUser == null)
+                {
+                    var user = CloudSalesBusiness.OrganizationBusiness.GetUserByUserID(uid, aid);
+                    user.Client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(user.ClientID);
+                    Session["KSManager"] = user;
+                    Session["Time"] = DateTime.Now.ToString("yyy-MM-dd HH:mm:ss");
+                    Session.Timeout = 60;
+                }
+                else
+                {
+                    if (Convert.ToDateTime(Session["Time"]).AddHours(1).CompareTo(DateTime.Now) > 1)
+                    {
+                        Session["KSManager"] = null;
+                        Session["Time"] = null;
+                    }
+                }
+            } 
         }
 
         /// <summary>
@@ -65,13 +98,22 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         /// <returns></returns>
         public ActionResult OrdersDetail(string orderid,string clientid)
         {
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+            string ccode, address, mphone,cname;
+            ccode = address = mphone = cname = "";
+            if (CurrentUser != null)
+            {
+                ccode = CurrentUser.Client.CityCode;
+                address = CurrentUser.Client.Address;
+                mphone = CurrentUser.Client.MobilePhone;
+                cname = CurrentUser.Client.ContactName;
+            }
+            ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;
-            ViewBag.CityCode = client==null?"":client.CityCode;
-            ViewBag.ContactName = client == null ? "" : client.ContactName;
-            ViewBag.MobilePhone = client == null ? "" : client.MobilePhone;
-            ViewBag.Address = client == null ? "" : client.Address;
+            ViewBag.CityCode = ccode;
+            ViewBag.ContactName = cname;
+            ViewBag.MobilePhone = mphone;
+            ViewBag.Address = address;
             var obj= OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
             if (obj.error_code == 0)
             {
@@ -84,10 +126,34 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
             }
             return View();
         }
+        
+        public JsonResult LoginCallBack(string sign, string uid = "", string aid = "")
+        {
+            SetSession(uid, aid);
+            JsonDictionary.Add("uid", !string.IsNullOrEmpty(uid));
+            JsonDictionary.Add("ccode", CurrentUser.Client.CityCode);
+            JsonDictionary.Add("address", CurrentUser.Client.Address);
+            JsonDictionary.Add("mphone", CurrentUser.Client.MobilePhone);
+            JsonDictionary.Add("cname", CurrentUser.Client.ContactName); 
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult IsLogin()
+        {
+            JsonDictionary.Add("result", CurrentUser!=null);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
 
         public JsonResult CreateOrder(string entity,string clientid,string userid="")
-        {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
+        { 
             AddResult result = OrderBusiness.BaseBusiness.CreateOrder(entity, clientid, userid);
             JsonDictionary.Add("id", result.id);
             JsonDictionary.Add("err_msg", result.error_message);
@@ -98,8 +164,7 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
             };
         }
         public JsonResult GetAllCateGory()
-        {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
+        { 
             var result = ClientBusiness.BaseBusiness.GetAllCategory(1,EnumCategoryType.Order);
           
             JsonDictionary.Add("items", result); 
@@ -109,10 +174,9 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex)
-        {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
-            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid, keyWords);
+        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex,string categoryID="", string orderby = "", string beginPrice="",string endPrice="")
+        { 
+            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid, keyWords, categoryID, orderby, beginPrice, endPrice);
             JsonDictionary.Add("items", item.orders);
             JsonDictionary.Add("totalCount", item.totalCount);
             JsonDictionary.Add("pageCount", item.pageCount);
@@ -124,8 +188,7 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         }
 
         public JsonResult GetZNGCCategorys(string categoryid)
-        {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
+        { 
             var obj = ClientBusiness.BaseBusiness.GetCategoryByID(categoryid);
             JsonDictionary.Add("items", obj); 
             return new JsonResult
@@ -136,8 +199,7 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         }
 
         public JsonResult GetOrderDetailByID(string clientid, string orderid, string categoryid)
-        {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
+        { 
             var obj = OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
             if (obj.error_code == 0)
             {
@@ -156,12 +218,43 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         }
 
         public JsonResult CreateOrderEDJ(string entity,decimal totalFee=0)
-        {
-            Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
+        { 
+            if (CurrentUser == null)
+            {
+                JsonDictionary.Add("result",-9);
+                JsonDictionary.Add("errMsg", "未登录请登陆后再提交");
+                return new JsonResult
+                {
+                    Data = JsonDictionary,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
             var ord= JsonConvert.DeserializeObject<OrderEntity>(entity);
+            CloudSalesEntity.Users user = CurrentUser;
+            //0.判断供应商以及是否授权
+            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, ord.clientID);
+            if (string.IsNullOrEmpty(provideid))
+            {
+                 YunXiaoService.ProductService.AddProviders(ord.clientName,
+                            ord.clientContactName,
+                            ord.clientMobile, "", ord.clientCityCode, ord.clientAdress,
+                            "", ord.clientID, ord.clientCode, "", CurrentUser.Client.AgentID, CurrentUser.ClientID);
+            }
+            if (string.IsNullOrEmpty(CurrentUser.Client.OtherSysID) || (!string.IsNullOrEmpty(CurrentUser.Client.OtherSysID) && CurrentUser.Client.OtherSysID.IndexOf(ord.clientID)==-1))
+            {
+                var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", CurrentUser.Client.CompanyName,
+                            CurrentUser.Client.MobilePhone, ord.clientID,
+                             CurrentUser.Client.AgentID, CurrentUser.ClientID, CurrentUser.Client.ClientCode);
+                CloudSalesBusiness.Manage.ClientBusiness.UpdateClientOtherid(ord.clientID, CurrentUser.ClientID);
+                user.Client.OtherSysID = string.IsNullOrEmpty(user.Client.OtherSysID)
+                    ? ord.clientID + ","
+                    : user.Client.OtherSysID + ord.clientID + ",";
+                Session["KSManager"] = user;
+            }
+
             //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入
             string dids = "";
-            CloudSalesEntity.Users user = (CloudSalesEntity.Users) Session["ClientManager"];
+           
             string pid = OrderBusiness.BaseBusiness.ZNGCAddProduct(ord, user.AgentID, user.ClientID, user.UserID, ref dids);
             if (string.IsNullOrEmpty(pid) || string.IsNullOrEmpty(dids))
             {

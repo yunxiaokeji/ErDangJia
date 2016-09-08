@@ -8,11 +8,12 @@ define(function (require, exports, module) {
 
     var ObjectJS = {};
     //登陆初始化
-    ObjectJS.init = function (status, returnUrl) {
+    ObjectJS.init = function (status,bindAccountType, returnUrl) {
         var _self=this;
         if ($(window.parent.document).find("#windowItems").length > 0) {
             window.top.location.href = location.href;
         }
+        _self.bindAccountType = bindAccountType;
         _self.returnUrl = returnUrl.replace('&amp;','&');
         ObjectJS.placeholderSupport(); 
         if (status == 2) {
@@ -47,13 +48,20 @@ define(function (require, exports, module) {
                 userName: $("#iptUserName").val(),
                 pwd: $("#iptPwd").val(),
                 otherid: $("#OtherID").val(),
-                remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0
+                remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0,
+                bindAccountType: _self.bindAccountType
             },
             function (data) {
                 $("#btnLogin").html("登录").removeAttr("disabled");
 
                 if (data.result == 1) {
-                    if (_self.returnUrl) { 
+                    if (_self.bindAccountType == 10000) {
+                        _self.returnUrl += _self.returnUrl.indexOf('?') > -1 ? "&sign=" + data.sign + "&uid=" + data.uid + "&aid=" + data.aid : "?sign=" + data.sign + "&uid=" + data.uid + "&aid=" + data.aid;
+                    }
+                    if (_self.returnUrl) {
+                        //if (_self.returnUrl.indexOf('IntFactoryModel') > -1) {
+                        //    _self.returnUrl += _self.returnUrl.indexOf('?') > 1 ? "&uid=" + data.uid + "&aid=" + data.aid : "?uid=" + data.uid + "&aid=" + data.aid;
+                        //}
                         location.href = _self.returnUrl;
                     }
                     else {

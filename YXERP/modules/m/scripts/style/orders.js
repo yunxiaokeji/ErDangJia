@@ -31,7 +31,7 @@
                 $(".getback").slideUp("slow");
             }
             var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
-            if (bottom <= 200) {
+            if (bottom <= 60) {
                 if (!ObjectJS.IsLoading) {
                     Params.pageIndex++;
                     if (Params.pageIndex <= ObjectJS.PageCount) {
@@ -172,7 +172,10 @@
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/order-list.html";
         var control = "/Purchase/GetPurchases";
+        ObjectJS.IsLoading = true;
         $.post(control, Params, function (data) {
+            ObjectJS.IsLoading = false;
+
             $(".data-loading").remove();
             if (data.items.length == 0) {
                 $(".list").append("<div class='nodata-txt'>暂无数据 !</div>");

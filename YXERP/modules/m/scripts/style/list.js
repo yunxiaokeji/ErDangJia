@@ -206,7 +206,6 @@
     };
 
     ObjectJS.getList = function () {
-        IsLoading = true;
         if (Params.pageIndex == 1) {
             $(".list").empty();
         }
@@ -260,9 +259,8 @@
                     });
                 });
                 ObjectJS.PageCount = data.pageCount;
-                IsLoading = false;
+                ObjectJS.IsLoading = false;
             }
-
         });
     };
     

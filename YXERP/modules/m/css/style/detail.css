@@ -130,7 +130,7 @@ nav ul .menuchecked{border-bottom:5px solid #4a98e7;color:#4a98e7;height:41px;}
 
 /*制版信息显示区域*/
 .print-status .print-header { color:#82cadb;display:block;height:40px;line-height:40px;margin:0 10px;border-bottom:2px solid #ddd;}
-.platemakingBody {margin:20px 10px 50px 10px;border-top:1px solid #eee;border-left:1px solid #eee;}
+.platemakingBody {margin:5px 10px 50px 10px;border-top:1px solid #eee;border-left:1px solid #eee;}
 .platemakingBody table {max-width:100%;}
 .platemakingBody table tr td{padding:15px 0px 15px 10px;text-align:center;color:#666;}
 .platemakingBody td {border-bottom:1px solid #eee;border-right:1px solid #eee;text-align:center !important; }

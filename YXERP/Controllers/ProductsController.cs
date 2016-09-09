@@ -407,7 +407,17 @@ namespace YXERP.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
+        public JsonResult GetProviderList()
+        {
+            var model = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            JsonDictionary.Add("items", model);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        
         public JsonResult SavaProviders(string entity)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();

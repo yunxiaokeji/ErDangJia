@@ -23,7 +23,7 @@ namespace YXERP.Controllers
             string otherID =CurrentUser.Client.OtherSysID;
             ViewBag.OtherID =(string.IsNullOrEmpty(otherID) ? "" : otherID);
             ViewBag.RemainDay =Math.Ceiling((CurrentUser.Client.EndTime - DateTime.Now).TotalDays);
-            ViewBag.RemainDate =  CurrentUser.Client.EndTime.Date.ToString("yyyy-MM-dd");
+            ViewBag.RemainDate =  CurrentUser.Client.EndTime.Date.ToString("yyyy-MM-dd"); 
             return View();
         }
 

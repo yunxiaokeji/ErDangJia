@@ -86,7 +86,7 @@ define(function (require, exports, module) {
 
             $("#contentMenu").hide();
         });
-
+        _self.getProvider();
         //向左滑动
         $(".left-btn").click(function () {
             var position = $("#windowItems").position();
@@ -118,30 +118,40 @@ define(function (require, exports, module) {
         });
 
         //一级菜单图标事件处理
-        $("#modulesMenu li").mouseenter(function () {
+        $("#modulesMenu li").mouseenter(function() {
             var _this = $(this).find("img");
             _this.attr("src", _this.data("hover"));
         });
-
         $("#modulesMenu li").mouseleave(function () {
             if (!$(this).hasClass("hover")) {
                 var _this = $(this).find("img");
                 _this.attr("src", _this.data("ico"));
             }
         });
-
+        $('#intfactoryli').mouseover(function () {
+            $(this).addClass("hover");
+            $('#providerul').show();
+        }).mouseout(function () {
+            $(this).removeClass("hover");
+            $('#providerul').hide();
+        });
         $("#modulesMenu li").click(function () {
             var _this = $(this);
             if (!_this.hasClass("hover")) {
                 _this.addClass("hover");
                 _this.siblings().removeClass("hover");
-                _this.siblings().find("img").each(function () {
+                _this.siblings().find("img").each(function() {
                     $(this).attr("src", $(this).data("ico"));
-                });
-                _self.getChildMenu(_this.data("code"));
+                }); 
+                if (_this.attr('id') == 'intfactoryli') {
+                    $('#providerul').show();
+                    //$('#intfactoryhref').click();
+                } else {
+                    _self.getChildMenu(_this.data("code"));
+                }
             }
         });
-
+         
         //打开窗口
         $("nav").delegate(".action-items li", "click", function () {
             _self.openWindows($(this));
@@ -541,7 +551,24 @@ define(function (require, exports, module) {
             }
         });
     }
-
+    //获取供应商
+    LayoutObject.getProvider = function () {
+        Global.post("/Products/GetProviderList", null, function (data) {
+            var html = "";
+            for (var s = 0; s < data.items.length; s++) {
+                var item = data.items[s];
+                if (item.CMClientID != "" && item.CMClientID != null) {
+                    html += "<li class='providerli' data-cmid='" + item.CMClientID + "' data-id='" + item.ProviderID + "'>" + item.Name + "</li>";
+                }
+            } 
+            $('#providerul').html(html);
+            $('#providerul').find("li").click(function () {
+                var _this = $(this); 
+                $('#intfactoryhref').parent().attr("href", "/StyleCenter/StyleCenter/StyleCenter/" + _this.data("cmid"));
+                $('#intfactoryhref').click();
+            });
+        });
+    }
     //获取代理商授权信息
     LayoutObject.getAgentAuthorizes = function () {
         Global.post("/Default/GetAgentAuthorizes", null, function (data) {

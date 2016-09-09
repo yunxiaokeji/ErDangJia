@@ -28,7 +28,7 @@
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-        var providerids = '-1';
+        var providerids = _self.clientid == "" ? "-1" : _self.clientid;
         //for (var t = 0; t < _self.providers.length; t++) {
         //    if (_self.providers[t].CMClientID != "" && _self.providers[t].CMClientID != null) {
         //        providerids += "''" + _self.providers[t].CMClientID + "'',";
@@ -132,7 +132,7 @@
             $('#loga').attr("href", '/Home/Authorize?sign=' + data.sign + '&ReturnUrl=' + rurl); 
         });
         $('#cgbtn').click(function () {
-            window.open($('#ipturl').val() + '/Purchase/Purchases?souceType=2', "", "fullscreen=1");
+            window.open($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单', "", "fullscreen=1");
         });
         $('#imglogo').click(function() {
             location.replace(location);

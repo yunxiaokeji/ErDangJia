@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace YXERP.Areas.IntFactoryModel.Controllers
+namespace YXERP.Areas.StyleCenter.Controllers
 {
     public class BaseController : Controller
     {

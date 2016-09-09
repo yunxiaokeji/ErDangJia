@@ -166,6 +166,7 @@ namespace YXERP.Controllers
                         if (string.IsNullOrEmpty(model.Avatar)) model.Avatar = user.user.avatar;
 
                         Session["ClientManager"] = model;
+                        Session["KSManager"] = model;
                         if (string.IsNullOrEmpty(state))
                         {
                             return Redirect("/Default/Index");
@@ -204,7 +205,7 @@ namespace YXERP.Controllers
                                     current.Avatar = user.user.avatar;
                                 }
                                 Session["ClientManager"] = current;
-
+                                Session["KSManager"] = current;
                                 if (string.IsNullOrEmpty(state))
                                 {
                                     return Redirect("/Default/Index");
@@ -227,7 +228,7 @@ namespace YXERP.Controllers
                                 current.MDToken = user.user.token;
                                 if (string.IsNullOrEmpty(current.Avatar)) current.Avatar = user.user.avatar;
                                 Session["ClientManager"] = current;
-
+                                Session["KSManager"] = current;
                                 if (string.IsNullOrEmpty(state))
                                 {
                                     return Redirect("/Default/Index");
@@ -282,7 +283,7 @@ namespace YXERP.Controllers
                     if (model.Status.Value == 1)
                     {
                         Session["ClientManager"] = model;
-
+                        Session["KSManager"] = model;
                         if (string.IsNullOrEmpty(state))
                             return Redirect("/Home/Index");
                         else
@@ -334,7 +335,8 @@ namespace YXERP.Controllers
                     //未注销
                     if (model.Status.Value != 9)
                     {
-                        Session["ClientManager"] = model; 
+                        Session["ClientManager"] = model;
+                        Session["KSManager"] = model;
                         return Redirect("/Default/Index");
                     }
                 }
@@ -358,6 +360,7 @@ namespace YXERP.Controllers
                             current.Avatar = user.client.logo;
                         }
                         Session["ClientManager"] = current;
+                        Session["KSManager"] = current;
                         return Redirect("/Default/Index");
                     } 
                 }
@@ -414,6 +417,7 @@ namespace YXERP.Controllers
                         resultObj.Add("sign",YXERP.Common.Signature.GetSignature(Common.Common.YXAgentID, Common.Common.YXClientID, model.UserID));
                     } 
                     Session["ClientManager"] = model;
+                    Session["KSManager"] = model;
                     if (YXERP.Common.Common.IsMobileDevice())
                     {
                         result = 11;

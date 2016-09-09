@@ -4,48 +4,31 @@
  }
 @section css{
     <link href="/modules/css/downorder.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/modules/intfactoryorder/css/intfactoryorders.css"/>
+    <link rel="stylesheet" href="/modules/stylecenter/css/stylecenter.css"/>
     <style>
-        
-        
-.login-body{ background:url(/modules/images/loginMainBackground.jpg) no-repeat right bottom; background-size:cover; width:100%; height:100%;}
-
-.login-body .main{ margin:0px auto; width:320px;background-color:#fff;padding:15px 30px 60px 40px;opacity:0.9;
-background:url(/modules/images/bg-loginBackground.png) no-repeat left top; background-size:100% 100%;
-
-} 
-
-.login-body .headerTitle {margin-left:5px; color:#4a98e7; text-align:center; font-size:16px;font-weight:bold; line-height:24px;}
-
-.login-body .main .login{ width:320px;margin-top:15px;}
-
-.login-body .main .login .loginbar{ width:100%;height:40px; margin:10px 0px; background-color:#fff;position:relative;}
-     
-.login-body .loginbar .input{ width:308px;height:40px; border:solid 1px #ccc;color:#333;  text-indent:26px;}
-
-.icoUserName { background:url(/modules/images/ico-name.png) no-repeat 7px 11px;border-radius:3px;}
-
-.icoUserPwd { background:url(/modules/images/ico-pwd.png) no-repeat 7px 11px;border-radius:3px;}
-
-.icoMobileCode { background:url(/modules/images/ico-mobilecode.png) no-repeat 7px 11px;border-radius:3px;}
-
-.icoUserCompany { background:url(/modules/images/ico-company.png) no-repeat 7px 11px;border-radius:3px;}
-
-.icoName { background:url(/modules/images/ico-username.png) no-repeat 7px 11px;border-radius:3px;}
-
-.icoSurePwd { background:url(/modules/images/ico-surepwd.png) no-repeat 7px 11px;border-radius:3px;}
-
-.remember-box { height:30px; margin-top:20px; }
-
-.remember-box .cb-remember-password { cursor:pointer; padding-left:2px; color:#666; }
-
-.btnLogin { height:40px;line-height:40px; background-color:#4A98E7 ; color:#fff; font-size:16px; text-align:center;
-border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radius:3px; width:320px;}
+        .login-body{ background:url(/modules/images/loginMainBackground.jpg) no-repeat right bottom; background-size:cover; width:100%; height:100%;}
+        .login-body .main{ margin:0px auto; width:320px;background-color:#fff;padding:15px 30px 60px 40px;opacity:0.9;
+        background:url(/modules/images/bg-loginBackground.png) no-repeat left top; background-size:100% 100%;
+        } 
+        .login-body .headerTitle {margin-left:5px; color:#4a98e7; text-align:center; font-size:16px;font-weight:bold; line-height:24px;}
+        .login-body .main .login{ width:320px;margin-top:15px;}
+        .login-body .main .login .loginbar{ width:100%;height:40px; margin:10px 0px; background-color:#fff;position:relative;}
+        .login-body .loginbar .input{ width:308px;height:40px; border:solid 1px #ccc;color:#333;  text-indent:26px;}
+        .icoUserName { background:url(/modules/images/ico-name.png) no-repeat 7px 11px;border-radius:3px;}
+        .icoUserPwd { background:url(/modules/images/ico-pwd.png) no-repeat 7px 11px;border-radius:3px;}
+        .icoMobileCode { background:url(/modules/images/ico-mobilecode.png) no-repeat 7px 11px;border-radius:3px;}
+        .icoUserCompany { background:url(/modules/images/ico-company.png) no-repeat 7px 11px;border-radius:3px;}
+        .icoName { background:url(/modules/images/ico-username.png) no-repeat 7px 11px;border-radius:3px;}
+        .icoSurePwd { background:url(/modules/images/ico-surepwd.png) no-repeat 7px 11px;border-radius:3px;}
+        .remember-box { height:30px; margin-top:20px; }
+        .remember-box .cb-remember-password { cursor:pointer; padding-left:2px; color:#666; }
+        .btnLogin { height:40px;line-height:40px; background-color:#4A98E7 ; color:#fff; font-size:16px; text-align:center;
+            border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radius:3px; width:320px;}
     </style>
 }
 @section scripts{
     <script type="text/javascript">
-        seajs.use(["/modules/intfactoryorder/scripts/orderdetail"], function (obj) {
+        seajs.use(["/modules/stylecenter/scripts/orderdetail"], function (obj) {
             obj.init('@(model.orderID)', '@Html.ToJSONString(model)','@(ViewBag.CityCode)');
         });
     </script>
@@ -61,7 +44,7 @@ border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radi
                 <span class="left">供应商：@(model.clientName)&nbsp;@(model.clientMobile)</span>  
             </li>
         </ul>
-        <a class="btn-back right mTop5" title="返回" href="/IntFactoryModel/IntFactoryOrder/Orders"><span id="btnback" style="color: #ffffff;">返回</span></a>
+        <a class="btn-back right mTop5" title="返回" href="/StyleCenter/StyleCenter/StyleCenter"><span id="btnback" style="color: #ffffff;">返回</span></a>
         
     </div>
 
@@ -79,12 +62,17 @@ border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radi
                 <li >
                     <label class="bolder font16">@(string.IsNullOrEmpty(model.goodsName) ? "暂无款式名称" : model.goodsName)</label>
                 </li>
-                <li style="overflow: initial;" id="pdttitle">
+                <li style="overflow: initial;" >
                     <div class="left">
-                        <span class="column-title " style="width: 50px; ">单价：</span>
+                        <span class="column-title " style="width: 50px;">单价：</span>
                         <label class="bolder red font14">
                             @(model.finalPrice.ToString("f2"))
                         </label>
+                    </div>
+                </li>
+                 <li style="overflow: initial;" id="pdttitle">
+                    <div class="left">
+                        <span class="column-title " style="width: 50px; ">优惠：</span>
                     </div>
                 </li>
                 <li id="pdtAttr">

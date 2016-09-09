@@ -49,7 +49,7 @@
         $(".tb-plates").html(''); 
         var PlateMakings = _self.model.plateMakings; 
         if (PlateMakings.length > 0) {
-            doT.exec("intfactoryorder/template/orderdetail/platematring-orderdatail.html", function (template) {
+            doT.exec("stylecenter/template/styledetail/platematring-orderdatail.html", function (template) {
                 var html = template(PlateMakings);
                 html = $(html);
                 html.find(".dropdown").remove();
@@ -65,7 +65,7 @@
         $(".productsalesattr").remove();
         $("#" + contendid).empty();
         CacheItems = [];
-        doT.exec("intfactoryorder/template/orderdetail/createorder-checkattr.html", function (template) {
+        doT.exec("stylecenter/template/styledetail/createorder-checkattr.html", function (template) {
             var innerhtml = template(categoryList);
             innerhtml = $(innerhtml);
             //组合产品
@@ -141,7 +141,7 @@
                     tableModel.items = items;
 
                     //加载子产品
-                    doT.exec("intfactoryorder/template/orderdetail/orders_child_list.html", function (templateFun) {
+                    doT.exec("stylecenter/template/styledetail/orders_child_list.html", function (templateFun) {
                         var innerText = templateFun(tableModel);
                         innerText = $(innerText);
                         $("#" + contendid).append(innerText);
@@ -301,7 +301,7 @@
             alert("请选择颜色尺码，并填写对应采购数量");
             
         }
-        Global.post("/IntFactoryModel/IntFactoryOrder/IsLogin", null, function(data) {
+        Global.post("/StyleCenter/StyleCenter/IsLogin", null, function (data) {
             if (data.result) {
                 _self.showUserInfo();
             } else {
@@ -348,7 +348,7 @@
                         $("#btnLogin").html("登录").removeAttr("disabled");
                         if (data.result == 1) {
                             Easydialog.close();
-                            Global.post("/IntFactoryModel/IntFactoryOrder/LoginCallBack", {
+                            Global.post("/StyleCenter/StyleCenter/LoginCallBack", {
                                 sign: data.sign,
                                 uid: data.uid,
                                 aid: data.aid
@@ -451,7 +451,7 @@
                 });
             }
         });
-        Global.post("/IntFactoryModel/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
+        Global.post("/StyleCenter/StyleCenter/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",
                     function () {

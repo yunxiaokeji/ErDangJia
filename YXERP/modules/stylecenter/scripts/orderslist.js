@@ -127,12 +127,15 @@
                 _self.getProducts();
             }
         });
-        var rurl = $('#ipturl').val() + '/IntFactoryModel/IntFactoryOrder/CallBackView';
+        var rurl = $('#ipturl').val() + '/StyleCenter/StyleCenter/CallBackView';
         Global.post("/Home/GetSign", { ReturnUrl: rurl }, function (data) { 
             $('#loga').attr("href", '/Home/Authorize?sign=' + data.sign + '&ReturnUrl=' + rurl); 
         });
         $('#cgbtn').click(function () {
             window.open($('#ipturl').val() + '/Purchase/Purchases?souceType=2', "", "fullscreen=1");
+        });
+        $('#imglogo').click(function() {
+            location.replace(location);
         });
         _self.getAllCategory();
         _self.getProducts(); 
@@ -153,10 +156,10 @@
         if (endp == "") {
             Params.endPrice = endp;
         }
-        Global.post("/IntFactoryModel/IntFactoryOrder/GetProductList", Params, function (data) {
+        Global.post("/StyleCenter/StyleCenter/GetProductList", Params, function (data) {
             $("#productlist").empty();
             if (data.items.length > 0) {
-                doT.exec("intfactoryorder/template/orders/zngc-products.html", function (templateFun) {
+                doT.exec("stylecenter/template/stylecenter/zngc-products.html", function (templateFun) {
                     var html = templateFun(data.items);
                     html = $(html); 
                     $("#productlist").append(html); 
@@ -192,7 +195,7 @@
 
     ObjectJS.getAllCategory = function () {
         var _self = this;
-        Global.post("/IntFactoryModel/IntFactoryOrder/GetAllCateGory", null, function (data) { 
+        Global.post("/StyleCenter/StyleCenter/GetAllCateGory", null, function (data) {
             if (data.items.length > 0) {
                 var html = ""; 
                 for (var i = 0; i < data.items.length; i++) { 

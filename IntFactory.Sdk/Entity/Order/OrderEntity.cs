@@ -77,5 +77,7 @@ namespace IntFactory.Sdk
         public List<ProductAttrEntity> AttrLists;
 
         public List<ProductAttrEntity> SaleAttrs;
+
+        public List<OrderAttrEntity> OrderAttrs;
     }
 }

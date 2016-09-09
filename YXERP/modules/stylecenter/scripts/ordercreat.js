@@ -149,7 +149,7 @@
                         if (products.length > 0) {
                             $('#pdtName').val(products[0].pname).data("categoryid", products[0].categoryid).data("orderid", products[0].orderid).data("code", products[0].code).data("price", products[0].price).show();
                        
-                            Global.post("/IntFactoryOrder/GetZNGCCategorys", { categoryid: products[0].categoryid }, function (data) {
+                            Global.post("/StyleCenter/StyleCenter/GetZNGCCategorys", { categoryid: products[0].categoryid }, function (data) {
                                 if (data.items!=null ) {  
                                     _self.showAttrForOrder(data.items, 'titleName','goodsQuantity');
                                 }
@@ -166,7 +166,7 @@
         $("#" + contendid).empty();
         CacheItems = []; 
         if ($(".ico-radiobox.hover").data('type') == 2 || contendid == "goodsQuantity") {
-            doT.exec("intfactoryorder/template/orderdetail/createorder-checkattr.html", function (template) {
+            doT.exec("stylecenter/template/styledetail/createorder-checkattr.html", function (template) {
                 var innerhtml = template(categoryList);
                 innerhtml = $(innerhtml); ;
                 //组合产品
@@ -242,7 +242,7 @@
                         tableModel.items = items;
 
                         //加载子产品
-                        doT.exec("intfactoryorder/template/orderdetail/orders_child_list.html", function (templateFun) {
+                        doT.exec("stylecenter/template/styledetail/orders_child_list.html", function (templateFun) {
                             var innerText = templateFun(tableModel);
                             innerText = $(innerText);
                             console.log(innerText);
@@ -371,7 +371,7 @@
             });
         }
 
-        Global.post("/IntFactoryModel/IntFactoryOrder/CreateOrder", { entity: JSON.stringify(model), clientid: _self.clientid }, function (data) {
+        Global.post("/StyleCenter/StyleCenter/CreateOrder", { entity: JSON.stringify(model), clientid: _self.clientid }, function (data) {
             if (data.id) {
                 alert("新增成功！");
                 window.location = location.href;
@@ -382,7 +382,7 @@
     }
     ObjectJS.getPressCategory = function () {
         var _self = this;
-        Global.post("/IntFactoryModel/IntFactoryOrder/GetProcessCategorys", { zngcclientid: _self.providerid }, function (data) {
+        Global.post("/StyleCenter/StyleCenter/GetProcessCategorys", { zngcclientid: _self.providerid }, function (data) {
             var html = "";
             for (var i = 0; i < data.items.length; i++) {
                 html += '<span class="category-item ' + (i == 0 ? "hover" : "") + '" data-id="' + data.items[i].CategoryID + '">' + data.items[i].Name + '</span>';

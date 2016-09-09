@@ -10,9 +10,9 @@ using CloudSalesBusiness;
 using CloudSalesEnum;
 using Newtonsoft.Json;
 
-namespace YXERP.Areas.IntFactoryModel.Controllers
+namespace YXERP.Areas.StyleCenter.Controllers
 {
-    public class IntFactoryOrderController : BaseController
+    public class StyleCenterController : BaseController
     {
         
         //
@@ -41,7 +41,7 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Orders(string id)
+        public ActionResult StyleCenter(string id)
         {
             var Status = 0;
             var clientid = ""; 
@@ -59,7 +59,7 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         public ActionResult CallBackView(string sign, string uid = "", string aid = "")
         {
             SetSession(uid, aid);
-            return Redirect("/IntFactoryModel/IntFactoryOrder/Orders");
+            return Redirect("/StyleCenter/StyleCenter/StyleCenter");
         }
         public void SetSession(string uid = "", string aid = "")
         {
@@ -104,7 +104,7 @@ namespace YXERP.Areas.IntFactoryModel.Controllers
         /// <param name="orderid"></param>
         /// <param name="clientid"></param>
         /// <returns></returns>
-        public ActionResult OrdersDetail(string orderid,string clientid)
+        public ActionResult StyleDetail(string orderid, string clientid)
         {
             string ccode, address, mphone,cname;
             ccode = address = mphone = cname = "";

@@ -6,13 +6,13 @@
 %}
 <li style="padding: 20px;">
     <div class="product-item"  >
-        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}" href="/IntFactoryModel/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
+        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}" href="/StyleCenter/StyleCenter/StyleDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
             <img  src="{%=item.orderImage%}" alt=""/>
         </a>
         <h2 class="price">
             ￥{%=item.finalPrice.toFixed(2)%}
         </h2>
-        <a class="btn-open-window name" href="/IntFactoryModel/IntFactoryOrder/OrdersDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}">
+        <a class="btn-open-window name" href="/StyleCenter/StyleCenter/StyleDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}">
             &nbsp;{%=goodname%}
         </a>
         <div class="mLeft5 mTop5 " title="员工人数:{%=item.clientName%}">

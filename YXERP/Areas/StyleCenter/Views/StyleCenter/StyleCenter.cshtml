@@ -1,11 +1,13 @@
 ﻿@{
     var plist = (List<CloudSalesEntity.ProvidersEntity>) ViewBag.Providers;
-    ViewBag.Title = "智能工厂--在线下单";
+    ViewBag.Title = "智能工厂--款式中心";
 }
 @section css{
-    <link rel="stylesheet" href="/modules/intfactoryorder/css/intfactoryorders.css"/>
+    <link rel="stylesheet" href="/modules/stylecenter/css/stylecenter.css"/>
+    <link rel="shortcut icon" href="/modules/stylecenter/images/ico-cmlogo.png">
+
     <style>
-        #cgbtn{color: #fff; padding-top: 6px;}
+        #cgbtn{color: #fff;}
         #cgbtn:hover{color:#f4f4f4;}
 
     </style>
@@ -13,25 +15,30 @@
 }
 @section scripts{
     <script type="text/javascript"> 
-        seajs.use(["/modules/intfactoryorder/scripts/orderslist"], function (obj) {
+        seajs.use(["/modules/stylecenter/scripts/orderslist"], function (obj) {
             obj.init('@ViewBag.ClientID');
         });
     </script>
 }
 <div style="height: 100px;">
     <div class="divcenter pTop5">
-        <div class="left">
-            <span class="left mTop10"><img src="/modules/intfactoryorder/images/ico-cmlogo.png" style="width: 60px; height: 60px;"/></span>
+        <div class="left" id="imglogo">
+            <span class="left mTop10"><img src="/modules/stylecenter/images/ico-cmlogo.png" style="width: 60px; height: 60px;"/></span>
             <span class="left mTop20 " style="">
                 <a class="font16">智能工厂</a><a>&nbsp;款式中心</a><br/>
-                <a class="font9 tRight mLeft30 lineHeight30">&nbsp;  &nbsp;采购管理就是如此简单</a> 
+                <a class="font9 tRight mLeft30 lineHeight30" style="font-style: italic;letter-spacing:3px;">&nbsp;  &nbsp;采购-管理就是如此简单</a> 
             </span>
         </div>
          @if (ViewBag.LogStatus == 0)
-        {
-            <a class="btn right mRight20" href="/Home/Register?ReturnUrl=@(ViewBag.Url)/IntFactoryModel/IntFactoryOrder/Orders"  data-name="注册">注册</a>  
-            <a class="right mRight10" id="loga" href="/Home/Authorize?ReturnUrl=@(ViewBag.Url)/IntFactoryModel/IntFactoryOrder/Orders" style="padding: 5px 10px;border-radius: 2px;line-height: 16px;background-color: #ffffff; color: #000; border: 1px solid #ccc;" data-name="登陆">登陆</a>
-        }
+         {
+             <a class="btn right mRight20" href="/Home/Register?ReturnUrl=@(ViewBag.Url)/StyleCenter/StyleCenter/StyleCenter" data-name="注册">注册</a>
+             <a class="right mRight10" id="loga" href="/Home/Authorize?ReturnUrl=@(ViewBag.Url)/StyleCenter/StyleCenter/StyleCenter" style="padding: 5px 10px; border-radius: 2px; line-height: 16px; background-color: #ffffff; color: #000; border: 1px solid #ccc;" data-name="登陆">登陆</a>
+         }
+         else
+         {
+             <a class="right mRight20 pTop5" style="color: #4B9CEE" href="@(ViewBag.Url)/Default/Index">[返回]</a>
+             <a class="right mRight10 pTop5" style="color:#4B9CEE" id="cgbtn">[采购订单]</a>
+         }
         <div class="searth-module right mRight50 mTop30" data-text="款号/名称模糊搜索..." data-width="180"> </div>
        
         <div class="clear"></div>
@@ -45,11 +52,7 @@
         </div>
         <div class="divcategory hide mtop30"></div>
 
-        </div>
-        @if (ViewBag.LogStatus > 0)
-        {
-            <a class="right" id="cgbtn">采购订单</a>
-        }
+        </div> 
         <span class="clear"></span>
     </div>
 
@@ -87,5 +90,5 @@
 
         <div id="pager" class="mTop20"></div>
     </div>
-</div> 
+</div>
 <input hidden="hidden" id="ipturl" type="text" style="display: none;" value="@(ViewBag.Url)"/>

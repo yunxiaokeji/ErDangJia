@@ -793,10 +793,10 @@ namespace YXERP.Controllers
         }
 
         public JsonResult SyncProduct()
-        {
-            var result = false;
-            JsonDictionary.Add("result", result);
-            JsonDictionary.Add("errMsg", "同步失败");
+        { 
+            IntFactory.Sdk.SyncBusiness.BaseBusiness.SyncProduct(CurrentUser.AgentID, CurrentUser.ClientID,
+                CurrentUser.UserID);
+            JsonDictionary.Add("result", true); 
             return new JsonResult
             {
                 Data = JsonDictionary,

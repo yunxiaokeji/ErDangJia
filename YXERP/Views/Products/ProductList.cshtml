@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "产品列表";
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
 }
 
 <link rel="stylesheet" href="/modules/css/shoppingcart.css" />
@@ -14,7 +15,7 @@
 
 <div class="header-box">
     <span class="header-title left">产品列表</span>
-     <div class="btn right @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))" id="syncPdt" title="同步供应商款式">
+     <div class="btn right @(!string.IsNullOrEmpty(CurrentUser.Agents.CMClientID)?ExpandClass.IsLimits(HttpContext.Current, "103010500"):"nolimits")" id="syncPdt" title="同步供应商款式">
         同步供应商款式
     </div>
     <div class="right mRight10 @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))">

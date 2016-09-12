@@ -31,7 +31,7 @@ namespace IntFactory.Sdk
             int totalcount = 1;
             for (int i = 1; i <= totalcount; i++)
             {
-                var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(providers, 20, i, clientid, "", "",
+                var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", 20, i, providers, "", "",
                     "", "", "");
                 if (orderlist.orders.Any())
                 {
@@ -44,11 +44,14 @@ namespace IntFactory.Sdk
                         {
                             x.OrderAttrs.Where(z => z.AttrType == 1).ToList().ForEach(z =>
                             {
+                                string xremark = z.AttrName.Replace("【", "[").Replace("】", "]");
+                                string yremark = y.AttrName.Replace("【", "[").Replace("】", "]");
                                x.details.Add(new ProductDetailEntity()
                                {
-                                   xRemark = z.AttrName.Replace("【", "[").Replace("】", "]"),
-                                   yRemark = y.AttrName.Replace("【", "[").Replace("】", "]"),
-                                   xYRemark = y.AttrName.Replace("【", "[").Replace("】", "]") + z.AttrName.Replace("【", "[").Replace("】", "]")
+                                   xRemark = xremark,
+                                   yRemark = yremark,
+                                   xYRemark = yremark + xremark,
+                                   remark = yremark + xremark
                                }); 
                             }); 
                         });

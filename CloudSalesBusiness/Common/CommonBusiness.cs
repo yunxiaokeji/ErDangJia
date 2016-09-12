@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -404,6 +405,39 @@ namespace CloudSalesBusiness
                 LogBusiness.AddOperateLog(userid, "", EnumLogType.Update, EnumLogModules.System, EnumLogEntity.ClientSetting, key.ToString(), message, ip, agentid, clientid);
             }
             return bl;
+        }
+
+        // <summary>
+        /// 添加服务日志
+        /// </summary>
+        public static void WriteLog(string str, int logType=1,string logname="log")
+        {
+            string fileName = DateTime.Now.ToString("yyyy-MM-dd");
+            string fileExtention = ".txt";
+            string directoryName = logname;
+            string infohead = "[Info] ";
+            FileStream fs = null;
+            if (logType == 2)
+            {
+                infohead = "[Error] ";
+            }
+            string path = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "log\\" + directoryName;
+            infohead += DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            fs = new FileStream(path + "\\" + fileName + fileExtention, FileMode.OpenOrCreate,
+                FileAccess.Write);
+
+            StreamWriter sw = new StreamWriter(fs);
+            sw.BaseStream.Seek(0, SeekOrigin.End);
+            sw.WriteLine(infohead + str + "\n");
+
+            sw.Flush();
+            sw.Close();
+            fs.Close();
         }
     }
 }

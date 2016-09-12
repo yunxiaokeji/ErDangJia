@@ -34,9 +34,7 @@ define(function (require, exports, module) {
     
     //绑定事件
     Product.bindEvent = function () {
-        var _self = this;
-
-
+        var _self = this
         PosterIco = Upload.uploader({
             browse_button: 'productIco',
             file_path: "/Content/UploadFiles/Product/",
@@ -206,7 +204,11 @@ define(function (require, exports, module) {
                     });
                 });
             }
-        }); 
+        });
+
+        $("#syncPdt").click(function() {
+            _self.Syncproduct();
+        });
     }
 
     //保存产品
@@ -314,6 +316,14 @@ define(function (require, exports, module) {
         _self.bindListEvent();
     }
 
+    Product.Syncproduct = function() {
+        Global.post("/Products/SyncProduct", null, function (data) {
+            if (data.result) {
+                alert("同步成功");
+            }
+            _self.getList();
+        });
+    };
     //获取分类信息和下级分类
     Product.getChildCategory = function (pid) {
         var _self = this;

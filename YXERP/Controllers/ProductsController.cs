@@ -792,6 +792,18 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult SyncProduct()
+        {
+            var result = false;
+            JsonDictionary.Add("result", result);
+            JsonDictionary.Add("errMsg", "同步失败");
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
 
         #region 产品导入 导出

@@ -29,7 +29,7 @@
                 <div class="left headerTitle">云销科技</div>
                 <div class="clear"></div>
             </div>
-            <a class="btnRegister right" href="/Home/Register?ReturnUrl=@(ViewBag.ReturnUrl)">注册</a>
+            <a class="btnRegister right" href="/Home/Register?id=@(ViewBag.OtherID)&type=@(ViewBag.BindAccountType)&ReturnUrl=@(ViewBag.ReturnUrl)">注册</a>
        </div>
         <div class="main">
              <div class="loginTitle">登录</div>
@@ -70,6 +70,6 @@
             Copyright©2015-2016 <a href="http://www.yunxiaokeji.com">云销科技</a> 沪ICP备15042543号-2
         </div>
     </div>
-    <input id="OtherID" hidden="hidden" class="hide" type="text" value="@(ViewBag.OtherID)">
+    <input id="OtherID" type="hidden" value="@(ViewBag.OtherID)"/>
 </body>
 </html>

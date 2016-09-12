@@ -47,6 +47,12 @@ namespace CloudSalesBusiness
             return Convert.ToInt32(count) > 0;
         }
 
+        public static bool IsExistsCMClient(string clientid)
+        {
+            var count = CommonBusiness.Select("Agents", "count(0)", "CMClientID='" + clientid + "'");
+            return Convert.ToInt32(count) > 0;
+        }
+
 
         /// <summary>
         /// 获取代理商详情

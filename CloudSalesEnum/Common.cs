@@ -76,13 +76,14 @@ namespace CloudSalesEnum
         /// </summary>
         MingDao = 3,
         /// <summary>
-        /// 微信
-        /// </summary>
-        WeiXin = 4,
-        /// <summary>
         /// 厂盟
         /// </summary>
-        ZNGC = 5
+        ZNGC = 4,
+        /// <summary>
+        /// 微信
+        /// </summary>
+        WeiXin = 5
+        
     }
 
     /// <summary>
@@ -109,7 +110,11 @@ namespace CloudSalesEnum
         /// <summary>
         /// 微信
         /// </summary>
-        WeiXin = 5
+        WeiXin = 5,
+        /// <summary>
+        /// 店铺分享
+        /// </summary>
+        ShopShare = 6
     }
 
     /// <summary>

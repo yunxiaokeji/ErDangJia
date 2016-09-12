@@ -52,7 +52,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
             }
             else
             {
-                Response.Write("<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?ReturnUrl=" + GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter/" + id + "';</script>");
+                Response.Write("<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" + GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + id + "';</script>");
                 Response.End(); 
             }
             ViewBag.Url = GetbaseUrl();
@@ -190,7 +190,12 @@ namespace YXERP.Areas.StyleCenter.Controllers
         {
             int pageCount = 0;
             int totalCount = 0;
-            List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords, orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+            if (clientid.Equals(CurrentUser.Agents.CMClientID))
+            {
+                clientid = CurrentUser.ClientID;
+            } 
+            List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords,
+                   orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
@@ -252,18 +257,8 @@ namespace YXERP.Areas.StyleCenter.Controllers
                  YunXiaoService.ProductService.AddProviders(ord.clientName,
                             ord.clientContactName,
                             ord.clientMobile, "", ord.clientCityCode, ord.clientAdress,
-                            "", ord.clientID, ord.clientCode, "", CurrentUser.Client.AgentID, CurrentUser.ClientID);
-            }
-            //if (string.IsNullOrEmpty(CurrentUser.Client.OtherSysID) || (!string.IsNullOrEmpty(CurrentUser.Client.OtherSysID) && CurrentUser.Client.OtherSysID.IndexOf(ord.clientID)==-1))
-            //{
-            //    var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", CurrentUser.Client.CompanyName,
-            //                CurrentUser.Client.MobilePhone, ord.clientID,
-            //                 CurrentUser.Client.AgentID, CurrentUser.ClientID, CurrentUser.Client.ClientCode);
-            //    CloudSalesBusiness.Manage.ClientBusiness.UpdateClientOtherid(ord.clientID, CurrentUser.ClientID);
-            //    user.Client.OtherSysID = string.IsNullOrEmpty(user.Client.OtherSysID)
-            //        ? ord.clientID + ","
-            //        : user.Client.OtherSysID + ord.clientID + ",";
-            //}
+                            "", ord.clientID, ord.clientCode, "", CurrentUser.Client.AgentID, CurrentUser.ClientID,1);
+            } 
 
             //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入
             string dids = "";

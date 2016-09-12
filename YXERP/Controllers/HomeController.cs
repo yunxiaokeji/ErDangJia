@@ -26,9 +26,10 @@ namespace YXERP.Controllers
             return Redirect("/Default/Index");
         }
 
-        public ActionResult Register(string id="",string ReturnUrl="")
+        public ActionResult Register(string id = "", int type = 2, string ReturnUrl = "")
         {
             ViewBag.OtherID = id;
+            ViewBag.RegType = type;
             string loginUrl="/home/index";
             ViewBag.LoginUrl = !string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl : loginUrl; 
             return View();
@@ -41,6 +42,16 @@ namespace YXERP.Controllers
 
         public ActionResult Login(string ReturnUrl, int Status = 0, string OtherID = "", string name = "", int BindAccountType = 0)
         {
+            ViewBag.Status = Status;
+            string otherid = "";
+            //获取OtherSysID
+            if ((!string.IsNullOrEmpty(ReturnUrl) && ReturnUrl.IndexOf("IntFactoryOrder") > -1 && string.IsNullOrEmpty(OtherID)) || BindAccountType == 10000 || BindAccountType == 6)
+            {
+                otherid = Common.Common.GetQueryString("id", ReturnUrl);
+            }
+            ViewBag.OtherID = otherid;
+            ViewBag.BindAccountType = BindAccountType;
+            ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
             if (Session["ClientManager"] != null)
             {
                 return Redirect("/Default/Index");
@@ -64,16 +75,7 @@ namespace YXERP.Controllers
                     ViewBag.UserName = cook["username"];
                 }
             }
-            ViewBag.Status = Status;
-            string otherid = OtherID; 
-            //获取OtherSysID
-            if ((!string.IsNullOrEmpty(ReturnUrl) && ReturnUrl.IndexOf("IntFactoryOrder") > -1 && string.IsNullOrEmpty(OtherID)) || BindAccountType==10000)
-            {
-                otherid = Common.Common.GetQueryString("id",ReturnUrl);
-            }
-            ViewBag.BindAccountType = BindAccountType;
-            ViewBag.OtherID = otherid;
-            ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
+           
             if (!string.IsNullOrEmpty(otherid) && Status == 0)
             {
                 return View("SelectLogin");
@@ -122,8 +124,7 @@ namespace YXERP.Controllers
                     ViewBag.ReturnUrl = ReturnUrl ?? string.Empty;
                     ViewBag.BindAccountType = 10000;
                     var otherid = Common.Common.GetQueryString("id", ReturnUrl); 
-                    ViewBag.OtherID = otherid;
-                    //return View("Login");
+                    ViewBag.OtherID = otherid; 
                     return View("SelectLogin"); 
                 }
             }
@@ -325,8 +326,8 @@ namespace YXERP.Controllers
                 return Redirect("/Home/Login");
             }
             string operateip = Common.Common.GetRequestIP();
-            var user = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(clientid, userid);
-            if (user.error_code <= 0)
+            var client = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(clientid);
+            if (client.error_code <= 0)
             {
                 var model = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
                 //已注册云销账户
@@ -341,27 +342,78 @@ namespace YXERP.Controllers
                 }
                 else
                 {
-                    int error = 0;  
                     int result = 0;
-                    string tempuserid = "";
-                    Clients clientModel = new Clients();
-                    clientModel.CompanyName = user.client.companyName;
-                    clientModel.ContactName = user.client.contactName;
-                    clientModel.MobilePhone = user.client.mobilePhone;
-                    var tempclientid = ClientBusiness.InsertClient(EnumRegisterType.ZNGC, EnumAccountType.ZNGC, userid, "", user.client.companyName, user.client.contactName,
-                                                                user.client.mobilePhone, "", "", "", user.client.address, "", user.client.clientID, "", "", "", out result, out tempuserid);
-                    if (!string.IsNullOrEmpty(tempclientid))
+                    var user = IntFactory.Sdk.UserBusiness.GetUserByUserID(userid, clientid);
+                    bool bl = AgentsBusiness.IsExistsCMClient(clientid);
+                    if (bl)
                     {
-                        var current = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
-                         
-                        if (string.IsNullOrEmpty(current.Avatar))
+                        var newuser = OrganizationBusiness.CreateUser(EnumAccountType.ZNGC, userid, "", user.user.name, user.user.mobilePhone, "", "", "", "", "", "", "", "", "", clientid, user.user.isSystemAdmin ? 1 : 0, "", out result);
+                        if (newuser != null)
                         {
-                            current.Avatar = user.client.logo;
+                            var current = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
+                            Session["ClientManager"] = current;
+                            return Redirect("/Default/Index");
                         }
-                        Session["ClientManager"] = current; 
-                        return Redirect("/Default/Index");
-                    } 
+                    }
+                    else
+                    {
+                        if (user.user.isSystemAdmin)
+                        {
+                            Users tempUser = new Users();
+                            tempUser.MobilePhone = user.user.mobilePhone;
+                            tempUser.Name = user.user.name;
+                            tempUser.MDUserID = userid;
+                            tempUser.MDProjectID = clientid;
+                            tempUser.Client = new Clients();
+                            tempUser.Client.CompanyName = client.client.companyName;
+                            tempUser.Client.Logo = client.client.logo;
+                            Session["CMTokenInfo"] = tempUser;
+
+                            return Redirect("/Home/CMSelectLogin");
+                        }
+                        else
+                        {
+                            return Redirect("/Home/Login?Status=3");
+                        }
+                    }
                 }
+            }
+            return Redirect("/Home/Login");
+        }
+
+        public ActionResult CMSelectLogin()
+        {
+            if (Session["CMTokenInfo"] == null)
+            {
+                return Redirect("/Home/Login");
+            }
+            var user = (Users)Session["CMTokenInfo"];
+            ViewBag.Name = user.Name;
+            ViewBag.CompanyName = user.Client.CompanyName;
+            ViewBag.Logo = user.Client.Logo;
+            return View();
+        }
+
+        public ActionResult CMRegister()
+        {
+            
+            if (Session["CMTokenInfo"] == null)
+            {
+                return Redirect("/Home/Login");
+            }
+            int result = 0;
+            string userid = "";
+            string operateip = Common.Common.GetRequestIP();
+            var user = (Users)Session["CMTokenInfo"];
+            var tempclientid = ClientBusiness.InsertClient(EnumRegisterType.ZNGC, EnumAccountType.ZNGC, user.MDUserID, "", user.Client.CompanyName, user.Name,
+                                                                        user.MobilePhone, "", "", user.Client.CityCode, user.Client.Address, "", user.MDProjectID, "", "", "", out result, out userid);
+            if (!string.IsNullOrEmpty(tempclientid))
+            {
+                var current = OrganizationBusiness.GetUserByOtherAccount(user.MDUserID, user.MDProjectID, operateip, (int)EnumAccountType.ZNGC);
+
+                Session["ClientManager"] = current;
+                Session["CMTokenInfo"] = null;
+                return Redirect("/Default/Index");
             }
             return Redirect("/Home/Login");
         }
@@ -385,24 +437,7 @@ namespace YXERP.Controllers
                 CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(userName, pwd, out outResult, operateip);
                 if (model != null)
                 {
-                    if (!string.IsNullOrEmpty(otherid))
-                    {
-                        IntFactory.Sdk.ClientResult zngcClientItem = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(otherid); 
-                        string providerID = ProductService.AddProviders(zngcClientItem.client.companyName,
-                            zngcClientItem.client.contactName,
-                            zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                            "", otherid, zngcClientItem.client.clientCode, "", model.Client.AgentID, model.ClientID);
-                        var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", model.Client.CompanyName,
-                            model.Client.MobilePhone, otherid,
-                             model.Client.AgentID, model.ClientID, model.Client.ClientCode);
-                        if (string.IsNullOrEmpty(model.Client.OtherSysID))
-                        {
-                            ClientBusiness.UpdateClientOtherid(otherid, model.ClientID);
-                            model.Client.OtherSysID = string.IsNullOrEmpty(model.Client.OtherSysID)
-                                ? otherid
-                                : model.Client.OtherSysID;
-                        }
-                    }
+                    AddProcider(bindAccountType,otherid,model.ClientID); 
                     //保持登录状态
                     HttpCookie cook = new HttpCookie("yunxiao_erp_user");
                     cook["username"] = userName;
@@ -429,7 +464,9 @@ namespace YXERP.Controllers
                     if (outResult == 3)
                     {
                         if (pwdErrorUser == null)
+                        {
                             pwdErrorUser = new Common.PwdErrorUserEntity();
+                        }
                         else
                         {
                             if (pwdErrorUser.ErrorCount > 2)
@@ -469,6 +506,37 @@ namespace YXERP.Controllers
             };
         }
 
+        public void AddProcider(int bindAccountType, string id, string clientid)
+        {
+            if (bindAccountType == 6)
+            {
+                var client = ClientBusiness.GetClientDetail(id);
+                Clients yxClientItem = UserService.GetClientDetail(clientid);
+                string providerID = ProductService.AddProviders(client.CompanyName,
+                    client.ContactName,
+                    client.MobilePhone, "", client.CityCode, client.Address,
+                    "", id, client.ClientCode, "", yxClientItem.AgentID, yxClientItem.ClientID, 2);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(id))
+                {
+                    IntFactory.Sdk.ClientResult zngcClientItem =
+                        IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(id);
+                    Clients yxClientItem = UserService.GetClientDetail(clientid);
+                    string providerID = ProductService.AddProviders(zngcClientItem.client.companyName,
+                        zngcClientItem.client.contactName,
+                        zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
+                        "", id, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientItem.ClientID,
+                        1);
+                    var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("",
+                        yxClientItem.CompanyName,
+                        yxClientItem.MobilePhone, id,
+                        yxClientItem.AgentID, yxClientItem.ClientID, yxClientItem.ClientCode);
+                }
+            }
+        }
+
         //账号是否存在
         public JsonResult IsExistLoginName(string loginName)
         {
@@ -484,7 +552,7 @@ namespace YXERP.Controllers
         }
 
         //主动注册客户端
-        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD, string code, string otherID = "")
+        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD, string code,int regType, string otherID = "")
         {
             int result = 0;
             Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
@@ -503,30 +571,16 @@ namespace YXERP.Controllers
                 else
                 {
                     string userid = "";
-                    //自助注册
-                   var clientid= ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result, out userid);
-
+                    //自助注册 
+                    var clientid = ClientBusiness.InsertClient((EnumRegisterType)Enum.Parse(typeof(EnumRegisterType), regType.ToString()), EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result, out userid);
+                    
                     if (result == 1)
                     {
-                        if (!string.IsNullOrEmpty(otherID))
+                        AddProcider(regType, otherID, clientid); 
+                        if (!string.IsNullOrEmpty(otherID) && YXERP.Common.Common.IsMobileDevice())
                         {
-                            IntFactory.Sdk.ClientResult zngcClientItem =IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(otherID);
-                            Clients yxClientItem = UserService.GetClientDetail(clientid);
-                            
-                            string providerID = ProductService.AddProviders(zngcClientItem.client.companyName,
-                                zngcClientItem.client.contactName,
-                                zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                                "", otherID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, clientid);
-                            var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", name,
-                                loginName, otherID,
-                                yxClientItem.AgentID, clientid, yxClientItem.ClientCode);
-
-                            if (YXERP.Common.Common.IsMobileDevice())
-                            {
-                                result = 11;
-                            }
-
-                        }
+                            result = 11;
+                        } 
                         string operateip = Common.Common.GetRequestIP();
                         int outResult;
                         CloudSalesEntity.Users user = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(loginName, loginPWD, out outResult, operateip);

@@ -10,9 +10,9 @@ namespace IntFactory.Sdk
 {
     public class SyncBusiness
     {
-
+        public static SyncBusiness BaseBusiness = new SyncBusiness();
         public AddResult SyncProduct(string agentid, string clientid,string userid)
-        {
+        { 
             ///1.获取供应商
             var list = CloudSalesBusiness.ProductsBusiness.BaseBusiness.GetProviders(clientid);
             var providers = "";
@@ -25,33 +25,40 @@ namespace IntFactory.Sdk
             });
             if (!string.IsNullOrEmpty(providers))
             {
-                providers = providers.Substring(1, providers.Length - 3);
+                providers = providers.Substring(2, providers.Length -5);
             }
             //2.获取智能工厂已公开款式
             int totalcount = 1;
             for (int i = 1; i <= totalcount; i++)
             {
-                var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(providers, 20, i, clientid, "", "",
+                var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", 20, i, providers, "", "",
                     "", "", "");
                 if (orderlist.orders.Any())
                 {
                     totalcount = orderlist.pageCount;
+                    //3.循环同步数据
                     orderlist.orders.ForEach(x =>
                     {
                         x.details=new List<ProductDetailEntity>();
                         x.OrderAttrs.Where(y => y.AttrType==2).ToList().ForEach(y =>
                         {
-                            x.OrderAttrs.Where(z => z.AttrType == 2).ToList().ForEach(z =>
+                            x.OrderAttrs.Where(z => z.AttrType == 1).ToList().ForEach(z =>
                             {
-                                
+                                string xremark = z.AttrName.Replace("【", "[").Replace("】", "]");
+                                string yremark = y.AttrName.Replace("【", "[").Replace("】", "]");
+                               x.details.Add(new ProductDetailEntity()
+                               {
+                                   xRemark = xremark,
+                                   yRemark = yremark,
+                                   xYRemark = yremark + xremark,
+                                   remark = yremark + xremark
+                               }); 
                             }); 
-                            
                         });
                         try
                         {
                             var dids = "";
                             OrderBusiness.BaseBusiness.ZNGCAddProduct(x, agentid, clientid, userid, ref dids);
-
                         }
                         catch (Exception ex)
                         {
@@ -61,13 +68,11 @@ namespace IntFactory.Sdk
                     });
                 }
             }
-            //3.循环同步数据
-
-           
             //返回错误
             return new AddResult()
             {
-                error_code=0
+                error_code=0,
+                error_message = "同步成功"
             }; 
         }
     }

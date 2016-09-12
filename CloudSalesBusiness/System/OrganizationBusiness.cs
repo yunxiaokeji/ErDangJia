@@ -542,7 +542,6 @@ namespace CloudSalesBusiness
         /// <param name="parentid">上级ID</param>
         /// <param name="agentid">代理商ID></param>
         /// <param name="clientid">客户端ID</param>
-        /// <param name="mduserid">明道用户ID</param>
         /// <param name="mdprojectid">明道网络ID</param>
         /// <param name="isAppAdmin">是否应用管理员</param>
         /// <param name="operateid">操作人</param>

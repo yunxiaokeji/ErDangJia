@@ -18,7 +18,7 @@ namespace IntFactory.Sdk
             paras.Add("userid", userid);
             paras.Add("clientid", clientid);
 
-            return HttpRequest.RequestServer<UserResult>(ApiOption.memberDetail, paras);
+            return HttpRequest.RequestServer<UserResult>(ApiOption.getUserByUserID, paras);
 
         }
 

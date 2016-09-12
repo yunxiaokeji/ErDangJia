@@ -9,6 +9,8 @@ namespace IntFactory.Sdk
     {
         public UserEntity user;
 
+        public ClientEntity client { get; set; }
+
         public int error_code = 0;
 
         public string error_message;

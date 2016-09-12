@@ -1227,6 +1227,7 @@
     <Content Include="Views\IntFactoryOrder\OrdersDetail.cshtml" />
     <Content Include="Views\IntFactoryOrder\Index.cshtml" />
     <Content Include="Views\Home\SelectLogin.cshtml" />
+    <Content Include="Views\Home\CMSelectLogin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

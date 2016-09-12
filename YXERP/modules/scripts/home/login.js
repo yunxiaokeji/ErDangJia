@@ -20,6 +20,8 @@ define(function (require, exports, module) {
             alert("您的账号已在其它地点登录，如不是本人操作，请及时通知管理员对账号冻结！");
         } else if (status == 1) {
             alert("尊敬的明道用户，您尚未被管理员添加到二当家系统，请及时联系管理员！");
+        } else if (status == 3) {
+            alert("尊敬的厂盟用户，您的工厂尚未开通二当家系统，请联系管理员！");
         }
         ObjectJS.bindEvent();
     }

@@ -327,8 +327,8 @@ namespace YXERP.Controllers
                 return Redirect("/Home/Login");
             }
             string operateip = Common.Common.GetRequestIP();
-            var user = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(clientid, userid);
-            if (user.error_code <= 0)
+            var client = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(clientid);
+            if (client.error_code <= 0)
             {
                 var model = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
                 //已注册云销账户
@@ -343,29 +343,64 @@ namespace YXERP.Controllers
                 }
                 else
                 {
-                    int error = 0;  
                     int result = 0;
                     string tempuserid = "";
-                    Clients clientModel = new Clients();
-                    clientModel.CompanyName = user.client.companyName;
-                    clientModel.ContactName = user.client.contactName;
-                    clientModel.MobilePhone = user.client.mobilePhone;
-                    var tempclientid = ClientBusiness.InsertClient(EnumRegisterType.ZNGC, EnumAccountType.ZNGC, userid, "", user.client.companyName, user.client.contactName,
-                                                                user.client.mobilePhone, "", "", "", user.client.address, "", user.client.clientID, "", "", "", out result, out tempuserid);
-                    if (!string.IsNullOrEmpty(tempclientid))
+                    var user = IntFactory.Sdk.UserBusiness.GetUserByUserID(userid, clientid);
+                    bool bl = AgentsBusiness.IsExistsCMClient(clientid);
+                    if (bl)
                     {
-                        var current = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
-                         
-                        if (string.IsNullOrEmpty(current.Avatar))
+                        var newuser = OrganizationBusiness.CreateUser(EnumAccountType.ZNGC, userid, "", user.user.name, user.user.mobilePhone, "", "", "", "", "", "", "", "", "", clientid, user.user.isSystemAdmin ? 1 : 0, "", out result);
+                        if (newuser != null)
                         {
-                            current.Avatar = user.client.logo;
+                            var current = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
+                            Session["ClientManager"] = current;
+                            return Redirect("/Default/Index");
                         }
-                        Session["ClientManager"] = current;
-                        return Redirect("/Default/Index");
-                    } 
+                    }
+                    else
+                    {
+                        if (user.user.isSystemAdmin)
+                        {
+                            user.client = client.client;
+                            Session["CMTokenInfo"] = user;
+
+                            return Redirect("/Home/CMSelectLogin");
+
+                            Clients clientModel = new Clients();
+                            clientModel.CompanyName = client.client.companyName;
+                            clientModel.ContactName = client.client.contactName;
+                            clientModel.MobilePhone = client.client.mobilePhone;
+                            var tempclientid = ClientBusiness.InsertClient(EnumRegisterType.ZNGC, EnumAccountType.ZNGC, userid, "", client.client.companyName, client.client.contactName,
+                                                                        client.client.mobilePhone, "", "", "", client.client.address, "", client.client.clientID, "", "", "", out result, out tempuserid);
+                            if (!string.IsNullOrEmpty(tempclientid))
+                            {
+                                var current = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
+
+                                if (string.IsNullOrEmpty(current.Avatar))
+                                {
+                                    current.Avatar = client.client.logo;
+                                }
+                                Session["ClientManager"] = current;
+                                return Redirect("/Default/Index");
+                            }
+                        }
+                        else
+                        {
+                            return Redirect("/Home/Login?Status=3");
+                        }
+                    }
                 }
             }
             return Redirect("/Home/Login");
+        }
+
+        public ActionResult CMSelectLogin()
+        {
+            if (Session["CMTokenInfo"] == null)
+            {
+                return Redirect("/Home/Login");
+            }
+            return View();
         }
 
         #region Ajax

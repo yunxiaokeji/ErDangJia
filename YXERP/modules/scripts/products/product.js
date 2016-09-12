@@ -227,7 +227,7 @@ define(function (require, exports, module) {
             alert("属性尚未设置值!");
             return false;
         }
-        if ($("#smallUnit").val() == "") {
+        if ($("#smallUnit").val() == "" || $("#smallUnit").val()==null) {
             alert("产品单位未选择，请选择后再保存!");
             return false;
         }

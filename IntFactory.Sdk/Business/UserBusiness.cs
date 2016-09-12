@@ -12,11 +12,11 @@ namespace IntFactory.Sdk
         /// <summary>
         /// 获取用户详情
         /// </summary>
-        public static UserResult GetUserByUserID(string userid, string clientid)
+        public static UserResult GetUserByUserID(string userID, string clientID)
         {
             var paras = new Dictionary<string, object>();
-            paras.Add("userid", userid);
-            paras.Add("clientid", clientid);
+            paras.Add("userID", userID);
+            paras.Add("clientID", clientID);
 
             return HttpRequest.RequestServer<UserResult>(ApiOption.getUserByUserID, paras);
 

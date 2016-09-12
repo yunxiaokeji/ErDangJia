@@ -26,12 +26,11 @@ namespace YXERP.Controllers
             return Redirect("/Default/Index");
         }
 
-        public ActionResult Register(string id="")
+        public ActionResult Register(string id="",string ReturnUrl="")
         {
             ViewBag.OtherID = id;
             string loginUrl="/home/index";
-            ViewBag.LoginUrl = loginUrl;
-
+            ViewBag.LoginUrl = !string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl : loginUrl; 
             return View();
         }
 
@@ -99,8 +98,7 @@ namespace YXERP.Controllers
                 Response.Cookies.Add(cook);
             }
 
-            Session["ClientManager"] = null;
-            Session["KSManager"] = null;
+            Session["ClientManager"] = null; 
             return Redirect("/Home/Login?Status=" + Status);
         }
         public JsonResult GetSign(string ReturnUrl)
@@ -168,7 +166,7 @@ namespace YXERP.Controllers
                         model.MDToken = user.user.token;
                         if (string.IsNullOrEmpty(model.Avatar)) model.Avatar = user.user.avatar;
 
-                        Session["ClientManager"] = model;
+                        Session["ClientManager"] = model; 
                         if (string.IsNullOrEmpty(state))
                         {
                             return Redirect("/Default/Index");
@@ -206,7 +204,7 @@ namespace YXERP.Controllers
                                 {
                                     current.Avatar = user.user.avatar;
                                 }
-                                Session["ClientManager"] = current;
+                                Session["ClientManager"] = current; 
                                 if (string.IsNullOrEmpty(state))
                                 {
                                     return Redirect("/Default/Index");
@@ -228,7 +226,7 @@ namespace YXERP.Controllers
 
                                 current.MDToken = user.user.token;
                                 if (string.IsNullOrEmpty(current.Avatar)) current.Avatar = user.user.avatar;
-                                Session["ClientManager"] = current;
+                                Session["ClientManager"] = current; 
                                 if (string.IsNullOrEmpty(state))
                                 {
                                     return Redirect("/Default/Index");
@@ -281,7 +279,7 @@ namespace YXERP.Controllers
                     //未注销
                     if (model.Status.Value == 1)
                     {
-                        Session["ClientManager"] = model;
+                        Session["ClientManager"] = model; 
                         if (string.IsNullOrEmpty(state))
                         {
                             return Redirect("/Home/Index");
@@ -337,7 +335,7 @@ namespace YXERP.Controllers
                     //未注销
                     if (model.Status.Value != 9)
                     {
-                        Session["ClientManager"] = model;
+                        Session["ClientManager"] = model; 
                         return Redirect("/Default/Index");
                     }
                 }
@@ -451,8 +449,7 @@ namespace YXERP.Controllers
                     {
                         resultObj.Add("sign",YXERP.Common.Signature.GetSignature(Common.Common.YXAgentID, Common.Common.YXClientID, model.UserID));
                     } 
-                    Session["ClientManager"] = model;
-                    Session["KSManager"] = model;
+                    Session["ClientManager"] = model; 
                     if (YXERP.Common.Common.IsMobileDevice())
                     {
                         result = 11;

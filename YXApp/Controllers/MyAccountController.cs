@@ -1,5 +1,4 @@
-﻿using IntFactory.Sdk;
-using IntFactory.Sdk.Business;
+﻿using IntFactory.Sdk; 
 using System;
 using System.Collections.Generic;
 using System.Linq;

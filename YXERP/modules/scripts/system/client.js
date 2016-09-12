@@ -168,6 +168,9 @@
         $("#updateClient").click(function () {
             ObjectJS.editClient();
         });
+        $('#ksurl').click(function() {
+            window.open($('#ksurl').html(), "", "fullscreen=1");
+        });
     }
 
     //获取详情

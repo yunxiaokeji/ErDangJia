@@ -237,6 +237,7 @@
     <Content Include="modules\images\ico-attachment-word.png" />
     <Content Include="modules\images\ico-category-close.png" />
     <Content Include="modules\images\ico-category.png" />
+    <Content Include="modules\images\ico-changmeng-login.png" />
     <Content Include="modules\images\ico-changmeng.png" />
     <Content Include="modules\images\ico-checknotall.png" />
     <Content Include="modules\images\ico-company.png" />

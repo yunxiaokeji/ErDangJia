@@ -342,7 +342,6 @@ namespace YXERP.Controllers
                 else
                 {
                     int result = 0;
-                    string tempuserid = "";
                     var user = IntFactory.Sdk.UserBusiness.GetUserByUserID(userid, clientid);
                     bool bl = AgentsBusiness.IsExistsCMClient(clientid);
                     if (bl)
@@ -359,28 +358,16 @@ namespace YXERP.Controllers
                     {
                         if (user.user.isSystemAdmin)
                         {
-                            user.client = client.client;
-                            Session["CMTokenInfo"] = user;
+                            Users tempUser = new Users();
+                            tempUser.MobilePhone = user.user.mobilePhone;
+                            tempUser.Name = user.user.name;
+                            tempUser.MDUserID = userid;
+                            tempUser.MDProjectID = clientid;
+                            tempUser.Client = new Clients();
+                            tempUser.Client.CompanyName = client.client.companyName;
+                            Session["CMTokenInfo"] = tempUser;
 
                             return Redirect("/Home/CMSelectLogin");
-
-                            Clients clientModel = new Clients();
-                            clientModel.CompanyName = client.client.companyName;
-                            clientModel.ContactName = client.client.contactName;
-                            clientModel.MobilePhone = client.client.mobilePhone;
-                            var tempclientid = ClientBusiness.InsertClient(EnumRegisterType.ZNGC, EnumAccountType.ZNGC, userid, "", client.client.companyName, client.client.contactName,
-                                                                        client.client.mobilePhone, "", "", "", client.client.address, "", client.client.clientID, "", "", "", out result, out tempuserid);
-                            if (!string.IsNullOrEmpty(tempclientid))
-                            {
-                                var current = OrganizationBusiness.GetUserByOtherAccount(userid, clientid, operateip, (int)EnumAccountType.ZNGC);
-
-                                if (string.IsNullOrEmpty(current.Avatar))
-                                {
-                                    current.Avatar = client.client.logo;
-                                }
-                                Session["ClientManager"] = current;
-                                return Redirect("/Default/Index");
-                            }
                         }
                         else
                         {
@@ -399,6 +386,30 @@ namespace YXERP.Controllers
                 return Redirect("/Home/Login");
             }
             return View();
+        }
+
+        public ActionResult CMRegister()
+        {
+            
+            if (Session["CMTokenInfo"] == null)
+            {
+                return Redirect("/Home/Login");
+            }
+            int result = 0;
+            string userid = "";
+            string operateip = Common.Common.GetRequestIP();
+            var user = (Users)Session["CMTokenInfo"];
+            var tempclientid = ClientBusiness.InsertClient(EnumRegisterType.ZNGC, EnumAccountType.ZNGC, user.MDUserID, "", user.Client.CompanyName, user.Name,
+                                                                        user.MobilePhone, "", "", user.Client.CityCode, user.Client.Address, "", user.MDProjectID, "", "", "", out result, out userid);
+            if (!string.IsNullOrEmpty(tempclientid))
+            {
+                var current = OrganizationBusiness.GetUserByOtherAccount(user.MDUserID, user.MDProjectID, operateip, (int)EnumAccountType.ZNGC);
+
+                Session["ClientManager"] = current;
+                Session["CMTokenInfo"] = null;
+                return Redirect("/Default/Index");
+            }
+            return Redirect("/Home/Login");
         }
 
         #region Ajax

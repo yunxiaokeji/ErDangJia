@@ -5,21 +5,21 @@ using System.Text;
 
 namespace IntFactory.Sdk
 {
-    public class MemberEntity
+    public class UserEntity
     {
-        public string memberId
+        public string userID
         {
             get;
             set;
         }
 
-        public string companyName
+        public string clientID
         {
             get;
             set;
         }
 
-        public string sellerName
+        public string name
         {
             get;
             set;
@@ -49,7 +49,7 @@ namespace IntFactory.Sdk
             set;
         }
 
-        public string token { get; set; }
+        public bool  isSystemAdmin { get; set; }
 
 
     }

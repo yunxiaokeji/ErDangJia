@@ -7,8 +7,11 @@ namespace IntFactory.Sdk
 {
     public class MemberResult
     {
+        public UserEntity user;
 
-        public MemberJson result{get;set;}
+        public int error_code = 0;
+
+        public string error_message;
 
     }
 }

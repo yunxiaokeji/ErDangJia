@@ -54,7 +54,7 @@ namespace IntFactory.Sdk
 
                     HttpWebResponse response = httpWebRequest.GetResponse() as HttpWebResponse;
                     Stream responseStream = response.GetResponseStream();
- 
+
                     System.Text.Encoding encode = Encoding.UTF8;
                     StreamReader reader = new StreamReader(response.GetResponseStream(), encode);
                     strResult = reader.ReadToEnd();
@@ -91,15 +91,15 @@ namespace IntFactory.Sdk
                 }
             }
             catch (System.Net.WebException webException)
-                    {
-                        HttpWebResponse response = webException.Response as HttpWebResponse;
-                        Stream responseStream = response.GetResponseStream();
-                        StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                        strResult = reader.ReadToEnd();
+            {
+                HttpWebResponse response = webException.Response as HttpWebResponse;
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                strResult = reader.ReadToEnd();
 
-                        reader.Close();
-                        response.Close();
-                    }
+                reader.Close();
+                response.Close();
+            }
 
 
 

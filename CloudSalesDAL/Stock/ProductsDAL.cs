@@ -320,7 +320,7 @@ namespace CloudSalesDAL
             return dt;
         }
 
-        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID)
+        public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID, int type)
         {
             string id = Guid.NewGuid().ToString();
             SqlParameter[] paras = { 
@@ -336,7 +336,8 @@ namespace CloudSalesDAL
                                      new SqlParameter("@CMClientCode" , cmClientCode),
                                      new SqlParameter("@CreateUserID" , operateID),
                                      new SqlParameter("@AgentID" , agentid),
-                                     new SqlParameter("@ClientID" , clientID)
+                                     new SqlParameter("@ClientID" , clientID),
+                                     new SqlParameter("@ProviderType" , type)
                                    };
             return ExecuteNonQuery("P_AddProviders", paras, CommandType.StoredProcedure) > 0 ? id : "";
 

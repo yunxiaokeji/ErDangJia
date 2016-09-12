@@ -792,6 +792,18 @@ namespace YXERP.Controllers
             };
         }
 
+        public JsonResult SyncProduct()
+        { 
+            IntFactory.Sdk.SyncBusiness.BaseBusiness.SyncProduct(CurrentUser.AgentID, CurrentUser.ClientID,
+                CurrentUser.UserID);
+            JsonDictionary.Add("result", true); 
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
 
         #region 产品导入 导出

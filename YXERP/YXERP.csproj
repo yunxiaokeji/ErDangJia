@@ -237,6 +237,7 @@
     <Content Include="modules\images\ico-attachment-word.png" />
     <Content Include="modules\images\ico-category-close.png" />
     <Content Include="modules\images\ico-category.png" />
+    <Content Include="modules\images\ico-changmeng-login.png" />
     <Content Include="modules\images\ico-changmeng.png" />
     <Content Include="modules\images\ico-checknotall.png" />
     <Content Include="modules\images\ico-company.png" />
@@ -1227,6 +1228,7 @@
     <Content Include="Views\IntFactoryOrder\OrdersDetail.cshtml" />
     <Content Include="Views\IntFactoryOrder\Index.cshtml" />
     <Content Include="Views\Home\SelectLogin.cshtml" />
+    <Content Include="Views\Home\CMSelectLogin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

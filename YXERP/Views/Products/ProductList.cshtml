@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "产品列表";
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
 }
 
 <link rel="stylesheet" href="/modules/css/shoppingcart.css" />
@@ -14,12 +15,16 @@
 
 <div class="header-box">
     <span class="header-title left">产品列表</span>
-    <div class="right @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))"  >
-        <span data-url="/Products/Category?type=add" data-id="103010500" data-name="添加产品"  class="pLeft2 btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))" style="color: #fff;-moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;-moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius:0px;border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >添加产品</span>
-        <div id="dropdown" class="bghulan dropdown rightraduis3 right " style="height:28px;width:20px;">
+     <div class="btn right @(!string.IsNullOrEmpty(CurrentUser.Agents.CMClientID)?ExpandClass.IsLimits(HttpContext.Current, "103010500"):"nolimits")" id="syncPdt" title="同步供应商款式">
+        同步供应商款式
+    </div>
+    <div class="right mRight10 @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))">
+        <span data-url="/Products/Category?type=add" data-id="103010500" data-name="添加产品"  class="pLeft2 btn-add btn-open-window left @(ExpandClass.IsLimits(HttpContext.Current, "103010500"))" style="color: #fff; -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px; -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px; border-bottom-right-radius: 0px; border-top-right-radius: 0px;" >添加产品</span>
+        <div id="dropdown" class="bghulan dropdown rightraduis3 right " style="height: 28px; width: 20px;">
             <span class="mTop8 mRight5 ico-dropdown-white right"></span>
         </div>
     </div>
+   
 
 </div>
  <div class="search-header">

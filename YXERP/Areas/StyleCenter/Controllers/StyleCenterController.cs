@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using IntFactory.Sdk;
-using IntFactory.Sdk.Business;
 using CloudSalesBusiness;
 using CloudSalesEnum;
 using Newtonsoft.Json;
@@ -45,12 +44,17 @@ namespace YXERP.Areas.StyleCenter.Controllers
         public ActionResult StyleCenter(string id)
         {
             var Status = 0;
-            var clientid = ""; 
+            var clientid = "";
             if (CurrentUser != null)
             {
                 Status = 1;
                 clientid = CurrentUser.ClientID;
-            } 
+            }
+            else
+            {
+                Response.Write("<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" + GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + id + "';</script>");
+                Response.End(); 
+            }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = id;
             ViewBag.LogStatus=Status;
@@ -58,32 +62,9 @@ namespace YXERP.Areas.StyleCenter.Controllers
             return View();
         }
         public ActionResult CallBackView(string sign, string uid = "", string aid = "")
-        {
-            SetSession(uid, aid);
+        { 
             return Redirect("/StyleCenter/StyleCenter/StyleCenter");
-        }
-        public void SetSession(string uid = "", string aid = "")
-        {
-            if (!string.IsNullOrEmpty(uid) && !string.IsNullOrEmpty(aid) )
-            {
-                if (CurrentUser == null)
-                {
-                    var user = CloudSalesBusiness.OrganizationBusiness.GetUserByUserID(uid, aid);
-                    user.Client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(user.ClientID);
-                    Session["KSManager"] = user;
-                    Session["Time"] = DateTime.Now.ToString("yyy-MM-dd HH:mm:ss");
-                    Session.Timeout = 60;
-                }
-                else
-                {
-                    if (Convert.ToDateTime(Session["Time"]).AddHours(1).CompareTo(DateTime.Now) > 1)
-                    {
-                        Session["KSManager"] = null;
-                        Session["Time"] = null;
-                    }
-                }
-            } 
-        }
+        } 
 
         /// <summary>
         /// 订购订单列表
@@ -93,8 +74,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
         {
             ViewBag.Type = (int)EnumDocType.RK;
             ViewBag.ZNGCID = "";
-            ViewBag.SouceType = 2;
-            //ViewBag.Wares = SystemBusiness.BaseBusiness.GetWareHouses(CurrentUser.ClientID);
+            ViewBag.SouceType = 2; 
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders("-1");
             return View();
         }
@@ -159,8 +139,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
             };
         }
         public JsonResult LoginCallBack(string sign, string uid = "", string aid = "")
-        {
-            SetSession(uid, aid);
+        { 
             JsonDictionary.Add("uid", !string.IsNullOrEmpty(uid));
             JsonDictionary.Add("ccode", CurrentUser.Client.CityCode);
             JsonDictionary.Add("address", CurrentUser.Client.Address);
@@ -211,7 +190,12 @@ namespace YXERP.Areas.StyleCenter.Controllers
         {
             int pageCount = 0;
             int totalCount = 0;
-            List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords, orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+            if (clientid.Equals(CurrentUser.Agents.CMClientID))
+            {
+                clientid = CurrentUser.ClientID;
+            } 
+            List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords,
+                   orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
@@ -273,19 +257,8 @@ namespace YXERP.Areas.StyleCenter.Controllers
                  YunXiaoService.ProductService.AddProviders(ord.clientName,
                             ord.clientContactName,
                             ord.clientMobile, "", ord.clientCityCode, ord.clientAdress,
-                            "", ord.clientID, ord.clientCode, "", CurrentUser.Client.AgentID, CurrentUser.ClientID);
-            }
-            if (string.IsNullOrEmpty(CurrentUser.Client.OtherSysID) || (!string.IsNullOrEmpty(CurrentUser.Client.OtherSysID) && CurrentUser.Client.OtherSysID.IndexOf(ord.clientID)==-1))
-            {
-                var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", CurrentUser.Client.CompanyName,
-                            CurrentUser.Client.MobilePhone, ord.clientID,
-                             CurrentUser.Client.AgentID, CurrentUser.ClientID, CurrentUser.Client.ClientCode);
-                CloudSalesBusiness.Manage.ClientBusiness.UpdateClientOtherid(ord.clientID, CurrentUser.ClientID);
-                user.Client.OtherSysID = string.IsNullOrEmpty(user.Client.OtherSysID)
-                    ? ord.clientID + ","
-                    : user.Client.OtherSysID + ord.clientID + ",";
-                Session["KSManager"] = user;
-            }
+                            "", ord.clientID, ord.clientCode, "", CurrentUser.Client.AgentID, CurrentUser.ClientID,1);
+            } 
 
             //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入
             string dids = "";

@@ -543,5 +543,12 @@ namespace YXERP.Controllers
             }
             return "";
         }
+
+        public string GetbaseUrl()
+        {
+            string port = HttpContext.Request.Url.Port.ToString();
+            return HttpContext.Request.Url.Scheme + "://" + HttpContext.Request.Url.Host +
+                         (string.IsNullOrEmpty(port) || port == "80" ? "" : ":" + port);
+        }
     }
 }

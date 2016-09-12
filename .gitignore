@@ -33,3 +33,4 @@ UploadFiles
 *.dbmdl
 [Ww]eb.config
 *.sql
+log/

@@ -441,13 +441,6 @@ namespace YXERP.Controllers
                         var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("", model.Client.CompanyName,
                             model.Client.MobilePhone, otherid,
                              model.Client.AgentID, model.ClientID, model.Client.ClientCode);
-                        if (string.IsNullOrEmpty(model.Client.OtherSysID))
-                        {
-                            ClientBusiness.UpdateClientOtherid(otherid, model.ClientID);
-                            model.Client.OtherSysID = string.IsNullOrEmpty(model.Client.OtherSysID)
-                                ? otherid
-                                : model.Client.OtherSysID;
-                        }
                     }
                     //保持登录状态
                     HttpCookie cook = new HttpCookie("yunxiao_erp_user");
@@ -475,7 +468,9 @@ namespace YXERP.Controllers
                     if (outResult == 3)
                     {
                         if (pwdErrorUser == null)
+                        {
                             pwdErrorUser = new Common.PwdErrorUserEntity();
+                        }
                         else
                         {
                             if (pwdErrorUser.ErrorCount > 2)

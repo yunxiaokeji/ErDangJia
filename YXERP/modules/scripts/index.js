@@ -144,8 +144,7 @@ define(function (require, exports, module) {
                     $(this).attr("src", $(this).data("ico"));
                 }); 
                 if (_this.attr('id') == 'intfactoryli') {
-                    $('#providerul').show();
-                    //$('#intfactoryhref').click();
+                    $('#providerul').show(); 
                 } else {
                     _self.getChildMenu(_this.data("code"));
                 }
@@ -560,11 +559,14 @@ define(function (require, exports, module) {
                 if (item.CMClientID != "" && item.CMClientID != null) {
                     html += "<li class='providerli' data-cmid='" + item.CMClientID + "' data-id='" + item.ProviderID + "'>" + item.Name + "</li>";
                 }
-            } 
+            }
+            if (html == "") {
+                $('#providerul').css("height","0px");
+            }
             $('#providerul').html(html);
             $('#providerul').find("li").click(function () {
                 var _this = $(this); 
-                $('#intfactoryhref').parent().attr("href", "/StyleCenter/StyleCenter/StyleCenter/" + _this.data("cmid"));
+                $('#intfactoryhref').parent().attr("href", "/StyleCenter/StyleCenter/StyleCenter?id=" + _this.data("cmid"));
                 $('#intfactoryhref').click();
             });
         });

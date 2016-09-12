@@ -75,11 +75,6 @@ namespace YXERP.Controllers
                     ViewBag.UserName = cook["username"];
                 }
             }
-           
-            if (!string.IsNullOrEmpty(otherid) && Status == 0)
-            {
-                return View("SelectLogin");
-            }
             return View();
         }
 

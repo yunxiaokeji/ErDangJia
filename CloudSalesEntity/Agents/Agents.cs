@@ -176,7 +176,7 @@ namespace CloudSalesEntity
 
         public string AgentKey { set; get; }
 
-        public string IsIntFactory { get; set; }
+        public string CMClientID { get; set; }
 
         public void FillData(System.Data.DataRow dr) 
         {

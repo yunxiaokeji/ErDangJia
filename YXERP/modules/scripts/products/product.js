@@ -206,9 +206,7 @@ define(function (require, exports, module) {
             }
         });
 
-        $("#syncPdt").click(function() {
-            _self.Syncproduct();
-        });
+       
     }
 
     //保存产品
@@ -316,8 +314,13 @@ define(function (require, exports, module) {
         _self.bindListEvent();
     }
 
-    Product.Syncproduct = function() {
+    Product.Syncproduct = function () {
+        console.log(1);
+        var _self = this;
+        $('#syncPdt').unbind('click');
         Global.post("/Products/SyncProduct", null, function (data) {
+            $('#syncPdt').bind('click', function () { _self.Syncproduct(); });
+            console.log(data);
             if (data.result) {
                 alert("同步成功");
             }
@@ -443,6 +446,9 @@ define(function (require, exports, module) {
             if (!$(e.target).parents().hasClass("dropdown-ul") && !$(e.target).parents().hasClass("dropdown") && !$(e.target).hasClass("dropdown")) {
                 $(".dropdown-ul").hide();
             }
+        });
+        $("#syncPdt").click(function () {
+            _self.Syncproduct();
         });
     }
 

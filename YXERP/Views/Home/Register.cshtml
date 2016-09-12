@@ -56,7 +56,9 @@
 
                 <div class="btnRegister" id="btnRegister">注册</div>
                 <div class="register-remember-box">
-                    <div class="left color999">已有账号，<a href="/home/login?ReturnUrl=@ViewBag.LoginUrl">登录</a></div>
+                    <div class="left color999">已有账号，<a href="/home/login?BindAccountType=@(ViewBag.RegType)&ReturnUrl=@ViewBag.LoginUrl">登录</a>
+                         <input id="regtype" hidden="hidden"  class="hide" type="text" value="@(ViewBag.RegType<10000?ViewBag.RegType:2)"  />
+                    </div>
                     <div class="cb-remember-password right">
                          注册即同意 <a href="/home/Terms" target="_target">《二当家授权协议》</a>
                     </div>
@@ -64,6 +66,6 @@
             </div>
         </div>
     </div>
-    <input id="OtherID" type="hidden" value="@ViewBag.OtherID"  />
+    <input id="OtherID" hidden="hidden" class="hide"  type="text" value="@ViewBag.OtherID"  />
 </body>
 </html>

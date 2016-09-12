@@ -16,16 +16,16 @@ namespace YXERP.Areas.StyleCenter.Controllers
         {
             get
             {
-                if (Session["KSManager"] == null)
+                if (Session["ClientManager"] == null)
                 {
                     return null;
                 }
                 else
                 {
-                    return (CloudSalesEntity.Users)Session["KSManager"];
+                    return (CloudSalesEntity.Users)Session["ClientManager"];
                 }
             }
-            set { Session["KSManager"] = value; }
+            set { Session["ClientManager"] = value; }
         }
         public string GetbaseUrl()
         {

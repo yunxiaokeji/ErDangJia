@@ -68,14 +68,14 @@ namespace YXERP.Controllers
             ViewBag.Status = Status;
             string otherid = OtherID; 
             //获取OtherSysID
-            if (!string.IsNullOrEmpty(ReturnUrl) && ReturnUrl.IndexOf("IntFactoryOrder") > -1 && string.IsNullOrEmpty(OtherID))
+            if ((!string.IsNullOrEmpty(ReturnUrl) && ReturnUrl.IndexOf("IntFactoryOrder") > -1 && string.IsNullOrEmpty(OtherID)) || BindAccountType==10000)
             {
                 otherid = Common.Common.GetQueryString("id",ReturnUrl);
             }
             ViewBag.BindAccountType = BindAccountType;
             ViewBag.OtherID = otherid;
             ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
-            if (!string.IsNullOrEmpty(otherid) && Status==0)
+            if (!string.IsNullOrEmpty(otherid) && Status == 0)
             {
                 return View("SelectLogin");
             }
@@ -123,7 +123,10 @@ namespace YXERP.Controllers
                     ViewBag.Status = 0;
                     ViewBag.ReturnUrl = ReturnUrl ?? string.Empty;
                     ViewBag.BindAccountType = 10000;
-                    return View("Login");
+                    var otherid = Common.Common.GetQueryString("id", ReturnUrl); 
+                    ViewBag.OtherID = otherid;
+                    //return View("Login");
+                    return View("SelectLogin"); 
                 }
             }
 

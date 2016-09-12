@@ -11,7 +11,8 @@
         clientid: "",
         beginPrice: "",
         endPrice: "",
-        orderBy:"",
+        orderBy: "",
+        isAsc: false,
         pageIndex: 1,
         pageSize: 12,
         keyWords: "" 
@@ -100,12 +101,14 @@
             if (_this.data("name") == "sales" || _this.data("name")=="zh") {
                 $('#parentprice').html('价格');
                 Params.orderBy = _this.data("desc");
+                Params.isAsc = _this.data("asc");
                 _self.getProducts();
             } 
         });
 
         $('.divprice li').click(function () { 
             Params.orderBy = $(this).data("desc");
+            Params.isAsc = $(this).data("asc");
             $('#parentprice').html($(this).find('.link').html()); 
             $('.seachul li .link').removeClass("hover"); 
             $('#parentprice').addClass("hover");
@@ -131,6 +134,7 @@
         Global.post("/Home/GetSign", { ReturnUrl: rurl }, function (data) { 
             $('#loga').attr("href", '/Home/Authorize?sign=' + data.sign + '&ReturnUrl=' + rurl); 
         });
+        $('#loga').click();
         $('#cgbtn').click(function () {
             window.open($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单', "", "fullscreen=1");
         });
@@ -156,7 +160,8 @@
         if (endp == "") {
             Params.endPrice = endp;
         }
-        Global.post("/StyleCenter/StyleCenter/GetProductList", Params, function (data) {
+        // Global.post("/StyleCenter/StyleCenter/GetProductList", Params, function (data) {
+        Global.post("/StyleCenter/StyleCenter/GetProduct", Params, function (data) {
             $("#productlist").empty();
             if (data.items.length > 0) {
                 doT.exec("stylecenter/template/stylecenter/zngc-products.html", function (templateFun) {
@@ -219,6 +224,7 @@
             $(".divcategory").find('a').click(function() {
                 Params.categoryID = $(this).data("id");
                 Params.orderBy = "";
+                Params.isAsc = false;
                 _self.getProducts();
                 $('.divcategory').hide();
             });

@@ -32,7 +32,7 @@
     var url = '@(ViewBag.ReturnUrl)';
     url = url.replace('&', '%26');
     $('#bindbtn').click(function () {
-        location.href = '/Home/Login?Status=-1&OtherID=' + id + '&ReturnUrl=' + url;
+        location.href = '/Home/Login?Status=-1&BindAccountType=10000&OtherID=' + id + '&ReturnUrl=' + url;
     });
     $('#regbtn').click(function () {
         location.href = '/Home/Register?id=' + id;

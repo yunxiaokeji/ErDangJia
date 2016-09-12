@@ -9,6 +9,7 @@ using IntFactory.Sdk.Business;
 using CloudSalesBusiness;
 using CloudSalesEnum;
 using Newtonsoft.Json;
+using CloudSalesEntity;
 
 namespace YXERP.Areas.StyleCenter.Controllers
 {
@@ -130,7 +131,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
             }
             else
             {
-                ViewBag.Model=new OrderEntity();
+                ViewBag.Model=new IntFactory.Sdk.OrderEntity();
             }
             return View();
         }
@@ -206,6 +207,21 @@ namespace YXERP.Areas.StyleCenter.Controllers
             };
         }
 
+        public JsonResult GetProduct(string clientid, string keyWords, int pageSize, int pageIndex, bool isAsc, string categoryID = "", string orderby = "", string beginPrice = "", string endPrice = "")
+        {
+            int pageCount = 0;
+            int totalCount = 0;
+            List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords, orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+            JsonDictionary.Add("items", list);
+            JsonDictionary.Add("totalCount", totalCount);
+            JsonDictionary.Add("pageCount", pageCount);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public JsonResult GetZNGCCategorys(string categoryid)
         { 
             var obj = ClientBusiness.BaseBusiness.GetCategoryByID(categoryid);
@@ -248,7 +264,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
-            var ord= JsonConvert.DeserializeObject<OrderEntity>(entity);
+            var ord= JsonConvert.DeserializeObject<IntFactory.Sdk.OrderEntity>(entity);
             CloudSalesEntity.Users user = CurrentUser;
             //0.判断供应商以及是否授权
             string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, ord.clientID);

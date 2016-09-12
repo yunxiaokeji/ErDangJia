@@ -437,7 +437,19 @@ namespace YXERP.Controllers
                 CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(userName, pwd, out outResult, operateip);
                 if (model != null)
                 {
-                    AddProcider(bindAccountType,otherid,model.ClientID); 
+                    if (bindAccountType == 6 || bindAccountType == 2)
+                    {
+                        AddProvider(bindAccountType, otherid, model.ClientID);
+                    }
+                    else if (bindAccountType == 4)
+                    {
+                        if (Session["CMTokenInfo"] != null)
+                        {
+                            var user = (Users)Session["CMTokenInfo"];
+                            OrganizationBusiness.BindOtherAccount(EnumAccountType.ZNGC, model.UserID, user.MDProjectID, user.MDUserID, model.ClientID, model.AgentID);
+                            AddProvider(bindAccountType, user.MDProjectID, model.ClientID);
+                        }
+                    }
                     //保持登录状态
                     HttpCookie cook = new HttpCookie("yunxiao_erp_user");
                     cook["username"] = userName;
@@ -445,10 +457,7 @@ namespace YXERP.Controllers
                     cook["status"] = remember;
                     cook.Expires = DateTime.Now.AddDays(7);
                     Response.Cookies.Add(cook);
-                    if (bindAccountType == 10000)
-                    {
-                        resultObj.Add("sign",YXERP.Common.Signature.GetSignature(Common.Common.YXAgentID, Common.Common.YXClientID, model.UserID));
-                    } 
+
                     Session["ClientManager"] = model; 
                     if (YXERP.Common.Common.IsMobileDevice())
                     {
@@ -506,7 +515,7 @@ namespace YXERP.Controllers
             };
         }
 
-        public void AddProcider(int bindAccountType, string id, string clientid)
+        public void AddProvider(int bindAccountType, string id, string clientid)
         {
             if (bindAccountType == 6)
             {
@@ -517,22 +526,17 @@ namespace YXERP.Controllers
                     client.MobilePhone, "", client.CityCode, client.Address,
                     "", id, client.ClientCode, "", yxClientItem.AgentID, yxClientItem.ClientID, 2);
             }
-            else
+            else if (bindAccountType==4)
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    IntFactory.Sdk.ClientResult zngcClientItem =
-                        IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(id);
+                    IntFactory.Sdk.ClientResult zngcClientItem = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(id);
                     Clients yxClientItem = UserService.GetClientDetail(clientid);
                     string providerID = ProductService.AddProviders(zngcClientItem.client.companyName,
                         zngcClientItem.client.contactName,
                         zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                        "", id, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientItem.ClientID,
-                        1);
-                    var zngcResult = IntFactory.Sdk.CustomerBusiness.BaseBusiness.SetCustomerYXinfo("",
-                        yxClientItem.CompanyName,
-                        yxClientItem.MobilePhone, id,
-                        yxClientItem.AgentID, yxClientItem.ClientID, yxClientItem.ClientCode);
+                        "", id, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientItem.ClientID, 1);
+
                 }
             }
         }
@@ -576,7 +580,7 @@ namespace YXERP.Controllers
                     
                     if (result == 1)
                     {
-                        AddProcider(regType, otherID, clientid); 
+                        AddProvider(regType, otherID, clientid); 
                         if (!string.IsNullOrEmpty(otherID) && YXERP.Common.Common.IsMobileDevice())
                         {
                             result = 11;

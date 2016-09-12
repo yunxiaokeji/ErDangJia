@@ -24,50 +24,51 @@
 
 <div class="content-body mTop10">
     <ul class="content-info">
-            <li>
-                <span class="column-title">公司名称：</span>
-                <span id="lblCompanyName"></span>
-            </li>
+        <li>
+            <span class="column-title">公司名称：</span>
+            <span id="lblCompanyName"></span>
+        </li>
 
-            <li>
-                <span class="column-title">联系人：</span>
-                <span id="lblContactName" ></span>
-            </li>
-            <li>
-                <span class="column-title">联系电话：</span>
-                <span id="lblMobilePhone"></span>
-            </li>
-            <li>
-                <span class="column-title">办公电话：</span>
-                <span  id="lblOfficePhone"></span>
-            </li>
-            <li>
-                <span class="column-title">行业：</span>
-                <span id ="lblIndustry"> 
+        <li>
+            <span class="column-title">联系人：</span>
+            <span id="lblContactName" ></span>
+        </li>
+        <li>
+            <span class="column-title">联系电话：</span>
+            <span id="lblMobilePhone"></span>
+        </li>
+        <li>
+            <span class="column-title">办公电话：</span>
+            <span  id="lblOfficePhone"></span>
+        </li>
+        <li>
+            <span class="column-title">行业：</span>
+            <span id ="lblIndustry"> 
                 </span>
-            </li>
-              <li>
-                <span class="column-title">授权人数：</span><span id="UserQuantity"></span>
-            </li>
-            <li>
-                <span class="column-title">地址：</span>
-                <span id="lblcitySpan"> </span>
-            </li>
-           <li>
-                <span class="column-title">到期时间：</span><span id="EndTime"></span>
-            </li>
-             <li>
-                <span class="column-title">详细地址：</span>
-                <span id="lblAddress"></span>
-            </li>
-            
-            <li>
-                <span class="column-title">剩余时间：</span><span id="agentRemainderDays"></span><span>天</span>
-            </li>
-    @*        <li>
+        </li>
+        <li>
+            <span class="column-title">授权人数：</span><span id="UserQuantity"></span>
+        </li>
+        <li>
+            <span class="column-title">地址：</span>
+            <span id="lblcitySpan"> </span>
+        </li>
+        <li>
+            <span class="column-title">到期时间：</span><span id="EndTime"></span>
+        </li>
+        <li>
+            <span class="column-title">详细地址：</span>
+            <span id="lblAddress"></span>
+        </li>
+
+        <li>
+            <span class="column-title">剩余时间：</span><span id="agentRemainderDays"></span><span>天</span>
+        </li>
+        @*        <li>
                 <span class="column-title">备注：</span>
                 <p id="lblDescription"></p>
             </li>*@
+
         <li class="hide">
             <select id="industrytemp">
                 @foreach (CloudSalesEntity.Industry model in (List<CloudSalesEntity.Industry>) ViewBag.Industry)
@@ -78,6 +79,8 @@
             </select>
         </li>
     </ul>
+    <span class="column-title" style="width: 100px;">店铺地址：</span><span><a id="ksurl">@(ViewBag.BaseUrl)/StyleCenter/StyleCenter/StyleCenter/@(ViewBag.ClientID)</a></span>
+    <input id="ipturl" hidden="hidden" type="text" value="@(ViewBag.BaseUrl)"/>
     <img class="company-logo" src="" id="posterDisImg" alt=""/>
 </div>
 <div class="tab-nav">

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
-
-using IntFactory.Sdk.Business;
+using System.Web.Mvc; 
 using IntFactory.Sdk;
 using CloudSalesEntity;
 using YunXiaoService;

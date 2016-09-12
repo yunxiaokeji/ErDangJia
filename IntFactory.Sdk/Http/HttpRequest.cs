@@ -92,6 +92,8 @@ namespace IntFactory.Sdk
             }
             catch (System.Net.WebException webException)
             {
+                CloudSalesBusiness.CommonBusiness.WriteLog(
+                    string.Format("接口{0}调用失败，原因{1}", urlPath, webException.ToString()), 2, "Error");
                 HttpWebResponse response = webException.Response as HttpWebResponse;
                 Stream responseStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
@@ -100,11 +102,7 @@ namespace IntFactory.Sdk
                 reader.Close();
                 response.Close();
             }
-
-
-
             return JsonConvert.DeserializeObject<T>(strResult);
-
         }
 
         private static String CreateParameterStr(Dictionary<String, Object> parameters)

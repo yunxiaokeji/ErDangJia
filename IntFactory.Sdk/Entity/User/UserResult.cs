@@ -5,10 +5,13 @@ using System.Text;
 
 namespace IntFactory.Sdk
 {
-    public class MemberResult
+    public class UserResult
     {
+        public UserEntity user;
 
-        public MemberJson result{get;set;}
+        public int error_code = 0;
+
+        public string error_message;
 
     }
 }

@@ -89,9 +89,8 @@
     <Compile Include="Entity\Order\OrderBaseResult.cs" />
     <Compile Include="Entity\Task\TaskListResult.cs" />
     <Compile Include="Entity\Token\TokenResult.cs" />
-    <Compile Include="Entity\User\MemberEntity.cs" />
-    <Compile Include="Entity\User\MemberJson.cs" />
-    <Compile Include="Entity\User\MemberResult.cs" />
+    <Compile Include="Entity\User\UserEntity.cs" />
+    <Compile Include="Entity\User\UserResult.cs" />
     <Compile Include="Entity\UserBase.cs" />
     <Compile Include="Entity\User\UserLoginResult.cs" />
     <Compile Include="Http\HttpRequest.cs" />

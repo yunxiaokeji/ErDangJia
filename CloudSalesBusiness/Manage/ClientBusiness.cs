@@ -342,11 +342,11 @@ namespace CloudSalesBusiness.Manage
         /// <param name="result">返回结果 0失败 1成功 2账号已存在</param>
         /// <returns>客户端ID</returns>
         public static string InsertClient(EnumRegisterType registerType, EnumAccountType accountType, string account, string loginPwd, string clientName, string contactName, string mobile, string email, string industry, string citycode, string address, string remark,
-                                          string companyid, string companyCode, string customerid, string operateid, out int result, out string userid,string otherid="")
+                                          string companyid, string companyCode, string customerid, string operateid, out int result, out string userid)
         {
             loginPwd = CloudSalesTool.Encrypt.GetEncryptPwd(loginPwd, account);
 
-            string clientid = ClientDAL.BaseProvider.InsertClient((int)registerType, (int)accountType, account, loginPwd, clientName, contactName, mobile, email, industry, citycode, address, remark, companyid, companyCode, customerid, operateid, out result, out userid, otherid);
+            string clientid = ClientDAL.BaseProvider.InsertClient((int)registerType, (int)accountType, account, loginPwd, clientName, contactName, mobile, email, industry, citycode, address, remark, companyid, companyCode, customerid, operateid, out result, out userid);
 
             return clientid;
         }

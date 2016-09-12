@@ -16,7 +16,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
         {
             get
             {
-                if (Session["KSManager"] == null)
+                if (Session["ClientManager"] == null)
                 {
                     return null;
                 }
@@ -25,7 +25,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
                     return (CloudSalesEntity.Users)Session["KSManager"];
                 }
             }
-            set { Session["KSManager"] = value; }
+            set { Session["ClientManager"] = value; }
         }
         public string GetbaseUrl()
         {

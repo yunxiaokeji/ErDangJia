@@ -80,7 +80,8 @@ namespace YXERP.Controllers
                 ViewBag.Option = 1;
             else
                 ViewBag.Option = id;
-
+            ViewBag.ClientID = CurrentUser.ClientID;
+            ViewBag.BaseUrl = GetbaseUrl();
             return View();
         }
 

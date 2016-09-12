@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CloudSalesEntity;
-using IntFactory.Sdk.Business;
+using IntFactory.Sdk;
 
 namespace YXERP.Areas.M.Controllers
 {

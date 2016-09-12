@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CloudSalesEntity;
 
-namespace IntFactory.Sdk.Business
+namespace IntFactory.Sdk
 {
     public class OrderBusiness
     {

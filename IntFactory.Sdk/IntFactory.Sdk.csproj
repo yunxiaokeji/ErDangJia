@@ -51,6 +51,7 @@
     <Compile Include="Business\ClientBusiness.cs" />
     <Compile Include="Business\CustomerBusiness.cs" />
     <Compile Include="Business\OrderBusiness.cs" />
+    <Compile Include="Business\SyncBusiness.cs" />
     <Compile Include="Common\ApiOption.cs" />
     <Compile Include="AppConfig.cs" />
     <Compile Include="Business\OauthBusiness.cs" />

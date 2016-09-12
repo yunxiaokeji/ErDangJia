@@ -19,7 +19,6 @@ namespace IntFactory.Sdk
             paras.Add("clientID", clientID);
 
             return HttpRequest.RequestServer<UserResult>(ApiOption.getUserByUserID, paras);
-
         }
 
         public static UserLoginResult UserLogin(string userName, string pwd,string userID,string agentID) 

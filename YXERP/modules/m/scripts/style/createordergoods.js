@@ -186,7 +186,7 @@
 
                 var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrandvalue='" + dataAttrValue + "' data-xremark='【" + _this.data('value') + "】' data-yremark='【" + $(this).data('value') + "】' data-xyremark='【" + _this.data('value') + "】【" + $(this).data('value') + "】' data-remark='" + description + "'></tr>");
                 trHtml.append("<td class='tLeft'>" + description + "</td>");
-                trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' class='quantity center' type='tel' value='' /></td>");
+                trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
                 trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
 
                 trHtml.find('.iconfont').click(function () {

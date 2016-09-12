@@ -211,7 +211,7 @@
         }
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/style-list.html";
-        var control = "/IntFactoryModel/IntFactoryOrder/GetProductList";
+        var control = "/StyleCenter/StyleCenter/GetProductList";
         ObjectJS.IsLoading = true;
         $.post(control, Params, function (data) {
             $(".data-loading").remove();

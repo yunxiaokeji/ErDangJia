@@ -314,17 +314,15 @@ define(function (require, exports, module) {
         _self.bindListEvent();
     }
 
-    Product.Syncproduct = function () {
-        console.log(1);
-        var _self = this;
+    Product.Syncproduct = function () {  
         $('#syncPdt').unbind('click');
         Global.post("/Products/SyncProduct", null, function (data) {
-            $('#syncPdt').bind('click', function () { _self.Syncproduct(); });
+            $('#syncPdt').bind('click', function () { Product.Syncproduct(); });
             console.log(data);
             if (data.result) {
                 alert("同步成功");
             }
-            _self.getList();
+            Product.getList();
         });
     };
     //获取分类信息和下级分类

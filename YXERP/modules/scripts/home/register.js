@@ -210,14 +210,15 @@
 
     //保存实体
     ObjectJS.registerClient = function () {
-        $("#btnRegister").html("注册中...");
+        $("#btnRegister").html("注册中..."); 
         var Paras = {
             loginName: $("#loginName").val(),
             code: $("#code").val(),
             companyName: $("#companyName").val(),
             name: $("#name").val(),
             otherID: $("#OtherID").val(),
-            loginPWD: $("#loginPWD").val()
+            loginPWD: $("#loginPWD").val(),
+            regType: $('#regtype').val()
         };
 
         Global.post("/Home/RegisterClient", Paras, function (data) {

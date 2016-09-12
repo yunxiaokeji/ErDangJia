@@ -85,7 +85,7 @@ namespace YXApp.Controllers
 
                         string providerID = ProductService.AddProviders(zngcClientItem.client.companyName, zngcClientItem.client.contactName,
                                                     zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                                                    "", zngcClientID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientID);
+                                                    "", zngcClientID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientID,1);
                         var zngcResult = CustomerBusiness.BaseBusiness.SetCustomerYXinfo(customerID, name, account, zngcClientID,
                                                     yxClientItem.AgentID, yxClientID, yxClientItem.ClientCode);
                         
@@ -137,7 +137,7 @@ namespace YXApp.Controllers
 
                         string providerID = ProductService.AddProviders(zngcClientItem.client.companyName, zngcClientItem.client.contactName,
                                                     zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                                                    "", zngcClientID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, model.ClientID);
+                                                    "", zngcClientID, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, model.ClientID,1);
                     }
 
                     //保持登录状态

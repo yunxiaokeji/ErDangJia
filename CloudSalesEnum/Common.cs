@@ -110,7 +110,11 @@ namespace CloudSalesEnum
         /// <summary>
         /// 微信
         /// </summary>
-        WeiXin = 5
+        WeiXin = 5,
+        /// <summary>
+        /// 店铺分享
+        /// </summary>
+        ShopShare = 6
     }
 
     /// <summary>

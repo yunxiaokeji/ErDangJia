@@ -130,16 +130,22 @@
                 _self.getProducts();
             }
         });
-        var rurl = $('#ipturl').val() + '/StyleCenter/StyleCenter/CallBackView';
-        Global.post("/Home/GetSign", { ReturnUrl: rurl }, function (data) { 
-            $('#loga').attr("href", '/Home/Authorize?sign=' + data.sign + '&ReturnUrl=' + rurl); 
-        });
-        $('#loga').click();
+        //var rurl = $('#ipturl').val() + '/StyleCenter/StyleCenter/CallBackView';
+        //Global.post("/Home/GetSign", { ReturnUrl: rurl }, function (data) { 
+        //    $('#loga').attr("href", '/Home/Authorize?sign=' + data.sign + '&ReturnUrl=' + rurl); 
+        //});
+        //$('#loga').click();
+        //$('#cgbtn').click(function () {
+        //    window.open($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单', "", "fullscreen=1");
+        //});
         $('#cgbtn').click(function () {
-            window.open($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单', "", "fullscreen=1");
+            location.replace($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单');
         });
         $('#imglogo').click(function() {
             location.replace(location);
+        });
+        $('#myself').click(function () {
+            location.replace($('#ipturl').val() + '/MyAccount/Index?name=个人中心');
         });
         _self.getAllCategory();
         _self.getProducts(); 

@@ -169,7 +169,6 @@ namespace YXERP.Controllers
                         if (string.IsNullOrEmpty(model.Avatar)) model.Avatar = user.user.avatar;
 
                         Session["ClientManager"] = model;
-                        Session["KSManager"] = model;
                         if (string.IsNullOrEmpty(state))
                         {
                             return Redirect("/Default/Index");
@@ -208,7 +207,6 @@ namespace YXERP.Controllers
                                     current.Avatar = user.user.avatar;
                                 }
                                 Session["ClientManager"] = current;
-                                Session["KSManager"] = current;
                                 if (string.IsNullOrEmpty(state))
                                 {
                                     return Redirect("/Default/Index");
@@ -231,7 +229,6 @@ namespace YXERP.Controllers
                                 current.MDToken = user.user.token;
                                 if (string.IsNullOrEmpty(current.Avatar)) current.Avatar = user.user.avatar;
                                 Session["ClientManager"] = current;
-                                Session["KSManager"] = current;
                                 if (string.IsNullOrEmpty(state))
                                 {
                                     return Redirect("/Default/Index");
@@ -251,7 +248,6 @@ namespace YXERP.Controllers
             }
             return Redirect("/Home/Login");
         }
-
 
         //微信账户选择进入方式
         public ActionResult WeiXinSelectLogin()
@@ -286,11 +282,14 @@ namespace YXERP.Controllers
                     if (model.Status.Value == 1)
                     {
                         Session["ClientManager"] = model;
-                        Session["KSManager"] = model;
                         if (string.IsNullOrEmpty(state))
+                        {
                             return Redirect("/Home/Index");
+                        }
                         else
+                        {
                             return Redirect(state);
+                        }
                     }
                     else
                     {
@@ -316,7 +315,7 @@ namespace YXERP.Controllers
             return Redirect("/Home/Login");
         }
 
-        public ActionResult CMLogin(string ReturnUrl="")
+        public ActionResult CMLogin(string ReturnUrl = "")
         {
             return Redirect(IntFactory.Sdk.OauthBusiness.GetAuthorize(ReturnUrl));
         }
@@ -339,7 +338,6 @@ namespace YXERP.Controllers
                     if (model.Status.Value != 9)
                     {
                         Session["ClientManager"] = model;
-                        Session["KSManager"] = model;
                         return Redirect("/Default/Index");
                     }
                 }
@@ -363,7 +361,6 @@ namespace YXERP.Controllers
                             current.Avatar = user.client.logo;
                         }
                         Session["ClientManager"] = current;
-                        Session["KSManager"] = current;
                         return Redirect("/Default/Index");
                     } 
                 }
@@ -490,7 +487,7 @@ namespace YXERP.Controllers
         }
 
         //主动注册客户端
-        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD,string code,string otherID="")
+        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD, string code, string otherID = "")
         {
             int result = 0;
             Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
@@ -510,7 +507,7 @@ namespace YXERP.Controllers
                 {
                     string userid = "";
                     //自助注册
-                   var clientid= ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result, out userid, otherID);
+                   var clientid= ClientBusiness.InsertClient(EnumRegisterType.Self, EnumAccountType.Mobile, loginName, loginPWD, companyName, name, loginName, "", "", "", "", "", "", "", "", "", out result, out userid);
 
                     if (result == 1)
                     {

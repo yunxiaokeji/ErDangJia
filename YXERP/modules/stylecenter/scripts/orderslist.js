@@ -145,7 +145,7 @@
             location.replace(location);
         });
         $('#myself').click(function () {
-            location.replace($('#ipturl').val() + '/MyAccount/Index?name=个人中心');
+            location.replace($('#ipturl').val() + '/MyAccount/Index?&name=个人中心');
         });
         _self.getAllCategory();
         _self.getProducts(); 

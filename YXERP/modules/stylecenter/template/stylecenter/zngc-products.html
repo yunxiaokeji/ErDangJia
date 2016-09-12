@@ -1,40 +1,40 @@
 ﻿{%
 	for(var i=0, j=$data.length; i < j; i++){
     var item = $data[i];
-    var titlename=item.intGoodsCode+" "+item.goodsName;
-    var goodname=(titlename.length>17?titlename.substring(0,17)+"...":titlename); 
+    var titlename=item.ProductCode+" "+item.ProductName;
+    var goodname=(titlename.length>35?titlename.substring(0,35)+"...":titlename); 
 %}
-<li style="padding: 20px;">
+<li style="padding: 20px;height: 339px;">
     <div class="product-item"  >
-        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}" href="/StyleCenter/StyleCenter/StyleDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}">
-            <img  src="{%=item.orderImage%}" alt=""/>
+        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.ProductName%}" href="/StyleCenter/StyleCenter/StyleDetail?orderid={%=item.ProductID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}">
+            <img  src="{%=item.ProductImage%}" alt=""/>
         </a>
         <h2 class="price">
-            ￥{%=item.finalPrice.toFixed(2)%}
+            ￥{%=item.Price.toFixed(2)%}
         </h2>
-        <a class="btn-open-window name" href="/StyleCenter/StyleCenter/StyleDetail?orderid={%=item.orderID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.goodsName%}" data-orderid="{%=item.orderID%}" title="{%=item.intGoodsCode%}&nbsp;{%=item.goodsName%}">
+        <a class="btn-open-window name" style="height: 40px;" href="/StyleCenter/StyleCenter/StyleDetail?orderid={%=item.ProductID%}&clientid={%=item.clientID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}" title="{%=item.ProductCode%}&nbsp;{%=item.ProductName%}">
             &nbsp;{%=goodname%}
         </a>
-        <div class="mLeft5 mTop5 " title="员工人数:{%=item.clientName%}">
+        <div class="mLeft5 mTop5 hide" title="员工人数:{%=item.clientName%}">
             <div class="left mLeft3">
                 <img src="/modules/images/ico-usernum.png" style="width: 16px; height: 16px; display: inline-block;"> 
             </div> 
-            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=item.clientUserNum%}</div>
+            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=item.SaleCount%}</div>
             <div class="clear"></div>
         </div>
-         <div class="mLeft5 mTop5 " title="所在地:{%=item.clientName%}">
+         <div class="mLeft5 mTop5 hide" title="所在地:{%=item.BrandName%}">
             <div class="left mLeft3">
                 <img src="/modules/images/ico-address.png" style="width: 16px; height: 16px; display: inline-block;"> 
             </div> 
-            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=item.clientCity%}</div>
+            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=item.BrandName%}</div>
             <div class="clear"></div>
         </div>
-         <div class="mLeft5 mTop5 " title="供应商:{%=item.clientName%}">
+         <div class="mLeft5 mTop5 " title="品牌:{%=item.BrandName%}">
             <div class="left mLeft3">
                 <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;"> 
             </div>
             
-            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=(item.clientName.length>16?item.clientName.substring(0,16)+"...":item.clientName)%}</div>
+            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=(item.BrandName)%}</div>
             <div class="clear"></div>
         </div> 
     </div>

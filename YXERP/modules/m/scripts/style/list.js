@@ -7,7 +7,8 @@
         keyWords: "",
         pageIndex: 1,
         pageSize: 5,
-        orderby: ""
+        orderby: "",
+        categoryID: ""
     };
 
     var ObjectJS = {};
@@ -29,7 +30,8 @@
         Params.clientid = "-1";
 
         ObjectJS.bindEvent();
-        ObjectJS.getList();  
+        ObjectJS.getList();
+        ObjectJS.getAllCategory();
     };
 
     ObjectJS.bindEvent = function () {
@@ -70,6 +72,9 @@
             }
             if (!$(e.target).parents().hasClass("btn-task-filtertype") && !$(e.target).hasClass("btn-task-filtertype")) {
                 $(".task-filtertype").slideUp(400);
+            }
+            if (!$(e.target).hasClass("show-category") && !$(e.target).hasClass("category-box") && !$(e.target).parents().hasClass("category-box")) {
+                $(".category-box").slideUp(400);
             }
         });
 
@@ -203,6 +208,11 @@
         $(".getback").click(function () {
             $('html, body').animate({ scrollTop: 0 }, 'slow');
         });
+
+        //显示选择分类弹出层
+        $(".show-category").click(function () {
+            $(".category-box").slideDown();
+        });
     };
 
     ObjectJS.getList = function () {
@@ -264,5 +274,39 @@
         });
     };
     
+    ObjectJS.getAllCategory = function () {
+        var _self = this;
+        $(".category-box").append("<div class='data-loading'></div>");
+        Global.post("/StyleCenter/StyleCenter/GetAllCateGory", null, function (data) {
+            $(".category-box .data-loading").remove();
+            if (data.items.length > 0) {
+                for (var i = 0; i < data.items.length; i++) {
+                    var item = data.items[i];
+                    var obj = $("<div style='display:table;'></div>"),
+                        _categoryName = $('<div style="display:table-cell; line-height:30px;vertical-align:top;min-width:50px;" data-id="' + item.CategoryID + '">' + item.CategoryName + '：</div>'),
+                        _childObj = $('<ul class="row category-items" style="display:table-cell;"></ul>');
+                    for (var j = 0; j < item.ChildCategory.length; j++) {
+                        var childcate = item.ChildCategory[j];
+                        _childObj.append('<li class="item" data-id="' + childcate.CategoryID + '">' + childcate.CategoryName + '</li>');
+                    }
+                    obj.append(_categoryName).append(_childObj);
+                    $(".category-box").append(obj);
+                }
+                $(".category-items .item").click(function () {
+                    var _this = $(this);
+                    var _desc = _this.parent().prev().text() + "> " + _this.text();
+                    $(".show-category").text(_desc);
+
+                    $(".category-items .item").removeClass('hover');
+                    _this.addClass('hover');
+                    Params.categoryID = $(this).data("id");
+                    $(".category-box").slideUp();
+                });
+            } else {
+                $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");
+            }
+        });
+    }
+
     module.exports = ObjectJS;
 });

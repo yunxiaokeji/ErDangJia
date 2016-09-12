@@ -366,6 +366,7 @@ namespace YXERP.Controllers
                             tempUser.MDProjectID = clientid;
                             tempUser.Client = new Clients();
                             tempUser.Client.CompanyName = client.client.companyName;
+                            tempUser.Client.Logo = client.client.logo;
                             Session["CMTokenInfo"] = tempUser;
 
                             return Redirect("/Home/CMSelectLogin");
@@ -386,6 +387,10 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Home/Login");
             }
+            var user = (Users)Session["CMTokenInfo"];
+            ViewBag.Name = user.Name;
+            ViewBag.CompanyName = user.Client.CompanyName;
+            ViewBag.Logo = user.Client.Logo;
             return View();
         }
 

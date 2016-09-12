@@ -1,21 +1,21 @@
 ﻿@{
     Layout = null;
 }
-<title>登录二当家</title>
+<title>授权登录二当家 - @ViewBag.CompanyName </title>
 <link href="/modules/css/base.css" rel="stylesheet" />
 <link href="/modules/css/default/layout.css" rel="stylesheet" />
 <link href="/modules/css/home/selectlogin.css" rel="stylesheet" />
 
 <div class="header">
-    <span class="left mLeft10">云销科技</span>
-    <span class="right"><a href="/Home/Login">登录</a></span>
+    <img class="left mTop2" style="width:25px; height:25px;" src="@(string.IsNullOrEmpty(ViewBag.Logo)?"/modules/images/logo_login.png":ViewBag.Logo)" />
+    <span class="left mLeft10">@ViewBag.CompanyName</span>
     <div class="clear"></div>
 </div>
-<div class="select-login" style="width:720px;">
+<div class="select-login" style="width:680px;">
     <div class="left ali-login">
         <div><img src="/modules/images/ico-changmeng-login.png" /></div>
         <div class="des">尚未注册二当家账户</div>
-        <div onclick="location.href='/Home/CMRegister'" class="btn">注册并绑定厂盟</div>
+        <div onclick="location.href='/Home/CMRegister'" class="btn">注册并绑定</div>
     </div>
 
     <div class="left bind-account">

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IntFactory.Sdk
 {
-    public class MemberResult
+    public class UserResult
     {
         public UserEntity user;
 

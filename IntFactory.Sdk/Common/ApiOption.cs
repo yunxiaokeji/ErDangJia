@@ -14,8 +14,8 @@ namespace IntFactory.Sdk
         [Description("/api/user/userLogin")]
         userLogin,
 
-        [Description("member.get")]
-        memberDetail,
+        [Description("/api/user/getUserByUserID")]
+        getUserByUserID,
 
         [Description("/api/task/getTasks")]
         GetTasks,

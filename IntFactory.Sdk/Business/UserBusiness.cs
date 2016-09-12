@@ -12,12 +12,13 @@ namespace IntFactory.Sdk
         /// <summary>
         /// 获取用户详情
         /// </summary>
-        public static MemberResult GetMemberDetail(string token, string memberId)
+        public static UserResult GetUserByUserID(string userid, string clientid)
         {
             var paras = new Dictionary<string, object>();
-            paras.Add("memberId", memberId);
+            paras.Add("userid", userid);
+            paras.Add("clientid", clientid);
 
-            return HttpRequest.RequestServer<MemberResult>(ApiOption.memberDetail, paras);
+            return HttpRequest.RequestServer<UserResult>(ApiOption.memberDetail, paras);
 
         }
 

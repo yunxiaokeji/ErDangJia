@@ -23,14 +23,7 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Home/Login");
             }
-            if (YXERP.Common.Common.IsMobileDevice())
-            {
-                return Redirect("/M/Default/Index");
-            }
-            else
-            {
-                return Redirect("/Default/Index");
-            }
+            return Redirect("/Default/Index");
         }
 
         public ActionResult Register(string ReturnUrl = "")
@@ -518,19 +511,6 @@ namespace YXERP.Controllers
                     user.Client.CompanyName, user.Client.ContactName, user.Client.MobilePhone, user.Client.CityCode, user.Client.Address);
             }
             return "";
-        }
-
-        public void AddProvider(int bindAccountType, string id, string clientid)
-        {
-            if (bindAccountType == 6)
-            {
-                var client = ClientBusiness.GetClientDetail(id);
-                Clients yxClientItem = UserService.GetClientDetail(clientid);
-                string providerID = ProductService.AddProviders(client.CompanyName,
-                    client.ContactName,
-                    client.MobilePhone, "", client.CityCode, client.Address,
-                    "", id, client.ClientCode, "", yxClientItem.AgentID, yxClientItem.ClientID, 2);
-            }
         }
 
         //账号是否存在

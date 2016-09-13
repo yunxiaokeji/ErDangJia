@@ -172,8 +172,11 @@
                 doT.exec("stylecenter/template/stylecenter/zngc-products.html", function (templateFun) {
                     var html = templateFun(data.items);
                     html = $(html); 
-                    $("#productlist").append(html); 
-                    
+                    $("#productlist").append(html);
+                    $("#productlist a").each(function() {
+                        var href = $(this).attr("href");
+                        $(this).attr("href", href + "&clientid=" + _self.clientid);
+                    });
                 });
             } else {
                 $("#productlist").append("<div class='nodata-div'>暂无数据!</div>");

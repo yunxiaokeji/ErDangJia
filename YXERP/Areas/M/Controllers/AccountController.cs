@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CloudSalesBusiness;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,10 +12,10 @@ namespace YXERP.Areas.M.Controllers
         //
         // GET: /M/Account/
 
-        public ActionResult Index(string providerID, string providerName)
+        public ActionResult Index(string providerID)
         {
             ViewBag.providerID = providerID;
-            ViewBag.providerName = string.IsNullOrEmpty(providerName) ? "--" : providerName;
+            var providers = ProductsBusiness.BaseBusiness.GetProviderByID(providerID);
 
             CloudSalesEntity.Users users = new CloudSalesEntity.Users();
             users.Name = CurrentUser.Name;

@@ -12,10 +12,10 @@ namespace YXERP.Areas.M.Controllers
         //
         // GET: /M/Orders/
 
-        public ActionResult List(string providerID, string providerName)
+        public ActionResult List(string providerID)
         {
             ViewBag.providerID = providerID;
-            ViewBag.providerName = string.IsNullOrEmpty(providerName) ? "--" : providerName;
+            var providers = ProductsBusiness.BaseBusiness.GetProviderByID(providerID);
 
             CloudSalesEntity.Users users = new CloudSalesEntity.Users();
             users.Name = CurrentUser.Client.ContactName;

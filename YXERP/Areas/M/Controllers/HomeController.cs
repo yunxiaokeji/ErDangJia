@@ -23,6 +23,11 @@ namespace YXERP.Areas.M.Controllers
             return View();
         }
 
+        public ActionResult ChooseProvider()
+        {
+            return View();
+        }
+
         public ActionResult Detail(string orderid, string clientid)
         {
             var obj = OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);

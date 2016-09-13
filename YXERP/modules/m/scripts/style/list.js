@@ -3,13 +3,16 @@
     var Global = require("m_global"),
         doT = require("dot");
     var Params = {
-        clientid: "",/*款式中供应商ID*/
-        keyWords: "",
+        categoryID: "",
+        clientid: "",
+        beginPrice: "",
+        endPrice: "",
+        orderBy: "",
+        isAsc: false,
         pageIndex: 1,
         pageSize: 5,
-        orderby: ""
+        keyWords: ""
     };
-
     var ObjectJS = {};
     var cacheOrder = [];
     var isShowOrder = false;
@@ -211,7 +214,7 @@
         }
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/style-list.html";
-        var control = "/StyleCenter/StyleCenter/GetProductList";
+        var control = "/StyleCenter/StyleCenter/GetProduct";
         ObjectJS.IsLoading = true;
         $.post(control, Params, function (data) {
             $(".data-loading").remove();

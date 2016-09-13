@@ -430,6 +430,7 @@
     <Content Include="Areas\StyleCenter\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\StyleCenter\Views\_ViewStart.cshtml" />
     <Content Include="Areas\M\Views\Orders\Detail.cshtml" />
+    <Content Include="Areas\M\Views\Home\ChooseProvider.cshtml" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

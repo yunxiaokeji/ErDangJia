@@ -43,12 +43,21 @@
     margin-top:50px;
     border-bottom:1px solid #ccc;
 }
- .sort-item { position:relative; cursor:pointer; width:90px;padding:15px 0;float:left}
+.sort-item { position:relative; cursor:pointer; width:90px;padding:15px 0;float:left;}
 .sort-item.hover { color:#4a98e7; }
  .sort-item .asc { position:absolute; top:18px; right:5px;  border-bottom:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
  .sort-item .desc { position:absolute; top:28px; right:5px;  border-top:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
 .sort-item .asc.hover {  border-bottom:solid 5px #4a98e7;}
 .sort-item .desc.hover { border-top:solid 5px #4a98e7;}
+
+/*分类选择*/
+.filter-category { border-bottom:1px solid #ccc;position:relative;}
+.show-category{ width:90px;padding:15px 0;height:20px; }
+.filter-category .category-box { position:absolute;left:0;top:51px;border-bottom:1px solid #ccc;width:100%;background-color:rgba(255,255,255,.9);padding:10px;
+                                 box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;
+}
+.category-box ul li { line-height:30px;float:left; margin-left:10px;}
+.category-items .item.hover { color:#4a98e7;}
 
 .list {margin-top:20px;padding-bottom:60px;}
 .list .listabove{width:100%;border-bottom:1px solid #eee;display:table;}

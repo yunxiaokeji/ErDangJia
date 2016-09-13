@@ -244,7 +244,7 @@
         }
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/style-list.html";
-        var control = "/StyleCenter/StyleCenter/GetProduct";
+        var control = "/Mall/Store/GetProduct";
         ObjectJS.IsLoading = true;
         $.post(control, Params, function (data) {
             $(".data-loading").remove();
@@ -300,7 +300,7 @@
     ObjectJS.getAllCategory = function () {
         var _self = this;
         $(".category-box").append("<div class='data-loading'></div>");
-        Global.post("/StyleCenter/StyleCenter/GetEdjCateGory", null, function (data) {
+        Global.post("/Mall/Store/GetEdjCateGory", null, function (data) {
             $(".category-box .data-loading").remove();
             if (data.items.length > 0) {
                 for (var i = 0; i < data.items.length; i++) {

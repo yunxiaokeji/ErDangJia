@@ -95,7 +95,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
         /// <param name="orderid"></param>
         /// <param name="clientid"></param>
         /// <returns></returns>
-        public ActionResult StyleDetail(string orderid, string clientid)
+        public ActionResult StyleDetail(string orderid, string clientid="")
         {
             if (string.IsNullOrEmpty(orderid))
             {
@@ -126,19 +126,29 @@ namespace YXERP.Areas.StyleCenter.Controllers
             ViewBag.ContactName = cname;
             ViewBag.MobilePhone = mphone;
             ViewBag.Address = address;
-            var obj= OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
-            if (obj.error_code == 0)
+           
+            var obj = new ProductsBusiness().GetProductByIDForDetails(orderid);
+            ViewBag.Model = obj;
+            ViewBag.ClientID = obj.ClientID;
+            return View();
+        }
+        public JsonResult GetOrderAttrsList(string goodsid)
+        {
+            var result = OrderBusiness.BaseBusiness.GetOrdersAttrsList(goodsid);
+            if (result.error_code == 0)
             {
-                ViewBag.Model = obj.order;
-                ViewBag.ClientID = obj.order.clientID;
+                JsonDictionary.Add("items", result.attrList);
             }
             else
             {
-                ViewBag.Model=new IntFactory.Sdk.OrderEntity();
+                JsonDictionary.Add("items", "[]");
             }
-            return View();
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
-
         public JsonResult GetProcessCategorys(string zngcclientid)
         {
             var result = ClientBusiness.BaseBusiness.GetProcessCategorys(zngcclientid);
@@ -338,6 +348,73 @@ namespace YXERP.Areas.StyleCenter.Controllers
                 JsonDictionary.Add("result", 0);
                 JsonDictionary.Add("errMsg", result.error_message);
             }
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string entity, string goodsid, string goodscode,string goodsname, decimal totalFee = 0)
+        {
+            if (CurrentUser == null)
+            {
+                JsonDictionary.Add("result", -9);
+                JsonDictionary.Add("errMsg", "未登录请登陆后再提交");
+                return new JsonResult
+                {
+                    Data = JsonDictionary,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            var details = JsonConvert.DeserializeObject<List<IntFactory.Sdk.ProductDetailEntity>>(entity);
+            CloudSalesEntity.Users user = CurrentUser;
+
+            //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入 
+            string dids = OrderBusiness.BaseBusiness.CheckProductDetail(productid, details, price, CurrentUser.ClientID, user.UserID, goodsid, goodscode, goodsname);
+            if (string.IsNullOrEmpty(productid) || string.IsNullOrEmpty(dids))
+            {
+                JsonDictionary.Add("result", 0);
+                JsonDictionary.Add("errMsg", "获取产品失败，请稍后重试");
+                return new JsonResult
+                {
+                    Data = JsonDictionary,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
+            //2.生成采购单据 
+            string purid = StockBusiness.AddPurchaseDoc(productid, dids, provideid, totalFee, "", "", 2, user.UserID,
+                user.AgentID, user.ClientID);
+            if (string.IsNullOrEmpty(purid))
+            {
+                JsonDictionary.Add("result", 0);
+                JsonDictionary.Add("errMsg", "采购单生成失败，请稍后重试");
+                return new JsonResult
+                {
+                    Data = JsonDictionary,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            JsonDictionary.Add("PurchaseID", purid);
+            JsonDictionary.Add("result", 1);
+            ////3.生成智能工厂单据
+            //ord.details.ForEach(x =>
+            //{
+            //    x.remark = x.remark.Replace("[", "【").Replace("]", "】");
+            //});
+            //var result = OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
+            //        ord.clientID, purid, user.ClientID, ord.personName, ord.mobileTele, ord.cityCode, ord.address);
+            //if (!string.IsNullOrEmpty(result.id))
+            //{
+            //    JsonDictionary.Add("OtherOrderID", result.id);
+            //    JsonDictionary.Add("result", 1);
+            //}
+            //else
+            //{
+            //    JsonDictionary.Add("result", 0);
+            //    JsonDictionary.Add("errMsg", result.error_message);
+            //}
             return new JsonResult
             {
                 Data = JsonDictionary,

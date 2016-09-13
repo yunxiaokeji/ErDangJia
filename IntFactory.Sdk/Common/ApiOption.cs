@@ -62,6 +62,10 @@ namespace IntFactory.Sdk
         [Description("/api/order/getOrderDetailByID")]
         GetOrderDetailByID,
 
+        [Description("/api/order/getOrderAttrsListByGoodsID")]
+        GetOrderAttrsList,
+        [Description("/api/order/getOrderAttrsListByOrderID")]
+        GetOrderAttrsListByOrderID,
         /// <summary>
         /// 创建订单
         /// </summary>
@@ -86,7 +90,7 @@ namespace IntFactory.Sdk
         [Description("/api/client/getProcessCategorys")]
         GetProcessCategorys,
         /// <summary>
-        /// 分类
+        /// 所有分类
         /// </summary>
         [Description("/api/client/getAllCategorys")]
         GetAllCategorys,

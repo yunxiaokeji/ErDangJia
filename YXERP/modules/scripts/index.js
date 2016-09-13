@@ -566,7 +566,7 @@ define(function (require, exports, module) {
             $('#providerul').html(html);
             $('#providerul').find("li").click(function () {
                 var _this = $(this); 
-                $('#intfactoryhref').parent().attr("href", "/StyleCenter/StyleCenter/StyleCenter?id=" + _this.data("cmid"));
+                $('#intfactoryhref').parent().attr("href", "/Mall/Store/Goods?id=" + _this.data("cmid"));
                 $('#intfactoryhref').click();
             });
         });

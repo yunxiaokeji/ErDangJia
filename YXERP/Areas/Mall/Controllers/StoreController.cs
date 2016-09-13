@@ -4,36 +4,45 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using IntFactory.Sdk;
 using CloudSalesBusiness;
 using CloudSalesEnum;
 using Newtonsoft.Json;
 using CloudSalesEntity;
 
+using CloudSalesBusiness.Manage;
+using CloudSalesEntity.Manage;
+using YunXiaoService;
+
 namespace YXERP.Areas.Mall.Controllers
 {
     public class StoreController : YXERP.Controllers.BaseController
     {
-        
-        //
-        // GET: /IntFactoryOrder/
-        /// <summary>
-        /// 需求单下载
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public ActionResult DownOrder(string id)
-        { 
-            ViewBag.ClientID = id;
-            ViewBag.Items = ClientBusiness.BaseBusiness.GetClientCategorys("", EnumCategoryType.Order);
-            ViewBag.Categorys = ClientBusiness.BaseBusiness.GetProcessCategorys(id);
-            var clientid = "";
-            if (CurrentUser != null)
+
+        public ActionResult Index(string id)
+        {
+            if (string.IsNullOrEmpty(id))
             {
-                clientid = CurrentUser.ClientID;
+                return Redirect("/Home/login");
             }
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(clientid); 
-            return View();
+            if (!ProductService.IsExistsProvider(id, CurrentUser.ClientID) && id.ToLower() != CurrentUser.ClientID.ToLower())
+            {
+                var client = ClientBusiness.GetClientDetail(id);
+                string providerID = ProductService.AddProviders(client.CompanyName, client.ContactName,
+                    client.MobilePhone, "", client.CityCode, client.Address,
+                    "", id, client.ClientCode, "", CurrentUser.Client.AgentID, CurrentUser.Client.ClientID, 2);
+            }
+            if (YXERP.Common.Common.IsMobileDevice())
+            {
+                return Redirect("/M/Home/Index");
+            }
+            else
+            {
+                ViewBag.Url = GetbaseUrl();
+                ViewBag.ClientID = id; ;
+                var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
+                ViewBag.Client = client == null ? CurrentUser.Client : client;
+                return View("Goods");
+            }
         }
 
         /// <summary>
@@ -43,51 +52,53 @@ namespace YXERP.Areas.Mall.Controllers
         /// <returns></returns>
         public ActionResult Goods(string id)
         {
-            var Status = 0;
-            var clientid = ""; 
-            if (CurrentUser != null)
-            {
-                Status = 1;
-                clientid = CurrentUser.ClientID; 
-            }
-            else
-            {
-                Response.Write(
-                    "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
-                    GetbaseUrl() + "/Mall/Store/Goods?id=" + id + "';</script>");
-                Response.End();
-            }
-
             if (string.IsNullOrEmpty(id))
             {
-                Response.Write(
-                    "<script type='text/javascript'>location.href='/Home/login';</script>");
-                Response.End();
+                return Redirect("/Home/login");
+            }
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
+            if (!ProductService.IsExistsProvider(id, CurrentUser.ClientID) && id.ToLower() != CurrentUser.ClientID.ToLower())
+            {
+                string providerID = ProductService.AddProviders(client.CompanyName, client.ContactName,
+                    client.MobilePhone, "", client.CityCode, client.Address,
+                    "", id, client.ClientCode, "", CurrentUser.Client.AgentID, CurrentUser.Client.ClientID, 2);
+            }
+            if (YXERP.Common.Common.IsMobileDevice())
+            {
+                return Redirect("/M/Home/Index");
             }
             ViewBag.Url = GetbaseUrl();
-            ViewBag.ClientID = id;
-            ViewBag.LogStatus=Status;
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
+            ViewBag.ClientID = id;;
+            
             ViewBag.Client = client == null ? CurrentUser.Client : client;
             return View();
         }
+
+        //
+        // GET: /IntFactoryOrder/
+        /// <summary>
+        /// 需求单下载
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult DownOrder(string id)
+        {
+            ViewBag.ClientID = id;
+            ViewBag.Items = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientCategorys("", IntFactory.Sdk.EnumCategoryType.Order);
+            ViewBag.Categorys = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetProcessCategorys(id);
+            var clientid = "";
+            if (CurrentUser != null)
+            {
+                clientid = CurrentUser.ClientID;
+            }
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(clientid);
+            return View();
+        }
+
         public ActionResult CallBackView(string sign, string uid = "", string aid = "")
         { 
             return Redirect("/Mall/Store/Goods");
         } 
-
-        /// <summary>
-        /// 订购订单列表
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Index()
-        {
-            ViewBag.Type = (int)EnumDocType.RK;
-            ViewBag.ZNGCID = "";
-            ViewBag.SouceType = 2; 
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders("-1");
-            return View();
-        }
 
         /// <summary>
         /// 打样单详情
@@ -134,7 +145,7 @@ namespace YXERP.Areas.Mall.Controllers
         }
         public JsonResult GetOrderAttrsList(string goodsid)
         {
-            var result = OrderBusiness.BaseBusiness.GetOrdersAttrsList(goodsid);
+            var result = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersAttrsList(goodsid);
             if (result.error_code == 0)
             {
                 JsonDictionary.Add("items", result.attrList);
@@ -151,7 +162,7 @@ namespace YXERP.Areas.Mall.Controllers
         }
         public JsonResult GetProcessCategorys(string zngcclientid)
         {
-            var result = ClientBusiness.BaseBusiness.GetProcessCategorys(zngcclientid);
+            var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetProcessCategorys(zngcclientid);
             JsonDictionary.Add("items", result);
             return new JsonResult()
             {
@@ -161,8 +172,8 @@ namespace YXERP.Areas.Mall.Controllers
         }
 
         public JsonResult CreateOrder(string entity,string clientid,string userid="")
-        { 
-            AddResult result = OrderBusiness.BaseBusiness.CreateOrder(entity, clientid, userid);
+        {
+            IntFactory.Sdk.AddResult result = IntFactory.Sdk.OrderBusiness.BaseBusiness.CreateOrder(entity, clientid, userid);
             JsonDictionary.Add("id", result.id);
             JsonDictionary.Add("err_msg", result.error_message);
             return new JsonResult()
@@ -196,8 +207,8 @@ namespace YXERP.Areas.Mall.Controllers
         }
       
         public JsonResult GetAllCateGory()
-        { 
-            var result = ClientBusiness.BaseBusiness.GetAllCategory(1,EnumCategoryType.Order);
+        {
+            var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory(1, IntFactory.Sdk.EnumCategoryType.Order);
           
             JsonDictionary.Add("items", result); 
             return new JsonResult()
@@ -207,8 +218,8 @@ namespace YXERP.Areas.Mall.Controllers
             };
         }
         public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex,string categoryID="", string orderby = "", string beginPrice="",string endPrice="")
-        { 
-            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid, keyWords, categoryID, orderby, beginPrice, endPrice);
+        {
+            IntFactory.Sdk.OrderListResult item = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid, keyWords, categoryID, orderby, beginPrice, endPrice);
             JsonDictionary.Add("items", item.orders);
             JsonDictionary.Add("totalCount", item.totalCount);
             JsonDictionary.Add("pageCount", item.pageCount);
@@ -250,8 +261,8 @@ namespace YXERP.Areas.Mall.Controllers
         }
 
         public JsonResult GetZNGCCategorys(string categoryid)
-        { 
-            var obj = ClientBusiness.BaseBusiness.GetCategoryByID(categoryid);
+        {
+            var obj = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetCategoryByID(categoryid);
             JsonDictionary.Add("items", obj); 
             return new JsonResult
             {
@@ -261,8 +272,8 @@ namespace YXERP.Areas.Mall.Controllers
         }
 
         public JsonResult GetOrderDetailByID(string clientid, string orderid, string categoryid)
-        { 
-            var obj = OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
+        {
+            var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
             if (obj.error_code == 0)
             {
                 JsonDictionary.Add("items", obj.order); 
@@ -305,8 +316,8 @@ namespace YXERP.Areas.Mall.Controllers
 
             //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入
             string dids = "";
-           
-            string pid = OrderBusiness.BaseBusiness.ZNGCAddProduct(ord, user.AgentID, user.ClientID, user.UserID, ref dids);
+
+            string pid = IntFactory.Sdk.OrderBusiness.BaseBusiness.ZNGCAddProduct(ord, user.AgentID, user.ClientID, user.UserID, ref dids);
             if (string.IsNullOrEmpty(pid) || string.IsNullOrEmpty(dids))
             {
                 JsonDictionary.Add("result", 0);
@@ -336,7 +347,7 @@ namespace YXERP.Areas.Mall.Controllers
             { 
                 x.remark = x.remark.Replace("[", "【").Replace("]", "】");
             });
-            var result = OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
+            var result = IntFactory.Sdk.OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
                     ord.clientID, purid, user.ClientID,ord.personName, ord.mobileTele, ord.cityCode, ord.address);
             if (!string.IsNullOrEmpty(result.id))
             {
@@ -371,7 +382,7 @@ namespace YXERP.Areas.Mall.Controllers
             CloudSalesEntity.Users user = CurrentUser;
 
             //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入 
-            string dids = OrderBusiness.BaseBusiness.CheckProductDetail(productid, details, price, CurrentUser.ClientID, user.UserID, goodsid, goodscode, goodsname);
+            string dids = IntFactory.Sdk.OrderBusiness.BaseBusiness.CheckProductDetail(productid, details, price, CurrentUser.ClientID, user.UserID, goodsid, goodscode, goodsname);
             if (string.IsNullOrEmpty(productid) || string.IsNullOrEmpty(dids))
             {
                 JsonDictionary.Add("result", 0);

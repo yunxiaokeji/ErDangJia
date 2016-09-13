@@ -79,7 +79,8 @@
         </li>
         <li style="width:100%;">
             <span class="column-title">店铺地址：</span>
-            <a id="ksurl">@(ViewBag.BaseUrl)/Mall/Store/Goods?id=@(ViewBag.ClientID)</a>
+            @*id="ksurl"*@
+            <a  target="_blank" href="@(ViewBag.BaseUrl)/Mall/Store/Index/@(ViewBag.ClientID)">@(ViewBag.BaseUrl)/Mall/Store/Index/@(ViewBag.ClientID)</a>
         </li>
     </ul>
     <input id="ipturl" hidden="hidden" type="text" value="@(ViewBag.BaseUrl)"/>

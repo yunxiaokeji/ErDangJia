@@ -31,5 +31,11 @@ namespace YunXiaoService
         {
             return ProductsBusiness.BaseBusiness.AddProviders(name, contact, mobile, email, cityCode, address, remark, cmClientID, cmClientCode, operateID, agentid, clientID, type);
         }
+
+        public static bool IsExistsProvider(string cmClientID, string clientid)
+        {
+            object count = CommonBusiness.Select("Providers", "count(0)", " ClientID='" + clientid + "' and CMClientID ='" + cmClientID + "' ");
+            return Convert.ToInt32(count) > 0;
+        }
     }
 }

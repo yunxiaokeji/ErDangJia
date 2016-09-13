@@ -424,7 +424,6 @@
     <Content Include="Areas\M\Views\Account\Index.cshtml" />
     <Content Include="Areas\Mall\Views\Web.config" />
     <Content Include="Areas\Mall\Views\Store\DownOrder.cshtml" />
-    <Content Include="Areas\Mall\Views\Store\Index.cshtml" />
     <Content Include="Areas\Mall\Views\Store\Goods.cshtml" />
     <Content Include="Areas\Mall\Views\Store\GoodsDetail.cshtml" />
     <Content Include="Areas\Mall\Views\Shared\_Layout.cshtml" />

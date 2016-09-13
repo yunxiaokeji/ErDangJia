@@ -25,7 +25,7 @@ namespace YXERP.Controllers
 
             if (YXERP.Common.Common.IsMobileDevice())
             {
-                return Redirect("/M/Default/Index");
+                return Redirect("/M/Home/Index");
             }
             return View();
         }

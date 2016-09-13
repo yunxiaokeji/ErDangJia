@@ -4,8 +4,8 @@
     CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
 }
 @section css{
-    <link rel="stylesheet" href="/modules/stylecenter/css/stylecenter.css"/>
-    <link rel="shortcut icon" href="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/stylecenter/images/ico-cmlogo.png")">
+    <link rel="stylesheet" href="/modules/mall/css/stylecenter.css"/>
+    <link rel="shortcut icon" href="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/mall/images/ico-cmlogo.png")">
 
     <style>
         #cgbtn{color: #fff;}
@@ -16,7 +16,7 @@
 }
 @section scripts{
     <script type="text/javascript"> 
-        seajs.use(["/modules/stylecenter/scripts/orderslist"], function (obj) {
+        seajs.use(["/modules/mall/scripts/goodslist"], function (obj) {
             obj.init('@ViewBag.ClientID');
         });
     </script>
@@ -24,7 +24,7 @@
 <div style="height: 100px;">
     <div class="divcenter pTop5">
         <div class="left" id="imglogo">
-            <span class="left mTop10"><img src="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/stylecenter/images/ico-cmlogo.png")" style="width: 60px; height: 60px;"/></span>
+            <span class="left mTop10"><img src="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/mall/images/ico-cmlogo.png")" style="width: 60px; height: 60px;"/></span>
             <span class="left mTop20 " style="">
                 <a class="font16">@(client.CompanyName)</a><br/>
                 <a class="font9 tRight mLeft30 lineHeight30" style="font-style: italic;letter-spacing:3px;">&nbsp;  &nbsp;采购-管理就是如此简单</a> 

@@ -10,9 +10,9 @@ using CloudSalesEnum;
 using Newtonsoft.Json;
 using CloudSalesEntity;
 
-namespace YXERP.Areas.StyleCenter.Controllers
+namespace YXERP.Areas.Mall.Controllers
 {
-    public class StyleCenterController : YXERP.Controllers.BaseController
+    public class StoreController : YXERP.Controllers.BaseController
     {
         
         //
@@ -41,7 +41,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult StyleCenter(string id)
+        public ActionResult Goods(string id)
         {
             var Status = 0;
             var clientid = ""; 
@@ -54,7 +54,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
             {
                 Response.Write(
                     "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
-                    GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + id + "';</script>");
+                    GetbaseUrl() + "/Mall/Store/Goods?id=" + id + "';</script>");
                 Response.End();
             }
 
@@ -73,7 +73,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
         }
         public ActionResult CallBackView(string sign, string uid = "", string aid = "")
         { 
-            return Redirect("/StyleCenter/StyleCenter/StyleCenter");
+            return Redirect("/Mall/Store/Goods");
         } 
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
         /// <param name="orderid"></param>
         /// <param name="clientid"></param>
         /// <returns></returns>
-        public ActionResult StyleDetail(string orderid, string clientid="")
+        public ActionResult GoodsDetail(string orderid, string clientid="")
         {
             if (string.IsNullOrEmpty(orderid))
             {
@@ -116,7 +116,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
             {
                 Response.Write(
                     "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
-                    GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + clientid + "';</script>");
+                    GetbaseUrl() + "/Mall/Store/Goods?id=" + clientid + "';</script>");
                 Response.End();
             } 
             ViewBag.Url = GetbaseUrl();

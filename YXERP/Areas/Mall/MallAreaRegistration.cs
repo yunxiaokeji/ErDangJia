@@ -1,22 +1,22 @@
 ﻿using System.Web.Mvc;
 
-namespace YXERP.Areas.StyleCenter
+namespace YXERP.Areas.Mall
 {
-    public class StyleCenterAreaRegistration : AreaRegistration
+    public class MallAreaRegistration : AreaRegistration
     {
         public override string AreaName
         {
             get
             {
-                return "StyleCenter";
+                return "Mall";
             }
         }
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
-                "StyleCenter_default",
-                "StyleCenter/{controller}/{action}/{id}",
+                "Mall_default",
+                "Mall/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }
             );
         }

@@ -125,7 +125,7 @@
     //绑定颜色尺码
     ObjectJS.getOrderAttr = function () {
         var _self = this;
-        Global.post("/StyleCenter/StyleCenter/GetOrderAttrsList", { goodsid: _self.model.CMGoodsID }, function (data) {
+        Global.post("/Mall/Store/GetOrderAttrsList", { goodsid: _self.model.CMGoodsID }, function (data) {
             var chtml = "";
             var shtml = "";
             console.log(data);
@@ -200,7 +200,7 @@
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
         }
-        Global.post("/StyleCenter/StyleCenter/IsLogin", null, function (data) {
+        Global.post("/Mall/Store/IsLogin", null, function (data) {
             if (data.result) {
                 _self.showUserInfo();
             } else {
@@ -329,7 +329,7 @@
                 });
             }
         });
-        Global.post("/StyleCenter/StyleCenter/CreatePurchaseOrder",
+        Global.post("/Mall/Store/CreatePurchaseOrder",
             {
                 productid: _self.model.ProductID,
                 price: _self.model.Price,

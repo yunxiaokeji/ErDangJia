@@ -217,7 +217,7 @@
             companyName: $("#companyName").val(),
             name: $("#name").val(),
             loginPWD: $("#loginPWD").val(),
-            regType: location.href.indexOf("/Mall/Home/Index") > 0 ? 6 : 2
+            regType: location.href.indexOf("/Mall/Store") > 0 ? 6 : 2
         };
 
         Global.post("/Home/RegisterClient", Paras, function (data) {

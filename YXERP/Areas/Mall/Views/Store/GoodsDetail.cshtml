@@ -4,7 +4,7 @@
  }
 @section css{
     <link href="/modules/css/downorder.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/modules/stylecenter/css/stylecenter.css"/>
+    <link rel="stylesheet" href="/modules/mall/css/stylecenter.css"/>
     <style>
         .login-body{ background:url(/modules/images/loginMainBackground.jpg) no-repeat right bottom; background-size:cover; width:100%; height:100%;}
         .login-body .main{ margin:0px auto; width:320px;background-color:#fff;padding:15px 30px 60px 40px;opacity:0.9;
@@ -28,7 +28,7 @@
 }
 @section scripts{
     <script type="text/javascript">
-        seajs.use(["/modules/stylecenter/scripts/orderdetail"], function (obj) {
+        seajs.use(["/modules/mall/scripts/goodsdetail"], function (obj) {
             obj.init('@(ViewBag.ClientID)', '@Html.ToJSONString(model)','@(ViewBag.CityCode)');
         });
     </script>
@@ -44,7 +44,7 @@
                 <span class="left">供应商：@(model.ProviderName)</span>  
             </li>
         </ul>
-        <a class="btn-back right mTop5" title="返回" href="/StyleCenter/StyleCenter/StyleCenter"><span id="btnback" style="color: #ffffff;">返回</span></a>
+        <a class="btn-back right mTop5" title="返回" href="/Mall/Store/Goods?id=@(ViewBag.ClientID)"><span id="btnback" style="color: #ffffff;">返回</span></a>
         
     </div>
 

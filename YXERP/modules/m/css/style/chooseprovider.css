@@ -1,0 +1,15 @@
+﻿body { background-color:#fefefe;}
+header {
+width: 100%;
+background-color:#2F73B8;
+line-height: 50px;
+position: fixed;
+height: 50px;
+z-index: 1000;
+left:0;
+top:0;
+color:#BFD2F2;
+}
+.provider-list { margin-top:50px;}
+.provider-items li { line-height: 40px; border-bottom: 1px solid #ddd; text-indent: 10px;background-color:#fcfcfc; }
+.provider-items li a { color:#666;}

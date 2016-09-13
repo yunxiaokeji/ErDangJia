@@ -19,17 +19,17 @@
 
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
-    ObjectJS.init = function (providers, user) {
-        providers = JSON.parse(providers.replace(/&quot;/g, '"'));
-        for (var i = 0; i < providers.length; i++) {              
-            var p = providers[i];
-            if (p.CMClientID != "" && p.CMClientID != null) {
-                $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
-            }
-        }
+    ObjectJS.init = function (providerid, user) {
+        Params.clientid = providerid || '-1';
+        //providers = JSON.parse(providers.replace(/&quot;/g, '"'));
+        //for (var i = 0; i < providers.length; i++) {              
+        //    var p = providers[i];
+        //    if (p.CMClientID != "" && p.CMClientID != null) {
+        //        $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
+        //    }
+        //}
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;
-        Params.clientid = "-1";
 
         ObjectJS.bindEvent();
         ObjectJS.getList();

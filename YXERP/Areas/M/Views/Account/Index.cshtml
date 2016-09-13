@@ -17,24 +17,34 @@
         @user.Name
     </div>
 </div>
+<div class="module-items">
+    <ul>
+        <li>
+            <a href="/M/Home/ChooseProvider" style="display:block;">
+                <span class="iconfont">&#xe654;</span>
+                <span>&nbsp;重新选择供应商</span>
+            </a>
+        </li>
+    </ul>
+</div>
 <div class="center" style="margin-top:80px;">
     <a href="/Home/Logout" class="exit-sys">退出</a>
 </div>
 <ul class="task-status">
     <li data-status="0">
-        <a href="/M/Home/Index">
+        <a href="/M/Home/Index?providerID=@ViewBag.providerID&providerName=@ViewBag.providerName">
             <div class="ico-status iconfont">&#xe64e;</div>
             款式
         </a>
     </li>
     <li data-status="1">
-        <a href="/M/Orders/List">
+        <a href="/M/Orders/List?providerID=@ViewBag.providerID&providerName=@ViewBag.providerName">
             <div class="ico-status iconfont">&#xe629;</div>
             订单
         </a>
     </li>
     <li data-status="2" class="hover" style="width:34%;">
-        <a href="/M/Account/Index">
+        <a href="/M/Account/Index?providerID=@ViewBag.providerID&providerName=@ViewBag.providerName">
             <div class="ico-status iconfont">&#xe601;</div>
             我的
         </a>

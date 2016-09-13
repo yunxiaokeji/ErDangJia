@@ -3,33 +3,37 @@
     var Global = require("m_global"),
         doT = require("dot");
     var Params = {
-        clientid: "",/*款式中供应商ID*/
-        keyWords: "",
+        categoryID: "",
+        clientid: "",
+        beginPrice: "",
+        endPrice: "",
+        orderBy: "",
+        isAsc: false,
         pageIndex: 1,
         pageSize: 5,
-        orderby: ""
+        keyWords: ""
     };
-
     var ObjectJS = {};
     var cacheOrder = [];
     var isShowOrder = false;
 
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
-    ObjectJS.init = function (providers, user) {
-        providers = JSON.parse(providers.replace(/&quot;/g, '"'));
-        for (var i = 0; i < providers.length; i++) {              
-            var p = providers[i];
-            if (p.CMClientID != "" && p.CMClientID != null) {
-                $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
-            }
-        }
+    ObjectJS.init = function (providerid, user) {
+        Params.clientid = providerid || '-1';
+        //providers = JSON.parse(providers.replace(/&quot;/g, '"'));
+        //for (var i = 0; i < providers.length; i++) {              
+        //    var p = providers[i];
+        //    if (p.CMClientID != "" && p.CMClientID != null) {
+        //        $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
+        //    }
+        //}
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;
-        Params.clientid = "-1";
 
         ObjectJS.bindEvent();
-        ObjectJS.getList();  
+        ObjectJS.getList();
+        ObjectJS.getAllCategory();
     };
 
     ObjectJS.bindEvent = function () {
@@ -70,6 +74,9 @@
             }
             if (!$(e.target).parents().hasClass("btn-task-filtertype") && !$(e.target).hasClass("btn-task-filtertype")) {
                 $(".task-filtertype").slideUp(400);
+            }
+            if (!$(e.target).hasClass("show-category") && !$(e.target).hasClass("category-box") && !$(e.target).parents().hasClass("category-box")) {
+                $(".category-box").slideUp(400);
             }
         });
 
@@ -194,7 +201,7 @@
             }
             _self.data("isasc", isasc).attr("data-isactive", 1);
 
-            Params.orderby = orderbycloumn+(isasc==1?" asc":" desc");
+            Params.orderBy = orderbycloumn + (isasc == 1 ? " asc" : " desc");
             Params.pageIndex = 1;
             ObjectJS.getList();
         });
@@ -202,6 +209,32 @@
         //返回顶部
         $(".getback").click(function () {
             $('html, body').animate({ scrollTop: 0 }, 'slow');
+        });
+
+        $(".filter-price input[type='tel']").change(function () {
+            var _this = $(this);
+            if (!_this.val().isDouble()) {
+                _this.val('');
+                return false;
+            }
+        });
+
+        $('#btnPriceRange').click(function () {
+            var beginp = $('#beginPrice').val();
+            var endp = $('#endPrice').val();
+            if ((beginp != "" && isNaN(Number(beginp))) || (endp != "" && isNaN(Number(endp)))) {
+                alert('价格格式输入有误，请重新输入');
+            } else {
+                Params.beginPrice = beginp;
+                Params.endPrice = endp;
+                Params.pageIndex = 1;
+                ObjectJS.getList();
+            }
+        });
+
+        //显示选择分类弹出层
+        $(".show-category").click(function () {
+            $(".category-box").slideDown();
         });
     };
 
@@ -211,7 +244,7 @@
         }
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/style-list.html";
-        var control = "/StyleCenter/StyleCenter/GetProductList";
+        var control = "/StyleCenter/StyleCenter/GetProduct";
         ObjectJS.IsLoading = true;
         $.post(control, Params, function (data) {
             $(".data-loading").remove();
@@ -264,5 +297,46 @@
         });
     };
     
+    ObjectJS.getAllCategory = function () {
+        var _self = this;
+        $(".category-box").append("<div class='data-loading'></div>");
+        Global.post("/StyleCenter/StyleCenter/GetEdjCateGory", null, function (data) {
+            $(".category-box .data-loading").remove();
+            if (data.items.length > 0) {
+                for (var i = 0; i < data.items.length; i++) {
+                    var item = data.items[i];
+                    var obj = $("<div style='display:table;'></div>"),
+                        _categoryName = $('<div class="category-title" data-type="1" style="display:table-cell; line-height:30px;vertical-align:top;min-width:45px;" data-id="' + item.CategoryID + '"><span>' + item.CategoryName + '</span>：</div>'),
+                        _childObj = $('<ul class="row category-items" style="display:table-cell;"></ul>');
+                    for (var j = 0; j < item.ChildCategorys.length; j++) {
+                        var childcate = item.ChildCategorys[j];
+                        _childObj.append('<li class="item" data-id="' + childcate.CategoryID + '">' + childcate.CategoryName + '</li>');
+                    }
+                    obj.append(_categoryName).append(_childObj);
+                    $(".category-box").append(obj);
+                }
+                $(".category-items .item,.category-title").click(function () {
+                    var _this = $(this);
+                    $(".category-items .item,.category-title").removeClass('hover');
+                    _this.addClass('hover');
+                    var _desc = "";
+                    if (_this.data('type') == 1) {
+                        _desc = _this.find('span').text();
+                    } else {
+                        _desc = _this.parent().prev().find('span').text() + " > " + _this.text();
+                    }
+                    $(".show-category").text(_desc);
+                    Params.categoryID = _this.data("id");
+                    Params.pageIndex = 1;
+                    $(".category-box").slideUp();
+
+                    ObjectJS.getList();
+                });
+            } else {
+                $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");
+            }
+        });
+    }
+
     module.exports = ObjectJS;
 });

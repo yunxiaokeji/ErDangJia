@@ -1,0 +1,25 @@
+﻿@{
+    List<CloudSalesEntity.ProvidersEntity> list = (List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers;
+}
+@section css{
+    <link href="/modules/m/css/style/chooseprovider.css" rel="stylesheet" />
+}
+<header>
+    <div class="center font16">
+       选择供应商
+    </div>
+</header>
+<div class="provider-list">
+    <ul class="provider-items">
+        @for (int i = 0; i < list.Count; i++)
+        {
+            var item=list[i];
+            if (item.CMClientID != "" && item.CMClientID != null) 
+            {
+                <li>
+                    <a href="/m/home/index?providerID=@item.CMClientID&providerName=@item.Name" style="display:block;">@item.Name</a>
+                </li>   
+            }
+        }
+    </ul>
+</div>

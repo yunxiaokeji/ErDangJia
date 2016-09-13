@@ -679,12 +679,12 @@ namespace CloudSalesBusiness
 
         #region 产品
 
-        public List<Products> GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, bool isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
+        public List<Products> GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, bool isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid, int status=-1)
         {
             List<Products> list = new List<Products>();
 
             var dal = new ProductsDAL();
-            DataTable dt = dal.GetProductList(categoryid, beginprice, endprice, keyWords, orderby, isasc ? 1 : 0, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
+            DataTable dt = dal.GetProductList(categoryid, beginprice, endprice, keyWords, orderby, isasc ? 1 : 0, pageSize, pageIndex, ref totalCount, ref pageCount, clientid, status);
 
             foreach (DataRow dr in dt.Rows)
             {

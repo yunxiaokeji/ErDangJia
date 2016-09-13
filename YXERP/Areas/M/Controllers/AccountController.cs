@@ -11,8 +11,11 @@ namespace YXERP.Areas.M.Controllers
         //
         // GET: /M/Account/
 
-        public ActionResult Index()
+        public ActionResult Index(string providerID, string providerName)
         {
+            ViewBag.providerID = providerID;
+            ViewBag.providerName = string.IsNullOrEmpty(providerName) ? "--" : providerName;
+
             CloudSalesEntity.Users users = new CloudSalesEntity.Users();
             users.Name = CurrentUser.Name;
             users.MobilePhone = CurrentUser.MobilePhone;

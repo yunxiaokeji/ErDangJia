@@ -275,6 +275,7 @@
     <Content Include="modules\images\weixin-hover-38.png" />
     <Content Include="modules\images\wx-code.jpg" />
     <Content Include="modules\images\wx_logo64.png" />
+    <Content Include="modules\m\css\style\chooseprovider.css" />
     <Content Include="modules\stylecenter\css\stylecenter.css" />
     <Content Include="modules\stylecenter\images\ico-cmlogo.png" />
     <Content Include="modules\stylecenter\scripts\ordercreat.js" />
@@ -430,6 +431,7 @@
     <Content Include="Areas\StyleCenter\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\StyleCenter\Views\_ViewStart.cshtml" />
     <Content Include="Areas\M\Views\Orders\Detail.cshtml" />
+    <Content Include="Areas\M\Views\Home\ChooseProvider.cshtml" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

@@ -423,7 +423,6 @@
     <Content Include="Areas\M\Views\Home\Detail.cshtml" />
     <Content Include="Areas\M\Views\Orders\List.cshtml" />
     <Content Include="Areas\M\Views\Account\Index.cshtml" />
-    <Content Include="Areas\StyleCenter\Views\Web.config" />
     <Content Include="Areas\StyleCenter\Views\StyleCenter\DownOrder.cshtml" />
     <Content Include="Areas\StyleCenter\Views\StyleCenter\Index.cshtml" />
     <Content Include="Areas\StyleCenter\Views\StyleCenter\StyleCenter.cshtml" />
@@ -432,6 +431,7 @@
     <Content Include="Areas\StyleCenter\Views\_ViewStart.cshtml" />
     <Content Include="Areas\M\Views\Orders\Detail.cshtml" />
     <Content Include="Areas\M\Views\Home\ChooseProvider.cshtml" />
+    <Content Include="Areas\StyleCenter\Views\Web.config" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

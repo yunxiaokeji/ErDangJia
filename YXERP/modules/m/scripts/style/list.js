@@ -201,7 +201,7 @@
             }
             _self.data("isasc", isasc).attr("data-isactive", 1);
 
-            Params.orderby = orderbycloumn+(isasc==1?" asc":" desc");
+            Params.orderBy = orderbycloumn + (isasc == 1 ? " asc" : " desc");
             Params.pageIndex = 1;
             ObjectJS.getList();
         });
@@ -300,30 +300,37 @@
     ObjectJS.getAllCategory = function () {
         var _self = this;
         $(".category-box").append("<div class='data-loading'></div>");
-        Global.post("/StyleCenter/StyleCenter/GetAllCateGory", null, function (data) {
+        Global.post("/StyleCenter/StyleCenter/GetEdjCateGory", null, function (data) {
             $(".category-box .data-loading").remove();
             if (data.items.length > 0) {
                 for (var i = 0; i < data.items.length; i++) {
                     var item = data.items[i];
                     var obj = $("<div style='display:table;'></div>"),
-                        _categoryName = $('<div style="display:table-cell; line-height:30px;vertical-align:top;min-width:45px;" data-id="' + item.CategoryID + '">' + item.CategoryName + '：</div>'),
+                        _categoryName = $('<div class="category-title" data-type="1" style="display:table-cell; line-height:30px;vertical-align:top;min-width:45px;" data-id="' + item.CategoryID + '"><span>' + item.CategoryName + '</span>：</div>'),
                         _childObj = $('<ul class="row category-items" style="display:table-cell;"></ul>');
-                    for (var j = 0; j < item.ChildCategory.length; j++) {
-                        var childcate = item.ChildCategory[j];
+                    for (var j = 0; j < item.ChildCategorys.length; j++) {
+                        var childcate = item.ChildCategorys[j];
                         _childObj.append('<li class="item" data-id="' + childcate.CategoryID + '">' + childcate.CategoryName + '</li>');
                     }
                     obj.append(_categoryName).append(_childObj);
                     $(".category-box").append(obj);
                 }
-                $(".category-items .item").click(function () {
+                $(".category-items .item,.category-title").click(function () {
                     var _this = $(this);
-                    var _desc = _this.parent().prev().text() + "> " + _this.text();
-                    $(".show-category").text(_desc);
-
-                    $(".category-items .item").removeClass('hover');
+                    $(".category-items .item,.category-title").removeClass('hover');
                     _this.addClass('hover');
-                    Params.categoryID = "";//$(this).data("id")
+                    var _desc = "";
+                    if (_this.data('type') == 1) {
+                        _desc = _this.find('span').text();
+                    } else {
+                        _desc = _this.parent().prev().find('span').text() + " > " + _this.text();
+                    }
+                    $(".show-category").text(_desc);
+                    Params.categoryID = _this.data("id");
+                    Params.pageIndex = 1;
                     $(".category-box").slideUp();
+
+                    ObjectJS.getList();
                 });
             } else {
                 $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");

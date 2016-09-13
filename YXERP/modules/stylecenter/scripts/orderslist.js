@@ -119,6 +119,7 @@
             Params.categoryID = '';
             _self.getProducts();
         });
+
         $('#btnPriceRange').click(function () { 
             var beginp = $('#beginprice').val();
             var endp = $('#endprice').val();

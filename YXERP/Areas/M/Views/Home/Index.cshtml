@@ -41,24 +41,29 @@
     </div>
 </div>
 <div class="filter-list">
-    <div class="sort-item mLeft10 hover" data-isactive="1" data-orderbycloumn="goods.CreateTime">上架时间
+    <div class="sort-item mLeft10 hover" data-isactive="1" data-orderbycloumn="p.CreateTime">上架时间
         <span class="asc"></span>
         <span class="desc hover"></span>
     </div>
-    <div class="sort-item mLeft20" style="width:60px;" data-orderbycloumn="goods.Price">价格
+    <div class="sort-item mLeft20" style="width:60px;" data-orderbycloumn="p.Price">价格
          <span class="asc"></span>
         <span class="desc"></span>
     </div>
-    <div class="sort-item mLeft20" style="width:60px;" data-orderbycloumn="goods.SaleCount">销量
+    <div class="sort-item mLeft20" style="width:60px;" data-orderbycloumn="p.SaleCount">销量
          <span class="asc"></span>
         <span class="desc"></span>
     </div>
     <div class="clear"></div>
 </div>
 <div class="filter-category row">
-    <div class="show-category mLeft10">
+    <div class="show-category mLeft10 left block-item">
         选择分类
-
+    </div>
+    <div class="right mRight10 mTop10 filter-price">
+        <input type="tel" id="beginPrice" spellcheck="false" placeholder="￥" />
+        -
+        <input type="tel" id="endPrice" spellcheck="false" placeholder="￥" />
+        <div class="btn" id="btnPriceRange">确定</div>
     </div>
     <div class="category-box hide">
     </div>

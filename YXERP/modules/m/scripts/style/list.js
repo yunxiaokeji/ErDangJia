@@ -211,6 +211,27 @@
             $('html, body').animate({ scrollTop: 0 }, 'slow');
         });
 
+        $(".filter-price input[type='tel']").change(function () {
+            var _this = $(this);
+            if (!_this.val().isDouble()) {
+                _this.val('');
+                return false;
+            }
+        });
+
+        $('#btnPriceRange').click(function () {
+            var beginp = $('#beginPrice').val();
+            var endp = $('#endPrice').val();
+            if ((beginp != "" && isNaN(Number(beginp))) || (endp != "" && isNaN(Number(endp)))) {
+                alert('价格格式输入有误，请重新输入');
+            } else {
+                Params.beginPrice = beginp;
+                Params.endPrice = endp;
+                Params.pageIndex = 1;
+                ObjectJS.getList();
+            }
+        });
+
         //显示选择分类弹出层
         $(".show-category").click(function () {
             $(".category-box").slideDown();
@@ -285,7 +306,7 @@
                 for (var i = 0; i < data.items.length; i++) {
                     var item = data.items[i];
                     var obj = $("<div style='display:table;'></div>"),
-                        _categoryName = $('<div style="display:table-cell; line-height:30px;vertical-align:top;min-width:50px;" data-id="' + item.CategoryID + '">' + item.CategoryName + '：</div>'),
+                        _categoryName = $('<div style="display:table-cell; line-height:30px;vertical-align:top;min-width:45px;" data-id="' + item.CategoryID + '">' + item.CategoryName + '：</div>'),
                         _childObj = $('<ul class="row category-items" style="display:table-cell;"></ul>');
                     for (var j = 0; j < item.ChildCategory.length; j++) {
                         var childcate = item.ChildCategory[j];
@@ -301,7 +322,7 @@
 
                     $(".category-items .item").removeClass('hover');
                     _this.addClass('hover');
-                    Params.categoryID = $(this).data("id");
+                    Params.categoryID = "";//$(this).data("id")
                     $(".category-box").slideUp();
                 });
             } else {

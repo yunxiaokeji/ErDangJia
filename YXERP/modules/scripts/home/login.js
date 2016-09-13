@@ -44,7 +44,11 @@ define(function (require, exports, module) {
                 $(".registerErr").html("请输入密码").slideDown();
                 return;
             }
-
+            if (_self.bindAccountType == 4) {
+                $("#btnLogin").html("绑定中...").attr("disabled", "disabled");
+            } else {
+                $("#btnLogin").html("登录中...").attr("disabled", "disabled");
+            }
             $(this).html("登录中...").attr("disabled", "disabled");
             Global.post("/Home/UserLogin", {
                 userName: $("#iptUserName").val(),
@@ -54,16 +58,18 @@ define(function (require, exports, module) {
                 bindAccountType: _self.bindAccountType
             },
             function (data) {
-                $("#btnLogin").html("登录").removeAttr("disabled");
+                if (_self.bindAccountType == 4) {
+                    $("#btnLogin").html("绑定").removeAttr("disabled");
+                } else {
+                    $("#btnLogin").html("登录").removeAttr("disabled");
+                }
+                
 
                 if (data.result == 1) {
                     if (_self.bindAccountType == 10000) {
                         _self.returnUrl += _self.returnUrl.indexOf('?') > -1 ? "&sign=" + data.sign + "&uid=" + data.uid + "&aid=" + data.aid : "?sign=" + data.sign + "&uid=" + data.uid + "&aid=" + data.aid;
                     }
                     if (_self.returnUrl) {
-                        //if (_self.returnUrl.indexOf('IntFactoryModel') > -1) {
-                        //    _self.returnUrl += _self.returnUrl.indexOf('?') > 1 ? "&uid=" + data.uid + "&aid=" + data.aid : "?uid=" + data.uid + "&aid=" + data.aid;
-                        //}
                         location.href = _self.returnUrl;
                     }
                     else {

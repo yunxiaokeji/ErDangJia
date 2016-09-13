@@ -42,7 +42,7 @@
                     <input type="password" class="input icoUserPwd" id="iptPwd"/>
                     <div class="txtBoxPassword">请输入密码</div>
                 </div>
-                <div class="btnLogin mTop20" id="btnLogin">登录</div>
+                <div class="btnLogin mTop20" id="btnLogin">@(ViewBag.BindAccountType != 4?"登录":"绑定")</div>
                 <div class="remember-box ">
                     <div class="cb-remember-password ico-check ">
                         一周内保持登录

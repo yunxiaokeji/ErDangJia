@@ -42,6 +42,12 @@ namespace YXERP.Controllers
 
         public ActionResult Login(string ReturnUrl, int Status = 0, string OtherID = "", string name = "", int BindAccountType = 0)
         {
+
+            if (Session["ClientManager"] != null)
+            {
+                return Redirect("/Default/Index");
+            }
+
             ViewBag.Status = Status;
             string otherid = "";
             //获取OtherSysID
@@ -52,10 +58,7 @@ namespace YXERP.Controllers
             ViewBag.OtherID = otherid;
             ViewBag.BindAccountType = BindAccountType;
             ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
-            if (Session["ClientManager"] != null)
-            {
-                return Redirect("/Default/Index");
-            }
+            
             HttpCookie cook = Request.Cookies["yunxiao_erp_user"];
             if (cook != null)
             {
@@ -75,14 +78,6 @@ namespace YXERP.Controllers
                     ViewBag.UserName = cook["username"];
                 }
             }
-            return View();
-        }
-
-        public ActionResult SelectLogin(string ReturnUrl, int Status = 0, string otherid = "")
-        {
-            ViewBag.OtherID = otherid;
-            ViewBag.Status = Status;
-            ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }
 
@@ -115,12 +110,7 @@ namespace YXERP.Controllers
             {
                 if (sign.Equals(YXERP.Common.Signature.GetSignature(Common.Common.YXAgentID, Common.Common.YXClientID, ReturnUrl), StringComparison.OrdinalIgnoreCase))
                 {
-                    ViewBag.Status = 0;
-                    ViewBag.ReturnUrl = ReturnUrl ?? string.Empty;
-                    ViewBag.BindAccountType = 10000;
-                    var otherid = Common.Common.GetQueryString("id", ReturnUrl); 
-                    ViewBag.OtherID = otherid; 
-                    return View("SelectLogin"); 
+                    return View("Login");
                 }
             }
 
@@ -311,6 +301,10 @@ namespace YXERP.Controllers
 
         public ActionResult CMLogin(string ReturnUrl = "")
         {
+            if (Session["ClientManager"] != null)
+            {
+                return Redirect("/Default/Index");
+            }
             return Redirect(IntFactory.Sdk.OauthBusiness.GetAuthorize(ReturnUrl));
         }
 
@@ -441,7 +435,7 @@ namespace YXERP.Controllers
                         if (Session["CMTokenInfo"] != null)
                         {
                             var user = (Users)Session["CMTokenInfo"];
-                            OrganizationBusiness.BindOtherAccount(EnumAccountType.ZNGC, model.UserID, user.MDProjectID, user.MDUserID, model.ClientID, model.AgentID);
+                            string errinfo = OrganizationBusiness.BindOtherAccount(EnumAccountType.ZNGC, model.UserID, user.MDProjectID, user.MDUserID, model.ClientID, model.AgentID);
                             AddProvider(bindAccountType, user.MDProjectID, model.ClientID);
                         }
                     }
@@ -459,9 +453,6 @@ namespace YXERP.Controllers
                         result = 11;
                     }
                     Common.Common.CachePwdErrorUsers.Remove(userName);
-                    resultObj.Add("uid", model.UserID);
-                    resultObj.Add("aid", model.AgentID);
-                    resultObj.Add("id", model.ClientID);
                 }
                 else
                 {
@@ -491,7 +482,6 @@ namespace YXERP.Controllers
 
                         Common.Common.CachePwdErrorUsers[userName] = pwdErrorUser;
                     }
-
                 }
             }
             else

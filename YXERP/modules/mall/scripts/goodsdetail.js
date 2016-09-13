@@ -2,19 +2,16 @@
     var City = require("city"), CityInvoice,
         Verify = require("verify"), VerifyInvoice,
         Global = require("global"),
-        doT = require("dot"),
-        Easydialog = require("easydialog"),
-        Upload = require("upload");
+        Easydialog = require("easydialog");
     require("smartzoom");
     require("pager"); 
 
-    var ObjectJS = {}, CacheItems=[];
+    var ObjectJS = {};
 
     ObjectJS.init = function (clientid,  model,citycode) {
         var _self = this;
         _self.clientid = clientid;
-        _self.model = JSON.parse(model.replace(/&quot;/g, '"')); 
-        console.log(_self.model);
+        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));  
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
         _self.getOrderAttr();
@@ -127,20 +124,18 @@
         var _self = this;
         Global.post("/Mall/Store/GetOrderAttrsList", { goodsid: _self.model.CMGoodsID }, function (data) {
             var chtml = "";
-            var shtml = "";
-            console.log(data);
+            var shtml = ""; 
             for (var i = 0; i < data.items.length; i++) {
                 var item = data.items[i]; 
                 if (item.AttrType == 2) {
-                    chtml += '<li data-id="' + item.OrderAttrID + '" data-remark="' + item.AttrName + '" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</li>';
+                    chtml += '<li class="left" data-id="' + item.OrderAttrID + '" data-remark="' + item.AttrName + '" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</li>';
                 } else {
                     if (i == (data.items.length - 1)) {
                         shtml += '<tr class="last-row" data-remark="' + item.AttrName + '">';
                     } else {
                         shtml += '<tr data-remark="' + item.AttrName + '">';
                     }
-                    shtml += 
-                        '<td class="name" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</td>' +
+                    shtml += '<td class="name" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</td>' +
                         '<td class="price">' + item.FinalPrice.toFixed(2) + '元</td>' +
                         '<td class="center"><div class="choose-quantity left">' +
                         '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;">-</span>' +
@@ -152,7 +147,10 @@
             }
             $('#colorlist').html(chtml);
             $('#sizelist').html(shtml);
-
+            if (shtml != ""){
+                $('.sizediv').addClass("linetopbottom");
+                $('#btnSubmit').show();
+            } 
             $('#colorlist li').click(function() {
                 if ($(this).hasClass("hover")) {
                     $(this).removeClass("hover");
@@ -173,12 +171,20 @@
                 if (_this.next().val() != 0) {
                     _this.next().val(parseInt(_this.next().val()) - 1);
                 }
+            }).mouseover(function () {
+                $(this).next().addClass("hover");
+            }).mouseout(function () {
+                $(this).next().removeClass("hover");
             });
             $('#sizelist .quantity-add').click(function () {
                 var _this = $(this);
                 if (_this.prev().val() != "") {
                     _this.prev().val(parseInt(_this.prev().val()) + 1);
                 }
+            }).mouseover(function () {
+                $(this).prev().addClass("hover");
+            }).mouseout(function () {
+                $(this).prev().removeClass("hover");
             });
         });
     }
@@ -200,12 +206,13 @@
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
         }
-        Global.post("/Mall/Store/IsLogin", null, function (data) {
-            if (data.result) {
-                _self.showUserInfo();
-            } else {
-                alert("请登陆后，再提交信息");
-                return false;
+        _self.showUserInfo();
+        //Global.post("/Mall/Store/IsLogin", null, function (data) {
+        //    if (data.result) {
+        //        _self.showUserInfo();
+        //    } else {
+        //        alert("请登陆后，再提交信息");
+        //        return false;
                 //$('#orderlogin-box').empty();
                 //var openhtml = '<div class="login-body"><div class="main"><div class="login">' +
                 //    '<div class="registerErr hide"></div>' +
@@ -285,8 +292,8 @@
                 //        _this.removeClass("ico-checked").addClass("ico-check");
                 //    }
                 //});
-            }
-        });
+        //    }
+        //});
         $('.bottombtn').bind('click', function () { _self.savePDT() });
     }
     ObjectJS.showUserInfo = function () {
@@ -316,7 +323,7 @@
         var _self = this; 
         //大货单遍历下单明细 
         var details = [];
-        $(".child-product-table .quantity").each(function () {
+        $("#sizelist .quantity").each(function () {
             var _this = $(this);
             if (_this.val() > 0) {
                 $("#colorlist li").each(function() {
@@ -345,13 +352,11 @@
                         $('#btnback').click();
                     },
                     function () {
-                        $('#btndetail').parent().attr("href", $('#ipturl').val() + '/Purchase/DocDetail/' + data.PurchaseID);
-                        //window.open($('#ipturl').val() + $('#btndetail').parent().data("url") + "PurchaseID", "", "fullscreen=1");
-
+                        $('#btndetail').parent().attr("href", $('#ipturl').val() + '/Purchase/DocDetail/' + data.PurchaseID); 
                         $('#btndetail').click();
                     });
             } else {
-                alert(data.error_message);
+                alert(data.errMsg);
             }
         });
     }

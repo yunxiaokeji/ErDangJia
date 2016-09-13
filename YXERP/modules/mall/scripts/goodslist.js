@@ -23,21 +23,13 @@
     ObjectJS.init = function (clientid) {
         var _self = this;
         _self.clientid = clientid;
-        _self.providers = [];//JSON.parse(providers.replace(/&quot;/g, '"')); 
+        _self.providers = [];
         _self.bindEvent();  
     } 
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
-        var providerids = _self.clientid == "" ? "-1" : _self.clientid;
-        //for (var t = 0; t < _self.providers.length; t++) {
-        //    if (_self.providers[t].CMClientID != "" && _self.providers[t].CMClientID != null) {
-        //        providerids += "''" + _self.providers[t].CMClientID + "'',";
-        //    }
-        //} 
-        //if (providerids != "") {
-        //    providerids = providerids.substring(2, providerids.length - 3);
-        //} 
+        var providerids = _self.clientid == "" ? "-1" : _self.clientid; 
         Params.clientid = providerids;
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({

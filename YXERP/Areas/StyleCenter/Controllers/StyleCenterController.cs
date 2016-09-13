@@ -67,8 +67,8 @@ namespace YXERP.Areas.StyleCenter.Controllers
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = id;
             ViewBag.LogStatus=Status;
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(clientid); 
-            
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
+            ViewBag.Client = client == null ? CurrentUser.Client : client;
             return View();
         }
         public ActionResult CallBackView(string sign, string uid = "", string aid = "")
@@ -118,7 +118,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
                     "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
                     GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + clientid + "';</script>");
                 Response.End();
-            }
+            } 
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;
@@ -208,7 +208,17 @@ namespace YXERP.Areas.StyleCenter.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
+        public JsonResult GetEdjCateGory()
+        {
+            var result = new ProductsBusiness().GetCategorys(CurrentUser.ClientID);
+            result = result.Where(x => string.IsNullOrEmpty(x.PID)).ToList();
+            JsonDictionary.Add("items", result);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
         public JsonResult GetProduct(string clientid, string keyWords, int pageSize, int pageIndex, bool isAsc, string categoryID = "", string orderby = "", string beginPrice = "", string endPrice = "")
         {
             int pageCount = 0;
@@ -218,7 +228,7 @@ namespace YXERP.Areas.StyleCenter.Controllers
                 clientid = CurrentUser.ClientID;
             } 
             List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords,
-                   orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
+                   orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid,1);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);

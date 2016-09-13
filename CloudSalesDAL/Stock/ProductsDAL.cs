@@ -487,7 +487,7 @@ namespace CloudSalesDAL
 
         #region 产品
 
-        public DataTable GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, int isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
+        public DataTable GetProductList(string categoryid, string beginprice, string endprice, string keyWords, string orderby, int isasc, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID, int status)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@totalCount",SqlDbType.Int),
@@ -499,6 +499,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@CategoryID",categoryid),
                                        new SqlParameter("@keyWords",keyWords),
                                        new SqlParameter("@pageSize",pageSize),
+                                       new SqlParameter("@Status",status),
                                        new SqlParameter("@pageIndex",pageIndex),
                                        new SqlParameter("@ClientID",clientID)
                                        

@@ -583,9 +583,7 @@ namespace CloudSalesBusiness
         public static string BindOtherAccount(EnumAccountType accountType, string userid, string projectid,
             string accountname, string clientid, string agentid)
         {
-            string mes = "";
-            mes=OrganizationDAL.BaseProvider.BindOtherAccount((int)accountType, userid, projectid, accountname, clientid,
-                agentid);
+            string mes = OrganizationDAL.BaseProvider.BindOtherAccount((int)accountType, userid, projectid, accountname, clientid, agentid);
             if (string.IsNullOrEmpty(mes))
             {
                 if (UserActList.ContainsKey(userid))

@@ -49,25 +49,15 @@ border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radi
 
 .other-account { border-top:dashed 1px #999; margin-top:20px; position:relative; }
 
-.other-account .other-text { text-align:center; top:-10px; position:absolute; left:115px; color:#666; background-color:#FCFCFC; }
+.other-account .accounts { height:40px; margin-top:10px; }
 
-.other-account .accounts { height:40px; margin-top:20px; text-align:center; }
+.other-account .accounts a { display:inline-block; }
+.other-account .accounts a span{ height:20px; line-height:20px; }
+.other-account .accounts .logo{ height:20px; width:20px; float:left; border-radius:10px; background-size: cover;}
 
-.other-account .accounts a, .other-account .accounts img{ height:40px; width:40px;display:inline-block; border-radius:20px;}
-
-.accounts .mingdao {background:url(/Content/homeico/mingdao.png) no-repeat; }
-
-.accounts .mingdao:hover {background:url(/Content/homeico/mingdao-hover.png) no-repeat; }
-
-.accounts .account-weixin {background:url(/modules/images/weixin-38.png) no-repeat center  center ;background-size: 37px 37px; } 
-.accounts .account-weixin:hover{background:url(/modules/images/weixin-hover-38.png) no-repeat center  center ;background-size:37px 37px;}
-
-.accounts .account-changmeng {background:url(/modules/images/ico-changmeng.png) no-repeat center  center ;background-size: 42px 42px; } 
-.accounts .account-changmeng:hover{background:url(/modules/images/ico-changmenghover.png) no-repeat center  center ;background-size: 42px 42px;}
-
-/*.accounts .account-weixin {background-color:#ccc; }
-
-.accounts .account-weixin:hover {background-color:#3eb94e; }*/
+.accounts .mingdao {background:url(/Content/homeico/mingdao-hover.png) no-repeat; }
+.accounts .account-weixin {background:url(/modules/images/weixin-hover-38.png) no-repeat center  center ;background-size: 37px 37px; } 
+.accounts .account-changmeng {background:url(/modules/images/ico-changmenghover.png) no-repeat center  center ;background-size: 42px 42px; } 
 
 .login-body .copyright{ position:fixed; bottom:20px; right:20px; color:#333; text-align:right}
 

@@ -27,7 +27,7 @@ namespace YunXiaoService
         /// <param name="agentid">代理商ID</param>
         /// <param name="clientID">客户端ID</param>
         /// <returns></returns>
-        public static string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID,int type=0)
+        public static string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID, int type)
         {
             return ProductsBusiness.BaseBusiness.AddProviders(name, contact, mobile, email, cityCode, address, remark, cmClientID, cmClientCode, operateID, agentid, clientID, type);
         }

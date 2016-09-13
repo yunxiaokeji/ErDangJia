@@ -32,7 +32,7 @@
             <a class="btnRegister right" href="/Home/Register?id=@(ViewBag.OtherID)&type=@(ViewBag.BindAccountType)&ReturnUrl=@(ViewBag.ReturnUrl)">注册</a>
        </div>
         <div class="main">
-             <div class="loginTitle">登录</div>
+            <div class="loginTitle">登录</div>
             <div class="login">
                 <div class="registerErr hide"></div>
                 <div class="loginbar">
@@ -42,27 +42,32 @@
                     <input type="password" class="input icoUserPwd" id="iptPwd"/>
                     <div class="txtBoxPassword">请输入密码</div>
                 </div>
-                <div class="remember-box">
+                <div class="btnLogin mTop20" id="btnLogin">登录</div>
+                <div class="remember-box ">
                     <div class="cb-remember-password ico-check ">
                         一周内保持登录
                     </div>
                     <div class="right pRight5"><a href="/Home/FindPassword" class="linkRegister">忘记密码?</a></div>
                     <div class="clear"></div>
                 </div>
-
-                <div class="btnLogin" id="btnLogin">登录</div>
-                @{
-                    if (ViewBag.BindAccountType != 10000)
-                    {
-                        <div class="other-account">
-                            <div class="other-text">使用其他账号登录</div>
-                            <div class="accounts">
-                                <a class="mingdao " href="/Home/MDLogin?ReturnUrl=@ViewBag.ReturnUrl"></a>
-                                <a class="account-weixin mLeft10" href="/Home/WeiXinLogin?ReturnUrl=@ViewBag.ReturnUrl" title="微信账号登录"></a>
-                                <a class="account-changmeng mLeft10" href="/Home/CMLogin?ReturnUrl=@ViewBag.ReturnUrl" title="智能工厂账号登录"></a>
-                            </div>
+                @if (ViewBag.BindAccountType != 4)
+                {
+                    <div class="other-account">
+                        <div class="accounts">
+                            <a class="" href="/Home/MDLogin?ReturnUrl=@ViewBag.ReturnUrl">
+                                <span class="logo mingdao"></span>
+                                <span class="left mLeft5">明道登录</span>
+                            </a>
+                            <a class="mLeft10" href="/Home/WeiXinLogin?ReturnUrl=@ViewBag.ReturnUrl">
+                                <span class="logo account-weixin"></span>
+                                <span class="left mLeft5">微信登录</span>
+                            </a>
+                            <a class="mLeft10" href="/Home/CMLogin?ReturnUrl=@ViewBag.ReturnUrl">
+                                <span class="logo account-changmeng"></span>
+                                <span class="left mLeft5">厂盟登录</span>
+                            </a>
                         </div>
-                    }
+                    </div>
                 }
             </div>
         </div>

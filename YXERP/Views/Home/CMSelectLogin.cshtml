@@ -11,18 +11,14 @@
     <span class="left mLeft10">@ViewBag.CompanyName</span>
     <div class="clear"></div>
 </div>
-<div class="select-login" style="width:680px;">
-    <div class="left ali-login">
-        <div><img src="/modules/images/ico-changmeng-login.png" /></div>
-        <div class="des">尚未注册二当家账户</div>
-        <div onclick="location.href='/Home/CMRegister'" class="btn">注册并绑定</div>
+<div class="select-login center">
+    <div class="header-txt">
+        您的工厂<span class="bolder">@ViewBag.CompanyName</span>尚未绑定<span class="bolder">二当家</span>账号
     </div>
-
-    <div class="left bind-account">
-        <div><img src="/modules/images/ico-account-login.png" /></div>
-        <div class="des">已注册二当家账户</div>
-        <div class="btn" onclick="location.href='/Home/Login?BindAccountType=1'" >绑定已有账户</div>
+    <div class="header-title">
+        请选择绑定已有帐户，或创建新账户
     </div>
-    <div class="clear"></div>
+    <div class="btn-bind btn-btn" onclick="location.href='/Home/Login?BindAccountType=4'" >绑定已有二当家账户</div>
+    <div class="btn-register btn-btn" onclick="location.href='/Home/CMRegister'">注册新账户</div>
 </div>
 

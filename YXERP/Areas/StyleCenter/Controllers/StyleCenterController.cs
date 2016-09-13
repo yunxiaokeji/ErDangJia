@@ -12,7 +12,7 @@ using CloudSalesEntity;
 
 namespace YXERP.Areas.StyleCenter.Controllers
 {
-    public class StyleCenterController : BaseController
+    public class StyleCenterController : YXERP.Controllers.BaseController
     {
         
         //
@@ -44,21 +44,31 @@ namespace YXERP.Areas.StyleCenter.Controllers
         public ActionResult StyleCenter(string id)
         {
             var Status = 0;
-            var clientid = "";
+            var clientid = ""; 
             if (CurrentUser != null)
             {
                 Status = 1;
-                clientid = CurrentUser.ClientID;
+                clientid = CurrentUser.ClientID; 
             }
             else
             {
-                Response.Write("<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" + GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + id + "';</script>");
-                Response.End(); 
+                Response.Write(
+                    "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
+                    GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + id + "';</script>");
+                Response.End();
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+                Response.Write(
+                    "<script type='text/javascript'>location.href='/Home/login';</script>");
+                Response.End();
             }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = id;
             ViewBag.LogStatus=Status;
             ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(clientid); 
+            
             return View();
         }
         public ActionResult CallBackView(string sign, string uid = "", string aid = "")
@@ -87,6 +97,12 @@ namespace YXERP.Areas.StyleCenter.Controllers
         /// <returns></returns>
         public ActionResult StyleDetail(string orderid, string clientid)
         {
+            if (string.IsNullOrEmpty(orderid))
+            {
+                Response.Write(
+                    "<script type='text/javascript'>location.href='/Home/login';</script>");
+                Response.End();
+            }
             string ccode, address, mphone,cname;
             ccode = address = mphone = cname = "";
             if (CurrentUser != null)
@@ -95,6 +111,13 @@ namespace YXERP.Areas.StyleCenter.Controllers
                 address = CurrentUser.Client.Address;
                 mphone = CurrentUser.Client.MobilePhone;
                 cname = CurrentUser.Client.ContactName;
+            }
+            else
+            {
+                Response.Write(
+                    "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
+                    GetbaseUrl() + "/StyleCenter/StyleCenter/StyleCenter?id=" + clientid + "';</script>");
+                Response.End();
             }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = clientid;

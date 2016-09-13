@@ -23,14 +23,19 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Home/Login");
             }
-            return Redirect("/Default/Index");
+            if (YXERP.Common.Common.IsMobileDevice())
+            {
+                return Redirect("/M/Default/Index");
+            }
+            else
+            {
+                return Redirect("/Default/Index");
+            }
         }
 
-        public ActionResult Register(string id = "", int type = 2, string ReturnUrl = "")
+        public ActionResult Register(string ReturnUrl = "")
         {
-            ViewBag.OtherID = id;
-            ViewBag.RegType = type;
-            string loginUrl="/home/index";
+            string loginUrl="/Home/Index";
             ViewBag.LoginUrl = !string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl : loginUrl; 
             return View();
         }
@@ -40,7 +45,7 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult Login(string ReturnUrl, int Status = 0, string OtherID = "", string name = "", int BindAccountType = 0)
+        public ActionResult Login(string ReturnUrl, int Status = 0, string name = "", int BindAccountType = 0)
         {
 
             if (Session["ClientManager"] != null)
@@ -49,13 +54,6 @@ namespace YXERP.Controllers
             }
 
             ViewBag.Status = Status;
-            string otherid = "";
-            //获取OtherSysID
-            if ((!string.IsNullOrEmpty(ReturnUrl) && ReturnUrl.IndexOf("IntFactoryOrder") > -1 && string.IsNullOrEmpty(OtherID)) || BindAccountType == 10000 || BindAccountType == 6)
-            {
-                otherid = Common.Common.GetQueryString("id", ReturnUrl);
-            }
-            ViewBag.OtherID = otherid;
             ViewBag.BindAccountType = BindAccountType;
             ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
             
@@ -90,8 +88,12 @@ namespace YXERP.Controllers
                 Response.Cookies.Add(cook);
             }
 
-            Session["ClientManager"] = null; 
-            return Redirect("/Home/Login?Status=" + Status);
+            Session["ClientManager"] = null;
+            if (Status > 0)
+            {
+                return Redirect("/Home/Login?Status=" + Status);
+            }
+            return Redirect("/Home/Login");
         }
         public JsonResult GetSign(string ReturnUrl)
         {
@@ -356,13 +358,17 @@ namespace YXERP.Controllers
                             tempUser.Client = new Clients();
                             tempUser.Client.CompanyName = client.client.companyName;
                             tempUser.Client.Logo = client.client.logo;
+                            tempUser.Client.ContactName = client.client.contactName;
+                            tempUser.Client.Address = client.client.address;
+                            tempUser.Client.MobilePhone = client.client.mobilePhone;
+                            tempUser.Client.CityCode = client.client.cityCode;
                             Session["CMTokenInfo"] = tempUser;
 
                             return Redirect("/Home/CMSelectLogin");
                         }
                         else
                         {
-                            return Redirect("/Home/Login?Status=3");
+                            return Redirect("/Home/Login?Status=4");
                         }
                     }
                 }
@@ -410,7 +416,7 @@ namespace YXERP.Controllers
         #region Ajax
 
         //员工登录
-        public JsonResult UserLogin(string userName, string pwd, string remember, int bindAccountType, string otherid = "")
+        public JsonResult UserLogin(string userName, string pwd, string remember, int bindAccountType)
         {
             int result = 0;
             Dictionary<string, object> resultObj = new Dictionary<string, object>();
@@ -426,31 +432,29 @@ namespace YXERP.Controllers
                 CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(userName, pwd, out outResult, operateip);
                 if (model != null)
                 {
-                    if (bindAccountType == 6 || bindAccountType == 2)
+                    if (bindAccountType == 4)
                     {
-                        AddProvider(bindAccountType, otherid, model.ClientID);
-                    }
-                    else if (bindAccountType == 4)
-                    {
-                        if (Session["CMTokenInfo"] != null)
+                        string errinfo = BindCMClient(model);
+                        if (!string.IsNullOrEmpty(errinfo))
                         {
-                            var user = (Users)Session["CMTokenInfo"];
-                            string errinfo = OrganizationBusiness.BindOtherAccount(EnumAccountType.ZNGC, model.UserID, user.MDProjectID, user.MDUserID, model.ClientID, model.AgentID);
-                            AddProvider(bindAccountType, user.MDProjectID, model.ClientID);
+                            result = 4;
+                            resultObj.Add("errinfo", errinfo);
+                        }
+                        else
+                        {
+                            Session["ClientManager"] = model;
                         }
                     }
-                    //保持登录状态
-                    HttpCookie cook = new HttpCookie("yunxiao_erp_user");
-                    cook["username"] = userName;
-                    cook["pwd"] = pwd;
-                    cook["status"] = remember;
-                    cook.Expires = DateTime.Now.AddDays(7);
-                    Response.Cookies.Add(cook);
-
-                    Session["ClientManager"] = model; 
-                    if (YXERP.Common.Common.IsMobileDevice())
+                    else
                     {
-                        result = 11;
+                        //保持登录状态
+                        HttpCookie cook = new HttpCookie("yunxiao_erp_user");
+                        cook["username"] = userName;
+                        cook["pwd"] = pwd;
+                        cook["status"] = remember;
+                        cook.Expires = DateTime.Now.AddDays(7);
+                        Response.Cookies.Add(cook);
+                        Session["ClientManager"] = model;
                     }
                     Common.Common.CachePwdErrorUsers.Remove(userName);
                 }
@@ -465,7 +469,9 @@ namespace YXERP.Controllers
                         else
                         {
                             if (pwdErrorUser.ErrorCount > 2)
+                            {
                                 pwdErrorUser.ErrorCount = 0;
+                            }
                         }
 
                         pwdErrorUser.ErrorCount += 1;
@@ -500,6 +506,20 @@ namespace YXERP.Controllers
             };
         }
 
+        public string BindCMClient(Users model)
+        {
+            if (Session["CMTokenInfo"] != null)
+            {
+                var user = (Users)Session["CMTokenInfo"];
+
+                IntFactory.Sdk.ClientResult zngcClientItem = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(user.MDProjectID);
+
+                return OrganizationBusiness.BindCMClient(model.UserID, user.MDUserID, user.MDProjectID, model.AgentID, model.ClientID,
+                    user.Client.CompanyName, user.Client.ContactName, user.Client.MobilePhone, user.Client.CityCode, user.Client.Address);
+            }
+            return "";
+        }
+
         public void AddProvider(int bindAccountType, string id, string clientid)
         {
             if (bindAccountType == 6)
@@ -510,19 +530,6 @@ namespace YXERP.Controllers
                     client.ContactName,
                     client.MobilePhone, "", client.CityCode, client.Address,
                     "", id, client.ClientCode, "", yxClientItem.AgentID, yxClientItem.ClientID, 2);
-            }
-            else if (bindAccountType==4)
-            {
-                if (!string.IsNullOrEmpty(id))
-                {
-                    IntFactory.Sdk.ClientResult zngcClientItem = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(id);
-                    Clients yxClientItem = UserService.GetClientDetail(clientid);
-                    string providerID = ProductService.AddProviders(zngcClientItem.client.companyName,
-                        zngcClientItem.client.contactName,
-                        zngcClientItem.client.mobilePhone, "", "", zngcClientItem.client.address,
-                        "", id, zngcClientItem.client.clientCode, "", yxClientItem.AgentID, yxClientItem.ClientID, 1);
-
-                }
             }
         }
 
@@ -541,7 +548,7 @@ namespace YXERP.Controllers
         }
 
         //主动注册客户端
-        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD, string code,int regType, string otherID = "")
+        public JsonResult RegisterClient(string name, string companyName, string loginName, string loginPWD, string code, int regType)
         {
             int result = 0;
             Dictionary<string, object> JsonDictionary = new Dictionary<string, object>();
@@ -565,11 +572,6 @@ namespace YXERP.Controllers
                     
                     if (result == 1)
                     {
-                        AddProvider(regType, otherID, clientid); 
-                        if (!string.IsNullOrEmpty(otherID) && YXERP.Common.Common.IsMobileDevice())
-                        {
-                            result = 11;
-                        } 
                         string operateip = Common.Common.GetRequestIP();
                         int outResult;
                         CloudSalesEntity.Users user = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(loginName, loginPWD, out outResult, operateip);

@@ -353,7 +353,7 @@ namespace YXERP.Controllers
                 var model = OrganizationBusiness.GetUserByOtherAccount(userToken.unionid, "", operateip, (int)EnumAccountType.WeiXin);
                 if (model == null)
                 {
-                    string flag = OrganizationBusiness.BindOtherAccount(EnumAccountType.WeiXin, CurrentUser.UserID, "", userToken.unionid, CurrentUser.ClientID, CurrentUser.AgentID);
+                    string flag = OrganizationBusiness.BindOtherAccount(EnumAccountType.WeiXin, CurrentUser.UserID, "", userToken.unionid, CurrentUser.AgentID, CurrentUser.ClientID);
                 }
                 else
                 {

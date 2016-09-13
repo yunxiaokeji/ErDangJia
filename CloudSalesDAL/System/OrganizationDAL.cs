@@ -174,12 +174,12 @@ namespace CloudSalesDAL
         }
 
         public string BindOtherAccount(int accountType, string userid, string projectid,
-            string accountname, string clientid, string agentid)
+            string accountname, string agentid, string clientid)
         {
 
             string result ="";
             SqlParameter[] paras = { 
-                                       new SqlParameter("@Result",result),
+                                       new SqlParameter("@Result",SqlDbType.NVarChar,100),
                                        new SqlParameter("@AccountType",accountType),
                                        new SqlParameter("@UserID",userid),  
                                        new SqlParameter("@ProjectID",projectid), 
@@ -191,6 +191,32 @@ namespace CloudSalesDAL
             paras[0].Direction = ParameterDirection.Output;
 
             ExecuteNonQuery("P_BindOtherAccount", paras, CommandType.StoredProcedure);
+            result = paras[0].Value.ToString();
+            return result;
+        }
+
+        public string BindCMClient(string userid, string cmUserID, string cmClientID, string agentid, string clientid,
+            string companyName, string name, string mobile, string cityCode, string address)
+        {
+
+            string result = "";
+            SqlParameter[] paras = { 
+                                       new SqlParameter("@Result",SqlDbType.NVarChar,100),
+                                       new SqlParameter("@UserID",userid),  
+                                       new SqlParameter("@ProjectID",cmClientID), 
+                                       new SqlParameter("@AccountName",cmUserID), 
+                                       new SqlParameter("@CompanyName",companyName),
+                                       new SqlParameter("@Name",name),
+                                       new SqlParameter("@Mobile",mobile),
+                                       new SqlParameter("@CityCode",cityCode),
+                                       new SqlParameter("@Address",address),
+                                       new SqlParameter("@AgentID",agentid), 
+                                       new SqlParameter("@ClientID",clientid)
+                                   };
+
+            paras[0].Direction = ParameterDirection.Output;
+
+            ExecuteNonQuery("P_BindCMClient", paras, CommandType.StoredProcedure);
             result = paras[0].Value.ToString();
             return result;
         }

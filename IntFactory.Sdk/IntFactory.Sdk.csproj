@@ -67,6 +67,7 @@
     <Compile Include="Entity\Customer\CustomerEntity.cs" />
     <Compile Include="Entity\Customer\CustomerResult.cs" />
     <Compile Include="Entity\Order\OrderAttrEntity.cs" />
+    <Compile Include="Entity\Order\OrderAttrResult.cs" />
     <Compile Include="Entity\Order\OrderEntity.cs" />
     <Compile Include="Entity\Order\OrderListResult.cs" />
     <Compile Include="Entity\Order\PlateMakingEntity.cs" />

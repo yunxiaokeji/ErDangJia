@@ -1,6 +1,6 @@
-﻿ @{
-     ViewBag.Title = "订单详情页";
-     var model = (IntFactory.Sdk.OrderEntity)ViewBag.Model;
+﻿ @{ 
+     var model = (CloudSalesEntity.Products)ViewBag.Model;
+     ViewBag.Title = model.ProductName;
  }
 @section css{
     <link href="/modules/css/downorder.css" rel="stylesheet"/>
@@ -29,19 +29,19 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use(["/modules/stylecenter/scripts/orderdetail"], function (obj) {
-            obj.init('@(model.orderID)', '@Html.ToJSONString(model)','@(ViewBag.CityCode)');
+            obj.init('@(ViewBag.ClientID)', '@Html.ToJSONString(model)','@(ViewBag.CityCode)');
         });
     </script>
 }
  
     <div class="content-title divcenter">
-        <div class="left titlename">款式编码：@(model.intGoodsCode)</div>
+        <div class="left titlename">款式编码：@(model.ProductCode)</div>
         <ul class="left mLeft20"> 
             <li title="订单类别">
-                <span class="left">类别：@(model.categoryName)</span>  
+                <span class="left">类别：@(model.CategoryName)</span>  
             </li>
              <li title="供应商">
-                <span class="left">供应商：@(model.clientName)&nbsp;@(model.clientMobile)</span>  
+                <span class="left">供应商：@(model.ProviderName)</span>  
             </li>
         </ul>
         <a class="btn-back right mTop5" title="返回" href="/StyleCenter/StyleCenter/StyleCenter"><span id="btnback" style="color: #ffffff;">返回</span></a>
@@ -52,49 +52,62 @@
         <div class="order-info">
             <div class="order-imgs-div left">
                 <div class="order-imgs">
-                    <img id="orderImage" src="@(string.IsNullOrEmpty(model.orderImage) ? "" : model.orderImage)" data-self="1"/>
+                    <img id="orderImage" src="@(string.IsNullOrEmpty(model.ProductImage) ? "" : model.ProductImage)" data-self="1"/>
                 </div>
                 <ul class="order-imgs-list pLeft10">
 
                 </ul>
             </div>
-            <ul class="moneyinfo left">
-                <li >
-                    <label class="bolder font16">@(string.IsNullOrEmpty(model.goodsName) ? "暂无款式名称" : model.goodsName)</label>
-                </li>
-                <li style="overflow: initial;" >
-                    <div class="left">
+            <div class="left divright">
+                <h1 >@(string.IsNullOrEmpty(model.ProductName) ? "暂无款式名称" : model.ProductName)</h1>
+                <ul class="moneyinfo ">
+                    <li style="overflow: initial;"> 
                         <span class="column-title " style="width: 50px;">单价：</span>
                         <label class="bolder red font14">
-                            @(model.finalPrice.ToString("f2"))
-                        </label>
-                    </div>
-                </li>
-                 <li style="overflow: initial;" id="pdttitle">
-                    <div class="left">
-                        <span class="column-title " style="width: 50px; ">优惠：</span>
-                    </div>
-                </li>
-                <li id="pdtAttr">
-                    
-                </li>
-                 <li id="btnSubmit" class="hide">
-                    <div class="bottombtn" >确认采购</div>
-                </li>
-            </ul>
+                            @(model.Price.ToString("f2"))
+                        </label> 
+                    </li>
+                    <li style="overflow: initial;"> 
+                        <span class="column-title " style="width: 50px;">单位：</span>
+                        <label class="bolder font14">
+                            @(model.SmallUnit != null ? (!string.IsNullOrEmpty(model.SmallUnit.UnitName) ? model.SmallUnit.UnitName : "件") : "件")
+                        </label> 
+                    </li>
+                    <li style="overflow: initial;" id="pdttitle"> 
+                        <span class="column-title " style="width: 50px;">优惠：</span>
+                        <label class="bolder font14">
+                            暂无优惠政策
+                        </label> 
+                    </li>
+                    <li >
+                        <div class="column-title left" style="width: 50px; line-height: 42px;">颜色：</div>
+                         <div class="left" style="width: 680px;">
+                            <ul class="product-details" id="colorlist">
+                            </ul>
+                        </div>
+                    </li>
+                     <li > 
+                        <div class="column-title left" style="width: 50px; line-height: 42px;">尺码：</div>
+                        <div class="left sizediv" >
+                            <table style="width: 650px;">
+                                <tbody id="sizelist"></tbody>
+                            </table>
+                        </div>  
+                    </li>
+                    <li id="btnSubmit" >
+                        <div class="bottombtn">确认采购</div>
+                    </li>
+                </ul>
+               
+            </div>
             <div class="clear"></div>
         </div>
 
         <div class="clear"></div>
     </div>
 
-    <div class="content-body divcenter" style="padding: 20px 0 50px 10px;">
-        <div class="nav-partdiv " id="tab12">
-            <div class="table-title tLeft" style="font-size: 17px; text-indent: 10px; padding: 5px 0px;">制版信息</div>
-            <div id="navEngravingInfo" class="platemaking-content"></div>
-            <div class="mTop20 table-title tLeft hide" style="font-size: 17px; text-indent: 10px;padding: 5px 0px;">工艺说明</div>
-            <table class="table-items-detail tb-plates hide"></table>
-        </div>
+    <div class="content-body divcenter" style="padding: 20px 0 50px 10px;"> 
+        <div class="description" id="description"></div>
     </div>
     <a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情"><span id="btndetail">查看采购详情</span></a>
     @*图片放大*@

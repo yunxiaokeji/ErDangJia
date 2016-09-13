@@ -33,7 +33,7 @@ namespace YXERP.Areas.Mall.Controllers
             }
             if (YXERP.Common.Common.IsMobileDevice())
             {
-                return Redirect("/M/Home/Index");
+                return Redirect("/M/Home/Index?providerID=" + id);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace YXERP.Areas.Mall.Controllers
             }
             if (YXERP.Common.Common.IsMobileDevice())
             {
-                return Redirect("/M/Home/Index");
+                return Redirect("/M/Home/Index?providerID=" + id);
             }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = id;;

@@ -17,8 +17,7 @@ namespace YXERP.Areas.M.Controllers
                 return Redirect("/M/Home/ChooseProvider");
             }
             ViewBag.providerID = providerID;
-            var providers = ProductsBusiness.BaseBusiness.GetProviderByID(providerID);
-            
+   
             CloudSalesEntity.Users users = new CloudSalesEntity.Users();
             users.Name = CurrentUser.Client.ContactName;
             users.MobilePhone = CurrentUser.Client.MobilePhone;

@@ -15,8 +15,7 @@ namespace YXERP.Areas.M.Controllers
         public ActionResult List(string providerID)
         {
             ViewBag.providerID = providerID;
-            var providers = ProductsBusiness.BaseBusiness.GetProviderByID(providerID);
-
+            
             CloudSalesEntity.Users users = new CloudSalesEntity.Users();
             users.Name = CurrentUser.Client.ContactName;
             users.MobilePhone = CurrentUser.Client.MobilePhone;

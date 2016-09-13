@@ -45,8 +45,8 @@
 }
  .sort-item { position:relative; cursor:pointer; width:90px;padding:15px 0;float:left}
 .sort-item.hover { color:#4a98e7; }
- .sort-item .asc { position:absolute; top:20px; right:5px;  border-bottom:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
- .sort-item .desc { position:absolute; top:30px; right:5px;  border-top:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
+ .sort-item .asc { position:absolute; top:18px; right:5px;  border-bottom:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
+ .sort-item .desc { position:absolute; top:28px; right:5px;  border-top:solid 5px #ccc; border-left:solid 5px transparent ;border-right:solid 5px transparent ; display:inline-block;}
 .sort-item .asc.hover {  border-bottom:solid 5px #4a98e7;}
 .sort-item .desc.hover { border-top:solid 5px #4a98e7;}
 

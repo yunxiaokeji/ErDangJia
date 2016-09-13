@@ -397,24 +397,7 @@ namespace YXERP.Areas.Mall.Controllers
                 };
             }
             JsonDictionary.Add("PurchaseID", purid);
-            JsonDictionary.Add("result", 1);
-            ////3.生成智能工厂单据
-            //ord.details.ForEach(x =>
-            //{
-            //    x.remark = x.remark.Replace("[", "【").Replace("]", "】");
-            //});
-            //var result = OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
-            //        ord.clientID, purid, user.ClientID, ord.personName, ord.mobileTele, ord.cityCode, ord.address);
-            //if (!string.IsNullOrEmpty(result.id))
-            //{
-            //    JsonDictionary.Add("OtherOrderID", result.id);
-            //    JsonDictionary.Add("result", 1);
-            //}
-            //else
-            //{
-            //    JsonDictionary.Add("result", 0);
-            //    JsonDictionary.Add("errMsg", result.error_message);
-            //}
+            JsonDictionary.Add("result", 1); 
             return new JsonResult
             {
                 Data = JsonDictionary,

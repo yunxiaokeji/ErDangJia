@@ -86,14 +86,15 @@
 .order-info .product-details li.hover { border:solid 2px #B10000; color:#B10000; }
 /*订单信息*/
 .order-info .moneyinfo { width: 810px; }
-.order-info .moneyinfo li{ line-height:25px; clear:both;padding:3px; overflow:auto; }
+.order-info .moneyinfo li{ line-height:25px; padding:3px; overflow:auto; }
 .order-info .moneyinfo li .column-title{ width:80px; float:left; color:#666; }
 
 .order-info .cutomerinfo {  border-left:solid 1px #f6f6f6; margin-top:20px; padding:0 50px 20px 50px; max-width:400px; }
 .order-info .cutomerinfo li{ line-height:25px; clear:both; padding:5px;  }
 .order-info .cutomerinfo li .column-title{ width:80px; float:left; color:#666; }
 
- .order-info .sizediv{position: relative;padding: 0px 10px 10px 16px;border-bottom: 1px solid #f0f0f0;border-top: 1px solid #f0f0f0;}
+ .linetopbottom {border-bottom: 1px solid #f0f0f0;border-top: 1px solid #f0f0f0;}
+ .order-info .sizediv{position: relative;padding: 0px 10px 10px 16px;}
  .order-info table{    display: table;border-collapse: collapse;border-spacing: 0;}
  .order-info table tbody {display: table-row-group;vertical-align: middle;border-color: inherit;}
  .order-info table tr{    display: table-row;vertical-align: inherit;border-color: inherit;}
@@ -103,6 +104,9 @@
   .order-info table tr .price {width: 120px;padding-right: 10px;}
  .order-info .quantity-add {height: 24px !important; line-height: 24px;font-size: 19px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
  .order-info .quantity-add:hover{ border: 1px solid #4a98e7;}
+
+ .order-info input:hover{border: 1px solid #4a98e7;}
+ .order-info input.hover{border: 1px solid #4a98e7;}
 
  .order-info .quantity-jian{height: 24px !important; line-height: 24px;font-size: 19px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
  .order-info .quantity-jian:hover{ border: 1px solid #4a98e7;}

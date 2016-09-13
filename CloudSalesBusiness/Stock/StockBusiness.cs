@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.SS.Formula.Functions;
 
 namespace CloudSalesBusiness
 {
@@ -272,10 +273,11 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public static string AddPurchaseDoc(string productid, string ids, string providerid, decimal totalfee, string remark, string wareid,int sourcetype, string userid,string agentid, string clientid)
+        public static string AddPurchaseDoc(string productid, string ids, string providerid, decimal totalfee, string remark, string wareid,int sourcetype, string userid,string agentid, string clientid
+            ,string personname,string mobilephone,string address,string citycode)
         {
             string guid = Guid.NewGuid().ToString();
-            bool bl = StockDAL.AddPurchaseDoc(guid,productid, (int)EnumDocType.RK, ids, providerid, totalfee, remark, wareid,sourcetype, userid, clientid);
+            bool bl = StockDAL.AddPurchaseDoc(guid, productid, (int)EnumDocType.RK, ids, providerid, totalfee, remark, wareid, sourcetype, userid, clientid, agentid, personname, mobilephone, address, citycode);
             if (bl)
             {
                 //日志

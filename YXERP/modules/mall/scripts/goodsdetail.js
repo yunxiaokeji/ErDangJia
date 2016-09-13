@@ -344,6 +344,10 @@
                 goodsid: _self.model.CMGoodsID,
                 goodscode: _self.model.CMGoodsCode,
                 goodsname: _self.model.ProductName,
+                personname: personname,
+                mobiletele: mobiletele,
+                citycode: citycode,
+                address:address,
                 entity: JSON.stringify(details)
             }, function (data) {
             if (data.result==1) {

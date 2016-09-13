@@ -20,7 +20,7 @@
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
     ObjectJS.init = function (providerid, user) {
-        Params.clientid = providerid || '-1';
+        Params.clientid = providerid;
         //providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         //for (var i = 0; i < providers.length; i++) {              
         //    var p = providers[i];

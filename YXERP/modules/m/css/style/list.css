@@ -88,6 +88,11 @@
 .list .center-list-task .stage {line-height:30px;}
 .list .center-list-task a {font-size:16px; }
 
+/*筛选浮层*/
+.filter-object { position:fixed;background-color:#fff;width:80%;min-width:270px;max-width:400px;right:0;top:50px;height:100%;
+                 box-shadow:#ccc 4px -4px;
+}
+.layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;}
 /*提示*/
 .list .prompt { text-align:center;color:#999;margin-bottom:30px;}
 /*图标*/

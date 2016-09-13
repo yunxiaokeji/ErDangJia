@@ -10,190 +10,24 @@
 
     var ObjectJS = {}, CacheItems=[];
 
-    ObjectJS.init = function (orderid,  model,citycode) {
+    ObjectJS.init = function (clientid,  model,citycode) {
         var _self = this;
-        _self.orderid = orderid; 
+        _self.clientid = clientid;
         _self.model = JSON.parse(model.replace(/&quot;/g, '"')); 
+        console.log(_self.model);
         _self.bindStyle(_self.model);
-        _self.CityCode = citycode; 
+        _self.CityCode = citycode;
+        _self.getOrderAttr();
     }
 
     ObjectJS.bindStyle = function (model) {
-        
-        var _self = this; 
-        if (model.platemaking) {
-            $("#navEngravingInfo").html(decodeURI(model.platemaking));
-            $("#navEngravingInfo .ico-dropdown").remove();
-            $("#navEngravingInfo tr").each(function () {
-                $(this).find("td").last().remove();
-            });
-        } else {
-            $("#navEngravingInfo").html("<div class='nodata-txt'>暂无制版信息<div>");
-        }
+        var _self = this;  
         //样图
-        _self.bindOrderImages(model.orderImages);
-        //规格
-        _self.showAttrForOrder(model, 'pdttitle', 'pdtAttr');
-        _self.getPlateMakings();
+        _self.bindOrderImages(model.ProductImage); 
         $('.bottombtn').bind('click', function () { _self.savePDT() });
-        //if (window.screen.width < 1500) {
-            $('.moneyinfo').css("width", "740px");
-        //} 
+        $('.moneyinfo').css("width", "740px"); 
+        $("#description").html(decodeURI(model.Description));
     } 
-
-    //获取制版工艺说明
-    ObjectJS.getPlateMakings = function () {
-        var _self = this;
-        $(".tb-plates").html('');
-        $(".tb-plates").html("<tr><td colspan='5'><div class='data-loading'><div></td></tr>"); 
-        $(".tb-plates").html(''); 
-        var PlateMakings = _self.model.plateMakings; 
-        if (PlateMakings.length > 0) {
-            doT.exec("stylecenter/template/styledetail/platematring-orderdatail.html", function (template) {
-                var html = template(PlateMakings);
-                html = $(html);
-                html.find(".dropdown").remove();
-                $(".tb-plates").append(html);
-            });
-        }
-        else {
-            $(".tb-plates").append("<tr><td colspan='5'><div class='nodata-txt'>暂无工艺说明</div></td></tr>");
-        } 
-    }
-     
-    ObjectJS.showAttrForOrder = function (categoryList, obj, contendid) {
-        $(".productsalesattr").remove();
-        $("#" + contendid).empty();
-        CacheItems = [];
-        doT.exec("stylecenter/template/styledetail/createorder-checkattr.html", function (template) {
-            var innerhtml = template(categoryList);
-            innerhtml = $(innerhtml);
-            //组合产品
-            innerhtml.find(".check-box").click(function () {
-                var _this = $(this).find(".checkbox");
-                if (_this.hasClass("hover")) {
-                    _this.removeClass("hover");
-                } else {
-                    _this.addClass("hover");
-                }
-
-                var bl = false, details = [], isFirst = true, xattr = [], yattr = [];
-                $(".productsalesattr").each(function () {
-                    bl = false;
-                    var _attr = $(this), attrdetail = details; 
-                    //组合规格 
-                    _attr.find(".checkbox.hover").each(function () {
-                        bl = true;
-                        var _value = $(this); 
-                        //首个规格
-                        if (isFirst) {
-                            var model = {};
-                            model.ids = _attr.data("id") + ":" + _value.data("id");
-                            model.saleAttr = _attr.data("id");
-                            model.attrValue = _value.data("id");
-                            model.xRemark = _value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "";
-                            model.yRemark = _value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "";
-                            model.xyRemark = "【" + _value.data("text") + "】";
-                            model.names = "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                            model.layer = 1;
-                            details.push(model);
-
-                        } else {
-                            for (var i = 0, j = attrdetail.length; i < j; i++) { 
-                                if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
-                                    var model = {};
-                                    model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
-                                    model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
-                                    model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
-                                    model.xRemark = attrdetail[i].xRemark + (_value.data("type") == 1 ? ("【" + _value.data("text") + "】") : "");
-                                    model.yRemark = attrdetail[i].yRemark + (_value.data("type") == 2 ? ("【" + _value.data("text") + "】") : "");
-                                    model.xyRemark = attrdetail[i].xyRemark + "【" + _value.data("text") + "】";
-                                    model.names = attrdetail[i].names + "【" + _attr.data("text") + "：" + _value.data("text") + "】";
-                                    model.layer = attrdetail[i].layer + 1;
-                                    details.push(model);
-                                }
-                            }
-                        }
-                        //处理二维表
-                        if (_value.data("type") == 1 && xattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                            xattr.push("【" + _value.data("text") + "】");
-                        } else if (_value.data("type") == 2 && yattr.indexOf("【" + _value.data("text") + "】") < 0) {
-                            yattr.push("【" + _value.data("text") + "】");
-                        }
-
-                    });
-                    isFirst = false;
-                });
-                $("#" + contendid).empty(); 
-                //选择所有属性
-                if (bl) {
-                    var layer = $(".productsalesattr").length, items = [];
-                    for (var i = 0, j = details.length; i < j; i++) {
-                        var model = details[i];
-                        if (model.layer == layer) {
-                            items.push(model);
-                            CacheItems[model.xyRemark] = model;
-                        }
-                    }
-                    var tableModel = {};
-                    tableModel.xAttr = xattr;
-                    tableModel.yAttr = yattr;
-                    tableModel.items = items;
-
-                    //加载子产品
-                    doT.exec("stylecenter/template/styledetail/orders_child_list.html", function (templateFun) {
-                        var innerText = templateFun(tableModel);
-                        innerText = $(innerText);
-                        $("#" + contendid).append(innerText);
-                        //数量必须大于0的数字
-                        innerText.find(".quantity").change(function () {
-                            var _this = $(this);
-                            if (!_this.val().isInt() || _this.val() <= 0) {
-                                _this.val("0");
-                            }
-
-                            var total = 0;
-                            $(".child-product-table .tr-item").each(function () {
-                                var _tr = $(this), totaly = 0;
-                                if (!_tr.hasClass("total")) {
-                                    _tr.find(".quantity").each(function () {
-                                        var _this = $(this);
-                                        if (_this.val() > 0) {
-                                            totaly += _this.val() * 1;
-                                        }
-                                    });
-                                    _tr.find(".total-y").text(totaly);
-                                } else {
-                                    _tr.find(".total-y").each(function () {
-                                        var _td = $(this), totalx = 0;
-                                        $(".child-product-table .quantity[data-x='" + _td.data("x") + "']").each(function () {
-                                            var _this = $(this);
-                                            if (_this.val() > 0) {
-                                                totalx += _this.val() * 1;
-                                            }
-                                        });
-                                        total += totalx;
-                                        _td.text(totalx);
-                                    });
-                                    _tr.find(".total-xy").text(total);
-                                }
-                            });
-                           
-                        });
-                        if (innerText.find(".quantity").length > 0) {
-                            $('#btnSubmit').show();
-                        } else {
-                            $('#btnSubmit').hide();
-                        }
-                    });
-                }
-            });
-            $(innerhtml).find(".column-title").css("width", "50px");
-            $("#" + obj).after(innerhtml);
-            $('#' + contendid).css("max-height", "274px").css("overflow-y", "auto");
-            
-        });
-    };
     //绑定样式图
     ObjectJS.bindOrderImages = function (orderimages) {
         var _self = this;
@@ -288,102 +122,169 @@
             $("#orderImage").css("height", 350);
         }
     }
+    //绑定颜色尺码
+    ObjectJS.getOrderAttr = function () {
+        var _self = this;
+        Global.post("/StyleCenter/StyleCenter/GetOrderAttrsList", { goodsid: _self.model.CMGoodsID }, function (data) {
+            var chtml = "";
+            var shtml = "";
+            console.log(data);
+            for (var i = 0; i < data.items.length; i++) {
+                var item = data.items[i]; 
+                if (item.AttrType == 2) {
+                    chtml += '<li data-id="' + item.OrderAttrID + '" data-remark="' + item.AttrName + '" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</li>';
+                } else {
+                    if (i == (data.items.length - 1)) {
+                        shtml += '<tr class="last-row" data-remark="' + item.AttrName + '">';
+                    } else {
+                        shtml += '<tr data-remark="' + item.AttrName + '">';
+                    }
+                    shtml += 
+                        '<td class="name" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</td>' +
+                        '<td class="price">' + item.FinalPrice.toFixed(2) + '元</td>' +
+                        '<td class="center"><div class="choose-quantity left">' +
+                        '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;">-</span>' +
+                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;" value="0"  data-remark="' + item.AttrName + '" />' +
+                        '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;">+</span>' +
+                        '</div></td>' +
+                        '</tr>';
+                }
+            }
+            $('#colorlist').html(chtml);
+            $('#sizelist').html(shtml);
 
+            $('#colorlist li').click(function() {
+                if ($(this).hasClass("hover")) {
+                    $(this).removeClass("hover");
+                } else {
+                    $(this).addClass("hover");
+                }
+            });
+
+            $('#sizelist .quantity').keyup(function () {
+                $(this).val($(this).val().replace(/\D/g, ''));
+            }).blur(function() {
+                if ($(this).val() == "") {
+                    $(this).val('0');
+                }
+            }); 
+            $('#sizelist .quantity-jian').click(function() {
+                var _this = $(this);
+                if (_this.next().val() != 0) {
+                    _this.next().val(parseInt(_this.next().val()) - 1);
+                }
+            });
+            $('#sizelist .quantity-add').click(function () {
+                var _this = $(this);
+                if (_this.prev().val() != "") {
+                    _this.prev().val(parseInt(_this.prev().val()) + 1);
+                }
+            });
+        });
+    }
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');
         var _self = this;
         var totalnum = 0;
-        $(".child-product-table .quantity").each(function () { 
+        var hashover = false;
+        $("#sizelist .quantity").each(function () {
             totalnum += parseInt($(this).val());
         });
-        if (totalnum == 0) {
+        $("#colorlist li").each(function () {
+            if ($(this).hasClass("hover")) {
+                hashover = true;
+            }
+        });
+        if (totalnum == 0 || !hashover) {
             $('.bottombtn').bind('click', function () { _self.savePDT() });
             alert("请选择颜色尺码，并填写对应采购数量");
-            
+            return false;
         }
         Global.post("/StyleCenter/StyleCenter/IsLogin", null, function (data) {
             if (data.result) {
                 _self.showUserInfo();
             } else {
-                $('#orderlogin-box').empty();
-                var openhtml = '<div class="login-body"><div class="main"><div class="login">' +
-                    '<div class="registerErr hide"></div>' +
-                    '<div class="loginbar">' +
-                        '<input type="text" class="input icoUserName" id="iptUserName" placeholder="请输入账号" maxlength="25"/>'+
-                    '</div>' +
-                    '<div class="loginbar" style="position:relative;"><input type="password" class="input icoUserPwd" id="iptPwd"/>'+
-                    '</div>'+
-                    '<div class="remember-box">'+
-                        '<div class="cb-remember-password ico-check ">一周内保持登录</div>' +
-                        '<div class="right pRight5"><a href="/Home/FindPassword" class="linkRegister">忘记密码?</a></div>'+
-                    '<div class="clear"></div>' +
-                '</div>'+
-                '<div class="btnLogin" id="btnLogin">登录</div></div>';
-                Easydialog.open({
-                    container: {
-                        id: "orderlogin-box",
-                        header: "<a style='font-size:18px;'>账号登录</a>",
-                        content: openhtml 
-                    }
-                });
-                //登录 
-                $('#orderlogin-box').find("#btnLogin").click(function () {
-                    if (!$("#iptUserName").val()) {
-                        $(".registerErr").html("请输入账号").slideDown();
-                        return;
-                    }
-                    if (!$("#iptPwd").val()) {
-                        $(".registerErr").html("请输入密码").slideDown();
-                        return;
-                    }
-                    $(this).html("登录中...").attr("disabled", "disabled");
-                    Global.post("/Home/UserLogin", {
-                        userName: $("#iptUserName").val(),
-                        pwd: $("#iptPwd").val(),
-                        otherid: $("#OtherID").val(),
-                        remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0,
-                        bindAccountType: 10000
-                    },
-                    function (data) {
-                        $("#btnLogin").html("登录").removeAttr("disabled");
-                        if (data.result == 1) {
-                            Easydialog.close();
-                            Global.post("/StyleCenter/StyleCenter/LoginCallBack", {
-                                sign: data.sign,
-                                uid: data.uid,
-                                aid: data.aid
-                            }, function(dresult) {
-                                _self.CityCode = dresult.ccode;
-                                $('#iptaddress').val(dresult.address);
-                                $('#iptmobilePhone').val(dresult.mphone);
-                                $('#iptcontactName').val(dresult.cname);
-                                _self.showUserInfo();
-                            });
-                        }
-                        else if (data.result == 0) {
-                            $(".registerErr").html("账号或密码有误").slideDown();
-                        }
-                        else if (data.result == 2) {
-                            $(".registerErr").html("密码输入错误超过3次，请2小时后再试").slideDown();
-                        }
-                        else if (data.result == 3) {
-                            $(".registerErr").html("账号或密码有误,您还有" + (3 - parseInt(data.errorCount)) + "错误机会").slideDown();
-                        }
-                        else if (data.result == -1) {
-                            $(".registerErr").html("账号已冻结，请" + data.forbidTime + "分钟后再试").slideDown();
-                        }
+                alert("请登陆后，再提交信息");
+                return false;
+                //$('#orderlogin-box').empty();
+                //var openhtml = '<div class="login-body"><div class="main"><div class="login">' +
+                //    '<div class="registerErr hide"></div>' +
+                //    '<div class="loginbar">' +
+                //        '<input type="text" class="input icoUserName" id="iptUserName" placeholder="请输入账号" maxlength="25"/>'+
+                //    '</div>' +
+                //    '<div class="loginbar" style="position:relative;"><input type="password" class="input icoUserPwd" id="iptPwd"/>'+
+                //    '</div>'+
+                //    '<div class="remember-box">'+
+                //        '<div class="cb-remember-password ico-check ">一周内保持登录</div>' +
+                //        '<div class="right pRight5"><a href="/Home/FindPassword" class="linkRegister">忘记密码?</a></div>'+
+                //    '<div class="clear"></div>' +
+                //'</div>'+
+                //'<div class="btnLogin" id="btnLogin">登录</div></div>';
+                //Easydialog.open({
+                //    container: {
+                //        id: "orderlogin-box",
+                //        header: "<a style='font-size:18px;'>账号登录</a>",
+                //        content: openhtml 
+                //    }
+                //});
+                ////登录 
+                //$('#orderlogin-box').find("#btnLogin").click(function () {
+                //    if (!$("#iptUserName").val()) {
+                //        $(".registerErr").html("请输入账号").slideDown();
+                //        return;
+                //    }
+                //    if (!$("#iptPwd").val()) {
+                //        $(".registerErr").html("请输入密码").slideDown();
+                //        return;
+                //    }
+                //    $(this).html("登录中...").attr("disabled", "disabled");
+                //    Global.post("/Home/UserLogin", {
+                //        userName: $("#iptUserName").val(),
+                //        pwd: $("#iptPwd").val(),
+                //        otherid: $("#OtherID").val(),
+                //        remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0,
+                //        bindAccountType: 10000
+                //    },
+                //    function (data) {
+                //        $("#btnLogin").html("登录").removeAttr("disabled");
+                //        if (data.result == 1) {
+                //            Easydialog.close();
+                //            Global.post("/StyleCenter/StyleCenter/LoginCallBack", {
+                //                sign: data.sign,
+                //                uid: data.uid,
+                //                aid: data.aid
+                //            }, function(dresult) {
+                //                _self.CityCode = dresult.ccode;
+                //                $('#iptaddress').val(dresult.address);
+                //                $('#iptmobilePhone').val(dresult.mphone);
+                //                $('#iptcontactName').val(dresult.cname);
+                //                _self.showUserInfo();
+                //            });
+                //        }
+                //        else if (data.result == 0) {
+                //            $(".registerErr").html("账号或密码有误").slideDown();
+                //        }
+                //        else if (data.result == 2) {
+                //            $(".registerErr").html("密码输入错误超过3次，请2小时后再试").slideDown();
+                //        }
+                //        else if (data.result == 3) {
+                //            $(".registerErr").html("账号或密码有误,您还有" + (3 - parseInt(data.errorCount)) + "错误机会").slideDown();
+                //        }
+                //        else if (data.result == -1) {
+                //            $(".registerErr").html("账号已冻结，请" + data.forbidTime + "分钟后再试").slideDown();
+                //        }
                         
-                    });
-                });
-                //记录密码
-                $('#orderlogin-box').find(".cb-remember-password").click(function () { 
-                    var _this = $(this);
-                    if (_this.hasClass("ico-check")) {
-                        _this.removeClass("ico-check").addClass("ico-checked");
-                    } else {
-                        _this.removeClass("ico-checked").addClass("ico-check");
-                    }
-                });
+                //    });
+                //});
+                ////记录密码
+                //$('#orderlogin-box').find(".cb-remember-password").click(function () { 
+                //    var _this = $(this);
+                //    if (_this.hasClass("ico-check")) {
+                //        _this.removeClass("ico-check").addClass("ico-checked");
+                //    } else {
+                //        _this.removeClass("ico-checked").addClass("ico-check");
+                //    }
+                //});
             }
         });
         $('.bottombtn').bind('click', function () { _self.savePDT() });
@@ -412,46 +313,32 @@
         });
     };
     ObjectJS.submitOrder = function (personname,mobiletele,citycode,address) {
-        var _self = this;
-        var model = {
-            OrderID: _self.model.orderID,
-            PersonName:personname,
-            MobileTele:mobiletele,
-            CityCode: citycode,
-            Address: address,
-            GoodsName: _self.model.goodsName,
-            GoodsID: _self.model.goodsID,
-            ClientID: _self.model.clientID,
-            ClientName: _self.model.clientName,
-            ClientMobile: _self.model.clientMobile,
-            ClientCity: _self.model.clientCity,
-            ClientCode: _self.model.clientCode,
-            ClientContactName: _self.model.clientContactName,
-            ClientCityCode: _self.model.clientCityCode,
-            IntGoodsCode: _self.model.intGoodsCode,
-            CategoryID: _self.model.categoryID,
-            FinalPrice: _self.model.finalPrice,
-            OrderImage: _self.model.orderImage,
-            Details: []
-        };
+        var _self = this; 
         //大货单遍历下单明细 
+        var details = [];
         $(".child-product-table .quantity").each(function () {
             var _this = $(this);
-            if (_this.val() > 0) { 
-                var item = CacheItems[_this.data("remark")];
-                model.Details.push({
-                    SaleAttr: item.saleAttr,
-                    AttrValue: item.attrValue,
-                    SaleAttrValue: item.ids,
-                    Quantity: _this.val(),
-                    XRemark: item.xRemark,
-                    YRemark: item.yRemark,
-                    XYRemark: item.xyRemark,
-                    Remark: item.names
+            if (_this.val() > 0) {
+                $("#colorlist li").each(function() {
+                    if ($(this).hasClass("hover")) {
+                        details.push({
+                            Quantity: _this.val(),
+                            Remark: $(this).data("remark") + _this.data("remark")
+                    });
+                    }
                 });
             }
         });
-        Global.post("/StyleCenter/StyleCenter/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
+        Global.post("/StyleCenter/StyleCenter/CreatePurchaseOrder",
+            {
+                productid: _self.model.ProductID,
+                price: _self.model.Price,
+                parentprid: _self.clientid,
+                goodsid: _self.model.CMGoodsID,
+                goodscode: _self.model.CMGoodsCode,
+                goodsname: _self.model.ProductName,
+                entity: JSON.stringify(details)
+            }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",
                     function () {

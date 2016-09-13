@@ -28,7 +28,7 @@
     <div class="header">
         <div class="header-li li-task-filtertype">
             <div class="btn-task-filtertype">
-            <div class="font16">@ViewBag.providerName</div>
+            <div class="font16">店铺中心</div>
             @*<div class="iconfont">&#xe61c;</div>
             <ul class="task-filtertype">
                 <li data-id="-1">全部</li>
@@ -71,19 +71,19 @@
 <div class="list"></div>
 <ul class="task-status">
     <li data-status="0" class="hover">
-        <a href="/M/Home/Index?providerID=@ViewBag.providerID&providerName=@ViewBag.providerName">
+        <a href="/M/Home/Index?providerID=@ViewBag.providerID">
             <div class="ico-status iconfont">&#xe64e;</div>
             款式
         </a>
     </li>
     <li data-status="1">
-        <a href="/M/Orders/List?providerID=@ViewBag.providerID&providerName=@ViewBag.providerName">
+        <a href="/M/Orders/List?providerID=@ViewBag.providerID">
             <div class="ico-status iconfont">&#xe629;</div>
             订单
         </a>
     </li>
     <li data-status="2" style="width:34%;">
-        <a href="/M/Account/Index?providerID=@ViewBag.providerID&providerName=@ViewBag.providerName">
+        <a href="/M/Account/Index?providerID=@ViewBag.providerID">
             <div class="ico-status iconfont">&#xe601;</div>
             我的
         </a>

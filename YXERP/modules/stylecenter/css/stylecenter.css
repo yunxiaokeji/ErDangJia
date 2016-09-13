@@ -1,8 +1,8 @@
 ﻿/*品类*/
 .dropdown-ul li:hover {color: #4a98e7;background-color: #ccc;}
 .divcenter {width: 1190px;margin: 0 auto;}
-.divcategory {margin: 0 auto;position: absolute;z-index: 666;width: 774px;height: 302px;background-color: #ffffff;
-    overflow: hidden;border: 1px solid #bbb;}
+.divcategory {margin: 0 auto;position: absolute;z-index: 666;width: 774px;min-height: 302px;background-color: #ffffff;
+    overflow: hidden;border-bottom: 1px solid #bbb;border-left: 1px solid #bbb;border-right: 1px solid #bbb;}
 .divcategory dl {float: left;margin: 0 20px;width: 210px;height: 140px;}
 .divcategory dl dt {margin-bottom: 6px;padding: 10px 0;border-bottom: 1px solid #1759c2;cursor: pointer;overflow: hidden; }
 .divcategory dl dd {float: left;margin-right: 15px;width: 60px;height: 24px;line-height: 2;overflow: hidden;cursor: pointer;}

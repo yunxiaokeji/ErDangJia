@@ -71,7 +71,7 @@
         //分类
         $('#divCategory').mouseover(function () {
             var xy = $(this).position(); 
-            $('.divcategory').css("left", xy.left);
+            $('.divcategory').css("left", xy.left-1);
             $('.divcategory').css("top", xy.top + $(this).height());
             $('.divcategory').show();
         }).mouseout(function () { 
@@ -165,8 +165,7 @@
         }
         if (endp == "") {
             Params.endPrice = endp;
-        }
-        // Global.post("/StyleCenter/StyleCenter/GetProductList", Params, function (data) {
+        } 
         Global.post("/StyleCenter/StyleCenter/GetProduct", Params, function (data) {
             $("#productlist").empty();
             if (data.items.length > 0) {
@@ -206,14 +205,14 @@
 
     ObjectJS.getAllCategory = function () {
         var _self = this;
-        Global.post("/StyleCenter/StyleCenter/GetAllCateGory", null, function (data) {
+        Global.post("/StyleCenter/StyleCenter/GetEdjCateGory", null, function (data) {
             if (data.items.length > 0) {
                 var html = ""; 
                 for (var i = 0; i < data.items.length; i++) { 
                     var item = data.items[i];
                     html += "<dl><dt><a  data-id='" + item.CategoryID + "' style='font-size: 14px;'>" + item.CategoryName + "</a></dt>";
-                    for (var j = 0; j < item.ChildCategory.length; j++) {
-                        var childcate = item.ChildCategory[j];
+                    for (var j = 0; j < item.ChildCategorys.length; j++) {
+                        var childcate = item.ChildCategorys[j];
                         html += "<dd ";
                         if ((j + 1) % 3 == 0) {
                             html += "style='margin-right:0px;'";

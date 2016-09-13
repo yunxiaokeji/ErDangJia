@@ -23,6 +23,8 @@ namespace YXERP.Models
 
         public int DocType { get; set; }
 
+        public int Status { get; set; }
+
         public bool IsAsc { get; set; }
 
         public int PageIndex { get; set; }

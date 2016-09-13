@@ -1,11 +1,11 @@
-﻿@{
-    var plist = (List<CloudSalesEntity.ProvidersEntity>) ViewBag.Providers;
-    ViewBag.Title = "智能工厂--款式中心";
+﻿@{ 
+    var client = (CloudSalesEntity.Manage.Clients)ViewBag.Client;
+    ViewBag.Title = client.CompanyName+"--款式中心";
     CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
 }
 @section css{
     <link rel="stylesheet" href="/modules/stylecenter/css/stylecenter.css"/>
-    <link rel="shortcut icon" href="/modules/stylecenter/images/ico-cmlogo.png">
+    <link rel="shortcut icon" href="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/stylecenter/images/ico-cmlogo.png")">
 
     <style>
         #cgbtn{color: #fff;}
@@ -24,9 +24,9 @@
 <div style="height: 100px;">
     <div class="divcenter pTop5">
         <div class="left" id="imglogo">
-            <span class="left mTop10"><img src="/modules/stylecenter/images/ico-cmlogo.png" style="width: 60px; height: 60px;"/></span>
+            <span class="left mTop10"><img src="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/stylecenter/images/ico-cmlogo.png")" style="width: 60px; height: 60px;"/></span>
             <span class="left mTop20 " style="">
-                <a class="font16">智能工厂</a><a>&nbsp;款式中心</a><br/>
+                <a class="font16">@(client.CompanyName)</a><br/>
                 <a class="font9 tRight mLeft30 lineHeight30" style="font-style: italic;letter-spacing:3px;">&nbsp;  &nbsp;采购-管理就是如此简单</a> 
             </span>
         </div> 
@@ -41,7 +41,7 @@
 <div class="header-box" style="background-color: #4a98e7; padding: 0px 20px;">
     <div class="divcenter">
         <div class="left" id="divCategory">
-        <div class="header-title left pLeft10" id="spanCategory" style="padding-right: 10px; color: #999; background-color: #ffffff; font-size: 14px; cursor: pointer; position: relative;">所有类目
+        <div class="header-title left pLeft10" id="spanCategory" style="border-top: 1px solid #E6E6E6; padding-right: 10px; color: #999; background-color: #ffffff; font-size: 14px; cursor: pointer; position: relative;">所有类目
 
         </div>
         <div class="divcategory hide mtop30"></div>
@@ -55,13 +55,13 @@
     <div class="orderby">
         <ul class="seachul">
             <li title="综合排序" class="font11" data-name="zh" data-desc="" data-asc="false"><span class="link hover">综合排序</span></li>
-            <li title="销量从高到低" class="font11" data-name="sales" data-desc="p.SaleCount" data-asc="false"><span class="link">销量</span></li>
+            <li title="销量从高到低" class="font11" data-name="sales" data-desc=" p.SaleCount desc" data-asc="false"><span class="link">销量</span></li>
             <li title="价格从高到低" class="font11" data-name="price" data-desc="" id="liprice" style="position: relative;">
                 <span class="link" id="parentprice">价格</span>
                 <span class="icon icon-btn-arrow-2-h"></span>
                 <ul class="divprice hide">
-                    <li data-desc="p.Price" data-asc="false"><span class="link" >价格从高到底</span></li>
-                    <li data-desc="p.Price" data-asc="true"><span class="link" >价格从低到高</span></li>
+                    <li data-desc=" p.Price desc" data-asc="false"><span class="link" >价格从高到底</span></li>
+                    <li data-desc=" p.Price asc" data-asc="true"><span class="link" >价格从低到高</span></li>
                 </ul>
             </li>
             <li title="价格区间" class="font11" id="pricerange" data-name="pricerange" data-desc="" style="padding:0 10px;">

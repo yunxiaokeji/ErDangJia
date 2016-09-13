@@ -29,7 +29,7 @@
                 <div class="left headerTitle">云销科技</div>
                 <div class="clear"></div>
             </div>
-            <a class="btnRegister right" href="/Home/Register?id=@(ViewBag.OtherID)&type=@(ViewBag.BindAccountType)&ReturnUrl=@(ViewBag.ReturnUrl)">注册</a>
+            <a class="btnRegister right" href="/Home/Register?ReturnUrl=@(ViewBag.ReturnUrl)">注册</a>
        </div>
         <div class="main">
             <div class="loginTitle">登录</div>
@@ -42,7 +42,7 @@
                     <input type="password" class="input icoUserPwd" id="iptPwd"/>
                     <div class="txtBoxPassword">请输入密码</div>
                 </div>
-                <div class="btnLogin mTop20" id="btnLogin">@(ViewBag.BindAccountType != 4?"登录":"绑定")</div>
+                <div class="btnLogin mTop20" id="btnLogin">@((ViewBag.BindAccountType != 4 && ViewBag.BindAccountType != 5)?"登录":"绑定")</div>
                 <div class="remember-box ">
                     <div class="cb-remember-password ico-check ">
                         一周内保持登录
@@ -50,7 +50,7 @@
                     <div class="right pRight5"><a href="/Home/FindPassword" class="linkRegister">忘记密码?</a></div>
                     <div class="clear"></div>
                 </div>
-                @if (ViewBag.BindAccountType != 4)
+                @if (ViewBag.BindAccountType != 4 && ViewBag.BindAccountType != 5)
                 {
                     <div class="other-account">
                         <div class="accounts">
@@ -75,6 +75,5 @@
             Copyright©2015-2016 <a href="http://www.yunxiaokeji.com">云销科技</a> 沪ICP备15042543号-2
         </div>
     </div>
-    <input id="OtherID" type="hidden" value="@(ViewBag.OtherID)"/>
 </body>
 </html>

@@ -43,8 +43,7 @@
         </li>
         <li>
             <span class="column-title">行业：</span>
-            <span id ="lblIndustry"> 
-                </span>
+            <span id ="lblIndustry"> </span>
         </li>
         <li>
             <span class="column-title">授权人数：</span><span id="UserQuantity"></span>
@@ -78,8 +77,11 @@
                 <option value="">其他行业</option>
             </select>
         </li>
+        <li style="width: 100%;">
+            <span class="column-title">店铺地址：</span>
+            <a id="ksurl">@(ViewBag.BaseUrl)/StyleCenter/StyleCenter/StyleCenter?id=@(ViewBag.ClientID)</a>
+        </li>
     </ul>
-    <span class="column-title" style="width: 100px;">店铺地址：</span><span><a id="ksurl">@(ViewBag.BaseUrl)/StyleCenter/StyleCenter/StyleCenter?id=@(ViewBag.ClientID)</a></span>
     <input id="ipturl" hidden="hidden" type="text" value="@(ViewBag.BaseUrl)"/>
     <img class="company-logo" src="" id="posterDisImg" alt=""/>
 </div>

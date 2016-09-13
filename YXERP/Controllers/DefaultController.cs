@@ -17,13 +17,16 @@ namespace YXERP.Controllers
         //
         // GET: /Default/
 
-        public ActionResult Index(string href = "",string name="")
+        public ActionResult Index(string href = "", string name = "")
         { 
             ViewBag.Herf = string.IsNullOrEmpty(href) ? "" : href + (string.IsNullOrEmpty(name) ? "" : "&name=" + name);
-            string otherID =CurrentUser.Client.OtherSysID;
-            ViewBag.OtherID =(string.IsNullOrEmpty(otherID) ? "" : otherID);
             ViewBag.RemainDay =Math.Ceiling((CurrentUser.Client.EndTime - DateTime.Now).TotalDays);
-            ViewBag.RemainDate =  CurrentUser.Client.EndTime.Date.ToString("yyyy-MM-dd"); 
+            ViewBag.RemainDate =  CurrentUser.Client.EndTime.Date.ToString("yyyy-MM-dd");
+
+            if (YXERP.Common.Common.IsMobileDevice())
+            {
+                return Redirect("/M/Default/Index");
+            }
             return View();
         }
 

@@ -216,9 +216,8 @@
             code: $("#code").val(),
             companyName: $("#companyName").val(),
             name: $("#name").val(),
-            otherID: $("#OtherID").val(),
             loginPWD: $("#loginPWD").val(),
-            regType: $('#regtype').val()
+            regType: location.href.indexOf("") > 0 ? 6 : 2
         };
 
         Global.post("/Home/RegisterClient", Paras, function (data) {
@@ -231,9 +230,7 @@
                 $(".registerErr").html("手机号已被注册").slideDown();
             } else if (data.Result == 3) {
                 $(".registerErr").html("验证码有误").slideDown();
-            } else if (data.result == 11) {
-                location.href = "/m/home/index";
-            }
+            } 
         })
     }
 

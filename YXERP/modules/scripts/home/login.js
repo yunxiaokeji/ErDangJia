@@ -20,7 +20,7 @@ define(function (require, exports, module) {
             alert("您的账号已在其它地点登录，如不是本人操作，请及时通知管理员对账号冻结！");
         } else if (status == 1) {
             alert("尊敬的明道用户，您尚未被管理员添加到二当家系统，请及时联系管理员！");
-        } else if (status == 3) {
+        } else if (status == 4) {
             alert("尊敬的厂盟用户，您的工厂尚未开通二当家系统，请联系管理员！");
         }
         ObjectJS.bindEvent();
@@ -44,7 +44,7 @@ define(function (require, exports, module) {
                 $(".registerErr").html("请输入密码").slideDown();
                 return;
             }
-            if (_self.bindAccountType == 4) {
+            if (_self.bindAccountType == 4 || _self.bindAccountType == 5) {
                 $("#btnLogin").html("绑定中...").attr("disabled", "disabled");
             } else {
                 $("#btnLogin").html("登录中...").attr("disabled", "disabled");
@@ -53,22 +53,17 @@ define(function (require, exports, module) {
             Global.post("/Home/UserLogin", {
                 userName: $("#iptUserName").val(),
                 pwd: $("#iptPwd").val(),
-                otherid: $("#OtherID").val(),
                 remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0,
                 bindAccountType: _self.bindAccountType
             },
             function (data) {
-                if (_self.bindAccountType == 4) {
+                if (_self.bindAccountType == 4 || _self.bindAccountType == 5) {
                     $("#btnLogin").html("绑定").removeAttr("disabled");
                 } else {
                     $("#btnLogin").html("登录").removeAttr("disabled");
                 }
-                
 
                 if (data.result == 1) {
-                    if (_self.bindAccountType == 10000) {
-                        _self.returnUrl += _self.returnUrl.indexOf('?') > -1 ? "&sign=" + data.sign + "&uid=" + data.uid + "&aid=" + data.aid : "?sign=" + data.sign + "&uid=" + data.uid + "&aid=" + data.aid;
-                    }
                     if (_self.returnUrl) {
                         location.href = _self.returnUrl;
                     }
@@ -85,11 +80,11 @@ define(function (require, exports, module) {
                 else if (data.result == 3) {
                     $(".registerErr").html("账号或密码有误,您还有" + (3 - parseInt(data.errorCount)) + "错误机会").slideDown();
                 }
+                else if (data.result == 4) {
+                    $(".registerErr").html(data.errinfo).slideDown();
+                }
                 else if (data.result == -1) {
                     $(".registerErr").html("账号已冻结，请" + data.forbidTime + "分钟后再试").slideDown();
-                }
-                else if (data.result == 11) {
-                    location.href = "/m/home/index";
                 }
             });
         });

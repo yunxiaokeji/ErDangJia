@@ -19,6 +19,8 @@ namespace IntFactory.Sdk
 
         public string clientCode;
 
+        public string cityCode;
+
         public string address;
 
     }

@@ -581,9 +581,9 @@ namespace CloudSalesBusiness
         }
 
         public static string BindOtherAccount(EnumAccountType accountType, string userid, string projectid,
-            string accountname, string clientid, string agentid)
+            string accountname, string agentid, string clientid)
         {
-            string mes = OrganizationDAL.BaseProvider.BindOtherAccount((int)accountType, userid, projectid, accountname, clientid, agentid);
+            string mes = OrganizationDAL.BaseProvider.BindOtherAccount((int)accountType, userid, projectid, accountname, agentid, clientid);
             if (string.IsNullOrEmpty(mes))
             {
                 if (UserActList.ContainsKey(userid))
@@ -596,6 +596,30 @@ namespace CloudSalesBusiness
                         ProjectID = projectid,
                         UserID=userid,
                         ClientID =clientid,
+                        AgentID = agentid
+                    });
+                    UserActList[userid] = accountList;
+                }
+            }
+            return mes;
+        }
+
+        public static string BindCMClient(string userid, string cmUserID, string cmClientID, string agentid, string clientid, 
+            string companyName, string name, string mobile, string cityCode, string address)
+        {
+            string mes = OrganizationDAL.BaseProvider.BindCMClient(userid, cmUserID, cmClientID, agentid, clientid, companyName, name, mobile, cityCode, address);
+            if (string.IsNullOrEmpty(mes))
+            {
+                if (UserActList.ContainsKey(userid))
+                {
+                    var accountList = GetUserAccounts(userid, clientid);
+                    accountList.Add(new UserAccounts()
+                    {
+                        AccountType = (int)EnumAccountType.ZNGC,
+                        AccountName = cmUserID,
+                        ProjectID = cmClientID,
+                        UserID = userid,
+                        ClientID = clientid,
                         AgentID = agentid
                     });
                     UserActList[userid] = accountList;

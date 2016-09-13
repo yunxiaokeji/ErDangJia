@@ -1,9 +1,9 @@
 ﻿
 
-/*订单详情-订单状态记录*/
+/*订单详情-订单状态记录padding: 0 10px 0 20px;*/
 .main-content { 
 }
-.content-title {height: 40px;line-height: 38px;border-bottom: solid 1px #eee;background-color: #fff;margin: 0px;padding: 0 10px 0 20px;}
+.content-title {height: 40px;line-height: 38px;border-bottom: solid 1px #eee;background-color: #fff;margin: 0px;}
 .content-title .titlename {font-size: 14px;color: #666;}
 .status-items {  }
 .status-items li{ float:left;  position:relative; height:40px; margin-left:-24px; }
@@ -79,15 +79,34 @@
 
 .enlarge-image-item{ position:fixed;  top:40px; bottom:40px; left:200px; right:200px;  }
 
-
+.order-info .divright{   width:740px;  margin-left: 30px; }
+.order-info .divright h1{ font-size: 16px;height: 50px;line-height: 50px;background-color: #f3f3f3;text-indent: 10px;width: 100%;} 
+.order-info .product-details li { height:25px; line-height:25px; float:left; padding:0 10px; margin:5px 10px 0 0; border:solid 2px #ccc; cursor:pointer; display:inline-block; }
+.order-info .product-details li:hover { border:solid 2px #B10000; color:#B10000; } 
+.order-info .product-details li.hover { border:solid 2px #B10000; color:#B10000; }
 /*订单信息*/
-.order-info .moneyinfo { min-width:720px; margin-left:30px; }
+.order-info .moneyinfo { width: 810px; }
 .order-info .moneyinfo li{ line-height:25px; clear:both;padding:3px; overflow:auto; }
 .order-info .moneyinfo li .column-title{ width:80px; float:left; color:#666; }
 
 .order-info .cutomerinfo {  border-left:solid 1px #f6f6f6; margin-top:20px; padding:0 50px 20px 50px; max-width:400px; }
 .order-info .cutomerinfo li{ line-height:25px; clear:both; padding:5px;  }
 .order-info .cutomerinfo li .column-title{ width:80px; float:left; color:#666; }
+
+ .order-info .sizediv{position: relative;padding: 0px 10px 10px 16px;border-bottom: 1px solid #f0f0f0;border-top: 1px solid #f0f0f0;}
+ .order-info table{    display: table;border-collapse: collapse;border-spacing: 0;}
+ .order-info table tbody {display: table-row-group;vertical-align: middle;border-color: inherit;}
+ .order-info table tr{    display: table-row;vertical-align: inherit;border-color: inherit;}
+ .order-info table tr td{height: 44px;border-bottom: 1px dotted #e5e5e5;}
+ .order-info table .last-row td {border-bottom: 0 none;}
+ .order-info table tr .name {width: 160px;padding-right: 10px;font-weight: 700;word-wrap: break-word;word-break: break-all;white-space: normal;}
+  .order-info table tr .price {width: 120px;padding-right: 10px;}
+ .order-info .quantity-add {height: 24px !important; line-height: 24px;font-size: 19px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
+ .order-info .quantity-add:hover{ border: 1px solid #4a98e7;}
+
+ .order-info .quantity-jian{height: 24px !important; line-height: 24px;font-size: 19px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
+ .order-info .quantity-jian:hover{ border: 1px solid #4a98e7;}
+
 
 .order-remark { margin-top:20px; padding:10px; border:solid 1px #eee; line-height:25px;word-break:break-all; }
 .order-remark .title{ color:#999; }

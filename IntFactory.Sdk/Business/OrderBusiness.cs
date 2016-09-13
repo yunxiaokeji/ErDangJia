@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using CloudSalesEntity;
@@ -37,7 +38,13 @@ namespace IntFactory.Sdk
 
             return HttpRequest.RequestServer<OrderResult>(ApiOption.GetOrderDetailByID, paras);
         }
-    
+
+        public OrderAttrResult GetOrdersAttrsList(string zngcOrderID)
+        {
+            var paras = new Dictionary<string, object>();
+            paras.Add("goodsID", zngcOrderID);
+            return HttpRequest.RequestServer<OrderAttrResult>(ApiOption.GetOrderAttrsList, paras);
+        }
         public AddResult CreateDHOrder(string zngcOrderID, decimal price, List<ProductDetailEntity> details, string zngcClientID, string yxOrderID,string clientid="",string personname="",string mobiletele="",string citycode="",string address="")
         {
             var paras = new Dictionary<string, object>();
@@ -73,37 +80,71 @@ namespace IntFactory.Sdk
                 pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "", "", 0, "", 1, "", "", ""
                     , ord.finalPrice, ord.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, ord.orderImage, "", "", new List<ProductDetail>(), ord.goodsID, ord.intGoodsCode, userid, agentid, clientid, out result);
             } 
-            string detailids = "";
-            ord.details.ForEach(x =>
+            //string detailids = "";
+            //ord.details.ForEach(x =>
+            //{
+            //    result = 0;
+            //    x.remark = x.remark.Replace("【", "[").Replace("】", "]");
+            //    string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, ord.intGoodsCode, ord.goodsID, clientid);
+            //    if (string.IsNullOrEmpty(did))
+            //    {
+            //        ProductDetail detail = new ProductDetail();
+            //        detail.Remark = x.remark;
+            //        detail.ClientID = clientid;
+            //        detail.ProductName = ord.goodsName;
+            //        detail.ProductID = pid;
+            //        detail.Price = ord.finalPrice;
+            //        detail.BigPrice = ord.finalPrice;
+            //        detail.CreateUserID = userid;
+            //        did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", "", "", "", ord.finalPrice,
+            //            (decimal) 0.00, ord.finalPrice, "", x.remark, "", userid, clientid, out result);
+            //        if (result == 1)
+            //        { 
+            //            detailids += "" + did + ":" + x.quantity + ",";
+            //        }
+            //    }
+            //    else
+            //    {
+            //        detailids += "" + did + ":"+x.quantity+",";
+            //    }
+            //});
+            //dids = detailids.TrimEnd(','); 
+            dids = CheckProductDetail(pid, ord.details, ord.finalPrice, clientid, userid, ord.goodsID, ord.intGoodsCode,ord.goodsName);
+            return pid;
+        }
+
+        public string CheckProductDetail(string pid, List<ProductDetailEntity> details, decimal price, string clientid, string userid, string goodsID,string goodscode,string goodsname)
+        {
+            string dids="";
+            details.ForEach(x =>
             {
-                result = 0;
+                int result = 0;
                 x.remark = x.remark.Replace("【", "[").Replace("】", "]");
-                string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, ord.intGoodsCode, ord.goodsID, clientid);
+                string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, goodscode, goodsID, clientid);
                 if (string.IsNullOrEmpty(did))
                 {
                     ProductDetail detail = new ProductDetail();
                     detail.Remark = x.remark;
                     detail.ClientID = clientid;
-                    detail.ProductName = ord.goodsName;
+                    detail.ProductName = goodsname;
                     detail.ProductID = pid;
-                    detail.Price = ord.finalPrice;
-                    detail.BigPrice = ord.finalPrice;
+                    detail.Price = price;
+                    detail.BigPrice = price;
                     detail.CreateUserID = userid;
-                    did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", "", "", "", ord.finalPrice,
-                        (decimal) 0.00, ord.finalPrice, "", x.remark, "", userid, clientid, out result);
+                    did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", "", "", "", price,
+                        (decimal)0.00, price, "", x.remark, "", userid, clientid, out result);
                     if (result == 1)
-                    { 
-                        detailids += "" + did + ":" + x.quantity + ",";
+                    {
+                        dids += "" + did + ":" + x.quantity + ",";
                     }
                 }
                 else
                 {
-                    detailids += "" + did + ":"+x.quantity+",";
+                    dids += "" + did + ":" + x.quantity + ",";
                 }
             });
-            dids = detailids.TrimEnd(','); 
-            return pid;
+            dids = dids.TrimEnd(',');
+            return dids;
         }
-
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CloudSalesBusiness;
 using IntFactory.Sdk;
-using IntFactory.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +10,14 @@ namespace YXERP.Areas.M.Controllers
 {
     public class HomeController : YXERP.Controllers.BaseController
     {
-        public ActionResult Index(string providerID, string providerName)
+        public ActionResult Index(string providerID)
         {
             if (string.IsNullOrEmpty(providerID))
             {
                 return Redirect("/M/Home/ChooseProvider");
             }
             ViewBag.providerID = providerID;
-            ViewBag.providerName = string.IsNullOrEmpty(providerName) ? "--" : providerName;
-            
+   
             CloudSalesEntity.Users users = new CloudSalesEntity.Users();
             users.Name = CurrentUser.Client.ContactName;
             users.MobilePhone = CurrentUser.Client.MobilePhone;

@@ -5,7 +5,7 @@
 %}
     <ul class="listabove row">
         <li style="">
-            <a href="/m/home/Detail?orderid={%=item.ProductID%}&clientid={%=item.ClientID%}" style="padding:1px;border:1px solid #ddd;font-size:0;"><img class="task-list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.ProductImage%}' /></a>
+            <a href="/m/home/Detail?orderid={%=item.ProductID%}&clientid={%=$data.clientID%}" style="padding:1px;border:1px solid #ddd;font-size:0;"><img class="task-list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.ProductImage%}' /></a>
         </li>     
         <li class="center-list-task">
             <!--任务详情-->

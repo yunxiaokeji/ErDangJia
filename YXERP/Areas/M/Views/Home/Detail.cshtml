@@ -1,11 +1,11 @@
 ﻿@{
     ViewBag.Title = "款式详情";
-    var order = (IntFactory.Sdk.OrderEntity)ViewBag.Order;
+    var order = (CloudSalesEntity.Products)ViewBag.Model;
     var user = (CloudSalesEntity.Users)ViewBag.baseUser;
     string[] imagesUrl = { };
-    if (order.orderImages.Length != 0)
+    if (order.ImgS!=null&&order.ImgS.Length != 0)
     {
-        imagesUrl = order.orderImages.Trim(',').Split(',');
+        imagesUrl = order.ImgS.Trim(',').Split(',');
     }
     
 }
@@ -70,17 +70,17 @@
     <div class="main-info">
         <ul class="mLeft10 mRight10">
             <li class="long" style="display:block;">
-                <div class="task-code base-info">@order.goodsName</div>
+                <div class="task-code base-info">@(string.IsNullOrEmpty(order.ProductName) ? "--" : order.ProductName)</div>
             </li>
-            <li><div class="task-code base-info"><span>分类：</span><span class="mLeft5">@order.categoryName</span></div></li>
+            <li><div class="task-code base-info"><span>分类：</span><span class="mLeft5"@(order.CategoryName)</span></div></li>
             <li class="long" style="display:block;">
                 <div class="task-code base-info">
                      <div class="left" style="padding-top:3px;"><img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;"></div>
-                    <div class="left mLeft5">@order.clientName</div>
+                    <div class="left mLeft5">@(order.ProviderName)</div>
                 </div>
             </li>
             <li>
-                <div class="left blue">￥ <span style="font-size:26px;">@order.finalPrice.ToString("f2")</span></div>
+                <div class="left blue">￥ <span style="font-size:26px;">@(order.Price.ToString("f2"))</span></div>
                 <div class="btn-addOrder right">立即下单</div>
                 <div class="clear"></div>
             </li>
@@ -92,7 +92,7 @@
 <!--菜单-->
 <nav>
     <ul>
-        <li class="menuchecked" data-classname="plate-info"><i class="iconfont">&#xe617;</i>制版信息</li>
+        <li class="menuchecked" data-classname="description"><i class="iconfont">&#xe617;</i>产品信息</li>
         <li data-classname="intfactory-info"><i class="iconfont">&#xe633;</i>工厂信息</li>
         @*<li data-classname="plate-des"><i class="iconfont">&#xe647;</i>工艺说明</li>*@
     </ul>
@@ -100,15 +100,15 @@
 </nav>
 
 <div class="main-box">
-    <div class="plate-info">
+    <div class="description">
         @{
-            if (!string.IsNullOrEmpty(order.platemaking))
+            if (!string.IsNullOrEmpty(order.Description))
             {
-                <div class="platemakingBody">@(new MvcHtmlString(Server.UrlDecode(order.platemaking)))</div>
+                <div class="">@(new MvcHtmlString(Server.UrlDecode(order.Description)))</div>
             }
             else
             {
-                <div class="nodata-txt">暂无制版信息</div>
+                <div class="nodata-txt">暂无说明</div>
             }
         }
     </div>
@@ -117,10 +117,10 @@
     </div>
      <div class="intfactory-info hide">
         <ul class="table-add">
-            <li><span class="column-title">工厂名称：</span><span>@order.clientName</span></li>
-            <li><span class="column-title">联系人：</span><span>@order.clientContactName</span></li>
-            <li><span class="column-title">联系电话：</span><span>@order.clientMobile</span></li>
-            <li><span class="column-title">工厂地址：</span><span>@order.clientAdress</span></li>
+            <li><span class="column-title">工厂名称：</span><span>呵呵</span></li>
+            <li><span class="column-title">联系人：</span><span>呵呵</span></li>
+            <li><span class="column-title">联系电话：</span><span>呵呵</span></li>
+            <li><span class="column-title">工厂地址：</span><span>呵呵</span></li>
         </ul>
     </div>
 </div>

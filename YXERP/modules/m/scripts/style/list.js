@@ -227,19 +227,6 @@
             }
         });
 
-        $('#btnPriceRange').click(function () {
-            var beginp = $('#beginPrice').val();
-            var endp = $('#endPrice').val();
-            if ((beginp != "" && isNaN(Number(beginp))) || (endp != "" && isNaN(Number(endp)))) {
-                alert('价格格式输入有误，请重新输入');
-            } else {
-                Params.beginPrice = beginp;
-                Params.endPrice = endp;
-                Params.pageIndex = 1;
-                ObjectJS.getList();
-            }
-        });
-
         //显示选择分类弹出层
         $(".show-category").click(function () {
             $(".layer-body").fadeIn(400);
@@ -247,6 +234,39 @@
             setTimeout(function () {
                 $(".filter-object").addClass('outlayer');
             }, 10);
+        });
+
+        /*确定筛选条件*/
+        $(".confirm-fliter").click(function () {
+            Params.categoryID = $(".category-box .category-block.hover").eq($(".category-box .category-block.hover").length - 1).data('id') || "";
+            Params.pageIndex = 1;
+            Params.beginPrice = $("#beginPrice").val();
+            Params.endPrice = $("#endPrice").val();
+            ObjectJS.getList();
+            $(".layer-body").fadeOut(400);
+            $(".filter-object").removeClass('outlayer');
+            setTimeout(function () {
+                $(".filter-object").hide();
+            }, 410);
+        });
+
+        /*重置筛选条件*/
+        $(".confirm-reset").click(function () {
+            $("#beginPrice").val('');
+            $("#endPrice").val('');
+            $(".layer-box").eq(1).nextAll().remove();
+            $(".layer-box .category-block").removeClass('hover');
+
+            Params.categoryID = "";
+            Params.pageIndex = 1;
+            Params.beginPrice = "";
+            Params.endPrice = "";
+            ObjectJS.getList();
+            $(".layer-body").fadeOut(400);
+            $(".filter-object").removeClass('outlayer');
+            setTimeout(function () {
+                $(".filter-object").hide();
+            }, 410);
         });
     };
 
@@ -265,6 +285,7 @@
                 $(".list").append("<div class='nodata-txt'>暂无数据 !</div>");
             } else {
                 doT.exec(template, function (code) {
+                    data.items.clientID = Params.clientid;
                     var innerHtml = code(data.items);
                     innerHtml = $(innerHtml);
                     $(".list").append(innerHtml);
@@ -326,9 +347,6 @@
                         _this.addClass('hover');
                         _this.siblings().removeClass('hover');
                         _thisParent.nextAll().remove();
-                        Params.categoryID = _this.data('id');
-                        Params.pageIndex = 1;
-                        ObjectJS.getList();
                         if (CacheChildCategory[_this.data('id')]) {
                             var item = CacheChildCategory[_this.data('id')];
                             if (item.ChildCategorys.length > 0) {
@@ -363,9 +381,6 @@
                         _this.addClass('hover');
                         _this.siblings().removeClass('hover');
                         _thisParent.nextAll().remove();
-                        Params.categoryID = _this.data('id');
-                        Params.pageIndex = 1;
-                        ObjectJS.getList();
                         if (CacheChildCategory[_this.data('id')]) {
                             var item = CacheChildCategory[_this.data('id')];
                             if (item.ChildCategorys.length > 0) {

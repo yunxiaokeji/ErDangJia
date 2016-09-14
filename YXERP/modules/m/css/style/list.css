@@ -89,15 +89,21 @@
 .list .center-list-task a {font-size:16px; }
 
 /*筛选浮层*/
-.filter-object { position:fixed;background-color:#fff;width:80%;min-width:270px;max-width:400px;right:0;top:50px;height:100%;
-                 border-left:1px solid #ccc;padding-bottom:50px;z-index:325;
+.filter-object { position:fixed;background-color:#fff;width:80%;min-width:270px;max-width:400px;right:0;top:0px;height:100%;
+                 border-left:1px solid #ccc;z-index:350;padding-bottom:50px;
                  box-shadow:0 0 3px #ccc;-webkit-box-shadow:0 0 3px #ccc;-moz-box-shadow:0 0 3px #ccc;
                  box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;
                  transition:transform .5s;-webkit-transition:-webkit-transform .5s;-moz-transition:-moz-transform .5s;
                  transform:translateX(100%);-webkit-transform:translateX(100%);-moz-transform:translateX(100%);
 }
 .filter-object.outlayer { transform:translateX(0);-webkit-transform:translateX(0);-moz-transform:translateX(0);}
-.layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;z-index:320;}
+/*确定按钮*/
+.fliter-confirm-box { position:absolute;left:0px;bottom:0px;width:100%;display:table;}
+.fliter-confirm-box .confirm-fliter,.fliter-confirm-box .confirm-reset {display:table-cell;text-align:center;padding:10px 0;font-size:16px;}
+.fliter-confirm-box .confirm-fliter { background-color:#4a98e7;color:#fff;}
+.fliter-confirm-box .confirm-reset { background-color:#eee;color:#333;}
+
+.layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;z-index:349;}
 .layer-box { box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;width:100%;border-bottom:1px solid #ddd;padding:10px 5px;}
 .category-block { min-width:60px;height:20px;padding:3px 5px;border:1px solid #ddd;text-align:center;float:left;margin-left:5px;margin-bottom:10px;}
 .category-block.hover {background-color:#4a98e7;color:#fff;}

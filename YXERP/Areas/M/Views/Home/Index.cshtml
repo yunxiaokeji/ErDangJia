@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title="款式中心";
+    ViewBag.Title="店铺中心";
     var v = DateTime.Now.Ticks;
 }
 @section css{
@@ -86,20 +86,26 @@
 <div class="layer-body hide"></div>
 <div class="filter-object hide">
     <div style="height:100%;overflow-y:auto;">
+        <div style="background:#ddd;color:#888;text-indent:10px;padding:5px 0;font-size:14px;">
+            高级筛选
+        </div>
         <div class="layer-box" style="">
-            <span style="display:inline-block;width:46px;">价格：</span>
+            <span style="display:inline-block;width:46px;margin-left:5px;">价格：</span>
             <input type="tel" id="beginPrice" spellcheck="false" placeholder="￥" />
             -
             <input type="tel" id="endPrice" spellcheck="false" placeholder="￥" />
-            <div class="btn" id="btnPriceRange">确定</div>
         </div>
         <div class="layer-box">
-        <div class="mLeft5 mBottom10">类目：</div>
-        <div>
-            <ul class="category-box row">
-            </ul>
+            <div class="mLeft5 mBottom10">类目：</div>
+            <div>
+                <ul class="category-box row">
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+    <div class="fliter-confirm-box">
+        <div class="confirm-reset">重置</div>
+        <div class="confirm-fliter">确定</div>
+    </div>
 </div>
 

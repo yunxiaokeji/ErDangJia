@@ -129,7 +129,7 @@ namespace YXERP.Areas.Mall.Controllers
                     "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
                     GetbaseUrl() + "/Mall/Store/Goods?id=" + clientid + "';</script>");
                 Response.End();
-            } 
+            }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;

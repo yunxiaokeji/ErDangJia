@@ -192,6 +192,8 @@
     <Content Include="Content\homeico\order.png" />
     <Content Include="Content\menuico\accountManage.png" />
     <Content Include="Content\menuico\activity.png" />
+    <Content Include="Content\menuico\collectstore.png" />
+    <Content Include="Content\menuico\collectstorehover.png" />
     <Content Include="Content\menuico\customer.png" />
     <Content Include="Content\menuico\customerRPT.png" />
     <Content Include="Content\menuico\default-menu.png" />

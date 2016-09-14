@@ -32,6 +32,7 @@ define(function (require, exports, module) {
 
         $("#iframeBox").css("height", document.documentElement.clientHeight - 95);
     }
+
     LayoutObject.getParam = function (url, name) { 
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
         if (url == '') {
@@ -84,9 +85,13 @@ define(function (require, exports, module) {
                 $(".dropdown-companyinfo").fadeOut("1000");
             }
 
+            if (!$(e.target).parents().hasClass("open-collect-store") && !$(e.target).hasClass("open-collect-store")) {
+                $(".dropdown-collect-store").fadeOut("1000");
+            }
+
             $("#contentMenu").hide();
         });
-        _self.getProvider();
+        
         //向左滑动
         $(".left-btn").click(function () {
             var position = $("#windowItems").position();
@@ -112,6 +117,18 @@ define(function (require, exports, module) {
             $(".dropdown-userinfo").fadeIn("1000");
         });
 
+        //展开关注商家
+        $('#openStores').click(function () {
+            var _this = $(this), offset = _this.offset();
+            $(".dropdown-collect-store").css("left", offset.left);
+            if (!_this.data("open")) {
+                _self.openCollectStore();
+                _this.data("open", "1");
+            } else {
+                $(".dropdown-collect-store").fadeIn("1000");
+            }
+        });
+
         //公司名称信息展开
         $("#companyName,#companyLogo").click(function () {
             $(".dropdown-companyinfo").fadeIn("1000");
@@ -128,16 +145,10 @@ define(function (require, exports, module) {
                 _this.attr("src", _this.data("ico"));
             }
         });
-        $('#intfactoryli').mouseover(function () {
-            $(this).addClass("hover");
-            $('#providerul').show();
-        }).mouseout(function () {
-            $(this).removeClass("hover");
-            $('#providerul').hide();
-        });
+
         $("#modulesMenu li").click(function () {
             var _this = $(this);
-            if (!_this.hasClass("hover")) {
+            if (!_this.hasClass("hover") && _this.attr("id") != "openStores") {
                 _this.addClass("hover");
                 _this.siblings().removeClass("hover");
                 _this.siblings().find("img").each(function() {
@@ -435,6 +446,7 @@ define(function (require, exports, module) {
             }
         }
     }
+
     //待办小红点
     LayoutObject.bindUpcomings = function () {
         return;
@@ -550,27 +562,20 @@ define(function (require, exports, module) {
             }
         });
     }
-    //获取供应商
-    LayoutObject.getProvider = function () {
-        Global.post("/Products/GetProviderList", null, function (data) {
-            var html = "";
-            for (var s = 0; s < data.items.length; s++) {
-                var item = data.items[s];
-                if (item.CMClientID != "" && item.CMClientID != null) {
-                    html += "<li class='providerli' data-cmid='" + item.CMClientID + "' data-id='" + item.ProviderID + "'>" + item.Name + "</li>";
+
+    //获取关注店铺
+    LayoutObject.openCollectStore = function () {
+        Global.post("/Products/GetProviderList", {}, function (data) {
+            for (var i = 0; i < data.items.length; i++) {
+                var item = data.items[i];
+                if (item.CMClientID && item.ProviderType == 2) {
+                    $(".dropdown-collect-store ul").append('<li class="item"><a class="long" href="/Mall/Store/Index/' + item.CMClientID + '"  target="_blank">' + item.Name + '</a></li>');
                 }
             }
-            if (html == "") {
-                $('#providerul').css("height","0px");
-            }
-            $('#providerul').html(html);
-            $('#providerul').find("li").click(function () {
-                var _this = $(this); 
-                $('#intfactoryhref').parent().attr("href", "/Mall/Store/Goods?id=" + _this.data("cmid"));
-                $('#intfactoryhref').click();
-            });
+            $(".dropdown-collect-store").fadeIn("1000");
         });
     }
+
     //获取代理商授权信息
     LayoutObject.getAgentAuthorizes = function () {
         Global.post("/Default/GetAgentAuthorizes", null, function (data) {

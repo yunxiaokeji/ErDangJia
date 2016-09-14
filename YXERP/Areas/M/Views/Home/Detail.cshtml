@@ -72,11 +72,16 @@
             <li class="long" style="display:block;">
                 <div class="task-code base-info">@(string.IsNullOrEmpty(order.ProductName) ? "--" : order.ProductName)</div>
             </li>
-            <li><div class="task-code base-info"><span>分类：</span><span class="mLeft5"@(order.CategoryName)</span></div></li>
-            <li class="long" style="display:block;">
+            <li>
                 <div class="task-code base-info">
-                     <div class="left" style="padding-top:3px;"><img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;"></div>
-                    <div class="left mLeft5">@(order.ProviderName)</div>
+                    <span>分类：</span>
+                    <span class="mLeft5">@(string.IsNullOrEmpty(order.CategoryName)?"--":order.CategoryName)</span>
+                </div>
+            </li>
+            <li>
+                <div class="task-code base-info">
+                    <span>单位：</span>
+                    <span class="mLeft5">@(order.SmallUnit != null ? (!string.IsNullOrEmpty(order.SmallUnit.UnitName) ? order.SmallUnit.UnitName : "件") : "件")</span>
                 </div>
             </li>
             <li>
@@ -92,9 +97,7 @@
 <!--菜单-->
 <nav>
     <ul>
-        <li class="menuchecked" data-classname="description"><i class="iconfont">&#xe617;</i>产品信息</li>
-        <li data-classname="intfactory-info"><i class="iconfont">&#xe633;</i>工厂信息</li>
-        @*<li data-classname="plate-des"><i class="iconfont">&#xe647;</i>工艺说明</li>*@
+        <li class="menuchecked" data-classname="description"><i class="iconfont">&#xe617;</i>基本信息</li>
     </ul>
     <div class="clear"></div>
 </nav>
@@ -111,17 +114,6 @@
                 <div class="nodata-txt">暂无说明</div>
             }
         }
-    </div>
-    <div class="plate-des hide">
-        <div class="tb-plates"></div>
-    </div>
-     <div class="intfactory-info hide">
-        <ul class="table-add">
-            <li><span class="column-title">工厂名称：</span><span>呵呵</span></li>
-            <li><span class="column-title">联系人：</span><span>呵呵</span></li>
-            <li><span class="column-title">联系电话：</span><span>呵呵</span></li>
-            <li><span class="column-title">工厂地址：</span><span>呵呵</span></li>
-        </ul>
     </div>
 </div>
 

@@ -583,7 +583,25 @@ namespace CloudSalesBusiness
 
             return model;
         }
+        public Category GetCategoryByName(string categoryname, string clientid,string pid="")
+        {
+            var list = GetCategorys(clientid);
+            if (list.Where(m => m.CategoryName == categoryname).Count() > 0)
+            {
+                return list.Where(m => m.CategoryName == categoryname).OrderBy(x=>x.Layers).FirstOrDefault();
+            }
 
+            DataTable dt = ProductsDAL.BaseProvider.GetCategoryByName(categoryname, clientid, pid);
+
+            Category model = new Category();
+            if (dt.Rows.Count > 0)
+            {
+                model.FillData(dt.Rows[0]);
+                list.Add(model);
+            }
+
+            return model;
+        }
         public Category GetCategoryDetailByID(string categoryid)
         {
             var dal = new ProductsDAL();

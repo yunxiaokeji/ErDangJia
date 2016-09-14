@@ -12,6 +12,7 @@ namespace IntFactory.Sdk
         public static ClientBusiness BaseBusiness = new ClientBusiness();
 
         public List<CategoryEntity>  CategoryList;
+        public static Nullable<DateTime> refreshTime { get; set; } 
         public ClientResult GetClientInfo(string zngcClientID,string userid="")
         {
             var paras = new Dictionary<string, object>();
@@ -56,12 +57,13 @@ namespace IntFactory.Sdk
         public List<CategoryEntity> GetAllCategory(int layerid = -1, EnumCategoryType type = EnumCategoryType.All)
         {
             var list=new List<CategoryEntity>();
-            if (CategoryList != null && CategoryList.Count != 0)
+            if (CategoryList != null && CategoryList.Count != 0 &&  refreshTime!=null && (DateTime.Now -Convert.ToDateTime(refreshTime)).TotalMinutes<30)
             {
                 list = CategoryList;
             }
             else
             {
+                refreshTime=DateTime.Now;
                 var paras = new Dictionary<string, object>();
                 paras.Add("layerid", layerid);
                 paras.Add("type", type);

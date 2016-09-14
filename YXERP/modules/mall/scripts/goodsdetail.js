@@ -15,6 +15,7 @@
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
         _self.getOrderAttr();
+        console.log(_self.model);
     }
 
     ObjectJS.bindStyle = function (model) {

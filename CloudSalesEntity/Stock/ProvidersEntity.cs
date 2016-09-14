@@ -155,6 +155,9 @@ namespace CloudSalesEntity
             set { _cmclientcode = value; }
             get { return _cmclientcode; }
         }
+
+        public int ProviderType { get; set; }
+
 		#endregion Model
 
         /// <summary>

@@ -30,6 +30,16 @@ header .menu .cursor {border-bottom:solid 9px #f2f4f8; border-left:solid 10px tr
 header .menu li:hover .name,header .menu .hover .name{ color:#fff;}
 header .menu .hover .cursor{ display:inline-block;}
 
+/*关注店铺*/
+.dropdown-collect-store { position:fixed; background-color:#fff; width:300px; border-radius:2px; border:solid 1px #eee;
+                     box-shadow:0 0 5px #ccc; top:50px; z-index:2000; }
+.dropdown-collect-store .top-lump { border-bottom:solid 10px #fff; border-left:solid 12px transparent ;border-right:solid 12px transparent; 
+                               width:0; height:0; position:absolute; left:50px; top:-9px; }
+.dropdown-collect-store .items-list { padding:5px 0; overflow:auto; max-height:350px; }
+.dropdown-collect-store .items-list .item{ height:35px; line-height:35px; }
+.dropdown-collect-store .items-list .item a{ width:200px; padding-left:20px; height:35px; display:inline-block; font-size:14px; color:#666;}
+.dropdown-collect-store .items-list .item:hover{ background-color:#eee; }
+
 /*登录信息*/
 header .currentuser { margin-right:30px; cursor:pointer;}
 header .currentuser span{ display:inline-block; float:left;}

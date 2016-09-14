@@ -32,13 +32,9 @@
                 </li>
             }
 
-            <li class="left" style="position: relative;" id="intfactoryli">
-                <img class="ico" data-ico="/modules/images/changmeng.png" data-hover="/modules/images/changmeng-noreal-Logo.png" src="/modules/images/changmeng.png" /> 
-                <span class="name" >供应商</span>
-                <span class="cursor"></span>
-                <a href="/Mall/Store/Goods" class="hide" style="color: #BFD2F2;"><span id="intfactoryhref">temp</span></a> 
-               <ul class="dropdown-ul hide" id="providerul" style="line-height: 25px !important;top :50px; left: -15px;"> 
-                </ul>
+            <li class="left open-collect-store" id="openStores">
+                <img class="ico" data-ico="/Content/menuico/collectstore.png" data-hover="/Content/menuico/collectstorehover.png" src="/Content/menuico/collectstore.png" /> 
+                <span class="name" >关注商家</span>
             </li>
         </ul> 
         
@@ -109,6 +105,13 @@
         <ul class="items-list">
             <li class="item"><a href="javascript:void(0);" class="btn-open-window" data-id="myAccount" data-code="10000000000" data-name="个人中心" data-url="/MyAccount/Index">个人中心</a></li>
             <li class="item"><a href="/Home/Logout">安全退出</a></li>
+        </ul>
+    </div>
+    @*点击关注商家展开下拉列表*@
+    <div class="dropdown-collect-store hide">
+        <div class="top-lump"></div>
+        <ul class="items-list">
+            <li class="item"><a href="/Mall/Store/Index/@(CurrentUser.ClientID)" target="_blank">进入我的店铺</a></li>
         </ul>
     </div>
 

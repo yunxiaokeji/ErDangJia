@@ -222,7 +222,8 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_SubmitOverflowDoc", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public static bool AddPurchaseDoc(string docid,string productid,  int doctype, string ids, string providerid,decimal totalfee, string remark, string wareid,int sourcetype, string userid, string clientid)
+        public static bool AddPurchaseDoc(string docid,string productid,  int doctype, string ids, string providerid,decimal totalfee, string remark, string wareid,
+            int sourcetype, string userid, string clientid,string agentid,string personname,string mobilephone,string address,string citycode )
         {
             SqlParameter[] paras = { 
                                      new SqlParameter("@DocID",docid),
@@ -234,8 +235,13 @@ namespace CloudSalesDAL
                                      new SqlParameter("@SourceType",sourcetype), 
                                      new SqlParameter("@ProductDetails" , ids),
                                      new SqlParameter("@ProviderID" , providerid),
+                                     new SqlParameter("@CityCode" , citycode),
+                                     new SqlParameter("@Address" , address), 
                                      new SqlParameter("@TotalMoney" , totalfee),
                                      new SqlParameter("@UserID" , userid),
+                                     new SqlParameter("@PersonName" , personname),
+                                     new SqlParameter("@MobilePhone" , mobilephone),
+                                     new SqlParameter("@AgentID" , agentid),
                                      new SqlParameter("@ClientID" , clientid)
                                    };
             return ExecuteNonQuery("P_AddPurchaseDoc", paras, CommandType.StoredProcedure) > 0;

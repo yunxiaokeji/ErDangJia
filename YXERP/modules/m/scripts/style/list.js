@@ -14,13 +14,13 @@
         keyWords: ""
     };
     var ObjectJS = {};
-    var cacheOrder = [];
-    var isShowOrder = false;
+    var CacheCategory = [];
+    var CacheChildCategory = [];
 
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
     ObjectJS.init = function (providerid, user) {
-        Params.clientid = providerid || '-1';
+        Params.clientid = providerid;
         //providers = JSON.parse(providers.replace(/&quot;/g, '"'));
         //for (var i = 0; i < providers.length; i++) {              
         //    var p = providers[i];
@@ -39,7 +39,7 @@
     ObjectJS.bindEvent = function () {
         //滚动加载数据
         $(window).scroll(function () {
-            if ($(".overlay-addOrder").css('display') == 'none') {
+            if ($(".overlay-addOrder").css('display') == 'none' && $(".filter-object").css('display') == "none") {
                 if (document.body.scrollTop > 30) {
                     $(".getback").slideDown("slow");
                 } else {
@@ -75,8 +75,14 @@
             if (!$(e.target).parents().hasClass("btn-task-filtertype") && !$(e.target).hasClass("btn-task-filtertype")) {
                 $(".task-filtertype").slideUp(400);
             }
-            if (!$(e.target).hasClass("show-category") && !$(e.target).hasClass("category-box") && !$(e.target).parents().hasClass("category-box")) {
-                $(".category-box").slideUp(400);
+            if (!$(e.target).hasClass("category-block") &&!$(e.target).hasClass("show-category")&&
+                !$(e.target).parents().hasClass("filter-object") && !$(e.target).parents().hasClass("layer-box")&&
+                !$(e.target).parents().hasClass("category-box") && !$(e.target).parents().hasClass("show-category")) {
+                $(".layer-body").fadeOut(400);
+                $(".filter-object").removeClass('outlayer');
+                setTimeout(function () {
+                    $(".filter-object").hide();
+                }, 401);
             }
         });
 
@@ -211,7 +217,7 @@
             $('html, body').animate({ scrollTop: 0 }, 'slow');
         });
 
-        $(".filter-price input[type='tel']").change(function () {
+        $("#beginPrice,#endPrice").change(function () {
             var _this = $(this);
             if (!_this.val().isDouble()) {
                 _this.val('');
@@ -219,22 +225,46 @@
             }
         });
 
-        $('#btnPriceRange').click(function () {
-            var beginp = $('#beginPrice').val();
-            var endp = $('#endPrice').val();
-            if ((beginp != "" && isNaN(Number(beginp))) || (endp != "" && isNaN(Number(endp)))) {
-                alert('价格格式输入有误，请重新输入');
-            } else {
-                Params.beginPrice = beginp;
-                Params.endPrice = endp;
-                Params.pageIndex = 1;
-                ObjectJS.getList();
-            }
-        });
-
         //显示选择分类弹出层
         $(".show-category").click(function () {
-            $(".category-box").slideDown();
+            $(".filter-object").show(1);
+            $(".layer-body").fadeIn(400);
+            setTimeout(function () {
+                $(".filter-object").addClass('outlayer');
+            }, 10);
+        });
+
+        /*确定筛选条件*/
+        $(".confirm-fliter").click(function () {
+            Params.categoryID = $(".category-box .category-block.hover").eq($(".category-box .category-block.hover").length - 1).data('id') || "";
+            Params.pageIndex = 1;
+            Params.beginPrice = $("#beginPrice").val();
+            Params.endPrice = $("#endPrice").val();
+            ObjectJS.getList();
+            $(".layer-body").fadeOut(400);
+            $(".filter-object").removeClass('outlayer');
+            setTimeout(function () {
+                $(".filter-object").hide();
+            }, 410);
+        });
+
+        /*重置筛选条件*/
+        $(".confirm-reset").click(function () {
+            $("#beginPrice").val('');
+            $("#endPrice").val('');
+            $(".layer-box").eq(1).nextAll().remove();
+            $(".layer-box .category-block").removeClass('hover');
+
+            Params.categoryID = "";
+            Params.pageIndex = 1;
+            Params.beginPrice = "";
+            Params.endPrice = "";
+            ObjectJS.getList();
+            $(".layer-body").fadeOut(400);
+            $(".filter-object").removeClass('outlayer');
+            setTimeout(function () {
+                $(".filter-object").hide();
+            }, 410);
         });
     };
 
@@ -253,38 +283,25 @@
                 $(".list").append("<div class='nodata-txt'>暂无数据 !</div>");
             } else {
                 doT.exec(template, function (code) {
+                    data.items.clientID = Params.clientid;
                     var innerHtml = code(data.items);
                     innerHtml = $(innerHtml);
                     $(".list").append(innerHtml);
 
                     innerHtml.find(".btn-addOrder").click(function () {
                         var _this = $(this);
-                        if (!isShowOrder) {
-                            var id = _this.data('orderid');
-                            if (!cacheOrder[id]) {
-                                isShowOrder = true;
-                                Global.post("../IntFactoryOrders/GetOrderDetail", {
-                                    orderID: id,
-                                    clientID: _this.data('clientid')
-                                }, function (data) {
-                                    isShowOrder = false;
-                                    if (data.result.error_code == 0) {
-                                        cacheOrder[id] = data.result.order;
-                                        Common.showOrderGoodsLayer(cacheOrder[id], ObjectJS.user);
-                                    } else {
-                                        alert("请重新尝试",2);
-                                    }
-                                });
-                            } else {
-                                Common.showOrderGoodsLayer(cacheOrder[id], ObjectJS.user);
-                            }
-                        } else {
-                            alert("正在加载，请稍等",2);
-                        }
+                        var obj = _this.parents('.listabove');
+                        var model = {
+                            ProductName: obj.find('.details').text(),
+                            Price: obj.find('.price').text(),
+                            ProductImage: obj.find('.list-img').data('src')
+                        };
+                       
+                        Common.showOrderGoodsLayer(model, ObjectJS.user);
                     });
 
                     //延迟加载图片
-                    $(".task-list-img").each(function () {
+                    $(".list-img").each(function () {
                         var _this = $(this);
                         setTimeout(function () {
                             _this.attr("src", _this.data("src") + "?imageView2/1/w/120/h/120");
@@ -303,40 +320,66 @@
         Global.post("/Mall/Store/GetEdjCateGory", null, function (data) {
             $(".category-box .data-loading").remove();
             if (data.items.length > 0) {
+                CacheCategory = data.items;
                 for (var i = 0; i < data.items.length; i++) {
                     var item = data.items[i];
-                    var obj = $("<div style='display:table;'></div>"),
-                        _categoryName = $('<div class="category-title" data-type="1" style="display:table-cell; line-height:30px;vertical-align:top;min-width:45px;" data-id="' + item.CategoryID + '"><span>' + item.CategoryName + '</span>：</div>'),
-                        _childObj = $('<ul class="row category-items" style="display:table-cell;"></ul>');
-                    for (var j = 0; j < item.ChildCategorys.length; j++) {
-                        var childcate = item.ChildCategorys[j];
-                        _childObj.append('<li class="item" data-id="' + childcate.CategoryID + '">' + childcate.CategoryName + '</li>');
-                    }
-                    obj.append(_categoryName).append(_childObj);
+                    CacheChildCategory[item.CategoryID] = item;
+                    var obj = $("<li class='category-block' data-id='" + item.CategoryID + "' layer='" + item.Layers + "'>" + item.CategoryName + "</li>");
+                    obj.click(function () {
+                        var _this = $(this);
+                        var _thisParent = _this.parents('.layer-box');
+                        _this.addClass('hover');
+                        _this.siblings().removeClass('hover');
+                        _thisParent.nextAll().remove();
+                        if (CacheChildCategory[_this.data('id')]) {
+                            var item = CacheChildCategory[_this.data('id')];
+                            if (item.ChildCategorys.length > 0) {
+                                _self.createCategory(_this.data('id'), _thisParent);
+                            }
+                        }
+                    });
                     $(".category-box").append(obj);
                 }
-                $(".category-items .item,.category-title").click(function () {
-                    var _this = $(this);
-                    $(".category-items .item,.category-title").removeClass('hover');
-                    _this.addClass('hover');
-                    var _desc = "";
-                    if (_this.data('type') == 1) {
-                        _desc = _this.find('span').text();
-                    } else {
-                        _desc = _this.parent().prev().find('span').text() + " > " + _this.text();
-                    }
-                    $(".show-category").text(_desc);
-                    Params.categoryID = _this.data("id");
-                    Params.pageIndex = 1;
-                    $(".category-box").slideUp();
-
-                    ObjectJS.getList();
-                });
             } else {
                 $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");
             }
         });
     }
+
+    ObjectJS.createCategory = function (id, parentObj) {
+        if (CacheChildCategory[id]) {
+            var item = CacheChildCategory[id];
+            if (item.ChildCategorys.length > 0) {
+                var _html = $('<div class="layer-box" style="display:table;"></div>'),
+                    _htmlTitle = $('<div class="mLeft5 mBottom10" data-id="' + id + '">' + item.CategoryName + '：</div>'),
+                    _htmlChildItems = $('<div></div>'),
+                    _htmlChildBox = $('<ul class="category-box row"></ul>');
+
+                for (var j = 0; j < item.ChildCategorys.length; j++) {
+                    var _child = item.ChildCategorys[j];
+                    CacheChildCategory[_child.CategoryID] = _child;
+                    var _obj = $("<li class='category-block' data-id='" + _child.CategoryID + "' layer='" + _child.Layers + "'>" + _child.CategoryName + "</li>");
+                    _obj.click(function () {
+                        var _this = $(this);
+                        var _thisParent = _this.parents('.layer-box');
+                        _this.addClass('hover');
+                        _this.siblings().removeClass('hover');
+                        _thisParent.nextAll().remove();
+                        if (CacheChildCategory[_this.data('id')]) {
+                            var item = CacheChildCategory[_this.data('id')];
+                            if (item.ChildCategorys.length > 0) {
+                                ObjectJS.createCategory(_this.data('id'), _thisParent);
+                            }
+                        }
+                    });
+                    _htmlChildBox.append(_obj);
+                }
+                _htmlChildItems.append(_htmlChildBox)
+                _html.append(_htmlTitle).append(_htmlChildItems);
+                parentObj.after(_html);
+            }
+        }
+    };
 
     module.exports = ObjectJS;
 });

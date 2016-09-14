@@ -129,7 +129,7 @@ namespace YXERP.Areas.Mall.Controllers
                     "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
                     GetbaseUrl() + "/Mall/Store/Goods?id=" + clientid + "';</script>");
                 Response.End();
-            } 
+            }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;
@@ -330,7 +330,7 @@ namespace YXERP.Areas.Mall.Controllers
             } 
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(pid, dids, ord.clientID, totalFee, "", "", 2, user.UserID,
-                user.AgentID, user.ClientID);
+                user.AgentID, user.ClientID,ord.personName,ord.mobileTele,ord.address,ord.cityCode);
             if (string.IsNullOrEmpty(purid))
             {
                 JsonDictionary.Add("result", 0);
@@ -366,7 +366,8 @@ namespace YXERP.Areas.Mall.Controllers
             };
         }
 
-        public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string entity, string goodsid, string goodscode,string goodsname, decimal totalFee = 0)
+        public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string entity, string goodsid, string goodscode,string goodsname,
+            string personname,string mobiletele,string citycode,string address ,decimal totalFee = 0)
         {
             if (CurrentUser == null)
             {
@@ -396,7 +397,7 @@ namespace YXERP.Areas.Mall.Controllers
             string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(productid, dids, provideid, totalFee, "", "", 2, user.UserID,
-                user.AgentID, user.ClientID);
+                user.AgentID, user.ClientID,personname,mobiletele,address,citycode);
             if (string.IsNullOrEmpty(purid))
             {
                 JsonDictionary.Add("result", 0);

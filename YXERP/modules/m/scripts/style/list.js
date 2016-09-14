@@ -14,8 +14,6 @@
         keyWords: ""
     };
     var ObjectJS = {};
-    var CacheOrder = [];
-    var IsShowOrder = false;
     var CacheCategory = [];
     var CacheChildCategory = [];
 
@@ -292,32 +290,18 @@
 
                     innerHtml.find(".btn-addOrder").click(function () {
                         var _this = $(this);
-                        if (!IsShowOrder) {
-                            var id = _this.data('orderid');
-                            if (!CacheOrder[id]) {
-                                IsShowOrder = true;
-                                Global.post("../IntFactoryOrders/GetOrderDetail", {
-                                    orderID: id,
-                                    clientID: _this.data('clientid')
-                                }, function (data) {
-                                    IsShowOrder = false;
-                                    if (data.result.error_code == 0) {
-                                        CacheOrder[id] = data.result.order;
-                                        Common.showOrderGoodsLayer(CacheOrder[id], ObjectJS.user);
-                                    } else {
-                                        alert("请重新尝试",2);
-                                    }
-                                });
-                            } else {
-                                Common.showOrderGoodsLayer(CacheOrder[id], ObjectJS.user);
-                            }
-                        } else {
-                            alert("正在加载，请稍等",2);
-                        }
+                        var obj = _this.parents('.listabove');
+                        var model = {
+                            ProductName: obj.find('.details').text(),
+                            Price: obj.find('.price').text(),
+                            ProductImage: obj.find('.list-img').data('src')
+                        };
+                       
+                        Common.showOrderGoodsLayer(model, ObjectJS.user);
                     });
 
                     //延迟加载图片
-                    $(".task-list-img").each(function () {
+                    $(".list-img").each(function () {
                         var _this = $(this);
                         setTimeout(function () {
                             _this.attr("src", _this.data("src") + "?imageView2/1/w/120/h/120");

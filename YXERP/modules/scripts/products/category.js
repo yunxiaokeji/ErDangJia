@@ -333,6 +333,10 @@ define(function (require, exports, module) {
                     $("#category-add-div .checked[data-id='" + _this.data("id") + "']").show();
 
                 } else {
+                    if (_this.data("type") == 2 && $("#saleAttr .checkbox.hover").length >= 2) {
+                        alert("产品规格不能超过2个");
+                        return false;
+                    }
                     _this.find(".checkbox").addClass("hover");
                     $("#category-add-div .checked[data-id='" + _this.data("id") + "']").hide();
                     _this.show();

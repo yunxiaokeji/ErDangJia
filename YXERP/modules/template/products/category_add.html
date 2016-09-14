@@ -19,7 +19,7 @@
 	            for(var i=0, j=$data.length; i < j; i++){
 	            var item = $data[i];
             %}
-            <span class="width80 long checked hand" title="{%=item.Description%}" data-id="{%=item.AttrID%}">
+            <span class="width80 long checked hand" data-type="1" title="{%=item.Description%}" data-id="{%=item.AttrID%}">
                 <span class="iconfont checkbox mTop3" data-id="{%=item.AttrID%}"></span>&nbsp;&nbsp;{%=item.AttrName%}
             </span>
             {% } %}
@@ -32,7 +32,7 @@
 	            for(var i=0, j=$data.length; i < j; i++){
 	            var item = $data[i];
             %}
-            <span class="width80 long checked hand" title="{%=item.Description%}" data-id="{%=item.AttrID%}">
+            <span class="width80 long checked hand" data-type="2" title="{%=item.Description%}" data-id="{%=item.AttrID%}">
                 <span class="iconfont checkbox mTop3" data-id="{%=item.AttrID%}"></span>&nbsp;&nbsp;{%=item.AttrName%}
             </span>
             {% } %}

@@ -18,7 +18,7 @@
 	                    for(var ii=0, jj=item.AttrValues.length; ii < jj; ii++){
 	                    var value = item.AttrValues[ii];
                     %}
-                        <option value="{%=value.ValueID%}">{%=value.ValueName%}</option> 
+                        <option value="{%=value.ValueName.toLocaleLowerCase()%}">{%=value.ValueName%}</option> 
                     {% } %}
                     <option value="|">自定义</option> 
                 </select>

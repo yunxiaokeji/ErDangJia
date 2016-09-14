@@ -128,9 +128,9 @@ define(function (require, exports, module) {
                     //首个规格
                     if (isFirst) {
                         var model = {};
-                        model.ids = _attr.data("id") + ":" + _value.data("id");
+                        model.ids = _attr.data("id") + ":" + _value.data("text");
                         model.saleAttr = _attr.data("id");
-                        model.attrValue = _value.data("id");
+                        model.attrValue = _value.data("text");
                         model.names = "[" + _attr.data("text") + "：" + _value.data("text") + "]";
                         model.layer = 1;
                         model.guid = Global.guid();
@@ -139,9 +139,9 @@ define(function (require, exports, module) {
                         for (var i = 0, j = attrdetail.length; i < j; i++) {
                             if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
                                 var model = {};
-                                model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("id");
+                                model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("text");
                                 model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
-                                model.attrValue = attrdetail[i].attrValue + "," + _value.data("id");
+                                model.attrValue = attrdetail[i].attrValue + "," + _value.data("text");
                                 model.names = attrdetail[i].names + " [" + _attr.data("text") + "：" + _value.data("text") + "]";
                                 model.layer = attrdetail[i].layer + 1;
                                 model.guid = Global.guid();
@@ -170,17 +170,19 @@ define(function (require, exports, module) {
 
                     innerText.find(".upload-child-img").each(function () {
                         var _this = $(this);
-                        Upload.createUpload({
-                            element: "#" + _this.attr("id"),
-                            buttonText: "选择图片",
-                            className: "",
-                            data: { folder: '', action: 'add', oldPath: "" },
-                            success: function (data, status) {
-                                if (data.Items.length > 0) {
-                                    _this.siblings("img").attr("src", data.Items[0]).data("src", data.Items[0]);
-                                } else {
-                                    alert("只能上传jpg/png/gif类型的图片，且大小不能超过5M！");
-                                }
+
+                        Upload.uploader({
+                            browse_button: _this.attr("id"),
+                            file_path: "/Content/UploadFiles/Product/",
+                            picture_container: "orderImages",
+                            multi_selection: false,
+                            maxSize: 1,
+                            auto_callback: false,
+                            fileType: 1,
+                            init: {},
+                            success: function (upseting, info) {
+                                var src = upseting.imgurl + info.key;
+                                _this.siblings("img").attr("src", src).data("src", src);
                             }
                         });
                     })
@@ -205,8 +207,6 @@ define(function (require, exports, module) {
                 });
             }
         });
-
-       
     }
 
     //保存产品
@@ -786,10 +786,6 @@ define(function (require, exports, module) {
                         var attrlist = "", valuelist = "", attrvaluelist = "", desc = $("#iptRemark").val().trim(), isNull = false;
                         $(".productattr").each(function () {
                             var _this = $(this);
-                            attrlist += _this.data("id") + ",";
-                            valuelist += _this.find("select").val() + ",";
-                            attrvaluelist += _this.data("id") + ":" + _this.find("select").val() + ",";
-                            //desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
                             if (_this.find("select").val() == "|" && !_this.find("select").next().val()) {
                                 isNull = true;
                                 alert("请输入自定义规格", function () {
@@ -797,6 +793,17 @@ define(function (require, exports, module) {
                                 });
                                 return false;
                             }
+                            attrlist += _this.data("id") + ",";
+
+                            if (_this.find("select").val() != "|") {
+                                valuelist += _this.find("select").val() + ",";
+                                attrvaluelist += _this.data("id") + ":" + _this.find("select").val() + ",";
+                            } else {
+                                valuelist += _this.find("select").next().val().trim() + ",";
+                                attrvaluelist += _this.data("id") + ":" + _this.find("select").next().val().trim() + ",";
+                            }
+                            //desc += "[" + _this.find(".attrname").html() + _this.find("select option:selected").text() + "]";
+                            
                         });
                         if (isNull) {
                             return false;
@@ -880,9 +887,11 @@ define(function (require, exports, module) {
                 $(".productattr").each(function () {
                     var _this = $(this), bl = false;
                     for (var i = 0, j = list.length; i < j; i++) {
-                        if (_this.find("select").attr("id") == list[i].split(':')[0] && list[i].split(':')[1] && list[i].split(':')[1] != "|") {
-                            $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]).prop("disabled", true);
-                            bl = true;
+                        if (_this.find("select").attr("id") == list[i].split(':')[0] && list[i].split(':')[1]) {
+                            if ($("#" + list[i].split(':')[0]).find("option[value='" + list[i].split(':')[1] + "']").length > 0) {
+                                $("#" + list[i].split(':')[0]).val(list[i].split(':')[1]).prop("disabled", true);
+                                bl = true;
+                            }
                         }
                     }
                     if (!bl) {

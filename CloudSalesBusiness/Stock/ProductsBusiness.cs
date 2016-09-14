@@ -373,9 +373,14 @@ namespace CloudSalesBusiness
         {
             var valueid = Guid.NewGuid().ToString().ToLower();
             var dal = new ProductsDAL();
+            var model = GetProductAttrByID(attrID, clientid);
+            if (model.AttrValues.Where(m => m.ValueName.ToLower() == valueName.ToLower()).Count() > 0)
+            {
+                return string.Empty;
+            }
             if (dal.AddAttrValue(valueid, valueName, attrID, operateid, clientid))
             {
-                var model = GetProductAttrByID(attrID, clientid);
+                
                 model.AttrValues.Add(new AttrValue()
                 {
                     ValueID = valueid,
@@ -913,28 +918,6 @@ namespace CloudSalesBusiness
         {
             lock (SingleLock)
             {
-                //if (!string.IsNullOrEmpty(productImg))
-                //{
-                //    if (productImg.IndexOf("?") > 0)
-                //    {
-                //        productImg = productImg.Substring(0, productImg.IndexOf("?"));
-                //    }
-
-                //    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                //    if (!directory.Exists)
-                //    {
-                //        directory.Create();
-                //    }
-
-                //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
-                //    productImg = FILEPATH + file.Name;
-
-                //    if (file.Exists)
-                //    {
-                //        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
-                //    }
-                //}
-
                 var dal = new ProductsDAL();
                 string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
                                         valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,

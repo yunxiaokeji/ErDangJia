@@ -82,7 +82,7 @@
                 $(".filter-object").removeClass('outlayer');
                 setTimeout(function () {
                     $(".filter-object").hide();
-                }, 410);
+                }, 401);
             }
         });
 
@@ -227,8 +227,8 @@
 
         //显示选择分类弹出层
         $(".show-category").click(function () {
+            $(".filter-object").show(1);
             $(".layer-body").fadeIn(400);
-            $(".filter-object").show();
             setTimeout(function () {
                 $(".filter-object").addClass('outlayer');
             }, 10);

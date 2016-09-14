@@ -64,7 +64,7 @@
     }
     //判断字符串是否数字
     String.prototype.isDouble = function () {
-        return this.match(/^\d+(.\d+)?$/);
+        return this.match(/^\d+([.]\d+)?$/);
     }
 
     /*重写alert*/

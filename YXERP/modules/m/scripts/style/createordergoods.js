@@ -234,7 +234,9 @@
             });
             $(".btn-sureAdd").text("下单中...");
             isCreateOrder = true;
-            Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
+            Global.post("/Mall/Store/CreatePurchaseOrder", {
+                entity: JSON.stringify(model)
+            }, function (data) {
                 isCreateOrder = false;
                 $(".btn-sureAdd").text("确定");
                 if (data.result) {

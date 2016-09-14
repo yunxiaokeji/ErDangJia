@@ -749,6 +749,7 @@ namespace CloudSalesBusiness
 
             return model;
         }
+
         public string GetProductCode(string code,string shapecode, string clientid)
         {
             object obj ;
@@ -765,6 +766,7 @@ namespace CloudSalesBusiness
             return obj!=null?obj.ToString():"";
 
         }
+
         public bool IsExistProductCode(string code, string productid, string clientid)
         {
             if (string.IsNullOrEmpty(productid))
@@ -778,16 +780,19 @@ namespace CloudSalesBusiness
                 return Convert.ToInt32(obj) > 0;
             }
         }
+
         public string IsExistCMProduct(string cmgoodscode, string cmgoodsid ,string clientid)
         {
             object obj = CommonBusiness.Select("Products", "  top 1 ProductID ", "CMGoodsID='" + cmgoodsid + "' and CMGoodscode='" + cmgoodscode + "' and Status<>9 and ClientID='" + clientid + "'");
             return obj != null ? obj.ToString() : "";
         }
+
         public string IsExistCMProductDetail(string remark, string cmgoodscode,string cmgoodsid,string clientid)
         {
             object obj = CommonBusiness.Select("Products a join ProductDetail b on a.ProductID=b.ProductID ", " top 1 b.ProductDetailID ", "a.CMGoodsID='" + cmgoodsid + "' and b.remark='" + remark + "' and a.CMGoodscode='" + cmgoodscode + "' and a.Status<>9  and b.Status<>9 and a.CLientID='" + clientid + "'");
             return obj != null ? obj.ToString() : "";
         }
+
         public bool IsExistShapeCode(string code, string productid, string clientid)
         {
             if (string.IsNullOrEmpty(productid))
@@ -878,7 +883,10 @@ namespace CloudSalesBusiness
                                 break;
                             }
                         }
-                       
+                    }
+                    else
+                    {
+                        model.SaleAttrs.Add(attrModel);
                     }
                 }
 
@@ -887,6 +895,24 @@ namespace CloudSalesBusiness
                 {
                     ProductDetail detail = new ProductDetail();
                     detail.FillData(item);
+
+                    foreach (var attrModel in model.SaleAttrs)
+                    {
+                        Dictionary<string, string> attrs = new Dictionary<string, string>();
+                        foreach (string attr in detail.SaleAttrValue.Split(','))
+                        {
+                            if (!string.IsNullOrEmpty(attr))
+                            {
+                                if (attr.Split(':')[0].ToLower() == attrModel.AttrID.ToLower() 
+                                    && attrModel.AttrValues.Where(v => v.ValueName.ToLower() == attr.Split(':')[1].ToLower()).Count() == 0)
+                                {
+                                    AttrValue valueModel = new AttrValue();
+                                    valueModel.ValueName = attr.Split(':')[1].ToLower();
+                                    attrModel.AttrValues.Add(valueModel);
+                                }
+                            }
+                        }
+                    }
 
                     model.ProductDetails.Add(detail);
                 }

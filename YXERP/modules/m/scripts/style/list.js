@@ -219,7 +219,7 @@
             $('html, body').animate({ scrollTop: 0 }, 'slow');
         });
 
-        $(".filter-price input[type='tel']").change(function () {
+        $("#beginPrice,#endPrice").change(function () {
             var _this = $(this);
             if (!_this.val().isDouble()) {
                 _this.val('');

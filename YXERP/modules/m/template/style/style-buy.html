@@ -14,29 +14,33 @@ var item=$data;
             &#xe628;
         </div>
         <div class="style-attr">
-            <div class="productsalesattr">
-                <div class="attr-title" data-type="1" id="attrBox" data-id="1">属性名称</div>
-                <div class="attr-rule attr-ul">
-                    <ul class="attr-item">
-                        <li class="size" data-type="1" data-id="1" data-value="规格名称">
-                                规格名称
-                        </li>
-                        <div class="clear"></div>
-                    </ul>
-                    <div class="show-more width50 mTop10 center" style="border:1px solid #ddd;color:#0026ff;padding:5px 15px;border-radius:3px;">更多+</div>
-                </div>
-            </div>
-            <div class="productsalesattr">
-                <div class="attr-title" data-type="2" id="colorBox"  data-id="1">属性名称</div>
-                <div class="attr-color attr-ul">
-                    <ul class="attr-item">
-                        <li class="color" data-type="2" data-id="1" data-value="规格名称">
-                            规格名称
-                        </li>
-                        <div class="clear"></div>
-                    </ul>
-                    <div class="show-more width50 mTop10 center" style="border:1px solid #ddd;color:#0026ff;padding:5px 15px;border-radius:3px;">更多+</div>
-                </div>
+            <div>
+                {%
+                    for(var i=0;i<item.SaleAttrs.length;i++)
+                    {
+                        var attr=item.SaleAttrs[i];
+                %}
+                    <div class="productsalesattr">
+                        <div class="attr-title" id="attrBox" data-id="{%=attr.AttrID%}">
+                            {%=attr.AttrName%}
+                        </div>
+                        <div class="attr-rule attr-ul">
+                            <ul class="attr-item">
+                                {%  
+                                    for(var j=0;j<attr.AttrValues.length;j++)
+                                    {
+                                        var attrItem=attr.AttrValues[j];
+                                %}
+                                <li class="{%=i==1?'color':'size'%}" data-value="{%=attrItem.ValueName%}">
+                                    {%=attrItem.ValueName%}
+                                </li>
+                                {%}%}
+                                <div class="clear"></div>
+                            </ul>
+                            <div class="show-more width50 mTop10 center" style="border:1px solid #ddd;color:#0026ff;padding:5px 15px;border-radius:3px;">更多+</div>
+                        </div>
+                    </div>
+                {%}%}
             </div>
             <div>
                 <div class="attr-title">所选款式</div>

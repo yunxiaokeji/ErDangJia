@@ -403,7 +403,17 @@ namespace CloudSalesDAL
             DataTable dt = GetDataTable("select * from Category where CategoryID=@CategoryID", paras, CommandType.Text);
             return dt;
         }
-
+        public DataTable GetCategoryByName(string name, string clientid, string pid)
+        {
+            SqlParameter[] paras = { new SqlParameter("@CategoryName", name), new SqlParameter("@ClientID", clientid) };
+            string sql = @"select * from Category where CategoryName=@CategoryName and Clientid=@ClientID ";
+            if (!string.IsNullOrEmpty(pid))
+            {
+                sql = sql + " pid='" + pid + "' ";
+            }
+            DataTable dt = GetDataTable(sql+" order by Layers asc", paras, CommandType.Text);
+            return dt;
+        }
         public DataSet GetCategoryDetailByID(string categoryid)
         {
             SqlParameter[] paras = { new SqlParameter("@CategoryID", categoryid) };

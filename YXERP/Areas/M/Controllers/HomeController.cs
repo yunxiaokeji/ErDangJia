@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using YunXiaoService;
 
 namespace YXERP.Areas.M.Controllers
 {
@@ -35,7 +36,7 @@ namespace YXERP.Areas.M.Controllers
 
         public ActionResult Detail(string orderid, string clientid)
         {
-            var obj = new ProductsBusiness().GetProductByIDForDetails(orderid);
+            var obj = ProductService.GetProductByIDForDetails(orderid);
             CloudSalesEntity.Users users = new CloudSalesEntity.Users();
             users.Name = CurrentUser.Client.ContactName;
             users.MobilePhone = CurrentUser.Client.MobilePhone;

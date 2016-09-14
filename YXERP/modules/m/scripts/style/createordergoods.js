@@ -182,7 +182,7 @@
                 var dataAttr = $("#attrBox").data('id') + ',' + $("#colorBox").data('id');
                 var dataValue = _this.data('id') + ',' + $(this).data('id');
                 var dataAttrValue = $("#attrBox").data('id') + ":" + _this.data('id') + "," + $("#colorBox").data('id') + ":" + $(this).data('id');
-                var description = '【尺码:' + _this.data('value') + '】【颜色:' + $(this).data('value') + '】';
+                var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text() + ':' + _this.data('value') + '】【' + $(this).parents('.productsalesattr').find('.attr-title').text() + ':' + $(this).data('value') + '】';
 
                 var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrandvalue='" + dataAttrValue + "' data-xremark='【" + _this.data('value') + "】' data-yremark='【" + $(this).data('value') + "】' data-xyremark='【" + _this.data('value') + "】【" + $(this).data('value') + "】' data-remark='" + description + "'></tr>");
                 trHtml.append("<td class='tLeft'>" + description + "</td>");
@@ -234,7 +234,9 @@
             });
             $(".btn-sureAdd").text("下单中...");
             isCreateOrder = true;
-            Global.post("/IntFactoryOrder/CreateOrderEDJ", { entity: JSON.stringify(model) }, function (data) {
+            Global.post("/Mall/Store/CreatePurchaseOrder", {
+                entity: JSON.stringify(model)
+            }, function (data) {
                 isCreateOrder = false;
                 $(".btn-sureAdd").text("确定");
                 if (data.result) {

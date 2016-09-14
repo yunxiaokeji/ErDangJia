@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using CloudSalesBusiness;
 using CloudSalesEnum;
+using CloudSalesEntity;
 
 namespace YunXiaoService
 {
@@ -30,6 +31,16 @@ namespace YunXiaoService
         public static string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID, int type)
         {
             return ProductsBusiness.BaseBusiness.AddProviders(name, contact, mobile, email, cityCode, address, remark, cmClientID, cmClientCode, operateID, agentid, clientID, type);
+        }
+
+        public static Products GetProductByIDForDetails(string productid)
+        {
+            return ProductsBusiness.BaseBusiness.GetProductByIDForDetails(productid);
+        }
+
+        public string CreateOrder(OrderEntity ord, string agentid, string clientid, string userid, ref string dids)
+        {
+            return null;
         }
 
         public static bool IsExistsProvider(string cmClientID, string clientid)

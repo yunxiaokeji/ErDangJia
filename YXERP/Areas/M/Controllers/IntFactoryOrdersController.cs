@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using CloudSalesEntity;
 using IntFactory.Sdk;
+using YunXiaoService;
 
 namespace YXERP.Areas.M.Controllers
 {
@@ -14,7 +15,7 @@ namespace YXERP.Areas.M.Controllers
         #region ajax
         public JsonResult GetOrderDetail(string orderID, string clientID)
         {
-            var obj = OrderBusiness.BaseBusiness.GetOrderDetailByID(orderID, clientID);
+            var obj = ProductService.GetProductByIDForDetails(orderID);
             JsonDictionary.Add("result", obj);
             return new JsonResult
             {

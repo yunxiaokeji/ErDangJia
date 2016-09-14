@@ -70,14 +70,14 @@ namespace IntFactory.Sdk
             paras.Add("opearid", userid);
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateOrder, paras);
         }
-        public string ZNGCAddProduct(OrderEntity ord, string agentid, string clientid, string userid,ref string dids )
+        public string ZNGCAddProduct(OrderEntity ord, string agentid, string clientid, string userid, ref string dids, string categoryid="")
         {
             int result = 0;
             string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.goodsID, clientid);
             if (string.IsNullOrEmpty(pid))
             {
                 string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(clientid, ord.clientID);
-                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "", "", 0, "", 1, "", "", ""
+                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "", categoryid, 0, "", 1, "", "", ""
                     , ord.finalPrice, ord.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, ord.orderImage, "", "", new List<ProductDetail>(), ord.goodsID, ord.intGoodsCode, userid, agentid, clientid, out result);
             } 
             //string detailids = "";

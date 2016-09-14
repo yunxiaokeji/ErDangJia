@@ -16,6 +16,8 @@
     var ObjectJS = {};
     var CacheCategory = [];
     var CacheChildCategory = [];
+    var CacheOrder = [];
+    var IsShowOrder = false;
 
     ObjectJS.PageCount = 0;
     ObjectJS.IsLoading = false;
@@ -290,14 +292,27 @@
 
                     innerHtml.find(".btn-addOrder").click(function () {
                         var _this = $(this);
-                        var obj = _this.parents('.listabove');
-                        var model = {
-                            ProductName: obj.find('.details').text(),
-                            Price: obj.find('.price').text(),
-                            ProductImage: obj.find('.list-img').data('src')
-                        };
-                       
-                        Common.showOrderGoodsLayer(model, ObjectJS.user);
+                        if (!IsShowOrder) {
+                            var id = _this.data('orderid');
+                            if (!CacheOrder[id]) {
+                                IsShowOrder = true;
+                                Global.post("/M/IntFactoryOrders/GetOrderDetail", {
+                                    orderID: id,
+                                }, function (data) {
+                                    IsShowOrder = false;
+                                    if (data.result) {
+                                        CacheOrder[id] = data.result;
+                                        Common.showOrderGoodsLayer(CacheOrder[id], ObjectJS.user);
+                                    } else {
+                                        alert("请重新尝试", 2);
+                                    }
+                                });
+                            } else {
+                                Common.showOrderGoodsLayer(CacheOrder[id], ObjectJS.user);
+                            }
+                        } else {
+                            alert("正在加载，请稍等", 2);
+                        }
                     });
 
                     //延迟加载图片

@@ -164,7 +164,7 @@ namespace YXERP.Controllers
             } 
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(pid, dids, ord.clientID, totalFee, "", "", 2,CurrentUser.UserID,
-                CurrentUser.AgentID, CurrentUser.ClientID);
+                CurrentUser.AgentID, CurrentUser.ClientID, ord.personName,ord.mobileTele,ord.address,ord.cityCode);
             if (string.IsNullOrEmpty(purid))
             {
                 JsonDictionary.Add("result", 0);

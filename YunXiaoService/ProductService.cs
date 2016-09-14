@@ -38,11 +38,6 @@ namespace YunXiaoService
             return ProductsBusiness.BaseBusiness.GetProductByIDForDetails(productid);
         }
 
-        public string CreateOrder(OrderEntity ord, string agentid, string clientid, string userid, ref string dids)
-        {
-            return null;
-        }
-
         public static bool IsExistsProvider(string cmClientID, string clientid)
         {
             object count = CommonBusiness.Select("Providers", "count(0)", " ClientID='" + clientid + "' and CMClientID ='" + cmClientID + "' ");

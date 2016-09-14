@@ -4,9 +4,9 @@
     var City = require("city"), CityInvoice,
         Global = require("m_global");
     var isCreateOrder = false;
-    ObjectJS.showOrderGoodsLayer = function (modle,user) {
+    ObjectJS.showOrderGoodsLayer = function (model, user) {
         doT.exec("m/template/style/style-buy.html", function (code) {
-            var innerHtml = code(modle);
+            var innerHtml = code(model);
             innerHtml = $(innerHtml);
 
             /*编辑发货信息*/
@@ -64,22 +64,21 @@
 
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
                 if ($('.edit-customer').css('display') == 'none') {
-                    var model = {
-                        OrderID: modle.orderID,
-                        PersonName: $("#customerName").val(),
-                        MobileTele: $("#customerTel").val(),
-                        CityCode: CityInvoice.getCityCode(),
-                        Address: $("#customerAddress").val(),
-                        GoodsName: modle.goodsName,
-                        GoodsID: modle.goodsID,
-                        ClientID: modle.clientID,
-                        IntGoodsCode: modle.intGoodsCode,
-                        CategoryID: modle.categoryID,
-                        FinalPrice: modle.finalPrice,
-                        OrderImage: modle.orderImage,
-                        Details: []
+                    var item = {
+                        personname: $("#customerName").val(),
+                        mobiletele: $("#customerTel").val(),
+                        citycode: CityInvoice.getCityCode(),
+                        address: $("#customerAddress").val(),
+                        goodsid: model.CMGoodsID,
+                        goodsname: model.ProductName,
+                        goodscode: model.CMGoodsCode,
+                        parentprid: model.ClientID,
+                        price: model.Price,
+                        productid:model.ProductID,
+                        entity: []
                     };
-                    ObjectJS.createOrders(model);
+
+                    ObjectJS.createOrders(item);
                 } else {
                     alert('请先保存收货信息', 2);
                 }
@@ -184,7 +183,7 @@
                 var dataAttrValue = $("#attrBox").data('id') + ":" + _this.data('id') + "," + $("#colorBox").data('id') + ":" + $(this).data('id');
                 var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text() + ':' + _this.data('value') + '】【' + $(this).parents('.productsalesattr').find('.attr-title').text() + ':' + $(this).data('value') + '】';
 
-                var trHtml = $("<tr class='detail-attr' data-attr='" + dataAttr + "' data-value='" + dataValue + "' data-attrandvalue='" + dataAttrValue + "' data-xremark='【" + _this.data('value') + "】' data-yremark='【" + $(this).data('value') + "】' data-xyremark='【" + _this.data('value') + "】【" + $(this).data('value') + "】' data-remark='" + description + "'></tr>");
+                var trHtml = $("<tr class='detail-attr' data-remark='" + description + "'></tr>");
                 trHtml.append("<td class='tLeft'>" + description + "</td>");
                 trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
                 trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
@@ -215,38 +214,34 @@
                 alert("请选择颜色尺码，并填写对应采购数量", 2);
                 return false;
             }
+
             //大货单遍历下单明细 
             $(".attr-box .table-list .quantity").each(function () {
                 var _this = $(this);
                 var _thisTr = _this.parents('tr');
                 if (_this.val() > 0) {
-                    model.Details.push({
-                        SaleAttr: _thisTr.data('attr'),
-                        AttrValue: _thisTr.data('value'),
-                        SaleAttrValue: _thisTr.data('attrandvalue'),
+                    model.entity.push({
                         Quantity: _this.val(),
-                        XRemark: _thisTr.data('xremark'),
-                        YRemark: _thisTr.data('yremark'),
-                        XYRemark: _thisTr.data('xyremark'),
                         Remark: _thisTr.data('remark')
                     });
                 }
             });
+
             $(".btn-sureAdd").text("下单中...");
+            model.entity = JSON.stringify(model.entity);
             isCreateOrder = true;
-            Global.post("/Mall/Store/CreatePurchaseOrder", {
-                entity: JSON.stringify(model)
-            }, function (data) {
+            Global.post("/Mall/Store/CreatePurchaseOrder", model, function (data) {
                 isCreateOrder = false;
                 $(".btn-sureAdd").text("确定");
-                if (data.result) {
+                if (data.result == 1) {
                     alert("下单成功");
                     $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
                         $("body,html").removeClass('ohidden');
                         $(".overlay-addOrder").fadeOut();;
                     });
                 } else {
-                    alert(data.error_message, 2);
+                    alert(data.errMsg);
+                    return false;
                 }
             });
         }

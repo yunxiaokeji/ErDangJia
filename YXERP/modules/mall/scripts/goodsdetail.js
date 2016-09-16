@@ -123,71 +123,85 @@
     //绑定颜色尺码
     ObjectJS.getOrderAttr = function () {
         var _self = this;
-        Global.post("/Mall/Store/GetOrderAttrsList", { goodsid: _self.model.CMGoodsID }, function (data) {
-            var chtml = "";
-            var shtml = ""; 
-            for (var i = 0; i < data.items.length; i++) {
-                var item = data.items[i]; 
-                if (item.AttrType == 2) {
-                    chtml += '<li class="left" data-id="' + item.OrderAttrID + '" data-remark="' + item.AttrName + '" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</li>';
+        var colorList = {}, tempList = [];
+        for (var i = 0; i < _self.model.ProductDetails.length; i++) {
+            var item = _self.model.ProductDetails[i];
+            if (item.AttrValue != "" && item.AttrValue != null) {
+                var color = item.AttrValue.split(",");
+                var key = "[" + color[0] + "]" + color.length > 1 ? "[" + color[1] + "]" : "";
+                colorList[key] = item.ProductDetailID;
+                if (!inArray(color[0], tempList)) {
+                    colorList[color[0]] = color.length > 1 ? color[1] : color[0];
+                    tempList.push(color[0]);
                 } else {
-                    if (i == (data.items.length - 1)) {
-                        shtml += '<tr class="last-row" data-remark="' + item.AttrName + '">';
-                    } else {
-                        shtml += '<tr data-remark="' + item.AttrName + '">';
-                    }
-                    shtml += '<td class="name" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</td>' +
-                        '<td class="price">' + item.FinalPrice.toFixed(2) + '元</td>' +
-                        '<td class="center"><div class="choose-quantity left">' +
-                        '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;">-</span>' +
-                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;" value="0"  data-remark="' + item.AttrName + '" />' +
-                        '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;">+</span>' +
-                        '</div></td>' +
-                        '</tr>';
+                    colorList[color[0]] = colorList[color[0]] + "," + color.length > 1 ? color[1] : "";
                 }
             }
-            $('#colorlist').html(chtml);
-            $('#sizelist').html(shtml);
-            if (shtml != ""){
-                $('.sizediv').addClass("linetopbottom");
-                $('#btnSubmit').show();
-            } 
-            $('#colorlist li').click(function() {
-                if ($(this).hasClass("hover")) {
-                    $(this).removeClass("hover");
+        }
+         
+        var chtml = "";
+        var shtml = ""; 
+        for (var i = 0; i < _self.model.ProductDetails.length; i++) {
+            var item = _self.model.ProductDetails.items[i]; 
+            if (item.AttrType == 2) {
+                chtml += '<li class="left" data-id="' + item.OrderAttrID + '" data-remark="' + item.AttrName + '" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</li>';
+            } else {
+                if (i == (data.items.length - 1)) {
+                    shtml += '<tr class="last-row" data-remark="' + item.AttrName + '">';
                 } else {
-                    $(this).addClass("hover");
+                    shtml += '<tr data-remark="' + item.AttrName + '">';
                 }
-            });
-
-            $('#sizelist .quantity').keyup(function () {
-                $(this).val($(this).val().replace(/\D/g, ''));
-            }).blur(function() {
-                if ($(this).val() == "") {
-                    $(this).val('0');
-                }
-            }); 
-            $('#sizelist .quantity-jian').click(function() {
-                var _this = $(this);
-                if (_this.next().val() != 0) {
-                    _this.next().val(parseInt(_this.next().val()) - 1);
-                }
-            }).mouseover(function () {
-                $(this).next().addClass("hover");
-            }).mouseout(function () {
-                $(this).next().removeClass("hover");
-            });
-            $('#sizelist .quantity-add').click(function () {
-                var _this = $(this);
-                if (_this.prev().val() != "") {
-                    _this.prev().val(parseInt(_this.prev().val()) + 1);
-                }
-            }).mouseover(function () {
-                $(this).prev().addClass("hover");
-            }).mouseout(function () {
-                $(this).prev().removeClass("hover");
-            });
+                shtml += '<td class="name" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</td>' +
+                    '<td class="price">' + item.FinalPrice.toFixed(2) + '元</td>' +
+                    '<td class="center"><div class="choose-quantity left">' +
+                    '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;">-</span>' +
+                    '<input type="text" class="quantity" style="width:70px;border-radius:0px;" value="0"  data-remark="' + item.AttrName + '" />' +
+                    '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;">+</span>' +
+                    '</div></td>' +
+                    '</tr>';
+            }
+        }
+        $('#colorlist').html(chtml);
+        $('#sizelist').html(shtml);
+        if (shtml != ""){
+            $('.sizediv').addClass("linetopbottom");
+            $('#btnSubmit').show();
+        } 
+        $('#colorlist li').click(function() {
+            if ($(this).hasClass("hover")) {
+                $(this).removeClass("hover");
+            } else {
+                $(this).addClass("hover");
+            }
         });
+
+        $('#sizelist .quantity').keyup(function () {
+            $(this).val($(this).val().replace(/\D/g, ''));
+        }).blur(function() {
+            if ($(this).val() == "") {
+                $(this).val('0');
+            }
+        }); 
+        $('#sizelist .quantity-jian').click(function() {
+            var _this = $(this);
+            if (_this.next().val() != 0) {
+                _this.next().val(parseInt(_this.next().val()) - 1);
+            }
+        }).mouseover(function () {
+            $(this).next().addClass("hover");
+        }).mouseout(function () {
+            $(this).next().removeClass("hover");
+        });
+        $('#sizelist .quantity-add').click(function () {
+            var _this = $(this);
+            if (_this.prev().val() != "") {
+                _this.prev().val(parseInt(_this.prev().val()) + 1);
+            }
+        }).mouseover(function () {
+            $(this).prev().addClass("hover");
+        }).mouseout(function () {
+            $(this).prev().removeClass("hover");
+        }); 
     }
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');

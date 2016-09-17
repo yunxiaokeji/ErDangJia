@@ -118,7 +118,7 @@
         }
     }
     //绑定颜色尺码
-    var colorList = {}, tempOrder= [],tempList = [];
+    var colorList = {}, tempOrder= {},tempList = [];
     ObjectJS.getOrderAttr = function () {
         var _self = this;
         for (var i = 0; i < _self.model.ProductDetails.length; i++) {
@@ -135,18 +135,17 @@
                 }
             }
         }
-         
-        var chtml = "";
-        var shtml = ""; 
+        var chtml = "",shtml = ""; 
         for (var i = 0; i < _self.model.SaleAttrs.length; i++) {
             var item = _self.model.SaleAttrs[i];
-
             for (var j = 0; j < item.AttrValues.length; j++) {
                 var citem = item.AttrValues[j]; 
                 if (_self.model.SaleAttrs.length == 1 || i == 1) {
                     if (i == (_self.model.SaleAttrs.length - 1)) {
+                        $('#sizeName').html(item.AttrName + ":");
                         shtml += '<tr class="last-row trattr" data-remark="' + citem.ValueName + '">';
                     } else {
+                        $('#colorName').html(item.AttrName + ":");
                         shtml += '<tr calss="trattr" data-remark="' + citem.ValueName + '">';
                     }
                     shtml += '<td class="name" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</td>' +
@@ -158,6 +157,7 @@
                         '</div></td>' +
                         '</tr>';
                 } else {
+                    $('#colorName').html(item.AttrName+":");
                     chtml += '<li class="left" data-id="' + item.AttrID + '" data-remark="' + citem.ValueName + '" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</li>';
                 }
             }
@@ -228,23 +228,13 @@
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');
         var _self = this;
-        var totalnum = 0;
-        var hashover = false;
-        $("#sizelist .quantity").each(function () {
-            totalnum += parseInt($(this).val());
-        });
-        $("#colorlist li").each(function () {
-            if ($(this).hasClass("hover")) {
-                hashover = true;
-            }
-        });
-        if (totalnum == 0 || !hashover) {
+        _self.setOrdersCache(); 
+        if ($.isEmptyObject(tempOrder)) {
             $('.bottombtn').bind('click', function () { _self.savePDT() });
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
-        }
+        } 
         _self.showUserInfo();
-       
         $('.bottombtn').bind('click', function () { _self.savePDT() });
     }
     ObjectJS.showUserInfo = function () {
@@ -272,21 +262,10 @@
     };
     ObjectJS.submitOrder = function (personname,mobiletele,citycode,address) {
         var _self = this; 
-        //大货单遍历下单明细 
-        var details = [];
-        $("#sizelist .quantity").each(function () {
-            var _this = $(this);
-            if (_this.val() > 0) {
-                $("#colorlist li").each(function() {
-                    if ($(this).hasClass("hover")) {
-                        details.push({
-                            Quantity: _this.val(),
-                            Remark: $(this).data("remark") + _this.data("remark")
-                    });
-                    }
-                });
-            }
-        });
+        var dids = '';
+        $.each(tempOrder, function(i, obj) {
+            dids += obj.detailid + ":" + obj.quantity + ",";
+        }); 
         Global.post("/Mall/Store/CreatePurchaseOrder",
             {
                 productid: _self.model.ProductID,
@@ -298,8 +277,8 @@
                 personname: personname,
                 mobiletele: mobiletele,
                 citycode: citycode,
-                address:address,
-                entity: JSON.stringify(details)
+                dids: dids,
+                address: address//,entity: JSON.stringify(details)
             }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",
@@ -321,8 +300,12 @@
             var _this = $(this);
             var size = _this.parent().parent().parent().data("remark"); 
             var color = '';
-            if ($('#colorlist li.hover').length > 0) {
-                var color = $('#colorlist li.hover').data("remark");
+            if ($('#colorlist li').length>0 ){
+                if ($('#colorlist li.hover').length > 0) {
+                    var color = $('#colorlist li.hover').data("remark");
+                } else {
+                    return false;
+                }
             }
             var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
             var item = { quantity: _this.val(), detailid: colorList[key], key: key }

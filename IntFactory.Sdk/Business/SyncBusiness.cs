@@ -54,10 +54,11 @@ namespace IntFactory.Sdk
                         try
                         {
                             var dids = "";
+                            var salesattr = "";
                             //插入分类
-                            string categoryid = SyncCateGory(x.categoryID, clientid, ref cateList);
+                            string categoryid = SyncCateGory(x.categoryID, clientid, ref cateList, ref salesattr);
                             //同步插入产品
-                            OrderBusiness.BaseBusiness.ZNGCAddProduct(x, agentid, clientid, userid, ref dids, categoryid);
+                            OrderBusiness.BaseBusiness.ZNGCAddProduct(x, agentid, clientid, userid, ref dids, categoryid, salesattr);
                         }
                         catch (Exception ex)
                         {
@@ -76,7 +77,7 @@ namespace IntFactory.Sdk
             }; 
         }
 
-        public string SyncCateGory(string categoryid, string clientid, ref List<CategoryEntity> cateList)
+        public string SyncCateGory(string categoryid, string clientid, ref List<CategoryEntity> cateList, ref string salesattr)
         {
             var category = cateList.Where(x => x.CategoryID == categoryid).FirstOrDefault();
             if (category == null)
@@ -107,7 +108,7 @@ namespace IntFactory.Sdk
             var localcate = ProductsBusiness.BaseBusiness.GetCategoryByName(category.CategoryName, clientid, pid);
             if (string.IsNullOrEmpty(localcate.CategoryID))
             {
-                var newcate = GetCateGory(category, clientid, pid);
+                var newcate = GetCateGory(category, clientid, pid, ref salesattr);
                 if (newcate != null)
                 {
                     pid = newcate.CategoryID;
@@ -121,45 +122,12 @@ namespace IntFactory.Sdk
             return pid;
         }
 
-        public CloudSalesEntity.Category GetCateGory(CategoryEntity category, string clientid,string pid="")
+        public CloudSalesEntity.Category GetCateGory(CategoryEntity category, string clientid,ref string salesattr,string pid="")
         {
             var result = 0;
              //判断规格是否存在
             string salesAttrs = CheckAttr(category, clientid);
-           
-            //category.SaleAttrs.ForEach(x =>
-            //{
-            //    var saleList = ProductsBusiness.BaseBusiness.GetAttrs(clientid);
-            //    saleList = saleList != null ? saleList : new List<ProductAttr>();
-            //    string attrid = "";
-            //    var saleAttr = saleList.Where(y => y.AttrName == x.AttrName).FirstOrDefault();
-            //    if (saleAttr == null)
-            //    {
-            //        attrid = ProductsBusiness.BaseBusiness.AddProductAttr(x.AttrName, "", "", 2, "", clientid);
-            //        if (!string.IsNullOrEmpty(attrid))
-            //        {
-            //            saleAttr = ProductsBusiness.BaseBusiness.GetProductAttrByID(attrid, clientid);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        attrid = saleAttr.AttrID;
-            //    }
-            //    //比对规格值
-            //    if (!string.IsNullOrEmpty(attrid))
-            //    {
-            //        x.AttrValues.ForEach(y =>
-            //        {
-            //            //不存在规格值
-            //            if (!saleAttr.AttrValues.Where(z => z.ValueName == y.ValueName).Any())
-            //            {
-            //                ProductsBusiness.BaseBusiness.AddAttrValue(y.ValueName, attrid, "", clientid);
-            //            }
-            //        });
-            //        salesAttrs += attrid + ",";
-            //    }
-            //});
-            //salesAttrs = salesAttrs.TrimEnd(',');
+            salesattr = salesAttrs;
             //插入新的分类
             string code = string.IsNullOrEmpty(category.CategoryCode)
                 ? GenerateRandomNumber(10)

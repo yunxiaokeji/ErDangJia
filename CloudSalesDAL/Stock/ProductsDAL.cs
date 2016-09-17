@@ -407,10 +407,7 @@ namespace CloudSalesDAL
         {
             SqlParameter[] paras = { new SqlParameter("@CategoryName", name), new SqlParameter("@ClientID", clientid) };
             string sql = @"select * from Category where CategoryName=@CategoryName and Clientid=@ClientID ";
-            if (!string.IsNullOrEmpty(pid))
-            {
-                sql = sql + " pid='" + pid + "' ";
-            }
+            sql += " and pid='" + pid + "' ";
             DataTable dt = GetDataTable(sql+" order by Layers asc", paras, CommandType.Text);
             return dt;
         }

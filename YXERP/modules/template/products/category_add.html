@@ -13,30 +13,42 @@
         </span>
     </li>
     <li>
-        <span class="width80">产品属性：</span>
+        <span class="width80">属性/参数：</span>
         <span style="max-width:500px; height:auto;" id="attrList">
             {%
 	            for(var i=0, j=$data.length; i < j; i++){
 	            var item = $data[i];
             %}
             <span class="width80 long checked hand" data-type="1" title="{%=item.Description%}" data-id="{%=item.AttrID%}">
-                <span class="iconfont checkbox mTop3" data-id="{%=item.AttrID%}"></span>&nbsp;&nbsp;{%=item.AttrName%}
+                <span class="iconfont checkbox mTop3" data-id="{%=item.AttrID%}"></span>
+                <span>{%=item.AttrName%}</span> 
             </span>
             {% } %}
         </span>
     </li>
     <li>
-        <span class="width80">产品规格：</span>
-        <span style="max-width:500px; height:auto;" id="saleAttr">
-            {%
+        <span class="width80">下单规格1：</span>
+        <select id="saleAttr1">
+             <option value="-1">请选择</option>
+             {%
 	            for(var i=0, j=$data.length; i < j; i++){
 	            var item = $data[i];
             %}
-            <span class="width80 long checked hand" data-type="2" title="{%=item.Description%}" data-id="{%=item.AttrID%}">
-                <span class="iconfont checkbox mTop3" data-id="{%=item.AttrID%}"></span>&nbsp;&nbsp;{%=item.AttrName%}
-            </span>
+                <option value="{%=item.AttrID%}">{%=item.AttrName%}</option>
             {% } %}
-        </span>
+         </select>
+    </li>
+     <li>
+        <span class="width80">下单规格2：</span>
+        <select id="saleAttr2">
+            <option value="-1">请选择</option>
+             {%
+	            for(var i=0, j=$data.length; i < j; i++){
+	            var item = $data[i];
+            %}
+                <option value="{%=item.AttrID%}">{%=item.AttrName%}</option>
+            {% } %}
+         </select>
     </li>
     <li>
         <span class="width80">状态：</span>

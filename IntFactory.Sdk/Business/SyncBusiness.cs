@@ -16,118 +16,115 @@ namespace IntFactory.Sdk
 
         public AddResult SyncProduct(string cmClientID, string userid, string agentid, string clientid)
         {
-            List<CategoryEntity> cateList = ClientBusiness.BaseBusiness.GetAllCategory(); 
-
-
-            //2.获取智能工厂已公开款式
-            int totalcount = 1;
-            for (int i = 1; i <= totalcount; i++)
+            List<CategoryEntity> cateList = ClientBusiness.BaseBusiness.GetAllCategory();
+            try
             {
-                var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(clientid, 20, i, cmClientID, "", "", "", "", "");
-                if (orderlist.orders.Any())
+                string provideid = ProductsBusiness.BaseBusiness.GetCMProviderID(clientid);
+                //2.获取智能工厂已公开款式
+                int totalcount = 1;
+                for (int i = 1; i <= totalcount; i++)
                 {
-                    totalcount = orderlist.pageCount;
-
-                    foreach (var order in orderlist.orders)
+                    var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(clientid, 20, i, cmClientID, "", "", "", "", "");
+                    if (orderlist.orders.Any())
                     {
-                        order.details = new List<ProductDetailEntity>();
-                    }
+                        totalcount = orderlist.pageCount;
 
-                    orderlist.orders.ForEach(x =>
-                    {
-                        x.details = new List<ProductDetailEntity>();
-                        x.OrderAttrs.Where(y => y.AttrType == 2).ToList().ForEach(y =>
+                        foreach (var order in orderlist.orders)
                         {
-                            x.OrderAttrs.Where(z => z.AttrType == 1).ToList().ForEach(z =>
+                            var categortModel = SyncCateGory(order.categoryID, clientid, ref cateList);
+                            if (categortModel != null && !string.IsNullOrEmpty(categortModel.CategoryID))
                             {
-                                string xremark = z.AttrName.Replace("【", "[").Replace("】", "]");
-                                string yremark = y.AttrName.Replace("【", "[").Replace("】", "]");
-                                x.details.Add(new ProductDetailEntity()
+                                string[] attrs = categortModel.SaleAttr.Split(',');
+                                order.details = new List<ProductDetailEntity>();
+                                order.OrderAttrs.Where(y => y.AttrType == 2).ToList().ForEach(y =>
                                 {
-                                    xRemark = xremark,
-                                    yRemark = yremark,
-                                    xYRemark = yremark + xremark,
-                                    remark = yremark + xremark
+                                    order.OrderAttrs.Where(z => z.AttrType == 1).ToList().ForEach(z =>
+                                    {
+                                        string xremark = z.AttrName.Replace("【", "[").Replace("】", "]");
+                                        string yremark = y.AttrName.Replace("【", "[").Replace("】", "]");
+                                        order.details.Add(new ProductDetailEntity()
+                                        {
+                                            saleAttr = attrs[0] + "," + attrs[1],
+                                            attrValue = y.AttrName.Replace("【", "").Replace("】", "") + "," + z.AttrName.Replace("【", "").Replace("】", ""),
+                                            saleAttrValue = attrs[0] + ":" + y.AttrName.Replace("【", "").Replace("】", "") + "," +
+                                                            attrs[1] + ":" + z.AttrName.Replace("【", "").Replace("】", ""),
+                                            xRemark = xremark,
+                                            yRemark = yremark,
+                                            xYRemark = yremark + xremark,
+                                            remark = yremark + xremark
+                                        });
+                                    });
                                 });
-                            });
-                        });
-                        try
-                        {
-                            var dids = "";
-                            var salesattr = "";
-                            //插入分类
-                            string categoryid = SyncCateGory(x.categoryID, clientid, ref cateList, ref salesattr);
+                            }
+
                             //同步插入产品
-                            OrderBusiness.BaseBusiness.ZNGCAddProduct(x, agentid, clientid, userid, ref dids, categoryid, salesattr);
+                            OrderBusiness.BaseBusiness.ZNGCAddProduct(order, categortModel.CategoryID, provideid, agentid, clientid, userid);
                         }
-                        catch (Exception ex)
-                        {
-                            CloudSalesBusiness.CommonBusiness.WriteLog(
-                                string.Format("同步添加产品失败，原因{0}", ex.ToString()), 2, "Error");
-                        }
-                    });
+                    }
+                    break;
                 }
-                break;
+            }
+            catch (Exception ex)
+            {
+                CloudSalesBusiness.CommonBusiness.WriteLog(
+                    string.Format("同步添加产品失败，原因{0}", ex.ToString()), 2, "Error");
             }
             //返回错误
             return new AddResult()
             {
-                error_code=0,
+                error_code = 0,
                 error_message = "同步成功"
-            }; 
+            };
         }
 
-        public string SyncCateGory(string categoryid, string clientid, ref List<CategoryEntity> cateList, ref string salesattr)
+        public Category SyncCateGory(string categoryid, string clientid, ref List<CategoryEntity> cateList)
         {
             var category = cateList.Where(x => x.CategoryID == categoryid).FirstOrDefault();
             if (category == null)
             {
-                cateList = ClientBusiness.BaseBusiness.GetAllCategory(); 
+                return null;
             }
-            string pid = "";
-            Category pcate=null;
+            Category pcate = null;
             //获取父级分类
             if (!string.IsNullOrEmpty(category.PID))
             {
                 var pcategory = cateList.Where(x => x.CategoryID == category.PID).FirstOrDefault();
-                pcate = ProductsBusiness.BaseBusiness.GetCategoryByName(pcategory.CategoryName, clientid);
-                if (string.IsNullOrEmpty(pcate.CategoryID))
+                pcate = ProductsBusiness.BaseBusiness.GetCategoryByName("", pcategory.CategoryName, clientid);
+                if (pcate != null && !string.IsNullOrEmpty(pcate.CategoryID))
                 {
-                    //判断规格是否存在并插入新的分类
-                    pcate = GetCateGory(pcategory, clientid, ref salesattr);
-                    var newcate = GetCateGory(category, clientid, ref salesattr, pcate == null ? "" : pcate.CategoryID);
-                    return newcate == null ? "" : newcate.CategoryID;
+                    var newcate = ProductsBusiness.BaseBusiness.GetCategoryByName(pcate.CategoryID, category.CategoryName, clientid);
+                    if (newcate != null && !string.IsNullOrEmpty(newcate.CategoryID))
+                    {
+                        string saleattr = CheckAttr(category, clientid);
+                        UpdateCategoryAttr(newcate, saleattr);
+                    }
+                    else
+                    {
+                        newcate = InsertCategory(category, clientid, pcate == null ? "" : pcate.CategoryID);
+                    }
+
+                    return newcate;
                 }
                 else
-                { 
-                   string saleattr= CheckAttr(pcategory, clientid);
-                   UpdateCategoryAttr(pcate, saleattr);
-                }
-                pid = pcate == null ? "" : pcate.CategoryID;
-            }
-            var localcate = ProductsBusiness.BaseBusiness.GetCategoryByName(category.CategoryName, clientid, pid);
-            if (string.IsNullOrEmpty(localcate.CategoryID))
-            {
-                var newcate = GetCateGory(category, clientid, ref salesattr, pid);
-                if (newcate != null)
                 {
-                    pid = newcate.CategoryID;
+                    pcate = InsertCategory(pcategory, clientid);
+                    var newcate = InsertCategory(category, clientid, pcate == null ? "" : pcate.CategoryID);
+                    return newcate;
+                    
                 }
             }
             else
             {
-               string saleattr= CheckAttr(category, clientid);
-               UpdateCategoryAttr(localcate, saleattr);
+                return null;
             }
-            return pid;
         }
 
-        public CloudSalesEntity.Category GetCateGory(CategoryEntity category, string clientid,ref string salesattr,string pid="")
+        public CloudSalesEntity.Category InsertCategory(CategoryEntity category, string clientid, string pid = "")
         {
             var result = 0;
              //判断规格是否存在
             string salesAttrs = CheckAttr(category, clientid);
-            salesattr = salesAttrs;
+          
             //插入新的分类
             string code = string.IsNullOrEmpty(category.CategoryCode)
                 ? GenerateRandomNumber(10)
@@ -139,38 +136,44 @@ namespace IntFactory.Sdk
         public string CheckAttr(CategoryEntity category, string clientid)
         {
             string salesAttrs = "";
-            category.SaleAttrs.ForEach(x =>
+            var saleList = ProductsBusiness.BaseBusiness.GetAttrs(clientid);
+           
+            foreach (var attr in category.SaleAttrs)
             {
-                var saleList = ProductsBusiness.BaseBusiness.GetAttrs(clientid);
-                saleList = saleList != null ? saleList : new List<ProductAttr>();
                 string attrid = "";
-                var saleAttr = saleList.Where(y => y.AttrName == x.AttrName).FirstOrDefault();
+                var saleAttr = saleList.Where(y => y.AttrName == attr.AttrName).FirstOrDefault();
+
                 if (saleAttr == null)
                 {
-                    attrid = ProductsBusiness.BaseBusiness.AddProductAttr(x.AttrName, "", "", 2, "", clientid);
-                    if (!string.IsNullOrEmpty(attrid))
-                    {
-                        saleAttr = ProductsBusiness.BaseBusiness.GetProductAttrByID(attrid, clientid);
-                    }
+                    attrid = ProductsBusiness.BaseBusiness.AddProductAttr(attr.AttrName, "", "", 1, "", clientid);
                 }
                 else
                 {
                     attrid = saleAttr.AttrID;
                 }
-                //比对规格值
                 if (!string.IsNullOrEmpty(attrid))
                 {
-                    x.AttrValues.ForEach(y =>
-                    {
-                        //不存在规格值
-                        if (!saleAttr.AttrValues.Where(z => z.ValueName == y.ValueName).Any())
-                        {
-                            ProductsBusiness.BaseBusiness.AddAttrValue(y.ValueName, attrid, "", clientid);
-                        }
-                    });
                     salesAttrs += attrid + ",";
                 }
-            });
+            }
+            foreach (var attr in category.AttrLists)
+            {
+                string attrid = "";
+                var saleAttr = saleList.Where(y => y.AttrName == attr.AttrName).FirstOrDefault();
+
+                if (saleAttr == null)
+                {
+                    attrid = ProductsBusiness.BaseBusiness.AddProductAttr(attr.AttrName, "", "", 1, "", clientid);
+                }
+                else
+                {
+                    attrid = saleAttr.AttrID;
+                }
+                if (!string.IsNullOrEmpty(attrid))
+                {
+                    salesAttrs += attrid + ",";
+                }
+            }
             return salesAttrs.TrimEnd(',');
         }
 

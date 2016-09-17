@@ -123,13 +123,6 @@ namespace YXERP.Areas.Mall.Controllers
                 mphone = CurrentUser.Client.MobilePhone;
                 cname = CurrentUser.Client.ContactName;
             }
-            else
-            {
-                Response.Write(
-                    "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
-                    GetbaseUrl() + "/Mall/Store/Goods?id=" + clientid + "';</script>");
-                Response.End();
-            }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;
@@ -251,7 +244,7 @@ namespace YXERP.Areas.Mall.Controllers
                 };
             } 
             CloudSalesEntity.Users user = CurrentUser; 
-            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
+            string provideid = ProductsBusiness.BaseBusiness.GetCMProviderID(CurrentUser.ClientID);
             provideid = string.IsNullOrEmpty(provideid) ? parentprid : provideid;
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), provideid, totalFee, "", "", 2, user.UserID,

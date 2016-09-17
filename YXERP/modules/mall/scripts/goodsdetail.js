@@ -11,8 +11,7 @@
     ObjectJS.init = function (clientid,  model,citycode) {
         var _self = this;
         _self.clientid = clientid;
-        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
-        console.log(_self.model);
+        _self.model = JSON.parse(model.replace(/&quot;/g, '"')); 
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
         _self.getOrderAttr(); 
@@ -151,10 +150,10 @@
                     }
                     shtml += '<td class="name" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</td>' +
                         '<td class="price">' + _self.model.Price.toFixed(2) + '元</td>' +
-                        '<td class="center"><div class="choose-quantity left">' +
-                        '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;">-</span>' +
-                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;" value="0"  data-remark="' + citem.ValueName + '" />' +
-                        '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;">+</span>' +
+                        '<td class="center"><div class="choose-quantity left mLeft30">' +
+                        '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;box-sizing:border-box;height:26px;">-</span>' +
+                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;box-sizing:border-box;height:26px;" value="0"  data-remark="' + citem.ValueName + '" />' +
+                        '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;box-sizing:border-box;height:26px;">+</span>' +
                         '</div></td>' +
                         '</tr>';
                 } else {
@@ -207,12 +206,14 @@
             if ($(this).val() == "") {
                 $(this).val('0');
             }
+            _self.SumNumPrice();
         }); 
         $('#sizelist .quantity-jian').click(function() {
             var _this = $(this);
             if (_this.next().val() != 0) {
                 _this.next().val(parseInt(_this.next().val()) - 1);
-            }
+                _self.SumNumPrice();
+            } 
         }).mouseover(function () {
             $(this).next().addClass("hover");
         }).mouseout(function () {
@@ -222,12 +223,33 @@
             var _this = $(this);
             if (_this.prev().val() != "") {
                 _this.prev().val(parseInt(_this.prev().val()) + 1);
+                _self.SumNumPrice();
             }
         }).mouseover(function () {
             $(this).prev().addClass("hover");
         }).mouseout(function () {
             $(this).prev().removeClass("hover");
         }); 
+    }
+    ObjectJS.SumNumPrice = function () {
+        var _self = this;
+        var sumnum = 0, sumprice = 0.00;
+        if (!$.isEmptyObject(tempOrder)) {
+           
+            $.each(tempOrder, function(i, obj) {
+                sumnum += parseInt(obj.quantity);
+            });
+        }
+        $('#sizelist .quantity').each(function() {
+            $(this).val($(this).val().replace(/\D/g, ''));
+            var num = $(this).val();
+            if (num != '') {
+                sumnum += parseInt(num);
+            }
+        });
+        sumprice = (sumnum * parseFloat(_self.model.Price)).toFixed(2);
+        $('#totalnum').html(sumnum);
+        $('#totalprice').html(sumprice);
     }
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');

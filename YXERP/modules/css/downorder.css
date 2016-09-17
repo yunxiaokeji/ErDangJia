@@ -105,13 +105,13 @@
  .order-info table tr .price {width: 120px;padding-right: 10px;}
 
 
- .order-info .quantity-add {height: 24px !important; line-height: 24px;font-size: 18px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
+ .order-info .quantity-add {height: 24px !important; line-height: 24px;font-size: 17.5px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
  .order-info .quantity-add:hover{ border: 1px solid #4a98e7;}
 
  .order-info input:hover{border: 1px solid #4a98e7;}
  .order-info input.hover{border: 1px solid #4a98e7;}
 
- .order-info .quantity-jian{height: 24px !important; line-height: 24px;font-size: 18px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
+ .order-info .quantity-jian{height: 24px !important; line-height: 24px;font-size: 17.5px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
  .order-info .quantity-jian:hover{ border: 1px solid #4a98e7;}
 
 

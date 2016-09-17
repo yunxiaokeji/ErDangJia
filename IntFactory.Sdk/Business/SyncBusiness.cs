@@ -94,8 +94,8 @@ namespace IntFactory.Sdk
                 if (string.IsNullOrEmpty(pcate.CategoryID))
                 {
                     //判断规格是否存在并插入新的分类
-                    pcate = GetCateGory(pcategory, clientid);
-                    var newcate = GetCateGory(category, clientid, pcate == null ? "" : pcate.CategoryID);
+                    pcate = GetCateGory(pcategory, clientid, ref salesattr);
+                    var newcate = GetCateGory(category, clientid, ref salesattr, pcate == null ? "" : pcate.CategoryID);
                     return newcate == null ? "" : newcate.CategoryID;
                 }
                 else
@@ -108,7 +108,7 @@ namespace IntFactory.Sdk
             var localcate = ProductsBusiness.BaseBusiness.GetCategoryByName(category.CategoryName, clientid, pid);
             if (string.IsNullOrEmpty(localcate.CategoryID))
             {
-                var newcate = GetCateGory(category, clientid, pid, ref salesattr);
+                var newcate = GetCateGory(category, clientid, ref salesattr, pid);
                 if (newcate != null)
                 {
                     pid = newcate.CategoryID;

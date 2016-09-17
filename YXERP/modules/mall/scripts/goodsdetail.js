@@ -14,8 +14,7 @@
         _self.model = JSON.parse(model.replace(/&quot;/g, '"'));  
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
-        _self.getOrderAttr();
-        console.log(_self.model);
+        _self.getOrderAttr(); 
     }
 
     ObjectJS.bindStyle = function (model) {
@@ -119,7 +118,7 @@
         }
     }
     //绑定颜色尺码
-    var colorList = {}, tempList = [];
+    var colorList = {}, tempOrder= [],tempList = [];
     ObjectJS.getOrderAttr = function () {
         var _self = this;
         for (var i = 0; i < _self.model.ProductDetails.length; i++) {
@@ -138,8 +137,7 @@
         }
          
         var chtml = "";
-        var shtml = "";
-        console.log(_self.model);
+        var shtml = ""; 
         for (var i = 0; i < _self.model.SaleAttrs.length; i++) {
             var item = _self.model.SaleAttrs[i];
 
@@ -186,9 +184,7 @@
                 }
             }
             _this.siblings().removeClass("hover");
-            _this.removeClass("hasquantity").addClass("hover");
-            console.log(_this.data("remark"));
-            console.log(colorList);
+            _this.removeClass("hasquantity").addClass("hover"); 
             $('.trattr').each(function () {
                 if(colorList[_this.data("remark")].indexOf($(this).data("remark"))==-1){
                     $(this).hide();
@@ -318,5 +314,25 @@
             }
         });
     }
+    
+    ObjectJS.getOrdersCache = function() {
+        $('#sizelist .quantity').each(function () {
+            var _this = $(this);
+            var size = _this.parent().parent().data("remark");
+            var color = '';
+            if ($('#colorlist li .hover').length > 0) {
+                var color = $('#colorlist li .hover').data("remark");
+            }
+            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
+            var item = { quantity: _this.val(), detailid: colorList[key] }
+            if (_this.val() > 0) {
+
+            } else {
+                
+            }
+            tempOrder[key] = item;
+        });
+    };
+
     module.exports = ObjectJS;
 })

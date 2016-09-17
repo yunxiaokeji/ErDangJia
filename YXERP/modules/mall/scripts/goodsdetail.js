@@ -250,6 +250,7 @@
         sumprice = (sumnum * parseFloat(_self.model.Price)).toFixed(2);
         $('#totalnum').html(sumnum);
         $('#totalprice').html(sumprice);
+        $('#totalnum').parent().show();
     }
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');

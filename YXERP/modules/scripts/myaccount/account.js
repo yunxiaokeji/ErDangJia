@@ -117,23 +117,24 @@ define(function (require, exports, module) {
                             return false;
                         } else {
                             if (!$("#S_BindMobile").html().trim()) {
-                                if ($("#LoginPWD").val() == "") {
+                                if ($("#iptLoginPWD").val() == "") {
                                     alert("密码不能为空！");
                                     return false;
-                                } else if ($("#LoginPWD").val().length < 6) {
+                                } else if ($("#iptLoginPWD").val().length < 6) {
                                     alert("密码长度不能低于6位！");
                                     return false;
-                                } else if (Global.passwordLevel($("#LoginPWD").val()) == 1) {
+                                } else if (Global.passwordLevel($("#iptLoginPWD").val()) == 1) {
                                     alert("密码至少包含字母大小写、数字、字符两种组合！");
                                     return false;
                                 }
 
-                                if ($("#LoginConfirmPWD").val() != $("#LoginPWD").val()) {
+                                if ($("#LoginConfirmPWD").val() != $("#iptLoginPWD").val()) {
                                     alert("确认密码输入不一致！");
                                     return false;
                                 }
                             }
-                            Global.post("/MyAccount/UpdateUserAccount", { loginName: $("#LoginName").val(), loginPwd: $("#LoginPWD").val() }, function (data) {
+
+                            Global.post("/MyAccount/UpdateUserAccount", { loginName: $("#LoginName").val(), loginPwd: $("#iptLoginPWD").val() }, function (data) {
                                 if (data.Result) {
                                     alert("账号设置成功！");
                                     $("#S_LoginName").html($("#LoginName").val());

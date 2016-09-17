@@ -70,46 +70,18 @@ namespace IntFactory.Sdk
             paras.Add("opearid", userid);
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateOrder, paras);
         }
-        public string ZNGCAddProduct(OrderEntity ord, string agentid, string clientid, string userid, ref string dids, string categoryid="")
+
+        public string ZNGCAddProduct(OrderEntity ord, string categoryid, string provideid, string agentid, string clientid, string userid)
         {
             int result = 0;
             string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.goodsID, clientid);
             if (string.IsNullOrEmpty(pid))
             {
-                string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(clientid, ord.clientID);
-                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "", categoryid, 0, "", 1, "", "", ""
+                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "", "", 0, categoryid, 1, "", "", ""
                     , ord.finalPrice, ord.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, ord.orderImage, "", "", new List<ProductDetail>(), ord.goodsID, ord.intGoodsCode, userid, agentid, clientid, out result);
+
+                CheckProductDetail(pid, ord.details, ord.finalPrice, clientid, userid, ord.goodsID, ord.intGoodsCode, ord.goodsName);
             } 
-            //string detailids = "";
-            //ord.details.ForEach(x =>
-            //{
-            //    result = 0;
-            //    x.remark = x.remark.Replace("【", "[").Replace("】", "]");
-            //    string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, ord.intGoodsCode, ord.goodsID, clientid);
-            //    if (string.IsNullOrEmpty(did))
-            //    {
-            //        ProductDetail detail = new ProductDetail();
-            //        detail.Remark = x.remark;
-            //        detail.ClientID = clientid;
-            //        detail.ProductName = ord.goodsName;
-            //        detail.ProductID = pid;
-            //        detail.Price = ord.finalPrice;
-            //        detail.BigPrice = ord.finalPrice;
-            //        detail.CreateUserID = userid;
-            //        did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", "", "", "", ord.finalPrice,
-            //            (decimal) 0.00, ord.finalPrice, "", x.remark, "", userid, clientid, out result);
-            //        if (result == 1)
-            //        { 
-            //            detailids += "" + did + ":" + x.quantity + ",";
-            //        }
-            //    }
-            //    else
-            //    {
-            //        detailids += "" + did + ":"+x.quantity+",";
-            //    }
-            //});
-            //dids = detailids.TrimEnd(','); 
-            dids = CheckProductDetail(pid, ord.details, ord.finalPrice, clientid, userid, ord.goodsID, ord.intGoodsCode,ord.goodsName);
             return pid;
         }
 
@@ -131,7 +103,7 @@ namespace IntFactory.Sdk
                     detail.Price = price;
                     detail.BigPrice = price;
                     detail.CreateUserID = userid;
-                    did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", "", "", "", price,
+                    did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", x.saleAttr, x.attrValue, x.saleAttrValue, price,
                         (decimal)0.00, price, "", x.remark, "", userid, clientid, out result);
                     if (result == 1)
                     {

@@ -163,7 +163,6 @@
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InfomationController.cs" />
-    <Compile Include="Controllers\IntFactoryOrderController.cs" />
     <Compile Include="Controllers\MingDaoController.cs" />
     <Compile Include="Controllers\MyAccountController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -1225,10 +1224,6 @@
     <Content Include="Views\StockRPT\StockDetailRPT.cshtml" />
     <Content Include="Views\MyAccount\WeiXinCallBack.cshtml" />
     <Content Include="Views\MyAccount\WeiXinBind.cshtml" />
-    <Content Include="Views\IntFactoryOrder\DownOrder.cshtml" />
-    <Content Include="Views\IntFactoryOrder\Orders.cshtml" />
-    <Content Include="Views\IntFactoryOrder\OrdersDetail.cshtml" />
-    <Content Include="Views\IntFactoryOrder\Index.cshtml" />
     <Content Include="Views\Home\CMSelectLogin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

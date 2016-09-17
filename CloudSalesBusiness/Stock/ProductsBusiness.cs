@@ -508,11 +508,12 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public string GetProviderIDByCMID(string clientid, string cmclientid)
+        public string GetCMProviderID(string clientid)
         {
-            object obj = CommonBusiness.Select("Providers", "  top 1 ProviderID ", "ClientID='" + clientid + "' and CMClientid='" + cmclientid + "' and Status<>9");
+            object obj = CommonBusiness.Select("Providers", "  top 1 ProviderID ", "ClientID='" + clientid + "' and Status<>9");
             return obj != null ? obj.ToString() : "";
         }
+
         public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID,int type=0)
         {
             return ProductsDAL.BaseProvider.AddProviders(name, contact, mobile, email, cityCode, address, remark, cmClientID, cmClientCode, operateID, agentid, clientID, type);
@@ -589,12 +590,12 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public Category GetCategoryByName(string categoryname, string clientid,string pid="")
+        public Category GetCategoryByName(string pid, string categoryname, string clientid)
         {
-            var list = GetCategorys(clientid);
+            var list = GetChildCategorysByID(pid, clientid);
             if (list.Where(m => m.CategoryName == categoryname).Count() > 0)
             {
-                return list.Where(m => m.CategoryName == categoryname).OrderBy(x=>x.Layers).FirstOrDefault();
+                return list.Where(m => m.CategoryName == categoryname).OrderBy(x => x.Layers).FirstOrDefault();
             }
 
             DataTable dt = ProductsDAL.BaseProvider.GetCategoryByName(categoryname, clientid, pid);

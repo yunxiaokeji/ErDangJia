@@ -278,6 +278,11 @@ define(function (require, exports, module) {
                             return false;
                         }
 
+                        if ($("#saleAttr1").val() != "-1" && $("#saleAttr1").val() == $("#saleAttr2").val()) {
+                            alert("两种规格不能相同");
+                            return false;
+                        }
+
                         var model = {
                             CategoryID: Category.CategoryID,
                             CategoryCode: $("#categoryCode").val().trim(),
@@ -292,10 +297,14 @@ define(function (require, exports, module) {
                         $("#attrList .checkbox.hover").each(function () {
                             attrs += $(this).data("id") + ",";
                         });
+
                         //规格
-                        $("#saleAttr .checkbox.hover").each(function () {
-                            saleattrs += $(this).data("id") + ",";
-                        });
+                        if ($("#saleAttr1").val() != "-1") {
+                            saleattrs += $("#saleAttr1").val() + ",";
+                        }
+                        if ($("#saleAttr2").val() != "-1") {
+                            saleattrs += $("#saleAttr2").val() + ",";
+                        }
                         _self.saveCategory(model, attrs, saleattrs, callback);
 
                         return false;
@@ -317,11 +326,13 @@ define(function (require, exports, module) {
 
                 for (var i = 0; i < Category.AttrLists.length; i++) {
                     $("#attrList .checked[data-id='" + Category.AttrLists[i].AttrID + "']").find(".checkbox").addClass("hover");
-                    $("#saleAttr .checked[data-id='" + Category.AttrLists[i].AttrID + "']").hide();
                 }
                 for (var i = 0; i < Category.SaleAttrs.length; i++) {
-                    $("#saleAttr .checked[data-id='" + Category.SaleAttrs[i].AttrID + "']").find(".checkbox").addClass("hover");
-                    $("#attrList .checked[data-id='" + Category.SaleAttrs[i].AttrID + "']").hide();
+                    if (i == 0) {
+                        $("#saleAttr1").val(Category.SaleAttrs[i].AttrID);
+                    } else if (i == 1) {
+                        $("#saleAttr2").val(Category.SaleAttrs[i].AttrID);
+                    } 
                 }
             }
 

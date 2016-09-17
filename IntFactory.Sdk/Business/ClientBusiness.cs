@@ -11,8 +11,9 @@ namespace IntFactory.Sdk
     {
         public static ClientBusiness BaseBusiness = new ClientBusiness();
 
-        public List<CategoryEntity>  CategoryList;
+        public static List<CategoryEntity>  CategoryList;
         public static Nullable<DateTime> refreshTime { get; set; } 
+
         public ClientResult GetClientInfo(string zngcClientID,string userid="")
         {
             var paras = new Dictionary<string, object>();
@@ -36,52 +37,38 @@ namespace IntFactory.Sdk
                 return new List<ProcessCategoryEntity>();
             }
         }
+
         public CategoryEntity GetCategoryByID(string categoryID)
         {
             var list = GetAllCategory();
             return list.Where(x => x.CategoryID == categoryID).FirstOrDefault();
-            //var paras = new Dictionary<string, object>();
-            //paras.Add("categoryID", categoryID);
-
-            //CategoryResult result = HttpRequest.RequestServer<CategoryResult>(ApiOption.GetCategoryByID, paras);
-            //if (result.error_code == 0)
-            //{
-            //    return result.result;
-            //}
-            //else
-            //{
-            //    return new CategoryEntity();
-            //}
         }
 
-        public List<CategoryEntity> GetAllCategory(int layerid = -1, EnumCategoryType type = EnumCategoryType.All)
+        public List<CategoryEntity> GetCategoryByPID(string pid)
         {
-            var list=new List<CategoryEntity>();
-            if (CategoryList != null && CategoryList.Count != 0 &&  refreshTime!=null && (DateTime.Now -Convert.ToDateTime(refreshTime)).TotalMinutes<30)
+            var list = GetAllCategory();
+            return list.Where(x => x.PID == pid).ToList();
+        }
+
+        public List<CategoryEntity> GetAllCategory()
+        {
+            if (CategoryList != null && CategoryList.Count != 0)
             {
+                return CategoryList;
+            }
+            var list = new List<CategoryEntity>();
+
+            var paras = new Dictionary<string, object>();
+            paras.Add("layerid", -1);
+            paras.Add("type", EnumCategoryType.Order);
+            CategorysResult result = HttpRequest.RequestServer<CategorysResult>(ApiOption.GetAllCategorys, paras);
+            if (result.error_code == 0)
+            {
+                CategoryList = result.result;
                 list = CategoryList;
             }
-            else
-            {
-                refreshTime=DateTime.Now;
-                var paras = new Dictionary<string, object>();
-                paras.Add("layerid", layerid);
-                paras.Add("type", type);
-                CategorysResult result = HttpRequest.RequestServer<CategorysResult>(ApiOption.GetAllCategorys, paras);
-                if (result.error_code == 0)
-                {
-                    CategoryList = result.result;
-                    list = CategoryList; 
-                } 
-            } 
-            if (layerid > -1)
-            {
-                return list.Where(x => x.Layers == layerid).ToList();
-            }
-            else
-            {
-                return list;
-            }
+            return list;
+            
         }
 
         public List<CategoryEntity> GetClientCategorys(string categoryid, EnumCategoryType type)

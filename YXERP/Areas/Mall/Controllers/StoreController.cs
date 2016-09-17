@@ -208,7 +208,7 @@ namespace YXERP.Areas.Mall.Controllers
       
         public JsonResult GetAllCateGory()
         {
-            var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory(1, IntFactory.Sdk.EnumCategoryType.Order);
+            var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory();
           
             JsonDictionary.Add("items", result); 
             return new JsonResult()
@@ -305,10 +305,10 @@ namespace YXERP.Areas.Mall.Controllers
             var ord= JsonConvert.DeserializeObject<IntFactory.Sdk.OrderEntity>(entity);
             CloudSalesEntity.Users user = CurrentUser;
             //0.判断供应商以及是否授权
-            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, ord.clientID);
+            string provideid = ProductsBusiness.BaseBusiness.GetCMProviderID(CurrentUser.ClientID);
             if (string.IsNullOrEmpty(provideid))
             {
-                 YunXiaoService.ProductService.AddProviders(ord.clientName,
+                provideid = YunXiaoService.ProductService.AddProviders(ord.clientName,
                             ord.clientContactName,
                             ord.clientMobile, "", ord.clientCityCode, ord.clientAdress,
                             "", ord.clientID, ord.clientCode, "", CurrentUser.Client.AgentID, CurrentUser.ClientID,1);
@@ -317,7 +317,7 @@ namespace YXERP.Areas.Mall.Controllers
             //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入
             string dids = "";
 
-            string pid = IntFactory.Sdk.OrderBusiness.BaseBusiness.ZNGCAddProduct(ord, user.AgentID, user.ClientID, user.UserID, ref dids);
+            string pid = IntFactory.Sdk.OrderBusiness.BaseBusiness.ZNGCAddProduct(ord, "", provideid, user.AgentID, user.ClientID, user.UserID);
             if (string.IsNullOrEmpty(pid) || string.IsNullOrEmpty(dids))
             {
                 JsonDictionary.Add("result", 0);
@@ -394,7 +394,7 @@ namespace YXERP.Areas.Mall.Controllers
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
-            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
+            string provideid = ProductsBusiness.BaseBusiness.GetCMProviderID(CurrentUser.ClientID);
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(productid, dids, provideid, totalFee, "", "", 2, user.UserID,
                 user.AgentID, user.ClientID,personname,mobiletele,address,citycode);

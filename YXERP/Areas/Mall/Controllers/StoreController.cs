@@ -380,6 +380,7 @@ namespace YXERP.Areas.Mall.Controllers
             } 
             CloudSalesEntity.Users user = CurrentUser; 
             string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
+            provideid = string.IsNullOrEmpty(provideid) ? parentprid : provideid;
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), provideid, totalFee, "", "", 2, user.UserID,
                 user.AgentID, user.ClientID,personname,mobiletele,address,citycode);

@@ -48,7 +48,7 @@ namespace YunXiaoService
 
         public static bool IsExistsProvider(string cmClientID, string clientid)
         {
-            object count = CommonBusiness.Select("Providers", "count(0)", " ClientID='" + clientid + "' and CMClientID ='" + cmClientID + "' ");
+            object count = CommonBusiness.Select("Providers", "count(0)", " ClientID='" + clientid + "' and CMClientID ='" + cmClientID + "' and Status <>9 ");
             return Convert.ToInt32(count) > 0;
         }
     }

@@ -195,40 +195,7 @@ namespace YXERP.Areas.Mall.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
-        public JsonResult IsLogin()
-        {
-            JsonDictionary.Add("result", CurrentUser!=null);
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-      
-        public JsonResult GetAllCateGory()
-        {
-            var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory(1, IntFactory.Sdk.EnumCategoryType.Order);
-          
-            JsonDictionary.Add("items", result); 
-            return new JsonResult()
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex,string categoryID="", string orderby = "", string beginPrice="",string endPrice="")
-        {
-            IntFactory.Sdk.OrderListResult item = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid, keyWords, categoryID, orderby, beginPrice, endPrice);
-            JsonDictionary.Add("items", item.orders);
-            JsonDictionary.Add("totalCount", item.totalCount);
-            JsonDictionary.Add("pageCount", item.pageCount);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
+         
         public JsonResult GetEdjCateGory(string clientid)
         {
             var result = new ProductsBusiness().GetCategorys(clientid);
@@ -270,101 +237,6 @@ namespace YXERP.Areas.Mall.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
-        public JsonResult GetOrderDetailByID(string clientid, string orderid, string categoryid)
-        {
-            var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, clientid);
-            if (obj.error_code == 0)
-            {
-                JsonDictionary.Add("items", obj.order); 
-            }
-            else
-            {
-                JsonDictionary.Add("items", ""); 
-                JsonDictionary.Add("errMsg", obj.error_message);
-            }
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
-
-        public JsonResult CreateOrderEDJ(string entity,decimal totalFee=0)
-        { 
-            if (CurrentUser == null)
-            {
-                JsonDictionary.Add("result",-9);
-                JsonDictionary.Add("errMsg", "未登录请登陆后再提交");
-                return new JsonResult
-                {
-                    Data = JsonDictionary,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
-            }
-            var ord= JsonConvert.DeserializeObject<IntFactory.Sdk.OrderEntity>(entity);
-            CloudSalesEntity.Users user = CurrentUser;
-            //0.判断供应商以及是否授权
-            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, ord.clientID);
-            if (string.IsNullOrEmpty(provideid))
-            {
-                 YunXiaoService.ProductService.AddProviders(ord.clientName,
-                            ord.clientContactName,
-                            ord.clientMobile, "", ord.clientCityCode, ord.clientAdress,
-                            "", ord.clientID, ord.clientCode, "", CurrentUser.Client.AgentID, CurrentUser.ClientID,1);
-            } 
-
-            //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入
-            string dids = "";
-
-            string pid = IntFactory.Sdk.OrderBusiness.BaseBusiness.ZNGCAddProduct(ord, user.AgentID, user.ClientID, user.UserID, ref dids);
-            if (string.IsNullOrEmpty(pid) || string.IsNullOrEmpty(dids))
-            {
-                JsonDictionary.Add("result", 0);
-                JsonDictionary.Add("errMsg", "获取产品失败，请稍后重试");
-                return new JsonResult
-                {
-                    Data = JsonDictionary,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
-            } 
-            //2.生成采购单据 
-            string purid = StockBusiness.AddPurchaseDoc(pid, dids, ord.clientID, totalFee, "", "", 2, user.UserID,
-                user.AgentID, user.ClientID,ord.personName,ord.mobileTele,ord.address,ord.cityCode);
-            if (string.IsNullOrEmpty(purid))
-            {
-                JsonDictionary.Add("result", 0);
-                JsonDictionary.Add("errMsg", "采购单生成失败，请稍后重试");
-                return new JsonResult
-                {
-                    Data = JsonDictionary,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
-            }
-            JsonDictionary.Add("PurchaseID", purid);
-            //3.生成智能工厂单据
-            ord.details.ForEach(x =>
-            { 
-                x.remark = x.remark.Replace("[", "【").Replace("]", "】");
-            });
-            var result = IntFactory.Sdk.OrderBusiness.BaseBusiness.CreateDHOrder(ord.orderID, ord.finalPrice, ord.details,
-                    ord.clientID, purid, user.ClientID,ord.personName, ord.mobileTele, ord.cityCode, ord.address);
-            if (!string.IsNullOrEmpty(result.id))
-            {
-                JsonDictionary.Add("OtherOrderID", result.id);
-                JsonDictionary.Add("result", 1);
-            } 
-            else
-            {
-                JsonDictionary.Add("result", 0);
-                JsonDictionary.Add("errMsg", result.error_message);
-            }
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        } 
         public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string goodsid, string goodscode,string goodsname,
             string personname, string mobiletele, string citycode, string address, string dids, decimal totalFee = 0)
         {

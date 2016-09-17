@@ -38,17 +38,14 @@
         <div class="left titlename">款式编码：@(model.ProductCode)</div>
         <ul class="left mLeft20"> 
             <li title="订单类别">
-                <span class="left">类别：@(model.CategoryName)</span>  
-            </li>
-             <li title="供应商">
-                <span class="left">供应商：@(model.ProviderName)</span>  
+                <span class="left">类别：@(string.IsNullOrEmpty(model.CategoryName)?"--":model.CategoryName)</span>  
             </li>
         </ul>
         <a class="btn-back right mTop5" title="返回" href="/Mall/Store/Goods?id=@(ViewBag.ClientID)"><span id="btnback" style="color: #ffffff;">返回</span></a>
         
     </div>
 
-    <div class="content-body divcenter" style="padding-top: 10px; overflow: initial;">
+    <div class="content-body divcenter" style="padding-top: 10px; padding-bottom: 0px;overflow: initial;">
         <div class="order-info">
             <div class="order-imgs-div left">
                 <div class="order-imgs">
@@ -102,13 +99,28 @@
             </div>
             <div class="clear"></div>
         </div>
-
         <div class="clear"></div>
     </div>
 
-    <div class="content-body divcenter" style="padding: 20px 0 50px 10px;"> 
-        <div class="description" id="description"></div>
+<div class="content-body divcenter" style="padding: 20px 0 50px 10px;">
+    <div class="show-nav">
+        <ul class="show-nav-ul">
+            <li class="hover" data-id="product-attr">产品介绍</li>
+        </ul>
     </div>
+    
+    <ul class="product-attr">
+        <li class="long">产品编码：@(model.ProductCode)</li>
+        <li class="long">产品毛重：@(model.Weight.Value.ToString("f2"))g</li>
+        <li class="long">累计销售：@(model.SaleCount)</li>
+        @foreach (var attr in model.AttrLists)
+        { 
+            <li class="long">@attr.AttrName：@attr.AttrValues[0].ValueName</li>
+         }
+        
+    </ul>
+    <div class="description" id="description"></div>
+</div>
     <a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情"><span id="btndetail">查看采购详情</span></a>
     @*图片放大*@
     <div class="enlarge-image-bgbox hide">

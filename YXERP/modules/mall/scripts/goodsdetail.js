@@ -11,7 +11,8 @@
     ObjectJS.init = function (clientid,  model,citycode) {
         var _self = this;
         _self.clientid = clientid;
-        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));  
+        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
+        console.log(_self.model);
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
         _self.getOrderAttr(); 

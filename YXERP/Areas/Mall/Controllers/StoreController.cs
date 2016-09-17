@@ -364,10 +364,9 @@ namespace YXERP.Areas.Mall.Controllers
                 Data = JsonDictionary,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
-        }
-
-        public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string entity, string goodsid, string goodscode,string goodsname,
-            string personname,string mobiletele,string citycode,string address ,decimal totalFee = 0)
+        } 
+        public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string goodsid, string goodscode,string goodsname,
+            string personname, string mobiletele, string citycode, string address, string dids, decimal totalFee = 0)
         {
             if (CurrentUser == null)
             {
@@ -378,25 +377,11 @@ namespace YXERP.Areas.Mall.Controllers
                     Data = JsonDictionary,
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
-            }
-            var details = JsonConvert.DeserializeObject<List<IntFactory.Sdk.ProductDetailEntity>>(entity);
-            CloudSalesEntity.Users user = CurrentUser;
-
-            //1.判断产品是否存ZNGCAddProduct在 与明细 不存在则插入 
-            string dids = IntFactory.Sdk.OrderBusiness.BaseBusiness.CheckProductDetail(productid, details, price, CurrentUser.ClientID, user.UserID, goodsid, goodscode, goodsname);
-            if (string.IsNullOrEmpty(productid) || string.IsNullOrEmpty(dids))
-            {
-                JsonDictionary.Add("result", 0);
-                JsonDictionary.Add("errMsg", "获取产品失败，请稍后重试");
-                return new JsonResult
-                {
-                    Data = JsonDictionary,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
-            }
+            } 
+            CloudSalesEntity.Users user = CurrentUser; 
             string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
             //2.生成采购单据 
-            string purid = StockBusiness.AddPurchaseDoc(productid, dids, provideid, totalFee, "", "", 2, user.UserID,
+            string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), provideid, totalFee, "", "", 2, user.UserID,
                 user.AgentID, user.ClientID,personname,mobiletele,address,citycode);
             if (string.IsNullOrEmpty(purid))
             {

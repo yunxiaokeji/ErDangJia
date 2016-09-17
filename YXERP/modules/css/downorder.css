@@ -84,6 +84,7 @@
 .order-info .product-details li { height:25px; line-height:25px; float:left; padding:0 10px; margin:5px 10px 0 0; border:solid 2px #ccc; cursor:pointer; display:inline-block; }
 .order-info .product-details li:hover { border:solid 2px #B10000; color:#B10000; } 
 .order-info .product-details li.hover { border:solid 2px #B10000; color:#B10000; }
+.order-info .product-details li.hasquantity{border:solid 2px #4a98e7;}
 /*订单信息*/
 .order-info .moneyinfo { width: 810px; }
 .order-info .moneyinfo li{ line-height:25px; padding:3px; overflow:auto; }
@@ -101,14 +102,16 @@
  .order-info table tr td{height: 44px;border-bottom: 1px dotted #e5e5e5;}
  .order-info table .last-row td {border-bottom: 0 none;}
  .order-info table tr .name {width: 160px;padding-right: 10px;font-weight: 700;word-wrap: break-word;word-break: break-all;white-space: normal;}
-  .order-info table tr .price {width: 120px;padding-right: 10px;}
- .order-info .quantity-add {height: 24px !important; line-height: 24px;font-size: 19px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
+ .order-info table tr .price {width: 120px;padding-right: 10px;}
+
+
+ .order-info .quantity-add {height: 24px !important; line-height: 24px;font-size: 18px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
  .order-info .quantity-add:hover{ border: 1px solid #4a98e7;}
 
  .order-info input:hover{border: 1px solid #4a98e7;}
  .order-info input.hover{border: 1px solid #4a98e7;}
 
- .order-info .quantity-jian{height: 24px !important; line-height: 24px;font-size: 19px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
+ .order-info .quantity-jian{height: 24px !important; line-height: 24px;font-size: 18px;font-weight: bolder; border: 1px solid #ccc;vertical-align: middle;cursor: pointer;} 
  .order-info .quantity-jian:hover{ border: 1px solid #4a98e7;}
 
 

@@ -229,9 +229,9 @@ namespace YXERP.Areas.Mall.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        public JsonResult GetEdjCateGory()
+        public JsonResult GetEdjCateGory(string clientid)
         {
-            var result = new ProductsBusiness().GetCategorys(CurrentUser.ClientID);
+            var result = new ProductsBusiness().GetCategorys(clientid);
             result = result.Where(x => string.IsNullOrEmpty(x.PID)).ToList();
             JsonDictionary.Add("items", result);
             return new JsonResult()

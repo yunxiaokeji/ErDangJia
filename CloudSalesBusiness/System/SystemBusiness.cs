@@ -545,6 +545,7 @@ namespace CloudSalesBusiness
             {
                 model.FillData(ds.Tables[0].Rows[0]);
                 model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
+                model.DepotSeats = new List<DepotSeat>();
                 foreach (DataRow ddr in ds.Tables[1].Rows)
                 {
                     DepotSeat depot = new DepotSeat();

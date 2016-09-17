@@ -13,40 +13,26 @@ namespace IntFactory.Sdk
     public class SyncBusiness
     {
         public static SyncBusiness BaseBusiness = new SyncBusiness();
-        public AddResult SyncProduct(string agentid, string clientid,string userid)
-        { 
-            List<CategoryEntity> cateList=new List<CategoryEntity>(); 
-            bool isRequst = false;
-            ///1.获取供应商
-            var list = CloudSalesBusiness.ProductsBusiness.BaseBusiness.GetProviders(clientid);
-            var providers = "";
-            list.ForEach(x =>
-            {
-                if (!string.IsNullOrEmpty(x.CMClientID))
-                {
-                    providers += "''" + x.CMClientID + "'',";
-                }
-            });
-            if (!string.IsNullOrEmpty(providers))
-            {
-                providers = providers.Substring(2, providers.Length -5);
-            }
+
+        public AddResult SyncProduct(string cmClientID, string userid, string agentid, string clientid)
+        {
+            List<CategoryEntity> cateList = ClientBusiness.BaseBusiness.GetAllCategory(); 
+
+
             //2.获取智能工厂已公开款式
             int totalcount = 1;
             for (int i = 1; i <= totalcount; i++)
             {
-                var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", 20, i, providers, "", "",
-                    "", "", "");
+                var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(clientid, 20, i, cmClientID, "", "", "", "", "");
                 if (orderlist.orders.Any())
                 {
-                    if (!isRequst)
-                    {
-                        cateList = ClientBusiness.BaseBusiness.GetAllCategory(); 
-                        isRequst = true;
-                    }
                     totalcount = orderlist.pageCount;
-                    //3.循环同步数据
-                    int j = 0;
+
+                    foreach (var order in orderlist.orders)
+                    {
+                        order.details = new List<ProductDetailEntity>();
+                    }
+
                     orderlist.orders.ForEach(x =>
                     {
                         x.details = new List<ProductDetailEntity>();

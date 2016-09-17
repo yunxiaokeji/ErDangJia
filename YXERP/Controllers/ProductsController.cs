@@ -793,9 +793,8 @@ namespace YXERP.Controllers
         }
 
         public JsonResult SyncProduct()
-        { 
-            IntFactory.Sdk.SyncBusiness.BaseBusiness.SyncProduct(CurrentUser.AgentID, CurrentUser.ClientID,
-                CurrentUser.UserID);
+        {
+            IntFactory.Sdk.SyncBusiness.BaseBusiness.SyncProduct(CurrentUser.Agents.CMClientID, CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID);
             JsonDictionary.Add("result", true); 
             return new JsonResult
             {

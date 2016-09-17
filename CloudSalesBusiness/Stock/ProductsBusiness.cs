@@ -588,6 +588,7 @@ namespace CloudSalesBusiness
 
             return model;
         }
+
         public Category GetCategoryByName(string categoryname, string clientid,string pid="")
         {
             var list = GetCategorys(clientid);
@@ -607,6 +608,7 @@ namespace CloudSalesBusiness
 
             return model;
         }
+
         public Category GetCategoryDetailByID(string categoryid)
         {
             var dal = new ProductsDAL();

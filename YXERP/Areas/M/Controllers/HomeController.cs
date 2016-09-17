@@ -25,6 +25,9 @@ namespace YXERP.Areas.M.Controllers
             users.CityCode = CurrentUser.Client.CityCode;
             users.Address = CurrentUser.Client.Address;
             ViewBag.baseUser = users;
+
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(providerID);
+            ViewBag.Client = client;
             return View();
         }
 

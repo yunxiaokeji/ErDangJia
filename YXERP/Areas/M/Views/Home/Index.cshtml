@@ -1,6 +1,8 @@
 ﻿@{
-    ViewBag.Title="店铺中心";
     var v = DateTime.Now.Ticks;
+    var client = (CloudSalesEntity.Manage.Clients)ViewBag.Client;
+    ViewBag.Title = client.CompanyName + "--款式中心";
+    
 }
 @section css{
     <link href="/modules/m/css/style/list.css" rel="stylesheet" />
@@ -28,7 +30,7 @@
     <div class="header">
         <div class="header-li li-task-filtertype">
             <div class="btn-task-filtertype">
-            <div class="font16">店铺中心</div>
+            <div class="font16">@client.CompanyName</div>
             @*<div class="iconfont">&#xe61c;</div>
             <ul class="task-filtertype">
                 <li data-id="-1">全部</li>

@@ -23,6 +23,18 @@ namespace YXERP.Areas.M.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
+        public JsonResult GetEdjCateGory(string clientID)
+        {
+            var obj = ProductService.GetEdjCateGory(clientID);
+            JsonDictionary.Add("result", obj);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
     }
 }

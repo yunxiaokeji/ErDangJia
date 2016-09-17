@@ -163,6 +163,9 @@
             }
         }
         $('#colorlist').html(chtml);
+        if (chtml == "") {
+            $('#licolor').hide();
+        }
         $('#sizelist').html(shtml);
         if (shtml != ""){
             $('.sizediv').addClass("linetopbottom");

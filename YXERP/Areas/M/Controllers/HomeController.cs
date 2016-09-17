@@ -30,7 +30,7 @@ namespace YXERP.Areas.M.Controllers
 
         public ActionResult ChooseProvider()
         {
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID).FindAll(m => !string.IsNullOrEmpty(m.CMClientID) && m.ProviderType == 2);
             return View();
         }
 

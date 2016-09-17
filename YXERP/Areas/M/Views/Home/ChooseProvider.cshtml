@@ -1,16 +1,21 @@
 ﻿@{
+    ViewBag.Title = "选择店铺";
     List<CloudSalesEntity.ProvidersEntity> list = (List<CloudSalesEntity.ProvidersEntity>)ViewBag.Providers;
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
 }
 @section css{
     <link href="/modules/m/css/style/chooseprovider.css" rel="stylesheet" />
 }
 <header>
     <div class="center font16">
-       选择供应商
+       选择店铺
     </div>
 </header>
 <div class="provider-list">
     <ul class="provider-items">
+        <li>
+            <a href="/m/home/index?providerID=@CurrentUser.ClientID" style="display:block;">进入我的店铺</a>
+        </li>   
         @for (int i = 0; i < list.Count; i++)
         {
             var item=list[i];

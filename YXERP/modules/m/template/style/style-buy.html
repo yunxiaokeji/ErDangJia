@@ -1,5 +1,6 @@
 ﻿{%
 var item=$data;
+console.log(item);
 %}
 <div class="style-content">
     <div class="style-main">
@@ -31,7 +32,7 @@ var item=$data;
                                     {
                                         var attrItem=attr.AttrValues[j];
                                 %}
-                                <li class="{%=i==1?'color':'size'%}" data-value="{%=attrItem.ValueName%}">
+                                <li class="{%=i==1?'next':'first'%}" data-value="{%=attrItem.ValueName%}">
                                     {%=attrItem.ValueName%}
                                 </li>
                                 {%}%}

@@ -54,7 +54,7 @@
                 });
             });
 
-            $(".overlay-addOrder .attr-ul li.size,.overlay-addOrder .attr-ul li.color").unbind().click(function () {
+            $(".overlay-addOrder .attr-ul li").unbind().click(function () {
                 var _self = $(this);
                 if (_self.hasClass("select")) {
                     _self.removeClass("select");
@@ -177,36 +177,56 @@
         $(".attr-box").empty();
         $(".attr-box").append('<table class="table-list"></table>');
         $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td class="tRight">操作</td></tr>');
-        $(".attr-ul .size.select").each(function () {
+        $(".attr-ul .first.select").each(function () {
             var _this = $(this);
-            $(".attr-ul .color.select").each(function () {
-                var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text() + ':' + _this.data('value') + '】【' + $(this).parents('.productsalesattr').find('.attr-title').text() + ':' + $(this).data('value') + '】';
-                var isContinue = false;
-                for (var i = 0; i < details.length; i++) {
-                    var _detail = details[i].AttrValue;
-                    if (_detail == (_this.data('value') + ($(this).data('value') && ',' + $(this).data('value')))) {
-                        isContinue = true;
-                    }
-                }
-                if (isContinue) {
-                    var trHtml = $("<tr class='detail-attr' data-remark='" + description + "'></tr>");
-                    trHtml.append("<td class='tLeft'>" + description + "</td>");
-                    trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
-                    trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
-
-                    trHtml.find('.iconfont').click(function () {
-                        $(this).parents('tr').remove();
-                        return false;
-                    });
-                    trHtml.find('.quantity').change(function () {
-                        var _this = $(this);
-                        if (!_this.val().isInt() || _this.val() < 0) {
-                            _this.val(0);
+            if ($(".productsalesattr").length > 1) {
+                $(".attr-ul .next.select").each(function () {
+                    var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text().trim() + '：' + _this.data('value') + '】【' + $(this).parents('.productsalesattr').find('.attr-title').text().trim() + '：' + $(this).data('value') + '】';
+                    var isContinue = false;
+                    for (var i = 0; i < details.length; i++) {
+                        var _detail = details[i].Remark.replace(/ /g, '').replace(/\[/g, '【').replace(/\]/g, '】').replace(/:/g, '：');
+                        if (_detail == description) {
+                            isContinue = true;
                         }
-                    });
-                    $(".attr-box .table-list").append(trHtml);
-                }
-            });
+                    }
+                    if (isContinue) {
+                        var trHtml = $("<tr class='detail-attr' data-remark='" + description + "'></tr>");
+                        trHtml.append("<td class='tLeft'>" + description + "</td>");
+                        trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
+                        trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
+
+                        trHtml.find('.iconfont').click(function () {
+                            $(this).parents('tr').remove();
+                            return false;
+                        });
+                        trHtml.find('.quantity').change(function () {
+                            var _this = $(this);
+                            if (!_this.val().isInt() || _this.val() < 0) {
+                                _this.val(0);
+                            }
+                        });
+                        $(".attr-box .table-list").append(trHtml);
+                    }
+                });
+            } else {
+                var description = '【'+ _this.parents('.productsalesattr').find('.attr-title').text().trim() + '：' + _this.data('value') + '】';
+                var trHtml = $("<tr class='detail-attr' data-remark='" + description + "'></tr>");
+                trHtml.append("<td class='tLeft'>" + description + "</td>");
+                trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
+                trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
+
+                trHtml.find('.iconfont').click(function () {
+                    $(this).parents('tr').remove();
+                    return false;
+                });
+                trHtml.find('.quantity').change(function () {
+                    var _this = $(this);
+                    if (!_this.val().isInt() || _this.val() < 0) {
+                        _this.val(0);
+                    }
+                });
+                $(".attr-box .table-list").append(trHtml);
+            }
         });
     };
 

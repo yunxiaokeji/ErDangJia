@@ -142,7 +142,7 @@
             var item = _self.model.SaleAttrs[i];
 
             for (var j = 0; j < item.AttrValues.length; j++) {
-                var citem = item.AttrValues[j];
+                var citem = item.AttrValues[j]; 
                 if (_self.model.SaleAttrs.length == 1 || i == 1) {
                     if (i == (_self.model.SaleAttrs.length - 1)) {
                         shtml += '<tr class="last-row trattr" data-remark="' + citem.ValueName + '">';
@@ -176,12 +176,13 @@
                 totalnum += parseInt($(this).val());
             });
             if (totalnum > 0) {
-                $('#colorlist li.hover').addClass("hasquantity");
-                if ($('#colorlist li.hover').length > 0) {
-                    $("#sizelist .quantity").each(function() {
-                        $(this).val(0);
-                    });
-                }
+                $('#colorlist li.hover').addClass("hasquantity"); 
+            }
+            if ($('#colorlist li.hover').length > 0) {
+                _self.setOrdersCache();
+                $("#sizelist .quantity").each(function () {
+                    $(this).val(0);
+                });
             }
             _this.siblings().removeClass("hover");
             _this.removeClass("hasquantity").addClass("hover"); 
@@ -193,7 +194,7 @@
                     $(this).show();
                 }
             });
-
+            _self.setOrdersQuantity();
         });
 
         $('#sizelist .quantity').keyup(function () {
@@ -314,24 +315,40 @@
             }
         });
     }
-    
-    ObjectJS.getOrdersCache = function() {
+    //数量缓存
+    ObjectJS.setOrdersCache = function() {
         $('#sizelist .quantity').each(function () {
             var _this = $(this);
-            var size = _this.parent().parent().data("remark");
+            var size = _this.parent().parent().parent().data("remark"); 
             var color = '';
-            if ($('#colorlist li .hover').length > 0) {
-                var color = $('#colorlist li .hover').data("remark");
+            if ($('#colorlist li.hover').length > 0) {
+                var color = $('#colorlist li.hover').data("remark");
             }
             var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
-            var item = { quantity: _this.val(), detailid: colorList[key] }
+            var item = { quantity: _this.val(), detailid: colorList[key], key: key }
             if (_this.val() > 0) {
-
+                tempOrder[key] = item;
             } else {
-                
-            }
-            tempOrder[key] = item;
+                if (typeof (tempOrder[key]) != 'undefined') {
+                    delete tempOrder[key]; 
+                } 
+            } 
         });
+    };
+    //数赋值
+    ObjectJS.setOrdersQuantity = function () {
+        $('#sizelist .quantity').each(function() {
+            var _this = $(this);
+            var size = _this.parent().parent().parent().data("remark");
+            var color = '';
+            if ($('#colorlist li.hover').length > 0) {
+                var color = $('#colorlist li.hover').data("remark");
+            }
+            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";  
+            if (typeof (tempOrder[key]) != 'undefined') {
+                _this.val(tempOrder[key].quantity);
+            }
+        }); 
     };
 
     module.exports = ObjectJS;

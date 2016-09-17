@@ -258,8 +258,7 @@ jQuery.extend({
 
 	isArray: Array.isArray || function( obj ) {
 		return jQuery.type(obj) === "array";
-	},
-
+	}, 
 	isWindow: function( obj ) {
 		/* jshint eqeqeq: false */
 		return obj != null && obj == obj.window;

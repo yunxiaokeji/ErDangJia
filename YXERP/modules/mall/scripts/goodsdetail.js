@@ -11,11 +11,11 @@
     ObjectJS.init = function (clientid,  model,citycode) {
         var _self = this;
         _self.clientid = clientid;
-        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));  
+        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
+        console.log(_self.model);
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
-        _self.getOrderAttr();
-        console.log(_self.model);
+        _self.getOrderAttr(); 
     }
 
     ObjectJS.bindStyle = function (model) {
@@ -48,9 +48,7 @@
             var _this = $(this); 
             _this.siblings().removeClass("hover");
             _this.addClass("hover");
-
             $("#orderImage").attr("src", _this.find("img").attr("src").split("?")[0]);
-
             if ($("#orderImage").width() > $("#orderImage").height()) {
                 $("#orderImage").css("width", 350);
             } else {
@@ -121,180 +119,126 @@
         }
     }
     //绑定颜色尺码
+    var colorList = {}, tempOrder= {},tempList = [];
     ObjectJS.getOrderAttr = function () {
         var _self = this;
-        Global.post("/Mall/Store/GetOrderAttrsList", { goodsid: _self.model.CMGoodsID }, function (data) {
-            var chtml = "";
-            var shtml = ""; 
-            for (var i = 0; i < data.items.length; i++) {
-                var item = data.items[i]; 
-                if (item.AttrType == 2) {
-                    chtml += '<li class="left" data-id="' + item.OrderAttrID + '" data-remark="' + item.AttrName + '" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</li>';
+        for (var i = 0; i < _self.model.ProductDetails.length; i++) {
+            var item = _self.model.ProductDetails[i];
+            if (item.AttrValue != "" && item.AttrValue != null) {
+                var color = item.AttrValue.split(",");
+                var key = "[" + color[0] + "]" + (color.length > 1 ? "[" + color[1] + "]" : "");
+                colorList[key] = item.ProductDetailID;
+                if ($.inArray(color[0], tempList)==-1) {
+                    colorList[color[0]] = color.length > 1 ? color[1] : color[0];
+                    tempList.push(color[0]);
                 } else {
-                    if (i == (data.items.length - 1)) {
-                        shtml += '<tr class="last-row" data-remark="' + item.AttrName + '">';
+                    colorList[color[0]] = colorList[color[0]] + (color.length > 1 ?  "," +color[1] : "");
+                }
+            }
+        }
+        var chtml = "",shtml = ""; 
+        for (var i = 0; i < _self.model.SaleAttrs.length; i++) {
+            var item = _self.model.SaleAttrs[i];
+            for (var j = 0; j < item.AttrValues.length; j++) {
+                var citem = item.AttrValues[j]; 
+                if (_self.model.SaleAttrs.length == 1 || i == 1) {
+                    if (i == (_self.model.SaleAttrs.length - 1)) {
+                        $('#sizeName').html(item.AttrName + ":");
+                        shtml += '<tr class="last-row trattr" data-remark="' + citem.ValueName + '">';
                     } else {
-                        shtml += '<tr data-remark="' + item.AttrName + '">';
+                        $('#colorName').html(item.AttrName + ":");
+                        shtml += '<tr calss="trattr" data-remark="' + citem.ValueName + '">';
                     }
-                    shtml += '<td class="name" >' + item.AttrName.replace('【', ' ').replace('】', ' ') + '</td>' +
-                        '<td class="price">' + item.FinalPrice.toFixed(2) + '元</td>' +
+                    shtml += '<td class="name" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</td>' +
+                        '<td class="price">' + _self.model.Price.toFixed(2) + '元</td>' +
                         '<td class="center"><div class="choose-quantity left">' +
                         '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;">-</span>' +
-                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;" value="0"  data-remark="' + item.AttrName + '" />' +
+                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;" value="0"  data-remark="' + citem.ValueName + '" />' +
                         '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;">+</span>' +
                         '</div></td>' +
                         '</tr>';
+                } else {
+                    $('#colorName').html(item.AttrName+":");
+                    chtml += '<li class="left" data-id="' + item.AttrID + '" data-remark="' + citem.ValueName + '" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</li>';
                 }
             }
-            $('#colorlist').html(chtml);
-            $('#sizelist').html(shtml);
-            if (shtml != ""){
-                $('.sizediv').addClass("linetopbottom");
-                $('#btnSubmit').show();
-            } 
-            $('#colorlist li').click(function() {
-                if ($(this).hasClass("hover")) {
-                    $(this).removeClass("hover");
+        }
+        $('#colorlist').html(chtml);
+        if (chtml == "") {
+            $('#licolor').hide();
+        }
+        $('#sizelist').html(shtml);
+        if (shtml != ""){
+            $('.sizediv').addClass("linetopbottom");
+            $('#btnSubmit').show();
+        } 
+        $('#colorlist li').click(function () {
+            var _this = $(this);
+            //数量验证
+            var totalnum = 0; 
+            $("#sizelist .quantity").each(function () {
+                totalnum += parseInt($(this).val());
+            });
+            if (totalnum > 0) {
+                $('#colorlist li.hover').addClass("hasquantity"); 
+            }
+            if ($('#colorlist li.hover').length > 0) {
+                _self.setOrdersCache();
+                $("#sizelist .quantity").each(function () {
+                    $(this).val(0);
+                });
+            }
+            _this.siblings().removeClass("hover");
+            _this.removeClass("hasquantity").addClass("hover"); 
+            $('.trattr').each(function () {
+                if(colorList[_this.data("remark")].indexOf($(this).data("remark"))==-1){
+                    $(this).hide();
+                    $(this).find('quantity').val(0);
                 } else {
-                    $(this).addClass("hover");
+                    $(this).show();
                 }
             });
-
-            $('#sizelist .quantity').keyup(function () {
-                $(this).val($(this).val().replace(/\D/g, ''));
-            }).blur(function() {
-                if ($(this).val() == "") {
-                    $(this).val('0');
-                }
-            }); 
-            $('#sizelist .quantity-jian').click(function() {
-                var _this = $(this);
-                if (_this.next().val() != 0) {
-                    _this.next().val(parseInt(_this.next().val()) - 1);
-                }
-            }).mouseover(function () {
-                $(this).next().addClass("hover");
-            }).mouseout(function () {
-                $(this).next().removeClass("hover");
-            });
-            $('#sizelist .quantity-add').click(function () {
-                var _this = $(this);
-                if (_this.prev().val() != "") {
-                    _this.prev().val(parseInt(_this.prev().val()) + 1);
-                }
-            }).mouseover(function () {
-                $(this).prev().addClass("hover");
-            }).mouseout(function () {
-                $(this).prev().removeClass("hover");
-            });
+            _self.setOrdersQuantity();
         });
+
+        $('#sizelist .quantity').keyup(function () {
+            $(this).val($(this).val().replace(/\D/g, ''));
+        }).blur(function() {
+            if ($(this).val() == "") {
+                $(this).val('0');
+            }
+        }); 
+        $('#sizelist .quantity-jian').click(function() {
+            var _this = $(this);
+            if (_this.next().val() != 0) {
+                _this.next().val(parseInt(_this.next().val()) - 1);
+            }
+        }).mouseover(function () {
+            $(this).next().addClass("hover");
+        }).mouseout(function () {
+            $(this).next().removeClass("hover");
+        });
+        $('#sizelist .quantity-add').click(function () {
+            var _this = $(this);
+            if (_this.prev().val() != "") {
+                _this.prev().val(parseInt(_this.prev().val()) + 1);
+            }
+        }).mouseover(function () {
+            $(this).prev().addClass("hover");
+        }).mouseout(function () {
+            $(this).prev().removeClass("hover");
+        }); 
     }
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');
         var _self = this;
-        var totalnum = 0;
-        var hashover = false;
-        $("#sizelist .quantity").each(function () {
-            totalnum += parseInt($(this).val());
-        });
-        $("#colorlist li").each(function () {
-            if ($(this).hasClass("hover")) {
-                hashover = true;
-            }
-        });
-        if (totalnum == 0 || !hashover) {
+        _self.setOrdersCache(); 
+        if ($.isEmptyObject(tempOrder)) {
             $('.bottombtn').bind('click', function () { _self.savePDT() });
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
-        }
+        } 
         _self.showUserInfo();
-        //Global.post("/Mall/Store/IsLogin", null, function (data) {
-        //    if (data.result) {
-        //        _self.showUserInfo();
-        //    } else {
-        //        alert("请登陆后，再提交信息");
-        //        return false;
-                //$('#orderlogin-box').empty();
-                //var openhtml = '<div class="login-body"><div class="main"><div class="login">' +
-                //    '<div class="registerErr hide"></div>' +
-                //    '<div class="loginbar">' +
-                //        '<input type="text" class="input icoUserName" id="iptUserName" placeholder="请输入账号" maxlength="25"/>'+
-                //    '</div>' +
-                //    '<div class="loginbar" style="position:relative;"><input type="password" class="input icoUserPwd" id="iptPwd"/>'+
-                //    '</div>'+
-                //    '<div class="remember-box">'+
-                //        '<div class="cb-remember-password ico-check ">一周内保持登录</div>' +
-                //        '<div class="right pRight5"><a href="/Home/FindPassword" class="linkRegister">忘记密码?</a></div>'+
-                //    '<div class="clear"></div>' +
-                //'</div>'+
-                //'<div class="btnLogin" id="btnLogin">登录</div></div>';
-                //Easydialog.open({
-                //    container: {
-                //        id: "orderlogin-box",
-                //        header: "<a style='font-size:18px;'>账号登录</a>",
-                //        content: openhtml 
-                //    }
-                //});
-                ////登录 
-                //$('#orderlogin-box').find("#btnLogin").click(function () {
-                //    if (!$("#iptUserName").val()) {
-                //        $(".registerErr").html("请输入账号").slideDown();
-                //        return;
-                //    }
-                //    if (!$("#iptPwd").val()) {
-                //        $(".registerErr").html("请输入密码").slideDown();
-                //        return;
-                //    }
-                //    $(this).html("登录中...").attr("disabled", "disabled");
-                //    Global.post("/Home/UserLogin", {
-                //        userName: $("#iptUserName").val(),
-                //        pwd: $("#iptPwd").val(),
-                //        otherid: $("#OtherID").val(),
-                //        remember: $(".cb-remember-password").hasClass("ico-checked") ? 1 : 0,
-                //        bindAccountType: 10000
-                //    },
-                //    function (data) {
-                //        $("#btnLogin").html("登录").removeAttr("disabled");
-                //        if (data.result == 1) {
-                //            Easydialog.close();
-                //            Global.post("/StyleCenter/StyleCenter/LoginCallBack", {
-                //                sign: data.sign,
-                //                uid: data.uid,
-                //                aid: data.aid
-                //            }, function(dresult) {
-                //                _self.CityCode = dresult.ccode;
-                //                $('#iptaddress').val(dresult.address);
-                //                $('#iptmobilePhone').val(dresult.mphone);
-                //                $('#iptcontactName').val(dresult.cname);
-                //                _self.showUserInfo();
-                //            });
-                //        }
-                //        else if (data.result == 0) {
-                //            $(".registerErr").html("账号或密码有误").slideDown();
-                //        }
-                //        else if (data.result == 2) {
-                //            $(".registerErr").html("密码输入错误超过3次，请2小时后再试").slideDown();
-                //        }
-                //        else if (data.result == 3) {
-                //            $(".registerErr").html("账号或密码有误,您还有" + (3 - parseInt(data.errorCount)) + "错误机会").slideDown();
-                //        }
-                //        else if (data.result == -1) {
-                //            $(".registerErr").html("账号已冻结，请" + data.forbidTime + "分钟后再试").slideDown();
-                //        }
-                        
-                //    });
-                //});
-                ////记录密码
-                //$('#orderlogin-box').find(".cb-remember-password").click(function () { 
-                //    var _this = $(this);
-                //    if (_this.hasClass("ico-check")) {
-                //        _this.removeClass("ico-check").addClass("ico-checked");
-                //    } else {
-                //        _this.removeClass("ico-checked").addClass("ico-check");
-                //    }
-                //});
-        //    }
-        //});
         $('.bottombtn').bind('click', function () { _self.savePDT() });
     }
     ObjectJS.showUserInfo = function () {
@@ -322,21 +266,10 @@
     };
     ObjectJS.submitOrder = function (personname,mobiletele,citycode,address) {
         var _self = this; 
-        //大货单遍历下单明细 
-        var details = [];
-        $("#sizelist .quantity").each(function () {
-            var _this = $(this);
-            if (_this.val() > 0) {
-                $("#colorlist li").each(function() {
-                    if ($(this).hasClass("hover")) {
-                        details.push({
-                            Quantity: _this.val(),
-                            Remark: $(this).data("remark") + _this.data("remark")
-                    });
-                    }
-                });
-            }
-        });
+        var dids = '';
+        $.each(tempOrder, function(i, obj) {
+            dids += obj.detailid + ":" + obj.quantity + ",";
+        }); 
         Global.post("/Mall/Store/CreatePurchaseOrder",
             {
                 productid: _self.model.ProductID,
@@ -348,8 +281,8 @@
                 personname: personname,
                 mobiletele: mobiletele,
                 citycode: citycode,
-                address:address,
-                entity: JSON.stringify(details)
+                dids: dids,
+                address: address//,entity: JSON.stringify(details)
             }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",
@@ -365,5 +298,45 @@
             }
         });
     }
+    //数量缓存
+    ObjectJS.setOrdersCache = function() {
+        $('#sizelist .quantity').each(function () {
+            var _this = $(this);
+            var size = _this.parent().parent().parent().data("remark"); 
+            var color = '';
+            if ($('#colorlist li').length>0 ){
+                if ($('#colorlist li.hover').length > 0) {
+                    var color = $('#colorlist li.hover').data("remark");
+                } else {
+                    return false;
+                }
+            }
+            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
+            var item = { quantity: _this.val(), detailid: colorList[key], key: key }
+            if (_this.val() > 0) {
+                tempOrder[key] = item;
+            } else {
+                if (typeof (tempOrder[key]) != 'undefined') {
+                    delete tempOrder[key]; 
+                } 
+            } 
+        });
+    };
+    //数赋值
+    ObjectJS.setOrdersQuantity = function () {
+        $('#sizelist .quantity').each(function() {
+            var _this = $(this);
+            var size = _this.parent().parent().parent().data("remark");
+            var color = '';
+            if ($('#colorlist li.hover').length > 0) {
+                var color = $('#colorlist li.hover').data("remark");
+            }
+            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";  
+            if (typeof (tempOrder[key]) != 'undefined') {
+                _this.val(tempOrder[key].quantity);
+            }
+        }); 
+    };
+
     module.exports = ObjectJS;
 })

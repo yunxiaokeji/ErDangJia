@@ -38,6 +38,14 @@ namespace YunXiaoService
             return ProductsBusiness.BaseBusiness.GetProductByIDForDetails(productid);
         }
 
+        public static List<Category> GetEdjCateGory(string clientid)
+        {
+
+            var result = new ProductsBusiness().GetCategorys(clientid);
+            result = result.Where(x => string.IsNullOrEmpty(x.PID)).ToList();
+            return result;
+        }
+
         public static bool IsExistsProvider(string cmClientID, string clientid)
         {
             object count = CommonBusiness.Select("Providers", "count(0)", " ClientID='" + clientid + "' and CMClientID ='" + cmClientID + "' ");

@@ -897,21 +897,7 @@ define(function (require, exports, module) {
                                 _this.find("select").next().val(list[i].split(':')[1]); 
                             }
                         }
-                    }
-                    if (!bl) {
-                        //_this.find("select").val("|");
-                        //_this.find("select").next().show();
-                        //var star = detailsModel.Remark.indexOf(_this.find(".attrname").html()) + _this.find(".attrname").html().length;
-                        //var len = 0;
-                        
-                        //if (_this.next().hasClass("productattr")) {
-                        //    len = detailsModel.Remark.indexOf(_this.next().find(".attrname").html()) - star - 2;
-                        //} else {
-                        //    len = detailsModel.Remark.length - star - 1;
-                        //}
-                        //_this.find("select").next().val(detailsModel.Remark.substr(star, len)); 
-                    }
-                    
+                    }                    
                 });
                 $("#iptRemark").val(detailsModel.Remark);
             }

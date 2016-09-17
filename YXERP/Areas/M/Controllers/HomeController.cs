@@ -25,12 +25,15 @@ namespace YXERP.Areas.M.Controllers
             users.CityCode = CurrentUser.Client.CityCode;
             users.Address = CurrentUser.Client.Address;
             ViewBag.baseUser = users;
+
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(providerID);
+            ViewBag.Client = client;
             return View();
         }
 
         public ActionResult ChooseProvider()
         {
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID);
+            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID).FindAll(m => !string.IsNullOrEmpty(m.CMClientID) && m.ProviderType == 2);
             return View();
         }
 

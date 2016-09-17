@@ -193,7 +193,7 @@
 
     ObjectJS.getAllCategory = function () {
         var _self = this;
-        Global.post("/Mall/Store/GetEdjCateGory", null, function (data) {
+        Global.post("/Mall/Store/GetEdjCateGory", { clientid: _self.clientid }, function (data) {
             if (data.items.length > 0) {
                 var html = ""; 
                 for (var i = 0; i < data.items.length; i++) { 

@@ -332,12 +332,14 @@
     ObjectJS.getAllCategory = function () {
         var _self = this;
         $(".category-box").append("<div class='data-loading'></div>");
-        Global.post("/Mall/Store/GetEdjCateGory", null, function (data) {
+        Global.post("/M/IntFactoryOrders/GetEdjCateGory", {
+            clientID: Params.clientid
+        }, function (data) {
             $(".category-box .data-loading").remove();
-            if (data.items.length > 0) {
-                CacheCategory = data.items;
-                for (var i = 0; i < data.items.length; i++) {
-                    var item = data.items[i];
+            if (data.result.length > 0) {
+                CacheCategory = data.result;
+                for (var i = 0; i < data.result.length; i++) {
+                    var item = data.result[i];
                     CacheChildCategory[item.CategoryID] = item;
                     var obj = $("<li class='category-block' data-id='" + item.CategoryID + "' layer='" + item.Layers + "'>" + item.CategoryName + "</li>");
                     obj.click(function () {

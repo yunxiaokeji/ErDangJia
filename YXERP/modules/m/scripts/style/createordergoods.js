@@ -3,8 +3,10 @@
     var doT = require("dot");
     var City = require("city"), CityInvoice,
         Global = require("m_global");
+    var details = [];
     var isCreateOrder = false;
     ObjectJS.showOrderGoodsLayer = function (model, user) {
+        details = model.ProductDetails;
         doT.exec("m/template/style/style-buy.html", function (code) {
             var innerHtml = code(model);
             innerHtml = $(innerHtml);
@@ -178,27 +180,32 @@
         $(".attr-ul .size.select").each(function () {
             var _this = $(this);
             $(".attr-ul .color.select").each(function () {
-                var dataAttr = $("#attrBox").data('id') + ',' + $("#colorBox").data('id');
-                var dataValue = _this.data('id') + ',' + $(this).data('id');
-                var dataAttrValue = $("#attrBox").data('id') + ":" + _this.data('id') + "," + $("#colorBox").data('id') + ":" + $(this).data('id');
                 var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text() + ':' + _this.data('value') + '】【' + $(this).parents('.productsalesattr').find('.attr-title').text() + ':' + $(this).data('value') + '】';
-
-                var trHtml = $("<tr class='detail-attr' data-remark='" + description + "'></tr>");
-                trHtml.append("<td class='tLeft'>" + description + "</td>");
-                trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
-                trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
-
-                trHtml.find('.iconfont').click(function () {
-                    $(this).parents('tr').remove();
-                    return false;
-                });
-                trHtml.find('.quantity').change(function () {
-                    var _this = $(this);
-                    if (!_this.val().isInt() || _this.val() < 0) {
-                        _this.val(0);
+                var isContinue = false;
+                for (var i = 0; i < details.length; i++) {
+                    var _detail = details[i].AttrValue;
+                    if (_detail == (_this.data('value') + ($(this).data('value') && ',' + $(this).data('value')))) {
+                        isContinue = true;
                     }
-                });
-                $(".attr-box .table-list").append(trHtml);
+                }
+                if (isContinue) {
+                    var trHtml = $("<tr class='detail-attr' data-remark='" + description + "'></tr>");
+                    trHtml.append("<td class='tLeft'>" + description + "</td>");
+                    trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
+                    trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
+
+                    trHtml.find('.iconfont').click(function () {
+                        $(this).parents('tr').remove();
+                        return false;
+                    });
+                    trHtml.find('.quantity').change(function () {
+                        var _this = $(this);
+                        if (!_this.val().isInt() || _this.val() < 0) {
+                            _this.val(0);
+                        }
+                    });
+                    $(".attr-box .table-list").append(trHtml);
+                }
             });
         });
     };

@@ -57,9 +57,6 @@ namespace IntFactory.Sdk
                                 });
                             }
 
-                            var salesattr = "";
-                            //插入分类
-
                             //同步插入产品
                             OrderBusiness.BaseBusiness.ZNGCAddProduct(order, categortModel.CategoryID, provideid, agentid, clientid, userid);
                         }

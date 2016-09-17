@@ -123,13 +123,6 @@ namespace YXERP.Areas.Mall.Controllers
                 mphone = CurrentUser.Client.MobilePhone;
                 cname = CurrentUser.Client.ContactName;
             }
-            else
-            {
-                Response.Write(
-                    "<script type='text/javascript'>alert('请登录后再操作.');location.href='/Home/login?Status=-1&BindAccountType=6&ReturnUrl=" +
-                    GetbaseUrl() + "/Mall/Store/Goods?id=" + clientid + "';</script>");
-                Response.End();
-            }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = clientid;
             ViewBag.OrderID = orderid;
@@ -199,7 +192,6 @@ namespace YXERP.Areas.Mall.Controllers
         public JsonResult GetEdjCateGory(string clientid)
         {
             var result = new ProductsBusiness().GetCategorys(clientid);
-            var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory();
             result = result.Where(x => string.IsNullOrEmpty(x.PID)).ToList();
             JsonDictionary.Add("items", result);
             return new JsonResult()
@@ -241,9 +233,6 @@ namespace YXERP.Areas.Mall.Controllers
         public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string goodsid, string goodscode,string goodsname,
             string personname, string mobiletele, string citycode, string address, string dids, decimal totalFee = 0)
         {
-            string provideid = ProductsBusiness.BaseBusiness.GetCMProviderID(CurrentUser.ClientID);
-                provideid = YunXiaoService.ProductService.AddProviders(ord.clientName,
-            string pid = IntFactory.Sdk.OrderBusiness.BaseBusiness.ZNGCAddProduct(ord, "", provideid, user.AgentID, user.ClientID, user.UserID);
             if (CurrentUser == null)
             {
                 JsonDictionary.Add("result", -9);

@@ -14,15 +14,16 @@
 
 /*遮罩*/
 .shade { width:100%;height:100%;top:0; position:fixed;z-index:1002;background-color:rgba(143,143,143,0.6);display:none;}
-.search {width:100%;background-color:rgb(143,143,143);position:fixed;top:0;z-index:1002;display:none;}
-.search .search-box { margin-right:70px;background-color:#fff;border-bottom:1px solid #ddd;}
+.search {width:100%;background-color:#fff;position:fixed;top:0;z-index:1002;display:none;border-bottom:1px solid #eee;}
+.search .search-box { margin-right:60px;border-right:1px solid #eee;}
 .search .search-box .iconfont {
-    font-size:22px;
+    font-size:24px;
     color:#999;
     margin-left:10px;
 }
-.search .search-box .txt-search{border:none; width:80%;padding:15px 0; color:#666;font-size:16px;}
-.search .btn-search {color:#333;height:30px;line-height:30px; position:fixed;top:11px;right:15px;font-size:20px;}
+.search .search-box .txt-search{border:none; width:80%;padding:15px 0; color:#666;font-size:18px;vertical-align:initial;}
+.search .btn-search {color:#4a98e7;position:fixed;top:14px;right:10px;font-size:18px;}
+.search .btn-cancel {background-color:#aaa;position:fixed;top:16px;right:70px;font-size:16px;color:#fff;border-radius:12px;padding:3px;}
 /*退出下拉*/
 .menu-box {position:absolute;top:33px; height:44px;line-height:60px;width:100%;z-index:302; box-shadow:0 0 5px #ccc;background-color:#fff;border-radius:2px;display:none; }
 .menu-box li{text-align:center;color:#333;line-height:44px;}
@@ -40,8 +41,13 @@
  .filter-task li .iconfont {color:#888; }
 /*选项下拉*/
 .filter-list {
-    margin-top:50px;
-    border-bottom:1px solid #ccc;
+position: fixed;
+top: 46px;
+left:0;
+border-bottom: 1px solid #ccc;
+width: 100%;
+z-index: 330;
+background-color: #fff;
 }
 .sort-item { position:relative; cursor:pointer; width:90px;padding:15px 0;float:left;}
 .sort-item.hover { color:#4a98e7; }
@@ -62,7 +68,7 @@
 #beginPrice, #endPrice {height:18px;padding:4px 5px;width:35px;text-align:center;}
 
 
-.list {margin-top:5px;padding-bottom:60px;}
+.list {margin-top:105px;padding-bottom:80px;}
 .list .listabove{width:100%;border-bottom:1px solid #eee;display:table;}
 .list .listabove li { display:table-cell;vertical-align:top;}
 .list .listabove li:first-child{padding:5px 10px; width:110px;}
@@ -90,7 +96,7 @@
 
 /*筛选浮层*/
 .filter-object { position:fixed;background-color:#fff;width:80%;min-width:270px;max-width:400px;right:0;top:0px;height:100%;
-                 border-left:1px solid #ccc;z-index:350;padding-bottom:50px;
+                 border-left:1px solid #ccc;z-index:2000;padding-bottom:50px;
                  box-shadow:0 0 3px #ccc;-webkit-box-shadow:0 0 3px #ccc;-moz-box-shadow:0 0 3px #ccc;
                  box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;
                  transition:transform .5s;-webkit-transition:-webkit-transform .5s;-moz-transition:-moz-transform .5s;
@@ -103,9 +109,9 @@
 .fliter-confirm-box .confirm-fliter { background-color:#4a98e7;color:#fff;}
 .fliter-confirm-box .confirm-reset { background-color:#eee;color:#333;}
 
-.layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;z-index:349;}
+.layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;z-index:1900;}
 .layer-box { box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;width:100%;border-bottom:1px solid #ddd;padding:10px 5px;}
-.category-block { min-width:60px;height:20px;padding:3px 5px;border:1px solid #ddd;text-align:center;float:left;margin-left:5px;margin-bottom:10px;}
+.category-block { min-width:60px;height:20px;border-radius:3px; padding:4px 5px;background-color:#eee;text-align:center;float:left;margin-left:5px;margin-bottom:10px;}
 .category-block.hover {background-color:#4a98e7;color:#fff;}
 /*提示*/
 .list .prompt { text-align:center;color:#999;margin-bottom:30px;}

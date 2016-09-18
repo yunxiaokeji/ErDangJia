@@ -23,13 +23,6 @@
     ObjectJS.IsLoading = false;
     ObjectJS.init = function (providerid, user) {
         Params.clientid = providerid;
-        //providers = JSON.parse(providers.replace(/&quot;/g, '"'));
-        //for (var i = 0; i < providers.length; i++) {              
-        //    var p = providers[i];
-        //    if (p.CMClientID != "" && p.CMClientID != null) {
-        //        $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
-        //    }
-        //}
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;
 
@@ -42,12 +35,11 @@
         //滚动加载数据
         $(window).scroll(function () {
             if ($(".overlay-addOrder").css('display') == 'none' && $(".filter-object").css('display') == "none") {
-                if (document.body.scrollTop > 30) {
-                    $(".getback").slideDown("slow");
-                } else {
-                    $(".getback").slideUp("slow");
-                }
-
+                //if (document.body.scrollTop > 30) {
+                //    $(".getback").slideDown("slow");
+                //} else {
+                //    $(".getback").slideUp("slow");
+                //}
                 var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
                 if (bottom <= 60) {
                     if (!ObjectJS.IsLoading) {
@@ -84,13 +76,12 @@
                 $(".filter-object").removeClass('outlayer');
                 setTimeout(function () {
                     $(".filter-object").hide();
-                }, 401);
+                }, 400);
             }
         });
 
         //显示关键字遮罩层
         $(".iconfont-search").click(function () {
-            $(".btn-search").text("确定");
             $(".txt-search").val("").focus();
             $(".shade,.search").show();
             $(".span-search").css("width", (document.body.clientWidth - 150) + "px");
@@ -98,39 +89,35 @@
 
         //关键字查询
         $(".btn-search").click(function () {
-            var name = $(this).text();
-            if (name == "确定") {
-                var txt = $(".txt-search").val();
-                if (txt != "") {
-                    $(".shade").slideUp("slow");
-                    $(this).text("取消");
-                    Params.pageIndex = 1;
-                    Params.keyWords = txt;
-                    ObjectJS.getList();
-
-                } else {
-                    $(".search").hide();
-                }
-            } else {
-                $(".search").hide();
-                Params.keyWords = "";
+            var keyWords = $(".txt-search").val();
+            if (keyWords != Params.keyWords) {
+                Params.keyWords = keyWords;
                 Params.pageIndex = 1;
                 ObjectJS.getList();
+
+                if (keyWords == '') {
+                    $(".btn-cancel").hide();
+                    $(".search").hide();
+                }
+                else {
+                    $(".btn-cancel").show();
+                }
+            } else {
+                if (keyWords == '') {
+                    $(".search").hide();
+                }
             }
+            
             $(".shade").hide();
         });
 
-        //搜索内容发生变化
-        $(".txt-search").keyup(function () {
-            
-            var changeAfter = $(".txt-search").val();
-            if (changeAfter == "") {
-                $(".cencal").text("取消");
-            } else if (Params.keyWords == changeAfter) {
-                $(".cencal").text("取消");
-            } else {
-                $(".cencal").text("确定");
-            }
+        $(".btn-cancel").click(function () {
+            $(".btn-cancel").hide();
+            $(".search").hide();
+            $(".shade").hide();
+            Params.keyWords = "";
+            Params.pageIndex = 1;
+            ObjectJS.getList();
         });
 
         //点击遮罩层空白区域
@@ -215,9 +202,9 @@
         });
         
         //返回顶部
-        $(".getback").click(function () {
-            $('html, body').animate({ scrollTop: 0 }, 'slow');
-        });
+        //$(".getback").click(function () {
+        //    $('html, body').animate({ scrollTop: 0 }, 'slow');
+        //});
 
         $("#beginPrice,#endPrice").change(function () {
             var _this = $(this);
@@ -227,7 +214,7 @@
             }
         });
 
-        //显示选择分类弹出层
+        //显示更多筛选弹出层
         $(".show-category").click(function () {
             $(".filter-object").show(1);
             $(".layer-body").fadeIn(400);
@@ -336,26 +323,29 @@
             clientID: Params.clientid
         }, function (data) {
             $(".category-box .data-loading").remove();
+
             if (data.result.length > 0) {
                 CacheCategory = data.result;
                 for (var i = 0; i < data.result.length; i++) {
                     var item = data.result[i];
                     CacheChildCategory[item.CategoryID] = item;
+
                     var obj = $("<li class='category-block' data-id='" + item.CategoryID + "' layer='" + item.Layers + "'>" + item.CategoryName + "</li>");
+                    $(".category-box").append(obj);
                     obj.click(function () {
                         var _this = $(this);
                         var _thisParent = _this.parents('.layer-box');
                         _this.addClass('hover');
                         _this.siblings().removeClass('hover');
                         _thisParent.nextAll().remove();
-                        if (CacheChildCategory[_this.data('id')]) {
-                            var item = CacheChildCategory[_this.data('id')];
+
+                        var item = CacheChildCategory[_this.data('id')];
+                        if (item) {
                             if (item.ChildCategorys.length > 0) {
                                 _self.createCategory(_this.data('id'), _thisParent);
                             }
                         }
                     });
-                    $(".category-box").append(obj);
                 }
             } else {
                 $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");
@@ -376,20 +366,22 @@
                     var _child = item.ChildCategorys[j];
                     CacheChildCategory[_child.CategoryID] = _child;
                     var _obj = $("<li class='category-block' data-id='" + _child.CategoryID + "' layer='" + _child.Layers + "'>" + _child.CategoryName + "</li>");
+                    _htmlChildBox.append(_obj);
+
                     _obj.click(function () {
                         var _this = $(this);
                         var _thisParent = _this.parents('.layer-box');
                         _this.addClass('hover');
                         _this.siblings().removeClass('hover');
                         _thisParent.nextAll().remove();
-                        if (CacheChildCategory[_this.data('id')]) {
-                            var item = CacheChildCategory[_this.data('id')];
+
+                        var item = CacheChildCategory[_this.data('id')];
+                        if (item) {
                             if (item.ChildCategorys.length > 0) {
                                 ObjectJS.createCategory(_this.data('id'), _thisParent);
                             }
                         }
                     });
-                    _htmlChildBox.append(_obj);
                 }
                 _htmlChildItems.append(_htmlChildBox)
                 _html.append(_htmlTitle).append(_htmlChildItems);

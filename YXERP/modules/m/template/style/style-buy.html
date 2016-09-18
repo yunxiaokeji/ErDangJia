@@ -21,37 +21,56 @@ var item=$data;
                         var attr=item.SaleAttrs[i];
                 %}
                     <div class="productsalesattr">
+                        {%if(i==0&&item.SaleAttrs.length>1){%}
                         <div class="attr-title" id="attrBox" data-id="{%=attr.AttrID%}">
                             {%=attr.AttrName%}
                         </div>
+                        {%}%}
                         <div class="attr-rule attr-ul">
-                            <ul class="attr-item">
+                            {%if(i==1||item.SaleAttrs.length==1){%}
+                            <table class="table-list" id="sizelist">
+                                <tr class="tr-header">
+                                    <td class="tLeft" style="font-weight:normal;">{%=attr.AttrName%}</td>
+                                    <td class="tLeft width50" style="padding-right:10px;font-weight:normal;">价格</td>
+                                    <td class="center width50" style="font-weight:normal;">数量</td>
+                                </tr>
+                                {%  
+                                    for(var j=0;j<attr.AttrValues.length;j++)
+                                    {
+                                        var attrItem=attr.AttrValues[j];        
+                                %}
+                                        <tr class="data-item" data-remark="{%=attrItem.ValueName%}">
+                                            <td class="name">{%=attrItem.ValueName%}</td>
+                                            <td class="tLeft price">{%=item.Price%}</td>
+                                            <td class="tRight"><input data-remark="{%=attrItem.ValueName%}" type="tel" class="quantity" style="width:48px;text-align:center;height:20px;padding:3px 2px;" /></td>
+                                        </tr>
+                                {%}%}
+                            </table>
+                            {%}else{%}
+                            <ul class="attr-item" id="colorlist">
                                 {%  
                                     for(var j=0;j<attr.AttrValues.length;j++)
                                     {
                                         var attrItem=attr.AttrValues[j];
                                 %}
-                                <li class="{%=i==1?'next':'first'%}" data-value="{%=attrItem.ValueName%}">
+                                <li class="{%=i==1?'next':'first'%}" data-remark="{%=attrItem.ValueName%}">
                                     {%=attrItem.ValueName%}
                                 </li>
                                 {%}%}
                                 <div class="clear"></div>
                             </ul>
-                            <div class="show-more width50 mTop10 center" style="border:1px solid #ddd;color:#0026ff;padding:5px 15px;border-radius:3px;">更多+</div>
+                            {%}%}
                         </div>
                     </div>
                 {%}%}
-            </div>
-            <div>
-                <div class="attr-title">所选款式</div>
-                <div class="attr-box">
-                    <table class='table-list'>
-                        <tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td class="tRight">操作</td></tr>
-                    </table>
-                </div>
+                    <div class="right hide red mRight10 font16">
+                        <span id="totalnum" class="red font16"></span>件
+                        <span id="totalprice" style="display:inline-block;margin-left:15px;" class="red font16"></span>元
+                    </div>
+                    <div class="clear"></div>
             </div>
             <div class="mTop15 pBottom20">
-                <div class="attr-title">
+                <div class="attr-title" style="border-bottom:1px solid #ccc;">
                     收货信息
                 </div>
                 <div class="customer-base-info" style="width:100%;display:table;height:60px;">
@@ -69,13 +88,13 @@ var item=$data;
                 </div>
                 <ul class="edit-customer hide">
                     <li class="mTop10">
-                        <span class="width80" style="display:inline-block;">收货人：</span>
+                        <span class="width80" style="display:inline-block;font-size:16px;">收货人：</span>
                         <span>
                             <input type="text" maxlength="20" id="customerName" value="" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" />
                         </span>
                     </li>
                     <li class="mTop10">
-                        <span class="width80" style="display:inline-block;">联系电话：</span>
+                        <span class="width80" style="display:inline-block;font-size:16px;">联系电话：</span>
                         <span>
                             <input type="tel" maxlength="13" id="customerTel" value="" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" />
                         </span>

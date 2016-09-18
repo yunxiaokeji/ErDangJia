@@ -11,8 +11,7 @@
     ObjectJS.init = function (clientid,  model,citycode) {
         var _self = this;
         _self.clientid = clientid;
-        _self.model = JSON.parse(model.replace(/&quot;/g, '"'));
-        console.log(_self.model);
+        _self.model = JSON.parse(model.replace(/&quot;/g, '"')); 
         _self.bindStyle(_self.model);
         _self.CityCode = citycode;
         _self.getOrderAttr(); 
@@ -111,7 +110,6 @@
             }
         });
 
-
         if ($("#orderImage").width() > $("#orderImage").height()) {
             $("#orderImage").css("width", 350);
         } else {
@@ -151,10 +149,10 @@
                     }
                     shtml += '<td class="name" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</td>' +
                         '<td class="price">' + _self.model.Price.toFixed(2) + '元</td>' +
-                        '<td class="center"><div class="choose-quantity left">' +
-                        '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;">-</span>' +
-                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;" value="0"  data-remark="' + citem.ValueName + '" />' +
-                        '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;">+</span>' +
+                        '<td class="center"><div class="choose-quantity left mLeft30">' +
+                        '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;box-sizing:border-box;height:26px;">-</span>' +
+                        '<input type="text" class="quantity" style="width:70px;border-radius:0px;box-sizing:border-box;height:26px;" value="0"  data-remark="' + citem.ValueName + '" />' +
+                        '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;box-sizing:border-box;height:26px;">+</span>' +
                         '</div></td>' +
                         '</tr>';
                 } else {
@@ -184,21 +182,22 @@
             }
             if ($('#colorlist li.hover').length > 0) {
                 _self.setOrdersCache();
-                $("#sizelist .quantity").each(function () {
+                $("#sizelist .quantity").each(function() {
                     $(this).val(0);
                 });
-            }
+            }  
             _this.siblings().removeClass("hover");
             _this.removeClass("hasquantity").addClass("hover"); 
             $('.trattr').each(function () {
                 if(colorList[_this.data("remark")].indexOf($(this).data("remark"))==-1){
                     $(this).hide();
-                    $(this).find('quantity').val(0);
+                    $(this).find('.quantity').val(0);  
                 } else {
                     $(this).show();
                 }
             });
-            _self.setOrdersQuantity();
+            _self.SumNumPrice();
+            _self.setOrdersQuantity(); 
         });
 
         $('#sizelist .quantity').keyup(function () {
@@ -207,12 +206,14 @@
             if ($(this).val() == "") {
                 $(this).val('0');
             }
+            _self.SumNumPrice();
         }); 
         $('#sizelist .quantity-jian').click(function() {
             var _this = $(this);
             if (_this.next().val() != 0) {
                 _this.next().val(parseInt(_this.next().val()) - 1);
-            }
+                _self.SumNumPrice();
+            } 
         }).mouseover(function () {
             $(this).next().addClass("hover");
         }).mouseout(function () {
@@ -222,12 +223,33 @@
             var _this = $(this);
             if (_this.prev().val() != "") {
                 _this.prev().val(parseInt(_this.prev().val()) + 1);
+                _self.SumNumPrice();
             }
         }).mouseover(function () {
             $(this).prev().addClass("hover");
         }).mouseout(function () {
             $(this).prev().removeClass("hover");
         }); 
+    }
+    ObjectJS.SumNumPrice = function () {
+        var _self = this;
+        var sumnum = 0, sumprice = 0.00;
+        if (!$.isEmptyObject(tempOrder)) {
+            $.each(tempOrder, function(i, obj) {
+                sumnum += parseInt(obj.quantity);
+            });
+        }
+        $('#sizelist .quantity').each(function() {
+            $(this).val($(this).val().replace(/\D/g, ''));
+            var num = $(this).val();
+            if (num != '') {
+                sumnum += parseInt(num);
+            }
+        });
+        sumprice = (sumnum * parseFloat(_self.model.Price)).toFixed(2);
+        $('#totalnum').html(sumnum);
+        $('#totalprice').html(sumprice);
+        $('#totalnum').parent().show();
     }
     ObjectJS.savePDT = function () {
         $('.bottombtn').unbind('click');
@@ -316,7 +338,7 @@
             if (_this.val() > 0) {
                 tempOrder[key] = item;
             } else {
-                if (typeof (tempOrder[key]) != 'undefined') {
+                if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
                     delete tempOrder[key]; 
                 } 
             } 
@@ -332,10 +354,10 @@
                 var color = $('#colorlist li.hover').data("remark");
             }
             var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";  
-            if (typeof (tempOrder[key]) != 'undefined') {
+            if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
                 _this.val(tempOrder[key].quantity);
             }
-        }); 
+        });
     };
 
     module.exports = ObjectJS;

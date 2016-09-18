@@ -81,6 +81,7 @@ nav .action-items li { width:180px; height:28px; line-height:28px;  color:#333; 
 nav .action-items li .name { position:relative; font-size:13px;}
 nav .action-items li:hover { background-color:#ccc;}
 nav .action-items li:hover ,nav .action-items .hover { color:#4a98e7; }
+
 nav .action-items .hover { background-color:#fff !important; }
 nav .action-items .point { width:6px; height:6px; border-radius:3px; background-color:red; display:inline-block; position:absolute; top:2px; right:-8px; }
 

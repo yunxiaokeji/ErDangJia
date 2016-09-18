@@ -203,7 +203,6 @@ line-height:60px;
 
 .overlay-addOrder .style-attr .attr-ul {
     padding-bottom:15px;
-    border-bottom:1px solid #eee;
 }
 
 .overlay-addOrder .style-attr .attr-ul li {
@@ -219,10 +218,10 @@ line-height:60px;
 }
 
 .overlay-addOrder .style-attr .attr-ul .select {
-    background-color:#4a98e7;
+    background-color:#2F73B8;
     color:#fff;
 }
-
+.overlay-addOrder .style-attr .attr-ul .hasquantity { background-color:#4a98e7;color:#fff;} 
 .overlay-addOrder .btn-sureAdd {
     position:fixed;
     width:100%;

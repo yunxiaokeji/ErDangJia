@@ -41,8 +41,13 @@
  .filter-task li .iconfont {color:#888; }
 /*选项下拉*/
 .filter-list {
-    margin-top:50px;
-    border-bottom:1px solid #ccc;
+position: fixed;
+top: 46px;
+left:0;
+border-bottom: 1px solid #ccc;
+width: 100%;
+z-index: 330;
+background-color: #fff;
 }
 .sort-item { position:relative; cursor:pointer; width:90px;padding:15px 0;float:left;}
 .sort-item.hover { color:#4a98e7; }
@@ -63,7 +68,7 @@
 #beginPrice, #endPrice {height:18px;padding:4px 5px;width:35px;text-align:center;}
 
 
-.list {margin-top:5px;padding-bottom:80px;}
+.list {margin-top:105px;padding-bottom:80px;}
 .list .listabove{width:100%;border-bottom:1px solid #eee;display:table;}
 .list .listabove li { display:table-cell;vertical-align:top;}
 .list .listabove li:first-child{padding:5px 10px; width:110px;}
@@ -106,7 +111,7 @@
 
 .layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;z-index:1900;}
 .layer-box { box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;width:100%;border-bottom:1px solid #ddd;padding:10px 5px;}
-.category-block { min-width:60px;height:20px;padding:3px 5px;border:1px solid #ddd;text-align:center;float:left;margin-left:5px;margin-bottom:10px;}
+.category-block { min-width:60px;height:20px;border-radius:3px; padding:4px 5px;background-color:#eee;text-align:center;float:left;margin-left:5px;margin-bottom:10px;}
 .category-block.hover {background-color:#4a98e7;color:#fff;}
 /*提示*/
 .list .prompt { text-align:center;color:#999;margin-bottom:30px;}

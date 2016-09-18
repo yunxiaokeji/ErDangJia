@@ -35,12 +35,11 @@
         //滚动加载数据
         $(window).scroll(function () {
             if ($(".overlay-addOrder").css('display') == 'none' && $(".filter-object").css('display') == "none") {
-                if (document.body.scrollTop > 30) {
-                    $(".getback").slideDown("slow");
-                } else {
-                    $(".getback").slideUp("slow");
-                }
-
+                //if (document.body.scrollTop > 30) {
+                //    $(".getback").slideDown("slow");
+                //} else {
+                //    $(".getback").slideUp("slow");
+                //}
                 var bottom = $(document).height() - document.documentElement.scrollTop - document.body.scrollTop - $(window).height();
                 if (bottom <= 60) {
                     if (!ObjectJS.IsLoading) {
@@ -77,7 +76,7 @@
                 $(".filter-object").removeClass('outlayer');
                 setTimeout(function () {
                     $(".filter-object").hide();
-                }, 401);
+                }, 400);
             }
         });
 
@@ -203,9 +202,9 @@
         });
         
         //返回顶部
-        $(".getback").click(function () {
-            $('html, body').animate({ scrollTop: 0 }, 'slow');
-        });
+        //$(".getback").click(function () {
+        //    $('html, body').animate({ scrollTop: 0 }, 'slow');
+        //});
 
         $("#beginPrice,#endPrice").change(function () {
             var _this = $(this);
@@ -215,7 +214,7 @@
             }
         });
 
-        //显示选择分类弹出层
+        //显示更多筛选弹出层
         $(".show-category").click(function () {
             $(".filter-object").show(1);
             $(".layer-body").fadeIn(400);
@@ -324,26 +323,29 @@
             clientID: Params.clientid
         }, function (data) {
             $(".category-box .data-loading").remove();
+
             if (data.result.length > 0) {
                 CacheCategory = data.result;
                 for (var i = 0; i < data.result.length; i++) {
                     var item = data.result[i];
                     CacheChildCategory[item.CategoryID] = item;
+
                     var obj = $("<li class='category-block' data-id='" + item.CategoryID + "' layer='" + item.Layers + "'>" + item.CategoryName + "</li>");
+                    $(".category-box").append(obj);
                     obj.click(function () {
                         var _this = $(this);
                         var _thisParent = _this.parents('.layer-box');
                         _this.addClass('hover');
                         _this.siblings().removeClass('hover');
                         _thisParent.nextAll().remove();
-                        if (CacheChildCategory[_this.data('id')]) {
-                            var item = CacheChildCategory[_this.data('id')];
+
+                        var item = CacheChildCategory[_this.data('id')];
+                        if (item) {
                             if (item.ChildCategorys.length > 0) {
                                 _self.createCategory(_this.data('id'), _thisParent);
                             }
                         }
                     });
-                    $(".category-box").append(obj);
                 }
             } else {
                 $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");
@@ -364,20 +366,22 @@
                     var _child = item.ChildCategorys[j];
                     CacheChildCategory[_child.CategoryID] = _child;
                     var _obj = $("<li class='category-block' data-id='" + _child.CategoryID + "' layer='" + _child.Layers + "'>" + _child.CategoryName + "</li>");
+                    _htmlChildBox.append(_obj);
+
                     _obj.click(function () {
                         var _this = $(this);
                         var _thisParent = _this.parents('.layer-box');
                         _this.addClass('hover');
                         _this.siblings().removeClass('hover');
                         _thisParent.nextAll().remove();
-                        if (CacheChildCategory[_this.data('id')]) {
-                            var item = CacheChildCategory[_this.data('id')];
+
+                        var item = CacheChildCategory[_this.data('id')];
+                        if (item) {
                             if (item.ChildCategorys.length > 0) {
                                 ObjectJS.createCategory(_this.data('id'), _thisParent);
                             }
                         }
                     });
-                    _htmlChildBox.append(_obj);
                 }
                 _htmlChildItems.append(_htmlChildBox)
                 _html.append(_htmlTitle).append(_htmlChildItems);

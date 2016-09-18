@@ -197,6 +197,7 @@
                     $(this).show();
                 }
             });
+            _self.SumNumPrice();
             _self.setOrdersQuantity();
         });
 

@@ -383,10 +383,10 @@ namespace YXERP.Controllers
 
         #region 供应商
 
-        public JsonResult GetProviders(string keyWords, int pageIndex, int totalCount)
+        public JsonResult GetProviders(string keyWords, EnumProviderType type ,int pageIndex, int totalCount)
         {
             int pageCount = 0;
-            var list = ProductsBusiness.BaseBusiness.GetProviders(keyWords, PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
+            var list = ProductsBusiness.BaseBusiness.GetProviders(type, keyWords, PageSize, pageIndex, ref totalCount, ref pageCount, CurrentUser.ClientID);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("TotalCount", totalCount);
             JsonDictionary.Add("PageCount", pageCount);

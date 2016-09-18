@@ -35,19 +35,10 @@
                 if (!_this.val().isInt() || _this.val() < 0) {
                     _this.val(0);
                 }
-                ObjectJS.setOrdersCache();
+                ObjectJS.SumNumPrice();
             });
 
             $(".overlay-addOrder").html(innerHtml).show();
-
-            $('.productsalesattr').each(function () {
-                var _this = $(this);
-                if (_this.find('.attr-item').height() <= 68) {
-                    _this.find('.show-more').remove();
-                } else {
-                    _this.find('.attr-item').addClass('show-attr-box');
-                }
-            });
 
             $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
 
@@ -152,18 +143,6 @@
                 $("#showCustomerAddress").text($("#customerAddress").val());
             });
 
-            innerHtml.find(".show-more").click(function () {
-                var _this = $(this);
-                if (_this.data('isget') != 1) {
-                    _this.parent().find('.attr-item').removeClass('show-attr-box');
-                    _this.data('isget', 1);
-                    _this.text("收起");
-                } else {
-                    _this.parent().find('.attr-item').addClass('show-attr-box');
-                    _this.data('isget', 2);
-                    _this.text("更多+");
-                }
-            });
             CityInvoice = City.createCity({
                 cityCode: user.CityCode,
                 elementID: "citySpan"
@@ -223,11 +202,11 @@
 
     ObjectJS.createOrders = function (model) {
         var _self = this;
+        _self.setOrdersCache();
         if ($.isEmptyObject(tempOrder)) {
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
         }
-        return false;
         if (!isCreateOrder) {
             //大货单遍历下单明细 
             var dids = "";

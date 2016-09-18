@@ -3,14 +3,14 @@
 }
 /*头部*/
 .header{width:100%;height:50px;background-color:#2F73B8;color:#BFD2F2;text-align:center;position:relative;}
-.header .header-li{text-align:center;margin-top:15px;}
+.header .header-li{text-align:center;margin-top:13px;}
 .header .btn-task-filtertype div{font-size:16px;display:inline-block;}
 .header .btn-task-filtertype {position:relative;margin:auto;min-width:130px;}
 .header .btn-task-filtertype .iconfont{line-height:22px;font-size:20px;}
 .header .li-task-filtertype { display:inline-block;}
 .task-filtertype{position:absolute;left:0px; top:35px;width:100%; z-index:302; box-shadow:0px 0px 5px #ccc;background-color:#fff;border-radius:2px;text-align:center;display:none;}
 .task-filtertype li{height:40px;line-height:40px; color:#666;}
-.header .btnsearch{position:absolute;right:5px;top:10px;}
+.header .btnsearch{position:absolute;right:5px;top:8px;}
 
 /*遮罩*/
 .shade { width:100%;height:100%;top:0; position:fixed;z-index:1002;background-color:rgba(143,143,143,0.6);display:none;}
@@ -21,9 +21,9 @@
     color:#999;
     margin-left:10px;
 }
-.search .search-box .txt-search{border:none; width:80%;padding:15px 0; color:#666;font-size:18px;vertical-align:initial;}
-.search .btn-search {color:#4a98e7;position:fixed;top:14px;right:10px;font-size:18px;}
-.search .btn-cancel {background-color:#aaa;position:fixed;top:16px;right:70px;font-size:16px;color:#fff;border-radius:12px;padding:3px;}
+.search .search-box .txt-search{border:none; width:80%;padding:12px 0; color:#666;font-size:18px;vertical-align:initial;}
+.search .btn-search {color:#4a98e7;position:fixed;top:12px;right:10px;font-size:18px;}
+.search .btn-cancel {background-color:#aaa;position:fixed;top:14px;right:70px;font-size:16px;color:#fff;border-radius:12px;padding:3px;}
 /*退出下拉*/
 .menu-box {position:absolute;top:33px; height:44px;line-height:60px;width:100%;z-index:302; box-shadow:0 0 5px #ccc;background-color:#fff;border-radius:2px;display:none; }
 .menu-box li{text-align:center;color:#333;line-height:44px;}

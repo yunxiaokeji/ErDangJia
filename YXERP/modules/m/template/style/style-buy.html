@@ -28,7 +28,7 @@ var item=$data;
                         {%}%}
                         <div class="attr-rule attr-ul">
                             {%if(i==1||item.SaleAttrs.length==1){%}
-                            <table class="table-list" id="orderTable">
+                            <table class="table-list" id="sizelist">
                                 <tr class="tr-header">
                                     <td class="tLeft">{%=attr.AttrName%}</td>
                                     <td class="tLeft width50" style="padding-right:10px;">价格</td>
@@ -47,13 +47,13 @@ var item=$data;
                                 {%}%}
                             </table>
                             {%}else{%}
-                            <ul class="attr-item">
+                            <ul class="attr-item" id="colorlist">
                                 {%  
                                     for(var j=0;j<attr.AttrValues.length;j++)
                                     {
                                         var attrItem=attr.AttrValues[j];
                                 %}
-                                <li class="{%=i==1?'next':'first'%}" data-value="{%=attrItem.ValueName%}">
+                                <li class="{%=i==1?'next':'first'%}" data-remark="{%=attrItem.ValueName%}">
                                     {%=attrItem.ValueName%}
                                 </li>
                                 {%}%}

@@ -358,7 +358,7 @@
             if (typeof (tempOrder[key]) != 'undefined') {
                 _this.val(tempOrder[key].quantity);
             }
-        }); 
+        });
     };
 
     module.exports = ObjectJS;

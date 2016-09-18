@@ -221,7 +221,7 @@ line-height:60px;
     background-color:#4a98e7;
     color:#fff;
 }
-
+.overlay-addOrder .style-attr .attr-ul .hasquantity { background-color:#2F73B8;color:#333;}
 .overlay-addOrder .btn-sureAdd {
     position:fixed;
     width:100%;

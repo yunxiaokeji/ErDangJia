@@ -110,7 +110,6 @@
             }
         });
 
-
         if ($("#orderImage").width() > $("#orderImage").height()) {
             $("#orderImage").css("width", 350);
         } else {
@@ -183,21 +182,22 @@
             }
             if ($('#colorlist li.hover').length > 0) {
                 _self.setOrdersCache();
-                $("#sizelist .quantity").each(function () {
+                $("#sizelist .quantity").each(function() {
                     $(this).val(0);
                 });
-            }
+            }  
             _this.siblings().removeClass("hover");
             _this.removeClass("hasquantity").addClass("hover"); 
             $('.trattr').each(function () {
                 if(colorList[_this.data("remark")].indexOf($(this).data("remark"))==-1){
                     $(this).hide();
-                    $(this).find('quantity').val(0);
+                    $(this).find('.quantity').val(0);  
                 } else {
                     $(this).show();
                 }
             });
-            _self.setOrdersQuantity();
+            _self.SumNumPrice();
+            _self.setOrdersQuantity(); 
         });
 
         $('#sizelist .quantity').keyup(function () {
@@ -235,7 +235,6 @@
         var _self = this;
         var sumnum = 0, sumprice = 0.00;
         if (!$.isEmptyObject(tempOrder)) {
-           
             $.each(tempOrder, function(i, obj) {
                 sumnum += parseInt(obj.quantity);
             });
@@ -339,7 +338,7 @@
             if (_this.val() > 0) {
                 tempOrder[key] = item;
             } else {
-                if (typeof (tempOrder[key]) != 'undefined') {
+                if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
                     delete tempOrder[key]; 
                 } 
             } 
@@ -355,7 +354,7 @@
                 var color = $('#colorlist li.hover').data("remark");
             }
             var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";  
-            if (typeof (tempOrder[key]) != 'undefined') {
+            if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
                 _this.val(tempOrder[key].quantity);
             }
         }); 

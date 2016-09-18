@@ -1,6 +1,6 @@
 ﻿@{ 
     var client = (CloudSalesEntity.Manage.Clients)ViewBag.Client;
-    ViewBag.Title = client.CompanyName+"--款式中心";
+    ViewBag.Title = client.CompanyName+"--款式中心"; 
     CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
 }
 @section css{
@@ -21,7 +21,7 @@
         });
     </script>
 }
-<div style="height: 100px;">
+@*<div style="height: 100px;">
     <div class="divcenter pTop5">
         <div class="left" id="imglogo">
             <span class="left mTop10"><img src="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/mall/images/ico-cmlogo.png")" style="width: 60px; height: 60px;"/></span>
@@ -37,7 +37,7 @@
        
         <div class="clear"></div>
     </div>
-</div>
+</div>*@
 <div class="header-box" style="background-color: #4a98e7; padding: 0px 20px;">
     <div class="divcenter">
         <div class="left" id="divCategory">

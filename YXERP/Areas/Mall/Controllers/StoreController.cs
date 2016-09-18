@@ -130,7 +130,9 @@ namespace YXERP.Areas.Mall.Controllers
             ViewBag.ContactName = cname;
             ViewBag.MobilePhone = mphone;
             ViewBag.Address = address;
-           
+            ViewBag.Url = GetbaseUrl(); 
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+            ViewBag.Client = client == null ? CurrentUser.Client : client;
             var obj = new ProductsBusiness().GetProductByIDForDetails(orderid);
             ViewBag.Model = obj;
             ViewBag.ClientID = obj.ClientID;

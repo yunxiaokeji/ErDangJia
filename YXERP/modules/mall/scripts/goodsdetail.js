@@ -289,7 +289,9 @@
     ObjectJS.submitOrder = function (personname,mobiletele,citycode,address) {
         var _self = this; 
         var dids = '';
+        var details = [];
         $.each(tempOrder, function(i, obj) {
+            //details.push({DetailID:obj.detailid,Quantity:obj.quantity,Remark:obj.key });
             dids += obj.detailid + ":" + obj.quantity + ",";
         }); 
         Global.post("/Mall/Store/CreatePurchaseOrder",
@@ -304,7 +306,8 @@
                 mobiletele: mobiletele,
                 citycode: citycode,
                 dids: dids,
-                address: address//,entity: JSON.stringify(details)
+                address: address
+                //,entity: JSON.stringify(details)
             }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",

@@ -23,13 +23,6 @@
     ObjectJS.IsLoading = false;
     ObjectJS.init = function (providerid, user) {
         Params.clientid = providerid;
-        //providers = JSON.parse(providers.replace(/&quot;/g, '"'));
-        //for (var i = 0; i < providers.length; i++) {              
-        //    var p = providers[i];
-        //    if (p.CMClientID != "" && p.CMClientID != null) {
-        //        $(".task-filtertype").append('<li data-providerid="' + p.ProviderID + '" data-id="' + p.CMClientID + '">' + p.Name + '</li>');
-        //    }
-        //}
         user = JSON.parse(user.replace(/&quot;/g, '"'));
         ObjectJS.user = user;
 
@@ -90,7 +83,6 @@
 
         //显示关键字遮罩层
         $(".iconfont-search").click(function () {
-            $(".btn-search").text("确定");
             $(".txt-search").val("").focus();
             $(".shade,.search").show();
             $(".span-search").css("width", (document.body.clientWidth - 150) + "px");
@@ -98,39 +90,35 @@
 
         //关键字查询
         $(".btn-search").click(function () {
-            var name = $(this).text();
-            if (name == "确定") {
-                var txt = $(".txt-search").val();
-                if (txt != "") {
-                    $(".shade").slideUp("slow");
-                    $(this).text("取消");
-                    Params.pageIndex = 1;
-                    Params.keyWords = txt;
-                    ObjectJS.getList();
-
-                } else {
-                    $(".search").hide();
-                }
-            } else {
-                $(".search").hide();
-                Params.keyWords = "";
+            var keyWords = $(".txt-search").val();
+            if (keyWords != Params.keyWords) {
+                Params.keyWords = keyWords;
                 Params.pageIndex = 1;
                 ObjectJS.getList();
+
+                if (keyWords == '') {
+                    $(".btn-cancel").hide();
+                    $(".search").hide();
+                }
+                else {
+                    $(".btn-cancel").show();
+                }
+            } else {
+                if (keyWords == '') {
+                    $(".search").hide();
+                }
             }
+            
             $(".shade").hide();
         });
 
-        //搜索内容发生变化
-        $(".txt-search").keyup(function () {
-            
-            var changeAfter = $(".txt-search").val();
-            if (changeAfter == "") {
-                $(".cencal").text("取消");
-            } else if (Params.keyWords == changeAfter) {
-                $(".cencal").text("取消");
-            } else {
-                $(".cencal").text("确定");
-            }
+        $(".btn-cancel").click(function () {
+            $(".btn-cancel").hide();
+            $(".search").hide();
+            $(".shade").hide();
+            Params.keyWords = "";
+            Params.pageIndex = 1;
+            ObjectJS.getList();
         });
 
         //点击遮罩层空白区域

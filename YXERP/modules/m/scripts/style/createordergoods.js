@@ -3,13 +3,11 @@
     var doT = require("dot");
     var City = require("city"), CityInvoice,
         Global = require("m_global");
-    var details = [];
     var isCreateOrder = false;
     var colorList = {}, tempOrder = {}, tempList = [];
 
     ObjectJS.showOrderGoodsLayer = function (model, user) {
         colorList = {}, tempOrder = {}, tempList = [];
-        details = model.ProductDetails;
         ObjectJS.model = model;
         ObjectJS.getOrderAttr();
         doT.exec("m/template/style/style-buy.html", function (code) {
@@ -79,11 +77,12 @@
                 $('.data-item').each(function () {
                     if (colorList[_this.data("remark")].indexOf($(this).data("remark")) == -1) {
                         $(this).hide();
-                        $(this).find('quantity').val(0);
+                        $(this).find('.quantity').val(0);
                     } else {
                         $(this).show();
                     }
                 });
+                ObjectJS.SumNumPrice();
                 ObjectJS.setOrdersQuantity();
             });
 
@@ -150,56 +149,6 @@
         });
     };
 
-    ObjectJS.createOrderGoods = function () {
-        $(".attr-box").empty();
-        $(".attr-box").append('<table class="table-list"></table>');
-        $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td class="tRight">操作</td></tr>');
-        $(".attr-ul .first.select").each(function () {
-            var _this = $(this);
-            if ($(".productsalesattr").length > 1) {
-                $(".attr-ul .next.select").each(function () {
-                    var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text().trim() + '：' + _this.data('value') + '】【' + $(this).parents('.productsalesattr').find('.attr-title').text().trim() + '：' + $(this).data('value') + '】';
-                    ObjectJS.createOrderDetailHtml(description);
-                });
-            } else {
-                var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text().trim() + '：' + _this.data('value') + '】';
-                ObjectJS.createOrderDetailHtml(description);
-            }
-        });
-    };
-
-    ObjectJS.createOrderDetailHtml = function (description) {
-        var isContinue = false;
-        var did = "";
-        for (var i = 0; i < details.length; i++) {
-            var _detail = details[i];
-            var _desc = _detail.Remark.replace(/ /g, '').replace(/\[/g, '【').replace(/\]/g, '】').replace(/:/g, '：');
-            if (_desc == description) {
-                did += _detail.ProductDetailID;
-                isContinue = true;
-                break;
-            }
-        }
-        if (isContinue) {
-            var trHtml = $("<tr class='detail-attr' data-remark='" + description + "' data-did='" + did + "'></tr>");
-            trHtml.append("<td class='tLeft'>" + description + "</td>");
-            trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
-            trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
-
-            trHtml.find('.iconfont').click(function () {
-                $(this).parents('tr').remove();
-                return false;
-            });
-            trHtml.find('.quantity').change(function () {
-                var _this = $(this);
-                if (!_this.val().isInt() || _this.val() < 0) {
-                    _this.val(0);
-                }
-            });
-            $(".attr-box .table-list").append(trHtml);
-        }
-    };
-
     ObjectJS.createOrders = function (model) {
         var _self = this;
         _self.setOrdersCache();
@@ -250,7 +199,8 @@
                 }
             }
         }
-    }
+    };
+    //下单数量与件数
     ObjectJS.SumNumPrice = function () {
         var _self = this;
         var sumnum = 0, sumprice = 0.00;
@@ -270,53 +220,7 @@
         $('#totalnum').html(sumnum);
         $('#totalprice').html(sumprice);
         $('#totalnum').parent().show();
-    }
-    ObjectJS.savePDT = function () {
-        $('.bottombtn').unbind('click');
-        var _self = this;
-        _self.setOrdersCache();
-        if ($.isEmptyObject(tempOrder)) {
-            $('.bottombtn').bind('click', function () { _self.savePDT() });
-            alert("请选择颜色尺码，并填写对应采购数量");
-            return false;
-        }
-        _self.showUserInfo();
-        $('.bottombtn').bind('click', function () { _self.savePDT() });
-    }
-    ObjectJS.submitOrder = function (personname, mobiletele, citycode, address) {
-        var _self = this;
-        var dids = '';
-        $.each(tempOrder, function (i, obj) {
-            dids += obj.detailid + ":" + obj.quantity + ",";
-        });
-        Global.post("/Mall/Store/CreatePurchaseOrder",
-            {
-                productid: _self.model.ProductID,
-                price: _self.model.Price,
-                parentprid: _self.clientid,
-                goodsid: _self.model.CMGoodsID,
-                goodscode: _self.model.CMGoodsCode,
-                goodsname: _self.model.ProductName,
-                personname: personname,
-                mobiletele: mobiletele,
-                citycode: citycode,
-                dids: dids,
-                address: address//,entity: JSON.stringify(details)
-            }, function (data) {
-                if (data.result == 1) {
-                    confirm("新增成功,是否返回继续选购产品！",
-                        function () {
-                            $('#btnback').click();
-                        },
-                        function () {
-                            $('#btndetail').parent().attr("href", $('#ipturl').val() + '/Purchase/DocDetail/' + data.PurchaseID);
-                            $('#btndetail').click();
-                        });
-                } else {
-                    alert(data.errMsg);
-                }
-            });
-    }
+    };
     //数量缓存
     ObjectJS.setOrdersCache = function () {
         $('#sizelist .quantity').each(function () {

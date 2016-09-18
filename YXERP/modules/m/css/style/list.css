@@ -90,7 +90,7 @@
 
 /*筛选浮层*/
 .filter-object { position:fixed;background-color:#fff;width:80%;min-width:270px;max-width:400px;right:0;top:0px;height:100%;
-                 border-left:1px solid #ccc;z-index:350;padding-bottom:50px;
+                 border-left:1px solid #ccc;z-index:2000;padding-bottom:50px;
                  box-shadow:0 0 3px #ccc;-webkit-box-shadow:0 0 3px #ccc;-moz-box-shadow:0 0 3px #ccc;
                  box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;
                  transition:transform .5s;-webkit-transition:-webkit-transform .5s;-moz-transition:-moz-transform .5s;
@@ -103,7 +103,7 @@
 .fliter-confirm-box .confirm-fliter { background-color:#4a98e7;color:#fff;}
 .fliter-confirm-box .confirm-reset { background-color:#eee;color:#333;}
 
-.layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;z-index:349;}
+.layer-body { background-color:rgba(0,0,0,.6);position:fixed;left:0;top:0;height:100%;width:100%;z-index:1900;}
 .layer-box { box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;width:100%;border-bottom:1px solid #ddd;padding:10px 5px;}
 .category-block { min-width:60px;height:20px;padding:3px 5px;border:1px solid #ddd;text-align:center;float:left;margin-left:5px;margin-bottom:10px;}
 .category-block.hover {background-color:#4a98e7;color:#fff;}

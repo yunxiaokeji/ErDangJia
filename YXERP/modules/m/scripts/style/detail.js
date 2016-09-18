@@ -5,58 +5,47 @@
     var Common = require("/modules/m/scripts/style/createordergoods.js");
 
     var ObjectJS = {};
-    ObjectJS.init = function (orderImagesCount, order,user) {
+    ObjectJS.init = function (orderImagesCount,orderImage, order,user) {
         ObjectJS.orderImagesCount = orderImagesCount;
-        var jsonOrder = JSON.parse(order.replace(/&quot;/g, '"'));
-        ObjectJS.order = jsonOrder;
+        ObjectJS.orderImage = orderImage;
+        var order = JSON.parse(order.replace(/&quot;/g, '"'));
+        ObjectJS.order = order;
         ObjectJS.user = JSON.parse(user.replace(/&quot;/g, '"'));
 
         ObjectJS.bindEvent();
 
         //设置图片显示宽高
-        $(".pic-list li").css({ "margin-right": "10px", "border": "1px solid #ccc" });
-        $(".pic-list .pic-box img").css({ "width": "100%", "height": "200px" });
+        //$(".pic-list li").css({ "margin-right": "10px", "border": "1px solid #ccc" });
+        //$(".pic-list .pic-box img").css({ "width": "100%", "height": "200px" });
         $(".platemakingBody table tr td:last-child").remove();
     }
 
     //绑定事件
     ObjectJS.bindEvent = function () {
         if (ObjectJS.orderImagesCount > 0) {
-            if (ObjectJS.orderImagesCount > 1) {
-                $(".main_image").touchSlider({
-                    flexible: true,
-                    speed: 200,
-                    paging: $(".flicking_con a"),
-                    counter: function (e) {
-                        $(".flicking_con a").removeClass("on").eq(e.current - 1).addClass("on");
-                    }
-                });
-            }
-
-            ObjectJS.setImagesSize();
+            setTimeout(function () {
+                ObjectJS.setImagesSize();
+            }, 300);
         }
        
         //菜单切换模块事件
         $("nav ul li").click(function () {
             var _this = $(this);
-            _this.addClass("menuchecked").siblings().removeClass("menuchecked");
-            _this.parent().parent().find("i").css("color", "#9e9e9e");
-            _this.find("i").css("color", "#4a98e7");
-            var classname = _this.data("classname");
-            ModuleType = classname;
-            $(".main-box ." + classname).show().siblings().hide();
-            //var isGet = _this.data("isget");
-            //if (classname == "plate-des") {
-            //    if (!isGet) {
-            //        ObjectJS.getPlateMakings();
-            //        _this.data("isget", "1");
-            //    }
-            //}
+            if (_this.hasClass("menuchecked")) {
+                _this.addClass("menuchecked").siblings().removeClass("menuchecked");
+                _this.parent().parent().find("i").css("color", "#9e9e9e");
+                _this.find("i").css("color", "#4a98e7");
+                var classname = _this.data("classname");
+                ModuleType = classname;
+                $(".main-box ." + classname).show().siblings().hide();
+         }
         });
+
         //点击回到顶部
         $(".getback").click(function () {
             $('html, body').animate({ scrollTop: 0 }, 'slow');
         });
+
         //下单
         $(".btn-addOrder").click(function () {
             Common.showOrderGoodsLayer(ObjectJS.order, ObjectJS.user);
@@ -65,17 +54,9 @@
 
     //设置图片宽高
     ObjectJS.setImagesSize = function () {
+        $(".main_image ul li img").attr("src", ObjectJS.orderImage);
         var windowWidth = $(window).width();
-        $(".main_image").css({ "height": windowWidth + "px", "width": windowWidth + "px" });
-        $(".main_image ul li").css({ "height": windowWidth + "px", "width": windowWidth + "px" });
-
-        $(".main_image ul li").each(function () {
-            if ($(this).find('img').width() > $(this).find('img').height()) {
-                $(this).find('img').css("height", windowWidth + "px");
-            } else {
-                $(this).find('img').css("width", windowWidth + "px");
-            }
-        });
+        $(".main_image ul li img").css("max-height",windowWidth + "px")
     }
 
     //获取任务详情日志列表

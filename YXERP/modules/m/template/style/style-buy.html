@@ -28,7 +28,7 @@ var item=$data;
                         {%}%}
                         <div class="attr-rule attr-ul">
                             {%if(i==1||item.SaleAttrs.length==1){%}
-                            <table class="table-list">
+                            <table class="table-list" id="orderTable">
                                 <tr class="tr-header">
                                     <td class="tLeft">{%=attr.AttrName%}</td>
                                     <td class="tLeft width50" style="padding-right:10px;">价格</td>
@@ -39,10 +39,10 @@ var item=$data;
                                     {
                                         var attrItem=attr.AttrValues[j];        
                                 %}
-                                        <tr>
-                                            <td>{%=attrItem.ValueName%}</td>
+                                        <tr class="data-item" data-remark="{%=attrItem.ValueName%}">
+                                            <td class="name">{%=attrItem.ValueName%}</td>
                                             <td class="tLeft price">{%=item.Price%}</td>
-                                            <td class="tRight"><input type="tel" class="quantity" style="width:48px;text-align:center;height:20px;padding:3px 2px;" /></td>
+                                            <td class="tRight"><input data-remark="{%=attrItem.ValueName%}" type="tel" class="quantity" style="width:48px;text-align:center;height:20px;padding:3px 2px;" /></td>
                                         </tr>
                                 {%}%}
                             </table>

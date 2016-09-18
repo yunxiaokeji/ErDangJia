@@ -383,7 +383,7 @@
                         }
                     });
                 }
-                _htmlChildItems.append(_htmlChildBox)
+                _htmlChildItems.append(_htmlChildBox);
                 _html.append(_htmlTitle).append(_htmlChildItems);
                 parentObj.after(_html);
             }

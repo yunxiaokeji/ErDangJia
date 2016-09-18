@@ -21,10 +21,32 @@ var item=$data;
                         var attr=item.SaleAttrs[i];
                 %}
                     <div class="productsalesattr">
+                        {%if(i==0){%}
                         <div class="attr-title" id="attrBox" data-id="{%=attr.AttrID%}">
                             {%=attr.AttrName%}
                         </div>
+                        {%}%}
                         <div class="attr-rule attr-ul">
+                            {%if(i==1||item.SaleAttrs.length==1){%}
+                            <table class="table-list">
+                                <tr class="tr-header">
+                                    <td class="tLeft">{%=attr.AttrName%}</td>
+                                    <td class="tLeft width50" style="padding-right:10px;">价格</td>
+                                    <td class="center width50">数量</td>
+                                </tr>
+                                {%  
+                                    for(var j=0;j<attr.AttrValues.length;j++)
+                                    {
+                                        var attrItem=attr.AttrValues[j];        
+                                %}
+                                        <tr>
+                                            <td>{%=attrItem.ValueName%}</td>
+                                            <td class="tLeft price">{%=item.Price%}</td>
+                                            <td class="tRight"><input type="tel" class="quantity" style="width:48px;text-align:center;height:20px;padding:3px 2px;" /></td>
+                                        </tr>
+                                {%}%}
+                            </table>
+                            {%}else{%}
                             <ul class="attr-item">
                                 {%  
                                     for(var j=0;j<attr.AttrValues.length;j++)
@@ -37,18 +59,11 @@ var item=$data;
                                 {%}%}
                                 <div class="clear"></div>
                             </ul>
+                            {%}%}
                             <div class="show-more width50 mTop10 center" style="border:1px solid #ddd;color:#0026ff;padding:5px 15px;border-radius:3px;">更多+</div>
                         </div>
                     </div>
                 {%}%}
-            </div>
-            <div>
-                <div class="attr-title">所选款式</div>
-                <div class="attr-box">
-                    <table class='table-list'>
-                        <tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td class="tRight">操作</td></tr>
-                    </table>
-                </div>
             </div>
             <div class="mTop15 pBottom20">
                 <div class="attr-title">

@@ -118,6 +118,8 @@ namespace CloudSalesEntity
             get { return _saleattr; }
         }
 
+        public string SaleAttrStr { get; set; }
+
         public List<ProductAttr> SaleAttrs { get; set; }
 
         /// <summary>
@@ -129,6 +131,8 @@ namespace CloudSalesEntity
             set { _attrlist = value; }
             get { return _attrlist; }
         }
+
+        public string AttrListStr { get; set; }
 
         public List<ProductAttr> AttrLists { get; set; }
 

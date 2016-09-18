@@ -31,7 +31,7 @@ namespace IntFactory.Sdk
 
                         foreach (var order in orderlist.orders)
                         {
-                            var categortModel = SyncCateGory(order.categoryID, clientid, ref cateList);
+                            var categortModel = new Category();
                             if (categortModel != null && !string.IsNullOrEmpty(categortModel.CategoryID))
                             {
                                 string[] attrs = categortModel.SaleAttr.Split(',');
@@ -75,114 +75,6 @@ namespace IntFactory.Sdk
                 error_code = 0,
                 error_message = "同步成功"
             };
-        }
-
-        public Category SyncCateGory(string categoryid, string clientid, ref List<CategoryEntity> cateList)
-        {
-            var category = cateList.Where(x => x.CategoryID == categoryid).FirstOrDefault();
-            if (category == null)
-            {
-                return null;
-            }
-            Category pcate = null;
-            //获取父级分类
-            if (!string.IsNullOrEmpty(category.PID))
-            {
-                var pcategory = cateList.Where(x => x.CategoryID == category.PID).FirstOrDefault();
-                pcate = ProductsBusiness.BaseBusiness.GetCategoryByName("", pcategory.CategoryName, clientid);
-                if (pcate != null && !string.IsNullOrEmpty(pcate.CategoryID))
-                {
-                    var newcate = ProductsBusiness.BaseBusiness.GetCategoryByName(pcate.CategoryID, category.CategoryName, clientid);
-                    if (newcate != null && !string.IsNullOrEmpty(newcate.CategoryID))
-                    {
-                        string saleattr = CheckAttr(category, clientid);
-                        UpdateCategoryAttr(newcate, saleattr);
-                    }
-                    else
-                    {
-                        newcate = InsertCategory(category, clientid, pcate == null ? "" : pcate.CategoryID);
-                    }
-
-                    return newcate;
-                }
-                else
-                {
-                    pcate = InsertCategory(pcategory, clientid);
-                    var newcate = InsertCategory(category, clientid, pcate == null ? "" : pcate.CategoryID);
-                    return newcate;
-                    
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public CloudSalesEntity.Category InsertCategory(CategoryEntity category, string clientid, string pid = "")
-        {
-            var result = 0;
-             //判断规格是否存在
-            string salesAttrs = CheckAttr(category, clientid);
-          
-            //插入新的分类
-            string code = string.IsNullOrEmpty(category.CategoryCode)
-                ? GenerateRandomNumber(10)
-                : category.CategoryCode;
-            var cate = ProductsBusiness.BaseBusiness.AddCategory(code, category.CategoryName, pid, 1, "", salesAttrs, "", "", clientid, out result);
-            return cate;
-        }
-
-        public string CheckAttr(CategoryEntity category, string clientid)
-        {
-            string salesAttrs = "";
-            var saleList = ProductsBusiness.BaseBusiness.GetAttrs(clientid);
-           
-            foreach (var attr in category.SaleAttrs)
-            {
-                string attrid = "";
-                var saleAttr = saleList.Where(y => y.AttrName == attr.AttrName).FirstOrDefault();
-
-                if (saleAttr == null)
-                {
-                    attrid = ProductsBusiness.BaseBusiness.AddProductAttr(attr.AttrName, "", "", 1, "", clientid);
-                }
-                else
-                {
-                    attrid = saleAttr.AttrID;
-                }
-                if (!string.IsNullOrEmpty(attrid))
-                {
-                    salesAttrs += attrid + ",";
-                }
-            }
-            foreach (var attr in category.AttrLists)
-            {
-                string attrid = "";
-                var saleAttr = saleList.Where(y => y.AttrName == attr.AttrName).FirstOrDefault();
-
-                if (saleAttr == null)
-                {
-                    attrid = ProductsBusiness.BaseBusiness.AddProductAttr(attr.AttrName, "", "", 1, "", clientid);
-                }
-                else
-                {
-                    attrid = saleAttr.AttrID;
-                }
-                if (!string.IsNullOrEmpty(attrid))
-                {
-                    salesAttrs += attrid + ",";
-                }
-            }
-            return salesAttrs.TrimEnd(',');
-        }
-
-        public void UpdateCategoryAttr(Category category, string saleattr)
-        {
-            int result = 0;
-            ProductsBusiness.BaseBusiness.UpdateCategory(category.CategoryID, category.CategoryName,
-                category.CategoryCode, category.Status.Value, category.AttrList, saleattr, category.Description, category.OperateIP,
-                category.ClientID, out result);
         }
 
         private static char[] constant ={   

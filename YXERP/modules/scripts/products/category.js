@@ -287,25 +287,40 @@ define(function (require, exports, module) {
                             CategoryID: Category.CategoryID,
                             CategoryCode: $("#categoryCode").val().trim(),
                             CategoryName: $("#categoryName").val().trim(),
+                            SaleAttr:"",
+                            SaleAttrStr: "",
+                            AttrList: "",
+                            AttrListStr: "",
                             PID: Category.PID,
                             Status: $("#categoryStatus").hasClass("hover") ? 1 : 0,
                             Description: $("#description").val()
                         };
 
-                        var attrs = "", saleattrs = "";
+                        var isAgain = false;;
                         //属性
                         $("#attrList .checkbox.hover").each(function () {
-                            attrs += $(this).data("id") + ",";
+                            if (model.AttrListStr.indexOf($(this).data("name") + ",") >= 0) {
+                                isAgain = true;
+                            }
+                            model.AttrList += $(this).data("id") + ",";
+                            model.AttrListStr += $(this).data("name") + ",";
                         });
+
+                        if (isAgain) {
+                            alert("选择的属性有重复名称，不能提交");
+                            return false;
+                        }
 
                         //规格
                         if ($("#saleAttr1").val() != "-1") {
-                            saleattrs += $("#saleAttr1").val() + ",";
+                            model.SaleAttr += $("#saleAttr1").val() + ",";
+                            model.SaleAttrStr += $("#saleAttr1 option:selected").data("name") + ",";
                         }
                         if ($("#saleAttr2").val() != "-1") {
-                            saleattrs += $("#saleAttr2").val() + ",";
+                            model.SaleAttr += $("#saleAttr2").val() + ",";
+                            model.SaleAttrStr += $("#saleAttr2 option:selected").data("name") + ",";
                         }
-                        _self.saveCategory(model, attrs, saleattrs, callback);
+                        _self.saveCategory(model, callback);
 
                         return false;
                     },
@@ -374,11 +389,9 @@ define(function (require, exports, module) {
     }
 
     //保存分类
-    ObjectJS.saveCategory = function (category, attrs, saleattrs, callback) {
+    ObjectJS.saveCategory = function (category, callback) {
         Global.post("/Products/SavaCategory", {
-            category: JSON.stringify(category),
-            attrlist: attrs,
-            saleattr: saleattrs
+            category: JSON.stringify(category)
         }, function (data) {
             if (data.result == "10001") {
                 alert("您没有此操作权限，请联系管理员帮您添加权限！", function () {

@@ -644,9 +644,9 @@ namespace CloudSalesBusiness
             return model;
         }
 
-        public Category AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
+        public Category AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string attrListStr, string saleattr, string saleAttrStr, string description, string operateid, string clientid, out int result)
         {
-            var id = ProductsDAL.BaseProvider.AddCategory(categoryCode, categoryName, pid, status, attrlist, saleattr, description, operateid, clientid, out result);
+            var id = ProductsDAL.BaseProvider.AddCategory(categoryCode, categoryName, pid, status, attrlist, attrListStr, saleattr, saleAttrStr, description, operateid, clientid, out result);
 
             if (!string.IsNullOrEmpty(id))
             {
@@ -672,9 +672,9 @@ namespace CloudSalesBusiness
             return dal.AddCategoryAttr(categoryid, attrid, type, operateID);
         }
 
-        public Category UpdateCategory(string categoryid, string categoryName, string categoryCode, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
+        public Category UpdateCategory(string categoryid, string categoryName, string categoryCode, int status, string attrlist, string attrListStr, string saleattr, string saleAttrStr, string description, string operateid, string clientid, out int result)
         {
-            bool bl = ProductsDAL.BaseProvider.UpdateCategory(categoryid, categoryName, categoryCode, status, attrlist, saleattr, description, operateid, clientid, out result);
+            bool bl = ProductsDAL.BaseProvider.UpdateCategory(categoryid, categoryName, categoryCode, status, attrlist, attrListStr, saleattr, saleAttrStr, description, operateid, clientid, out result);
             if (bl)
             {
                 var model = GetCategoryByID(categoryid, clientid);
@@ -682,7 +682,9 @@ namespace CloudSalesBusiness
                 model.CategoryCode = categoryCode;
                 model.Status = status;
                 model.SaleAttr = saleattr;
+                model.SaleAttrStr = saleAttrStr;
                 model.AttrList = attrlist;
+                model.AttrListStr = attrListStr;
                 model.Description = description;
                 return model;
             }

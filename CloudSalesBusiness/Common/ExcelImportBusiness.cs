@@ -107,11 +107,11 @@ namespace CloudSalesBusiness
             return mes;
         }
 
-        public static string AddCategory(Category category,ref string mes)
+        public static string AddCategory(Category category, ref string mes)
         {
             int result = 0;
             Category newCategory= ProductsBusiness.BaseBusiness.AddCategory(category.CategoryCode, category.CategoryName, category.PID,
-                category.Status.Value, "", "", "", category.CreateUserID, category.ClientID, out result);
+                category.Status.Value, "", "", "", "", "", category.CreateUserID, category.ClientID, out result);
             if (result != 1 )
             {
                 if (mes.IndexOf(category.CategoryCode) == -1)

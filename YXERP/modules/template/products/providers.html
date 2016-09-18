@@ -3,15 +3,24 @@
 	var item = $data[i];
 %}
 <tr class="list-item">
-    <td>{%=item.Name%}</td>
+    <td>
+       <span class="left">{%=item.Name %}</span> 
+        {% if(item.ProviderType==2){ %}
+            <a href="/Mall/Store/Index/{%=item.CMClientID%}" style="border:solid 1px #ccc; background-color:#f6f6f6; padding:5px 10px; line-height:20px;" class="right mRight20 mTop2" target="_blank">进入店铺</a>
+        {% } else{ %}
+           
+        {% }  %}
+    </td>
     <td>{%=item.Contact%}</td>
     <td>{%=item.MobileTele%}</td>
-    <td>{%=item.City ? item.City.Description : ""%} </td>
+    <td class="center">{%=item.City ? item.City.Description : ""%} </td>
     <td>{%=item.Address%}</td>
     <td class="center">{%=item.CreateTime.toDate("yyyy-MM-dd hh:mm:ss")%}</td>
     <td class="center" data-id="{%=item.ProviderID%}">
         <span title="编辑" class="iconfont ico-edit left mLeft3" data-id="{%=item.ProviderID%}"></span>
-        <span title="删除" class="iconfont ico-del right mTop1 mRight3" data-id="{%=item.ProviderID%}"></span>
+        {% if(item.ProviderType!=1){ %}
+            <span title="删除" class="iconfont ico-del right mTop1 mRight3" data-type="{%= item.ProviderType %}" data-id="{%=item.ProviderID%}"></span>
+        {% } %}
     </td>
 </tr>
 {% } %}

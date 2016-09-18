@@ -158,6 +158,8 @@ namespace CloudSalesEntity
 
         public int ProviderType { get; set; }
 
+        public string ProviderTypeStr { get; set; }
+
 		#endregion Model
 
         /// <summary>

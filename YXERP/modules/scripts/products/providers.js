@@ -8,6 +8,7 @@ define(function (require, exports, module) {
     require("pager");
     var Params = {
         keyWords: "",
+        type: -1,
         pageSize: 20,
         pageIndex: 1,
         totalCount: 0
@@ -36,6 +37,18 @@ define(function (require, exports, module) {
                 Params.keyWords = keyWords;
                 _self.getList();
             });
+        });
+
+        //类型
+        $(".search-type li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.PageIndex = 1;
+                Params.type = _this.data("id");
+                _self.getList();
+            }
         });
 
         //添加
@@ -125,8 +138,12 @@ define(function (require, exports, module) {
 
                     //删除
                     innerText.find(".ico-del").click(function () {
-                        var _this = $(this);
-                        confirm("供应商删除后不可恢复,确认删除吗？", function () {
+                        var _this = $(this), msg = "供应商删除后不可恢复,确认删除吗？";
+
+                        if (_this.data("type") == 2) {
+                            msg = "此供应商为商家店铺，删除后不再关注此店铺，确认删除吗？";
+                        }
+                        confirm(msg, function () {
                             Global.post("/Products/DeleteProvider", { id: _this.data("id") }, function (data) {
                                 if (data.result == 1) {
                                     alert("删除成功");

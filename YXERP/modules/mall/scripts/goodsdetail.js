@@ -357,7 +357,7 @@
             if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
                 _this.val(tempOrder[key].quantity);
             }
-        }); 
+        });
     };
 
     module.exports = ObjectJS;

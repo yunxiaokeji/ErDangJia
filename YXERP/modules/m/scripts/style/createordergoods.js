@@ -3,10 +3,13 @@
     var doT = require("dot");
     var City = require("city"), CityInvoice,
         Global = require("m_global");
-    var details = [];
     var isCreateOrder = false;
+    var colorList = {}, tempOrder = {}, tempList = [];
+
     ObjectJS.showOrderGoodsLayer = function (model, user) {
-        details = model.ProductDetails;
+        colorList = {}, tempOrder = {}, tempList = [];
+        ObjectJS.model = model;
+        ObjectJS.getOrderAttr();
         doT.exec("m/template/style/style-buy.html", function (code) {
             var innerHtml = code(model);
             innerHtml = $(innerHtml);
@@ -25,16 +28,15 @@
             innerHtml.find("#showCustomerTel").text(user.MobilePhone);
             innerHtml.find("#showCustomerAddress").text(user.Address);
 
-            $(".overlay-addOrder").html(innerHtml).show();
-
-            $('.productsalesattr').each(function () {
+            innerHtml.find(".quantity").change(function () {
                 var _this = $(this);
-                if (_this.find('.attr-item').height() <= 68) {
-                    _this.find('.show-more').remove();
-                } else {
-                    _this.find('.attr-item').addClass('show-attr-box');
+                if (!_this.val().isInt() || _this.val() < 0) {
+                    _this.val(0);
                 }
+                ObjectJS.SumNumPrice();
             });
+
+            $(".overlay-addOrder").html(innerHtml).show();
 
             $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
 
@@ -55,13 +57,33 @@
             });
 
             $(".overlay-addOrder .attr-ul li").unbind().click(function () {
-                var _self = $(this);
-                if (_self.hasClass("select")) {
-                    _self.removeClass("select");
-                } else {
-                    _self.addClass("select");
+                var _this = $(this);
+                //数量验证
+                var totalnum = 0;
+                $("#sizelist .quantity").each(function () {
+                    totalnum += parseInt($(this).val());
+                });
+                if (totalnum > 0) {
+                    $('#colorlist li.select').addClass("hasquantity");
                 }
-                ObjectJS.createOrderGoods();
+                if ($('#colorlist li.select').length > 0) {
+                    ObjectJS.setOrdersCache();
+                    $("#sizelist .quantity").each(function () {
+                        $(this).val(0);
+                    });
+                }
+                _this.siblings().removeClass("select");
+                _this.removeClass("hasquantity").addClass("select");
+                $('.data-item').each(function () {
+                    if (colorList[_this.data("remark")].indexOf($(this).data("remark")) == -1) {
+                        $(this).hide();
+                        $(this).find('.quantity').val(0);
+                    } else {
+                        $(this).show();
+                    }
+                });
+                ObjectJS.SumNumPrice();
+                ObjectJS.setOrdersQuantity();
             });
 
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
@@ -86,40 +108,6 @@
                 }
                 return false;
             });
-
-            /*自定义规格*/
-            //innerHtml.find('.layout-attr').change(function () {
-            //    var _this = $(this);
-            //    var isContinue = true;
-            //    var _thisTitle = _this.parents('.productsalesattr').find('.attr-title');
-            //    if (!_this.val().trim()) {
-            //        _this.val('');
-            //        return false;
-            //    }
-            //    _this.parent().siblings().each(function () {
-            //        var obj = $(this);
-            //        if (_this.val().trim() == obj.text().trim()) {
-            //            alert(obj.data('type') == 1 ? "" + _thisTitle.text() + "已存在" : "" + _thisTitle.text() + "已存在", 2);
-            //            isContinue = false;
-            //            return false;
-            //        }
-            //    });
-            //    if (isContinue) {
-            //        var attrObj = $("<li class='" + (_thisTitle.data('type') == 1 ? "size" : "color") + "' data-type='" + _thisTitle.data('type') + "' data-id='|' data-value='" + _this.val().trim() + "'>" + _this.val().trim() + "</li>");
-            //        attrObj.click(function () {
-            //            var _self = $(this);
-            //            if (_self.hasClass("select")) {
-            //                _self.removeClass("select");
-            //            } else {
-            //                _self.addClass("select");
-            //            }
-            //            ObjectJS.createOrderGoods();
-            //        });
-            //        _this.parent().before(attrObj);
-            //        attrObj.click();
-            //        _this.val('');
-            //    }
-            //});
 
             innerHtml.find('.customer-base-info .ico-edit').click(function () {
                 var _this = $(this);
@@ -154,18 +142,6 @@
                 $("#showCustomerAddress").text($("#customerAddress").val());
             });
 
-            innerHtml.find(".show-more").click(function () {
-                var _this = $(this);
-                if (_this.data('isget') != 1) {
-                    _this.parent().find('.attr-item').removeClass('show-attr-box');
-                    _this.data('isget', 1);
-                    _this.text("收起");
-                } else {
-                    _this.parent().find('.attr-item').addClass('show-attr-box');
-                    _this.data('isget', 2);
-                    _this.text("更多+");
-                }
-            });
             CityInvoice = City.createCity({
                 cityCode: user.CityCode,
                 elementID: "citySpan"
@@ -173,72 +149,19 @@
         });
     };
 
-    ObjectJS.createOrderGoods = function () {
-        $(".attr-box").empty();
-        $(".attr-box").append('<table class="table-list"></table>');
-        $(".attr-box .table-list").append('<tr class="tr-header" ><td class="tLeft">规格</td><td>数量</td><td class="tRight">操作</td></tr>');
-        $(".attr-ul .first.select").each(function () {
-            var _this = $(this);
-            if ($(".productsalesattr").length > 1) {
-                $(".attr-ul .next.select").each(function () {
-                    var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text().trim() + '：' + _this.data('value') + '】【' + $(this).parents('.productsalesattr').find('.attr-title').text().trim() + '：' + $(this).data('value') + '】';
-                    ObjectJS.createOrderDetailHtml(description);
-                });
-            } else {
-                var description = '【' + _this.parents('.productsalesattr').find('.attr-title').text().trim() + '：' + _this.data('value') + '】';
-                ObjectJS.createOrderDetailHtml(description);
-            }
-        });
-    };
-
-    ObjectJS.createOrderDetailHtml = function (description) {
-        var isContinue = false;
-        var did = "";
-        for (var i = 0; i < details.length; i++) {
-            var _detail = details[i];
-            var _desc = _detail.Remark.replace(/ /g, '').replace(/\[/g, '【').replace(/\]/g, '】').replace(/:/g, '：');
-            if (_desc == description) {
-                did += _detail.ProductDetailID;
-                isContinue = true;
-                break;
-            }
-        }
-        if (isContinue) {
-            var trHtml = $("<tr class='detail-attr' data-remark='" + description + "' data-did='" + did + "'></tr>");
-            trHtml.append("<td class='tLeft'>" + description + "</td>");
-            trHtml.append("<td class='center'><input style='width:50px;height:20px;padding:3px; 0' maxlength='9' class='quantity center' type='tel' value='' /></td>");
-            trHtml.append("<td class='iconfont center red tRight' style='font-size:14px;padding-right:10px;'>&#xe606;</td>");
-
-            trHtml.find('.iconfont').click(function () {
-                $(this).parents('tr').remove();
-                return false;
-            });
-            trHtml.find('.quantity').change(function () {
-                var _this = $(this);
-                if (!_this.val().isInt() || _this.val() < 0) {
-                    _this.val(0);
-                }
-            });
-            $(".attr-box .table-list").append(trHtml);
-        }
-    };
-
     ObjectJS.createOrders = function (model) {
         var _self = this;
+        _self.setOrdersCache();
+        if ($.isEmptyObject(tempOrder)) {
+            alert("请选择颜色尺码，并填写对应采购数量");
+            return false;
+        }
         if (!isCreateOrder) {
             //大货单遍历下单明细 
             var dids = "";
-            $(".attr-box .table-list .quantity").each(function () {
-                var _this = $(this);
-                var _thisTr = _this.parents('tr');
-                if (_this.val() > 0) {
-                    dids += _thisTr.data('did') + ":" + _this.val() + ',';
-                }
+            $.each(tempOrder, function (i, obj) {
+                dids += obj.detailid + ":" + obj.quantity + ",";
             });
-            if (!dids) {
-                alert("请选择颜色尺码，并填写对应采购数量", 2);
-                return false;
-            }
             model.dids = dids;
             $(".btn-sureAdd").text("下单中...");
             isCreateOrder = true;
@@ -257,6 +180,85 @@
                 }
             });
         }
+    };
+
+    //绑定颜色尺码
+    ObjectJS.getOrderAttr = function () {
+        var _self = ObjectJS;
+        for (var i = 0; i < _self.model.ProductDetails.length; i++) {
+            var item = _self.model.ProductDetails[i];
+            if (item.AttrValue != "" && item.AttrValue != null) {
+                var color = item.AttrValue.split(",");
+                var key = "[" + color[0] + "]" + (color.length > 1 ? "[" + color[1] + "]" : "");
+                colorList[key] = item.ProductDetailID;
+                if ($.inArray(color[0], tempList) == -1) {
+                    colorList[color[0]] = color.length > 1 ? color[1] : color[0];
+                    tempList.push(color[0]);
+                } else {
+                    colorList[color[0]] = colorList[color[0]] + (color.length > 1 ? "," + color[1] : "");
+                }
+            }
+        }
+    };
+    //下单数量与件数
+    ObjectJS.SumNumPrice = function () {
+        var _self = this;
+        var sumnum = 0, sumprice = 0.00;
+        if (!$.isEmptyObject(tempOrder)) {
+            $.each(tempOrder, function (i, obj) {
+                sumnum += parseInt(obj.quantity);
+            });
+        }
+        $('#sizelist .quantity').each(function () {
+            $(this).val($(this).val().replace(/\D/g, ''));
+            var num = $(this).val();
+            if (num != '') {
+                sumnum += parseInt(num);
+            }
+        });
+        sumprice = (sumnum * parseFloat(_self.model.Price)).toFixed(2);
+        $('#totalnum').html(sumnum);
+        $('#totalprice').html(sumprice);
+        $('#totalnum').parent().show();
+    };
+    //数量缓存
+    ObjectJS.setOrdersCache = function () {
+        $('#sizelist .quantity').each(function () {
+            var _this = $(this);
+            var size = _this.parents('tr').data("remark");
+            var color = '';
+            if ($('#colorlist li').length > 0) {
+                if ($('#colorlist li.select').length > 0) {
+                    color = $('#colorlist li.select').data("remark");
+                } else {
+                    return false;
+                }
+            }
+            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
+            var item = { quantity: _this.val(), detailid: colorList[key], key: key }
+            if (_this.val() > 0) {
+                tempOrder[key] = item;
+            } else {
+                if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
+                    delete tempOrder[key];
+                }
+            }
+        });
+    };
+    //数赋值
+    ObjectJS.setOrdersQuantity = function () {
+        $('#sizelist .quantity').each(function () {
+            var _this = $(this);
+            var size = _this.parents('tr').data("remark");
+            var color = '';
+            if ($('#colorlist li.select').length > 0) {
+                var color = $('#colorlist li.select').data("remark");
+            }
+            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
+            if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
+                _this.val(tempOrder[key].quantity);
+            }
+        });
     };
 
     module.exports = ObjectJS;

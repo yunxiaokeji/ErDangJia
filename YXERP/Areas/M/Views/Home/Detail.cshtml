@@ -2,27 +2,23 @@
     ViewBag.Title = "款式详情";
     var order = (CloudSalesEntity.Products)ViewBag.Model;
     var user = (CloudSalesEntity.Users)ViewBag.baseUser;
-    string[] imagesUrl = { };
-    if (order.ImgS!=null&&order.ImgS.Length != 0)
-    {
-        imagesUrl = order.ImgS.Trim(',').Split(',');
-    }
-    
+    string[] imagesUrl = { order.ProductImage};
 }
 @section css{
     <link href="/modules/m/css/style/detail.css" rel="stylesheet" />
-    <link href="/modules/m/plug/touchSlider/css/style.css" rel="stylesheet" />
+    @*<link href="/modules/m/plug/touchSlider/css/style.css" rel="stylesheet" />*@
 }
 @section scripts{
     <script src="/Scripts/jquery-1.11.1.js"></script>
-    <script src="/modules/m/plug/touchSlider/js/jquery-1.js"></script>
+@*    <script src="/modules/m/plug/touchSlider/js/jquery-1.js"></script>
     <script src="/modules/m/plug/touchSlider/js/jquery_002.js"></script>
-    <script src="/modules/m/plug/touchSlider/js/jquery.js"></script> 
+    <script src="/modules/m/plug/touchSlider/js/jquery.js"></script> *@
     <script type="text/javascript">
         $(function () {
             seajs.use("/modules/m/scripts/style/detail", function (obj) {
                 obj.init(
                     '@(imagesUrl.Length)',
+                    '@order.ProductImage',
                     '@Html.ToJSONString(order)',
                     '@Html.ToJSONString(user)'
                  );
@@ -32,14 +28,12 @@
 }
 <header>
         <a class="btn-return" href = "javascript:if(history.length>1){ history.go(-1);} else{location.href='/task/list'}"><i class="return-icon iconfont">&#xe60a;</i></a>
-        <div class="mLeft50 font16">
-            款式详情
-        </div>
+        <div class="mLeft50 font16"> 款式详情</div>
     </header>
 
-<div class="main_visual mTop50">
-    <div class="flicking_con">
-    @*    @{
+<div class="main_visual mTop40">
+@*    <div class="flicking_con">
+        @{
             if (imagesUrl.Length > 1)
             {
                 for (int i = 0; i < imagesUrl.Length; i++)
@@ -47,19 +41,20 @@
                     <a class="@(i == 0 ? "on" : "")" href="javascript:void(0);"></a>
                 }
             }
-        }*@
-    </div>
+        }
+    </div>*@
     <div class="main_image">
         <ul>
-            @{
+            <li><img style="width:100%;" ></li>
+         @*   @{
                 if (imagesUrl.Length > 0)
                 {
                     for (int i = 0; i < imagesUrl.Length; i++)
                     {
-                        <li><img src="@(imagesUrl[i])"></li>
+                        <li><img style="width:100%;" src="@(imagesUrl[i])"></li>
                     }
                 }
-            }
+            }*@
         </ul>
         <div class="clear"></div>
     </div>
@@ -74,7 +69,7 @@
             </li>
             <li>
                 <div class="task-code base-info">
-                    <span>分类：</span>
+                    <span>类别：</span>
                     <span class="mLeft5">@(string.IsNullOrEmpty(order.CategoryName)?"--":order.CategoryName)</span>
                 </div>
             </li>
@@ -97,21 +92,28 @@
 <!--菜单-->
 <nav>
     <ul>
-        <li class="menuchecked" data-classname="description"><i class="iconfont">&#xe617;</i>基本信息</li>
+        <li class="menuchecked" data-classname="description"><i class="iconfont">&#xe625;;</i>款式详情</li>
     </ul>
     <div class="clear"></div>
 </nav>
 
 <div class="main-box">
-    <div class="description">
+    <ul class="table-add">
+            <li><span class="column-title">款式编码：</span><span>@order.ProductCode</span></li>
+            <li><span class="column-title">产品毛重：</span><span>@(order.Weight.Value.ToString("f2"))g</span></li>
+            <li><span class="column-title">累计销售：</span><span>@(order.SaleCount)</span></li>
+            <li><span class="column-title">颜色：</span>
+                @foreach (var attr in order.AttrLists)
+                { 
+                    <span class="mRight5">@attr.AttrValues[0].ValueName</span>
+                 }
+            </li>
+        </ul>
+    <div class="description pAll15">
         @{
             if (!string.IsNullOrEmpty(order.Description))
             {
                 <div class="">@(new MvcHtmlString(Server.UrlDecode(order.Description)))</div>
-            }
-            else
-            {
-                <div class="nodata-txt">暂无说明</div>
             }
         }
     </div>

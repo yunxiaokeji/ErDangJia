@@ -97,11 +97,12 @@ input[type="file"] > input[type="button"]::-moz-focus-inner{padding:0;border:non
 .pTop30 {padding-top:30px;}
 .pTop50 {padding-top:50px;}
 
+.pBottom10 {padding-bottom:10px;}
 .pBottom20 {padding-bottom:20px;}
 .pBottom50 {padding-bottom:50px;}
 
 .pAll10 {padding:10px;}
-.pAll15 {padding:10px;}
+.pAll15 {padding:15px;}
 .pAll20 {padding:20px;}
 /*margin*/ 
 .mTop1 {margin-top:1px;}

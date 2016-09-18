@@ -34,7 +34,7 @@
 	            for(var i=0, j=$data.length; i < j; i++){
 	            var item = $data[i];
             %}
-                <option value="{%=item.AttrID%}">{%=item.AttrName%}</option>
+                <option value="{%=item.AttrID%}">{%=item.AttrName+"["+item.Description+"]"%}</option>
             {% } %}
          </select>
     </li>
@@ -46,7 +46,7 @@
 	            for(var i=0, j=$data.length; i < j; i++){
 	            var item = $data[i];
             %}
-                <option value="{%=item.AttrID%}">{%=item.AttrName%}</option>
+                <option value="{%=item.AttrID%}">{%=item.AttrName+"["+item.Description+"]"%}</option>
             {% } %}
          </select>
     </li>

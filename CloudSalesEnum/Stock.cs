@@ -78,5 +78,19 @@ namespace CloudSalesEnum
         [DescriptionAttribute("已删除")]
         Delete = 9
     }
+    /// <summary>
+    /// 供应商类型
+    /// </summary>
+    public enum EnumProviderType
+    {
+        [DescriptionAttribute("全部")]
+        All = -1,
+        [DescriptionAttribute("普通")]
+        Normal = 0,
+        [DescriptionAttribute("工厂")]
+        Factory = 1,
+        [DescriptionAttribute("店铺")]
+        Store = 2
+    }
 
 }

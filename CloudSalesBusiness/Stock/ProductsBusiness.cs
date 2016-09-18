@@ -458,7 +458,7 @@ namespace CloudSalesBusiness
 
         #region 供应商
 
-        public List<ProvidersEntity> GetProviders(string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
+        public List<ProvidersEntity> GetProviders(EnumProviderType type, string keyWords, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientID)
         {
             var dal = new StockDAL();
 
@@ -466,6 +466,10 @@ namespace CloudSalesBusiness
             if (!string.IsNullOrEmpty(keyWords))
             {
                 where += " and (Name like '%" + keyWords + "%' or Contact like '%" + keyWords + "%' or MobileTele like '%" + keyWords + "%') ";
+            }
+            if (type != EnumProviderType.All)
+            {
+                where += " and ProviderType=" + (int)type;
             }
 
             DataTable dt = CommonBusiness.GetPagerData("Providers", "*", where, "AutoID", pageSize, pageIndex, out totalCount, out pageCount);
@@ -476,6 +480,7 @@ namespace CloudSalesBusiness
                 ProvidersEntity model = new ProvidersEntity();
                 model.FillData(dr);
                 model.City = CommonBusiness.Citys.Where(c => c.CityCode == model.CityCode).FirstOrDefault();
+                model.ProviderTypeStr = CommonBusiness.GetEnumDesc<EnumProviderType>((EnumProviderType)model.ProviderType);
                 list.Add(model);
             }
             return list;

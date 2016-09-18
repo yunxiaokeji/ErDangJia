@@ -25,7 +25,7 @@ define(function (require, exports, module) {
     };
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (type, providers,sourcetype) {
+    ObjectJS.init = function (type, providers, sourcetype) {
         var _self = this;
         Params.type = type;
         Params.sourcetype = sourcetype;
@@ -55,30 +55,9 @@ define(function (require, exports, module) {
             $("#btnSubmit").html("提交采购单 ( " + data.Quantity + " ) ");
         });
 
-
-        require.async("dropdown", function () {
-            var sourceList = [
-                { Name: "本地采购", SourceType: "1" },
-                { Name: "在线下单", SourceType: "2" }
-            ];
-            var dropdown1 = $("#ddlSourceType").dropdown({
-                prevText: "订单来源-",
-                defaultText: "全部",
-                defaultValue: Params.sourcetype,
-                data: sourceList,
-                dataValue: "SourceType",
-                dataText: "Name",
-                width: "180",
-                isposition: true,
-                onChange: function (data) {
-                    Params.pageIndex = 1;
-                    Params.sourcetype = data.value;
-                    _self.getList();
-                }
-            });
-        });
         if (Params.sourcetype == 2) {
-            $("#ddlSourceType").hide();
+            $(".search-type li").removeClass("hover");
+            $(".search-type li[data-id='2']").addClass("hover");
         }
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({
@@ -103,6 +82,18 @@ define(function (require, exports, module) {
                 Params.keyWords = keyWords;
                 _self.getList();
             });
+        });
+
+        //切换类型
+        $(".search-type li").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("hover")) {
+                _this.siblings().removeClass("hover");
+                _this.addClass("hover");
+                Params.pageIndex = 1;
+                Params.sourcetype = _this.data("id");
+                _self.getList();
+            }
         });
 
         //切换状态

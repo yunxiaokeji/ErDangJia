@@ -27,7 +27,7 @@
                 ObjectJS.setImagesSize();
             }, 300);
         }
-       
+       E:\YX.Project\edj\YXERP\modules/m/scripts/
         //菜单切换模块事件
         $("nav ul li").click(function () {
             var _this = $(this);

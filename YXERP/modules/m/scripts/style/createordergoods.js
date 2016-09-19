@@ -61,7 +61,7 @@
                 //数量验证
                 var totalnum = 0;
                 $("#sizelist .quantity").each(function () {
-                    totalnum += parseInt($(this).val());
+                    totalnum += parseInt($(this).val() * 1);
                 });
                 if (totalnum > 0) {
                     $('#colorlist li.select').addClass("hasquantity");
@@ -98,8 +98,9 @@
                         goodscode: model.CMGoodsCode,
                         parentprid: model.ClientID,
                         price: model.Price,
-                        productid:model.ProductID,
-                        dids: ""
+                        productid: model.ProductID,
+                        dids: "",
+                        cmclientid: model.ClientID
                     };
 
                     ObjectJS.createOrders(item);

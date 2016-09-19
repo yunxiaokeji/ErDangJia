@@ -518,7 +518,11 @@ namespace CloudSalesBusiness
             object obj = CommonBusiness.Select("Providers", "  top 1 ProviderID ", "ClientID='" + clientid + "' and Status<>9");
             return obj != null ? obj.ToString() : "";
         }
-
+        public string GetProviderIDByCMID(string clientid, string cmclientid)
+        {
+            object obj = CommonBusiness.Select("Providers", "  top 1 ProviderID ", "ClientID='" + clientid + "' and CMClientid='" + cmclientid + "' and Status<>9");
+            return obj != null ? obj.ToString() : "";
+        }
         public string AddProviders(string name, string contact, string mobile, string email, string cityCode, string address, string remark, string cmClientID, string cmClientCode, string operateID, string agentid, string clientID,int type=0)
         {
             return ProductsDAL.BaseProvider.AddProviders(name, contact, mobile, email, cityCode, address, remark, cmClientID, cmClientCode, operateID, agentid, clientID, type);

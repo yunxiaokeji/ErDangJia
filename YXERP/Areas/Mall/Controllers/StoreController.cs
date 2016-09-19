@@ -232,37 +232,38 @@ namespace YXERP.Areas.Mall.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string goodsid, string goodscode,string goodsname,
-            string personname, string mobiletele, string citycode, string address, string dids, string cmclientid, decimal totalFee = 0)
+        
+        public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid,
+            string personname, string mobiletele, string citycode, string address, string dids, decimal totalFee = 0)
         {
+            int result = 0;
+            string error = string.Empty;
             if (CurrentUser == null)
             {
-                JsonDictionary.Add("result", -9);
-                JsonDictionary.Add("errMsg", "未登录请登陆后再提交");
-                return new JsonResult
-                {
-                    Data = JsonDictionary,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
-            } 
-            CloudSalesEntity.Users user = CurrentUser;
-            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, cmclientid);
-            provideid = string.IsNullOrEmpty(provideid) ? parentprid : provideid;
-            //2.生成采购单据 
-            string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), provideid, totalFee, "", "", 2, user.UserID,
-                user.AgentID, user.ClientID,personname,mobiletele,address,citycode);
-            if (string.IsNullOrEmpty(purid))
-            {
-                JsonDictionary.Add("result", 0);
-                JsonDictionary.Add("errMsg", "采购单生成失败，请稍后重试");
-                return new JsonResult
-                {
-                    Data = JsonDictionary,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
+                result = -9;
+                error = "未登录请登陆后再提交";
             }
-            JsonDictionary.Add("PurchaseID", purid);
-            JsonDictionary.Add("result", 1); 
+            else
+            {
+                string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
+                provideid = string.IsNullOrEmpty(provideid) ? parentprid : provideid;
+                //2.生成采购单据 
+                string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), provideid, totalFee, "", "", 2, CurrentUser.UserID,
+                    CurrentUser.AgentID, CurrentUser.ClientID, personname, mobiletele, address, citycode);
+                if (string.IsNullOrEmpty(purid))
+                {
+                    result = -9;
+                    error = "采购单生成失败，请稍后重试";
+                }
+                else
+                {
+                    result = 1;
+                    JsonDictionary.Add("PurchaseID", purid);
+                }
+            }
+            JsonDictionary.Add("result", result);
+            JsonDictionary.Add("errMsg", error);
+
             return new JsonResult
             {
                 Data = JsonDictionary,

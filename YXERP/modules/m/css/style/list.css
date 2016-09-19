@@ -127,14 +127,14 @@ background-color: #fff;
 
 /*个人中心*/
 .account-header { height:190px;padding-top:50px;
-                  background:-webkit-gradient(linear,left top,left bottom,from(#2F73B8),to(#b1d3f5));
+                  background:-webkit-gradient(linear,left top,left bottom,from(#5990C8),to(#b1d3f5));
                   background: -moz-linear-gradient(top,  #4a98e7,  #b1d3f5);
                   background:-ms-linear-gradient(top,  #4a98e7,  #b1d3f5);
 }
 .module-items li{line-height:50px;border-bottom:1px solid #ddd;text-indent:5px;}
-.module-items li span { color:#444;}
-.exit-sys { width:200px;line-height:40px;height:40px;color:#fff;font-size:18px;
-            background:#4a98e7;
+.module-items li span { color:#666;font-size:16px;}
+.exit-sys { width:90%;line-height:40px;height:40px;color:#fff;font-size:18px;
+            background:#4a98e7;border-radius:2px;
 }
 
 @media screen and (max-width:360px) {

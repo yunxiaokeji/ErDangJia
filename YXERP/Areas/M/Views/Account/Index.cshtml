@@ -13,7 +13,7 @@
     <div class="account-avator center">
         <img onerror="this.src='/modules/images/defaultavatar.png'" src="@(!string.IsNullOrEmpty(user.Avatar)?user.Avatar:"/modules/images/defaultavatar.png")" style="width:100px;height:100px;border-radius:50%;" />
     </div>
-    <div class="account-name center" style="color:#fff;font-size:18px;margin-top:20px;">
+    <div class="account-name center" style="color:#fff;font-size:24px;margin-top:20px;">
         @user.Name
     </div>
 </div>
@@ -22,7 +22,7 @@
         <li>
             <a href="/M/Home/ChooseProvider" style="display:block;">
                 <span class="iconfont">&#xe654;</span>
-                <span>&nbsp;重新选择店铺</span>
+                <span>&nbsp;已关注店铺</span>
             </a>
         </li>
     </ul>

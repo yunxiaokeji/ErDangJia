@@ -11,5 +11,5 @@ top:0;
 color:#BFD2F2;
 }
 .provider-list { margin-top:50px;}
-.provider-items li { line-height: 40px; border-bottom: 1px solid #ddd; padding:0 10px;background-color:#fcfcfc; }
+.provider-items li { line-height: 50px; border-bottom: 1px solid #ddd; padding:0 10px;background-color:#fcfcfc; }
 .provider-items li a { color:#666;}

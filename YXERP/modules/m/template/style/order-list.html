@@ -11,32 +11,28 @@
 %}
         <ul class="listabove row">
             <li style="">
-                <a href="/M/Orders/Detail/{%=item.DocID%}" style="padding:1px;border:1px solid #ddd;font-size:0;"><img class="task-list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.orderImage%}' /></a>
+                <a href="/M/Orders/Detail/{%=item.DocID%}" style="padding:1px;border:1px solid #ddd;font-size:0;"><img class="task-list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=detail.ProductImage==""?"/modules/m/images/img-noimg.png":detail.ProductImage%}' /></a>
             </li>     
             <li class="center-list-task">
                 <!--任务详情-->
-                <div class="mTop4">
+                <div style="margin-top:12px;">
                     <div style="display:table;width:100%;">   
                         <div style="display:table-cell;">
                             <a class="color333 details" style="margin-top:0;word-break:break-all;" href="/M/Orders/Detail/{%=item.DocID%}">{%=item.Details.length==0?'--':item.Details[0].ProductName%}</a>
                         </div>
-                        <div style="display:table-cell;vertical-align:top;padding:0 10px;" class="blue tRight">￥{%=item.TotalMoney%}</div>
+                        
                     </div>
                     <div style="line-height:24px;">
-                        <span class="width80 long left">下单数量：</span>
-                        <span class="long left">
+                        <span class="left">数量：</span>
+                        <span class="left">
                             {%=totalquantity%}
                         </span>
-                        <div class="clear"></div>
-                    </div>
-                    <div style="line-height:24px;">
-                        <span class="width80 long left">订单进度：</span>
-                        <span class="long left">{%=item.StatusStr%}</span>
+                        <span class="blue right mRight10 mTop1">￥{%=item.TotalMoney%}</span>
                         <div class="clear"></div>
                     </div>             
-                    <div style="line-height:24px;">
-                        <span class="width80 long left">下单时间：</span>
-                        <span class="long left">{%=item.CreateTime.toDate('yyyy-MM-dd')%}</span>
+                    <div style="line-height:24px;margin-top:8px;">
+                        <span class="left">{%=item.StatusStr%}</span>
+                        <span class="right mRight10">{%=item.CreateTime.toDate('yyyy-MM-dd')%}</span>
                         <div class="clear"></div>
                     </div>                                              
                     <div class="clear"></div>

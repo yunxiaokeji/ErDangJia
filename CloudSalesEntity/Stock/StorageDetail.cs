@@ -166,6 +166,8 @@ namespace CloudSalesEntity
         public string Imgs { get; set; }
 
         public string DepotCode { get; set; }
+
+        public string ProductImage { get; set; }
         /// <summary>
         /// 填充数据
         /// </summary>

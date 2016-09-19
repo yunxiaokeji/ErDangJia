@@ -27,7 +27,7 @@
     </script>
 }
 <header>
-        <a class="btn-return" href = "javascript:if(history.length>1){ history.go(-1);} else{location.href='/task/list'}"><i class="return-icon iconfont">&#xe60a;</i></a>
+        <a class="btn-return" href = "javascript:if(history.length>1){ history.go(-1);} else{location.href='/home/index'}"><i class="return-icon iconfont">&#xe60a;</i></a>
         <div class="mLeft50 font16"> 款式详情</div>
     </header>
 
@@ -98,24 +98,35 @@
 </nav>
 
 <div class="main-box">
-    <ul class="table-add">
-            <li><span class="column-title">款式编码：</span><span>@order.ProductCode</span></li>
-            <li><span class="column-title">产品毛重：</span><span>@(order.Weight.Value.ToString("f2"))g</span></li>
-            <li><span class="column-title">累计销售：</span><span>@(order.SaleCount)</span></li>
-            <li><span class="column-title">颜色：</span>
-                @foreach (var attr in order.AttrLists)
-                { 
-                    <span class="mRight5">@attr.AttrValues[0].ValueName</span>
-                 }
-            </li>
-        </ul>
-    <div class="description pAll15">
-        @{
-            if (!string.IsNullOrEmpty(order.Description))
-            {
-                <div class="">@(new MvcHtmlString(Server.UrlDecode(order.Description)))</div>
+    <div class="description">
+        <ul class="table-add">
+                <li>
+                    <span class="column-title">款式编码：</span>
+                    <span>@order.ProductCode</span></li>
+                <li>
+                    <span class="column-title">产品毛重：</span>
+                    <span>@(order.Weight.Value.ToString("f2"))g</span>
+                </li>
+                <li>
+                    <span class="column-title">累计销售：</span>
+                    <span>@(order.SaleCount)</span>
+                </li>
+                <li>
+                    <span class="column-title">颜色：</span>
+                    @foreach (var attr in order.AttrLists)
+                    {
+                        <span class="mRight5">@attr.AttrValues[0].ValueName</span>
+                    }
+                </li>
+            </ul>
+        <div class="pAll15">
+            @{
+                if (!string.IsNullOrEmpty(order.Description))
+                {
+                    <div class="">@(new MvcHtmlString(Server.UrlDecode(order.Description)))</div>
+                }
             }
-        }
+        </div>
     </div>
 </div>
 

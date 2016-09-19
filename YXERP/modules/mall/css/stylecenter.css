@@ -3,7 +3,7 @@
 .divcenter .menuul li{ float: right;color: #999;padding: 0px 8px;}
 .divcenter .menuul li a{ color: #999;float: right;cursor: pointer;font-size: 12px;}
 .divcenter .menuul li a:hover{color: #f50;}
-.divcenter .categoryMenu{line-height: 40px; padding-right: 10px; color: #fff; background-color: #42c5cc; font-size: 14px; cursor: pointer; position: relative;}
+.divcenter .categoryMenu{line-height: 40px; padding-right: 10px; color: #fff; background-color: #f39b4d; font-size: 14px; cursor: pointer; position: relative;}
 .divcenter .categoryMenu:hover{background-color: #bb670c !important;}
 .divcenter .categoryMenu.hover{background-color: #bb670c !important; }
 

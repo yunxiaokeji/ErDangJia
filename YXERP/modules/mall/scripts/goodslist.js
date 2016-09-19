@@ -86,9 +86,16 @@
             _self.getProducts();
         });
      
-        $('#spanCategory').click(function () {
-            $('.categoryMenu:first').nextAll().remove();
+        //$('#spanCategory').click(function () {
+        //    $('.categoryMenu').eq(0).nextAll().remove();
+        //    Params.categoryID = $(this).data('id');
+        //    _self.getProducts();
+        //});
+
+        $('.categoryMenu').click(function () {
+            console.log($(this).data('id'));
             Params.categoryID = $(this).data('id');
+            $(this).nextAll().remove();
             _self.getProducts();
         });
 

@@ -15,7 +15,7 @@
         $('.categoryMenu').mouseover(function() {
             _self.getAllCategory($(this).data('id'));
         });
-        $('#divCategory').mouseover(function () {
+        $('#categoryContent').mouseover(function () {
             var xy = $(this).position();
             $('.divcategory').css("left", xy.left);
             $('.divcategory').css("top", xy.top + $(this).height());
@@ -38,9 +38,16 @@
             location.replace($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单');
         });
         _self.getClientDetail();
-       
+        _self.getAllCategory('');
     }
     ObjectJS.getAllCategory = function (categpryid) {
+        if (categpryid == $('.categoryMenu:last').data('id') && categpryid !='-1') {
+            return;
+        }
+        if ($('.categoryMenu:last').data('id') == '-1') {
+            $('.categoryMenu:last').data('id', '');
+        }
+        categpryid = categpryid == '-1' ? '' : categpryid;
         var _self = this;
         $(".divcategory").html('');
         Global.post("/Mall/Store/GetEdjCateGory", { clientid: _self.clientid, categoryid: categpryid }, function (data) {
@@ -95,8 +102,11 @@
                 }
                 $('.categoryMenu').unbind('mouseover').bind('mouseover', function() {
                     _self.getAllCategory($(this).data('id'));
-                }); 
-                 
+                });
+                $('.categoryMenu').click(function() {
+                    $(this).addClass('hover').nextAll().remove();
+                     
+                });
             });
         });
     }
@@ -121,7 +131,7 @@
 
             }
         });
-    }
+    } 
     module.exports = ObjectJS;
 
 });

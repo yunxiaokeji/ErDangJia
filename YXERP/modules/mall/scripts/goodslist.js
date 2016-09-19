@@ -4,8 +4,6 @@
         doT = require("dot"); 
         require("pager");
 
-    var CacheProduct = [];
-
     var Params = {
         categoryID: "",
         clientid: "",
@@ -86,18 +84,10 @@
             _self.getProducts();
         });
      
-        //$('#spanCategory').click(function () {
-        //    $('.categoryMenu').eq(0).nextAll().remove();
-        //    Params.categoryID = $(this).data('id');
-        //    _self.getProducts();
-        //});
-
-        $('.categoryMenu').click(function () {
-            console.log($(this).data('id'));
-            Params.categoryID = $(this).data('id');
-            $(this).nextAll().remove();
+        $('#categoryContent').click(function () {
+            Params.categoryID = $('.categoryMenu.hover').data('id'); 
             _self.getProducts();
-        });
+        }); 
 
         $('#btnPriceRange').click(function () { 
             var beginp = $('#beginprice').val();

@@ -893,27 +893,39 @@ namespace CloudSalesBusiness
                 model.AttrLists = new List<ProductAttr>();
                 model.SaleAttrs = new List<ProductAttr>();
 
-                foreach (DataRow attrtr in ds.Tables["Attrs"].Rows)
-                {
-                    ProductAttr attrModel = new ProductAttr();
-                    attrModel.FillData(attrtr);
-                    attrModel.AttrValues = new List<AttrValue>();
+                //foreach (DataRow attrtr in ds.Tables["Attrs"].Rows)
+                //{
+                //    ProductAttr attrModel = new ProductAttr();
+                //    attrModel.FillData(attrtr);
+                //    attrModel.AttrValues = new List<AttrValue>();
 
-                    //参数
-                    if (attrModel.Type == (int)EnumAttrType.Parameter)
+                //    //参数
+                //    if (attrModel.Type == (int)EnumAttrType.Parameter)
+                //    {
+                //        foreach (var value in GetProductAttrByID(attrModel.AttrID, model.ClientID).AttrValues)
+                //        {
+                //            if (model.AttrValueList.IndexOf(value.ValueID) >= 0)
+                //            {
+                //                attrModel.AttrValues.Add(value);
+                //                model.AttrLists.Add(attrModel);
+                //                break;
+                //            }
+                //        }
+                //    }
+                //    else
+                //    {
+                //        model.SaleAttrs.Add(attrModel);
+                //    }
+                //}
+
+                foreach (var str in model.SaleAttrStr.Split(','))
+                {
+                    if (!string.IsNullOrEmpty(str))
                     {
-                        foreach (var value in GetProductAttrByID(attrModel.AttrID, model.ClientID).AttrValues)
-                        {
-                            if (model.AttrValueList.IndexOf(value.ValueID) >= 0)
-                            {
-                                attrModel.AttrValues.Add(value);
-                                model.AttrLists.Add(attrModel);
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
+                        ProductAttr attrModel = new ProductAttr();
+                        attrModel.AttrID = str;
+                        attrModel.AttrName = str;
+                        attrModel.AttrValues = new List<AttrValue>();
                         model.SaleAttrs.Add(attrModel);
                     }
                 }
@@ -935,7 +947,8 @@ namespace CloudSalesBusiness
                                     && attrModel.AttrValues.Where(v => v.ValueName.ToLower() == attr.Split(':')[1].ToLower()).Count() == 0)
                                 {
                                     AttrValue valueModel = new AttrValue();
-                                    valueModel.ValueName = attr.Split(':')[1].ToLower();
+                                    valueModel.ValueID = attr.Split(':')[1].ToUpper();
+                                    valueModel.ValueName = attr.Split(':')[1].ToUpper();
                                     attrModel.AttrValues.Add(valueModel);
                                 }
                             }

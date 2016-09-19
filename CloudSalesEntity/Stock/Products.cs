@@ -200,6 +200,9 @@ namespace CloudSalesEntity
 			set{ _saleattr=value;}
 			get{return _saleattr;}
 		}
+
+        public string SaleAttrStr { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

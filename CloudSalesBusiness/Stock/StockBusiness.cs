@@ -273,11 +273,11 @@ namespace CloudSalesBusiness
             return bl;
         }
 
-        public static string AddPurchaseDoc(string productid, string ids, string providerid, decimal totalfee, string remark, string wareid,int sourcetype, string userid,string agentid, string clientid
+        public static string AddPurchaseDoc(string productid, string ids, string cmClientID, decimal totalfee, string remark, string wareid,int sourcetype, string userid,string agentid, string clientid
             ,string personname,string mobilephone,string address,string citycode)
         {
             string guid = Guid.NewGuid().ToString();
-            bool bl = StockDAL.AddPurchaseDoc(guid, productid, (int)EnumDocType.RK, ids, providerid, totalfee, remark, wareid, sourcetype, userid, clientid, agentid, personname, mobilephone, address, citycode);
+            bool bl = StockDAL.AddPurchaseDoc(guid, productid, (int)EnumDocType.RK, ids, cmClientID, totalfee, remark, wareid, sourcetype, userid, clientid, agentid, personname, mobilephone, address, citycode);
             if (bl)
             {
                 //日志

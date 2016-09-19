@@ -245,10 +245,8 @@ namespace YXERP.Areas.Mall.Controllers
             }
             else
             {
-                string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, parentprid);
-                provideid = string.IsNullOrEmpty(provideid) ? parentprid : provideid;
-                //2.生成采购单据 
-                string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), provideid, totalFee, "", "", 2, CurrentUser.UserID,
+
+                string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), parentprid, totalFee, "", "", 2, CurrentUser.UserID,
                     CurrentUser.AgentID, CurrentUser.ClientID, personname, mobiletele, address, citycode);
                 if (string.IsNullOrEmpty(purid))
                 {

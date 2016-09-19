@@ -161,6 +161,8 @@ namespace CloudSalesEntity
 			get{return _UnitID;}
 		}
 
+        public string UnitName { get; set; }
+
         public ProductUnit SmallUnit { get; set; }
 
 		/// <summary>
@@ -417,6 +419,8 @@ namespace CloudSalesEntity
 		}
 
 		#endregion Model
+
+        public string AttrValueStr { get; set; }
 
         public string BrandName { get; set; }
 

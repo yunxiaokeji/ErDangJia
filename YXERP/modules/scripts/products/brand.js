@@ -64,7 +64,7 @@ define(function (require, exports, module) {
                             BrandID: model ? model.BrandID : "",
                             Name: $("#brandName").val().trim(),
                             AnotherName: $("#anotherName").val().trim(),
-                            IcoPath: $("#brandImg").data("src"),
+                            IcoPath: $("#brandImg").attr("src"),
                             CountryCode: "0086",
                             CityCode: BrandCity.getCityCode(),
                             Status: $("#brandStatus").prop("checked") ? 1 : 0,
@@ -104,37 +104,29 @@ define(function (require, exports, module) {
                     cityCode: model.CityCode
                 });
 
-                BrandIco = Upload.createUpload({
-                    element: "#brandIco",
-                    buttonText: "更换商标",
-                    className: "",
-                    data: { folder: '', action: 'edit', oldPath: model.IcoPath },
-                    success: function (data, status) {
-                        if (data.Items.length > 0) {
-                            $("#brandImg").data("src", data.Items[0]);
-                            $("#brandImg").attr("src", data.Items[0] + "?" + Global.guid());
-                        } else {
-                            alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
-                        }
-                    }
+                Upload.uploader({
+                    browse_button: 'brandIco',
+                    file_path: "/Content/UploadFiles/PdtDetail/",
+                    picture_container: "orderImages",
+                    multi_selection: false,
+                    maxSize: 1,
+                    successItems: '#brandImg',
+                    fileType: 1,
+                    init: {}
                 });
             } else {
                 BrandCity = City.createCity({
                     elementID: "brandCity"
                 });
-                BrandIco = Upload.createUpload({
-                    element: "#brandIco",
-                    buttonText: "选择商标",
-                    className: "",
-                    data: { folder: '', action: 'add', oldPath: "" },
-                    success: function (data, status) {
-                        if (data.Items.length > 0) {
-                            $("#brandImg").data("src", data.Items[0]);
-                            $("#brandImg").attr("src", data.Items[0] + "?" + Global.guid());
-                        } else {
-                            alert("只能上传jpg/png/gif类型的图片，且大小不能超过10M！");
-                        }
-                    }
+                Upload.uploader({
+                    browse_button: 'brandIco',
+                    file_path: "/Content/UploadFiles/PdtDetail/",
+                    picture_container: "orderImages",
+                    multi_selection: false,
+                    maxSize: 1,
+                    successItems: '#brandImg',
+                    fileType: 1,
+                    init: {}
                 });
             }
         });

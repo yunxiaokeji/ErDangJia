@@ -568,6 +568,10 @@ namespace YXERP.Controllers
             {
                 model.AttrValueList = model.AttrValueList.Substring(0, model.AttrValueList.Length - 1);
             }
+            if (!string.IsNullOrEmpty(model.AttrValueStr))
+            {
+                model.AttrValueStr = model.AttrValueStr.Substring(0, model.AttrValueStr.Length - 1);
+            }
 
             string id = "";
             if (string.IsNullOrEmpty(model.ProductID))
@@ -583,7 +587,7 @@ namespace YXERP.Controllers
                         model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID,
                         model.UnitID,
                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList,
-                        model.ValueList, model.AttrValueList,
+                        model.ValueList, model.AttrValueList, model.AttrValueStr,
                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1,
                         model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                         model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode,
@@ -594,7 +598,7 @@ namespace YXERP.Controllers
             else
             {
                 bool bl = new ProductsBusiness().UpdateProduct(model.ProductID, model.ProductCode, model.ProductName, model.GeneralName, model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
-                                                        model.BigSmallMultiple.Value, model.Status.Value, model.CategoryID, model.AttrList, model.ValueList, model.AttrValueList,
+                                                        model.BigSmallMultiple.Value, model.Status.Value, model.CategoryID, model.AttrList, model.ValueList, model.AttrValueList, model.AttrValueStr,
                                                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1, model.IsRecommend.Value == 1, model.IsAllow, model.IsAutoSend, model.EffectiveDays.Value,
                                                         model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
                 if (bl)

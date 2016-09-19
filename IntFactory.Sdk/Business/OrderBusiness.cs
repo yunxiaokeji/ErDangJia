@@ -77,8 +77,8 @@ namespace IntFactory.Sdk
             string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.goodsID, clientid);
             if (string.IsNullOrEmpty(pid))
             {
-                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "", "", 0, categoryid, 1, "", "", ""
-                    , ord.finalPrice, ord.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, ord.orderImage, "", "", new List<ProductDetail>(), ord.goodsID, ord.intGoodsCode, userid, agentid, clientid, out result);
+                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "件", "件", 1, categoryid, 1, "", "", "", "",
+                     ord.finalPrice, ord.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, ord.orderImage, "", "", new List<ProductDetail>(), ord.goodsID, ord.intGoodsCode, userid, agentid, clientid, out result);
 
                 CheckProductDetail(pid, ord.details, ord.finalPrice, clientid, userid, ord.goodsID, ord.intGoodsCode, ord.goodsName);
             } 

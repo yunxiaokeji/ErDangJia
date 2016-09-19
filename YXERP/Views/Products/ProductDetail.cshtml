@@ -75,7 +75,7 @@
             {
                 foreach (CloudSalesEntity.ProductAttr attr in model.Category.AttrLists)
                 {
-                    <li data-id="@attr.AttrID" class="product-attr">
+                    <li data-id="@attr.AttrID" data-name="@attr.AttrName" class="product-attr">
                         <span class="column-name">@attr.AttrName：</span>
                         <select id="@attr.AttrID">
                             @foreach (CloudSalesEntity.AttrValue value in attr.AttrValues)
@@ -92,7 +92,7 @@
                 <select id="smallUnit">
                 @foreach (CloudSalesEntity.ProductUnit unit in (List<CloudSalesEntity.ProductUnit>)ViewBag.UnitList)
                 {
-                    <option value="@unit.UnitID">@unit.UnitName</option> 
+                    <option value="@unit.UnitID" data-name="@unit.UnitName">@unit.UnitName</option> 
                 }
                 </select>
             </li>

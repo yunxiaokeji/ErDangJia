@@ -122,26 +122,26 @@ namespace CloudSalesBusiness
 
         public string AddBrand(string name, string anotherName, string icoPath, string countryCode, string cityCode, int status, string remark, string brandStyle, string operateIP, string operateID, string clientID)
         {
-            if (!string.IsNullOrEmpty(icoPath))
-            {
-                if (icoPath.IndexOf("?") > 0)
-                {
-                    icoPath = icoPath.Substring(0, icoPath.IndexOf("?"));
-                }
+            //if (!string.IsNullOrEmpty(icoPath))
+            //{
+            //    if (icoPath.IndexOf("?") > 0)
+            //    {
+            //        icoPath = icoPath.Substring(0, icoPath.IndexOf("?"));
+            //    }
 
-                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                if (!directory.Exists)
-                {
-                    directory.Create();
-                }
+            //    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+            //    if (!directory.Exists)
+            //    {
+            //        directory.Create();
+            //    }
 
-                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icoPath));
-                icoPath = FILEPATH + file.Name;
-                if (file.Exists)
-                {
-                    file.MoveTo(HttpContext.Current.Server.MapPath(icoPath));
-                }
-            }
+            //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icoPath));
+            //    icoPath = FILEPATH + file.Name;
+            //    if (file.Exists)
+            //    {
+            //        file.MoveTo(HttpContext.Current.Server.MapPath(icoPath));
+            //    }
+            //}
 
             return new ProductsDAL().AddBrand(name, anotherName, icoPath, countryCode, cityCode, status, remark, brandStyle, operateIP, operateID, clientID);
         }
@@ -155,26 +155,26 @@ namespace CloudSalesBusiness
 
         public bool UpdateBrand(string brandID, string name, string anotherName, string countryCode, string cityCode, string icopath, int status, string remark, string brandStyle, string operateIP, string operateID)
         {
-            if (!string.IsNullOrEmpty(icopath) && icopath.IndexOf(TempPath) >= 0)
-            {
-                if (icopath.IndexOf("?") > 0)
-                {
-                    icopath = icopath.Substring(0, icopath.IndexOf("?"));
-                }
+            //if (!string.IsNullOrEmpty(icopath) && icopath.IndexOf(TempPath) >= 0)
+            //{
+            //    if (icopath.IndexOf("?") > 0)
+            //    {
+            //        icopath = icopath.Substring(0, icopath.IndexOf("?"));
+            //    }
 
-                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                if (!directory.Exists)
-                {
-                    directory.Create();
-                }
+            //    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+            //    if (!directory.Exists)
+            //    {
+            //        directory.Create();
+            //    }
 
-                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icopath));
-                icopath = FILEPATH + file.Name;
-                if (file.Exists)
-                {
-                    file.MoveTo(HttpContext.Current.Server.MapPath(icopath));
-                }
-            }
+            //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(icopath));
+            //    icopath = FILEPATH + file.Name;
+            //    if (file.Exists)
+            //    {
+            //        file.MoveTo(HttpContext.Current.Server.MapPath(icopath));
+            //    }
+            //}
             var dal = new ProductsDAL();
             return dal.UpdateBrand(brandID, name, anotherName, countryCode, cityCode, status, icopath, remark, brandStyle, operateIP, operateID);
         }
@@ -763,8 +763,6 @@ namespace CloudSalesBusiness
                 model.FillData(ds.Tables["Product"].Rows[0]);
                 model.Category = GetCategoryDetailByID(model.CategoryID);
 
-                model.SmallUnit = GetUnitByID(model.UnitID, model.ClientID);
-
                 model.ProductDetails = new List<ProductDetail>();
                 foreach (DataRow item in ds.Tables["Details"].Rows)
                 {
@@ -888,8 +886,6 @@ namespace CloudSalesBusiness
             {
                 model.FillData(ds.Tables["Product"].Rows[0]);
 
-                model.SmallUnit = GetUnitByID(model.UnitID, model.ClientID);
-
                 model.AttrLists = new List<ProductAttr>();
                 model.SaleAttrs = new List<ProductAttr>();
 
@@ -966,7 +962,7 @@ namespace CloudSalesBusiness
         }
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
-                                 string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
+                                 string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, decimal commonprice, decimal price, decimal weight, bool isnew,
                                  bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description,
                                  List<ProductDetail> details,string cmgoodsid,string cmgoodscode, string operateid, string agentid, string clientid, out int result)
         {
@@ -974,7 +970,7 @@ namespace CloudSalesBusiness
             {
                 var dal = new ProductsDAL();
                 string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
-                                        valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
+                                        valuelist, attrvaluelist, attrvalueStr, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
                                         productImg, shapeCode, cmgoodsid, cmgoodscode,description, operateid, clientid, out result);
                 //产品添加成功添加子产品
                 if (!string.IsNullOrEmpty(pid))
@@ -1039,34 +1035,34 @@ namespace CloudSalesBusiness
         }
 
         public bool UpdateProduct(string productid, string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
-                         int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, decimal commonprice, decimal price, decimal weight, bool isnew,
+                         int status, string categoryid, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, decimal commonprice, decimal price, decimal weight, bool isnew,
                          bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description, string operateid, string clientid, out int result)
         {
 
-            if (!string.IsNullOrEmpty(productImg) && productImg.IndexOf(TempPath) >= 0)
-            {
-                if (productImg.IndexOf("?") > 0)
-                {
-                    productImg = productImg.Substring(0, productImg.IndexOf("?"));
-                }
+            //if (!string.IsNullOrEmpty(productImg) && productImg.IndexOf(TempPath) >= 0)
+            //{
+            //    if (productImg.IndexOf("?") > 0)
+            //    {
+            //        productImg = productImg.Substring(0, productImg.IndexOf("?"));
+            //    }
 
-                DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                if (!directory.Exists)
-                {
-                    directory.Create();
-                }
+            //    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+            //    if (!directory.Exists)
+            //    {
+            //        directory.Create();
+            //    }
 
-                FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
-                productImg = FILEPATH + file.Name;
-                if (file.Exists)
-                {
-                    file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
-                }
-            }
+            //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
+            //    productImg = FILEPATH + file.Name;
+            //    if (file.Exists)
+            //    {
+            //        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
+            //    }
+            //}
 
             var dal = new ProductsDAL();
             return dal.UpdateProduct(productid, productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, status, categoryid, attrlist,
-                                    valuelist, attrvaluelist, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg,
+                                    valuelist, attrvaluelist, attrvalueStr, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount, productImg,
                                     shapeCode, description, operateid, clientid, out result);
         }
 
@@ -1080,26 +1076,26 @@ namespace CloudSalesBusiness
         {
             lock (SingleLock)
             {
-                if (!string.IsNullOrEmpty(productImg) && productImg.IndexOf(TempPath) >= 0)
-                {
-                    if (productImg.IndexOf("?") > 0)
-                    {
-                        productImg = productImg.Substring(0, productImg.IndexOf("?"));
-                    }
+                //if (!string.IsNullOrEmpty(productImg) && productImg.IndexOf(TempPath) >= 0)
+                //{
+                //    if (productImg.IndexOf("?") > 0)
+                //    {
+                //        productImg = productImg.Substring(0, productImg.IndexOf("?"));
+                //    }
 
-                    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
-                    if (!directory.Exists)
-                    {
-                        directory.Create();
-                    }
+                //    DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath(FILEPATH));
+                //    if (!directory.Exists)
+                //    {
+                //        directory.Create();
+                //    }
 
-                    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
-                    productImg = FILEPATH + file.Name;
-                    if (file.Exists)
-                    {
-                        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
-                    }
-                }
+                //    FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath(productImg));
+                //    productImg = FILEPATH + file.Name;
+                //    if (file.Exists)
+                //    {
+                //        file.MoveTo(HttpContext.Current.Server.MapPath(productImg));
+                //    }
+                //}
                 var dal = new ProductsDAL();
                 return dal.UpdateProductDetails(detailid, productid, productCode, shapeCode, bigPrice, attrlist, valuelist, attrvaluelist, price, weight, remark, description, productImg, out result);
             }

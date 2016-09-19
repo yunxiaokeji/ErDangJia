@@ -76,7 +76,7 @@
             <li>
                 <div class="task-code base-info">
                     <span>单位：</span>
-                    <span class="mLeft5">@(order.SmallUnit != null ? (!string.IsNullOrEmpty(order.SmallUnit.UnitName) ? order.SmallUnit.UnitName : "件") : "件")</span>
+                    <span class="mLeft5">@((!string.IsNullOrEmpty(order.UnitName) ? order.UnitName : "件")</span>
                 </div>
             </li>
             <li>

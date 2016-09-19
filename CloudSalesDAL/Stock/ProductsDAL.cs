@@ -418,7 +418,7 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public string AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
+        public string AddCategory(string categoryCode, string categoryName, string pid, int status, string attrlist, string attrListStr, string saleattr, string saleAttrStr, string description, string operateid, string clientid, out int result)
         {
             string id = "";
             SqlParameter[] paras = { 
@@ -429,7 +429,9 @@ namespace CloudSalesDAL
                                        new SqlParameter("@PID",pid),
                                        new SqlParameter("@Status",status),
                                        new SqlParameter("@AttrList",attrlist),
+                                       new SqlParameter("@AttrListStr",attrListStr),
                                        new SqlParameter("@SaleAttr",saleattr),
+                                       new SqlParameter("@SaleAttrStr",saleAttrStr),
                                        new SqlParameter("@Description",description),
                                        new SqlParameter("@CreateUserID",operateid),
                                        new SqlParameter("@ClientID",clientid)
@@ -454,7 +456,7 @@ namespace CloudSalesDAL
             return ExecuteNonQuery("P_AddCategoryAttr", paras, CommandType.StoredProcedure) > 0;
         }
 
-        public bool UpdateCategory(string categoryid, string categoryName, string categoryCode, int status, string attrlist, string saleattr, string description, string operateid, string clientid, out int result)
+        public bool UpdateCategory(string categoryid, string categoryName, string categoryCode, int status, string attrlist, string attrListStr, string saleattr, string saleAttrStr, string description, string operateid, string clientid, out int result)
         {
             string sql = "P_UpdateCategory";
             SqlParameter[] paras = { 
@@ -464,7 +466,9 @@ namespace CloudSalesDAL
                                        new SqlParameter("@CategoryCode",categoryCode),
                                        new SqlParameter("@Status",status),
                                        new SqlParameter("@AttrList",attrlist),
+                                       new SqlParameter("@AttrListStr",attrListStr),
                                        new SqlParameter("@SaleAttr",saleattr),
+                                       new SqlParameter("@SaleAttrStr",saleAttrStr),
                                        new SqlParameter("@UserID",operateid),
                                        new SqlParameter("@ClientID",clientid),
                                        new SqlParameter("@Description",description)

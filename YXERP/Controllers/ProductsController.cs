@@ -460,29 +460,33 @@ namespace YXERP.Controllers
 
         #region 分类
 
-        public JsonResult SavaCategory(string category, string attrlist, string saleattr)
+        public JsonResult SavaCategory(string category)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             Category model = serializer.Deserialize<Category>(category);
             //参数
-            if (!string.IsNullOrEmpty(attrlist))
+            if (!string.IsNullOrEmpty(model.AttrList))
             {
-                attrlist = attrlist.Substring(0, attrlist.Length - 1);
+                model.AttrList = model.AttrList.Substring(0, model.AttrList.Length - 1);
+                model.AttrListStr = model.AttrListStr.Substring(0, model.AttrListStr.Length - 1);
             }
             //规格
-            if (!string.IsNullOrEmpty(saleattr))
+            if (!string.IsNullOrEmpty(model.SaleAttr))
             {
-                saleattr = saleattr.Substring(0, saleattr.Length - 1);
+                model.SaleAttr = model.SaleAttr.Substring(0, model.SaleAttr.Length - 1);
+                model.SaleAttrStr = model.SaleAttrStr.Substring(0, model.SaleAttrStr.Length - 1);
             }
             int result = 0;
 
             if (string.IsNullOrEmpty(model.CategoryID))
             {
-                model = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
+                model = new ProductsBusiness().AddCategory(model.CategoryCode, model.CategoryName, model.PID, model.Status.Value, model.AttrList, model.AttrListStr,
+                                                           model.SaleAttr, model.SaleAttrStr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
             }
             else
             {
-                model = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.CategoryCode, model.Status.Value, attrlist, saleattr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
+                model = new ProductsBusiness().UpdateCategory(model.CategoryID, model.CategoryName, model.CategoryCode, model.Status.Value, model.AttrList, model.AttrListStr,
+                                                              model.SaleAttr, model.SaleAttrStr, model.Description, CurrentUser.UserID, CurrentUser.ClientID, out result);
             }
 
             JsonDictionary.Add("status", result == 1);

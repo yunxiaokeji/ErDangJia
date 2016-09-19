@@ -290,8 +290,7 @@
         var _self = this; 
         var dids = '';
         var details = [];
-        $.each(tempOrder, function(i, obj) {
-            //details.push({DetailID:obj.detailid,Quantity:obj.quantity,Remark:obj.key });
+        $.each(tempOrder, function(i, obj) { 
             dids += obj.detailid + ":" + obj.quantity + ",";
         }); 
         Global.post("/Mall/Store/CreatePurchaseOrder",
@@ -307,8 +306,7 @@
                 citycode: citycode,
                 dids: dids,
                 cmclientid: _self.model.ClientID,
-                address: address
-                //,entity: JSON.stringify(details)
+                address: address 
             }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",

@@ -8,6 +8,7 @@ namespace IntFactory.Sdk
 {
     public class ProductDetailEntity
     {
+        public string detailsID { get; set; }
         public string detailsCode { get; set; }
 
         public string imgS{ get; set; }

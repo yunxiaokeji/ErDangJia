@@ -1,11 +1,9 @@
-﻿@{ 
-    var client = (CloudSalesEntity.Manage.Clients)ViewBag.Client;
-    ViewBag.Title = client.CompanyName+"--款式中心"; 
-    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
+﻿@{  
+   
 }
 @section css{
     <link rel="stylesheet" href="/modules/mall/css/stylecenter.css"/>
-    <link rel="shortcut icon" href="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/mall/images/ico-cmlogo.png")">
+    <link rel="shortcut icon" href="/modules/mall/images/ico-cmlogo.png">
 
     <style>
         #cgbtn{color: #fff;}
@@ -38,7 +36,7 @@
         <div class="clear"></div>
     </div>
 </div>*@
-<div class="header-box" style="background-color: #4a98e7; padding: 0px 20px;">
+@*<div class="header-box" style="background-color: #4a98e7; padding: 0px 20px;">
     <div class="divcenter">
         <div class="left" id="divCategory">
         <div class="header-title left pLeft10" id="spanCategory" style="border-top: 1px solid #E6E6E6; padding-right: 10px; color: #999; background-color: #ffffff; font-size: 14px; cursor: pointer; position: relative;">所有类目
@@ -50,7 +48,7 @@
         <span class="clear"></span>
     </div>
 
-</div>
+</div>*@
 <div class="divcenter seachlist">
     <div class="orderby">
         <ul class="seachul">
@@ -84,5 +82,4 @@
 
         <div id="pager" class="mTop20"></div>
     </div>
-</div>
-<input hidden="hidden" id="ipturl" type="text" style="display: none;" value="@(ViewBag.Url)"/>
+</div> 

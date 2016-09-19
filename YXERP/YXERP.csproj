@@ -275,6 +275,7 @@
     <Content Include="modules\images\weixin-hover-38.png" />
     <Content Include="modules\images\wx-code.jpg" />
     <Content Include="modules\images\wx_logo64.png" />
+    <Content Include="modules\mall\scripts\layout.js" />
     <Content Include="modules\m\css\style\chooseprovider.css" />
     <Content Include="modules\mall\css\stylecenter.css" />
     <Content Include="modules\mall\images\ico-cmlogo.png" />

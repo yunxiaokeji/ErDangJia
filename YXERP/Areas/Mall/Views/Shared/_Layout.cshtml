@@ -1,5 +1,5 @@
 ﻿@{
-
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"]; 
 }
 <!DOCTYPE html>
 
@@ -12,52 +12,110 @@
 
     @RenderSection("css", false)
 </head>
-<body style="margin: 0;padding: 0;">
+<body id="stylebody" style="margin: 0;padding: 0; min-height: 100%;">
     <div style="width: 100%;">
         <div class="divcenter">
-            <div style="height:40px; line-height: 35px;">
-                <div title="云销科技" class="left font16" style="color: #e48a32;">二当家</div>
+            <div style="height: 40px; line-height: 35px;">
+                <div title="云销科技" class="left" style="color: #e48a32;">二当家</div>
                 <div class="right">
                     <ul class="right menuul">
-                        <li class="right">我的信息</li>
-                        <li class="right">  <a class="right color999" id="cgbtn" title="查看历史采购单">采购订单</a></li>
-                        <li class="right">| <a class="right color999"  href="@(ViewBag.Url)/Default/Index" style="font-size: 12px;" title="进入系统">  &nbsp;进入系统</a></li>
-                        <li class="right">联系客服</li>
-                        <li class="right">帮助中心</li> 
+                        <li class="right"><a title="我的信息">@CurrentUser.Name</a></li>
+                        <li class="right"><a id="purchaseurl" title="查看历史采购单">采购订单</a></li>
+                        <li class="right">| <a href="@(ViewBag.Url)/Default/Index" style="font-size: 12px;" title="进入系统"> &nbsp;进入系统</a></li>
+                        <li class="right"><a href="http://yunxiaokeji.com/About/About#map">联系客服</a></li>
+                        <li class="right"><a href="http://yunxiaokeji.com/">帮助中心</a></li>
                     </ul>
 
                 </div>
             </div>
         </div>
-
-           @* <div class="left" id="imglogo">
-                <span class="left mTop10">
-                        <img src="@(!string.IsNullOrEmpty(((CloudSalesEntity.Manage.Clients) ViewBag.Client).Logo) ? ((CloudSalesEntity.Manage.Clients) ViewBag.Client).Logo : "/modules/mall/images/ico-cmlogo.png")" style="width: 60px; height: 60px;"/></span>
-                <span class="left mTop20 " style="">
-                        <a class="font16">@(((CloudSalesEntity.Manage.Clients) ViewBag.Client).CompanyName)</a><br />
-                        <a class="font9 tRight mLeft30 lineHeight30" style="font-style: italic; letter-spacing: 3px;">&nbsp;  &nbsp;采购-管理就是如此简单</a>
-                    </span>
-            </div>
-            <a class="right mRight10 pTop5" style="color: #4B9CEE" id="cgbtn" title="查看历史采购单">[采购订单]</a>
-            <a class="right mRight10 pTop5" style="color: #4B9CEE" id="myself" title="进入个人中心">[@(((CloudSalesEntity.Users) Session["ClientManager"]).Name)]</a>
-            <div class="searth-module right mRight50 mTop30" data-text="款号/名称模糊搜索..." data-width="180"></div>
-            <a class="right mRight20 pTop5" style="color: #4B9CEE" href="@(ViewBag.Url)/Default/Index" title="返回二当家">[返回]</a>
-            <div class="clear"></div>*@
-       
     </div>
+<div style="width: 100%; background-color: #e48a32;">
+    <div class="divcenter">
+        <div style="height: 100px;">
+            <div class="left mTop30" id="imglogo">
+                <div class="left ">
+                    <img src="/modules/mall/images/ico-cmlogo.png" style="width: 40px; height: 40px;"/>
+                </div>
+                <div class="left mLeft30" id="providerinfo" style="margin-top: -5px; line-height: 28px;">
+                    <div class="font16 colorfff pcompanyName"></div>
+                    <div class="colorfff pname"></div>
+
+                    <div class=" mLeft30 providerdiv hide">
+                        <ul class="seachul mTop10">
+                            <li title="经营模式">
+                                <div class="left mTop3 ">
+                                    <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;">
+                                </div>
+                                <div class="left mLeft5" id="ptype">
+                                    生产商家
+                                </div>
+                            </li>
+                            <li title="联系信息">
+                                <div class="left mTop3 ">
+                                    <img src="/modules/images/ico-usernum.png" style="width: 16px; height: 16px; display: inline-block;">
+                                </div>
+                                <div class="left mLeft5 pname" > 
+                                </div>
+                            </li>
+                            <li title="地址">
+                                <div class="left mTop3 ">
+                                    <img src="/modules/images/ico-address.png" style="width: 16px; height: 16px; display: inline-block;">
+                                </div>
+                                <div class="left mLeft5" id="pcityname" style="color: #000; width: 220px;"> 
+                                </div>
+                            </li>
+                            <li title="规模">
+                                <div class="left mTop3 ">
+                                    <img src="/modules/images/ico-usernum.png" style="width: 16px; height: 16px; display: inline-block;">
+                                </div>
+                                <div class="left mLeft5" style="color: #000;">
+                                    100人以上
+                                </div>
+                            </li>
+                        </ul>
+                        <div style="width: 90%; border-top: 1px solid #999;" class="right mRight10">
+                            <span class="right color999 font14">收藏店铺</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clear"></div>
+            </div>
+            <div class="searth-module right mTop30" data-text="款号/名称模糊搜索..." data-width="300"></div>
+        </div>
+    </div>
+</div>
+<div style="width: 100%; background-color: #fff; height: 170px;">
+</div>
+<div style="width: 100%; background-color: #f39b4d; ">
+    <div class="divcenter" style="height: 40px;">
+        <div class="left" id="divCategory">
+            <div class="header-title left pLeft10 hover categoryMenu " data-id="" id="spanCategory">所有类目</div>
+            <div class="divcategory hide mtop30"></div>
+
+        </div>
+    </div>
+</div> 
 
     @RenderBody()
 
 
     <script type="text/javascript" src="/Scripts/sea.js"></script>
     <script type="text/javascript" src="/Scripts/sea-config.js?v=@(ExpandClass.Version)"></script>
-
+   <script type="text/javascript">
+         seajs.use(["/modules/mall/scripts/layout"], function (obj) {
+             obj.init('@ViewBag.ClientID');
+        });
+    </script>
     @RenderSection("scripts", false)
-    <footer style="width: 100%;height: 50px; position:fixed ;background-color: #434443; bottom: 0px; ">
-        <div class="right mRight30 mTop20" style="color: #fff;">
-            ©2016云销科技 沪ICP备 1999888 号
-        </div>
-    </footer>
+
+<footer style="width: 100%; height: 50px; position: relative; background-color: #434443; bottom: 0px;">
+    <input id="ipturl" type="text" hidden="hidden" class="hide" value="@(ViewBag.Url)"/>
+    <div class="right mRight30 mTop20" style="color: #fff;">
+        ©2016云销科技 沪ICP备 1999888 号
+    </div>
+</footer>
 </body>
 
 </html>

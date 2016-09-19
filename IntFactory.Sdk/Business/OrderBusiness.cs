@@ -71,52 +71,42 @@ namespace IntFactory.Sdk
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateOrder, paras);
         }
 
-        public string ZNGCAddProduct(OrderEntity ord, string categoryid, string provideid, string agentid, string clientid, string userid)
+        public string ZNGCAddProduct(OrderEntity order, string categoryid, string provideid, string agentid, string clientid, string userid)
         {
             int result = 0;
-            string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(ord.intGoodsCode, ord.goodsID, clientid);
+            string pid = ProductsBusiness.BaseBusiness.IsExistCMProduct(order.intGoodsCode, order.goodsID, clientid);
             if (string.IsNullOrEmpty(pid))
             {
-                pid = ProductsBusiness.BaseBusiness.AddProduct(ord.intGoodsCode, ord.goodsName, "", false, provideid, "", "件", "件", 1, categoryid, 1, "", "", "", "",
-                     ord.finalPrice, ord.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, ord.orderImage, "", "", new List<ProductDetail>(), ord.goodsID, ord.intGoodsCode, userid, agentid, clientid, out result);
+                //var cmCategory = Sdk.ClientBusiness.BaseBusiness.GetCategoryByID(order.categoryID);
+                string[] attrs = new string[] { "颜色", "尺码" };
 
-                CheckProductDetail(pid, ord.details, ord.finalPrice, clientid, userid, ord.goodsID, ord.intGoodsCode, ord.goodsName);
+                var list = new List<ProductDetail>();
+                order.OrderAttrs.Where(y => y.AttrType == 2).ToList().ForEach(y =>
+                {
+                    order.OrderAttrs.Where(z => z.AttrType == 1).ToList().ForEach(z =>
+                    {
+                        ProductDetail detail = new ProductDetail();
+                        
+                        detail.ClientID = clientid;
+                        detail.ProductName = "";
+                        detail.ProductID = pid;
+                        detail.Price = order.finalPrice;
+                        detail.BigPrice = order.finalPrice;
+                        detail.SaleAttr = attrs[0] + "," + attrs[1];
+                        detail.AttrValue = y.AttrName.Replace("【", "").Replace("】", "") + "," + z.AttrName.Replace("【", "").Replace("】", "");
+                        detail.SaleAttrValue = attrs[0] + ":" + y.AttrName.Replace("【", "").Replace("】", "") + "," +
+                                               attrs[1] + ":" + z.AttrName.Replace("【", "").Replace("】", "");
+                        detail.Remark = "[" + attrs[0] + "：" + y.AttrName.Replace("【", "").Replace("】", "") + "][" +
+                                              attrs[1] + "：" + z.AttrName.Replace("【", "").Replace("】", "") + "]";
+                        detail.CreateUserID = userid;
+                        list.Add(detail);
+
+                    });
+                });
+                pid = ProductsBusiness.BaseBusiness.AddProduct(order.intGoodsCode, order.goodsName, "", false, provideid, "", "件", "件", 1, categoryid, 1, "", "", "", "", "颜色,尺码",
+                     order.finalPrice, order.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, order.orderImage, "", "", list, order.goodsID, order.intGoodsCode, userid, agentid, clientid, out result);
             } 
             return pid;
-        }
-
-        public string CheckProductDetail(string pid, List<ProductDetailEntity> details, decimal price, string clientid, string userid, string goodsID,string goodscode,string goodsname)
-        {
-            string dids="";
-            details.ForEach(x =>
-            {
-                int result = 0;
-                x.remark = x.remark.Replace("【", "[").Replace("】", "]");
-                string did = ProductsBusiness.BaseBusiness.IsExistCMProductDetail(x.remark, goodscode, goodsID, clientid);
-                if (string.IsNullOrEmpty(did))
-                {
-                    ProductDetail detail = new ProductDetail();
-                    detail.Remark = x.remark;
-                    detail.ClientID = clientid;
-                    detail.ProductName = goodsname;
-                    detail.ProductID = pid;
-                    detail.Price = price;
-                    detail.BigPrice = price;
-                    detail.CreateUserID = userid;
-                    did = ProductsBusiness.BaseBusiness.AddProductDetails(pid, "", "", x.saleAttr, x.attrValue, x.saleAttrValue, price,
-                        (decimal)0.00, price, "", x.remark, "", userid, clientid, out result);
-                    if (result == 1)
-                    {
-                        dids += "" + did + ":" + x.quantity + ",";
-                    }
-                }
-                else
-                {
-                    dids += "" + did + ":" + x.quantity + ",";
-                }
-            });
-            dids = dids.TrimEnd(',');
-            return dids;
         }
     }
 }

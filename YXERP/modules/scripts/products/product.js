@@ -772,7 +772,7 @@ define(function (require, exports, module) {
         var _self = this, count = 1;
         doT.exec("template/products/productdetails_add.html", function (templateFun) {
 
-            var html = templateFun(model.Category.SaleAttrs);
+            var html = templateFun(model.Category.SaleAttrs || []);
 
             Easydialog.open({
                 container: {

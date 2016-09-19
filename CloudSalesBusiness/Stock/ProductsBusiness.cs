@@ -979,7 +979,7 @@ namespace CloudSalesBusiness
         }
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
-                                 string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, decimal commonprice, decimal price, decimal weight, bool isnew,
+                                 string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, string saleAttrStr,decimal commonprice, decimal price, decimal weight, bool isnew,
                                  bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description,
                                  List<ProductDetail> details,string cmgoodsid,string cmgoodscode, string operateid, string agentid, string clientid, out int result)
         {
@@ -987,7 +987,7 @@ namespace CloudSalesBusiness
             {
                 var dal = new ProductsDAL();
                 string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
-                                        valuelist, attrvaluelist, attrvalueStr, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
+                                        valuelist, attrvaluelist, attrvalueStr, saleAttrStr, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
                                         productImg, shapeCode, cmgoodsid, cmgoodscode,description, operateid, clientid, out result);
                 //产品添加成功添加子产品
                 if (!string.IsNullOrEmpty(pid))

@@ -613,7 +613,7 @@ namespace CloudSalesDAL
         }
 
         public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
-                         string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, decimal commonprice, decimal price,
+                         string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, string saleAttrStr,decimal commonprice, decimal price,
                          decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount,
                          string productImg, string shapeCode,string cmgoodsid,string cmgoodscode, string description, string operateid, string clientid, out int result)
         {
@@ -637,6 +637,7 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ValueList",valuelist),
                                        new SqlParameter("@AttrValueList",attrvaluelist),
                                        new SqlParameter("@AttrValueStr",attrvalueStr),
+                                       new SqlParameter("@SaleAttrStr",saleAttrStr),
                                        new SqlParameter("@CommonPrice",commonprice),
                                        new SqlParameter("@Price",price),
                                        new SqlParameter("@Weight",weight),

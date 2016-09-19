@@ -98,8 +98,9 @@
                         goodscode: model.CMGoodsCode,
                         parentprid: model.ClientID,
                         price: model.Price,
-                        productid:model.ProductID,
-                        dids: ""
+                        productid: model.ProductID,
+                        dids: "",
+                        cmclientid: model.ClientID
                     };
 
                     ObjectJS.createOrders(item);

@@ -56,7 +56,7 @@
                     <li style="overflow: initial;"> 
                         <span class="column-title " style="width: 50px;">单位：</span>
                         <label class="bolder font14">
-                            @(model.SmallUnit != null ? (!string.IsNullOrEmpty(model.SmallUnit.UnitName) ? model.SmallUnit.UnitName : "件") : "件")
+                            @(!string.IsNullOrEmpty(model.UnitName) ? model.UnitName : "件")
                         </label> 
                     </li>
                     <li style="overflow: initial;" id="pdttitle"> 

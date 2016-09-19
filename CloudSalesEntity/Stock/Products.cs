@@ -161,6 +161,8 @@ namespace CloudSalesEntity
 			get{return _UnitID;}
 		}
 
+        public string UnitName { get; set; }
+
         public ProductUnit SmallUnit { get; set; }
 
 		/// <summary>
@@ -198,6 +200,9 @@ namespace CloudSalesEntity
 			set{ _saleattr=value;}
 			get{return _saleattr;}
 		}
+
+        public string SaleAttrStr { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -417,6 +422,8 @@ namespace CloudSalesEntity
 		}
 
 		#endregion Model
+
+        public string AttrValueStr { get; set; }
 
         public string BrandName { get; set; }
 

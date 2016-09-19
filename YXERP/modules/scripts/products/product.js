@@ -128,8 +128,8 @@ define(function (require, exports, module) {
                     //首个规格
                     if (isFirst) {
                         var model = {};
-                        model.ids = _attr.data("id") + ":" + _value.data("text");
-                        model.saleAttr = _attr.data("id");
+                        model.ids = _attr.data("text") + ":" + _value.data("text");
+                        model.saleAttr = _attr.data("text");
                         model.attrValue = _value.data("text");
                         model.names = "[" + _attr.data("text") + "：" + _value.data("text") + "]";
                         model.layer = 1;
@@ -137,10 +137,10 @@ define(function (require, exports, module) {
                         details.push(model);
                     }else {
                         for (var i = 0, j = attrdetail.length; i < j; i++) {
-                            if (attrdetail[i].ids.indexOf(_value.data("attrid")) < 0) {
+                            if (attrdetail[i].ids.indexOf(_value.data("attrname")) < 0) {
                                 var model = {};
-                                model.ids = attrdetail[i].ids + "," + _attr.data("id") + ":" + _value.data("text");
-                                model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("id");
+                                model.ids = attrdetail[i].ids + "," + _attr.data("text") + ":" + _value.data("text");
+                                model.saleAttr = attrdetail[i].saleAttr + "," + _attr.data("text");
                                 model.attrValue = attrdetail[i].attrValue + "," + _value.data("text");
                                 model.names = attrdetail[i].names + " [" + _attr.data("text") + "：" + _value.data("text") + "]";
                                 model.layer = attrdetail[i].layer + 1;
@@ -211,13 +211,14 @@ define(function (require, exports, module) {
 
     //保存产品
     Product.savaProduct = function () {
-        var _self = this, attrlist = "", valuelist = "", attrvaluelist = "";
+        var _self = this, attrlist = "", valuelist = "", attrvaluelist = "", attrValueStr = "";
         var bl = true;
         $(".product-attr").each(function () {
             var _this = $(this);
             attrlist += _this.data("id") + ",";
             valuelist += _this.find("select").val() + ",";
             attrvaluelist += _this.data("id") + ":" + _this.find("select").val() + ",";
+            attrValueStr += _this.data("name") + ":" + _this.find("select option:selected").text() + ",";
             if (!_this.find("select").val()) {
                 bl = false;
             }
@@ -240,13 +241,14 @@ define(function (require, exports, module) {
             ProviderID: $("#provider").val(),
             BrandID: $("#brand").val(),
             BigUnitID: $("#smallUnit").val().trim(),//$("#bigUnit").val().trim(),
-            UnitID: $("#smallUnit").val().trim(),
+            UnitID: $("#smallUnit option:selected").text(),
             BigSmallMultiple: 1,//$("#bigSmallMultiple").val().trim(),
             CategoryID: $("#categoryID").val(),
             Status: $("#status").hasClass("hover") ? 1 : 0,
             AttrList: attrlist,
             ValueList: valuelist,
             AttrValueList: attrvaluelist,
+            AttrValueStr: attrValueStr,
             CommonPrice: $("#commonprice").val().trim(),
             Price: $("#price").val().trim(),
             Weight: $("#weight").val().trim(),
@@ -599,9 +601,9 @@ define(function (require, exports, module) {
         }
         model.ProviderID && $("#provider").val(model.ProviderID);
         model.BrandID && $("#brand").val(model.BrandID);
-        $("#smallUnit").val(model.UnitID);
-        $("#bigUnit").val(model.BigUnitID);
-        $("#bigSmallMultiple").val(model.BigSmallMultiple);
+        $("#smallUnit option[data-name='" + model.UnitName + "']").attr("selected", "selected");
+        //$("#bigUnit").val(model.BigUnitID);
+        //$("#bigSmallMultiple").val(model.BigSmallMultiple);
         $("#commonprice").val(model.CommonPrice);
         $("#price").val(model.Price);
         $("#weight").val(model.Weight);
@@ -770,7 +772,7 @@ define(function (require, exports, module) {
         var _self = this, count = 1;
         doT.exec("template/products/productdetails_add.html", function (templateFun) {
 
-            var html = templateFun(model.Category.SaleAttrs);
+            var html = templateFun(model.Category.SaleAttrs || []);
 
             Easydialog.open({
                 container: {
@@ -860,7 +862,7 @@ define(function (require, exports, module) {
             }
 
             //绑定单位
-            $("#unitName").text(model.SmallUnit.UnitName);
+            $("#unitName").text(model.UnitName);
 
             if (!id) {
                 $("#detailsPrice").val(model.Price);

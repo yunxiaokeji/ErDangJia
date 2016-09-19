@@ -68,7 +68,7 @@ namespace CloudSalesBusiness
                 int result = 0;
                 string pid
                     = ProductsBusiness.BaseBusiness.AddProduct(x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.ProviderID, x.BrandID,
-                    x.BigUnitID, x.UnitID, x.BigSmallMultiple.Value, x.CategoryID, x.Status.Value, x.AttrList, x.ValueList, x.AttrValueList,
+                    x.BigUnitID, x.UnitID, x.BigSmallMultiple.Value, x.CategoryID, x.Status.Value, x.AttrList, x.ValueList, x.AttrValueList, x.AttrValueStr, x.SaleAttrStr,
                     x.CommonPrice.Value, x.Price, x.Weight.Value, (x.IsNew == 1), (x.IsRecommend == 1), x.IsAllow, x.IsAutoSend, x.EffectiveDays.Value,
                     x.DiscountValue.Value, x.WarnCount, x.ProductImage, x.ShapeCode, x.Description, x.ProductDetails,"","", x.CreateUserID, agentid, x.ClientID, out result);
                 if (result != 1)

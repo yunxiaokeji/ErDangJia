@@ -16,9 +16,9 @@ namespace IntFactory.Sdk
 
         public AddResult SyncProduct(string cmClientID, string userid, string agentid, string clientid)
         {
-            List<CategoryEntity> cateList = ClientBusiness.BaseBusiness.GetAllCategory();
             try
             {
+                
                 string provideid = ProductsBusiness.BaseBusiness.GetCMProviderID(clientid);
                 //2.获取智能工厂已公开款式
                 int totalcount = 1;
@@ -31,34 +31,8 @@ namespace IntFactory.Sdk
 
                         foreach (var order in orderlist.orders)
                         {
-                            var categortModel = new Category();
-                            if (categortModel != null && !string.IsNullOrEmpty(categortModel.CategoryID))
-                            {
-                                string[] attrs = categortModel.SaleAttr.Split(',');
-                                order.details = new List<ProductDetailEntity>();
-                                order.OrderAttrs.Where(y => y.AttrType == 2).ToList().ForEach(y =>
-                                {
-                                    order.OrderAttrs.Where(z => z.AttrType == 1).ToList().ForEach(z =>
-                                    {
-                                        string xremark = z.AttrName.Replace("【", "[").Replace("】", "]");
-                                        string yremark = y.AttrName.Replace("【", "[").Replace("】", "]");
-                                        order.details.Add(new ProductDetailEntity()
-                                        {
-                                            saleAttr = attrs[0] + "," + attrs[1],
-                                            attrValue = y.AttrName.Replace("【", "").Replace("】", "") + "," + z.AttrName.Replace("【", "").Replace("】", ""),
-                                            saleAttrValue = attrs[0] + ":" + y.AttrName.Replace("【", "").Replace("】", "") + "," +
-                                                            attrs[1] + ":" + z.AttrName.Replace("【", "").Replace("】", ""),
-                                            xRemark = xremark,
-                                            yRemark = yremark,
-                                            xYRemark = yremark + xremark,
-                                            remark = yremark + xremark
-                                        });
-                                    });
-                                });
-                            }
-
                             //同步插入产品
-                            OrderBusiness.BaseBusiness.ZNGCAddProduct(order, categortModel.CategoryID, provideid, agentid, clientid, userid);
+                            OrderBusiness.BaseBusiness.ZNGCAddProduct(order, "", provideid, agentid, clientid, userid);
                         }
                     }
                     break;

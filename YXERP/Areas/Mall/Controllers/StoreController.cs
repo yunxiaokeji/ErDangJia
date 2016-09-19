@@ -124,13 +124,15 @@ namespace YXERP.Areas.Mall.Controllers
                 cname = CurrentUser.Client.ContactName;
             }
             ViewBag.Url = GetbaseUrl();
-            ViewBag.ClientID = clientid;
+            ViewBag.CMClientID = clientid;
             ViewBag.OrderID = orderid;
             ViewBag.CityCode = ccode;
             ViewBag.ContactName = cname;
             ViewBag.MobilePhone = mphone;
             ViewBag.Address = address;
-           
+            ViewBag.Url = GetbaseUrl(); 
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+            ViewBag.Client = client == null ? CurrentUser.Client : client;
             var obj = new ProductsBusiness().GetProductByIDForDetails(orderid);
             ViewBag.Model = obj;
             ViewBag.ClientID = obj.ClientID;
@@ -231,7 +233,7 @@ namespace YXERP.Areas.Mall.Controllers
             };
         }
         public JsonResult CreatePurchaseOrder(string productid, decimal price, string parentprid, string goodsid, string goodscode,string goodsname,
-            string personname, string mobiletele, string citycode, string address, string dids, decimal totalFee = 0)
+            string personname, string mobiletele, string citycode, string address, string dids, string cmclientid, decimal totalFee = 0)
         {
             if (CurrentUser == null)
             {
@@ -243,8 +245,8 @@ namespace YXERP.Areas.Mall.Controllers
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             } 
-            CloudSalesEntity.Users user = CurrentUser; 
-            string provideid = ProductsBusiness.BaseBusiness.GetCMProviderID(CurrentUser.ClientID);
+            CloudSalesEntity.Users user = CurrentUser;
+            string provideid = ProductsBusiness.BaseBusiness.GetProviderIDByCMID(CurrentUser.ClientID, cmclientid);
             provideid = string.IsNullOrEmpty(provideid) ? parentprid : provideid;
             //2.生成采购单据 
             string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), provideid, totalFee, "", "", 2, user.UserID,

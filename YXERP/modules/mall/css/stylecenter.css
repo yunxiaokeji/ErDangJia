@@ -1,6 +1,14 @@
-﻿/*品类*/
+﻿/**header*/
+.divcenter .menuul{ width: 500px;}
+.divcenter .menuul li{ float: right;color: #999;padding: 0px 8px;}
+
+
+
+
+
+/*品类*/
 .dropdown-ul li:hover {color: #4a98e7;background-color: #ccc;}
-.divcenter {width: 1190px;margin: 0 auto;}
+.divcenter {width: 1190px;margin: 0 auto;position:relative ;}
 .divcategory {margin: 0 auto;position: absolute;z-index: 666;width: 774px;min-height: 302px;background-color: #ffffff;
     overflow: hidden;border-bottom: 1px solid #bbb;border-left: 1px solid #bbb;border-right: 1px solid #bbb;}
 .divcategory dl {float: left;margin: 0 20px;width: 210px;height: 140px;}

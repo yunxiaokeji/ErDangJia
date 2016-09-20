@@ -246,6 +246,7 @@
     <Content Include="modules\images\ico-loading.gif" />
     <Content Include="modules\images\ico-provider.png" />
     <Content Include="modules\images\ico-reg.png" />
+    <Content Include="modules\images\ico-sjselect.png" />
     <Content Include="modules\images\ico-usernum.png" />
     <Content Include="modules\images\ico-wechat.png" />
     <Content Include="modules\images\ico-changmenghover.png" />
@@ -432,7 +433,6 @@
     <Content Include="Areas\M\Views\Orders\Detail.cshtml" />
     <Content Include="Areas\M\Views\Home\ChooseProvider.cshtml" />
     <Content Include="Areas\Mall\Views\Web.config" />
-    <Content Include="Areas\M\Views\Shared\Footer.cshtml" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />

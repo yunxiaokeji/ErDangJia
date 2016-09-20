@@ -103,7 +103,7 @@ namespace IntFactory.Sdk
 
                     });
                 });
-                pid = ProductsBusiness.BaseBusiness.AddProduct(order.intGoodsCode, order.goodsName, "", false, provideid, "", "件", "件", 1, categoryid, 1, "", "", "", "", "颜色,尺码",
+                pid = ProductsBusiness.BaseBusiness.AddProduct(CloudSalesEnum.EnumProductSourceType.IntFactory, order.intGoodsCode, order.goodsName, "", false, provideid, "", "件", "件", 1, categoryid, 1, "", "", "", "", "颜色,尺码",
                      order.finalPrice, order.finalPrice, (decimal)0.00, true, false, 1, 0, 0, (decimal)0.00, 0, order.orderImage, "", "", list, order.goodsID, order.intGoodsCode, userid, agentid, clientid, out result);
             } 
             return pid;

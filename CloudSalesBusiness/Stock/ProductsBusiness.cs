@@ -978,7 +978,7 @@ namespace CloudSalesBusiness
             return list;
         }
 
-        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
+        public string AddProduct(EnumProductSourceType type, string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                                  string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, string saleAttrStr,decimal commonprice, decimal price, decimal weight, bool isnew,
                                  bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount, string productImg, string shapeCode, string description,
                                  List<ProductDetail> details,string cmgoodsid,string cmgoodscode, string operateid, string agentid, string clientid, out int result)
@@ -986,7 +986,7 @@ namespace CloudSalesBusiness
             lock (SingleLock)
             {
                 var dal = new ProductsDAL();
-                string pid = dal.AddProduct(productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
+                string pid = dal.AddProduct((int)type, productCode, productName, generalName, iscombineproduct, providerid, brandid, bigunitid, UnitID, bigSmallMultiple, categoryid, status, attrlist,
                                         valuelist, attrvaluelist, attrvalueStr, saleAttrStr, commonprice, price, weight, isnew, isRecommend, isallow, isautosend, effectiveDays, discountValue, warnCount,
                                         productImg, shapeCode, cmgoodsid, cmgoodscode,description, operateid, clientid, out result);
                 //产品添加成功添加子产品

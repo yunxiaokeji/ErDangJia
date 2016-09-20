@@ -612,7 +612,7 @@ namespace CloudSalesDAL
             return ds;
         }
 
-        public string AddProduct(string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
+        public string AddProduct(int type, string productCode, string productName, string generalName, bool iscombineproduct, string providerid, string brandid, string bigunitid, string UnitID, int bigSmallMultiple,
                          string categoryid, int status, string attrlist, string valuelist, string attrvaluelist, string attrvalueStr, string saleAttrStr,decimal commonprice, decimal price,
                          decimal weight, bool isnew, bool isRecommend, int isallow, int isautosend, int effectiveDays, decimal discountValue, int warnCount,
                          string productImg, string shapeCode,string cmgoodsid,string cmgoodscode, string description, string operateid, string clientid, out int result)
@@ -622,6 +622,7 @@ namespace CloudSalesDAL
             SqlParameter[] paras = { 
                                        new SqlParameter("@ProductID",SqlDbType.NVarChar,64),
                                        new SqlParameter("@Result",SqlDbType.Int),
+                                       new SqlParameter("@SourceType",type),
                                        new SqlParameter("@ProductCode",productCode),
                                        new SqlParameter("@ProductName",productName),
                                        new SqlParameter("@GeneralName",generalName),

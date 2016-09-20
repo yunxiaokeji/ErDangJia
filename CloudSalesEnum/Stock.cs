@@ -23,6 +23,16 @@ namespace CloudSalesEnum
         Specification = 2
 
     }
+    /// <summary>
+    /// 产品来源
+    /// </summary>
+    public enum EnumProductSourceType
+    {
+        All = -1,
+        Normal = 0,
+        IntFactory = 1,
+        EDJ = 2
+    }
 
     /// <summary>
     /// 单据类型

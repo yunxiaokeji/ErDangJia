@@ -18,12 +18,7 @@ namespace YXERP.Areas.M.Controllers
                 return Redirect("/M/Home/ChooseProvider");
             }
 
-            CloudSalesEntity.Users users= new CloudSalesEntity.Users();
-            users.Name = CurrentUser.Client.ContactName;
-            users.MobilePhone = CurrentUser.Client.MobilePhone;
-            users.CityCode = CurrentUser.Client.CityCode;
-            users.Address = CurrentUser.Client.Address;
-            ViewBag.baseUser = users;
+            ViewBag.baseUser = CurrentUser.Client;
 
             var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentStoreID);
             ViewBag.Client = client;
@@ -42,12 +37,7 @@ namespace YXERP.Areas.M.Controllers
         public ActionResult Detail(string orderid, string clientid)
         {
             var obj = ProductService.GetProductByIDForDetails(orderid);
-            CloudSalesEntity.Users users = new CloudSalesEntity.Users();
-            users.Name = CurrentUser.Client.ContactName;
-            users.MobilePhone = CurrentUser.Client.MobilePhone;
-            users.CityCode = CurrentUser.Client.CityCode;
-            users.Address = CurrentUser.Client.Address;
-            ViewBag.baseUser = users;
+            ViewBag.baseUser = CurrentUser.Client;
             ViewBag.Model = obj;
             ViewBag.ClientID = obj.ClientID;
 
@@ -59,8 +49,8 @@ namespace YXERP.Areas.M.Controllers
             JsonDictionary.Add("status",true);
 
             return new JsonResult { 
-            Data=JsonDictionary,
-            JsonRequestBehavior=JsonRequestBehavior.AllowGet
+                Data=JsonDictionary,
+                JsonRequestBehavior=JsonRequestBehavior.AllowGet
             };
         }
     }

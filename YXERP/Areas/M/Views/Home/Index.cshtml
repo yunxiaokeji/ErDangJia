@@ -13,7 +13,7 @@
         seajs.use("/modules/m/scripts/style/list.js", function (data) {
             data.init(
                 '@ViewBag.providerID',
-                '@Html.ToJSONString((CloudSalesEntity.Users)ViewBag.baseUser)'
+                '@Html.ToJSONString((CloudSalesEntity.Manage.Clients)ViewBag.baseUser)'
             );
         });
     </script>

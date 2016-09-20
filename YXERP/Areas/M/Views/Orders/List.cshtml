@@ -7,9 +7,7 @@
 @section scripts{
     <script type="text/javascript">
         seajs.use("/modules/m/scripts/style/orders.js", function (data) {
-            data.init(
-                '@Html.ToJSONString((CloudSalesEntity.Users)ViewBag.baseUser)'
-            );
+            data.init();
         });
     </script>
 }

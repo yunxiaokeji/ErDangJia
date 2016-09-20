@@ -15,8 +15,8 @@
             innerHtml = $(innerHtml);
 
             /*编辑发货信息*/
-            innerHtml.find("#customerName").val(user.Name)
-                                            .data('value', user.Name);
+            innerHtml.find("#customerName").val(user.ContactName)
+                                            .data('value', user.ContactName);
             innerHtml.find("#customerTel").val(user.MobilePhone)
                                             .data('value', user.MobilePhone);
             innerHtml.find("#customerAddress").val(user.Address)
@@ -24,7 +24,7 @@
             innerHtml.find("#citySpan").data('value', user.CityCode);
 
             /*展示发货信息*/
-            innerHtml.find("#showCustomerName").text(user.Name);
+            innerHtml.find("#showCustomerName").text(user.ContactName);
             innerHtml.find("#showCustomerTel").text(user.MobilePhone);
             innerHtml.find("#showCustomerAddress").text(user.Address);
 

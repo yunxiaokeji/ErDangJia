@@ -189,6 +189,7 @@
         for (var i = 0; i < _self.model.ProductDetails.length; i++) {
             var item = _self.model.ProductDetails[i];
             if (item.AttrValue != "" && item.AttrValue != null) {
+                item.AttrValue = item.AttrValue.toUpperCase();
                 var color = item.AttrValue.split(",");
                 var key = "[" + color[0] + "]" + (color.length > 1 ? "[" + color[1] + "]" : "");
                 colorList[key] = item.ProductDetailID;

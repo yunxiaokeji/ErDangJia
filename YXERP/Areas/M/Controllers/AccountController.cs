@@ -12,15 +12,12 @@ namespace YXERP.Areas.M.Controllers
         //
         // GET: /M/Account/
 
-        public ActionResult Index(string providerID)
+        public ActionResult Index()
         {
-            ViewBag.providerID = providerID;
+            ViewBag.providerID = CurrentUser.CurrentStoreID; ;
+            ViewBag.baseUser = CurrentUser;
+            ViewBag.index = 2;
 
-            CloudSalesEntity.Users users = new CloudSalesEntity.Users();
-            users.Name = CurrentUser.Name;
-            users.MobilePhone = CurrentUser.MobilePhone;
-            users.Avatar = CurrentUser.Avatar;
-            ViewBag.baseUser = users;
             return View();
         }
 

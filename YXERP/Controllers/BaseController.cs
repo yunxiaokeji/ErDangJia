@@ -418,7 +418,7 @@ namespace YXERP.Controllers
                 Dictionary<string, object> jDic =
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(jObject[key].ToString());
                 foreach (var keyvalue in jDic)
-                {
+                {                    
                     JObject jChild = (JObject) JsonConvert.DeserializeObject(keyvalue.Value.ToString());
                     ExcelModel excelModel = GetExcelModel(keyvalue.Key.ToLower(),jChild);
                     if (!excelModel.IsHide || (!string.IsNullOrEmpty(test) && test!="export"))

@@ -43,6 +43,8 @@ namespace IntFactory.Sdk
 
         public string categoryName;
 
+        public string processCategoryName;
+
         public string platemaking;
 
         public string goodsID;

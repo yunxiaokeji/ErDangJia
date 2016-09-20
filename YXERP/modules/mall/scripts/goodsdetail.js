@@ -123,6 +123,7 @@
         for (var i = 0; i < _self.model.ProductDetails.length; i++) {
             var item = _self.model.ProductDetails[i];
             if (item.AttrValue != "" && item.AttrValue != null) {
+                item.AttrValue = item.AttrValue.toUpperCase();
                 var color = item.AttrValue.split(",");
                 var key = "[" + color[0] + "]" + (color.length > 1 ? "[" + color[1] + "]" : "");
                 colorList[key] = item.ProductDetailID;
@@ -160,7 +161,7 @@
                     chtml += '<li class="left" data-id="' + item.AttrID + '" data-remark="' + citem.ValueName + '" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</li>';
                 }
             }
-        }
+        } 
         $('#colorlist').html(chtml);
         if (chtml == "") {
             $('#licolor').hide();
@@ -290,15 +291,14 @@
         var _self = this; 
         var dids = '';
         var details = [];
-        $.each(tempOrder, function(i, obj) {
-            //details.push({DetailID:obj.detailid,Quantity:obj.quantity,Remark:obj.key });
+        $.each(tempOrder, function(i, obj) { 
             dids += obj.detailid + ":" + obj.quantity + ",";
         }); 
         Global.post("/Mall/Store/CreatePurchaseOrder",
             {
                 productid: _self.model.ProductID,
                 price: _self.model.Price,
-                parentprid: _self.clientid,
+                parentprid: _self.model.ClientID,
                 goodsid: _self.model.CMGoodsID,
                 goodscode: _self.model.CMGoodsCode,
                 goodsname: _self.model.ProductName,
@@ -307,8 +307,7 @@
                 citycode: citycode,
                 dids: dids,
                 cmclientid: _self.model.ClientID,
-                address: address
-                //,entity: JSON.stringify(details)
+                address: address 
             }, function (data) {
             if (data.result==1) {
                 confirm("新增成功,是否返回继续选购产品！",

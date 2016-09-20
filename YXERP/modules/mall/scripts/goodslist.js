@@ -4,8 +4,6 @@
         doT = require("dot"); 
         require("pager");
 
-    var CacheProduct = [];
-
     var Params = {
         categoryID: "",
         clientid: "",
@@ -30,28 +28,7 @@
     ObjectJS.bindEvent = function () {
         var _self = this;
         var providerids = _self.clientid == "" ? "-1" : _self.clientid; 
-        Params.clientid = providerids;
-        require.async("dropdown", function () {
-            var dropdown = $("#ddlProviders").dropdown({
-                prevText: "供应商-",
-                defaultText: "全部",
-                defaultValue:"-1",
-                data: _self.providers,
-                dataValue: "CMClientID",
-                dataText: "Name",
-                width: "180",
-                isposition: true,
-                onChange: function (data) {
-                    Params.pageIndex = 1;
-                    if (data.value == "") {
-                        Params.clientid = providerids;
-                    } else {
-                         Params.clientid = data.value;
-                    }
-                    _self.getProducts();
-                }
-            });
-        });
+        Params.clientid = providerids; 
       
         //搜索
         require.async("search", function () {
@@ -107,10 +84,10 @@
             _self.getProducts();
         });
      
-        $('#spanCategory').click(function() {
-            Params.categoryID = '';
+        $('#categoryContent').click(function () {
+            Params.categoryID = $('.categoryMenu.hover').data('id'); 
             _self.getProducts();
-        });
+        }); 
 
         $('#btnPriceRange').click(function () { 
             var beginp = $('#beginprice').val();
@@ -125,14 +102,18 @@
         }); 
         $('#cgbtn').click(function () {
             location.replace($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单');
-        });
-        $('#imglogo').click(function() {
-            location.replace(location);
-        });
+        }); 
         $('#myself').click(function () {
             location.replace($('#ipturl').val() + '/MyAccount/Index?&name=个人中心');
         });
-        _self.getAllCategory();
+
+        $(".divcategory").find('a').click(function () {
+            Params.categoryID = $(this).data("id");
+            Params.orderBy = "";
+            Params.isAsc = false;
+            _self.getProducts();
+            $('.divcategory').hide();
+        });
         _self.getProducts(); 
     }
 
@@ -188,39 +169,7 @@
                     ObjectJS.getProducts();
                 }
             });
-        });
-    }
-
-    ObjectJS.getAllCategory = function () {
-        var _self = this;
-        Global.post("/Mall/Store/GetEdjCateGory", { clientid: _self.clientid }, function (data) {
-            if (data.items.length > 0) {
-                var html = ""; 
-                for (var i = 0; i < data.items.length; i++) { 
-                    var item = data.items[i];
-                    html += "<dl><dt><a  data-id='" + item.CategoryID + "' style='font-size: 14px;'>" + item.CategoryName + "</a></dt>";
-                    for (var j = 0; j < item.ChildCategorys.length; j++) {
-                        var childcate = item.ChildCategorys[j];
-                        html += "<dd ";
-                        if ((j + 1) % 3 == 0) {
-                            html += "style='margin-right:0px;'";
-                        }
-                        html += "><a data-id='" + item.CategoryID + "'>" + childcate.CategoryName + "</a></dd>";
-                    }
-                    html += "</dl>";
-                }
-                html += "<div class='clear'></div>";
-                $(".divcategory").append(html);
-            } else {
-                $(".divcategory").append("<div class='nodata-box' >暂无分类</div>");
-            }
-            $(".divcategory").find('a').click(function() {
-                Params.categoryID = $(this).data("id");
-                Params.orderBy = "";
-                Params.isAsc = false;
-                _self.getProducts();
-                $('.divcategory').hide();
-            });
+            $('#stylebody').css('min-height', $(window).height() + 'px');
         });
     }
 

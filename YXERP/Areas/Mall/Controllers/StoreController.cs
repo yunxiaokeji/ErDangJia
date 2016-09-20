@@ -124,31 +124,33 @@ namespace YXERP.Areas.Mall.Controllers
                 cname = CurrentUser.Client.ContactName;
             }
             ViewBag.Url = GetbaseUrl();
-            ViewBag.CMClientID = clientid;
             ViewBag.OrderID = orderid;
             ViewBag.CityCode = ccode;
             ViewBag.ContactName = cname;
             ViewBag.MobilePhone = mphone;
-            ViewBag.Address = address;
-            ViewBag.Url = GetbaseUrl(); 
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
-            ViewBag.Client = client == null ? CurrentUser.Client : client;
+            ViewBag.Address = address; 
             var obj = new ProductsBusiness().GetProductByIDForDetails(orderid);
             ViewBag.Model = obj;
             ViewBag.ClientID = obj.ClientID;
             return View();
         }
+        public JsonResult GetClientDetail(string clientid)
+        {
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+            if (client!=null)
+            {
+                JsonDictionary.Add("items", client);
+            }
+            return new JsonResult()
+            {
+                Data = client,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
         public JsonResult GetOrderAttrsList(string goodsid)
         {
             var result = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersAttrsList(goodsid);
-            if (result.error_code == 0)
-            {
-                JsonDictionary.Add("items", result.attrList);
-            }
-            else
-            {
-                JsonDictionary.Add("items", "[]");
-            }
+            JsonDictionary.Add("items", result.error_code == 0 ? result.attrList : new List<IntFactory.Sdk.OrderAttrEntity>());
             return new JsonResult()
             {
                 Data = JsonDictionary,
@@ -191,10 +193,10 @@ namespace YXERP.Areas.Mall.Controllers
             };
         }
          
-        public JsonResult GetEdjCateGory(string clientid)
+        public JsonResult GetEdjCateGory(string clientid,string categoryid="")
         {
             var result = new ProductsBusiness().GetCategorys(clientid);
-            result = result.Where(x => string.IsNullOrEmpty(x.PID)).ToList();
+            result = result.Where(x => x.PID == categoryid).ToList();
             JsonDictionary.Add("items", result);
             return new JsonResult()
             {

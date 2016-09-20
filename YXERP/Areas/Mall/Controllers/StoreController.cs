@@ -124,14 +124,14 @@ namespace YXERP.Areas.Mall.Controllers
                 cname = CurrentUser.Client.ContactName;
             }
             ViewBag.Url = GetbaseUrl();
-            ViewBag.CMClientID = clientid;
             ViewBag.OrderID = orderid;
             ViewBag.CityCode = ccode;
             ViewBag.ContactName = cname;
             ViewBag.MobilePhone = mphone;
             ViewBag.Address = address; 
             var obj = new ProductsBusiness().GetProductByIDForDetails(orderid);
-            ViewBag.Model = obj; 
+            ViewBag.Model = obj;
+            ViewBag.ClientID = obj.ClientID;
             return View();
         }
         public JsonResult GetClientDetail(string clientid)
@@ -193,10 +193,10 @@ namespace YXERP.Areas.Mall.Controllers
             };
         }
          
-        public JsonResult GetEdjCateGory(string clientid)
+        public JsonResult GetEdjCateGory(string clientid,string categoryid="")
         {
             var result = new ProductsBusiness().GetCategorys(clientid);
-            result = result.Where(x => string.IsNullOrEmpty(x.PID)).ToList();
+            result = result.Where(x => x.PID == categoryid).ToList();
             JsonDictionary.Add("items", result);
             return new JsonResult()
             {

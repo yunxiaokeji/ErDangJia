@@ -4,8 +4,6 @@
         doT = require("dot"); 
         require("pager");
 
-    var CacheProduct = [];
-
     var Params = {
         categoryID: "",
         clientid: "",
@@ -86,11 +84,10 @@
             _self.getProducts();
         });
      
-        $('#spanCategory').click(function () {
-            $('.categoryMenu:first').nextAll().remove();
-            Params.categoryID = $(this).data('id');
+        $('#categoryContent').click(function () {
+            Params.categoryID = $('.categoryMenu.hover').data('id'); 
             _self.getProducts();
-        });
+        }); 
 
         $('#btnPriceRange').click(function () { 
             var beginp = $('#beginprice').val();

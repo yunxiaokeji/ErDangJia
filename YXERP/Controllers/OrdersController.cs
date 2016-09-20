@@ -40,7 +40,7 @@ namespace YXERP.Controllers
             return View("Orders");
         }
 
-        public ActionResult ChooseProducts(string id,string pids="")
+        public ActionResult ChooseProducts(string id, string pids = "")
         {
             ViewBag.Type = (int)EnumDocType.Order;
             ViewBag.GUID = id;
@@ -58,7 +58,7 @@ namespace YXERP.Controllers
             }
             string pids = "";
             model.Details.ForEach(x => { if (pids.IndexOf(x.ProductDetailID) == -1) pids += x.ProductDetailID + ","; });
-            ViewBag.Pids =pids;
+            ViewBag.Pids = pids;
             ViewBag.Model = model;
             return View();
         }
@@ -214,6 +214,14 @@ namespace YXERP.Controllers
         {
             int result = 0;
             var bl = OrdersBusiness.BaseBusiness.EffectiveOrder(orderid, CurrentUser.UserID, OperateIP, CurrentUser.AgentID, CurrentUser.ClientID, out result);
+            if (bl)
+            {
+                //var order = OrdersBusiness.BaseBusiness.GetOrderByIDFor(orderid, CurrentUser.AgentID, CurrentUser.ClientID);
+                //if (order.SourceType == 1)
+                //{
+                //    IntFactory.Sdk.AddResult addResult = IntFactory.Sdk.OrderBusiness.BaseBusiness.CreateDHOrder(,null, CurrentUser.ClientID, CurrentUser.UserID);
+                //}
+            }
             JsonDictionary.Add("status", bl);
             JsonDictionary.Add("result", result);
             return new JsonResult

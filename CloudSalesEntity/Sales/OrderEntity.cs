@@ -151,6 +151,8 @@ namespace CloudSalesEntity
         /// </summary>
         public List<OrderDetail> Details { get; set; }
 
+        public int SourceType { get; set; }
+
         public string Remark { get; set; }
 
         public string OrderCode { get; set; }
@@ -185,6 +187,9 @@ namespace CloudSalesEntity
         public string OpportunityID { get; set; }
 
         public string OpportunityCode { get; set; }
+
+        //原始采购单ID
+        public string OriginalID { get; set; }
 
         /// <summary>
         /// 填充数据

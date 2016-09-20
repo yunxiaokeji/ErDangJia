@@ -24,14 +24,17 @@ namespace YXERP.Areas.Mall.Controllers
             {
                 return Redirect("/Home/login");
             }
+
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
             //非智能工厂暂不开通店铺
-            if (string.IsNullOrEmpty(CurrentUser.Agents.CMClientID))
+            var agent = CloudSalesBusiness.AgentsBusiness.GetAgentDetail(client.AgentID);
+            if (string.IsNullOrEmpty(agent.CMClientID))
             {
                 return Redirect("/Home/login");
             }
             if (!ProductService.IsExistsProvider(id, CurrentUser.ClientID) && id.ToLower() != CurrentUser.ClientID.ToLower())
             {
-                var client = ClientBusiness.GetClientDetail(id);
+                
                 string providerID = ProductService.AddProviders(client.CompanyName, client.ContactName,
                     client.MobilePhone, "", client.CityCode, client.Address,
                     "", id, client.ClientCode, "", CurrentUser.Client.AgentID, CurrentUser.Client.ClientID, 2);
@@ -44,7 +47,6 @@ namespace YXERP.Areas.Mall.Controllers
             {
                 ViewBag.Url = GetbaseUrl();
                 ViewBag.ClientID = id; ;
-                var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
                 ViewBag.Client = client == null ? CurrentUser.Client : client;
                 return View("Goods");
             }
@@ -61,12 +63,14 @@ namespace YXERP.Areas.Mall.Controllers
             {
                 return Redirect("/Home/login");
             }
+
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
             //非智能工厂暂不开通店铺
-            if (string.IsNullOrEmpty(CurrentUser.Agents.CMClientID))
+            var agent = CloudSalesBusiness.AgentsBusiness.GetAgentDetail(client.AgentID);
+            if (string.IsNullOrEmpty(agent.CMClientID))
             {
                 return Redirect("/Home/login");
             }
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
             if (!ProductService.IsExistsProvider(id, CurrentUser.ClientID) && id.ToLower() != CurrentUser.ClientID.ToLower())
             {
                 string providerID = ProductService.AddProviders(client.CompanyName, client.ContactName,
@@ -101,17 +105,9 @@ namespace YXERP.Areas.Mall.Controllers
         /// <param name="orderid"></param>
         /// <param name="clientid"></param>
         /// <returns></returns>
-        public ActionResult GoodsDetail(string orderid, string clientid="")
+        public ActionResult GoodsDetail(string orderid, string clientid = "")
         {
             if (string.IsNullOrEmpty(orderid))
-            {
-                Response.Write(
-                    "<script type='text/javascript'>location.href='/Home/login';</script>");
-                Response.End();
-            }
-
-            //非智能工厂暂不开通店铺
-            if (string.IsNullOrEmpty(CurrentUser.Agents.CMClientID))
             {
                 return Redirect("/Home/login");
             }
@@ -200,8 +196,6 @@ namespace YXERP.Areas.Mall.Controllers
 
                 string purid = StockBusiness.AddPurchaseDoc(productid, dids.TrimEnd(','), parentprid, totalFee, "", "", 2, CurrentUser.UserID,
                     CurrentUser.AgentID, CurrentUser.ClientID, personname, mobiletele, address, citycode);
-
-                //IntFactory.Sdk.AddResult result = IntFactory.Sdk.OrderBusiness.BaseBusiness.CreateOrder(entity, clientid, userid);
 
                 if (string.IsNullOrEmpty(purid))
                 {

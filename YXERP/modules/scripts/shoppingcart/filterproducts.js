@@ -22,7 +22,7 @@
 
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (type, guid, pids) { 
+    ObjectJS.init = function (type, guid, pids) {
         var _self = this;
         _self.type = type;
         _self.guid = guid;

@@ -12,6 +12,18 @@
     ObjectJS.bindEvent = function () {
         var _self = this; 
         //分类
+        $('#userinfo').click(function () {
+            var xy = $(this).offset();
+            console.log(xy);
+            $('.dropdown-userinfo').css("left", xy.left);
+            $('.dropdown-userinfo').css("top", xy.top + $(this).height()-5);
+            $('.dropdown-userinfo').show();
+        });
+        $(document).click(function(e) {
+            if (!$(e.target).parents().hasClass("userinfo") && !$(e.target).hasClass("userinfo")) {
+                $(".dropdown-userinfo").fadeOut("1000");
+            }
+        });
         $('.categoryMenu').mouseover(function() {
             _self.getAllCategory($(this).data('id'));
         });
@@ -128,10 +140,11 @@
                 $('.pcompanyName').html(data.CompanyName);
                 $('#pcityname').html(data.City != null ? data.City.Description + data.Address : data.Address);
                 $('#ptype').html('店铺分销');
-
+                 
             }
         });
-    } 
+    }
+    
     module.exports = ObjectJS;
 
 });

@@ -110,6 +110,7 @@ select option{ padding:2px; }
 .mTop8 {margin-top:8px;}
 .mTop9 {margin-top:9px;}
 .mTop10 {margin-top:10px;}
+.mTop12 {margin-top:12px;}
 .mTop15 {margin-top:15px;}
 .mTop20 {margin-top:20px;}
 .mTop30 {margin-top:30px;}
@@ -160,6 +161,7 @@ select option{ padding:2px; }
 .width100 { width:100px !important; }
 .width120 { width:120px !important; }
 .width150 { width:150px !important; }
+.width170 { width:170px !important; }
 .width200 { width:200px !important; }
 .width300 { width:300px !important; }
 .width310 { width:310px !important; }

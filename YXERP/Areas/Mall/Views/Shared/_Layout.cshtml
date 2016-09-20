@@ -19,9 +19,18 @@
                 <div title="云销科技" class="left" style="color: #e48a32;">二当家</div>
                 <div class="right">
                     <ul class="right menuul">
-                        <li class="right"><a title="我的信息">@CurrentUser.Name</a></li>
+                        <li class="right userinfo" id="userinfo">
+                            <span class="left spanimg mTop5 mRight5">
+                                <img class="img" src="@(string.IsNullOrEmpty(CurrentUser.Avatar) ? "/modules/images/defaultavatar.png" : CurrentUser.Avatar)"/>
+                            </span>
+                            <a class="left" title="我的信息">@CurrentUser.Name</a>
+                            <span class="left dropdown">
+                                <span class="dropdown-top"></span> 
+                            </span>
+                        </li>
                         <li class="right"><a id="purchaseurl" title="查看历史采购单">采购订单</a></li>
-                        <li class="right">| <a href="@(ViewBag.Url)/Default/Index" style="font-size: 12px;" title="进入系统"> &nbsp;进入系统</a></li>
+                        <li class="right">| 
+                            <a  href="@(ViewBag.Url)/Default/Index" style="font-size: 12px;" title="进入系统"> &nbsp;进入系统</a></li>
                         <li class="right"><a href="http://yunxiaokeji.com/About/About#map">联系客服</a></li>
                         <li class="right"><a href="http://yunxiaokeji.com/">帮助中心</a></li>
                     </ul>
@@ -73,7 +82,7 @@
                             </li>
                         </ul>
                         <div style="width: 90%; border-top: 1px solid #999;" class="right mRight10">
-                            <span class="right color999 font14">收藏店铺</span>
+                            <span class="right color999 font14 hand">收藏店铺</span>
                         </div>
                     </div>
                 </div>
@@ -88,23 +97,23 @@
     <div class="divcenter" >
         <div class="left" style="width: 200px; height: 170px;"></div>
         <div class="left" style="height: 170px;">
-            <div class="pcompanyName" style="margin-top: 90px; line-height: 50px; font-size: 30px;"></div>
+            <div class="pcompanyName" style="margin-top: 90px; line-height: 50px; color: #FFE2B6;font-size: 30px;"></div>
         </div>
         <div class="right mRight20">
             <ul class="creditul">
                 <li>
-                    <p class="font20 center colorfff mTop5" style="width: 100%;">优质</p>
-                    <p class="font10 center colorfff mTop10" style="width: 100%;">CREDIT</p>
+                    <p class="font20 center colorfff mTop10" style="width: 100%;">优质</p>
+                    <p class="center colorfff mTop10" style="width: 100%;">CREDIT</p>
                     <span class="sanjiao triangle-up"></span>
                 </li>
                 <li>
-                    <p class="font20 center colorfff mTop5" style="width: 100%;">服务</p>
-                    <p class="font10 center colorfff mTop10" style="width: 100%;">SERVICE</p>
+                    <p class="font20 center colorfff mTop10" style="width: 100%;">服务</p>
+                    <p class=" center colorfff mTop10" style="width: 100%;">SERVICE</p>
                     <span  class="sanjiao triangle-up"></span>
                 </li>
                  <li>
-                    <p class="font20 center colorfff mTop5" style="width: 100%;">平价</p>
-                    <p class="font10 center colorfff mTop10" style="width: 100%;">DISCOUNT</p>
+                    <p class="font20 center colorfff mTop10" style="width: 100%;">平价</p>
+                    <p class="center colorfff mTop10" style="width: 100%;">DISCOUNT</p>
                     <span  class="sanjiao triangle-up"></span>
                 </li>
             </ul>
@@ -122,23 +131,29 @@
 </div> 
 
     @RenderBody()
-
-
+    
     <script type="text/javascript" src="/Scripts/sea.js"></script>
     <script type="text/javascript" src="/Scripts/sea-config.js?v=@(ExpandClass.Version)"></script>
-   <script type="text/javascript">
+    <script type="text/javascript">
          seajs.use(["/modules/mall/scripts/layout"], function (obj) {
              obj.init('@ViewBag.ClientID');
         });
     </script>
     @RenderSection("scripts", false)
-
 <footer style="width: 100%; height: 50px; position: relative; background-color: #434443; bottom: 0px;">
     <input id="ipturl" type="text" hidden="hidden" class="hide" value="@(ViewBag.Url)"/>
     <div class="right mRight30 mTop20" style="color: #fff;">
         ©2016云销科技 沪ICP备 1999888 号
     </div>
 </footer>
+
+ <div class="dropdown-userinfo hide" >
+        @*<div class="top-lump"></div>*@
+        <ul class="items-list">
+            <li class="item"><a  href="@(ViewBag.Url)/MyAccount/Index?&name=个人中心">个人中心</a></li>
+            <li class="item"><a href="@(ViewBag.Url)/Home/Logout">安全退出</a></li>
+        </ul>
+    </div>
 </body>
 
 </html>

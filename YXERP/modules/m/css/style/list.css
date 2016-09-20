@@ -21,7 +21,7 @@
     color:#999;
     margin-left:10px;
 }
-.search .search-box .txt-search{border:none; width:80%;padding:12px 0; color:#666;font-size:18px;vertical-align:initial;}
+.search .search-box .txt-search{border:none; width:80%;padding:12px 0; color:#666;font-size:16px;vertical-align:initial;}
 .search .btn-search {color:#4a98e7;position:fixed;top:12px;right:10px;font-size:18px;}
 .search .btn-cancel {background-color:#aaa;position:fixed;top:14px;right:70px;font-size:16px;color:#fff;border-radius:12px;padding:3px;}
 /*退出下拉*/

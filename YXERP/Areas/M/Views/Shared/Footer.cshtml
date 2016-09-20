@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Footer";
+}
+
+<ul class="task-status">
+    <li data-status="0" class="@(ViewBag.index==0?"hover":"")">
+        <a href="/M/Home/Index">
+            <div class="ico-status iconfont">&#xe64e;</div>
+            款式
+        </a>
+    </li>
+    <li data-status="1" class="@(ViewBag.index==1?"hover":"")">
+        <a href="/M/Orders/List">
+            <div class="ico-status iconfont">&#xe629;</div>
+            订单
+        </a>
+    </li>
+    <li data-status="2" class="@(ViewBag.index==2?"hover":"")" style="width:34%;">
+        <a href="/M/Account/Index">
+            <div class="ico-status iconfont">&#xe601;</div>
+            我的
+        </a>
+    </li>
+    <div class="clear"></div>
+</ul>
+

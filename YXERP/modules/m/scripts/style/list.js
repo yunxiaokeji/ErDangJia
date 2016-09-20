@@ -143,29 +143,6 @@
             }            
         });
 
-        //任务过滤类型切换
-        $(".task-filtertype li").click(function () {
-            $(".btn-task-filtertype div:first").text($(this).text());
-            $(this).parent().hide();
-            Params.pageIndex = 1;
-            Params.clientid = $(this).data("id");
-            //if ($(this).data("id") == '-1') {
-            //    var id = "";
-            //    $(".task-filtertype li").each(function () {
-            //        var _this = $(this);
-            //        if (_this.data("id") != '-1') {
-            //            if (_this.index() != $(".task-filtertype li").length - 1) {
-            //                id += _this.data("id") + '\',\'';
-            //            } else {
-            //                id += _this.data("id");
-            //            }
-            //        }
-            //    });
-            //    Params.clientid = id;
-            //}
-            ObjectJS.getList();
-        });
-
         //列表排序
         $(".sort-item").click(function () {
             var _self = $(this);

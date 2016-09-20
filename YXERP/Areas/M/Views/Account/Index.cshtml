@@ -27,27 +27,7 @@
         </li>
     </ul>
 </div>
-<div class="center" style="margin-top:80px;">
+<div class="center" style="margin-top:80px;padding-bottom:20px;">
     <a href="/Home/Logout" class="exit-sys">退出</a>
 </div>
-<ul class="task-status">
-    <li data-status="0">
-        <a href="/M/Home/Index?providerID=@ViewBag.providerID">
-            <div class="ico-status iconfont">&#xe64e;</div>
-            款式
-        </a>
-    </li>
-    <li data-status="1">
-        <a href="/M/Orders/List?providerID=@ViewBag.providerID">
-            <div class="ico-status iconfont">&#xe629;</div>
-            订单
-        </a>
-    </li>
-    <li data-status="2" class="hover" style="width:34%;">
-        <a href="/M/Account/Index?providerID=@ViewBag.providerID">
-            <div class="ico-status iconfont">&#xe601;</div>
-            我的
-        </a>
-    </li>
-    <div class="clear"></div>
-</ul>
+@{Html.RenderPartial("Footer");}

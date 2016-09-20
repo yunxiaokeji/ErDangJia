@@ -268,7 +268,13 @@ namespace CloudSalesEntity
 		{
 			set{ _clientid=value;}
 			get{return _clientid;}
-		} 
+		}
+
+        public string CurrentStoreID
+        {
+            set;
+            get;
+        } 
 		#endregion Model
 
         public string FirstName 

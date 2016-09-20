@@ -3,14 +3,7 @@
 }
 @section css{
     <link rel="stylesheet" href="/modules/mall/css/stylecenter.css"/>
-    <link rel="shortcut icon" href="/modules/mall/images/ico-cmlogo.png">
-
-    <style>
-        #cgbtn{color: #fff;}
-        #cgbtn:hover{color:#f4f4f4;}
-
-    </style>
-
+    <link rel="shortcut icon" href="/modules/mall/images/ico-cmlogo.png"> 
 }
 @section scripts{
     <script type="text/javascript"> 
@@ -19,36 +12,6 @@
         });
     </script>
 }
-@*<div style="height: 100px;">
-    <div class="divcenter pTop5">
-        <div class="left" id="imglogo">
-            <span class="left mTop10"><img src="@(!string.IsNullOrEmpty(client.Logo)?client.Logo:"/modules/mall/images/ico-cmlogo.png")" style="width: 60px; height: 60px;"/></span>
-            <span class="left mTop20 " style="">
-                <a class="font16">@(client.CompanyName)</a><br/>
-                <a class="font9 tRight mLeft30 lineHeight30" style="font-style: italic;letter-spacing:3px;">&nbsp;  &nbsp;采购-管理就是如此简单</a> 
-            </span>
-        </div> 
-        <a class="right mRight20 pTop5" style="color: #4B9CEE" href="@(ViewBag.Url)/Default/Index" title="返回二当家">[返回]</a>
-        <a class="right mRight10 pTop5" style="color: #4B9CEE" id="cgbtn" title="查看历史采购单">[采购订单]</a>
-        <a class="right mRight10 pTop5" style="color:#4B9CEE" id="myself" title="进入个人中心" >[@(CurrentUser.Name)]</a>
-        <div class="searth-module right mRight50 mTop30" data-text="款号/名称模糊搜索..." data-width="180"> </div>
-       
-        <div class="clear"></div>
-    </div>
-</div>*@
-@*<div class="header-box" style="background-color: #4a98e7; padding: 0px 20px;">
-    <div class="divcenter">
-        <div class="left" id="divCategory">
-        <div class="header-title left pLeft10" id="spanCategory" style="border-top: 1px solid #E6E6E6; padding-right: 10px; color: #999; background-color: #ffffff; font-size: 14px; cursor: pointer; position: relative;">所有类目
-
-        </div>
-        <div class="divcategory hide mtop30"></div>
-
-        </div> 
-        <span class="clear"></span>
-    </div>
-
-</div>*@
 <div class="divcenter seachlist">
     <div class="orderby">
         <ul class="seachul">
@@ -79,7 +42,6 @@
         <ul class="productlist" id="productlist">
 
         </ul> 
-
         <div id="pager" class="mTop20"></div>
     </div>
 </div> 

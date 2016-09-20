@@ -240,7 +240,7 @@
         }
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/style-list.html";
-        var control = "/Mall/Store/GetProduct";
+        var control = "/M/IntFactoryOrders/GetProducts";
         ObjectJS.IsLoading = true;
         $.post(control, Params, function (data) {
             $(".data-loading").remove();
@@ -300,7 +300,6 @@
             clientID: Params.clientid
         }, function (data) {
             $(".category-box .data-loading").remove();
-
             if (data.result.length > 0) {
                 CacheCategory = data.result;
                 for (var i = 0; i < data.result.length; i++) {
@@ -318,11 +317,13 @@
 
                         var item = CacheChildCategory[_this.data('id')];
                         if (item) {
-                            if (item.ChildCategorys.length > 0) {
+                            if (item.ChildCategory.length > 0) {
                                 _self.createCategory(_this.data('id'), _thisParent);
                             }
                         }
                     });
+                    console.log(CacheChildCategory);
+
                 }
             } else {
                 $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");
@@ -333,14 +334,14 @@
     ObjectJS.createCategory = function (id, parentObj) {
         if (CacheChildCategory[id]) {
             var item = CacheChildCategory[id];
-            if (item.ChildCategorys.length > 0) {
+            if (item.ChildCategory.length > 0) {
                 var _html = $('<div class="layer-box" style="display:table;"></div>'),
                     _htmlTitle = $('<div class="mLeft5 mBottom10" data-id="' + id + '">' + item.CategoryName + '：</div>'),
                     _htmlChildItems = $('<div></div>'),
                     _htmlChildBox = $('<ul class="category-box row"></ul>');
 
-                for (var j = 0; j < item.ChildCategorys.length; j++) {
-                    var _child = item.ChildCategorys[j];
+                for (var j = 0; j < item.ChildCategory.length; j++) {
+                    var _child = item.ChildCategory[j];
                     CacheChildCategory[_child.CategoryID] = _child;
                     var _obj = $("<li class='category-block' data-id='" + _child.CategoryID + "' layer='" + _child.Layers + "'>" + _child.CategoryName + "</li>");
                     _htmlChildBox.append(_obj);
@@ -354,7 +355,7 @@
 
                         var item = CacheChildCategory[_this.data('id')];
                         if (item) {
-                            if (item.ChildCategorys.length > 0) {
+                            if (item.ChildCategory.length > 0) {
                                 ObjectJS.createCategory(_this.data('id'), _thisParent);
                             }
                         }

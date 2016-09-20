@@ -13,17 +13,17 @@ namespace YXERP.Areas.M.Controllers
     {
         public ActionResult Index()
         {
-            if (string.IsNullOrEmpty(CurrentUser.CurrentStoreID))
+            if (string.IsNullOrEmpty(CurrentUser.CurrentClientID))
             {
                 return Redirect("/M/Home/ChooseProvider");
             }
 
             ViewBag.baseUser = CurrentUser.Client;
 
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentStoreID);
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
             ViewBag.Client = client;
             ViewBag.index = 0;
-            ViewBag.providerID = CurrentUser.CurrentStoreID;
+            ViewBag.providerID = CurrentUser.CurrentCMClientID;
             return View();
         }
 
@@ -45,7 +45,10 @@ namespace YXERP.Areas.M.Controllers
         }
 
         public JsonResult SelectStore(string id) {
-            CurrentUser.CurrentStoreID = id;
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
+            CurrentUser.CurrentClientID = id;
+            var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
+            CurrentUser.CurrentCMClientID = agent.CMClientID;
             JsonDictionary.Add("status",true);
 
             return new JsonResult { 

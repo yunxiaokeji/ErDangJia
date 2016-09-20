@@ -270,7 +270,13 @@ namespace CloudSalesEntity
 			get{return _clientid;}
 		}
 
-        public string CurrentStoreID
+        public string CurrentClientID
+        {
+            set;
+            get;
+        }
+
+        public string CurrentCMClientID
         {
             set;
             get;

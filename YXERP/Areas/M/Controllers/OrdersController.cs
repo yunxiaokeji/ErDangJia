@@ -16,7 +16,7 @@ namespace YXERP.Areas.M.Controllers
         public ActionResult List(string providerID)
         {
             ViewBag.index = 1;
-            ViewBag.providerID = CurrentUser.CurrentStoreID;
+            ViewBag.providerID = CurrentUser.CurrentClientID;
 
             return View();
         }

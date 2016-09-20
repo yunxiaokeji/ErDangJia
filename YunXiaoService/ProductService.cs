@@ -40,7 +40,6 @@ namespace YunXiaoService
 
         public static List<Category> GetEdjCateGory(string clientid)
         {
-
             var result = new ProductsBusiness().GetCategorys(clientid);
             result = result.Where(x => string.IsNullOrEmpty(x.PID)).ToList();
             return result;

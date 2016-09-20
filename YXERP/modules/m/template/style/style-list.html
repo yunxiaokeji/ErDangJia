@@ -5,13 +5,13 @@
 %}
     <ul class="listabove row">
         <li style="">
-            <a href="/m/home/Detail?orderid={%=item.ProductID%}&clientid={%=$data.clientID%}" style="padding:1px;border:1px solid #ddd;font-size:0;"><img class="list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.ProductImage%}' /></a>
+            <a href="/m/home/Detail?orderid={%=item.orderID%}&clientid={%=$data.clientID%}" style="padding:1px;border:1px solid #ddd;font-size:0;"><img class="list-img" onerror="this.src='/modules/m/images/img-noimg.png'" data-src='{%=item.orderImage==""?"/modules/m/images/img-noimg.png":item.ProductImage%}' /></a>
         </li>     
         <li class="center-list-task">
             <!--任务详情-->
             <div>
                 <div>   
-                     <a class="color333 details" href="/m/home/Detail?orderid={%=item.ProductID%}&clientid={%=item.ClientID%}">{%=item.ProductName%}</a>
+                     <a class="color333 details" href="/m/home/Detail?orderid={%=item.orderID%}&clientid={%=item.clientID%}">{%=item.goodsName%}</a>
                 </div>
                 <div class="stage">
                     <div class="left" style="padding-top:3px;"><img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;"></div>
@@ -19,7 +19,7 @@
                     <div class="clear"></div>
                 </div>
                 <div class="stage">
-                    <div class="left blue font16 price">￥ {%=item.Price.toFixed(2)%}</div>
+                    <div class="left blue font16 price">￥ {%=item.finalPrice.toFixed(2)%}</div>
                     <div class="btn right mRight5 btn-addOrder" data-orderid="{%=item.ProductID%}" data-clientid="{%=item.ClientID%}" >立即下单</div>
                     <div class="clear"></div>
                 </div>                                              

@@ -14,7 +14,7 @@ namespace YXERP.Areas.M.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.providerID = CurrentUser.CurrentStoreID; ;
+            ViewBag.providerID = CurrentUser.CurrentCMClientID; ;
             ViewBag.baseUser = CurrentUser;
             ViewBag.index = 2;
 

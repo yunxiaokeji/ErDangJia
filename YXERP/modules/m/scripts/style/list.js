@@ -322,8 +322,6 @@
                             }
                         }
                     });
-                    console.log(CacheChildCategory);
-
                 }
             } else {
                 $(".category-box").append("<div class='nodata-txt' >暂无分类</div>");

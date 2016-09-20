@@ -583,7 +583,7 @@ namespace YXERP.Controllers
                 }
                 else
                 {
-                    id = new ProductsBusiness().AddProduct(model.ProductCode, model.ProductName, model.GeneralName,
+                    id = new ProductsBusiness().AddProduct(EnumProductSourceType.Normal, model.ProductCode, model.ProductName, model.GeneralName,
                         model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID,model.UnitID,
                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList,
                         model.ValueList, model.AttrValueList, model.AttrValueStr, model.SaleAttrStr,

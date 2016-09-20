@@ -34,7 +34,7 @@
 
             <li class="left open-collect-store" id="openStores">
                 <img class="ico" data-ico="/Content/menuico/collectstore.png" data-hover="/Content/menuico/collectstorehover.png" src="/Content/menuico/collectstore.png" /> 
-                <span class="name" >关注店铺</span>
+                <span class="name" >关注商家</span>
             </li>
         </ul> 
         
@@ -111,7 +111,10 @@
     <div class="dropdown-collect-store hide">
         <div class="top-lump"></div>
         <ul class="items-list">
-            <li class="item"><a href="/Mall/Store/Index/@(CurrentUser.ClientID)" target="_blank">进入我的店铺</a></li>
+            @if(!string.IsNullOrEmpty(CurrentUser.Agents.CMClientID))
+            {
+                <li class="item"><a href="/Mall/Store/Index/@(CurrentUser.ClientID)" target="_blank">进入我的店铺</a></li>
+            }
         </ul>
     </div>
 

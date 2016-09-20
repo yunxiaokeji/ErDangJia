@@ -77,11 +77,14 @@
                 <option value="">其他行业</option>
             </select>
         </li>
-        <li style="width:100%;">
-            <span class="column-title">店铺地址：</span>
-            @*id="ksurl"*@
-            <a  target="_blank" href="@(ViewBag.BaseUrl)/Mall/Store/Index/@(ViewBag.ClientID)">@(ViewBag.BaseUrl)/Mall/Store/Index/@(ViewBag.ClientID)</a>
-        </li>
+        @if (!string.IsNullOrEmpty(ViewBag.CMClientID))
+        {
+            <li style="width:100%;">
+                <span class="column-title">店铺地址：</span>
+                @*id="ksurl"*@
+                <a  target="_blank" href="@(ViewBag.BaseUrl)/Mall/Store/Index/@(ViewBag.ClientID)">@(ViewBag.BaseUrl)/Mall/Store/Index/@(ViewBag.ClientID)</a>
+            </li>
+        }
     </ul>
     <input id="ipturl" hidden="hidden" type="text" value="@(ViewBag.BaseUrl)"/>
     <img class="company-logo" src="" id="posterDisImg" alt=""/>

@@ -75,11 +75,16 @@ namespace YXERP.Controllers
 
         public ActionResult Client(string id)
         {
-            ViewBag.Industry =CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
+            ViewBag.Industry = CloudSalesBusiness.Manage.IndustryBusiness.GetIndustrys();
             if (string.IsNullOrEmpty(id))
+            {
                 ViewBag.Option = 1;
+            }
             else
+            {
                 ViewBag.Option = id;
+            }
+            ViewBag.CMClientID = CurrentUser.Agents.CMClientID;
             ViewBag.ClientID = CurrentUser.ClientID;
             ViewBag.BaseUrl = GetbaseUrl();
             return View();

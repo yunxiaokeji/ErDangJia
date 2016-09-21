@@ -247,6 +247,7 @@
                         '</span><span class="sjselect hide" style="position: absolute;bottom:-8px;right:-10px;z-index:22;"><img style="height:16px;width:16px;" src="/modules/images/ico-sjselect.png"></div></li>';
                 }
             }
+
         }
         $('#colorlist').html(chtml);
         if (chtml == "") {

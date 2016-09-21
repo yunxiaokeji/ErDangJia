@@ -413,7 +413,6 @@
     <Content Include="modules\excelmodel\stockout.json" />
     <Content Include="modules\excelmodel\orderdetailrpt.json" />
     <Content Include="modules\excelmodel\stockdetailrpt.json" />
-    <Content Include="Areas\Api\Views\Web.config" />
     <Content Include="Areas\M\Views\Web.config" />
     <Content Include="Areas\M\Views\Home\Index.cshtml" />
     <Content Include="modules\m\css\iconfont\iconfont.eot" />
@@ -434,6 +433,7 @@
     <Content Include="Areas\M\Views\Home\ChooseProvider.cshtml" />
     <Content Include="Areas\M\Views\Shared\Footer.cshtml" />
     <Content Include="Areas\Mall\Views\Web.config" />
+    <Content Include="Areas\Api\Views\Web.config" />
     <None Include="modules\plug\umeditor\net\Uploader.cs" />
     <Compile Include="Models\FilterUser.cs" />
     <Compile Include="Models\FilterCustomer.cs" />
@@ -1184,6 +1184,7 @@
     <Content Include="modules\plug\umeditor\third-party\video-js\font\vjs.eot" />
     <Content Include="modules\plug\umeditor\third-party\video-js\font\vjs.ttf" />
     <Content Include="modules\plug\umeditor\third-party\video-js\font\vjs.woff" />
+    <None Include="Properties\PublishProfiles\edj.pubxml" />
     <None Include="Properties\PublishProfiles\web.pubxml" />
     <Content Include="Views\Auction\ExtendNow.cshtml" />
     <Content Include="Views\Auction\BuyUserQuantity.cshtml" />
@@ -1204,7 +1205,6 @@
     <Content Include="Views\Products\Providers.cshtml" />
     <Content Include="Views\Home\Terms.cshtml" />
     <Content Include="Views\Auction\GoAlipayPay.cshtml" />
-    <None Include="Properties\PublishProfiles\yunxiaoweb.pubxml" />
     <Content Include="Views\Shared\_LayoutUserCenter.cshtml" />
     <Content Include="Views\MyAccount\SetAvatar.cshtml" />
     <Content Include="Views\MyAccount\SetPassWord.cshtml" />

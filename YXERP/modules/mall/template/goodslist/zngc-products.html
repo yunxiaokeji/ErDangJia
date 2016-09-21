@@ -6,13 +6,13 @@
 %}
 <li style="padding: 20px;height: 339px;">
     <div class="product-item"  >
-        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.ProductName%}" href="/Mall/Store/GoodsDetail?orderid={%=item.ProductID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}">
+        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.ProductName%}" data-href="/Mall/Store/GoodsDetail?orderid={%=item.ProductID%}&categoryid={%=item.CategoryID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}">
             <img  src="{%=item.ProductImage%}" alt=""/>
         </a>
         <h2 class="price">
             ￥{%=item.Price.toFixed(2)%}
         </h2>
-        <a class="btn-open-window name" style="height: 40px;" href="/Mall/Store/GoodsDetail?orderid={%=item.ProductID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}" title="{%=item.ProductCode%}&nbsp;{%=item.ProductName%}">
+        <a class="btn-open-window name" style="height: 40px;" data-href="/Mall/Store/GoodsDetail?orderid={%=item.ProductID%}&categoryid={%=item.CategoryID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}" title="{%=item.ProductCode%}&nbsp;{%=item.ProductName%}">
             &nbsp;{%=goodname%}
         </a>
         <div class="mLeft5 mTop5 hide" title="员工人数:{%=item.clientName%}">

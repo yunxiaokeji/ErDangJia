@@ -18,7 +18,7 @@ namespace YXERP.Areas.Mall.Controllers
     public class StoreController : YXERP.Controllers.BaseController
     {
 
-        public ActionResult Index(string id)
+        public ActionResult Index(string id,string categoryid="")
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -47,6 +47,7 @@ namespace YXERP.Areas.Mall.Controllers
             {
                 ViewBag.Url = GetbaseUrl();
                 ViewBag.ClientID = id; ;
+                ViewBag.CategoryID = categoryid;
                 ViewBag.Client = client == null ? CurrentUser.Client : client;
                 return View("Goods");
             }
@@ -57,7 +58,7 @@ namespace YXERP.Areas.Mall.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Goods(string id)
+        public ActionResult Goods(string id, string categoryid = "")
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -83,7 +84,7 @@ namespace YXERP.Areas.Mall.Controllers
             }
             ViewBag.Url = GetbaseUrl();
             ViewBag.ClientID = id;;
-            
+            ViewBag.CategoryID = categoryid;
             ViewBag.Client = client == null ? CurrentUser.Client : client;
             return View();
         }
@@ -105,7 +106,7 @@ namespace YXERP.Areas.Mall.Controllers
         /// <param name="orderid"></param>
         /// <param name="clientid"></param>
         /// <returns></returns>
-        public ActionResult GoodsDetail(string orderid, string clientid = "")
+        public ActionResult GoodsDetail(string orderid, string clientid = "", string categoryid = "")
         {
             if (string.IsNullOrEmpty(orderid))
             {
@@ -121,6 +122,7 @@ namespace YXERP.Areas.Mall.Controllers
                 mphone = CurrentUser.Client.MobilePhone;
                 cname = CurrentUser.Client.ContactName;
             }
+            ViewBag.CategoryID = categoryid;
             ViewBag.Url = GetbaseUrl();
             ViewBag.OrderID = orderid;
             ViewBag.CityCode = ccode;
@@ -149,10 +151,9 @@ namespace YXERP.Areas.Mall.Controllers
             };
         }
 
-        public JsonResult GetEdjCateGory(string clientid,string categoryid="")
+        public JsonResult GetEdjCateGory(string clientid)
         {
-            var result = new ProductsBusiness().GetCategorys(clientid);
-            result = result.Where(x => x.PID == categoryid).ToList();
+            var result = new ProductsBusiness().GetCategorys(clientid); 
             JsonDictionary.Add("items", result);
             return new JsonResult()
             {

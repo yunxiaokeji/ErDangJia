@@ -18,18 +18,18 @@
 
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (clientid) {
+    ObjectJS.init = function (clientid,categoryid) {
         var _self = this;
         _self.clientid = clientid;
         _self.providers = [];
+        Params.categoryID = categoryid;
         _self.bindEvent();  
     } 
     //绑定事件
     ObjectJS.bindEvent = function () {
         var _self = this;
         var providerids = _self.clientid == "" ? "-1" : _self.clientid; 
-        Params.clientid = providerids; 
-      
+        Params.clientid = providerids;;
         //搜索
         require.async("search", function () {
             $(".searth-module").searchKeys(function (keyWords) {
@@ -142,6 +142,10 @@
                     $("#productlist a").each(function() {
                         var href = $(this).attr("href");
                         $(this).attr("href", href + "&clientid=" + _self.clientid);
+                    });
+
+                    $(html).find('a').click(function() {
+                        window.open($(this).data('href'), $(this).data('name'));
                     });
                 });
             } else {

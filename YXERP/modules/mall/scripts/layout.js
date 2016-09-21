@@ -90,8 +90,10 @@
             for (var i = 0; i < templist.length; i++) {
                 var item = templist[i];
                 html += "<dl ><dt data-id='" + categoryid + "'><a  data-id='" + item.CategoryID + "' data-name='" + item.CategoryName + "' style='font-size: 14px;'>" + item.CategoryName + "</a></dt>";
-                for (var j = 0; j < item.ChildCategorys.length; j++) {
-                    var childcate = item.ChildCategorys[j];
+                var childList = typeof (item.ChildCategorys) != 'undefined' ? item.ChildCategorys : item.ChildCategory;
+
+                for (var j = 0; j < childList.length; j++) {
+                    var childcate = childList[j];
                     html += "<dd data-id='" + item.CategoryID + "' data-name='" + item.CategoryName + "' ";
                     if ((j + 1) % 3 == 0) {
                         html += "style='margin-right:0px;'";

@@ -239,12 +239,14 @@
             Global.post("/M/IntFactoryOrders/AddIntfactoryPurchaseDoc", model, function (data) {
                 isCreateOrder = false;
                 $(".btn-sureAdd").text("确定");
-                if (data.result == 1) {
-                    alert("下单成功");
-                    $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
-                        $("body,html").removeClass('ohidden');
-                        $(".overlay-addOrder").fadeOut();;
-                    });
+                if (data.result) {
+                    if (data.result.id) {
+                        alert("下单成功");
+                        $(".overlay-addOrder .style-content").animate({ height: "0px" }, 200, function () {
+                            $("body,html").removeClass('ohidden');
+                            $(".overlay-addOrder").fadeOut();;
+                        });
+                    }
                 } else {
                     alert("下单失败,请重试");
                     return false;

@@ -38,6 +38,7 @@ namespace YXERP.Areas.M.Controllers
         public ActionResult Detail(string orderid)
         {
             var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, CurrentUser.CurrentCMClientID);
+            ViewBag.EDJProviderID = CurrentUser.CurrentClientID;
             ViewBag.baseUser = CurrentUser.Client;
             ViewBag.Model = obj.order;
 

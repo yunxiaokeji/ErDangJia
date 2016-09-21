@@ -221,8 +221,8 @@
                         zngcModel.attrValue = _attrs.ValueID + ',' + _sale.SaleID;
                         zngcModel.saleAttrValue = $("#sizelist .tr-header .attr-title").data('id') + ':' + _attrs.ValueID + ',' + $("#colorlist").prev().data('id') + ':' + _sale.SaleID;
                         zngcModel.remark = '【' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + '】【' + $("#colorlist").prev().text().trim() + '：' + _sale.SaleRemark + '】';
-                        zngcModel.xRemark = '【' + _sale.SaleRemark + '】';
-                        zngcModel.yRemark = '【' + _attrs.ValueName + '】';
+                        zngcModel.xRemark = '【' + _attrs.ValueName + '】';
+                        zngcModel.yRemark = '【' + _sale.SaleRemark + '】';
                         zngcModel.xYRemark = '【' + _attrs.ValueName + '】【' + _sale.SaleRemark + '】';
                         zngcModel.description = "";
                         zngcProductEntity.push(zngcModel);

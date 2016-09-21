@@ -34,12 +34,11 @@ namespace YXERP.Areas.M.Controllers
             return View();
         }
 
-        public ActionResult Detail(string orderid, string clientid)
+        public ActionResult Detail(string orderid)
         {
-            var obj = ProductService.GetProductByIDForDetails(orderid);
+            var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, CurrentUser.CurrentCMClientID);
             ViewBag.baseUser = CurrentUser.Client;
-            ViewBag.Model = obj;
-            ViewBag.ClientID = obj.ClientID;
+            ViewBag.Model = obj.order;
 
             return View();
         }

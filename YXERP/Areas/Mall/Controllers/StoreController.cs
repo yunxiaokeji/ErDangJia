@@ -197,7 +197,7 @@ namespace YXERP.Areas.Mall.Controllers
             }
             //暂读取智能工厂产品
             return  this.GetProductList
-            (CurrentUser.CurrentCMClientID, keyWords, pageSize, pageIndex, categoryID, orderby, beginPrice, endPrice);
+            (CurrentUser.CurrentCMClientID, keyWords, pageSize, pageIndex, categoryID, orderby,  isAsc, beginPrice, endPrice);
 
             List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords,
                    orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid, 1);
@@ -210,9 +210,9 @@ namespace YXERP.Areas.Mall.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex, string categoryID = "", string orderby = "", string beginPrice = "", string endPrice = "")
+        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex, string categoryID = "", string orderby = "", bool isAsc=false, string beginPrice = "", string endPrice = "")
         {
-            IntFactory.Sdk.OrderListResult item = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid, keyWords, categoryID, orderby, beginPrice, endPrice);
+            IntFactory.Sdk.OrderListResult item = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(keyWords, clientid, pageSize, pageIndex, categoryID, beginPrice, endPrice, isAsc, orderby);
             JsonDictionary.Add("items", item.orders);
             JsonDictionary.Add("totalCount", item.totalCount);
             JsonDictionary.Add("pageCount", item.pageCount);

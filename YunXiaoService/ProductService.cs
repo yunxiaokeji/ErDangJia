@@ -45,10 +45,10 @@ namespace YunXiaoService
             return result;
         }
 
-        public static List<StorageDoc> GetPurchases(string keyWords, int pageIndex, int totalCount, string userID,string clientID, string agentID, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype = -1, int pageSize = 10)
+        public List<StorageDoc> GetPurchases(string keyWords, int pageIndex, string userID, string clientID, string agentID, ref int totalCount, ref int pageCount, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype = -1, int pageSize = 10)
         {
-            int pageCount = 0;
-            List<StorageDoc> list = StockBusiness.GetPurchases(type == 3 ? string.Empty : userID, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, providerid, sourcetype, pageSize, pageIndex, ref totalCount, ref pageCount, agentID, clientID);
+            List<StorageDoc> list = StockBusiness.GetPurchases(type == 3 ? string.Empty : userID, (EnumDocStatus)status, keyWords, begintime, endtime, wareid, 
+                providerid, sourcetype, pageSize, pageIndex, ref totalCount, ref pageCount, agentID, clientID);
             return list;   
         }
 

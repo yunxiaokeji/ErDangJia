@@ -169,7 +169,7 @@
         //获取任务列表(页面加载)
         $(".list").append('<div class="data-loading"></div>');
         var template = "m/template/style/order-list.html";
-        var control = "/Purchase/GetPurchases";
+        var control = "/m/IntFactoryOrders/GetPurchases";
         ObjectJS.IsLoading = true;
         $.post(control, Params, function (data) {
             ObjectJS.IsLoading = false;

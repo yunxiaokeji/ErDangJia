@@ -2,6 +2,7 @@
     ViewBag.Title = "款式详情";
     var order = (IntFactory.Sdk.OrderEntity)ViewBag.Model;
     var user = (CloudSalesEntity.Manage.Clients)ViewBag.baseUser;
+    var client = (CloudSalesEntity.Manage.Clients)ViewBag.Client;
 }
 @section css{
     <link href="/modules/m/css/style/detail.css" rel="stylesheet" />
@@ -65,7 +66,7 @@
 <!--菜单-->
 <nav>
     <ul>
-        <li class="menuchecked" data-classname="description"><i class="iconfont">&#xe625;;</i>工厂信息</li>
+        <li class="menuchecked" data-classname="description"><i class="iconfont">&#xe625;;</i>店铺信息</li>
     </ul>
     <div class="clear"></div>
 </nav>
@@ -74,24 +75,24 @@
     <div class="description">
         <ul class="table-add">
             <li>
-                    <span class="column-title">工厂名称：</span>
-                    <span>@(order.clientName)</span>
+                    <span class="column-title">店铺名称：</span>
+                    <span>@(client.CompanyName)</span>
                 </li>
                 <li>
-                    <span class="column-title">工厂编码：</span>
-                    <span>@order.clientCode</span>
+                    <span class="column-title">店铺编码：</span>
+                    <span>@client.ClientCode</span>
                 </li>
                 <li>
                     <span class="column-title">联系人：</span>
-                    <span>@(order.clientContactName)</span>
+                    <span>@(client.ContactName)</span>
                 </li>
                 <li>
                     <span class="column-title">联系电话：</span>
-                   <span>@(order.clientMobile)</span>
+                   <span>@(client.MobilePhone)</span>
                 </li>
                <li>
                     <span class="column-title">地址：</span>
-                    <span>@(order.clientAdress)</span>
+                    <span>@(client.City==null?"--":client.City.Description)</span>
                 </li>
             </ul>
     </div>

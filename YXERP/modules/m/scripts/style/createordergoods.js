@@ -60,13 +60,20 @@
 
             $(".overlay-addOrder .attr-ul li").unbind().click(function () {
                 var _this = $(this);
-                //第一次，没有选中任何颜色处理
-                if (!$(".attr-item li").hasClass('select')) {
-                    $("#sizelist .data-item").each(function () {
-                        var _sizeTr = $(this);
+                var num = 0;
+                $("#sizelist .data-item").each(function () {
+                    var _sizeTr = $(this);
+                    //第一次，没有选中任何颜色处理
+                    if (!$(".attr-item li").hasClass('select')) {
                         ObjectJS.setOrderAttrQuantity(_this.data('id'), _sizeTr.data('id'), _sizeTr.find('.quantity').val() || 0, 1);
-                    });
+                    } else {
+                        num += _sizeTr.find('.quantity').val() * 1;
+                    }
+                });
+                if (num > 0) {
+                    //$()
                 }
+
                 ObjectJS.setTrQuantity(_this.data('id'));
                 _this.siblings().removeClass("select");
                 _this.removeClass("hasquantity").addClass("select");

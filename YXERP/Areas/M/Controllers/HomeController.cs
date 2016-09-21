@@ -11,13 +11,19 @@ namespace YXERP.Areas.M.Controllers
 {
     public class HomeController : YXERP.Controllers.BaseController
     {
-        public ActionResult Index()
+        public ActionResult Index(string providerID)
         {
-            if (string.IsNullOrEmpty(CurrentUser.CurrentClientID))
+            if (string.IsNullOrEmpty(providerID) && string.IsNullOrEmpty(CurrentUser.CurrentClientID))
             {
                 return Redirect("/M/Home/ChooseProvider");
             }
 
+            if (!string.IsNullOrEmpty(providerID)) {
+                var c = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(providerID);
+                CurrentUser.CurrentClientID = providerID;
+                var agent = AgentsBusiness.GetAgentDetail(c.AgentID);
+                CurrentUser.CurrentCMClientID = agent.CMClientID;
+            }
             ViewBag.baseUser = CurrentUser.Client;
 
             var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
@@ -30,8 +36,13 @@ namespace YXERP.Areas.M.Controllers
 
         public ActionResult ChooseProvider()
         {
-            ViewBag.Providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID).FindAll(m => !string.IsNullOrEmpty(m.CMClientID) && m.ProviderType == 2);
+            var providers = ProductsBusiness.BaseBusiness.GetProviders(CurrentUser.ClientID).FindAll(m => !string.IsNullOrEmpty(m.CMClientID) && m.ProviderType == 2);
+            if (providers.Count==1)
+            {
+                return Redirect("/M/Home/Index?providerID=" + providers[0].CMClientID);
+            }
 
+            ViewBag.Providers = providers;
             return View();
         }
 

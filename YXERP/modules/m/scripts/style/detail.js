@@ -5,28 +5,17 @@
     var Common = require("/modules/m/scripts/style/createordergoods.js");
 
     var ObjectJS = {};
-    ObjectJS.init = function (orderImagesCount,orderImage, order,user) {
-        ObjectJS.orderImagesCount = orderImagesCount;
-        ObjectJS.orderImage = orderImage;
+    ObjectJS.init = function (order,user) {
         var order = JSON.parse(order.replace(/&quot;/g, '"'));
         ObjectJS.order = order;
         ObjectJS.user = JSON.parse(user.replace(/&quot;/g, '"'));
 
         ObjectJS.bindEvent();
-
-        //设置图片显示宽高
-        //$(".pic-list li").css({ "margin-right": "10px", "border": "1px solid #ccc" });
-        //$(".pic-list .pic-box img").css({ "width": "100%", "height": "200px" });
         $(".platemakingBody table tr td:last-child").remove();
     }
 
     //绑定事件
     ObjectJS.bindEvent = function () {
-        if (ObjectJS.orderImagesCount > 0) {
-            setTimeout(function () {
-                ObjectJS.setImagesSize();
-            }, 300);
-        }
         //菜单切换模块事件
         $("nav ul li").click(function () {
             var _this = $(this);

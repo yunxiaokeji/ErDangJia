@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using CloudSalesEntity;
 using YunXiaoService;
 
@@ -45,14 +46,24 @@ namespace YXERP.Areas.M.Controllers
             };
         }
 
-        public JsonResult AddIntfactoryPurchaseDoc(string goodsID, string goodsCode, string goodsName, string price, string productDetails, string cmClientID,
-                                             decimal totalMoney, string saleAttrStr = "", string productImage = "", string personName = "",
+        public JsonResult AddIntfactoryPurchaseDoc(string goodsID, string goodsCode, string goodsName, decimal price, string productDetails, string cmClientID,
+                                             decimal totalMoney,string zngcOrderID,string zngcClientID,string zngcProductEntity, string saleAttrStr = "", string productImage = "", string personName = "",
                                             string mobilePhone = "", string cityCode = "", string address = "")
         {
-            bool flag = new StockService().AddIntfactoryPurchaseDoc(goodsID, goodsCode, goodsName, price, productDetails, cmClientID,
+            string id = new StockService().AddIntfactoryPurchaseDoc(goodsID, goodsCode, goodsName, price.ToString(), productDetails, cmClientID,
                  (int)CloudSalesEnum.EnumDocType.RK, (int)CloudSalesEnum.EnumProductSourceType.IntFactory, totalMoney,
                  CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, saleAttrStr, productImage, personName, mobilePhone, cityCode, address);
-            JsonDictionary.Add("result", flag ? 1 : 0);
+            if (!string.IsNullOrEmpty(id))
+            {
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                List<IntFactory.Sdk.ProductDetailEntity> details = serializer.Deserialize<List<IntFactory.Sdk.ProductDetailEntity>>(zngcProductEntity);
+                IntFactory.Sdk.AddResult result = IntFactory.Sdk.OrderBusiness.BaseBusiness.CreateDHOrder(zngcOrderID, price, details, zngcClientID, id, CurrentUser.ClientID, personName, mobilePhone, cityCode, address);
+                JsonDictionary.Add("result", result);
+            }
+            else
+            {
+                JsonDictionary.Add("result", "");
+            }
             return new JsonResult
             {
                 Data = JsonDictionary,

@@ -91,10 +91,13 @@
                         goodsCode: model.intGoodsCode,
                         price: model.finalPrice,
                         productDetails: "",
-                        cmClientID: model.clientID,
+                        cmClientID: $("#EDJProvider").data('id'),
                         totalMoney: $("#totalprice").text() * 1,
                         saleAttrStr: model.SaleAttrs[0].AttrName + ',' + model.AttrLists[0].AttrName,
-                        productImage: model.orderImage
+                        productImage: model.orderImage,
+                        zngcOrderID: model.orderID,
+                        zngcClientID: model.clientID,
+                        zngcProductEntity: ""
                     };
                     ObjectJS.createOrders(item);
                 } else {
@@ -149,6 +152,7 @@
             var _sale = _self.model.SaleAttrs[0].AttrValues[i];
             var _model = {};
             _model.SaleRemark = _sale.ValueName;
+            _model.SaleID = _sale.ValueID;
             var _details = {};
             for (var j = 0; j < _self.model.AttrLists[0].AttrValues.length; j++) {
                 var _attr = _self.model.AttrLists[0].AttrValues[j];
@@ -195,20 +199,41 @@
         if (!isCreateOrder) {
             //大货单遍历下单明细 
             var productDetails = "";
+            var zngcProductEntity = [];
             for (var i in AttrList) {
-                var _attr = AttrList[i];
-                for (var j in _attr.AttrsList) {
-                    var _attrs = _attr.AttrsList[j];
+                var _sale = AttrList[i];
+                for (var j in _sale.AttrsList) {
+                    var _attrs = _sale.AttrsList[j];
                     if (_attrs.Quantity > 0) {
-                        productDetails += _attr.SaleRemark + ',' + _attrs.ValueName + '|';
-                        productDetails += $("#colorlist").prev().text().trim() + ':' + _attr.SaleRemark + ',' + $("#sizelist .tr-header .attr-title").text().trim() + ':' + _attrs.ValueName + '|';
+                        productDetails += _sale.SaleRemark + ',' + _attrs.ValueName + '|';
+                        productDetails += $("#colorlist").prev().text().trim() + ':' + _sale.SaleRemark + ',' + $("#sizelist .tr-header .attr-title").text().trim() + ':' + _attrs.ValueName + '|';
                         productDetails += _attrs.Quantity + '|';
                         productDetails += _attrs.Quantity * 1 * _self.model.finalPrice + '|';
-                        productDetails += '[' + $("#colorlist").prev().text().trim() + '：' + _attr.SaleRemark + '][' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + ']&';
+                        productDetails += '[' + $("#colorlist").prev().text().trim() + '：' + _sale.SaleRemark + '][' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + ']&';
+                        
+                        var zngcModel = {};
+                        zngcModel.price = _self.model.finalPrice;
+                        zngcModel.productCode = _self.model.intGoodsCode;
+                        zngcModel.productName = _self.model.goodsName;
+                        zngcModel.productImage = _self.model.orderImage;
+                        zngcModel.quantity = _attrs.Quantity;
+                        zngcModel.saleAttr = $("#colorlist").prev().data('id') + ',' + $("#sizelist .tr-header .attr-title").data('id');
+                        zngcModel.attrValue = _sale.SaleID + ',' + _attrs.ValueID;
+                        zngcModel.saleAttrValue = $("#colorlist").prev().data('id') + ':' + _sale.SaleID + ',' + $("#sizelist .tr-header .attr-title").data('id') + ':' + _attrs.ValueID;
+                        zngcModel.remark = '【' + $("#colorlist").prev().text().trim() + '：' + _sale.SaleRemark + '】【' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + '】';
+                        zngcModel.xRemark = '【' + _sale.SaleRemark + '】';
+                        zngcModel.yRemark = '【' + _attrs.ValueName + '】';
+                        zngcModel.xYRemark = '【' + _sale.SaleRemark + '】【' + _attrs.ValueName + '】';
+                        zngcModel.description = "";
+                        zngcProductEntity.push(zngcModel);
                     }
                 }
             }
             model.productDetails = productDetails && productDetails.substring(0, productDetails.length - 1);
+            model.zngcProductEntity = JSON.stringify(zngcProductEntity);
+            if (!model.productDetails) {
+                alert("请选择规格，或数量未填写下单数量");
+            }
             $(".btn-sureAdd").text("下单中...");
             isCreateOrder = true;
             Global.post("/M/IntFactoryOrders/AddIntfactoryPurchaseDoc", model, function (data) {
@@ -221,7 +246,7 @@
                         $(".overlay-addOrder").fadeOut();;
                     });
                 } else {
-                    alert(data.errMsg);
+                    alert("下单失败,请重试");
                     return false;
                 }
             });

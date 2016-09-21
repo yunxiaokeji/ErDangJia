@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
     var model = (IntFactory.Sdk.OrderResult)ViewBag.DetailItem;
     var order = model.order;
-    var colorModel = model.order.saleAttrs;
+    var colorModel = model.order.SaleAttrs;
     var attrModel = model.order.attrLists;
 }
 @section css{

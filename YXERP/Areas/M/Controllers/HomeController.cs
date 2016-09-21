@@ -23,6 +23,7 @@ namespace YXERP.Areas.M.Controllers
             var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
             ViewBag.Client = client;
             ViewBag.index = 0;
+            ViewBag.EDJProviderID = CurrentUser.CurrentClientID;
             ViewBag.providerID = CurrentUser.CurrentCMClientID;
             return View();
         }

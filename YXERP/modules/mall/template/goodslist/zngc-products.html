@@ -4,6 +4,43 @@
     var titlename=item.ProductCode+" "+item.ProductName;
     var goodname=(titlename.length>35?titlename.substring(0,35)+"...":titlename); 
 %}
+<!-- 二当家产品信息
+    <li style="padding: 20px;height: 339px;">
+    <div class="product-item">
+        <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.ProductName%}" data-href="/Mall/Store/GoodsDetail?orderid={%=item.ProductID%}&categoryid={%=item.CategoryID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}">
+            <img src="{%=item.ProductImage%}" alt=""/>
+        </a>
+        <h2 class="price">
+            ￥{%=item.Price.toFixed(2)%}
+        </h2>
+        <a class="btn-open-window name" style="height: 40px;" data-href="/Mall/Store/GoodsDetail?orderid={%=item.ProductID%}&categoryid={%=item.CategoryID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}" title="{%=item.ProductCode%}&nbsp;{%=item.ProductName%}">
+            &nbsp;{%=goodname%}
+        </a>
+        <div class="mLeft5 mTop5 hide" title="员工人数:{%=item.clientName%}">
+            <div class="left mLeft3">
+                <img src="/modules/images/ico-usernum.png" style="width: 16px; height: 16px; display: inline-block;">
+            </div>
+            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=item.SaleCount%}</div>
+            <div class="clear"></div>
+        </div>
+        <div class="mLeft5 mTop5 hide" title="所在地:{%=item.BrandName%}">
+            <div class="left mLeft3">
+                <img src="/modules/images/ico-address.png" style="width: 16px; height: 16px; display: inline-block;">
+            </div>
+            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=item.BrandName%}</div>
+            <div class="clear"></div>
+        </div>
+        <div class="mLeft5 mTop5 " title="品牌:{%=item.BrandName%}">
+            <div class="left mLeft3">
+                <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;">
+            </div>
+
+            <div class="left color999 mLeft5" style="height: 16px;">&nbsp;{%=(item.BrandName)%}</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</li>-->
+
 <li style="padding: 20px;height: 339px;">
     <div class="product-item"  >
         <a class="btn-open-window productimg" title="{%=item.intGoodsCode%}&nbsp;{%=item.ProductName%}" data-href="/Mall/Store/GoodsDetail?orderid={%=item.ProductID%}&categoryid={%=item.CategoryID%}" href="javascript:void(0);" data-name="产品详情页-{%=item.ProductName%}" data-orderid="{%=item.ProductID%}">

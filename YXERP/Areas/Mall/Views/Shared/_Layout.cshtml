@@ -17,7 +17,11 @@
     <div class="header">
         <div class="divcenter">
             <div style="height: 40px; line-height: 40px;">
-                <div title="云销科技" class="left" style="color: #e48a32;">二当家</div>
+                <div title="云销科技" class="left" style="color: #e48a32; cursor: pointer;">
+                    <a href="http://yunxiaokeji.com/" >
+                        <span class="iconfont left" style="color: #e48a32; font-size: 18pt;">&#xe65e;</span><span class=" mTop5 lineHeight30 left font16" style="color: #e48a32;">二当家</span>
+                    </a>
+                </div>
                 <div class="right">
                     <ul class="right menuul">
                         <li class="right userinfo" id="userinfo">
@@ -29,11 +33,17 @@
                                 <span class="dropdown-top"></span> 
                             </span>
                         </li>
-                        <li class="right"><a id="purchaseurl" title="查看历史采购单">采购订单</a></li>
-                        <li class="right">| 
-                            <a  href="@(ViewBag.Url)/Default/Index" style="font-size: 12px;" title="进入系统"> &nbsp;进入系统</a></li>
+                        <li class="right">
+                            <span class="left iconfont mTop1 mRight1">&#xe65c;</span>
+                            <a class="left" id="purchaseurl" title="查看历史采购单">采购订单</a>
+                        </li>
+                        <li class="right">
+                             <span class="left iconfont mTop1 mRight1">| &#xe65d;</span>
+                            <a class="left" href="@(ViewBag.Url)/Default/Index" style="font-size: 12px;" title="进入系统">
+                                进入系统
+                            </a></li>
                         <li class="right"><a href="http://yunxiaokeji.com/About/About#map">联系客服</a></li>
-                        <li class="right"><a href="http://yunxiaokeji.com/">帮助中心</a></li>
+                        @*<li class="right"><a href="http://yunxiaokeji.com/">帮助中心</a></li>*@
                     </ul>
                 </div>
             </div>
@@ -42,19 +52,17 @@
 <div style="width: 100%; ">
     <div class="divcenter">
         <div style="height: 100px;">
-            <div class="left mTop30" id="imglogo">
-                <div class="left ">
-                    <img src="/modules/mall/images/ico-cmlogo.png" style="width: 40px; height: 40px;"/>
-                </div>
-                <div class="left mLeft30" id="providerinfo" style=" line-height: 40px;">
+            <div class="left mTop30" id="imglogo"> 
+                <div class="left" id="providerinfo" style=" line-height: 40px;">
                     <div class="font18 color666 pcompanyName"></div>
-                    <div class=" mLeft30 providerdiv hide pBottom10 pTop10">
+                    <div class="providerdiv hide pBottom10 pTop10">
+                        @*<div class="top-lump" style="top:-10px; left: 125px;"></div>*@
                         <ul class="seachul">
-                            <li title="联系信息">
+                            <li title="公司名称">
                                 <div class="left mTop3 ">
                                     <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;">
                                 </div>
-                                <div class="left mLeft5 pcompanyName">
+                                <div class="left mLeft5 pcompanyName font10">
                                 </div>
                             </li>
                             <li title="联系信息">
@@ -71,26 +79,7 @@
                                 <div class="left mLeft5" id="pcityname" style="color: #000; width: 220px;">
                                 </div>
                             </li>
-                            @*    <li title="经营模式">
-                                <div class="left mTop3 ">
-                                    <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;">
-                                </div>
-                                <div class="left mLeft5" id="ptype">
-                                    生产商家
-                                </div>
-                            </li>
-                            <li title="规模">
-                                <div class="left mTop3 ">
-                                    <img src="/modules/images/ico-usernum.png" style="width: 16px; height: 16px; display: inline-block;">
-                                </div>
-                                <div class="left mLeft5" style="color: #000;">
-                                    100人以上
-                                </div>
-                            </li>*@
                         </ul>
-                        @*<div style="width: 90%; border-top: 1px solid #999;" class="right mRight10">
-                            <span class="right color999 font14 hand">收藏店铺</span>
-                        </div>*@
                     </div>
                 </div>
 
@@ -147,6 +136,10 @@
         ©2016云销科技 沪ICP备 1999888 号
     </div>
 </footer>
+<div id="qrcodediv" class="qrcodediv hide">
+    <p class="mTop10 center lineHeight30 font16">请使用手机扫描下单</p>
+    <img id="qrcode" style="width:200px;height:200px; margin-left: 40px;" src=""/>
+</div>
 
 <div class="dropdown-userinfo hide">
     <div class="top-lump"></div>

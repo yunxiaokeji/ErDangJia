@@ -4,10 +4,8 @@
     var City = require("city"), CityInvoice,
         Global = require("m_global");
     var isCreateOrder = false;
-    var colorList = {}, tempOrder = {}, tempList = [];
-
+    var AttrList = [];
     ObjectJS.showOrderGoodsLayer = function (model, user) {
-        colorList = {}, tempOrder = {}, tempList = [];
         ObjectJS.model = model;
         ObjectJS.getOrderAttr();
         doT.exec("m/template/style/style-buy.html", function (code) {
@@ -32,8 +30,12 @@
                 var _this = $(this);
                 if (!_this.val().isInt() || _this.val() < 0) {
                     _this.val(0);
+                    return false;
                 }
-                ObjectJS.SumNumPrice();
+                if ($("#colorlist li").hasClass('select')) {
+                    var _saleID = $("#colorlist li.select").data('id');
+                    ObjectJS.setOrderAttrQuantity(_saleID, _this.parents('tr').data('id'), _this.val() || 0);
+                }
             });
 
             $(".overlay-addOrder").html(innerHtml).show();
@@ -58,32 +60,16 @@
 
             $(".overlay-addOrder .attr-ul li").unbind().click(function () {
                 var _this = $(this);
-                //数量验证
-                var totalnum = 0;
-                $("#sizelist .quantity").each(function () {
-                    totalnum += parseInt($(this).val() * 1);
-                });
-                if (totalnum > 0) {
-                    $('#colorlist li.select').addClass("hasquantity");
-                }
-                if ($('#colorlist li.select').length > 0) {
-                    ObjectJS.setOrdersCache();
-                    $("#sizelist .quantity").each(function () {
-                        $(this).val(0);
+                //第一次，没有选中任何颜色处理
+                if (!$(".attr-item li").hasClass('select')) {
+                    $("#sizelist .data-item").each(function () {
+                        var _sizeTr = $(this);
+                        ObjectJS.setOrderAttrQuantity(_this.data('id'), _sizeTr.data('id'), _sizeTr.find('.quantity').val() || 0);
                     });
                 }
+                ObjectJS.setTrQuantity(_this.data('id'));
                 _this.siblings().removeClass("select");
                 _this.removeClass("hasquantity").addClass("select");
-                $('.data-item').each(function () {
-                    if (colorList[_this.data("remark")].indexOf($(this).data("remark")) == -1) {
-                        $(this).hide();
-                        $(this).find('.quantity').val(0);
-                    } else {
-                        $(this).show();
-                    }
-                });
-                ObjectJS.SumNumPrice();
-                ObjectJS.setOrdersQuantity();
             });
 
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
@@ -150,6 +136,53 @@
         });
     };
 
+    ObjectJS.getOrderAttr = function () {
+        var _self = ObjectJS;
+        for (var i = 0; i < _self.model.SaleAttrs[0].AttrValues.length; i++) {
+            var _sale = _self.model.SaleAttrs[0].AttrValues[i];
+            var _model = {};
+            _model.SaleRemark = _sale.ValueName;
+            var _details = {};
+            for (var j = 0; j < _self.model.AttrLists[0].AttrValues.length; j++) {
+                var _attr = _self.model.AttrLists[0].AttrValues[j];
+                _details[_attr.ValueID] = {
+                    ValueName: _attr.ValueName,
+                    Quantity: 0,
+                    ValueID: _attr.ValueID
+                };
+            }
+            _model.AttrsList = _details;
+            AttrList[_sale.ValueID] = _model;
+        }
+    };
+
+    ObjectJS.setOrderAttrQuantity = function (saleID, attrID, quantity) {
+        AttrList[saleID].AttrsList[attrID].Quantity = quantity;
+        /*设置总计*/
+        var totalCount = 0;
+        var totalPrice = 0;
+        for (var i in AttrList) {
+            var _sale = AttrList[i].AttrsList;
+            for (var j in _sale) {
+                var _attr = _sale[j];
+                totalCount += _attr.Quantity * 1;
+                totalPrice += _attr.Quantity * ($(".data-item").eq(0).find('.price').text() * 1);
+            }
+        }
+        $("#totalnum").parent().show();
+        $("#totalnum").text(totalCount);
+        $("#totalprice").text(totalPrice);
+    };
+
+    ObjectJS.setTrQuantity = function (saleID) {
+        var item = AttrList[saleID].AttrsList;
+        $("#sizelist .data-item").each(function () {
+            var _this = $(this);
+            var _data = item[_this.data('id')];
+            _this.find('.quantity').val(_data.Quantity);
+        });
+    };
+
     ObjectJS.createOrders = function (model) {
         var _self = this;
         _self.setOrdersCache();
@@ -181,86 +214,6 @@
                 }
             });
         }
-    };
-
-    //绑定颜色尺码
-    ObjectJS.getOrderAttr = function () {
-        var _self = ObjectJS;
-        for (var i = 0; i < _self.model.ProductDetails.length; i++) {
-            var item = _self.model.ProductDetails[i];
-            if (item.AttrValue != "" && item.AttrValue != null) {
-                item.AttrValue = item.AttrValue.toUpperCase();
-                var color = item.AttrValue.split(",");
-                var key = "[" + color[0] + "]" + (color.length > 1 ? "[" + color[1] + "]" : "");
-                colorList[key] = item.ProductDetailID;
-                if ($.inArray(color[0], tempList) == -1) {
-                    colorList[color[0]] = color.length > 1 ? color[1] : color[0];
-                    tempList.push(color[0]);
-                } else {
-                    colorList[color[0]] = colorList[color[0]] + (color.length > 1 ? "," + color[1] : "");
-                }
-            }
-        }
-    };
-    //下单数量与件数
-    ObjectJS.SumNumPrice = function () {
-        var _self = this;
-        var sumnum = 0, sumprice = 0.00;
-        if (!$.isEmptyObject(tempOrder)) {
-            $.each(tempOrder, function (i, obj) {
-                sumnum += parseInt(obj.quantity);
-            });
-        }
-        $('#sizelist .quantity').each(function () {
-            $(this).val($(this).val().replace(/\D/g, ''));
-            var num = $(this).val();
-            if (num != '') {
-                sumnum += parseInt(num);
-            }
-        });
-        sumprice = (sumnum * parseFloat(_self.model.Price)).toFixed(2);
-        $('#totalnum').html(sumnum);
-        $('#totalprice').html(sumprice);
-        $('#totalnum').parent().show();
-    };
-    //数量缓存
-    ObjectJS.setOrdersCache = function () {
-        $('#sizelist .quantity').each(function () {
-            var _this = $(this);
-            var size = _this.parents('tr').data("remark");
-            var color = '';
-            if ($('#colorlist li').length > 0) {
-                if ($('#colorlist li.select').length > 0) {
-                    color = $('#colorlist li.select').data("remark");
-                } else {
-                    return false;
-                }
-            }
-            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
-            var item = { quantity: _this.val(), detailid: colorList[key], key: key }
-            if (_this.val() > 0) {
-                tempOrder[key] = item;
-            } else {
-                if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
-                    delete tempOrder[key];
-                }
-            }
-        });
-    };
-    //数赋值
-    ObjectJS.setOrdersQuantity = function () {
-        $('#sizelist .quantity').each(function () {
-            var _this = $(this);
-            var size = _this.parents('tr').data("remark");
-            var color = '';
-            if ($('#colorlist li.select').length > 0) {
-                var color = $('#colorlist li.select').data("remark");
-            }
-            var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
-            if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
-                _this.val(tempOrder[key].quantity);
-            }
-        });
     };
 
     module.exports = ObjectJS;

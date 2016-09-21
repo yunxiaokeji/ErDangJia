@@ -25,8 +25,8 @@ namespace YXERP.Areas.M.Controllers
 
         public JsonResult GetOrderDetail(string orderID, string clientID)
         {
-            var obj = ProductService.GetProductByIDForDetails(orderID);
-            JsonDictionary.Add("result", obj);
+            var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderID, clientID);
+            JsonDictionary.Add("result", obj.order);
             return new JsonResult
             {
                 Data = JsonDictionary,

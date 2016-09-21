@@ -72,12 +72,6 @@ namespace CloudSalesEntity.Manage
 			get{return _companyname;}
 		}
 
-        public string OtherSysID
-        {
-            set { _othersysid = value; }
-            get { return _othersysid; }
-        }
-
         public string Logo
         {
             set;
@@ -197,7 +191,9 @@ namespace CloudSalesEntity.Manage
 		#endregion Model
 
 
+        public string CMClientID { get; set; }
 
+        public string IsMall { get; set; }
         
 
         /// <summary>

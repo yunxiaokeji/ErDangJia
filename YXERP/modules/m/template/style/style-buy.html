@@ -8,7 +8,7 @@ var item=$data;
             <div class="blue mTop30"><span class="font18">￥</span> <span class="bold">{%=item.finalPrice%}</span></div>
         </div>
         <div class="style-img">
-            <img onerror="this.src='/modules/m/images/img-noimg.png'" src="{%=!item.ProductImage?'/modules/m/images/img-noimg.png':item.ProductImage%}"/>
+            <img onerror="this.src='/modules/m/images/img-noimg.png'" src="{%=!item.orderImage?'/modules/m/images/img-noimg.png':item.orderImage+'?imageView2/1/w/120/h/120'%}"/>
         </div>
         <div class="close iconfont">
             &#xe628;
@@ -47,7 +47,7 @@ var item=$data;
                         <div class="attr-rule attr-ul">
                             <table class="table-list" id="sizelist">
                                 <tr class="tr-header">
-                                    <td class="tLeft" style="font-weight:normal;">{%=attr.AttrName%}</td>
+                                    <td class="tLeft attr-title" style="font-weight:normal;">{%=attr.AttrName%}</td>
                                     <td class="tLeft width50" style="padding-right:10px;font-weight:normal;">价格</td>
                                     <td class="center width50" style="font-weight:normal;">数量</td>
                                 </tr>

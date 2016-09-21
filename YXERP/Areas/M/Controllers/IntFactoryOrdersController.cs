@@ -45,6 +45,21 @@ namespace YXERP.Areas.M.Controllers
             };
         }
 
+        public JsonResult AddIntfactoryPurchaseDoc(string goodsID, string goodsCode, string goodsName, string price, string productDetails, string cmClientID,
+                                             decimal totalMoney, string saleAttrStr = "", string productImage = "", string personName = "",
+                                            string mobilePhone = "", string cityCode = "", string address = "")
+        {
+            bool flag = new StockService().AddIntfactoryPurchaseDoc(goodsID, goodsCode, goodsName, price, productDetails, cmClientID,
+                 (int)CloudSalesEnum.EnumDocType.RK, (int)CloudSalesEnum.EnumProductSourceType.IntFactory, totalMoney,
+                 CurrentUser.UserID, CurrentUser.AgentID, CurrentUser.ClientID, saleAttrStr, productImage, personName, mobilePhone, cityCode, address);
+            JsonDictionary.Add("result", flag ? 1 : 0);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         #endregion
     }
 }

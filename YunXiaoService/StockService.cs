@@ -71,7 +71,15 @@ namespace YunXiaoService
             int result = 0;
             return new StockBusiness().AuditStorageIn(docid, doctype, isover, details, remark, userid, opearip, agentid, clientid, ref result, ref errmsg);
         }
- 
+
+        public bool AddIntfactoryPurchaseDoc(string goodsID, string goodsCode, string goodsName, string price, string productDetails, string cmClientID,
+                                            int docType, int sourceType, decimal totalMoney, string userID, string agentID, string clientID,
+        string saleAttrStr = "", string productImage = "", string personName = "", string mobilePhone = "", string cityCode = "", string address = "")
+        {
+            return new StockBusiness().AddIntfactoryPurchaseDoc(goodsID, goodsCode, goodsName, price, productDetails, cmClientID, docType, sourceType,
+                totalMoney, userID, agentID, clientID, saleAttrStr, productImage, personName, mobilePhone, cityCode, address);
+        }
+
         #endregion
 
         #region 出库单

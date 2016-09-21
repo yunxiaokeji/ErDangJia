@@ -308,6 +308,15 @@ namespace CloudSalesBusiness
             return bl;
         }
 
+        public bool AddIntfactoryPurchaseDoc(string goodsID, string goodsCode, string goodsName, string price, string productDetails, string cmClientID,
+                                                    int docType, int sourceType, decimal totalMoney, string userID, string agentID, string clientID,
+          string saleAttrStr = "", string productImage = "", string personName = "", string mobilePhone = "", string cityCode = "", string address = "")
+        {
+            string guid = Guid.NewGuid().ToString();
+            return StockDAL.AddIntfactoryPurchaseDoc(goodsID, goodsCode, goodsName, price, productDetails, cmClientID, guid, 
+                docType, sourceType, totalMoney, userID, agentID, clientID, saleAttrStr, productImage, personName, mobilePhone, cityCode, address);
+        }
+
         public bool SubmitOverflowDoc(string wareid, string ids, string remark, string userid, string operateip, string clientid)
         {
             string guid = Guid.NewGuid().ToString();

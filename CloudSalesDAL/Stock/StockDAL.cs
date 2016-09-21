@@ -288,6 +288,37 @@ namespace CloudSalesDAL
             errinfo = paras[1].Value.ToString();
             return bl;
         }
+
+        public static bool AddIntfactoryPurchaseDoc(string goodsID,string goodsCode,string goodsName,string price,string productDetails,string cmClientID,string docID,
+                                                    int docType,int sourceType,decimal totalMoney,string userID,string agentID,string clientID,
+            string saleAttrStr = "", string productImage = "", string personName = "", string mobilePhone = "", string cityCode = "", string address = "", string remark = "",string wareID = "")
+        {
+            SqlParameter[] paras = {
+                                      new SqlParameter("@GoodsID",goodsID),
+                                      new SqlParameter("@GoodsCode",goodsCode),
+                                      new SqlParameter("@GoodsName",goodsName),
+                                      new SqlParameter("@Price",price),
+                                      new SqlParameter("@SaleAttrStr",saleAttrStr),
+                                      new SqlParameter("@ProductImage",productImage),
+                                      new SqlParameter("@ProductDetails",productDetails),
+                                      new SqlParameter("@CMClientID",cmClientID),
+                                      new SqlParameter("@DocID",docID),
+                                      new SqlParameter("@DocCode",DateTime.Now.ToString("yyyyMMddHHmmssfff")),
+                                      new SqlParameter("@DocType",docType),
+                                      new SqlParameter("@SourceType",sourceType),
+                                      new SqlParameter("@TotalMoney",totalMoney),
+                                      new SqlParameter("@PersonName",personName),
+                                      new SqlParameter("@MobilePhone",mobilePhone),
+                                      new SqlParameter("@CityCode",cityCode),
+                                      new SqlParameter("@Address",address),
+                                      new SqlParameter("@Remark",remark),
+                                      new SqlParameter("@WareID", wareID),
+                                      new SqlParameter("@UserID", userID),
+                                      new SqlParameter("@AgentID",agentID),
+                                      new SqlParameter("@ClientID",clientID)
+                                   };
+            return ExecuteNonQuery("P_AddIntfactoryPurchaseDoc", paras, CommandType.StoredProcedure) > 0;
+        }
         #endregion
 
         #region 编辑、删除

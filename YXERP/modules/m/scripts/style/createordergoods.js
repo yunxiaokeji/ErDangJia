@@ -82,20 +82,20 @@
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
                 if ($('.edit-customer').css('display') == 'none') {
                     var item = {
-                        personname: $("#customerName").val(),
-                        mobiletele: $("#customerTel").val(),
-                        citycode: CityInvoice.getCityCode(),
+                        personName: $("#customerName").val(),
+                        mobilePhone: $("#customerTel").val(),
+                        cityCode: CityInvoice.getCityCode(),
                         address: $("#customerAddress").val(),
-                        goodsid: model.CMGoodsID,
-                        goodsname: model.ProductName,
-                        goodscode: model.CMGoodsCode,
-                        parentprid: model.ClientID,
-                        price: model.Price,
-                        productid: model.ProductID,
-                        dids: "",
-                        cmclientid: model.ClientID
+                        goodsID: model.goodsID,
+                        goodsName: model.goodsName,
+                        goodsCode: model.intGoodsCode,
+                        price: model.finalPrice,
+                        productDetails: "",
+                        cmClientID: model.clientID,
+                        totalMoney: $("#totalprice").text() * 1,
+                        saleAttrStr: model.SaleAttrs[0].AttrName + ',' + model.AttrLists[0].AttrName,
+                        productImage: model.orderImage
                     };
-
                     ObjectJS.createOrders(item);
                 } else {
                     alert('请先保存收货信息', 2);
@@ -192,21 +192,26 @@
 
     ObjectJS.createOrders = function (model) {
         var _self = this;
-        _self.setOrdersCache();
-        if ($.isEmptyObject(tempOrder)) {
-            alert("请选择颜色尺码，并填写对应采购数量");
-            return false;
-        }
         if (!isCreateOrder) {
             //大货单遍历下单明细 
-            var dids = "";
-            $.each(tempOrder, function (i, obj) {
-                dids += obj.detailid + ":" + obj.quantity + ",";
-            });
-            model.dids = dids;
+            var productDetails = "";
+            for (var i in AttrList) {
+                var _attr = AttrList[i];
+                for (var j in _attr.AttrsList) {
+                    var _attrs = _attr.AttrsList[j];
+                    if (_attrs.Quantity > 0) {
+                        productDetails += _attr.SaleRemark + ',' + _attrs.ValueName + '|';
+                        productDetails += $("#colorlist").prev().text().trim() + ':' + _attr.SaleRemark + ',' + $("#sizelist .tr-header .attr-title").text().trim() + ':' + _attrs.ValueName + '|';
+                        productDetails += _attrs.Quantity + '|';
+                        productDetails += _attrs.Quantity * 1 * _self.model.finalPrice + '|';
+                        productDetails += '[' + $("#colorlist").prev().text().trim() + '：' + _attr.SaleRemark + '][' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + ']&';
+                    }
+                }
+            }
+            model.productDetails = productDetails;
             $(".btn-sureAdd").text("下单中...");
             isCreateOrder = true;
-            Global.post("/Mall/Store/CreatePurchaseOrder", model, function (data) {
+            Global.post("/M/IntFactoryOrders/AddIntfactoryPurchaseDoc", model, function (data) {
                 isCreateOrder = false;
                 $(".btn-sureAdd").text("确定");
                 if (data.result == 1) {

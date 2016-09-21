@@ -47,20 +47,20 @@ namespace YXERP.Areas.M.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        public JsonResult GetPurchases(string keyWords, int pageIndex, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype = -1, int pageSize = 10)
-        {
-            int pageCount = 0;
-            int totalCount=0;
-            List<StorageDoc> list = new ProductService().GetPurchases(keyWords, pageIndex,totalCount, type == 3 ? string.Empty : CurrentUser.UserID, CurrentUser.ClientID, CurrentUser.AgentID, status, type, begintime, endtime, wareid, providerid, (int)EnumProductSourceType.IntFactory, pageSize);
-            JsonDictionary.Add("items", list);
-            JsonDictionary.Add("TotalCount", totalCount);
-            JsonDictionary.Add("PageCount", pageCount);
-            return new JsonResult
-            {
-                Data = JsonDictionary,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
+        //public JsonResult GetPurchases(string keyWords, int pageIndex, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype = -1, int pageSize = 10)
+        //{
+        //    //int pageCount = 0;
+        //    //int totalCount=0;
+        //    //List<StorageDoc> list = new ProductService().GetPurchases(keyWords, pageIndex,totalCount, type == 3 ? string.Empty : CurrentUser.UserID, CurrentUser.ClientID, CurrentUser.AgentID, status, type, begintime, endtime, wareid, providerid, (int)EnumProductSourceType.IntFactory, pageSize);
+        //    //JsonDictionary.Add("items", list);
+        //    //JsonDictionary.Add("TotalCount", totalCount);
+        //    //JsonDictionary.Add("PageCount", pageCount);
+        //    //return new JsonResult
+        //    //{
+        //    //    Data = JsonDictionary,
+        //    //    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+        //    //};
+        //}
 
         public JsonResult AddIntfactoryPurchaseDoc(string goodsID, string goodsCode, string goodsName, decimal price, string productDetails, string cmClientID,
                                              decimal totalMoney,string zngcOrderID,string zngcClientID,string zngcProductEntity, string saleAttrStr = "", string productImage = "", string personName = "",

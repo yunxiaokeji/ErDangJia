@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using CloudSalesEntity;
 using YunXiaoService;
+using CloudSalesEnum;
 
 namespace YXERP.Areas.M.Controllers
 {
@@ -40,6 +41,20 @@ namespace YXERP.Areas.M.Controllers
         {
             var obj = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory().FindAll(m => m.CategoryType == 2 && m.Layers == 1);
             JsonDictionary.Add("result", obj);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public JsonResult GetPurchases(string keyWords, int pageIndex, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype = -1, int pageSize = 10)
+        {
+            int pageCount = 0;
+            int totalCount=0;
+            List<StorageDoc> list = new ProductService().GetPurchases(keyWords, pageIndex,totalCount, type == 3 ? string.Empty : CurrentUser.UserID, CurrentUser.ClientID, CurrentUser.AgentID, status, type, begintime, endtime, wareid, providerid, (int)EnumProductSourceType.IntFactory, pageSize);
+            JsonDictionary.Add("items", list);
+            JsonDictionary.Add("TotalCount", totalCount);
+            JsonDictionary.Add("PageCount", pageCount);
             return new JsonResult
             {
                 Data = JsonDictionary,

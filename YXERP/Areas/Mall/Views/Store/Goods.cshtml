@@ -1,5 +1,5 @@
-﻿@{  
-   
+﻿@{
+    ViewBag.Title = "店铺中心";
 }
 @section css{
     <link rel="stylesheet" href="/modules/mall/css/stylecenter.css"/>
@@ -8,7 +8,7 @@
 @section scripts{
     <script type="text/javascript"> 
         seajs.use(["/modules/mall/scripts/goodslist"], function (obj) {
-            obj.init('@ViewBag.ClientID');
+            obj.init('@ViewBag.ClientID','@(ViewBag.CategoryID)');
         });
     </script>
 }

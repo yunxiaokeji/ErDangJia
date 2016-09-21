@@ -148,14 +148,14 @@
 
     ObjectJS.getOrderAttr = function () {
         var _self = ObjectJS;
-        for (var i = 0; i < _self.model.AttrLists[0].AttrValues.length; i++) {
-            var _sale = _self.model.AttrLists[0].AttrValues[i];
+        for (var i = 0; i < _self.model.SaleAttrs[0].AttrValues.length; i++) {
+            var _sale = _self.model.SaleAttrs[0].AttrValues[i];
             var _model = {};
             _model.SaleRemark = _sale.ValueName;
             _model.SaleID = _sale.ValueID;
             var _details = {};
-            for (var j = 0; j < _self.model.SaleAttrs[0].AttrValues.length; j++) {
-                var _attr = _self.model.SaleAttrs[0].AttrValues[j];
+            for (var j = 0; j < _self.model.AttrLists[0].AttrValues.length; j++) {
+                var _attr = _self.model.AttrLists[0].AttrValues[j];
                 _details[_attr.ValueID] = {
                     ValueName: _attr.ValueName,
                     Quantity: 0,
@@ -217,13 +217,13 @@
                         zngcModel.productName = _self.model.goodsName;
                         zngcModel.productImage = _self.model.orderImage;
                         zngcModel.quantity = _attrs.Quantity;
-                        zngcModel.saleAttr = $("#colorlist").prev().data('id') + ',' + $("#sizelist .tr-header .attr-title").data('id');
-                        zngcModel.attrValue = _sale.SaleID + ',' + _attrs.ValueID;
-                        zngcModel.saleAttrValue = $("#colorlist").prev().data('id') + ':' + _sale.SaleID + ',' + $("#sizelist .tr-header .attr-title").data('id') + ':' + _attrs.ValueID;
-                        zngcModel.remark = '【' + $("#colorlist").prev().text().trim() + '：' + _sale.SaleRemark + '】【' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + '】';
-                        zngcModel.xRemark = '【' + _sale.SaleRemark + '】';
-                        zngcModel.yRemark = '【' + _attrs.ValueName + '】';
-                        zngcModel.xYRemark = '【' + _sale.SaleRemark + '】【' + _attrs.ValueName + '】';
+                        zngcModel.saleAttr = $("#sizelist .tr-header .attr-title").data('id') + ',' + $("#colorlist").prev().data('id');
+                        zngcModel.attrValue = _attrs.ValueID + ',' + _sale.SaleID;
+                        zngcModel.saleAttrValue = $("#sizelist .tr-header .attr-title").data('id') + ':' + _attrs.ValueID + ',' + $("#colorlist").prev().data('id') + ':' + _sale.SaleID;
+                        zngcModel.remark = '【' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + '】【' + $("#colorlist").prev().text().trim() + '：' + _sale.SaleRemark + '】';
+                        zngcModel.xRemark = '【' + _attrs.ValueName + '】';
+                        zngcModel.yRemark = '【' + _sale.SaleRemark + '】';
+                        zngcModel.xYRemark = '【' + _attrs.ValueName + '】【' + _sale.SaleRemark + '】';
                         zngcModel.description = "";
                         zngcProductEntity.push(zngcModel);
                     }

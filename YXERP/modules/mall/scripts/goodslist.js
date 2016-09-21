@@ -60,7 +60,7 @@
         }).mouseout(function () {
             $('.divprice').hide();
         });
-        $('#qrcode').attr('src', 'http://qrickit.com/api/qr?d='+window.location.href);
+        //$('#qrcode').attr('src', 'http://qrickit.com/api/qr?d='+window.location.href);
         $('.seachul li').click(function () {
             var _this = $(this); 
             if (!_this.find(".link").hasClass("hover")) {
@@ -147,6 +147,7 @@
                     $(html).find('a').click(function() {
                         //目前先隐藏
                         //window.open($(this).data('href'), $(this).data('name')); 
+                        $('#qrcode').attr('src', 'http://qrickit.com/api/qr?d='+$('#ipturl').val()+$(this).data('href'));
                         $('#qrcodediv').show();
                     });
                 });

@@ -105,10 +105,14 @@
             html += "<div class='clear'></div>";
             $(".divcategory").append(html);
         } else { 
-            if (typeof (pcategory.PID) != 'undefined') {
+            if (typeof (pcategory.PID) != 'undefined' && clist.length>0) {
                 _self.bindCategory(clist, pcategory.PID);
             }
-            $(".divcategory").hide();
+            if (clist.length > 0) {
+                $(".divcategory").hide();
+            } else {
+                $(".divcategory").append("<p class='center'>暂未获取到分类信息</p>");
+            }
         }
         $(".divcategory").find('a').click(function () {
             var _this = $(this);

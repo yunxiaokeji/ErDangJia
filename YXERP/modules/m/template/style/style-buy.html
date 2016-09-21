@@ -30,7 +30,7 @@ var item=$data;
                                 {
                                     var attrItem=attr.AttrValues[j];
                             %}
-                                <li data-remark="{%=attrItem.ValueName%}" data-id="{%=attrItem.ValueID%}">
+                                <li class="{%=(j==0?'select':'')%}" data-remark="{%=attrItem.ValueName%}"  data-id="{%=attrItem.ValueID%}">
                                     {%=attrItem.ValueName%}
                                 </li>
                             {%}%}

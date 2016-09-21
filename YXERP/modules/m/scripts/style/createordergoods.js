@@ -233,6 +233,7 @@
             model.zngcProductEntity = JSON.stringify(zngcProductEntity);
             if (!model.productDetails) {
                 alert("请选择规格，或数量未填写下单数量");
+                return false;
             }
             $(".btn-sureAdd").text("下单中...");
             isCreateOrder = true;

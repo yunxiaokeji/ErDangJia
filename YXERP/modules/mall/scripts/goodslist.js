@@ -60,7 +60,7 @@
         }).mouseout(function () {
             $('.divprice').hide();
         });
-
+        $('#qrcode').attr('src', 'http://qrickit.com/api/qr?d='+window.location.href);
         $('.seachul li').click(function () {
             var _this = $(this); 
             if (!_this.find(".link").hasClass("hover")) {
@@ -114,6 +114,7 @@
             _self.getProducts();
             $('.divcategory').hide();
         });
+        
         _self.getProducts(); 
     }
 
@@ -145,7 +146,9 @@
                     });
 
                     $(html).find('a').click(function() {
-                        window.open($(this).data('href'), $(this).data('name'));
+                        //目前先隐藏
+                        //window.open($(this).data('href'), $(this).data('name')); 
+                        $('#qrcodediv').show();
                     });
                 });
             } else {

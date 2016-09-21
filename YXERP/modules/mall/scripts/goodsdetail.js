@@ -255,7 +255,8 @@
         $('#sizelist').html(shtml);
         if (shtml != "") {
             $('.sizediv').addClass("linetopbottom");
-            $('#btnSubmit').show();
+            //隐藏下单按钮
+            //$('#btnSubmit').show();
         }
         $('#colorlist li').click(function() {
             var _this = $(this);

@@ -23,7 +23,11 @@
             if (!$(e.target).parents().hasClass("userinfo") && !$(e.target).hasClass("userinfo")) {
                 $(".dropdown-userinfo").fadeOut("1000");
             }
+            if ($(e.target).parents().hasClass("qrcodediv") || $(e.target).hasClass("qrcodediv")) {
+                $(".qrcodediv").fadeOut("1000");
+            }
         });
+
         $('.categoryMenu').mouseover(function() {
             _self.getAllCategory($(this).data('id'));
         });
@@ -41,9 +45,9 @@
         });
 
         $('#providerinfo').mouseover(function () {
-            var xy = $(this).position();
-            $('.providerdiv').css("left", xy.left+30);
-            $('.providerdiv').css("top", xy.top + $(this).height()-5);
+            var xy = $(this).offset();
+            $('.providerdiv').css("left", xy.left);
+            $('.providerdiv').css("top", xy.top + $(this).height());
             $('.providerdiv').show();
         }).mouseout(function () {
             $('.providerdiv').hide();
@@ -186,7 +190,7 @@
             if (data != null) {
                 $('.pname').html(data.ContactName + " &nbsp; " + data.MobilePhone);
                 $('.pcompanyName').html(data.CompanyName);
-                $('#pcityname').html(data.City != null ? data.City.Description + data.Address : data.Address);
+                $('#pcityname').html(data.City != null ? data.City.Description + '<br/>'+data.Address : data.Address);
                 $('#ptype').html('店铺分销');
                  
             }

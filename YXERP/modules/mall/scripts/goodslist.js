@@ -140,11 +140,10 @@
                     var html = templateFun(data.items);
                     html = $(html); 
                     $("#productlist").append(html);
-                    $("#productlist a").each(function() {
-                        var href = $(this).attr("href");
-                        $(this).attr("href", href + "&clientid=" + _self.clientid);
-                    });
-
+                    //$("#productlist a").each(function() {
+                    //    var href = $(this).attr("href");
+                    //    $(this).attr("href", href + "&clientid=" + _self.clientid);
+                    //});
                     $(html).find('a').click(function() {
                         //目前先隐藏
                         //window.open($(this).data('href'), $(this).data('name')); 

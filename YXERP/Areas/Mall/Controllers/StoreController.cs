@@ -149,11 +149,29 @@ namespace YXERP.Areas.Mall.Controllers
                 Data = client,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
-        }
-
+        } 
         public JsonResult GetEdjCateGory(string clientid)
         {
+            if (string.IsNullOrEmpty(CurrentUser.CurrentCMClientID))
+            {
+                var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+                CurrentUser.CurrentClientID = clientid;
+                var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
+                CurrentUser.CurrentCMClientID = agent.CMClientID;
+            }
+            return GetAllCateGory(CurrentUser.CurrentCMClientID);
             var result = new ProductsBusiness().GetCategorys(clientid); 
+            JsonDictionary.Add("items", result);
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public JsonResult GetAllCateGory(string clientid)
+        {
+            var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory();
+
             JsonDictionary.Add("items", result);
             return new JsonResult()
             {
@@ -169,12 +187,35 @@ namespace YXERP.Areas.Mall.Controllers
             if (clientid.Equals(CurrentUser.Agents.CMClientID))
             {
                 clientid = CurrentUser.ClientID;
-            } 
+            }
+            if (string.IsNullOrEmpty(CurrentUser.CurrentCMClientID))
+            {
+                var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+                CurrentUser.CurrentClientID = clientid;
+                var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
+                CurrentUser.CurrentCMClientID = agent.CMClientID;
+            }
+            //暂读取智能工厂产品
+            return  this.GetProductList
+            (CurrentUser.CurrentCMClientID, keyWords, pageSize, pageIndex, categoryID, orderby, beginPrice, endPrice);
+
             List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords,
-                   orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid,1);
+                   orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid, 1);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("totalCount", totalCount);
             JsonDictionary.Add("pageCount", pageCount);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public JsonResult GetProductList(string clientid, string keyWords, int pageSize, int pageIndex, string categoryID = "", string orderby = "", string beginPrice = "", string endPrice = "")
+        {
+            IntFactory.Sdk.OrderListResult item = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid, keyWords, categoryID, orderby, beginPrice, endPrice);
+            JsonDictionary.Add("items", item.orders);
+            JsonDictionary.Add("totalCount", item.totalCount);
+            JsonDictionary.Add("pageCount", item.pageCount);
             return new JsonResult
             {
                 Data = JsonDictionary,

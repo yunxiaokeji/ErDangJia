@@ -12,10 +12,11 @@
         });
     </script>
 }
+
 <div class="divcenter seachlist">
     <div class="orderby">
         <ul class="seachul">
-            <li title="综合排序" class="font11" data-name="zh" data-desc="" data-asc="false"><span class="link hover">综合排序</span></li>
+            @* <li title="综合排序" class="font11" data-name="zh" data-desc="" data-asc="false"><span class="link hover">综合排序</span></li>
             <li title="销量从高到低" class="font11" data-name="sales" data-desc=" p.SaleCount desc" data-asc="false"><span class="link">销量</span></li>
             <li title="价格从高到低" class="font11" data-name="price" data-desc="" id="liprice" style="position: relative;">
                 <span class="link" id="parentprice">价格</span>
@@ -23,6 +24,24 @@
                 <ul class="divprice hide">
                     <li data-desc=" p.Price desc" data-asc="false"><span class="link" >价格从高到底</span></li>
                     <li data-desc=" p.Price asc" data-asc="true"><span class="link" >价格从低到高</span></li>
+                </ul>
+            </li>
+            <li title="价格区间" class="font11" id="pricerange" data-name="pricerange" data-desc="" style="padding:0 10px;">
+                <span class="left mRight10">
+                <input type="text" id="beginprice" value="" style="height: 20px; width: 45px;"  placeholder="￥"/> -
+                <input type="text" id="endprice"  value="" style="height: 20px; width: 45px;" placeholder="￥"/>
+                </span>
+                <span class="btn22 left" id="btnPriceRange" style="display: none;width: 24px; margin-top: 8px;" >确定</span>
+                <span class="clear"></span>
+            </li>*@
+            <li title="综合排序" class="font11" data-name="zh" data-desc="" data-asc="false"><span class="link hover">综合排序</span></li>
+            <li title="销量从高到低" class="font11" data-name="sales" data-desc="Goods.SaleCount desc" data-asc="false"><span class="link">销量</span></li>
+            <li title="价格从高到低" class="font11" data-name="price" data-desc="" data-asc="false" id="liprice" style="position: relative;">
+                <span class="link" id="parentprice">价格</span>
+                <span class="icon icon-btn-arrow-2-h"></span>
+                <ul class="divprice hide">
+                    <li data-desc="Goods.Price desc" data-asc="false"><span class="link" >价格从高到底</span></li>
+                    <li data-desc="Goods.Price asc" data-asc="false"><span class="link" >价格从低到高</span></li>
                 </ul>
             </li>
             <li title="价格区间" class="font11" id="pricerange" data-name="pricerange" data-desc="" style="padding:0 10px;">

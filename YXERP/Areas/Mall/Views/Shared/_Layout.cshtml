@@ -1,5 +1,6 @@
 ﻿@{
-    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"]; 
+    CloudSalesEntity.Users CurrentUser = (CloudSalesEntity.Users)Session["ClientManager"];
+    var catogoryid = string.IsNullOrEmpty(ViewBag.CategoryID) ? "" : ViewBag.CategoryID;
 }
 <!DOCTYPE html>
 
@@ -13,9 +14,9 @@
     @RenderSection("css", false)
 </head>
 <body id="stylebody" style="margin: 0;padding: 0; min-height: 100%;">
-    <div style="width: 100%;">
+    <div class="header">
         <div class="divcenter">
-            <div style="height: 40px; line-height: 35px;">
+            <div style="height: 40px; line-height: 40px;">
                 <div title="云销科技" class="left" style="color: #e48a32;">二当家</div>
                 <div class="right">
                     <ul class="right menuul">
@@ -38,38 +39,44 @@
             </div>
         </div>
     </div>
-<div style="width: 100%; background-color: #e48a32;">
+<div style="width: 100%; ">
     <div class="divcenter">
         <div style="height: 100px;">
             <div class="left mTop30" id="imglogo">
                 <div class="left ">
                     <img src="/modules/mall/images/ico-cmlogo.png" style="width: 40px; height: 40px;"/>
                 </div>
-                <div class="left mLeft30" id="providerinfo" style="margin-top: -5px; line-height: 28px;">
-                    <div class="font16 colorfff pcompanyName"></div>
-                    <div class="colorfff pname"></div>
-                    <div class=" mLeft30 providerdiv hide">
-                        <ul class="seachul mTop10">
-                            <li title="经营模式">
+                <div class="left mLeft30" id="providerinfo" style=" line-height: 40px;">
+                    <div class="font18 color666 pcompanyName"></div>
+                    <div class=" mLeft30 providerdiv hide pBottom10 pTop10">
+                        <ul class="seachul">
+                            <li title="联系信息">
                                 <div class="left mTop3 ">
                                     <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;">
                                 </div>
-                                <div class="left mLeft5" id="ptype">
-                                    生产商家
+                                <div class="left mLeft5 pcompanyName">
                                 </div>
                             </li>
                             <li title="联系信息">
                                 <div class="left mTop3 ">
                                     <img src="/modules/images/ico-usernum.png" style="width: 16px; height: 16px; display: inline-block;">
                                 </div>
-                                <div class="left mLeft5 pname" > 
+                                <div class="left mLeft5 pname">
                                 </div>
                             </li>
                             <li title="地址">
                                 <div class="left mTop3 ">
                                     <img src="/modules/images/ico-address.png" style="width: 16px; height: 16px; display: inline-block;">
                                 </div>
-                                <div class="left mLeft5" id="pcityname" style="color: #000; width: 220px;"> 
+                                <div class="left mLeft5" id="pcityname" style="color: #000; width: 220px;">
+                                </div>
+                            </li>
+                            @*    <li title="经营模式">
+                                <div class="left mTop3 ">
+                                    <img src="/modules/images/ico-provider.png" style="width: 16px; height: 16px; display: inline-block;">
+                                </div>
+                                <div class="left mLeft5" id="ptype">
+                                    生产商家
                                 </div>
                             </li>
                             <li title="规模">
@@ -79,54 +86,48 @@
                                 <div class="left mLeft5" style="color: #000;">
                                     100人以上
                                 </div>
-                            </li>
+                            </li>*@
                         </ul>
-                        <div style="width: 90%; border-top: 1px solid #999;" class="right mRight10">
+                        @*<div style="width: 90%; border-top: 1px solid #999;" class="right mRight10">
                             <span class="right color999 font14 hand">收藏店铺</span>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
-                
+
                 <div class="clear"></div>
             </div>
-            <div class="searth-module right mTop30" data-text="款号/名称模糊搜索..." data-width="300"></div>
+            <div class="right mRight20">
+                    <ul class="creditul">
+                        <li>
+                            <p class="font16 center colorfff mTop10">优质</p>
+                            <p class="center colorfff mTop10" style="font-size: 10px;-webkit-transform:scale(0.8);">CREDIT</p>
+                            <span class="sanjiao triangle-up"></span>
+                        </li>
+                        <li>
+                            <p class="font16 center colorfff mTop10" style="">服务</p>
+                            <p class=" center colorfff mTop10" style="font-size: 10px;-webkit-transform:scale(0.8);">SERVICE</p>
+                            <span  class="sanjiao triangle-up"></span>
+                        </li>
+                         <li>
+                            <p class="font16 center colorfff mTop10" >平价</p>
+                            <p class="center colorfff mTop10" style="text-align: center;font-size: 10px;-webkit-transform:scale(0.8);">DISCOUNT</p>
+                            <span  class="sanjiao triangle-up"></span>
+                        </li>
+                    </ul>
+                </div>
         </div>
+        
     </div>
 </div>
-<div style="width: 100%; background-color: #fff; height: 170px;">
-    <div class="divcenter" >
-        <div class="left" style="width: 200px; height: 170px;"></div>
-        <div class="left" style="height: 170px;">
-            <div class="pcompanyName" style="margin-top: 90px; line-height: 50px; color: #FFE2B6;font-size: 30px;"></div>
-        </div>
-        <div class="right mRight20">
-            <ul class="creditul">
-                <li>
-                    <p class="font20 center colorfff mTop10" style="width: 100%;">优质</p>
-                    <p class="center colorfff mTop10" style="width: 100%;">CREDIT</p>
-                    <span class="sanjiao triangle-up"></span>
-                </li>
-                <li>
-                    <p class="font20 center colorfff mTop10" style="width: 100%;">服务</p>
-                    <p class=" center colorfff mTop10" style="width: 100%;">SERVICE</p>
-                    <span  class="sanjiao triangle-up"></span>
-                </li>
-                 <li>
-                    <p class="font20 center colorfff mTop10" style="width: 100%;">平价</p>
-                    <p class="center colorfff mTop10" style="width: 100%;">DISCOUNT</p>
-                    <span  class="sanjiao triangle-up"></span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+ 
 <div style="width: 100%; background-color: #f39b4d; ">
     <div class="divcenter" style="height: 40px;">
         <div class="left" id="categoryContent">
             <div class="divcategory hide mtop30"></div>
-            <div class="header-title left pLeft10 hover categoryMenu " data-id="-1" id="spanCategory">所有类目</div>
-            
+            <div class="header-title left pLeft10 hover categoryMenu " data-id="" id="spanCategory">所有类目</div>
+
         </div>
+        <div class="searth-module right mTop5" data-text="款号/名称模糊搜索..." data-width="300"></div>
     </div>
 </div> 
 
@@ -136,24 +137,24 @@
     <script type="text/javascript" src="/Scripts/sea-config.js?v=@(ExpandClass.Version)"></script>
     <script type="text/javascript">
          seajs.use(["/modules/mall/scripts/layout"], function (obj) {
-             obj.init('@ViewBag.ClientID');
-        });
+             obj.init('@ViewBag.ClientID', '@(catogoryid)');
+         });
     </script>
     @RenderSection("scripts", false)
 <footer style="width: 100%; height: 50px; position: relative; background-color: #434443; bottom: 0px;">
-    <input id="ipturl" type="text" hidden="hidden" class="hide" value="@(ViewBag.Url)"/>
+    <input id="ipturl" type="text" hidden="hidden" class="hide" value="@(ViewBag.Url)"/> 
     <div class="right mRight30 mTop20" style="color: #fff;">
         ©2016云销科技 沪ICP备 1999888 号
     </div>
 </footer>
 
- <div class="dropdown-userinfo hide" >
-        @*<div class="top-lump"></div>*@
-        <ul class="items-list">
-            <li class="item"><a  href="@(ViewBag.Url)/MyAccount/Index?&name=个人中心">个人中心</a></li>
-            <li class="item"><a href="@(ViewBag.Url)/Home/Logout">安全退出</a></li>
-        </ul>
-    </div>
+<div class="dropdown-userinfo hide">
+    <div class="top-lump"></div>
+    <ul class="items-list">
+        <li class="item"><a href="@(ViewBag.Url)/MyAccount/Index?&name=个人中心">个人中心</a></li>
+        <li class="item"><a href="@(ViewBag.Url)/Home/Logout">安全退出</a></li>
+    </ul>
+</div>
 </body>
 
 </html>

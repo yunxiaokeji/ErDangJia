@@ -36,7 +36,7 @@
                 $('.cartlist').hide();
             }   
         });
-       
+        //清单隐藏
         $(document).click(function (e) { 
             if (!$(e.target).parents().hasClass("cartlist") && !$(e.target).hasClass("cartlist") && !$(e.target).hasClass("tdcart")
                 && !$(e.target).hasClass("tdspan") && !$(e.target).hasClass("cartlist") && !$(e.target).parents().hasClass("carttable") && !$(e.target).parents().hasClass("cartdiv")) {
@@ -45,12 +45,35 @@
                 $('.tdcart .dropdown-bottom').removeClass('hide');
                 $('.cartlist').hide();
             }
+            //解决文本框值全选 清单为隐藏问题
+            $('.quantity').focus(function () {  
+                var _this = $(e.target);
+                if (!_this.parents().hasClass("cartlist") && !_this.hasClass("cartlist") && !_this.hasClass("tdcart")
+                    && !_this.hasClass("tdspan") && !_this.hasClass("cartlist") && !_this.parents().hasClass("carttable") && !_this.parents().hasClass("cartdiv")) {
+                    $('.tdcart').removeClass('hover');
+                    $('.tdcart .dropdown-top').addClass('hide');
+                    $('.tdcart .dropdown-bottom').removeClass('hide');
+                    $('.cartlist').hide();
+                }
+            });
         });
         //样图
         _self.bindOrderImages(model.ProductImage); 
         $('.bottombtn').bind('click', function () { _self.savePDT() });
         $('.moneyinfo').css("width", "740px"); 
         $("#description").html(decodeURI(model.Description));
+
+        //分类返回
+        $('#categoryContent').click(function () { 
+            window.open('/Mall/Store/Goods?id=' + _self.clientid + '&categoryid=' + $('.categoryMenu.hover').data('id'), '店铺中心');
+            $('.divcategory').hide();
+        });
+        $(".divcategory").find('a').click(function () {
+            console.log($(this).data("id"));
+            window.open('/Mall/Store/Goods?id=' + _self.clientid + '&categoryid=' + $(this).data("id"), '店铺中心');
+            $('.divcategory').hide();
+        });
+
     } 
 
     ObjectJS.setCartList = function () {
@@ -204,10 +227,10 @@
                 var citem = item.AttrValues[j];
                 if (_self.model.SaleAttrs.length == 1 || i == 1) {
                     if (i == (_self.model.SaleAttrs.length - 1)) {
-                        $('#sizeName').html(item.AttrName + ":");
+                        $('#sizeName').html(item.AttrName.length > 5 ? item.AttrName.substring(0, 5) : item.AttrName + ":");
                         shtml += '<tr class="last-row trattr" data-remark="' + citem.ValueName + '">';
                     } else {
-                        $('#colorName').html(item.AttrName + ":");
+                        $('#colorName').html(item.AttrName.length > 5 ? item.AttrName.substring(0,5) : item.AttrName + ":");
                         shtml += '<tr calss="trattr" data-remark="' + citem.ValueName + '">';
                     }
                     shtml += '<td class="name" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</td>' +
@@ -442,8 +465,7 @@
                 list[key].push({ quantity: obj.quantity, key: obj.key, name: obj.name, size: obj.size });
                 quantitylist[key] = parseInt(quantitylist[key]) + parseInt(obj.quantity);
             }
-        });
-        console.log(elemobj);
+        }); 
         if (typeof (list[elemobj.data('name')]) != 'undefined') {
             sumnum = quantitylist[elemobj.data('name')];
         }

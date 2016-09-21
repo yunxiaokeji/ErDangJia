@@ -1,98 +1,226 @@
-﻿ @{ 
-     var model = (CloudSalesEntity.Products)ViewBag.Model;
-     ViewBag.Title = model.ProductName;
- }
+﻿@{ 
+    var model = (CloudSalesEntity.Products)ViewBag.Model;
+    ViewBag.Title = model.ProductName;
+}
 @section css{
-    <link href="/modules/css/downorder.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/modules/mall/css/stylecenter.css"/>
+    <link href="/modules/css/downorder.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/modules/mall/css/stylecenter.css" />
     <style>
-        .login-body{ background:url(/modules/images/loginMainBackground.jpg) no-repeat right bottom; background-size:cover; width:100%; height:100%;}
-        .login-body .main{ margin:0px auto; width:320px;background-color:#fff;padding:15px 30px 60px 40px;opacity:0.9;
-        background:url(/modules/images/bg-loginBackground.png) no-repeat left top; background-size:100% 100%;
-        } 
-        .login-body .headerTitle {margin-left:5px; color:#4a98e7; text-align:center; font-size:16px;font-weight:bold; line-height:24px;}
-        .login-body .main .login{ width:320px;margin-top:15px;}
-        .login-body .main .login .loginbar{ width:100%;height:40px; margin:10px 0px; background-color:#fff;position:relative;}
-        .login-body .loginbar .input{ width:308px;height:40px; border:solid 1px #ccc;color:#333;  text-indent:26px;}
-        .icoUserName { background:url(/modules/images/ico-name.png) no-repeat 7px 11px;border-radius:3px;}
-        .icoUserPwd { background:url(/modules/images/ico-pwd.png) no-repeat 7px 11px;border-radius:3px;}
-        .icoMobileCode { background:url(/modules/images/ico-mobilecode.png) no-repeat 7px 11px;border-radius:3px;}
-        .icoUserCompany { background:url(/modules/images/ico-company.png) no-repeat 7px 11px;border-radius:3px;}
-        .icoName { background:url(/modules/images/ico-username.png) no-repeat 7px 11px;border-radius:3px;}
-        .icoSurePwd { background:url(/modules/images/ico-surepwd.png) no-repeat 7px 11px;border-radius:3px;}
-        .remember-box { height:30px; margin-top:20px; }
-        .remember-box .cb-remember-password { cursor:pointer; padding-left:2px; color:#666; }
-        .btnLogin { height:40px;line-height:40px; background-color:#4A98E7 ; color:#fff; font-size:16px; text-align:center;
-            border:none; font-weight:bold; cursor:pointer; display:inline-block; border-radius:3px; width:320px;}
+        .login-body {
+            background: url(/modules/images/loginMainBackground.jpg) no-repeat right bottom;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+            .login-body .main {
+                margin: 0px auto;
+                width: 320px;
+                background-color: #fff;
+                padding: 15px 30px 60px 40px;
+                opacity: 0.9;
+                background: url(/modules/images/bg-loginBackground.png) no-repeat left top;
+                background-size: 100% 100%;
+            }
+
+            .login-body .headerTitle {
+                margin-left: 5px;
+                color: #4a98e7;
+                text-align: center;
+                font-size: 16px;
+                font-weight: bold;
+                line-height: 24px;
+            }
+
+            .login-body .main .login {
+                width: 320px;
+                margin-top: 15px;
+            }
+
+                .login-body .main .login .loginbar {
+                    width: 100%;
+                    height: 40px;
+                    margin: 10px 0px;
+                    background-color: #fff;
+                    position: relative;
+                }
+
+            .login-body .loginbar .input {
+                width: 308px;
+                height: 40px;
+                border: solid 1px #ccc;
+                color: #333;
+                text-indent: 26px;
+            }
+
+        .icoUserName {
+            background: url(/modules/images/ico-name.png) no-repeat 7px 11px;
+            border-radius: 3px;
+        }
+
+        .icoUserPwd {
+            background: url(/modules/images/ico-pwd.png) no-repeat 7px 11px;
+            border-radius: 3px;
+        }
+
+        .icoMobileCode {
+            background: url(/modules/images/ico-mobilecode.png) no-repeat 7px 11px;
+            border-radius: 3px;
+        }
+
+        .icoUserCompany {
+            background: url(/modules/images/ico-company.png) no-repeat 7px 11px;
+            border-radius: 3px;
+        }
+
+        .icoName {
+            background: url(/modules/images/ico-username.png) no-repeat 7px 11px;
+            border-radius: 3px;
+        }
+
+        .icoSurePwd {
+            background: url(/modules/images/ico-surepwd.png) no-repeat 7px 11px;
+            border-radius: 3px;
+        }
+
+        .remember-box {
+            height: 30px;
+            margin-top: 20px;
+        }
+
+            .remember-box .cb-remember-password {
+                cursor: pointer;
+                padding-left: 2px;
+                color: #666;
+            }
+
+        .btnLogin {
+            height: 40px;
+            line-height: 40px;
+            background-color: #4A98E7;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+            border-radius: 3px;
+            width: 320px;
+        }
     </style>
 }
 @section scripts{
     <script type="text/javascript">
         seajs.use(["/modules/mall/scripts/goodsdetail"], function (obj) {
-            obj.init('@(ViewBag.ClientID)', '@Html.ToJSONString(model)','@(ViewBag.CityCode)');
+            obj.init('@(ViewBag.ClientID)', '@Html.ToJSONString(model)', '@(ViewBag.CityCode)');
         });
     </script>
-} 
-<a class=" hide btn-back right mTop5" title="返回" href="/Mall/Store/Goods?id=@(ViewBag.ClientID)"><span id="btnback" style="color: #ffffff;">返回</span></a>
-    <div class="content-body divcenter" style="padding-top: 10px; padding-bottom: 0px;overflow: initial;">
-        <div class="order-info">
-            <div class="order-imgs-div left">
-                <div class="order-imgs">
-                    <img id="orderImage" src="@(string.IsNullOrEmpty(model.ProductImage) ? "" : model.ProductImage)" data-self="1"/>
-                </div>
-                <ul class="order-imgs-list pLeft10">
-
-                </ul>
+}
+<a class="btn-back right mTop5" style="display: none;" title="返回" href="/Mall/Store/Goods?id=@(ViewBag.ClientID)"><span id="btnback" style="color: #ffffff;">返回</span></a>
+<div class="content-body divcenter" style="padding-top: 10px; padding-bottom: 0px; overflow: initial;">
+    <h1>@(string.IsNullOrEmpty(model.ProductName) ? model.ProductCode : model.ProductCode + " " + model.ProductName)</h1>
+    <div class="order-info">
+        <div class="order-imgs-div left">
+            <div class="order-imgs">
+                <img id="orderImage" src="@(string.IsNullOrEmpty(model.ProductImage) ? "" : model.ProductImage)" data-self="1"/>
             </div>
-            <div class="left divright">
-                <h1 >@(string.IsNullOrEmpty(model.ProductName) ? model.ProductCode :model.ProductCode+" "+ model.ProductName)</h1>
-                <ul class="moneyinfo ">
-                    <li style="overflow: initial;"> 
-                        <span class="column-title " style="width: 50px;">单价：</span>
-                        <label class="bolder red font14">
-                            @(model.Price.ToString("f2"))
-                        </label> 
-                    </li>
-                    <li style="overflow: initial;"> 
-                        <span class="column-title " style="width: 50px;">单位：</span>
-                        <label class="bolder font14">
-                            @(!string.IsNullOrEmpty(model.UnitName) ? model.UnitName : "件")
-                        </label> 
-                    </li>
-                    <li style="overflow: initial;" id="pdttitle"> 
-                        <span class="column-title " style="width: 50px;">优惠：</span>
-                        <label class="bolder font14">
-                            暂无优惠政策
-                        </label> 
-                    </li>
-                    <li id="licolor">
-                        <div class="column-title left" style="width: 50px; line-height: 42px;" id="colorName">颜色：</div>
-                         <div class="left" style="width: 680px;">
-                            <ul class="product-details" id="colorlist">
-                            </ul>
-                        </div>
-                    </li>
-                     <li > 
-                        <div class="column-title left" style="width: 50px; line-height: 42px;" id="sizeName">尺码：</div>
-                        <div class="left sizediv" >
-                            <table style="width: 650px;">
-                                <tbody id="sizelist"></tbody>
-                            </table>
-                        </div>  
-                    </li>
-                    <li id="btnSubmit" class="hide">
-
-                        <div class="bottombtn">确认采购</div>
-                        <div class="right mRight50 red hide"><span class=" font16 red bolder" id="totalnum" >0</span>件 <span class="pLeft30 font16 red bolder" id="totalprice">0.00</span>元
-                        </div>
-                    </li>
-                </ul>
-               
+            <ul class="order-imgs-list pLeft10">
+            </ul>
+        </div>
+        <div class="left mLeft10" style="width: 760px; background-color: #FDF0E7; border-top: 1px solid #F6C38C;">
+            <table class="pricetable">
+                <tbody>
+                    <tr class="firsttr">
+                        <td class="center color999" style="width: 70px;">单价:</td>
+                        <td>
+                            <span class="priceimg">￥</span>
+                            <span class="price">@(model.Price.ToString("f2"))</span>
+                        </td>
+                        <td class="hide"></td>
+                        <td class="hide"></td>
+                    </tr>
+                    <tr class="hide" style="line-height: 30px; height: 30px;">
+                        <td class="center color999" style="width: 70px;">优惠:</td>
+                        <td></td>
+                        <td class="hide"></td>
+                        <td class="hide"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="left divright">
+            <ul class="moneyinfo ">
+                <li style="overflow: initial;" id="pdttitle">
+                    <span class="column-title " style="width: 50px;">单位：</span>
+                    <label class="bolder font14">
+                        @(!string.IsNullOrEmpty(model.UnitName) ? model.UnitName : "件")
+                    </label>
+                </li>
+                <li id="licolor">
+                    <div class="column-title left" style="width: 50px; line-height: 42px;" id="colorName">颜色：</div>
+                    <div class="left" style="width: 680px;">
+                        <ul class="product-details" id="colorlist">
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="column-title left" style="width: 50px; line-height: 42px;" id="sizeName">尺码：</div>
+                    <div class="left sizediv">
+                        <table style="width: 650px;">
+                            <tbody id="sizelist"></tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="left cartdiv" >
+            <div class="cartlist hide" style="bottom:50px;">
+                 <table class="left">
+                    <tbody id="cartbody" >
+                    <tr>
+                        <td class="bolder center width80">黑色</td>
+                        <td class="width170 center">0件</td>
+                        <td class="tLeft"style="width: 510px;">
+                            &nbsp;
+                        </td>
+                    </tr>
+                        <tr>
+                        <td class="bolder center width80">黑色</td>
+                        <td class="width170 center">0件</td>
+                        <td class="tLeft"style="width: 510px;">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="clear"></div>
+            <div class="left mTop10 hide"  style="width: 100%; background-color: #F9F9F9;border-bottom:  1px solid #E5E5E5;border-top:  1px solid #E5E5E5;">
+                <table class="left carttable">
+                    <tbody>
+                        <tr>
+                            <td  style="width: 170px;"><span class="mLeft15 font16 red bolder" id="totalnum">0</span>件</td>
+                            <td style="width: 275px;"><span class="pLeft20 font16 red bolder" id="totalprice">0.00</span>元</td>
+                            <td style="width: 245px;" class="tdcart">
+                                <span class="tdspan left mLeft50 mTop5">已选清单</span>
+                                <span class="tdspan left dropdown" style="overflow:visible;">
+                                    <span class="dropdown-top hide" style="left:-3px; top: 0px;"></span> 
+                                    <span class="dropdown-bottom " style="left:-3px;top: 0px;"></span> 
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div id="btnSubmit" class="hide right" style="margin-top:10px; margin-right: 70px;">
+            <div class="bottombtn">确认采购</div>
         </div>
         <div class="clear"></div>
     </div>
+    <div class="clear"></div>
+</div>
 
 <div class="content-body divcenter" style="padding: 20px 0 50px 10px;">
     <div class="show-nav">
@@ -100,7 +228,7 @@
             <li class="hover" data-id="product-attr">产品介绍</li>
         </ul>
     </div>
-    
+
     <ul class="product-attr">
         <li class="long">产品编码：@(model.ProductCode)</li>
         <li class="long">产品毛重：@(model.Weight.Value.ToString("f2"))g</li>
@@ -108,23 +236,23 @@
         @foreach (var attr in model.AttrLists)
         { 
             <li class="long">@attr.AttrName：@attr.AttrValues[0].ValueName</li>
-         }
-        
+        }
+
     </ul>
     <div class="description" id="description"></div>
 </div>
-    <a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情"><span id="btndetail">查看采购详情</span></a>
-    @*图片放大*@
-    <div class="enlarge-image-bgbox hide">
-        <div class="close-enlarge-image iconfont">&#xe606;</div>
-        <span id="zoomInButton" class="zoom-botton iconfont mRight50">&#xe642;</span>
-        <span id="zoomOutButton" class="zoom-botton iconfont">&#xe641;</span>
-    </div>
-    <div id="pageContent" class="enlarge-image-box hide">
-        <div class="left-enlarge-image"></div>
-        <div class="right-enlarge-image"></div>
-        <div class="enlarge-image-item"></div>
-    </div>
-<input type="text" hidden="hidden" id="iptcontactName" value="@(ViewBag.ContactName)" data-empty="联系人不能为空!"> 
+<a class="btn-open-window right mTop5 hide" data-url="/Purchase/DocDetail/" data-id="" data-name="采购单详情"><span id="btndetail">查看采购详情</span></a>
+@*图片放大*@
+<div class="enlarge-image-bgbox hide">
+    <div class="close-enlarge-image iconfont">&#xe606;</div>
+    <span id="zoomInButton" class="zoom-botton iconfont mRight50">&#xe642;</span>
+    <span id="zoomOutButton" class="zoom-botton iconfont">&#xe641;</span>
+</div>
+<div id="pageContent" class="enlarge-image-box hide">
+    <div class="left-enlarge-image"></div>
+    <div class="right-enlarge-image"></div>
+    <div class="enlarge-image-item"></div>
+</div>
+<input type="text" hidden="hidden" id="iptcontactName" value="@(ViewBag.ContactName)" data-empty="联系人不能为空!">
 <input type="text" hidden="hidden" id="iptmobilePhone" value="@(ViewBag.MobilePhone)" maxlength="11" data-empty="电话不能为空!">
-<input type="text" hidden="hidden" placeholder="详细地址..." class="width300" id="iptaddress" value="@(ViewBag.Address)">  
+<input type="text" hidden="hidden" placeholder="详细地址..." class="width300" id="iptaddress" value="@(ViewBag.Address)">

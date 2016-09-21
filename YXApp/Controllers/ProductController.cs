@@ -27,8 +27,8 @@ namespace YXApp.Controllers
 
         public JsonResult GetProductList(string zngcClientID,int pageSize,int pageIndex)
         {
-            OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(CurrentUser.Client.ClientCode, pageSize, pageIndex, zngcClientID);
-            JsonDictionary.Add("item",item);
+            //OrderListResult item = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(CurrentUser.Client.ClientCode, pageSize, pageIndex, zngcClientID);
+            //JsonDictionary.Add("item",item);
             return new JsonResult
             {
                 Data = JsonDictionary,

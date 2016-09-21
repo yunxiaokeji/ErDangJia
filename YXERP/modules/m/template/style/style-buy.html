@@ -17,9 +17,9 @@ var item=$data;
             <div>
                     <div class="productsalesattr">
                         {%
-                        for(var i=0;i<item.SaleAttrs.length;i++)
+                        for(var i=0;i<item.AttrLists.length;i++)
                         {
-                            var attr=item.SaleAttrs[i];
+                            var attr=item.AttrLists[i];
                         %}
                             <div class="attr-title" id="Div1" data-id="{%=attr.AttrID%}">
                                 {%=attr.AttrName%}
@@ -40,9 +40,9 @@ var item=$data;
                     </div>
                    <div class="productsalesattr">
                         {%
-                        for(var i=0;i<item.AttrLists.length;i++)
+                        for(var i=0;i<item.SaleAttrs.length;i++)
                         {
-                            var attr=item.AttrLists[i];
+                            var attr=item.SaleAttrs[i];
                         %}
                         <div class="attr-rule attr-ul">
                             <table class="table-list" id="sizelist">

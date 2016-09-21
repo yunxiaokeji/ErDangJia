@@ -148,14 +148,14 @@
 
     ObjectJS.getOrderAttr = function () {
         var _self = ObjectJS;
-        for (var i = 0; i < _self.model.SaleAttrs[0].AttrValues.length; i++) {
-            var _sale = _self.model.SaleAttrs[0].AttrValues[i];
+        for (var i = 0; i < _self.model.AttrLists[0].AttrValues.length; i++) {
+            var _sale = _self.model.AttrLists[0].AttrValues[i];
             var _model = {};
             _model.SaleRemark = _sale.ValueName;
             _model.SaleID = _sale.ValueID;
             var _details = {};
-            for (var j = 0; j < _self.model.AttrLists[0].AttrValues.length; j++) {
-                var _attr = _self.model.AttrLists[0].AttrValues[j];
+            for (var j = 0; j < _self.model.SaleAttrs[0].AttrValues.length; j++) {
+                var _attr = _self.model.SaleAttrs[0].AttrValues[j];
                 _details[_attr.ValueID] = {
                     ValueName: _attr.ValueName,
                     Quantity: 0,

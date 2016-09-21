@@ -36,6 +36,16 @@
                 $('.cartlist').hide();
             }   
         });
+       
+        $(document).click(function (e) { 
+            if (!$(e.target).parents().hasClass("cartlist") && !$(e.target).hasClass("cartlist") && !$(e.target).hasClass("tdcart")
+                && !$(e.target).hasClass("tdspan") && !$(e.target).hasClass("cartlist") && !$(e.target).parents().hasClass("carttable") && !$(e.target).parents().hasClass("cartdiv")) {
+                $('.tdcart').removeClass('hover');
+                $('.tdcart .dropdown-top').addClass('hide');
+                $('.tdcart .dropdown-bottom').removeClass('hide');
+                $('.cartlist').hide();
+            }
+        });
         //样图
         _self.bindOrderImages(model.ProductImage); 
         $('.bottombtn').bind('click', function () { _self.savePDT() });
@@ -58,14 +68,14 @@
         });
         var html = '';
         $.each(list, function (i, obj) {
-            html += '<tr><td class="bolder center width80">' + i + '</td><td class="width170 center">' + quantitylist[i] + '件</td>' +
+            html += '<tr><td class="bolder center width80">' + i + '</td><td class="width170 center" id="' + i + '">' + quantitylist[i] + '件</td>' +
                 '<td class="tLeft"style="width: 510px;">';
             $.each(obj, function (j, item) {
                 html += '<div class="choose-quantity left mLeft30"><span class="left mRight5">' + item.size +'</span>'+
-                    '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;box-sizing:border-box;height:26px;">-</span>' +
+                    '<span class="quantity-jian" style="left:1px;padding: 0 5px;border-right: 0 none;box-sizing:border-box;height:26px;" data-name="' + i+ '">-</span>' +
                     '<input type="text" class="quantity" style="width:30px;border-radius:0px;box-sizing:border-box;height:26px;" ' +
                     ' value="' + item.quantity + '" data-size="' + item.size + '"  data-name="' + item.name + '"  data-key="' + item.key + '" />' +
-                    '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;box-sizing:border-box;height:26px;">+</span>' +
+                    '<span class="quantity-add"  style="right:1px;padding: 0 2px; border-left: 0 none;box-sizing:border-box;height:26px;" data-name="' + i + '">+</span>' +
                     '</div>';
             });
             html+='</td> </tr>';
@@ -218,9 +228,7 @@
         $('#colorlist').html(chtml);
         if (chtml == "") {
             $('#licolor').hide();
-        } else {
-            $('#licolor li:first').addClass('hover');
-        }
+        } 
         $('#sizelist').html(shtml);
         if (shtml != "") {
             $('.sizediv').addClass("linetopbottom");
@@ -255,39 +263,10 @@
             });
             $('#colorlist li.hasquantity').find('.sjselect').show();
             _self.setOrdersQuantity();
-            _self.SumNumPrice();
+            _self.SumNumPrice('', '');
         });
         _self.QuantityChange('sizelist');
-        //$('#sizelist .quantity').keyup(function() {
-        //    $(this).val($(this).val().replace(/\D/g, ''));
-        //}).blur(function() {
-        //    if ($(this).val() == "") {
-        //        $(this).val('0');
-        //    }
-        //    _self.SumNumPrice();
-        //});
-        //$('#sizelist .quantity-jian').click(function() {
-        //    var _this = $(this);
-        //    if (_this.next().val() != 0) {
-        //        _this.next().val(parseInt(_this.next().val()) - 1);
-        //        _self.SumNumPrice();
-        //    }
-        //}).mouseover(function() {
-        //    $(this).next().addClass("hover");
-        //}).mouseout(function() {
-        //    $(this).next().removeClass("hover");
-        //});
-        //$('#sizelist .quantity-add').click(function() {
-        //    var _this = $(this);
-        //    if (_this.prev().val() != "") {
-        //        _this.prev().val(parseInt(_this.prev().val()) + 1);
-        //        _self.SumNumPrice();
-        //    }
-        //}).mouseover(function() {
-        //    $(this).prev().addClass("hover");
-        //}).mouseout(function() {
-        //    $(this).prev().removeClass("hover");
-        //});
+        $('#licolor li:first').click();
     };
 
     ObjectJS.QuantityChange=function(elem)
@@ -299,13 +278,14 @@
             if ($(this).val() == "") {
                 $(this).val('0');
             }
-            _self.SumNumPrice(elem);
+            _self.SumNumPrice(elem, $(this));
+
         });
         $('#' + elem + ' .quantity-jian').click(function () {
             var _this = $(this);
             if (_this.next().val() != 0) {
                 _this.next().val(parseInt(_this.next().val()) - 1);
-                _self.SumNumPrice(elem);
+                _self.SumNumPrice(elem, $(this));
             }
         }).mouseover(function () {
             $(this).next().addClass("hover");
@@ -316,7 +296,7 @@
             var _this = $(this);
             if (_this.prev().val() != "") {
                 _this.prev().val(parseInt(_this.prev().val()) + 1);
-                _self.SumNumPrice(elem);
+                _self.SumNumPrice(elem, $(this));
             }
         }).mouseover(function () {
             $(this).prev().addClass("hover");
@@ -324,8 +304,8 @@
             $(this).prev().removeClass("hover");
         });
     }
-    ObjectJS.SumNumPrice = function (elem) {
-        var _self = this;
+    ObjectJS.SumNumPrice = function (elem,obj) {
+        var _self = this; 
         _self.setOrdersCache(elem);
         var sumnum = 0, sumprice = 0.00;
         if (!$.isEmptyObject(tempOrder)) {
@@ -338,6 +318,9 @@
         $('#totalprice').html(sumprice);
         if (sumnum > 0) {
             $('.carttable').parent().show();
+        }
+        if (elem != 'sizelist' && elem!='') {
+            _self.RefreshQuantity(obj);
         }
     }
     ObjectJS.savePDT = function () {
@@ -411,7 +394,7 @@
             }
         });
     }
-    //数量缓存
+    //数量缓存 input 所在的div
     ObjectJS.setOrdersCache = function (elem) {
         elem = elem == '' ? 'sizelist' : elem;
         $('#' + elem + ' .quantity').each(function () {
@@ -442,8 +425,30 @@
                     delete tempOrder[key]; 
                 } 
             } 
-        }); 
+        });
+        if (elem != 'sizelist') {
+            ObjectJS.setOrdersQuantity();
+        }
     };
+    ObjectJS.RefreshQuantity= function(elemobj) { 
+        var sumnum = 0;
+        var list = {}; var quantitylist = {};
+        $.each(tempOrder, function (i, obj) {
+            var key = obj.name == "" ? obj.size : obj.name;
+            if (typeof (list[key]) == 'undefined') {
+                list[key] = [{ quantity: obj.quantity, key: obj.key, name: obj.name, size: obj.size }];
+                quantitylist[key] = parseInt(obj.quantity);
+            } else {
+                list[key].push({ quantity: obj.quantity, key: obj.key, name: obj.name, size: obj.size });
+                quantitylist[key] = parseInt(quantitylist[key]) + parseInt(obj.quantity);
+            }
+        });
+        console.log(elemobj);
+        if (typeof (list[elemobj.data('name')]) != 'undefined') {
+            sumnum = quantitylist[elemobj.data('name')];
+        }
+        $('td[id="' + elemobj.data('name') + '"]').html(sumnum + '件');
+    }
     //数赋值
     ObjectJS.setOrdersQuantity = function () {
         $('#sizelist .quantity').each(function() {

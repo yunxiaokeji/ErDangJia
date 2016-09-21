@@ -112,7 +112,10 @@ namespace YXERP.Areas.Mall.Controllers
             {
                 return Redirect("/Home/login");
             }
-
+            if (YXERP.Common.Common.IsMobileDevice())
+            {
+                return Redirect("/M/Home/Detail?orderid=" + orderid);
+            }
             string ccode, address, mphone,cname;
             ccode = address = mphone = cname = "";
             if (CurrentUser != null)

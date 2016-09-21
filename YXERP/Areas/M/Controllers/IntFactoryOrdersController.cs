@@ -13,9 +13,10 @@ namespace YXERP.Areas.M.Controllers
     {
 
         #region ajax
-        public JsonResult GetProducts(string clientid, int pageSize, int pageIndex)
+        public JsonResult GetProducts(string keyWords, string categoryID, string beginPrice, string endPrice, bool isAsc, string orderby, int pageSize, int pageIndex)
         {
-            IntFactory.Sdk.OrderListResult list = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode("", pageSize, pageIndex, clientid);
+            IntFactory.Sdk.OrderListResult list = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(keyWords, CurrentUser.CurrentCMClientID, pageSize, pageIndex,
+                categoryID, beginPrice, endPrice, isAsc, orderby);
             JsonDictionary.Add("items", list.orders);
             return new JsonResult
             {

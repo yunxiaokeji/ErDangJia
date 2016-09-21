@@ -14,10 +14,9 @@ namespace IntFactory.Sdk
     {
         public static OrderBusiness BaseBusiness = new OrderBusiness();
 
-        public OrderListResult GetOrdersByYXClientCode(string yxClientCode, int pageSize, int pageIndex, string zngcClientID = "", string keyWords = "", string categoryID = "", string orderby = "", string beginPrice = "", string endPrice = "")
+        public OrderListResult GetOrdersByYXClientCode(string keyWords,string zngcClientID,int pageSize, int pageIndex, string categoryID="", string beginPrice="", string endPrice="", bool isAsc=true, string orderby="")
         {
             var paras = new Dictionary<string, object>();
-            paras.Add("yxClientCode", yxClientCode);
             paras.Add("clientID", zngcClientID);
             paras.Add("keywords", keyWords); 
             paras.Add("pageSize", pageSize);

@@ -24,7 +24,7 @@ namespace IntFactory.Sdk
                 int totalcount = 1;
                 for (int i = 1; i <= totalcount; i++)
                 {
-                    var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(clientid, 20, i, cmClientID, "", "", "", "", "");
+                    var orderlist = OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(string.Empty, cmClientID, 20, i);
                     if (orderlist.orders.Any())
                     {
                         totalcount = orderlist.pageCount;

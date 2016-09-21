@@ -64,7 +64,7 @@
                 if (!$(".attr-item li").hasClass('select')) {
                     $("#sizelist .data-item").each(function () {
                         var _sizeTr = $(this);
-                        ObjectJS.setOrderAttrQuantity(_this.data('id'), _sizeTr.data('id'), _sizeTr.find('.quantity').val() || 0);
+                        ObjectJS.setOrderAttrQuantity(_this.data('id'), _sizeTr.data('id'), _sizeTr.find('.quantity').val() || 0, 1);
                     });
                 }
                 ObjectJS.setTrQuantity(_this.data('id'));

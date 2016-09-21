@@ -208,7 +208,7 @@
                     }
                 }
             }
-            model.productDetails = productDetails;
+            model.productDetails = productDetails && productDetails.substring(0, productDetails.length - 1);
             $(".btn-sureAdd").text("下单中...");
             isCreateOrder = true;
             Global.post("/M/IntFactoryOrders/AddIntfactoryPurchaseDoc", model, function (data) {

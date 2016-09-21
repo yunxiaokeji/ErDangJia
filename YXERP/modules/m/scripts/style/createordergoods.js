@@ -71,7 +71,7 @@
                     }
                 });
                 if (num > 0) {
-                    //$()
+                    $("#colorlist li.select").addClass('hasquantity');
                 }
 
                 ObjectJS.setTrQuantity(_this.data('id'));

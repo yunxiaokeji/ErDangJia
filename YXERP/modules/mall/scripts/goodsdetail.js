@@ -3,8 +3,7 @@
         Verify = require("verify"), VerifyInvoice,
         Global = require("global"),
         Easydialog = require("easydialog");
-    require("smartzoom");
-    require("pager"); 
+    require("smartzoom"); 
 
     var ObjectJS = {};
 
@@ -20,6 +19,7 @@
     var colorList = {}, tempOrder = {}, tempList = [];
     ObjectJS.bindStyle = function (model) {
         var _self = this;
+        //清单点击事件
         $('.tdcart').click(function () {
             _self.setCartList();
             if ($('.tdcart .dropdown-top').hasClass('hide')) {

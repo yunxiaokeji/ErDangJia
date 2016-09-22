@@ -25,13 +25,10 @@
 .dropdown-userinfo .items-list .item a{ width:70px;padding-left:30px; display:inline-block; font-size:14px; color:#666;}
 .dropdown-userinfo .items-list .item:hover {background-color: #eee;}
 .divcenter {width: 1190px;margin: 0 auto;position:relative ;}
-
 .creditul{ margin-top:5px;}
 .divcenter .creditul li{ float: right;position: relative;width: 60px; background-color: #F0C789; height: 90px;margin-right: 10px;}
 .divcenter .creditul li .sanjiao{ position: absolute; bottom: 0px; left: 0px;}
 .triangle-up {width:0;height:0; border-left:30px solid transparent;   border-right:30px solid transparent;   border-bottom:10px solid #fff;} 
-
-
 .qrcodediv{position: absolute; top: 35%;right: 40%; width: 240px; height: 240px; background-color: #fff;padding:10px 20px; 
            box-shadow:0 0 5px #ccc;border:solid 1px #eee;cursor: pointer;
 }
@@ -42,7 +39,6 @@
 .divcenter .categoryMenu.hover{background-color: #bb670c !important; }
 
 .dropdown-ul li:hover {color: #4a98e7;background-color: #ccc;}
-
 .providerdiv {margin: 0 auto;position: fixed;z-index: 666;width: 250px;min-height: 150px;background-color: #ffffff;min-width: 280px;
     border: 1px solid #eee;box-shadow: 0px 0px 3px #999;
 }
@@ -59,8 +55,7 @@
 .mRight0 { margin-right: 0px; }
 /*价格排序*/
 .divprice {height: 80px;width: 112px;display:none; position: absolute;top: -1px;left:-2px; z-index: 333;border:1px solid #ccc;background: #fff;
-           -webkit-box-shadow: 0 3px 3px rgba(0,0,0,.1);-moz-box-shadow: 0 3px 3px rgba(0,0,0,.1);box-shadow: 0 3px 3px rgba(0,0,0,.1);
-}
+           -webkit-box-shadow: 0 3px 3px rgba(0,0,0,.1);-moz-box-shadow: 0 3px 3px rgba(0,0,0,.1);box-shadow: 0 3px 3px rgba(0,0,0,.1);}
 .divprice li {float: none;white-space: nowrap;border-right: solid 1px #cccccc;border-left: solid 1px #cccccc}
 
 .seachlist{ background-color: #f6f6f6; margin-top: 10px;} 

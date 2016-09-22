@@ -55,8 +55,7 @@
             <div class="left mTop30" id="imglogo"> 
                 <div class="left" id="providerinfo" style=" line-height: 40px;">
                     <div class="font18 color666 pcompanyName"></div>
-                    <div class="providerdiv hide pBottom10 pTop10">
-                        @*<div class="top-lump" style="top:-10px; left: 125px;"></div>*@
+                    <div class="providerdiv hide pBottom10 pTop10"> 
                         <ul class="seachul">
                             <li title="公司名称">
                                 <div class="left mTop3 ">
@@ -131,11 +130,12 @@
     </script>
     @RenderSection("scripts", false)
 <footer style="width: 100%; height: 50px; position: relative; background-color: #434443; bottom: 0px;">
-    <input id="ipturl" type="text" hidden="hidden" class="hide" value="@(ViewBag.Url)"/> 
+    <input id="ipturl" type="text" hidden="hidden" class="hide" value="@(ViewBag.Url)"/>
     <div class="right mRight30 mTop20" style="color: #fff;">
         ©2016云销科技 沪ICP备 1999888 号
     </div>
 </footer>
+
 <div id="qrcodediv" class="qrcodediv hide">
     <span style="position: absolute;top :2px; right: 2px;" class="iconfont" title="关闭">&#xe628;</span>
     <p class=" center lineHeight30 font16">请使用手机扫描下单</p>

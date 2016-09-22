@@ -90,7 +90,7 @@
                         goodsID: model.goodsID,
                         goodsName: model.goodsName,
                         goodsCode: model.intGoodsCode,
-                        price: model.finalPrice,
+                        price: $("#productPrice").text(),
                         productDetails: "",
                         cmClientID: $("#EDJProvider").data('id'),
                         totalMoney: $("#totalprice").text() * 1,
@@ -235,7 +235,7 @@
                         productDetails += '[' + $("#colorlist").prev().text().trim() + '：' + _sale.SaleRemark + '][' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + ']&';
                         
                         var zngcModel = {};
-                        zngcModel.price = _self.model.finalPrice;
+                        zngcModel.price = $("#productPrice").text();
                         zngcModel.productCode = _self.model.intGoodsCode;
                         zngcModel.productName = _self.model.goodsName;
                         zngcModel.productImage = _self.model.orderImage;

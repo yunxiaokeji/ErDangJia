@@ -7,7 +7,7 @@
     require("daterangepicker");
     require("pager");
     require("colormark");
-    var $ = require('jquery');
+
     require("parser")($);
     require("form")($);
 

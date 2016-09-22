@@ -29,7 +29,7 @@
             innerHtml.find(".quantity").change(function () {
                 var _this = $(this);
                 if (!_this.val().isInt() || _this.val() < 0) {
-                    _this.val(0);
+                    _this.val('');
                     return false;
                 }
                 if ($("#colorlist li").hasClass('select')) {
@@ -190,7 +190,7 @@
         $("#sizelist .data-item").each(function () {
             var _this = $(this);
             var _data = item[_this.data('id')];
-            _this.find('.quantity').val(_data.Quantity);
+            _this.find('.quantity').val(_data.Quantity || '');
         });
     };
 

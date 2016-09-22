@@ -19,19 +19,25 @@ namespace YXERP.Areas.M.Controllers
                 return Redirect("/M/Home/ChooseProvider");
             }
 
-            if (!string.IsNullOrEmpty(providerID)) {
-                var c = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(providerID);
+            var providerClient = new CloudSalesEntity.Manage.Clients();
+            if (!string.IsNullOrEmpty(providerID))
+            {
                 CurrentUser.CurrentClientID = providerID;
-                var agent = AgentsBusiness.GetAgentDetail(c.AgentID);
+                providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(providerID);
+                var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
                 CurrentUser.CurrentCMClientID = agent.CMClientID;
             }
-            ViewBag.baseUser = CurrentUser.Client;
-
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
-            ViewBag.Client = client;
+            else 
+            {
+                providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
+            }
+            
             ViewBag.index = 0;
             ViewBag.EDJProviderID = CurrentUser.CurrentClientID;
             ViewBag.providerID = CurrentUser.CurrentCMClientID;
+            ViewBag.ProviderClient = providerClient;
+            ViewBag.CurrentClient = CurrentUser.Client;
+
             return View();
         }
 
@@ -42,35 +48,38 @@ namespace YXERP.Areas.M.Controllers
             {
                 return Redirect("/M/Home/Index?providerID=" + providers[0].CMClientID);
             }
-
             ViewBag.Providers = providers;
+
             return View();
         }
 
         public ActionResult Detail(string orderid, string clientid)
         {
-            var client =new Clients();
-            if (!string.IsNullOrEmpty(clientid)) {
-                client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+            var providerClient = new Clients();
+            if (!string.IsNullOrEmpty(clientid))
+            {
                 CurrentUser.CurrentClientID = clientid;
-                var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
+                providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+                var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
                 CurrentUser.CurrentCMClientID = agent.CMClientID;
             }
-
+            else {
+                providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
+            }
             var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, CurrentUser.CurrentCMClientID);
-            client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
             ViewBag.EDJProviderID = CurrentUser.CurrentClientID;
-            ViewBag.baseUser = CurrentUser.Client;
-            ViewBag.Model = obj.order;
-            ViewBag.Client =client;
+            ViewBag.Order = obj.order;
+            ViewBag.CurrentClient = CurrentUser.Client;
+            ViewBag.ProviderClient = providerClient;
 
             return View();
         }
 
-        public JsonResult SelectStore(string id) {
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
+        public JsonResult SelectStore(string id)
+        {
+            var providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
             CurrentUser.CurrentClientID = id;
-            var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
+            var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
             CurrentUser.CurrentCMClientID = agent.CMClientID;
             JsonDictionary.Add("status",true);
 

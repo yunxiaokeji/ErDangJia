@@ -1,7 +1,7 @@
 ﻿{%
 var item=$data;
 var productPrice=((item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderPriceRanges[0].price:item.finalPrice);
-var minPrice=item.orderPriceRanges&&item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice;
+var minPrice=(item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderPriceRanges[0].price:item.finalPrice;
 %}
 <div class="style-content">
     <div class="style-main">
@@ -9,7 +9,7 @@ var minPrice=item.orderPriceRanges&&item.orderPriceRanges.length>0?item.orderPri
             <div class="style-title">{%=item.goodsName%}</div>
             <div class="blue mTop30">
                <span class="font18">￥</span> 
-                <span class="bold">{%=(item.orderPriceRanges.length>1?item.orderPriceRanges[item.orderPriceRanges.length-1].price+'~':'')%}</span>
+                <span class="bold">{%=((item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderPriceRanges[item.orderPriceRanges.length-1].price+'~':'')%}</span>
                 <span class="bold" id="productPrice" data-minprice="{%=minPrice%}" data-price="{%=productPrice%}">{%=productPrice%}</span>
                 {%
                     if(item.orderPriceRanges&&item.orderPriceRanges.length>0)

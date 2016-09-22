@@ -7,7 +7,7 @@
     var AttrList = [];
     ObjectJS.showOrderGoodsLayer = function (model, user) {
         if (model.AttrLists.length == 0 || model.SaleAttrs.length == 0) {
-            alert("该产品暂不支持下单");
+            alert("该产品暂不支持下单", 2);
         }
         ObjectJS.model = model;
         AttrList = [];
@@ -105,7 +105,7 @@
                     };
                     if ($("#pirceRangeBox").length > 0 && $("#minOrderNum").length == 1) {
                         if ($("#totalnum").text() * 1 < $("#minOrderNum").text()*1) {
-                            alert("下单数最少" + $("#minOrderNum").text() + "件");
+                            alert("下单数最少" + $("#minOrderNum").text() + "件", 2);
                             return false;
                         }
                     }
@@ -258,7 +258,7 @@
             model.productDetails = productDetails && productDetails.substring(0, productDetails.length - 1);
             model.zngcProductEntity = JSON.stringify(zngcProductEntity);
             if (!model.productDetails) {
-                alert("请选择规格，或未填写下单数量");
+                alert("请填写下单数量",2);
                 return false;
             }
             $(".btn-sureAdd").text("下单中...");
@@ -275,7 +275,7 @@
                         });
                     }
                 } else {
-                    alert("下单失败,请重试");
+                    alert("下单失败,请重试", 2);
                     return false;
                 }
             });

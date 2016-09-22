@@ -1,7 +1,7 @@
 ﻿{%
 var item=$data;
-var productPrice=(item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice);
-var minPrice=item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice;
+var productPrice=(item.orderPriceRanges&&item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice);
+var minPrice=item.orderPriceRanges&&item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice;
 %}
 <div class="style-content">
     <div class="style-main">
@@ -12,7 +12,7 @@ var minPrice=item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.
                 <span class="bold">{%=(item.orderPriceRanges.length>1?item.orderPriceRanges[item.orderPriceRanges.length-1].price+'~':'')%}</span>
                 <span class="bold" id="productPrice" data-minprice="{%=minPrice%}" data-price="{%=productPrice%}">{%=productPrice%}</span>
                 {%
-                    if(item.orderPriceRanges.length>0)
+                    if(item.orderPriceRanges&&item.orderPriceRanges.length>0)
                     {
                  %}
                 (最少下单<span id="minOrderNum">{%=item.orderPriceRanges[0].minQuantity%}</span>件）
@@ -82,7 +82,7 @@ var minPrice=item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.
                     </div>
                     <div class="clear"></div>
                     {%
-                        if(item.orderPriceRanges.length>0)
+                        if(item.orderPriceRanges&&item.orderPriceRanges.length>0)
                         {
                     %}
                     <div class="title" style="font-weight:bold;font-size:14px;margin:5px 0;">

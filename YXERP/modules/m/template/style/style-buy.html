@@ -1,6 +1,6 @@
 ﻿{%
 var item=$data;
-var productPrice=(item.orderPriceRanges&&item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice);
+var productPrice=((item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderPriceRanges[0].price:item.finalPrice);
 var minPrice=item.orderPriceRanges&&item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice;
 %}
 <div class="style-content">

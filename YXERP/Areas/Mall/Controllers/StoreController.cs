@@ -166,15 +166,9 @@ namespace YXERP.Areas.Mall.Controllers
             };
         } 
         public JsonResult GetEdjCateGory(string clientid)
-        {
-            if (string.IsNullOrEmpty(CurrentUser.CurrentCMClientID))
-            {
-                var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
-                CurrentUser.CurrentClientID = clientid;
-                var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
-                CurrentUser.CurrentCMClientID = agent.CMClientID;
-            }
-            return GetAllCateGory(CurrentUser.CurrentCMClientID);
+        { 
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+            return GetAllCateGory(client.CMClientID);
             var result = new ProductsBusiness().GetCategorys(clientid); 
             JsonDictionary.Add("items", result);
             return new JsonResult()

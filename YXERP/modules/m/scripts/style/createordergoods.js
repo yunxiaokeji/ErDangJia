@@ -44,7 +44,7 @@
 
             $(".overlay-addOrder").html(innerHtml).show();
 
-            $(".overlay-addOrder .style-content").animate({ height: "450px" }, 200);
+            $(".overlay-addOrder .style-content").animate({ height: ($(window).height() > 460 ? 450 : 400) + "px" }, 200);
 
             $(".overlay-addOrder").unbind().click(function (e) {
                 if (!$(e.target).parents().hasClass("style-content") && !$(e.target).hasClass("style-content")) {

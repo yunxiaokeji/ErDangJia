@@ -277,6 +277,7 @@
     <Content Include="modules\images\wx-code.jpg" />
     <Content Include="modules\images\wx_logo64.png" />
     <Content Include="modules\mall\scripts\layout.js" />
+    <Content Include="modules\mall\template\goodslist\edj-products.html" />
     <Content Include="modules\m\css\style\chooseprovider.css" />
     <Content Include="modules\mall\css\stylecenter.css" />
     <Content Include="modules\mall\images\ico-cmlogo.png" />

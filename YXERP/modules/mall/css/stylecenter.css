@@ -32,7 +32,7 @@
 .triangle-up {width:0;height:0; border-left:30px solid transparent;   border-right:30px solid transparent;   border-bottom:10px solid #fff;} 
 
 
-.qrcodediv{position: fixed; top: 35%;right: 40%; width: 280px; height: 280px; background-color: #fff;padding: 20px; 
+.qrcodediv{position: absolute; top: 35%;right: 40%; width: 240px; height: 240px; background-color: #fff;padding:10px 20px; 
            box-shadow:0 0 5px #ccc;border:solid 1px #eee;cursor: pointer;
 }
 /*品类*/
@@ -82,8 +82,9 @@
 .productlist li{ width:240px; float:left;margin: 20px 20px 0 0; border:solid 1px #eee;display: list-item; }
 .productlist .product-item{  width:240px;  display:inline-block; position:relative; }
 .productlist li:hover{ border:solid 1px #B10000; }
-.product-item .productimg { width:240px; height:230px; display:table-cell; background:url('/modules/images/none-img.png') no-repeat center; overflow:hidden; text-align:center; vertical-align:middle; background-color:#eee; }
-.product-item .productimg img{ max-width:240px; height:240px;}
+.product-item .productimg { width:240px; height:240px;box-sizing:border-box;-moz-box-sizing:border-box; -webkit-box-sizing:border-box; display:table-cell;
+                            background:url('/modules/images/none-img.png') no-repeat center; overflow:hidden; text-align:center; vertical-align:middle; background-color:#eee; }
+.product-item .productimg img{ max-width:240px; max-height:240px;display: block;    margin: 0 auto; }
 .product-item .price { color:#B10000; padding:0 5px; height:30px; line-height:30px; font-size:16px; }
 .product-item .name { width:240px; max-height:40px; line-height:20px; overflow:hidden; color:#333; margin:0 5px; font-size:14px; display:inline-block; }
 .product-item .name:hover { text-decoration:underline; color:#B10000; }

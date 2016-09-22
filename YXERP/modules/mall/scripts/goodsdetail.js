@@ -16,7 +16,7 @@
         _self.getOrderAttr(); 
     }
 
-    var colorList = {}, tempOrder = {}, tempList = [];
+    var ColorList = {}, TempOrder = {}, TempList = [];
     ObjectJS.bindStyle = function (model) {
         var _self = this;
         //清单点击事件
@@ -26,7 +26,7 @@
                 $(this).addClass('hover');
                 $('.tdcart .dropdown-bottom').addClass('hide');
                 $('.tdcart .dropdown-top').removeClass('hide');
-                if (tempOrder != null) {
+                if (TempOrder != null) {
                     $('.cartlist').show();
                 }
             } else {
@@ -79,7 +79,7 @@
     ObjectJS.setCartList = function () {
         var _self = this;
         var list = {}; var quantitylist = {};
-        $.each(tempOrder, function (i, obj) {
+        $.each(TempOrder, function (i, obj) {
             var key = obj.name == "" ? obj.size : obj.name;
             if (typeof (list[key]) == 'undefined') {
                 list[key] = [{ quantity: obj.quantity, key: obj.key, name: obj.name, size: obj.size }];
@@ -211,12 +211,12 @@
                 item.AttrValue = item.AttrValue.toUpperCase();
                 var color = item.AttrValue.split(",");
                 var key = "[" + color[0] + "]" + (color.length > 1 ? "[" + color[1] + "]" : "");
-                colorList[key] = item.ProductDetailID;
-                if ($.inArray(color[0], tempList) == -1) {
-                    colorList[color[0]] = color.length > 1 ? color[1] : color[0];
-                    tempList.push(color[0]);
+                ColorList[key] = item.ProductDetailID;
+                if ($.inArray(color[0], TempList) == -1) {
+                    ColorList[color[0]] = color.length > 1 ? color[1] : color[0];
+                    TempList.push(color[0]);
                 } else {
-                    colorList[color[0]] = colorList[color[0]] + (color.length > 1 ? "," + color[1] : "");
+                    ColorList[color[0]] = ColorList[color[0]] + (color.length > 1 ? "," + color[1] : "");
                 }
             }
         }
@@ -233,6 +233,7 @@
                         $('#colorName').html(item.AttrName.length > 5 ? item.AttrName.substring(0,5) : item.AttrName + ":");
                         shtml += '<tr calss="trattr" data-remark="' + citem.ValueName + '">';
                     }
+                    //尺码
                     shtml += '<td class="name" >' + citem.ValueName.replace('【', ' ').replace('】', ' ') + '</td>' +
                         '<td class="price">' + _self.model.Price.toFixed(2) + '元</td>' +
                         '<td class="center"><div class="choose-quantity left mLeft30">' +
@@ -242,6 +243,7 @@
                         '</div></td>' +
                         '</tr>';
                 } else {
+                    //颜色
                     $('#colorName').html(item.AttrName + ":");
                     chtml += '<li class="left" style="overflow:visible;" data-id="' + item.AttrID + '" data-remark="' + citem.ValueName + '" ><div style="position: relative;;z-index:1;"><span>' + citem.ValueName.replace('【', ' ').replace('】', ' ') +
                         '</span><span class="sjselect hide" style="position: absolute;bottom:-8px;right:-10px;z-index:22;"><img style="height:16px;width:16px;" src="/modules/images/ico-sjselect.png"></div></li>';
@@ -279,7 +281,7 @@
             _this.find('.sjselect').hide();
             _this.removeClass("hasquantity").addClass("hover");
             $('.trattr').each(function() {
-                if (colorList[_this.data("remark")].indexOf($(this).data("remark")) == -1) {
+                if (ColorList[_this.data("remark")].indexOf($(this).data("remark")) == -1) {
                     $(this).hide();
                     $(this).find('.quantity').val(0);
                 } else {
@@ -333,8 +335,8 @@
         var _self = this; 
         _self.setOrdersCache(elem);
         var sumnum = 0, sumprice = 0.00;
-        if (!$.isEmptyObject(tempOrder)) {
-            $.each(tempOrder, function(i, obj) {
+        if (!$.isEmptyObject(TempOrder)) {
+            $.each(TempOrder, function (i, obj) {
                 sumnum += parseInt(obj.quantity);
             });
         } 
@@ -352,7 +354,7 @@
         $('.bottombtn').unbind('click');
         var _self = this;
         _self.setOrdersCache(); 
-        if ($.isEmptyObject(tempOrder)) {
+        if ($.isEmptyObject(TempOrder)) {
             $('.bottombtn').bind('click', function () { _self.savePDT() });
             alert("请选择颜色尺码，并填写对应采购数量");
             return false;
@@ -387,7 +389,7 @@
         var _self = this; 
         var dids = '';
         var details = [];
-        $.each(tempOrder, function(i, obj) { 
+        $.each(TempOrder, function (i, obj) {
             dids += obj.detailid + ":" + obj.quantity + ",";
         }); 
         Global.post("/Mall/Store/CreatePurchaseOrder",
@@ -437,17 +439,17 @@
                     }
                 }
                 key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";
-                item = { quantity: _this.val(), detailid: colorList[key], key: key, name: color, size: size }
+                item = { quantity: _this.val(), detailid: ColorList[key], key: key, name: color, size: size }
             } else {
                 //清单
                 key = _this.data('key');
-                item = { quantity: _this.val(), detailid: colorList[key], key: key, name: _this.data('name'), size: _this.data('size') }
+                item = { quantity: _this.val(), detailid: ColorList[key], key: key, name: _this.data('name'), size: _this.data('size') }
             }
             if (_this.val() > 0) {
-                tempOrder[key] = item;
+                TempOrder[key] = item;
             } else {
-                if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
-                    delete tempOrder[key]; 
+                if (typeof (TempOrder[key]) != 'undefined' && typeof (ColorList[key]) != 'undefined') {
+                    delete TempOrder[key];
                 } 
             } 
         });
@@ -458,7 +460,7 @@
     ObjectJS.RefreshQuantity= function(elemobj) { 
         var sumnum = 0;
         var list = {}; var quantitylist = {};
-        $.each(tempOrder, function (i, obj) {
+        $.each(TempOrder, function (i, obj) {
             var key = obj.name == "" ? obj.size : obj.name;
             if (typeof (list[key]) == 'undefined') {
                 list[key] = [{ quantity: obj.quantity, key: obj.key, name: obj.name, size: obj.size }];
@@ -483,8 +485,8 @@
                 var color = $('#colorlist li.hover').data("remark");
             }
             var key = (color != "" ? "[" + color + "]" : "") + "[" + size + "]";  
-            if (typeof (tempOrder[key]) != 'undefined' && typeof (colorList[key]) != 'undefined') {
-                _this.val(tempOrder[key].quantity);
+            if (typeof (TempOrder[key]) != 'undefined' && typeof (ColorList[key]) != 'undefined') {
+                _this.val(TempOrder[key].quantity);
             }
         });
     };

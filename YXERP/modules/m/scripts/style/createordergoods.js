@@ -29,7 +29,7 @@
             innerHtml.find(".quantity").change(function () {
                 var _this = $(this);
                 if (!_this.val().isInt() || _this.val() < 0) {
-                    _this.val(0);
+                    _this.val('');
                     return false;
                 }
                 if ($("#colorlist li").hasClass('select')) {

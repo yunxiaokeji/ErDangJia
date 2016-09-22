@@ -69,15 +69,6 @@
             if (!$(e.target).parents().hasClass("btn-task-filtertype") && !$(e.target).hasClass("btn-task-filtertype")) {
                 $(".task-filtertype").slideUp(400);
             }
-            if (!$(e.target).hasClass("category-block") &&!$(e.target).hasClass("show-category")&&
-                !$(e.target).parents().hasClass("filter-object") && !$(e.target).parents().hasClass("layer-box")&&
-                !$(e.target).parents().hasClass("category-box") && !$(e.target).parents().hasClass("show-category")) {
-                $(".layer-body").fadeOut(400);
-                $(".filter-object").removeClass('outlayer');
-                setTimeout(function () {
-                    $(".filter-object").hide();
-                }, 400);
-            }
         });
 
         //显示关键字遮罩层
@@ -85,6 +76,14 @@
             $(".txt-search").val("").focus();
             $(".shade,.search").show();
             $(".span-search").css("width", (document.body.clientWidth - 150) + "px");
+        });
+
+        $(".layer-body").click(function () {
+            $(".layer-body").fadeOut(400);
+            $(".filter-object").removeClass('outlayer');
+            setTimeout(function () {
+                $(".filter-object").hide();
+            }, 400);
         });
 
         //关键字查询

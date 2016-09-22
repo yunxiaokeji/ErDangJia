@@ -37,11 +37,11 @@ namespace YXERP.Common
                 string source = HttpContext.Current.Request.QueryString["source"];
                 if (!string.IsNullOrEmpty(source) && source == "md")
                 {
-                    filterContext.Result = new RedirectResult("/Home/MDLogin?ReturnUrl=" + HttpContext.Current.Request.Url);
+                    filterContext.Result = new RedirectResult("/Home/MDLogin?ReturnUrl=" + HttpContext.Current.Request.Url.ToString().Replace("&", "%26"));
                 }
                 else 
                 {
-                    filterContext.Result = new RedirectResult("/Home/Login?ReturnUrl=" + HttpContext.Current.Request.Url);
+                    filterContext.Result = new RedirectResult("/Home/Login?ReturnUrl=" + (HttpContext.Current.Request.Url).ToString().Replace("&", "%26"));
                 }
                 return;
             }

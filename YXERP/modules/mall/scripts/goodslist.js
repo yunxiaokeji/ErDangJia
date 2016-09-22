@@ -119,6 +119,7 @@
 
     //绑定产品列表
     ObjectJS.getProducts = function (params) {
+        $('#qrcodediv').hide();
         var _self = this;
         var attrs = [];
         $("#productlist").empty();
@@ -144,14 +145,15 @@
                         $(this).data("href", href + "%26clientid=" + _self.clientid);
                     });
                     $(html).find('.product-item').click(function () {
+                        $('#qrcodediv').hide();
                         //目前先隐藏
                         //window.open($(this).data('href'), $(this).data('name'));    
                         var src = 'http://qrickit.com/api/qr?qrsize=240&d=' + $('#ipturl').val() +$(this).find('a').data('href');
                         var xy = $(this).offset();
                         $('#qrcode').attr('src', '');
                         $('#qrcodediv').css("top", xy.top -20).css("left", xy.left - 20);
-                        $('#qrcode').attr('src', src);
-                        $('#qrcodediv').fadeIn(500); 
+                        $('#qrcode').attr('src', src); 
+                        $('#qrcodediv').fadeIn(500);
                     });
                 });
             } else {

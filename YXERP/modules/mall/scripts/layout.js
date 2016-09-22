@@ -41,7 +41,7 @@
         });
 
         $('#purchaseurl').click(function () {
-            location.replace($('#ipturl').val() + '/Purchase/Purchases?souceType=2%26name=采购订单');
+            location.replace($('#ipturl').val() + '/Purchase/Purchases?souceType=1%26name=采购订单');
         });
 
         $('#providerinfo').mouseover(function () {

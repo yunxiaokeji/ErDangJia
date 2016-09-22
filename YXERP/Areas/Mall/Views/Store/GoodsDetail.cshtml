@@ -115,9 +115,12 @@
         <li class="long">产品编码：@(model.ProductCode)</li>
         <li class="long">产品毛重：@(model.Weight.Value.ToString("f2"))g</li>
         <li class="long">累计销售：@(model.SaleCount)</li>
-        @foreach (var attr in model.AttrLists)
-        { 
-            <li class="long">@attr.AttrName：@attr.AttrValues[0].ValueName</li>
+        @if (model.AttrLists != null)
+        {
+            foreach (var attr in model.AttrLists)
+            {
+                <li class="long">@attr.AttrName：@attr.AttrValues[0].ValueName</li>
+            }
         }
 
     </ul>

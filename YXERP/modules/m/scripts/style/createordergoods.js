@@ -177,7 +177,7 @@
             for (var j in _sale) {
                 var _attr = _sale[j];
                 totalCount += _attr.Quantity * 1;
-                totalPrice += _attr.Quantity * ($(".data-item").eq(0).find('.price').text() * 1);
+                totalPrice += _attr.Quantity * $("#productPrice").text() * 1;
             }
         }
         $("#totalnum").parent().show();

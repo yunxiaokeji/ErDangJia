@@ -233,3 +233,9 @@ line-height:60px;
     text-align:center;
     line-height:50px;
 }
+
+#pirceRangeBox { background-color:#efefef;border:1px solid #ccc;}
+#pirceRangeBox .range { padding:0 5px;line-height:30px;border-bottom:1px solid #ccc;}
+#pirceRangeBox .range.hover { background-color:#555;}
+#pirceRangeBox .range.hover div { color:#fff !important;}
+#pirceRangeBox .range:last-child { border-bottom:none;}

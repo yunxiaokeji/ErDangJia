@@ -1,6 +1,6 @@
 ﻿@{
     var v = DateTime.Now.Ticks;
-    var client = (CloudSalesEntity.Manage.Clients)ViewBag.Client;
+    var client = (CloudSalesEntity.Manage.Clients)ViewBag.ProviderClient;
     ViewBag.Title = client.CompanyName + "--款式中心";
     
 }
@@ -13,7 +13,7 @@
         seajs.use("/modules/m/scripts/style/list.js", function (data) {
             data.init(
                 '@ViewBag.providerID',
-                '@Html.ToJSONString((CloudSalesEntity.Manage.Clients)ViewBag.baseUser)'
+                '@Html.ToJSONString((CloudSalesEntity.Manage.Clients)ViewBag.CurrentClient)'
             );
         });
     </script>

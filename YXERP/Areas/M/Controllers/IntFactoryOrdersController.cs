@@ -19,6 +19,7 @@ namespace YXERP.Areas.M.Controllers
             IntFactory.Sdk.OrderListResult list = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrdersByYXClientCode(keyWords, CurrentUser.CurrentCMClientID, pageSize, pageIndex,
                 categoryID, beginPrice, endPrice, isAsc, orderby);
             JsonDictionary.Add("items", list.orders);
+            JsonDictionary.Add("pageCount", list.pageCount);
             return new JsonResult
             {
                 Data = JsonDictionary,
@@ -41,6 +42,7 @@ namespace YXERP.Areas.M.Controllers
         {
             var obj = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory().FindAll(m => m.CategoryType == 2 && m.Layers == 1);
             JsonDictionary.Add("result", obj);
+
             return new JsonResult
             {
                 Data = JsonDictionary,

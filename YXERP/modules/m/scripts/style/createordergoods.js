@@ -242,7 +242,7 @@
                         productDetails += _sale.SaleRemark + ',' + _attrs.ValueName + '|';
                         productDetails += $("#colorlist").prev().text().trim() + ':' + _sale.SaleRemark + ',' + $("#sizelist .tr-header .attr-title").text().trim() + ':' + _attrs.ValueName + '|';
                         productDetails += _attrs.Quantity + '|';
-                        productDetails += _attrs.Quantity * 1 * _self.model.finalPrice + '|';
+                        productDetails += $("#productPrice").text() + '|';
                         productDetails += '[' + $("#colorlist").prev().text().trim() + '：' + _sale.SaleRemark + '][' + $("#sizelist .tr-header .attr-title").text().trim() + '：' + _attrs.ValueName + ']&';
                         
                         var zngcModel = {};

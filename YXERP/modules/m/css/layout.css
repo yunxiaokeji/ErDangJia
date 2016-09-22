@@ -239,3 +239,7 @@ line-height:60px;
 #pirceRangeBox .range.hover { background-color:#555;}
 #pirceRangeBox .range.hover div { color:#fff !important;}
 #pirceRangeBox .range:last-child { border-bottom:none;}
+
+@media screen and (max-height:465px) {
+    .overlay-addOrder .style-attr { height:200px !important;}
+}

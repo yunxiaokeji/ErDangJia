@@ -153,4 +153,9 @@ var minPrice=item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.
             </div>
         </div>
 </div>
-<div class="btn-sureAdd">确定</div>
+{%
+    if(item.AttrLists.length>0&&item.SaleAttrs.length>0)
+    {
+%}
+    <div class="btn-sureAdd">确定</div>
+{%}%}

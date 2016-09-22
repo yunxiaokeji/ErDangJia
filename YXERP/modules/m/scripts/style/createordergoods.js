@@ -6,6 +6,9 @@
     var isCreateOrder = false;
     var AttrList = [];
     ObjectJS.showOrderGoodsLayer = function (model, user) {
+        if (model.AttrLists.length == 0 || model.SaleAttrs.length == 0) {
+            alert("该产品暂不支持下单");
+        }
         ObjectJS.model = model;
         AttrList = [];
         ObjectJS.getOrderAttr();
@@ -155,22 +158,24 @@
 
     ObjectJS.getOrderAttr = function () {
         var _self = ObjectJS;
-        for (var i = 0; i < _self.model.SaleAttrs[0].AttrValues.length; i++) {
-            var _sale = _self.model.SaleAttrs[0].AttrValues[i];
-            var _model = {};
-            _model.SaleRemark = _sale.ValueName;
-            _model.SaleID = _sale.ValueID;
-            var _details = {};
-            for (var j = 0; j < _self.model.AttrLists[0].AttrValues.length; j++) {
-                var _attr = _self.model.AttrLists[0].AttrValues[j];
-                _details[_attr.ValueID] = {
-                    ValueName: _attr.ValueName,
-                    Quantity: 0,
-                    ValueID: _attr.ValueID
-                };
+        if (_self.model.SaleAttrs[0]) {
+            for (var i = 0; i < _self.model.SaleAttrs[0].AttrValues.length; i++) {
+                var _sale = _self.model.SaleAttrs[0].AttrValues[i];
+                var _model = {};
+                _model.SaleRemark = _sale.ValueName;
+                _model.SaleID = _sale.ValueID;
+                var _details = {};
+                for (var j = 0; j < _self.model.AttrLists[0].AttrValues.length; j++) {
+                    var _attr = _self.model.AttrLists[0].AttrValues[j];
+                    _details[_attr.ValueID] = {
+                        ValueName: _attr.ValueName,
+                        Quantity: 0,
+                        ValueID: _attr.ValueID
+                    };
+                }
+                _model.AttrsList = _details;
+                AttrList[_sale.ValueID] = _model;
             }
-            _model.AttrsList = _details;
-            AttrList[_sale.ValueID] = _model;
         }
     };
 

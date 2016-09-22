@@ -1,4 +1,5 @@
 ﻿using CloudSalesBusiness;
+using CloudSalesEntity.Manage;
 using IntFactory.Sdk;
 using System;
 using System.Collections.Generic;
@@ -46,10 +47,18 @@ namespace YXERP.Areas.M.Controllers
             return View();
         }
 
-        public ActionResult Detail(string orderid)
+        public ActionResult Detail(string orderid, string clientid)
         {
+            var client =new Clients();
+            if (!string.IsNullOrEmpty(clientid)) {
+                client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+                CurrentUser.CurrentClientID = clientid;
+                var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
+                CurrentUser.CurrentCMClientID = agent.CMClientID;
+            }
+
             var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, CurrentUser.CurrentCMClientID);
-            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
+            client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
             ViewBag.EDJProviderID = CurrentUser.CurrentClientID;
             ViewBag.baseUser = CurrentUser.Client;
             ViewBag.Model = obj.order;

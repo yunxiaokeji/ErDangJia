@@ -1,8 +1,8 @@
 ﻿@{
     ViewBag.Title = "款式详情";
-    var order = (IntFactory.Sdk.OrderEntity)ViewBag.Model;
-    var user = (CloudSalesEntity.Manage.Clients)ViewBag.baseUser;
-    var client = (CloudSalesEntity.Manage.Clients)ViewBag.Client;
+    var order = (IntFactory.Sdk.OrderEntity)ViewBag.Order;
+    var user = (CloudSalesEntity.Manage.Clients)ViewBag.CurrentClient;
+    var client = (CloudSalesEntity.Manage.Clients)ViewBag.ProviderClient;
 }
 @section css{
     <link href="/modules/m/css/style/detail.css" rel="stylesheet" />

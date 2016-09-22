@@ -42,6 +42,7 @@ namespace YXERP.Areas.M.Controllers
         {
             var obj = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory().FindAll(m => m.CategoryType == 2 && m.Layers == 1);
             JsonDictionary.Add("result", obj);
+
             return new JsonResult
             {
                 Data = JsonDictionary,

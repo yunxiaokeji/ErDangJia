@@ -199,6 +199,10 @@
                 $('#pcityname').html(data.City != null ? data.City.Description + '<br/>'+data.Address : data.Address);
                 $('#ptype').html('店铺分销');
                 $(document).attr("title", data.CompanyName + '款式中心');
+                var link = document.createElement("link");
+                link.href = (data.Logo != "" && data.Logo != null) ? data.Logo : '/modules/images/logo_login.png';
+                link.rel = "shortcut icon";
+                document.head.appendChild(link);
             }
         });
     }

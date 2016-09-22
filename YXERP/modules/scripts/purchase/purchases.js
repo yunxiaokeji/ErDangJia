@@ -55,9 +55,9 @@ define(function (require, exports, module) {
             $("#btnSubmit").html("提交采购单 ( " + data.Quantity + " ) ");
         });
 
-        if (Params.sourcetype == 2) {
+        if (Params.sourcetype) {
             $(".search-type li").removeClass("hover");
-            $(".search-type li[data-id='2']").addClass("hover");
+            $(".search-type li[data-id='" + Params.sourcetype + "']").addClass("hover");
         }
         require.async("dropdown", function () {
             var dropdown = $("#ddlProviders").dropdown({

@@ -126,7 +126,14 @@ namespace YXERP.Areas.Mall.Controllers
             }
             if (YXERP.Common.Common.IsMobileDevice())
             {
-                return Redirect("/M/Home/Detail?orderid=" + orderid + "&clientid=" + clientid);
+                if (string.IsNullOrEmpty(clientid))
+                {
+                    return Redirect("/M/Home/Index");
+                }
+                else
+                {
+                    return Redirect("/M/Home/Detail?orderid=" + orderid + "&clientid=" + clientid);
+                }
             }
             string ccode, address, mphone,cname;
             ccode = address = mphone = cname = "";
@@ -146,7 +153,7 @@ namespace YXERP.Areas.Mall.Controllers
             ViewBag.Address = address; 
             var obj = new ProductsBusiness().GetProductByIDForDetails(orderid);
             ViewBag.Model = obj;
-            ViewBag.ClientID = obj.ClientID;
+            ViewBag.ClientID = clientid;
             return View();
         }
 

@@ -28,8 +28,8 @@ namespace YXERP.Controllers
 
         public ActionResult Register(string ReturnUrl = "")
         {
-            string loginUrl="/Home/Index";
-            ViewBag.LoginUrl = !string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl : loginUrl; 
+            string loginUrl = "/Default/Index";
+            ViewBag.LoginUrl = !string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl.Replace("%26", "&") : loginUrl; 
             return View();
         }
 
@@ -38,7 +38,7 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult Login(string ReturnUrl, int Status = 0, string name = "", int BindAccountType = 0)
+        public ActionResult Login(string ReturnUrl = "", int Status = 0, string name = "", int BindAccountType = 0)
         {
 
             if (Session["ClientManager"] != null)
@@ -48,7 +48,7 @@ namespace YXERP.Controllers
 
             ViewBag.Status = Status;
             ViewBag.BindAccountType = BindAccountType;
-            ViewBag.ReturnUrl = ReturnUrl + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
+            ViewBag.ReturnUrl = ReturnUrl.Replace("%26", "&") + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
             
             HttpCookie cook = Request.Cookies["yunxiao_erp_user"];
             if (cook != null)

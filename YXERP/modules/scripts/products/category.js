@@ -180,21 +180,18 @@ define(function (require, exports, module) {
     //绑定一级分类
     ObjectJS.bindCategory = function () {
         var _self = this;
-
+        $("#categoryBox").html('');
         Global.post("/Products/GetChildCategorysByID", {
             categoryid: ""
         }, function (data) {
             doT.exec("template/products/categorys.html", function (template) {
                 var innerHtml = template(data.items);
                 innerHtml = $(innerHtml);
-
                 $("#categoryBox").append(innerHtml);
-
                 for (var i = 0; i < data.items.length; i++) {
                     var item=data.items[i];
                     CacheCategorys[item.CategoryID] = item.ChildCategorys;
                 }
-
                 _self.bindStyle();
             });
         });

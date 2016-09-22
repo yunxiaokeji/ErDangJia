@@ -199,20 +199,11 @@ namespace YXERP.Areas.Mall.Controllers
         {
             int pageCount = 0;
             int totalCount = 0;
-            if (clientid.Equals(CurrentUser.Agents.CMClientID))
-            {
-                clientid = CurrentUser.ClientID;
-            }
-            if (string.IsNullOrEmpty(CurrentUser.CurrentCMClientID))
-            {
-                var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
-                CurrentUser.CurrentClientID = clientid;
-                var agent = AgentsBusiness.GetAgentDetail(client.AgentID);
-                CurrentUser.CurrentCMClientID = agent.CMClientID;
-            }
+
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
             //暂读取智能工厂产品
             return  this.GetProductList
-            (CurrentUser.CurrentCMClientID, keyWords, pageSize, pageIndex, categoryID, orderby,  isAsc, beginPrice, endPrice);
+            (client.CMClientID, keyWords, pageSize, pageIndex, categoryID, orderby, isAsc, beginPrice, endPrice);
 
             List<Products> list = new ProductsBusiness().GetProductList(categoryID, beginPrice, endPrice, keyWords,
                    orderby, isAsc, pageSize, pageIndex, ref totalCount, ref pageCount, clientid, 1);

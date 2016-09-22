@@ -18,18 +18,17 @@
 
     var ObjectJS = {};
     //初始化
-    ObjectJS.init = function (clientid,categoryid) {
+    ObjectJS.init = function (clientid, categoryid) {
+        Params.categoryID = categoryid;
         var _self = this;
         _self.clientid = clientid;
         _self.providers = [];
-        Params.categoryID = categoryid;
         _self.bindEvent();  
     } 
     //绑定事件
     ObjectJS.bindEvent = function () {
-        var _self = this;
-        var providerids = _self.clientid == "" ? "-1" : _self.clientid; 
-        Params.clientid = providerids;;
+        var _self = this; 
+        Params.clientid = _self.clientid;;
         //搜索
         require.async("search", function () {
             $(".searth-module").searchKeys(function (keyWords) {
@@ -60,7 +59,7 @@
         }).mouseout(function () {
             $('.divprice').hide();
         });
-        //$('#qrcode').attr('src', 'http://qrickit.com/api/qr?d='+window.location.href);
+        
         $('.seachul li').click(function () {
             var _this = $(this); 
             if (!_this.find(".link").hasClass("hover")) {
@@ -140,15 +139,14 @@
                     var html = templateFun(data.items);
                     html = $(html); 
                     $("#productlist").append(html);
-                    //$("#productlist a").each(function() {
-                    //    var href = $(this).attr("href");
-                    //    $(this).attr("href", href + "&clientid=" + _self.clientid);
-                    //});
+                    $("#productlist a").each(function() {
+                        var href = $(this).data("href");
+                        $(this).data("href", href + "&clientid=" + _self.clientid);
+                    });
                     $(html).find('.product-item').click(function () {
                         //目前先隐藏
-                        //window.open($(this).data('href'), $(this).data('name'));  
-                        var href = $(this).find('a').data('href') + '&clientid=' + _self.clientid;
-                        var src = 'http://qrickit.com/api/qr?qrsize=240&d=' + $('#ipturl').val() + href;
+                        //window.open($(this).data('href'), $(this).data('name'));   
+                        var src = 'http://qrickit.com/api/qr?qrsize=240&d=' + $('#ipturl').val() +$(this).find('a').data('href');
                         var xy = $(this).offset(); 
                         $('#qrcodediv').css("top", xy.top -20).css("left", xy.left - 20);
                         $('#qrcode').attr('src', src);

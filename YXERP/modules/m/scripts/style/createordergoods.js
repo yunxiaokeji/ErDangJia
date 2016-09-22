@@ -30,15 +30,23 @@
             innerHtml.find("#showCustomerTel").text(user.MobilePhone);
             innerHtml.find("#showCustomerAddress").text(user.Address);
 
-            innerHtml.find(".quantity").change(function () {
-                var _this = $(this);
-                if ($("#colorlist li").hasClass('select')) {
-                    var _saleID = $("#colorlist li.select").data('id');
-                    ObjectJS.setOrderAttrQuantity(_saleID, _this.parents('tr').data('id'), _this.val() || 0);
-                }
-                if (!_this.val().isInt() || _this.val() < 0) {
-                    _this.val('');
-                    return false;
+            innerHtml.find(".quantity").bind({
+                change:function(){
+                    var _this = $(this);
+                    if ($("#colorlist li").hasClass('select')) {
+                        var _saleID = $("#colorlist li.select").data('id');
+                        ObjectJS.setOrderAttrQuantity(_saleID, _this.parents('tr').data('id'), _this.val() || 0);
+                    }
+                    if (!_this.val().isInt() || _this.val() < 0) {
+                        _this.val('');
+                        return false;
+                    }
+                },
+                focus: function () {
+                    $(".btn-sureAdd").hide();
+                },
+                blur: function () {
+                    $(".btn-sureAdd").show();
                 }
             });
 

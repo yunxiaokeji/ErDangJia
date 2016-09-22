@@ -1,11 +1,23 @@
 ﻿{%
 var item=$data;
+var productPrice=(item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice);
+var minPrice=item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.finalPrice;
 %}
 <div class="style-content">
     <div class="style-main">
         <div class="style-detail">
             <div class="style-title">{%=item.goodsName%}</div>
-            <div class="blue mTop30"><span class="font18">￥</span> <span class="bold" id="productPrice">{%=item.finalPrice%}</span></div>
+            <div class="blue mTop30">
+               <span class="font18">￥</span> 
+                <span class="bold">{%=(item.orderPriceRanges.length>1?item.orderPriceRanges[item.orderPriceRanges.length-1].price+'~':'')%}</span>
+                <span class="bold" id="productPrice" data-minprice="{%=minPrice%}" data-price="{%=productPrice%}">{%=productPrice%}</span>
+                {%
+                    if(item.orderPriceRanges.length>0)
+                    {
+                 %}
+                (最少下单<span>{%=item.orderPriceRanges[0].minQuantity%}</span>件）
+                {%}%}
+            </div>
         </div>
         <div class="style-img">
             <img onerror="this.src='/modules/m/images/img-noimg.png'" src="{%=!item.orderImage?'/modules/m/images/img-noimg.png':item.orderImage+'?imageView2/1/w/120/h/120'%}"/>
@@ -69,45 +81,30 @@ var item=$data;
                         <span id="totalprice" style="display:inline-block;margin-left:15px;" class="red font16"></span> 元
                     </div>
                     <div class="clear"></div>
+                    {%
+                        if(item.orderPriceRanges.length>0)
+                        {
+                    %}
                     <div class="title" style="font-weight:bold;font-size:14px;margin:5px 0;">
                         价格区间
                     </div>
                     <div id="pirceRangeBox">
+                        {%
+                        for(var k=0;k<item.orderPriceRanges.length;k++)
+                        {
+                            var range=item.orderPriceRanges[k];
+                        %}
                         <div class="range row">
                             <div class="left">
-                                >=100
+                                >=<span class="quantity">{%=range.minQuantity%}</span>
                             </div>
-                            <div class="right blue">
-                                <span class="font16">￥100</span>/件
-                            </div>
-                        </div>
-                        <div class="range row">
-                            <div class="left">
-                                >=200
-                            </div>
-                            <div class="right blue">
-                                <span class="font16">￥90</span>/件
+                            <div class="right blue font16">
+                                ￥<span class="price">{%=range.price%}</span>/件
                             </div>
                         </div>
-                        <div class="range row">
-                            <div class="left">
-                                >=300
-                            </div>
-                            <div class="right blue">
-                                <span class="font16">￥80</span>/件
-                            </div>
-                        </div>
-                        <div class="range row">
-                            <div class="left">
-                                >=400
-                            </div>
-                            <div class="right blue">
-                                <span class="font16">￥60</span>/件
-                            </div>
-                        </div>
+                        {%}%}
                     </div>
-                    <div class="clear"></div>
-            </div>
+                {%}%}
             <div class="mTop15 pBottom20">
                 <div class="attr-title" style="border-bottom:1px solid #ccc;margin-bottom:5px;">
                     收货信息

@@ -7,6 +7,7 @@
     var AttrList = [];
     ObjectJS.showOrderGoodsLayer = function (model, user) {
         ObjectJS.model = model;
+        AttrList = [];
         ObjectJS.getOrderAttr();
         doT.exec("m/template/style/style-buy.html", function (code) {
             var innerHtml = code(model);
@@ -28,13 +29,13 @@
 
             innerHtml.find(".quantity").change(function () {
                 var _this = $(this);
-                if (!_this.val().isInt() || _this.val() < 0) {
-                    _this.val('');
-                    return false;
-                }
                 if ($("#colorlist li").hasClass('select')) {
                     var _saleID = $("#colorlist li.select").data('id');
                     ObjectJS.setOrderAttrQuantity(_saleID, _this.parents('tr').data('id'), _this.val() || 0);
+                }
+                if (!_this.val().isInt() || _this.val() < 0) {
+                    _this.val('');
+                    return false;
                 }
             });
 
@@ -183,6 +184,21 @@
         $("#totalnum").parent().show();
         $("#totalnum").text(totalCount);
         $("#totalprice").text(totalPrice);
+
+        $("#pirceRangeBox .range").removeClass('hover');
+        $("#productPrice").text($("#productPrice").data('price'));
+        $("#productPrice").prev().show();
+        var k = $("#pirceRangeBox .range").length*1 - 1;
+        while (k >= 0) {
+            var obj=$("#pirceRangeBox .range").eq(k);
+            if (totalCount * 1 >= obj.find('.quantity').text() * 1) {
+                obj.addClass('hover');
+                $("#productPrice").text(obj.find('.price').text());
+                $("#productPrice").prev().hide();
+                break;
+            }
+            k--;
+        }
     };
 
     ObjectJS.setTrQuantity = function (saleID) {
@@ -232,7 +248,7 @@
             model.productDetails = productDetails && productDetails.substring(0, productDetails.length - 1);
             model.zngcProductEntity = JSON.stringify(zngcProductEntity);
             if (!model.productDetails) {
-                alert("请选择规格，或数量未填写下单数量");
+                alert("请选择规格，或未填写下单数量");
                 return false;
             }
             $(".btn-sureAdd").text("下单中...");

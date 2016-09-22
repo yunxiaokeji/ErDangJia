@@ -190,7 +190,7 @@
         $("#sizelist .data-item").each(function () {
             var _this = $(this);
             var _data = item[_this.data('id')];
-            _this.find('.quantity').val(_data.Quantity);
+            _this.find('.quantity').val(_data.Quantity || '');
         });
     };
 

@@ -187,7 +187,7 @@ namespace YXERP.Areas.Mall.Controllers
         public JsonResult GetAllCateGory(string clientid)
         {
             var result = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory();
-
+            result = result.Where(z => z.Status == 1).ToList();
             JsonDictionary.Add("items", result);
             return new JsonResult()
             {

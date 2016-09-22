@@ -38,7 +38,7 @@ namespace YXERP.Controllers
             return View();
         }
 
-        public ActionResult Login(string ReturnUrl, int Status = 0, string name = "", int BindAccountType = 0)
+        public ActionResult Login(string ReturnUrl = "", int Status = 0, string name = "", int BindAccountType = 0)
         {
 
             if (Session["ClientManager"] != null)

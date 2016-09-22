@@ -7,8 +7,7 @@ define(function (require, exports, module) {
         doT = require("dot"),
         Verify = require("verify"), VerifyObject,
         Dialog = require("dialog"),
-        Easydialog = require("easydialog");
-    var $ = require('jquery');
+        Easydialog = require("easydialog"); 
     require("parser")($);
     require("form")($);
     var Category = {
@@ -181,21 +180,18 @@ define(function (require, exports, module) {
     //绑定一级分类
     ObjectJS.bindCategory = function () {
         var _self = this;
-
+        $("#categoryBox").html('');
         Global.post("/Products/GetChildCategorysByID", {
             categoryid: ""
         }, function (data) {
             doT.exec("template/products/categorys.html", function (template) {
                 var innerHtml = template(data.items);
                 innerHtml = $(innerHtml);
-
                 $("#categoryBox").append(innerHtml);
-
                 for (var i = 0; i < data.items.length; i++) {
                     var item=data.items[i];
                     CacheCategorys[item.CategoryID] = item.ChildCategorys;
                 }
-
                 _self.bindStyle();
             });
         });

@@ -70,6 +70,7 @@
     <Compile Include="Entity\Order\OrderAttrResult.cs" />
     <Compile Include="Entity\Order\OrderEntity.cs" />
     <Compile Include="Entity\Order\OrderListResult.cs" />
+    <Compile Include="Entity\Order\OrderPriceRangeEntity.cs" />
     <Compile Include="Entity\Order\PlateMakingEntity.cs" />
     <Compile Include="Entity\Order\OrderResult.cs" />
     <Compile Include="Entity\Product\AttrValueEntity.cs" />

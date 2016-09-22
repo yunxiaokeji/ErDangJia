@@ -1090,7 +1090,9 @@ namespace YXERP.Controllers
                             {
                                 category.CreateUserID = CurrentUser.UserID;
                                 category.ClientID = CurrentUser.ClientID;
-                                category.CategoryID = Guid.NewGuid().ToString();
+                                var tempCategory =
+                                    catelist.Where(x => x.CategoryCode == category.CategoryCode).FirstOrDefault();
+                                category.CategoryID = tempCategory != null ? tempCategory.CategoryID : Guid.NewGuid().ToString();
                                 category.ChildCategorys = new List<Category>();
                                 var tempcate=catelist.Where(x => !string.IsNullOrEmpty(category.PCode)&& x.CategoryCode == category.PCode).FirstOrDefault();
                                 if (tempcate != null)
@@ -1098,7 +1100,7 @@ namespace YXERP.Controllers
                                     category.PID = tempcate.CategoryID;
                                 } 
                                 DataRow[] details = dt.Select("类别编码='" + category.CategoryCode + "'");
-                                if (details.Count() > 0 && mes.IndexOf(category.CategoryCode) == -1)
+                                if (details.Count() > 1 && mes.IndexOf(category.CategoryCode) == -1)
                                 {
                                     mes += "编码为:" + category.CategoryCode + "的产品存在相同【类别编码】,默认插入第一条";
                                 }

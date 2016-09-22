@@ -7,8 +7,7 @@ define(function (require, exports, module) {
         doT = require("dot"),
         Verify = require("verify"), VerifyObject,
         Dialog = require("dialog"),
-        Easydialog = require("easydialog");
-    var $ = require('jquery');
+        Easydialog = require("easydialog"); 
     require("parser")($);
     require("form")($);
     var Category = {

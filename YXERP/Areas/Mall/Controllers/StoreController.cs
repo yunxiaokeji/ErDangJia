@@ -27,10 +27,9 @@ namespace YXERP.Areas.Mall.Controllers
 
             var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
             //非智能工厂暂不开通店铺
-            var agent = CloudSalesBusiness.AgentsBusiness.GetAgentDetail(client.AgentID);
-            if (string.IsNullOrEmpty(agent.CMClientID))
+            if (string.IsNullOrEmpty(client.CMClientID))
             {
-                return Redirect("/Home/login");
+                return Redirect("/Default/Index");
             }
             if (!ProductService.IsExistsProvider(id, CurrentUser.ClientID) && id.ToLower() != CurrentUser.ClientID.ToLower())
             {
@@ -67,13 +66,13 @@ namespace YXERP.Areas.Mall.Controllers
 
             var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
             //非智能工厂暂不开通店铺
-            var agent = CloudSalesBusiness.AgentsBusiness.GetAgentDetail(client.AgentID);
-            if (string.IsNullOrEmpty(agent.CMClientID))
+            if (string.IsNullOrEmpty(client.CMClientID))
             {
-                return Redirect("/Home/login");
+                return Redirect("/Default/Index");
             }
             if (!ProductService.IsExistsProvider(id, CurrentUser.ClientID) && id.ToLower() != CurrentUser.ClientID.ToLower())
             {
+
                 string providerID = ProductService.AddProviders(client.CompanyName, client.ContactName,
                     client.MobilePhone, "", client.CityCode, client.Address,
                     "", id, client.ClientCode, "", CurrentUser.Client.AgentID, CurrentUser.Client.ClientID, 2);
@@ -112,9 +111,22 @@ namespace YXERP.Areas.Mall.Controllers
             {
                 return Redirect("/Home/login");
             }
+            //非智能工厂暂不开通店铺
+            var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
+            if (string.IsNullOrEmpty(client.CMClientID))
+            {
+                return Redirect("/Default/Index");
+            }
+            if (!ProductService.IsExistsProvider(clientid, CurrentUser.ClientID) && clientid.ToLower() != CurrentUser.ClientID.ToLower())
+            {
+
+                string providerID = ProductService.AddProviders(client.CompanyName, client.ContactName,
+                    client.MobilePhone, "", client.CityCode, client.Address,
+                    "", clientid, client.ClientCode, "", CurrentUser.Client.AgentID, CurrentUser.Client.ClientID, 2);
+            }
             if (YXERP.Common.Common.IsMobileDevice())
             {
-                return Redirect("/M/Home/Detail?orderid=" + orderid);
+                return Redirect("/M/Home/Detail?orderid=" + orderid + "&clientid=" + clientid);
             }
             string ccode, address, mphone,cname;
             ccode = address = mphone = cname = "";

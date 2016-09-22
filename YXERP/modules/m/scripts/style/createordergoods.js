@@ -178,25 +178,22 @@
         AttrList[saleID].AttrsList[attrID].Quantity = quantity;
         /*设置总计*/
         var totalCount = 0;
-        var totalPrice = 0;
         for (var i in AttrList) {
             var _sale = AttrList[i].AttrsList;
             for (var j in _sale) {
                 var _attr = _sale[j];
                 totalCount += _attr.Quantity * 1;
-                totalPrice += _attr.Quantity * $("#productPrice").text() * 1;
             }
         }
         $("#totalnum").parent().show();
         $("#totalnum").text(totalCount);
-        $("#totalprice").text(totalPrice);
 
         $("#pirceRangeBox .range").removeClass('hover');
         $("#productPrice").text($("#productPrice").data('price'));
         $("#productPrice").prev().show();
         var k = $("#pirceRangeBox .range").length*1 - 1;
         while (k >= 0) {
-            var obj=$("#pirceRangeBox .range").eq(k);
+            var obj = $("#pirceRangeBox .range").eq(k);
             if (totalCount * 1 >= obj.find('.quantity').text() * 1) {
                 obj.addClass('hover');
                 $("#productPrice").text(obj.find('.price').text());
@@ -206,6 +203,7 @@
             }
             k--;
         }
+        $("#totalprice").text(totalCount * $("#productPrice").text() * 1);
     };
 
     ObjectJS.setTrQuantity = function (saleID) {

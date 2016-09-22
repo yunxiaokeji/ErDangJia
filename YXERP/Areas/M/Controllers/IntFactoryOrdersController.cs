@@ -40,7 +40,7 @@ namespace YXERP.Areas.M.Controllers
 
         public JsonResult GetEdjCateGory(string clientID)
         {
-            var obj = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory().FindAll(m => m.CategoryType == 2 && m.Layers == 1);
+            var obj = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetAllCategory().FindAll(m => m.CategoryType == 2 && m.Layers == 1 && m.Status == 1);
             JsonDictionary.Add("result", obj);
 
             return new JsonResult

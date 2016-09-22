@@ -15,7 +15,7 @@ var minPrice=item.orderPriceRanges.length>0?item.orderPriceRanges[0].price:item.
                     if(item.orderPriceRanges.length>0)
                     {
                  %}
-                (最少下单<span>{%=item.orderPriceRanges[0].minQuantity%}</span>件）
+                (最少下单<span id="minOrderNum">{%=item.orderPriceRanges[0].minQuantity%}</span>件）
                 {%}%}
             </div>
         </div>

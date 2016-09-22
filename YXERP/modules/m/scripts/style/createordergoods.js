@@ -100,6 +100,12 @@
                         zngcClientID: model.clientID,
                         zngcProductEntity: ""
                     };
+                    if ($("#pirceRangeBox").length > 0 && $("#minOrderNum").length == 1) {
+                        if ($("#totalnum").text() * 1 < $("#minOrderNum").text()*1) {
+                            alert("下单数最少" + $("#minOrderNum").text() + "件");
+                            return false;
+                        }
+                    }
                     ObjectJS.createOrders(item);
                 } else {
                     alert('请先保存收货信息', 2);
@@ -195,6 +201,7 @@
                 obj.addClass('hover');
                 $("#productPrice").text(obj.find('.price').text());
                 $("#productPrice").prev().hide();
+                $("#totalprice").text(obj.find('.price').text() * 1 * $("#totalnum").text() * 1);
                 break;
             }
             k--;

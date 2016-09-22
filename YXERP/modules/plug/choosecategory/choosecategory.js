@@ -129,7 +129,7 @@
                             };
                             var item = getCacheDataByID(id);
                             $(".change-menu-content").find('ul').empty();
-                            if (item.length==0) {
+                            if (item==null || item.length == 0) {
                                 $(".change-menu-content").append('<div class="nodata-txt">暂无分类信息！</div>');
                                 bindObj(item, obj, headerData);
                                 $(".change-menu-body").hide();

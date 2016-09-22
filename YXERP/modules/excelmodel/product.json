@@ -138,7 +138,7 @@
         "UnitID": {
             "title": "单位",
             "hide": false,
-            "format": true,
+            "format": false,
             "exporttype": 11,
 			"testexporttype": 7,
 			"datasource":"DropSourceList|5",

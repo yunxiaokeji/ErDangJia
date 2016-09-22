@@ -9,7 +9,7 @@ define(function (require, exports, module) {
     require("pager");
     require("switch");
     require("choosecategory");
-    var $ = require('jquery');
+    //var $ = require('jquery');
     require("parser")($);
     require("form")($);
     var Params = {
@@ -34,7 +34,7 @@ define(function (require, exports, module) {
     
     //绑定事件
     Product.bindEvent = function () {
-        var _self = this
+        var _self = this;
         PosterIco = Upload.uploader({
             browse_button: 'productIco',
             file_path: "/Content/UploadFiles/Product/",

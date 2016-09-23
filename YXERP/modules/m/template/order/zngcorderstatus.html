@@ -1,10 +1,12 @@
 ﻿<div class="module-item">
     {%
+    console.log($data);
     for(var i=0;i<$data.length;i++)
     {
         var item=$data[i];
         console.log(item);
-    {%}
+    %}
+    {%}%}
     <div class="item row">
         <div class="left">找材料</div>
         <div class="right">未接受</div>
@@ -17,5 +19,5 @@
         <div class="left">车缝</div>
         <div class="right">2016/9/26</div>
     </div>
-    {%}%}
+    
 </div>

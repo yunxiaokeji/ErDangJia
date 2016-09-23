@@ -73,13 +73,14 @@
     //获取订单在智能工厂状态
     ObjectJS.getZngcOrderStatus = function () {
         Global.post("/M/Orders/GetZngcOrderStatus", { id: ObjectJS.order.DocID }, function (data) {
-            if (data.result) {
+            data = JSON.parse(data);
+            //if (!items.result) {
                 doT.exec("m/template/order/zngcorderstatus.html", function (template) {
-                    var innerHtml = template(data);
+                    var innerHtml = template(data.items);
                     innerHtml = $(innerHtml);
                     $("#moduleBox").append(innerHtml);
                 });
-            }
+            //}
         });
     };
 

@@ -35,10 +35,9 @@ namespace YXERP.Areas.M.Controllers
         public JsonResult GetZngcOrderStatus(string id)
         {
             var zngcOrderJson = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderTasks(id);
-            JsonDictionary.Add("items", zngcOrderJson);
             return new JsonResult
             {
-                Data = JsonDictionary,
+                Data = zngcOrderJson,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }

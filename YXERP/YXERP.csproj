@@ -327,6 +327,7 @@
     <Content Include="modules\m\scripts\style\orderdetail.js" />
     <Content Include="modules\m\template\order\platematrings.html" />
     <Content Include="modules\m\template\order\orderdetails.html" />
+    <Content Include="modules\m\template\order\zngcorderstatus.html" />
     <Content Include="modules\m\template\style\style-buy.html" />
     <Content Include="modules\m\template\style\style-list.html" />
     <Content Include="modules\m\template\style\order-list.html" />

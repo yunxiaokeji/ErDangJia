@@ -31,5 +31,17 @@ namespace YXERP.Areas.M.Controllers
             ViewBag.Model = model;
             return View();
         }
+
+        public JsonResult GetZngcOrderStatus(string id)
+        {
+            var zngcOrderJson = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderTasks(id);
+            JsonDictionary.Add("items", zngcOrderJson);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
     }
 }

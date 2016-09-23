@@ -9,6 +9,7 @@
         ObjectJS.order = model;
         ObjectJS.getOrderDetails();
         ObjectJS.bindEvent();
+        ObjectJS.getZngcOrderStatus();
     };
 
     //绑定事件
@@ -67,6 +68,19 @@
         else {
             $(".tb-order-detail").append("<div class='nodata-txt'>暂无工艺说明<div>");
         }
+    };
+
+    //获取订单在智能工厂状态
+    ObjectJS.getZngcOrderStatus = function () {
+        Global.post("/M/Orders/GetZngcOrderStatus", { id: ObjectJS.order.DocID }, function (data) {
+            if (data.result) {
+                doT.exec("m/template/order/zngcorderstatus.html", function (template) {
+                    var innerHtml = template(data);
+                    innerHtml = $(innerHtml);
+                    $("#moduleBox").append(innerHtml);
+                });
+            }
+        });
     };
 
     module.exports = ObjectJS;

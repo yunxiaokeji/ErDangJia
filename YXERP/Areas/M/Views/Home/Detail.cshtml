@@ -1,20 +1,19 @@
 ﻿@{
     ViewBag.Title = "款式详情";
     var order = (IntFactory.Sdk.OrderEntity)ViewBag.Order;
-    var user = (CloudSalesEntity.Manage.Clients)ViewBag.CurrentClient;
-    var client = (CloudSalesEntity.Manage.Clients)ViewBag.ProviderClient;
+    var currentClient = (CloudSalesEntity.Manage.Clients)ViewBag.CurrentClient;
+    var providerClient = (CloudSalesEntity.Manage.Clients)ViewBag.ProviderClient;
 }
 @section css{
     <link href="/modules/m/css/style/detail.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="/Scripts/jquery-1.11.1.js"></script>
     <script type="text/javascript">
         $(function () {
             seajs.use("/modules/m/scripts/style/detail", function (obj) {
                 obj.init(
                     '@Html.ToJSONString(order)',
-                    '@Html.ToJSONString(user)'
+                    '@Html.ToJSONString(currentClient)'
                  );
             });
         });
@@ -74,31 +73,31 @@
 <div class="main-box">
     <div class="description">
         <ul class="table-add">
-            <li>
+                <li>
                     <span class="column-title">店铺名称：</span>
-                    <span>@(client.CompanyName)</span>
+                    <span>@(providerClient.CompanyName)</span>
                 </li>
                 <li>
                     <span class="column-title">店铺编码：</span>
-                    <span>@client.ClientCode</span>
+                    <span>@providerClient.ClientCode</span>
                 </li>
                 <li>
                     <span class="column-title">联系人：</span>
-                    <span>@(client.ContactName)</span>
+                    <span>@(providerClient.ContactName)</span>
                 </li>
                 <li>
                     <span class="column-title">联系电话：</span>
-                   <span>@(client.MobilePhone)</span>
+                   <span>@(providerClient.MobilePhone)</span>
                 </li>
                <li>
                     <span class="column-title">地址：</span>
-                    <span>@(client.City==null?"--":client.City.Description)</span>
+                    <span>@(providerClient.City==null?"--":providerClient.City.Description)</span>
                 </li>
             </ul>
     </div>
 </div>
 
 <div class="overlay-addOrder"></div>
-<input hidden="hidden" data-id="@ViewBag.EDJProviderID" id="EDJProvider" />
+<input hidden="hidden" data-id="@providerClient.ClientID" id="EDJProvider" />
 
     

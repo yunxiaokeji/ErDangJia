@@ -2,6 +2,7 @@
 var item=$data;
 var productPrice=((item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderPriceRanges[0].price:item.finalPrice);
 var minPrice=(item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderPriceRanges[0].price:item.finalPrice;
+var currentClient=item.currentClient;
 %}
 <div class="style-content">
     <div class="style-main">
@@ -114,11 +115,10 @@ var minPrice=(item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderP
                     <div style="display:table-cell;">
                         <div style="line-height:30px;" class="row">
                             <div class="left">收货人：</div>
-                            <div class="left" id="showCustomerName"></div>
-                            <div class="right" id="showCustomerTel"></div>
+                            <div class="left" id="showCustomerName" >{%=currentClient.ContactName%}</div>
+                            <div class="right" id="showCustomerTel" >{%=currentClient.MobilePhone%}</div>
                         </div>
-                        <div style="line-height:30px;" id="showCustomerAddress">
-                        </div>
+                        <div style="line-height:30px;" id="showCustomerAddress" >{%=currentClient.Address%}</div>
                     </div>
                     <div class="ico-edit iconfont tRight" style="display:table-cell;padding:0 10px;vertical-align:middle;width:30px;"></div>
                 </div>
@@ -126,23 +126,23 @@ var minPrice=(item.orderPriceRanges&&item.orderPriceRanges.length>0)?item.orderP
                     <li class="mTop10">
                         <span class="width80" style="display:inline-block;">收货人：</span>
                         <span>
-                            <input type="text" maxlength="20" id="customerName" value="" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" />
+                            <input type="text" maxlength="20" id="customerName" data-value="{%=currentClient.ContactName%}" value="{%=currentClient.ContactName%}" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" />
                         </span>
                     </li>
                     <li class="mTop10">
                         <span class="width80" style="display:inline-block;">联系电话：</span>
                         <span>
-                            <input type="tel" maxlength="13" id="customerTel" value="" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" />
+                            <input type="tel" maxlength="13" id="customerTel" data-value="{%=currentClient.MobilePhone%}" value="{%=currentClient.MobilePhone%}" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" />
                         </span>
                     </li>
                     <li class="mTop10">
                         <span class="width80 left" style="display:inline-block;">地址：</span>
-                        <span class="left mLeft4" id="citySpan" style="width:200px;"></span>
+                        <span class="left mLeft4" id="citySpan" style="width:200px;" data-value="{%=currentClient.CityCode%}"></span>
                         <div class="clear"></div>
                     </li>
                     <li class="mTop10">
                         <span class="width80" style="display:inline-block;">详细地址：</span>
-                        <span><input type="text" maxlength="50" id="customerAddress" value="" placeholder="详细地址" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" /></span>
+                        <span><input type="text" maxlength="50" id="customerAddress" data-value="{%=currentClient.Address%}" value="{%=currentClient.Address%}" placeholder="详细地址" style="width:200px;text-indent:4px;padding:2px;box-sizing:border-box;" /></span>
                     </li>
                     <li class="mTop10 tRight" style="width:280px;">
                         <span class="btn save-customer" data-type="save">保存</span>

@@ -3,32 +3,33 @@
     var doT = require("dot");
     var City = require("city"), CityInvoice,
         Global = require("m_global");
+
     var isCreateOrder = false;
     var AttrList = [];
-    ObjectJS.showOrderGoodsLayer = function (model, user) {
+    ObjectJS.showOrderGoodsLayer = function (model, currentClient) {
         if (model.AttrLists.length == 0 || model.SaleAttrs.length == 0) {
             alert("该产品暂不支持下单", 2);
         }
         ObjectJS.model = model;
-        AttrList = [];
-        ObjectJS.getOrderAttr();
+        model.currentClient = currentClient;
+        ObjectJS.setOrderAttr();
+
         doT.exec("m/template/style/style-buy.html", function (code) {
             var innerHtml = code(model);
             innerHtml = $(innerHtml);
 
             /*编辑发货信息*/
-            innerHtml.find("#customerName").val(user.ContactName)
-                                            .data('value', user.ContactName);
-            innerHtml.find("#customerTel").val(user.MobilePhone)
-                                            .data('value', user.MobilePhone);
-            innerHtml.find("#customerAddress").val(user.Address)
-                                                .data('value', user.Address);
-            innerHtml.find("#citySpan").data('value', user.CityCode);
-
-            /*展示发货信息*/
-            innerHtml.find("#showCustomerName").text(user.ContactName);
-            innerHtml.find("#showCustomerTel").text(user.MobilePhone);
-            innerHtml.find("#showCustomerAddress").text(user.Address);
+            //innerHtml.find("#customerName").val(currentClient.ContactName)
+            //                                .data('value', currentClient.ContactName);
+            //innerHtml.find("#customerTel").val(currentClient.MobilePhone)
+            //                                .data('value', currentClient.MobilePhone);
+            //innerHtml.find("#customerAddress").val(currentClient.Address)
+            //                                    .data('value', currentClient.Address);
+            //innerHtml.find("#citySpan").data('value', currentClient.CityCode);
+            ///*展示发货信息*/
+            //innerHtml.find("#showCustomerName").text(currentClient.ContactName);
+            //innerHtml.find("#showCustomerTel").text(currentClient.MobilePhone);
+            //innerHtml.find("#showCustomerAddress").text(currentClient.Address);
 
             innerHtml.find(".quantity").bind({
                 change:function(){
@@ -168,23 +169,26 @@
             };
 
             CityInvoice = City.createCity({
-                cityCode: user.CityCode,
+                cityCode: currentClient.CityCode,
                 elementID: "citySpan"
             });
         });
     };
 
-    ObjectJS.getOrderAttr = function () {
+    ObjectJS.setOrderAttr = function () {
         var _self = ObjectJS;
-        if (_self.model.SaleAttrs[0]) {
-            for (var i = 0; i < _self.model.SaleAttrs[0].AttrValues.length; i++) {
-                var _sale = _self.model.SaleAttrs[0].AttrValues[i];
+        var SaleAttrs=_self.model.SaleAttrs[0];
+        if (SaleAttrs) {
+            for (var i = 0; i < SaleAttrs.AttrValues.length; i++) {
+                var _sale = SaleAttrs.AttrValues[i];
                 var _model = {};
                 _model.SaleRemark = _sale.ValueName;
                 _model.SaleID = _sale.ValueID;
+
+                var AttrLists=_self.model.AttrLists[0];
                 var _details = {};
-                for (var j = 0; j < _self.model.AttrLists[0].AttrValues.length; j++) {
-                    var _attr = _self.model.AttrLists[0].AttrValues[j];
+                for (var j = 0; j < AttrLists.AttrValues.length; j++) {
+                    var _attr = AttrLists.AttrValues[j];
                     _details[_attr.ValueID] = {
                         ValueName: _attr.ValueName,
                         Quantity: 0,
@@ -192,6 +196,7 @@
                     };
                 }
                 _model.AttrsList = _details;
+
                 AttrList[_sale.ValueID] = _model;
             }
         }

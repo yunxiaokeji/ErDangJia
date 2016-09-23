@@ -1,7 +1,8 @@
 ﻿/**客户阶段**/
-.opport-relative { overflow: auto; position: relative; left: 0;}
+.opport-relative { overflow: visible; position: relative; left: 0;}
 .opport-absolute{position: absolute;  bottom: 0;}
 .pauto20{padding: 0 20px;}
+.pauto10{padding: 0 10px;}
 .footertext {height: 40px; font-size: 9pt;line-height:40px; } 
 .border-bottom{ border-bottom: 40px solid #FFFFFF;}
 .min-width720{ min-width: 720px;}

@@ -5,13 +5,31 @@
     var Common = require("/modules/m/scripts/style/createordergoods.js");
 
     var ObjectJS = {};
-    ObjectJS.init = function (order, currentClient) {
+    ObjectJS.init = function (order, currentClient,imgsCount) {
         var order = JSON.parse(order.replace(/&quot;/g, '"'));
         ObjectJS.order = order;
         ObjectJS.currentClient = JSON.parse(currentClient.replace(/&quot;/g, '"'));
 
         ObjectJS.bindEvent();
         $(".platemakingBody table tr td:last-child").remove();
+        //处理款式图片显示
+        if (imgsCount > 1) {
+            var swiper = new Swiper('.swiper-container', {
+                nextButton: '.swiper-button-next',
+                prevButton: '.swiper-button-prev',
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                // Disable preloading of all images
+                preloadImages: false,
+                // Enable lazy loading
+                lazyLoading: true
+            });
+        } else if (imgsCount == 1) {
+            $(".swiper-container .swiper-slide .swiper-lazy-preloader").hide();
+            $(".swiper-container .swiper-slide img").attr("src", order.orderImage);
+        } else {
+            $(".swiper-container").hide();
+        }
     }
 
     //绑定事件

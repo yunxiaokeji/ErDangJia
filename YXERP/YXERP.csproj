@@ -307,6 +307,9 @@
     <Content Include="modules\m\images\logo_login.png" />
     <Content Include="modules\m\images\times.jpg" />
     <Content Include="modules\m\images\Zoom.gif" />
+    <Content Include="modules\m\plug\swiper\css\swiper.css" />
+    <Content Include="modules\m\plug\swiper\css\swiper.min.css" />
+    <Content Include="modules\m\plug\swiper\swiper.min.js" />
     <Content Include="modules\m\plug\touchSlider\css\style.css" />
     <Content Include="modules\m\plug\touchSlider\images\20141206092732_4208.jpg" />
     <Content Include="modules\m\plug\touchSlider\images\20141206093851_5791.jpg" />

@@ -72,7 +72,9 @@
 
     //获取订单在智能工厂状态
     ObjectJS.getZngcOrderStatus = function () {
+        $("#moduleBox").append('<div class="data-loading"></div>');
         Global.post("/M/Orders/GetZngcOrderStatus", { id: ObjectJS.order.DocID }, function (data) {
+            $("#moduleBox .data-loading").remove();
             data = JSON.parse(data);
             if (data.items) {
                 doT.exec("m/template/order/zngcorderstatus.html", function (template) {

@@ -217,11 +217,15 @@
             }
             var obj = $("#colorlist li[data-id='" + _item.SaleID + "']").find('.quantity-lump');
             obj.removeClass('quantity-more');
-            if (_thisAttrCount > 99) {
-                _thisAttrCount = '99+';
-                obj.addClass('quantity-more');
+            if (_thisAttrCount > 0) {
+                if (_thisAttrCount > 99) {
+                    _thisAttrCount = '99+';
+                    obj.addClass('quantity-more');
+                }
+                obj.show().text(_thisAttrCount);
+            } else {
+                obj.hide();
             }
-            obj.text(_thisAttrCount);
         }
         $("#totalnum").parent().show();
         $("#totalnum").text(totalCount);

@@ -44,7 +44,6 @@ header .task-text {color:#BFD2F2;text-align:center;font-size:16px;}
 .task-info .order-need { line-height:30px;color:#666;padding:10px}
 .task-info .order-need div{display:table-cell;}
 
-
 /*菜单*/
 nav { margin-top:20px;background-color:#fff;margin-bottom:10px; width:100%;}
 nav ul li {cursor:pointer;float:left;list-style:none;padding:0 20px;line-height:46px;text-align:center;color:#666;border-right:1px solid #efefef;margin-right:-1px;height:46px;}
@@ -165,6 +164,10 @@ nav ul .menuchecked{border-bottom:5px solid #4a98e7;color:#4a98e7;height:41px;}
 .log-box li:last-child p:last-child { color:#999;}
 
 .show-attr-box { height:68px;overflow:hidden;}
+/*任务状态样式*/
+.module-item .item{ line-height:30px;border:1px solid #ddd;margin-bottom:4px;padding:0 4px;color:#999;}
+.module-item .item.ing {border-color:#45BF67;color:#666; }
+.module-item .item.end {border-color:#4a98e7;color:#666; }
 
 .btn-addOrder {
     width:120px;

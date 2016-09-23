@@ -624,6 +624,13 @@ namespace CloudSalesBusiness
                     });
                     UserActList[userid] = accountList;
                 }
+
+                var agent = AgentsBusiness.GetAgentDetail(agentid);
+                agent.CMClientID = cmClientID;
+
+                var client = Manage.ClientBusiness.GetClientDetail(clientid);
+                client.CMClientID = cmClientID;
+                client.IsMall = 1;
             }
             return mes;
         }

@@ -193,7 +193,7 @@ namespace CloudSalesEntity.Manage
 
         public string CMClientID { get; set; }
 
-        public string IsMall { get; set; }
+        public int IsMall { get; set; }
         
 
         /// <summary>

@@ -505,8 +505,6 @@ namespace YXERP.Controllers
             {
                 var user = (Users)Session["CMTokenInfo"];
 
-                IntFactory.Sdk.ClientResult zngcClientItem = IntFactory.Sdk.ClientBusiness.BaseBusiness.GetClientInfo(user.MDProjectID);
-
                 return OrganizationBusiness.BindCMClient(model.UserID, user.MDUserID, user.MDProjectID, model.AgentID, model.ClientID,
                     user.Client.CompanyName, user.Client.ContactName, user.Client.MobilePhone, user.Client.CityCode, user.Client.Address);
             }

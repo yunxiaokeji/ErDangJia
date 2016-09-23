@@ -13,6 +13,8 @@ namespace CloudSalesEntity
         public string Remark { get; set; }
         public int Quantity { get; set; }
         public int QCQuantity { get; set; }
+        public int StockIn { get; set; }
+        public int StockOut { get; set; }
         public int JYQuantity { get; set; }
         public int InQuantity { get; set; }
         public int OutQuantity { get; set; }

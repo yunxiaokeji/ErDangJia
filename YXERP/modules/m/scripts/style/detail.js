@@ -5,10 +5,10 @@
     var Common = require("/modules/m/scripts/style/createordergoods.js");
 
     var ObjectJS = {};
-    ObjectJS.init = function (order,user) {
+    ObjectJS.init = function (order, currentClient) {
         var order = JSON.parse(order.replace(/&quot;/g, '"'));
         ObjectJS.order = order;
-        ObjectJS.user = JSON.parse(user.replace(/&quot;/g, '"'));
+        ObjectJS.currentClient = JSON.parse(currentClient.replace(/&quot;/g, '"'));
 
         ObjectJS.bindEvent();
         $(".platemakingBody table tr td:last-child").remove();
@@ -36,7 +36,7 @@
 
         //下单
         $(".btn-addOrder").click(function () {
-            Common.showOrderGoodsLayer(ObjectJS.order, ObjectJS.user);
+            Common.showOrderGoodsLayer(ObjectJS.order, ObjectJS.currentClient);
         });
     }
 

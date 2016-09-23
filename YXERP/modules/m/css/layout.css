@@ -215,6 +215,7 @@ line-height:60px;
     min-width:50px;
     margin-top:15px;
     position:relative;
+    border:1px solid #ddd;
 }
 .attr-ul li .quantity-lump { 
     background-color:#f25b5b;

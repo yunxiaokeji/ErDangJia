@@ -37,7 +37,7 @@ var currentClient=item.currentClient;
                             <div class="attr-title" id="Div1" data-id="{%=attr.AttrID%}">
                                 {%=attr.AttrName%}
                             </div>
-                            <ul class="attr-item attr-ul" id="colorlist">
+                            <ul class="attr-item attr-ul row" id="colorlist">
                             {%  
                                 for(var j=0;j<attr.AttrValues.length;j++)
                                 {
@@ -45,6 +45,7 @@ var currentClient=item.currentClient;
                             %}
                                 <li class="{%=(j==0?'select':'')%}" data-remark="{%=attrItem.ValueName%}"  data-id="{%=attrItem.ValueID%}">
                                     {%=attrItem.ValueName%}
+                                    <div class="quantity-lump hide">0</div>
                                 </li>
                             {%}%}
                             </ul>
@@ -157,5 +158,5 @@ var currentClient=item.currentClient;
     if(item.AttrLists.length>0&&item.SaleAttrs.length>0)
     {
 %}
-    <div class="btn-sureAdd">确定</div>
+    <div class="btn-sureAdd">下单</div>
 {%}%}

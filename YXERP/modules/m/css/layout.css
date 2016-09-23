@@ -198,7 +198,6 @@ line-height:60px;
 
 .overlay-addOrder .style-attr .attr-title {
     font-size:16px;
-    line-height:40px;
 }
 
 .overlay-addOrder .style-attr .attr-ul {
@@ -214,14 +213,28 @@ line-height:60px;
     background-color:#eee;
     cursor:pointer;
     min-width:50px;
-    margin-top:5px;
+    margin-top:15px;
+    position:relative;
 }
-
+.attr-ul li .quantity-lump { 
+    background-color:#f25b5b;
+    color:#fff;
+    position:absolute;
+    right:-10px;
+    top:-12px;
+    width:25px;
+    height:25px;
+    line-height:25px;
+    border-radius:50%;
+}
+.attr-ul li .quantity-lump.quantity-more { 
+   font-size:12px;
+}
 .overlay-addOrder .style-attr .attr-ul .select {
     background-color:#2F73B8;
     color:#fff;
 }
-.overlay-addOrder .style-attr .attr-ul .hasquantity { background-color:#4a98e7;color:#fff;} 
+/*.overlay-addOrder .style-attr .attr-ul .hasquantity { background-color:#4a98e7;color:#fff;}*/ 
 .overlay-addOrder .btn-sureAdd {
     position:fixed;
     width:100%;
@@ -233,7 +246,7 @@ line-height:60px;
     text-align:center;
     line-height:50px;
 }
-
+.overlay-addOrder .btn-sureAdd.unable { background-color:#ddd;color:#888;}
 #pirceRangeBox { background-color:#efefef;border:1px solid #ccc;}
 #pirceRangeBox .range { padding:0 5px;line-height:35px;border-bottom:1px solid #ccc;}
 #pirceRangeBox .range.hover { background-color:#555;}

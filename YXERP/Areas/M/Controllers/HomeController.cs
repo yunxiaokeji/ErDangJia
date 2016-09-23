@@ -24,8 +24,9 @@ namespace YXERP.Areas.M.Controllers
             {
                 CurrentUser.CurrentClientID = providerID;
                 providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(providerID);
-                var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
-                CurrentUser.CurrentCMClientID = agent.CMClientID;
+                //var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
+                //CurrentUser.CurrentCMClientID = agent.CMClientID;
+                CurrentUser.CurrentCMClientID = providerClient.CMClientID;
             }
             else 
             {
@@ -59,8 +60,9 @@ namespace YXERP.Areas.M.Controllers
             {
                 CurrentUser.CurrentClientID = clientid;
                 providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);
-                var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
-                CurrentUser.CurrentCMClientID = agent.CMClientID;
+                //var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
+                //CurrentUser.CurrentCMClientID = agent.CMClientID;
+                CurrentUser.CurrentCMClientID = providerClient.CMClientID;
             }
             else {
                 providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
@@ -77,8 +79,9 @@ namespace YXERP.Areas.M.Controllers
         {
             var providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(id);
             CurrentUser.CurrentClientID = id;
-            var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
-            CurrentUser.CurrentCMClientID = agent.CMClientID;
+            //var agent = AgentsBusiness.GetAgentDetail(providerClient.AgentID);
+            //CurrentUser.CurrentCMClientID = agent.CMClientID;
+            CurrentUser.CurrentCMClientID = providerClient.CMClientID;
             JsonDictionary.Add("status",true);
 
             return new JsonResult { 

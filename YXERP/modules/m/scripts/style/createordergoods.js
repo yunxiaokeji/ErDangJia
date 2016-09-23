@@ -44,10 +44,16 @@
                     }
                 },
                 focus: function () {
-                    $(".btn-sureAdd").hide();
+                    $(".btn-sureAdd").addClass('unable');
+                    $(".overlay-addOrder .btn-sureAdd").unbind();
                 },
                 blur: function () {
-                    $(".btn-sureAdd").show();
+                    $(".btn-sureAdd").removeClass('unable');
+                    setTimeout(function () {
+                        $(".overlay-addOrder .btn-sureAdd").bind('click', function () {
+                            createOrder();
+                        });
+                    }, 10);
                 }
             });
 
@@ -93,35 +99,7 @@
             });
 
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
-                if ($('.edit-customer').css('display') == 'none') {
-                    var item = {
-                        personName: $("#customerName").val(),
-                        mobilePhone: $("#customerTel").val(),
-                        cityCode: CityInvoice.getCityCode(),
-                        address: $("#customerAddress").val(),
-                        goodsID: model.goodsID,
-                        goodsName: model.goodsName,
-                        goodsCode: model.intGoodsCode,
-                        price: $("#productPrice").text(),
-                        productDetails: "",
-                        cmClientID: $("#EDJProvider").data('id'),
-                        totalMoney: $("#totalprice").text() * 1,
-                        saleAttrStr: model.SaleAttrs[0].AttrName + ',' + model.AttrLists[0].AttrName,
-                        productImage: model.orderImage,
-                        zngcOrderID: model.orderID,
-                        zngcClientID: model.clientID,
-                        zngcProductEntity: ""
-                    };
-                    if ($("#pirceRangeBox").length > 0 && $("#minOrderNum").length == 1) {
-                        if ($("#totalnum").text() * 1 < $("#minOrderNum").text()*1) {
-                            alert("下单数最少" + $("#minOrderNum").text() + "件", 2);
-                            return false;
-                        }
-                    }
-                    ObjectJS.createOrders(item);
-                } else {
-                    alert('请先保存收货信息', 2);
-                }
+                createOrder();
                 return false;
             });
 
@@ -158,6 +136,38 @@
                 $("#showCustomerAddress").text($("#customerAddress").val());
             });
 
+            function createOrder() {
+                if ($('.edit-customer').css('display') == 'none') {
+                    var item = {
+                        personName: $("#customerName").val(),
+                        mobilePhone: $("#customerTel").val(),
+                        cityCode: CityInvoice.getCityCode(),
+                        address: $("#customerAddress").val(),
+                        goodsID: model.goodsID,
+                        goodsName: model.goodsName,
+                        goodsCode: model.intGoodsCode,
+                        price: $("#productPrice").text(),
+                        productDetails: "",
+                        cmClientID: $("#EDJProvider").data('id'),
+                        totalMoney: $("#totalprice").text() * 1,
+                        saleAttrStr: model.SaleAttrs[0].AttrName + ',' + model.AttrLists[0].AttrName,
+                        productImage: model.orderImage,
+                        zngcOrderID: model.orderID,
+                        zngcClientID: model.clientID,
+                        zngcProductEntity: ""
+                    };
+                    if ($("#pirceRangeBox").length > 0 && $("#minOrderNum").length == 1) {
+                        if ($("#totalnum").text() * 1 < $("#minOrderNum").text() * 1) {
+                            alert("下单数最少" + $("#minOrderNum").text() + "件", 2);
+                            return false;
+                        }
+                    }
+                    ObjectJS.createOrders(item);
+                } else {
+                    alert('请先保存收货信息', 2);
+                }
+            };
+
             CityInvoice = City.createCity({
                 cityCode: currentClient.CityCode,
                 elementID: "citySpan"
@@ -167,7 +177,7 @@
 
     ObjectJS.setOrderAttr = function () {
         var _self = ObjectJS;
-        var SaleAttrs=_self.model.SaleAttrs[0];
+        var SaleAttrs = _self.model.SaleAttrs[0];
         if (SaleAttrs) {
             for (var i = 0; i < SaleAttrs.AttrValues.length; i++) {
                 var _sale = SaleAttrs.AttrValues[i];
@@ -175,7 +185,7 @@
                 _model.SaleRemark = _sale.ValueName;
                 _model.SaleID = _sale.ValueID;
 
-                var AttrLists=_self.model.AttrLists[0];
+                var AttrLists = _self.model.AttrLists[0];
                 var _details = {};
                 for (var j = 0; j < AttrLists.AttrValues.length; j++) {
                     var _attr = AttrLists.AttrValues[j];
@@ -190,17 +200,31 @@
                 AttrList[_sale.ValueID] = _model;
             }
         }
-    };
+    }
 
     ObjectJS.setOrderAttrQuantity = function (saleID, attrID, quantity) {
         AttrList[saleID].AttrsList[attrID].Quantity = quantity;
         /*设置总计*/
         var totalCount = 0;
         for (var i in AttrList) {
-            var _sale = AttrList[i].AttrsList;
+            var _item = AttrList[i];
+            var _sale = _item.AttrsList;
+            var _thisAttrCount = 0;
             for (var j in _sale) {
                 var _attr = _sale[j];
                 totalCount += _attr.Quantity * 1;
+                _thisAttrCount += _attr.Quantity * 1;
+            }
+            var obj = $("#colorlist li[data-id='" + _item.SaleID + "']").find('.quantity-lump');
+            obj.removeClass('quantity-more');
+            if (_thisAttrCount > 0) {
+                if (_thisAttrCount > 99) {
+                    _thisAttrCount = '99+';
+                    obj.addClass('quantity-more');
+                }
+                obj.show().text(_thisAttrCount);
+            } else {
+                obj.hide();
             }
         }
         $("#totalnum").parent().show();
@@ -278,7 +302,7 @@
             isCreateOrder = true;
             Global.post("/M/IntFactoryOrders/AddIntfactoryPurchaseDoc", model, function (data) {
                 isCreateOrder = false;
-                $(".btn-sureAdd").text("确定");
+                $(".btn-sureAdd").text("下单");
                 if (data.result) {
                     if (data.result.id) {
                         alert("下单成功");

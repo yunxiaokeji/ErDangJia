@@ -233,7 +233,7 @@ line-height:60px;
     text-align:center;
     line-height:50px;
 }
-
+.overlay-addOrder .btn-sureAdd.unable { background-color:#ddd;color:#888;}
 #pirceRangeBox { background-color:#efefef;border:1px solid #ccc;}
 #pirceRangeBox .range { padding:0 5px;line-height:35px;border-bottom:1px solid #ccc;}
 #pirceRangeBox .range.hover { background-color:#555;}

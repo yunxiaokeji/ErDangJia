@@ -43,10 +43,10 @@
                     }
                 },
                 focus: function () {
-                    $(".btn-sureAdd").hide();
+                    $(".btn-sureAdd").addClass('unable');
                 },
                 blur: function () {
-                    $(".btn-sureAdd").show();
+                    $(".btn-sureAdd").removeClass('unable');
                 }
             });
 
@@ -92,6 +92,7 @@
             });
 
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
+                var _this = $(this);
                 if ($('.edit-customer').css('display') == 'none') {
                     var item = {
                         personName: $("#customerName").val(),

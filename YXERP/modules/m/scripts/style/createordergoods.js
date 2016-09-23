@@ -50,10 +50,10 @@
                 blur: function () {
                     $(".btn-sureAdd").removeClass('unable');
                     setTimeout(function () {
-                        $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
+                        $(".overlay-addOrder .btn-sureAdd").bind('click', function () {
                             createOrder();
                         });
-                    }, 10);
+                    }, 100);
                 }
             });
 

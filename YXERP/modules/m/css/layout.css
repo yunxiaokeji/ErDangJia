@@ -198,7 +198,6 @@ line-height:60px;
 
 .overlay-addOrder .style-attr .attr-title {
     font-size:16px;
-    line-height:40px;
 }
 
 .overlay-addOrder .style-attr .attr-ul {
@@ -214,7 +213,7 @@ line-height:60px;
     background-color:#eee;
     cursor:pointer;
     min-width:50px;
-    margin-top:10px;
+    margin-top:15px;
     position:relative;
 }
 .attr-ul li .quantity-lump { 

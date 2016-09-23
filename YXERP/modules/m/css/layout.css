@@ -215,8 +215,22 @@ line-height:60px;
     cursor:pointer;
     min-width:50px;
     margin-top:5px;
+    position:relative;
 }
-
+.attr-ul li .quantity-lump { 
+    background-color:red;
+    color:#fff;
+    position:absolute;
+    right:-5px;
+    top:-8px;
+    width:25px;
+    height:25px;
+    line-height:25px;
+    border-radius:50%;
+}
+.attr-ul li .quantity-lump.quantity-more { 
+   font-size:12px;
+}
 .overlay-addOrder .style-attr .attr-ul .select {
     background-color:#2F73B8;
     color:#fff;

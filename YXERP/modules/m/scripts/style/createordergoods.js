@@ -177,7 +177,7 @@
 
     ObjectJS.setOrderAttr = function () {
         var _self = ObjectJS;
-        var SaleAttrs=_self.model.SaleAttrs[0];
+        var SaleAttrs = _self.model.SaleAttrs[0];
         if (SaleAttrs) {
             for (var i = 0; i < SaleAttrs.AttrValues.length; i++) {
                 var _sale = SaleAttrs.AttrValues[i];
@@ -185,7 +185,7 @@
                 _model.SaleRemark = _sale.ValueName;
                 _model.SaleID = _sale.ValueID;
 
-                var AttrLists=_self.model.AttrLists[0];
+                var AttrLists = _self.model.AttrLists[0];
                 var _details = {};
                 for (var j = 0; j < AttrLists.AttrValues.length; j++) {
                     var _attr = AttrLists.AttrValues[j];
@@ -200,18 +200,28 @@
                 AttrList[_sale.ValueID] = _model;
             }
         }
-    };
+    }
 
     ObjectJS.setOrderAttrQuantity = function (saleID, attrID, quantity) {
         AttrList[saleID].AttrsList[attrID].Quantity = quantity;
         /*设置总计*/
         var totalCount = 0;
         for (var i in AttrList) {
-            var _sale = AttrList[i].AttrsList;
+            var _item = AttrList[i];
+            var _sale = _item.AttrsList;
+            var _thisAttrCount = 0;
             for (var j in _sale) {
                 var _attr = _sale[j];
                 totalCount += _attr.Quantity * 1;
+                _thisAttrCount += _attr.Quantity * 1;
             }
+            var obj = $("#colorlist li[data-id='" + _item.SaleID + "']").find('.quantity-lump');
+            obj.removeClass('quantity-more');
+            if (_thisAttrCount > 99) {
+                _thisAttrCount = '99+';
+                obj.addClass('quantity-more');
+            }
+            obj.text(_thisAttrCount);
         }
         $("#totalnum").parent().show();
         $("#totalnum").text(totalCount);

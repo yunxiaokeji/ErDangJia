@@ -64,6 +64,7 @@ namespace IntFactory.Sdk
 
         [Description("/api/order/getOrderAttrsListByGoodsID")]
         GetOrderAttrsList,
+
         [Description("/api/order/getOrderAttrsListByOrderID")]
         GetOrderAttrsListByOrderID,
         /// <summary>
@@ -74,6 +75,10 @@ namespace IntFactory.Sdk
 
         [Description("/api/order/createDHOrder")]
         CreateDHOrder,
+
+        [Description("/api/order/getOrderTasks")]
+        GetOrderTasks,
+
         /// <summary>
         /// 分类
         /// </summary>

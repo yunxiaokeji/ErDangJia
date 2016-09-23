@@ -44,6 +44,7 @@ namespace IntFactory.Sdk
             paras.Add("goodsID", zngcOrderID);
             return HttpRequest.RequestServer<OrderAttrResult>(ApiOption.GetOrderAttrsList, paras);
         }
+
         public AddResult CreateDHOrder(string zngcOrderID, decimal price, List<ProductDetailEntity> details, string zngcClientID, string yxOrderID,string clientid="",string personname="",string mobiletele="",string citycode="",string address="")
         {
             var paras = new Dictionary<string, object>();
@@ -59,6 +60,13 @@ namespace IntFactory.Sdk
             paras.Add("address", address);
 
             return HttpRequest.RequestServer<AddResult>(ApiOption.CreateDHOrder, paras);
+        }
+
+        public string GetOrderTasks(string zngcOrderID)
+        {
+            var paras = new Dictionary<string, object>();
+            paras.Add("orderID", zngcOrderID);
+            return HttpRequest.RequestServer(ApiOption.GetOrderTasks, paras);
         }
 
         public AddResult CreateOrder(string entity, string clientid, string userid = "")

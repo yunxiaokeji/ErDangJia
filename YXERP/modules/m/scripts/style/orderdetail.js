@@ -74,13 +74,13 @@
     ObjectJS.getZngcOrderStatus = function () {
         Global.post("/M/Orders/GetZngcOrderStatus", { id: ObjectJS.order.DocID }, function (data) {
             data = JSON.parse(data);
-            //if (!items.result) {
+            if (data.items) {
                 doT.exec("m/template/order/zngcorderstatus.html", function (template) {
                     var innerHtml = template(data.items);
                     innerHtml = $(innerHtml);
                     $("#moduleBox").append(innerHtml);
                 });
-            //}
+            }
         });
     };
 

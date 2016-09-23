@@ -165,7 +165,9 @@ nav ul .menuchecked{border-bottom:5px solid #4a98e7;color:#4a98e7;height:41px;}
 
 .show-attr-box { height:68px;overflow:hidden;}
 /*任务状态样式*/
-.module-item .item{ line-height:30px;border:1px solid #ddd;margin-bottom:4px;padding:0 4px;color:#999;}
+.module-item .item{ line-height:30px;border:1px solid #ddd;margin-bottom:4px;padding:0 4px;color:#999;
+                    box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;
+}
 .module-item .item.ing {border-color:#45BF67;color:#666; }
 .module-item .item.end {border-color:#4a98e7;color:#666; }
 

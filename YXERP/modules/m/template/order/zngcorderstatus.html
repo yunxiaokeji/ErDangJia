@@ -1,23 +1,15 @@
 ﻿<div class="module-item">
     {%
-    console.log($data);
     for(var i=0;i<$data.length;i++)
     {
         var item=$data[i];
-        console.log(item);
+        var mark=item.FinishStatus == 0 ? '0' : item.FinishStatus == 1 ? '1' : '2';
     %}
+    <div class="item row {%=mark==1?'ing':mark==2?'end':''%}" style="display:table;width:100%;">
+        <div style="display:table-cell;">
+            <div style="height:30px;overflow:hidden;">{%=item.Title%}</div>
+        </div>
+        <div style="display:table-cell;text-align:right;width:160px;">{%=mark==1?'预计时间：'+item.EndTime.toDate('yyyy/MM/dd'):mark==2?'预计时间：'+item.EndTime.toDate('yyyy/MM/dd'):'未接受'%}</div>
+    </div>
     {%}%}
-    <div class="item row">
-        <div class="left">找材料</div>
-        <div class="right">未接受</div>
-    </div>
-    <div class="item row ing">
-        <div class="left">裁剪</div>
-        <div class="right">2016/9/23</div>
-    </div>
-    <div class="item row end">
-        <div class="left">车缝</div>
-        <div class="right">2016/9/26</div>
-    </div>
-    
 </div>

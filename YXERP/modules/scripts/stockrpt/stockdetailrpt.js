@@ -100,10 +100,10 @@
                         '<td class="tLeft">' + item.ProductName + '</td>' +
                         '<td class="tLeft">' + item.Remark + '</td>' +
                         '<td class="tLeft">' + item.UnitName + '</td>' +
-                        '<td class="center">' + item.QCQuantity + '</td>' +
-                        '<td class="center">' + item.InQuantity + '</td>' +
-                        '<td class="center">' + item.OutQuantity + '</td>' +
-                        '<td class="center">' + item.JYQuantity + '</td>' + 
+                        '<td class="center hide">' + item.QCQuantity + '</td>' +
+                        '<td class="center ">' + item.InQuantity + '</td>' +
+                        '<td class="center">' + item.OutQuantity + '</td>' + 
+                        '<td class="center">' + (parseInt(item.StockIn) - parseInt(item.StockOut)) + '</td>' +
                         '</tr>';
                 }
             } else {

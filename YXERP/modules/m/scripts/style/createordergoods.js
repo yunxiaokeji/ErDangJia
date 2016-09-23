@@ -53,7 +53,7 @@
                         $(".overlay-addOrder .btn-sureAdd").bind('click', function () {
                             createOrder();
                         });
-                    }, 100);
+                    }, 10);
                 }
             });
 

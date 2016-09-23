@@ -44,9 +44,15 @@
                 },
                 focus: function () {
                     $(".btn-sureAdd").addClass('unable');
+                    $(".overlay-addOrder .btn-sureAdd").unbind();
                 },
                 blur: function () {
                     $(".btn-sureAdd").removeClass('unable');
+                    setTimeout(function () {
+                        $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
+                            createOrder();
+                        });
+                    }, 10);
                 }
             });
 
@@ -92,36 +98,7 @@
             });
 
             $(".overlay-addOrder .btn-sureAdd").unbind().click(function () {
-                var _this = $(this);
-                if ($('.edit-customer').css('display') == 'none') {
-                    var item = {
-                        personName: $("#customerName").val(),
-                        mobilePhone: $("#customerTel").val(),
-                        cityCode: CityInvoice.getCityCode(),
-                        address: $("#customerAddress").val(),
-                        goodsID: model.goodsID,
-                        goodsName: model.goodsName,
-                        goodsCode: model.intGoodsCode,
-                        price: $("#productPrice").text(),
-                        productDetails: "",
-                        cmClientID: $("#EDJProvider").data('id'),
-                        totalMoney: $("#totalprice").text() * 1,
-                        saleAttrStr: model.SaleAttrs[0].AttrName + ',' + model.AttrLists[0].AttrName,
-                        productImage: model.orderImage,
-                        zngcOrderID: model.orderID,
-                        zngcClientID: model.clientID,
-                        zngcProductEntity: ""
-                    };
-                    if ($("#pirceRangeBox").length > 0 && $("#minOrderNum").length == 1) {
-                        if ($("#totalnum").text() * 1 < $("#minOrderNum").text()*1) {
-                            alert("下单数最少" + $("#minOrderNum").text() + "件", 2);
-                            return false;
-                        }
-                    }
-                    ObjectJS.createOrders(item);
-                } else {
-                    alert('请先保存收货信息', 2);
-                }
+                createOrder();
                 return false;
             });
 
@@ -157,6 +134,38 @@
                 $("#showCustomerTel").text($("#customerTel").val());
                 $("#showCustomerAddress").text($("#customerAddress").val());
             });
+
+            function createOrder() {
+                if ($('.edit-customer').css('display') == 'none') {
+                    var item = {
+                        personName: $("#customerName").val(),
+                        mobilePhone: $("#customerTel").val(),
+                        cityCode: CityInvoice.getCityCode(),
+                        address: $("#customerAddress").val(),
+                        goodsID: model.goodsID,
+                        goodsName: model.goodsName,
+                        goodsCode: model.intGoodsCode,
+                        price: $("#productPrice").text(),
+                        productDetails: "",
+                        cmClientID: $("#EDJProvider").data('id'),
+                        totalMoney: $("#totalprice").text() * 1,
+                        saleAttrStr: model.SaleAttrs[0].AttrName + ',' + model.AttrLists[0].AttrName,
+                        productImage: model.orderImage,
+                        zngcOrderID: model.orderID,
+                        zngcClientID: model.clientID,
+                        zngcProductEntity: ""
+                    };
+                    if ($("#pirceRangeBox").length > 0 && $("#minOrderNum").length == 1) {
+                        if ($("#totalnum").text() * 1 < $("#minOrderNum").text() * 1) {
+                            alert("下单数最少" + $("#minOrderNum").text() + "件", 2);
+                            return false;
+                        }
+                    }
+                    ObjectJS.createOrders(item);
+                } else {
+                    alert('请先保存收货信息', 2);
+                }
+            };
 
             CityInvoice = City.createCity({
                 cityCode: user.CityCode,
@@ -274,7 +283,7 @@
             isCreateOrder = true;
             Global.post("/M/IntFactoryOrders/AddIntfactoryPurchaseDoc", model, function (data) {
                 isCreateOrder = false;
-                $(".btn-sureAdd").text("确定");
+                $(".btn-sureAdd").text("下单");
                 if (data.result) {
                     if (data.result.id) {
                         alert("下单成功");

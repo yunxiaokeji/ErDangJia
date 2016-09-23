@@ -1,18 +1,17 @@
 ﻿@{
     var v = DateTime.Now.Ticks;
-    var client = (CloudSalesEntity.Manage.Clients)ViewBag.ProviderClient;
-    ViewBag.Title = client.CompanyName + "--款式中心";
+    var ProviderClient = (CloudSalesEntity.Manage.Clients)ViewBag.ProviderClient;
+    ViewBag.Title = ProviderClient.CompanyName + "--款式中心";
     
 }
 @section css{
     <link href="/modules/m/css/style/list.css" rel="stylesheet" />
 }
-
 @section scripts{
     <script type="text/javascript">
         seajs.use("/modules/m/scripts/style/list.js", function (data) {
             data.init(
-                '@ViewBag.providerID',
+                '@ViewBag.CurrentCMClientID',
                 '@Html.ToJSONString((CloudSalesEntity.Manage.Clients)ViewBag.CurrentClient)'
             );
         });
@@ -31,7 +30,7 @@
     <div class="header">
         <div class="header-li li-task-filtertype">
             <div class="btn-task-filtertype">
-                <div class="font16">@client.CompanyName</div>
+                <div class="font16">@ProviderClient.CompanyName</div>
             </div>
         </div>
         <div class="btnsearch">
@@ -87,5 +86,5 @@
         <div class="confirm-fliter">确定</div>
     </div>
 </div>
-<input hidden="hidden" data-id="@ViewBag.EDJProviderID" id="EDJProvider" />
+<input hidden="hidden" data-id="@ProviderClient.ClientID" id="EDJProvider" />
 

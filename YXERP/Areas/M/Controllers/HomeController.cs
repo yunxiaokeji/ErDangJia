@@ -33,8 +33,7 @@ namespace YXERP.Areas.M.Controllers
             }
             
             ViewBag.index = 0;
-            ViewBag.EDJProviderID = CurrentUser.CurrentClientID;
-            ViewBag.providerID = CurrentUser.CurrentCMClientID;
+            ViewBag.CurrentCMClientID = CurrentUser.CurrentCMClientID;
             ViewBag.ProviderClient = providerClient;
             ViewBag.CurrentClient = CurrentUser.Client;
 
@@ -67,7 +66,6 @@ namespace YXERP.Areas.M.Controllers
                 providerClient = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(CurrentUser.CurrentClientID);
             }
             var obj = IntFactory.Sdk.OrderBusiness.BaseBusiness.GetOrderDetailByID(orderid, CurrentUser.CurrentCMClientID);
-            ViewBag.EDJProviderID = CurrentUser.CurrentClientID;
             ViewBag.Order = obj.order;
             ViewBag.CurrentClient = CurrentUser.Client;
             ViewBag.ProviderClient = providerClient;

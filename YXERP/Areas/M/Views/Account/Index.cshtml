@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "个人中心";
     var user = (CloudSalesEntity.Users)ViewBag.baseUser;
+    var WeiXinID=ViewBag.WeiXinID;
 }
 @section css{
     <link href="/modules/m/css/style/list.css" rel="stylesheet" />
@@ -25,6 +26,15 @@
                 <span>&nbsp;已关注店铺</span>
             </a>
         </li>
+        @{
+            if (string.IsNullOrEmpty(WeiXinID))
+            {
+        <li><a href="/m/account/WeiXinLogin" style="display:block;" ><span class="mLeft10">绑定微信</span></a></li>
+        }
+        else{
+             <li><span style="display:block;" class="mLeft10">已绑定微信</span></li>
+            }
+        }
     </ul>
 </div>
 <div class="center" style="margin-top:80px;padding-bottom:20px;">

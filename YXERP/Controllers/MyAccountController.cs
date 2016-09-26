@@ -344,7 +344,6 @@ namespace YXERP.Controllers
 
         public ActionResult WeiXinCallBack(string code, string state)
         {
-            string result ="0";
             string operateip = Common.Common.GetRequestIP();
             var userToken = WeiXin.Sdk.Token.GetAccessToken(code);
 
@@ -354,6 +353,10 @@ namespace YXERP.Controllers
                 if (model == null)
                 {
                     string flag = OrganizationBusiness.BindOtherAccount(EnumAccountType.WeiXin, CurrentUser.UserID, "", userToken.unionid, CurrentUser.AgentID, CurrentUser.ClientID);
+                    if (!string.IsNullOrEmpty(state))
+                    {
+                        return Redirect(state);
+                    }
                 }
                 else
                 {
@@ -361,7 +364,14 @@ namespace YXERP.Controllers
                     if (model.Status.Value==1)
                     {
                         Session["ClientManager"] = model;
-                        return Redirect("/Home/Index");
+                        if (!string.IsNullOrEmpty(state))
+                        {
+                            return Redirect(state);
+                        }
+                        else
+                        {
+                            return Redirect("/Home/Index");
+                        }
                     }
                     else
                     {

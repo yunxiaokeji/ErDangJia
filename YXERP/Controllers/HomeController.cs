@@ -29,7 +29,7 @@ namespace YXERP.Controllers
         public ActionResult Register(string ReturnUrl = "")
         {
             string loginUrl = "/Default/Index";
-            ViewBag.LoginUrl = !string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl.Replace("%26", "&") : loginUrl; 
+            ViewBag.LoginUrl = !string.IsNullOrEmpty(ReturnUrl) ? ReturnUrl.Replace("&", "%26") : loginUrl; 
             return View();
         }
 
@@ -48,7 +48,7 @@ namespace YXERP.Controllers
 
             ViewBag.Status = Status;
             ViewBag.BindAccountType = BindAccountType;
-            ViewBag.ReturnUrl = ReturnUrl.Replace("%26", "&") + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
+            ViewBag.ReturnUrl = ReturnUrl.Replace("&", "%26") + (string.IsNullOrEmpty(name) ? "" : "%26name=" + name).Replace("&", "%26") ?? string.Empty;
             
             HttpCookie cook = Request.Cookies["yunxiao_erp_user"];
             if (cook != null)
@@ -244,11 +244,12 @@ namespace YXERP.Controllers
         //微信授权地址
         public ActionResult WeiXinLogin(string ReturnUrl)
         {
-            return Redirect(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.CallBackUrl), ReturnUrl, YXERP.Common.Common.IsMobileDevice()));
+            ReturnUrl = ReturnUrl.Replace("http://edj.yunxiaokeji.com/", "").Replace("https://edj.yunxiaokeji.com/", "");
+            return Redirect(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.CallBackUrl), Server.UrlEncode(ReturnUrl), YXERP.Common.Common.IsMobileDevice()));
         }
 
         //微信回调地址
-        public ActionResult WeiXinCallBack(string code, string state)
+        public ActionResult WeiXinCallBack(string code, string state = "")
         {
             string operateip = Common.Common.GetRequestIP();
             var userToken = WeiXin.Sdk.Token.GetAccessToken(code);
@@ -262,14 +263,15 @@ namespace YXERP.Controllers
                     //未注销
                     if (model.Status.Value == 1)
                     {
-                        Session["ClientManager"] = model; 
+                        Session["ClientManager"] = model;
                         if (string.IsNullOrEmpty(state))
                         {
-                            return Redirect("/Home/Index");
+                            return Redirect("/Default/Index");
                         }
                         else
                         {
-                            return Redirect(state);
+                            state = state.Replace("|", "&").Replace("%23", "&");
+                            return Redirect("http://edj.yunxiaokeji.com/" + state);
                         }
                     }
                     else
@@ -302,7 +304,8 @@ namespace YXERP.Controllers
             {
                 return Redirect("/Default/Index");
             }
-            return Redirect(IntFactory.Sdk.OauthBusiness.GetAuthorize(ReturnUrl));
+            var url = IntFactory.Sdk.OauthBusiness.GetAuthorize(Server.UrlEncode(ReturnUrl));
+            return Redirect(url);
         }
 
         public ActionResult CMCallBack(string sign, string userid,string clientid)

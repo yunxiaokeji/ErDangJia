@@ -11,7 +11,8 @@ namespace WeiXin.Sdk
 {
     public class Token
     {
-        public static string GetAuthorizeUrl(string redirect_uri,string returnUrl,bool isMobile){
+        public static string GetAuthorizeUrl(string redirect_uri, string returnUrl, bool isMobile)
+        {
             string apiUrl = "https://open.weixin.qq.com";
             if (isMobile)
             {
@@ -25,7 +26,7 @@ namespace WeiXin.Sdk
                apiUrl, AppConfig.AppKey, redirect_uri, "code", "snsapi_login");
 
             if (!string.IsNullOrEmpty(returnUrl)) {
-                url += "&state="+returnUrl;
+                url += "&state=" + returnUrl.Replace("%26", "|").Replace("&", "|");
             }
             return url;
         }

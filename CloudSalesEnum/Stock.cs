@@ -89,6 +89,24 @@ namespace CloudSalesEnum
         Delete = 9
     }
     /// <summary>
+    /// 生产进度
+    /// </summary>
+    public enum EnumProgressStatus
+    {
+        All = -1,
+        [DescriptionAttribute("待生产")]
+        Normal = 0,
+        [DescriptionAttribute("生产中")]
+        ING = 1,
+        [DescriptionAttribute("生产完成")]
+        End = 2,
+        [DescriptionAttribute("已终止")]
+        Over = 8,
+        [DescriptionAttribute("作废")]
+        Delete = 9
+    }
+
+    /// <summary>
     /// 供应商类型
     /// </summary>
     public enum EnumProviderType

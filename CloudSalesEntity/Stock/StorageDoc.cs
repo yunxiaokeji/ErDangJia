@@ -322,6 +322,8 @@ namespace CloudSalesEntity
 
         public string WareName { get; set; }
 
+        public int ProgressStatus { get; set; }
+
         /// <summary>
         /// 填充数据
         /// </summary>

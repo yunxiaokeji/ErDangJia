@@ -69,6 +69,8 @@ namespace YXERP.Controllers
                     ViewBag.UserName = cook["username"];
                 }
             }
+            ViewBag.IsMobileDevice=YXERP.Common.Common.IsMobileDevice();
+
             return View();
         }
 
@@ -241,8 +243,8 @@ namespace YXERP.Controllers
 
         //微信授权地址
         public ActionResult WeiXinLogin(string ReturnUrl)
-        { 
-            return Redirect(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.CallBackUrl), "", false));
+        {
+            return Redirect(WeiXin.Sdk.Token.GetAuthorizeUrl(Server.UrlEncode(WeiXin.Sdk.AppConfig.CallBackUrl), ReturnUrl, YXERP.Common.Common.IsMobileDevice()));
         }
 
         //微信回调地址

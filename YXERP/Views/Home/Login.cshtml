@@ -54,18 +54,28 @@
                 {
                     <div class="other-account">
                         <div class="accounts">
+                            @{
+                            if (!ViewBag.IsMobileDevice)
+                            {
                             <a class="" href="/Home/MDLogin?ReturnUrl=@ViewBag.ReturnUrl">
                                 <span class="logo mingdao"></span>
                                 <span class="left mLeft5">明道登录</span>
                             </a>
+                             }
+                            }
                             <a class="mLeft10" href="/Home/WeiXinLogin?ReturnUrl=@ViewBag.ReturnUrl">
                                 <span class="logo account-weixin"></span>
                                 <span class="left mLeft5">微信登录</span>
                             </a>
+                            @{
+                            if (!ViewBag.IsMobileDevice)
+                            {
                             <a class="mLeft10" href="/Home/CMLogin?ReturnUrl=@ViewBag.ReturnUrl">
                                 <span class="logo account-changmeng"></span>
                                 <span class="left mLeft5">厂盟登录</span>
                             </a>
+                                }
+                            }
                         </div>
                     </div>
                 }

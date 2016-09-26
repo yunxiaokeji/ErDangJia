@@ -421,12 +421,14 @@ namespace YXERP.Controllers
 
             if (pwdErrorUser == null || (pwdErrorUser.ErrorCount < 3 && pwdErrorUser.ForbidTime<DateTime.Now) )
             {
-                result = 1;
+                
                 string operateip = string.IsNullOrEmpty(Request.Headers.Get("X-Real-IP")) ? Request.UserHostAddress : Request.Headers["X-Real-IP"];
                 int outResult;
                 CloudSalesEntity.Users model = CloudSalesBusiness.OrganizationBusiness.GetUserByUserName(userName, pwd, out outResult, operateip);
                 if (model != null)
                 {
+                    result = 1;
+
                     if (bindAccountType == 4)
                     {
                         string errinfo = BindCMClient(model);

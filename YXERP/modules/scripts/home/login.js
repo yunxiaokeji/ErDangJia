@@ -63,6 +63,8 @@ define(function (require, exports, module) {
                     $("#btnLogin").html("登录").removeAttr("disabled");
                 }
 
+                console.log(data);
+
                 if (data.result == 1) {
                     if (_self.returnUrl) {
                         location.href = _self.returnUrl;

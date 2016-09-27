@@ -42,16 +42,20 @@
                     var _this = $(this);
                     if (_this.data('isget') == 1) {
                         $(".module-item").slideUp();
-                        $(".show-status-lump").css("transform", "rotate(0deg)");
-                        $(".show-status-lump").css("-webkit-transform", "rotate(0deg)");
-                        $(".show-status-lump").css("-moz-transform", "rotate(0deg)");
+                        $(".show-status-lump").css({
+                            "-webkit-transform": "rotate(0deg)",
+                            "-moz-transform": "rotate(0deg)",
+                            "transform": "rotate(0deg)"
+                        });
                         _this.data('isget', 0);
                     } else {
                         $(".module-item").slideDown();
                         _this.data('isget', 1);
-                        $(".show-status-lump").css("-webkit-transform", "rotate(180deg)");
-                        $(".show-status-lump").css("-moz-transform", "rotate(180deg)");
-                        $(".show-status-lump").css("transform", "rotate(180deg)");
+                        $(".show-status-lump").css({
+                            "-webkit-transform": "rotate(180deg)",
+                            "-moz-transform": "rotate(180deg)",
+                            "transform": "rotate(180deg)"
+                        });
                     }
                 }
             });

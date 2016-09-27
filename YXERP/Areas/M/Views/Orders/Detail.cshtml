@@ -58,10 +58,7 @@
     <div class="mTop10 pBottom10 mLeft10 mRight10" id="moduleBox">
         <div class="module-switch" style="margin-bottom:2px;padding:5px;background-color:#efefef;border:1px solid #ddd;color:#888;">
             <div style="font-size:15px;" class="left">@(model.ProgressStatus==0?"待生产":model.ProgressStatus==1?"生产中":model.ProgressStatus==2?"生产完成":"已终止")</div>
-            @if (model.ProgressStatus >0)
-            {
-                <div class="show-status-lump right iconfont mTop4" style="font-size:13px;">&#xe65f;</div>
-            }
+            <div class="show-status-lump right iconfont mTop4" style="font-size:13px;">&#xe65f;</div>
             <div class="clear"></div>
         </div>
     </div>

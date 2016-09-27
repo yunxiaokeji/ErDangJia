@@ -30,7 +30,7 @@
             <li class="">
                 <div class="">
                     <span style="width:90px;display:inline-block;">状态：</span>
-                    <span class="color333">@(model.StatusStr)</span>
+                    <span class="color333">@(model.ProgressStatus==0?"待生产":model.ProgressStatus==1?"生产中":model.ProgressStatus==2?"生产完成":"已终止")</span>
                 </div>
 @*                <div>
                     <span style="width:90px;display:inline-block;">仓库：</span>

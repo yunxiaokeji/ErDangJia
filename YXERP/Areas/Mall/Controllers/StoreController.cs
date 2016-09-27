@@ -109,7 +109,11 @@ namespace YXERP.Areas.Mall.Controllers
         {
             if (string.IsNullOrEmpty(orderid))
             {
-                return Redirect("/Home/login");
+                return Redirect("/Default/Index");
+            }
+            if (string.IsNullOrEmpty(clientid))
+            {
+                return Redirect("/Default/Index");
             }
             //非智能工厂暂不开通店铺
             var client = CloudSalesBusiness.Manage.ClientBusiness.GetClientDetail(clientid);

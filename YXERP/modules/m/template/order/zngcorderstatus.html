@@ -12,4 +12,9 @@
         <div style="display:table-cell;text-align:right;width:160px;">{%=mark==1?'预计时间：'+item.EndTime.toDate('yyyy/MM/dd'):mark==2?'完成时间：'+item.EndTime.toDate('yyyy/MM/dd'):'未进行'%}</div>
     </div>
     {%}%}
+    {%if($data.length==0)
+    {
+    %}
+    <div class="nodata-txt" style="padding:10px 0;">暂无状态！</div>
+    {%}%}
 </div>

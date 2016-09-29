@@ -23,13 +23,18 @@
         <li>
             <a href="/M/Home/ChooseProvider" style="display:block;">
                 <span class="iconfont">&#xe654;</span>
-                <span>&nbsp;已关注店铺</span>
+                <span class="mLeft10">已关注店铺</span>
             </a>
         </li>
         @{
             if (string.IsNullOrEmpty(WeiXinID))
             {
-        <li><a href="/m/account/WeiXinLogin" style="display:block;" ><span class="mLeft10">绑定微信</span></a></li>
+        <li>
+            <a href="/m/account/WeiXinLogin" style="display:block;" >
+                <span class="iconfont">&#xe654;</span>
+                <span class="mLeft10">绑定微信</span>
+            </a>
+        </li>
         }
         else{
              <li><span style="display:block;" class="mLeft10">已绑定微信</span></li>

@@ -50,13 +50,14 @@ namespace YXERP.Areas.M.Controllers
             };
         }
 
-        public JsonResult GetPurchases(string keyWords, int pageIndex, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype = -1, int pageSize = 10)
+        public JsonResult GetPurchases(string keyWords, int pageIndex, int progressStatus=-1, int status = -1, int type = 1, string begintime = "", string endtime = "", string wareid = "", string providerid = "", int sourcetype = -1, int pageSize = 10)
         {
             int pageCount = 0;
             int totalCount = 0;
-            List<StorageDoc> list = new ProductService().GetPurchases(keyWords, pageIndex, 
+
+            List<StorageDoc> list = new ProductService().GetPurchases(keyWords, pageIndex,
                 type == 3 ? string.Empty : CurrentUser.UserID, CurrentUser.ClientID, CurrentUser.AgentID, ref totalCount, ref  pageCount,
-                status, type, begintime, endtime, wareid, providerid, (int)EnumProductSourceType.IntFactory, pageSize);
+                status, type, begintime, endtime, wareid, providerid, (int)EnumProductSourceType.IntFactory, pageSize, progressStatus);
             JsonDictionary.Add("items", list);
             JsonDictionary.Add("TotalCount", totalCount);
             JsonDictionary.Add("PageCount", pageCount);

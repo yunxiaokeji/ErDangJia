@@ -31,7 +31,7 @@ namespace CloudSalesDAL
         }
 
 
-        public static DataSet GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid,int sourcetype, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid)
+        public static DataSet GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid,int sourcetype, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string clientid,int progressStatus)
         {
             SqlParameter[] paras = { 
                                        new SqlParameter("@TotalCount",SqlDbType.Int),
@@ -46,7 +46,8 @@ namespace CloudSalesDAL
                                        new SqlParameter("@ProviderID", providerid),
                                        new SqlParameter("@PageSize",pageSize),
                                        new SqlParameter("@PageIndex",pageIndex),
-                                       new SqlParameter("@ClientID",clientid)
+                                       new SqlParameter("@ClientID",clientid),
+                                       new SqlParameter("@ProgressStatus",progressStatus)
                                    };
             paras[0].Value = totalCount;
             paras[1].Value = pageCount;

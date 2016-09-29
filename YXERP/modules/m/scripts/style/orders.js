@@ -7,7 +7,7 @@
         keyWords: "",
         type: 3,/*获取所有采购单*/
         totalCount: 0,
-        status: -1
+        progressStatus: -1
     };
 
     var ObjectJS = {};
@@ -126,7 +126,7 @@
             $(".btn-task-filtertype div:first").text($(this).text());
             $(this).parent().hide();
             Params.pageIndex = 1;
-            Params.status = $(this).data('id');
+            Params.progressStatus = $(this).data('id');
             ObjectJS.getList();
         });
 

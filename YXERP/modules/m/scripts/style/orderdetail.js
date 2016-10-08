@@ -35,6 +35,31 @@
         $(".getback").click(function () {
             $('html, body').animate({ scrollTop: 0 }, 'slow');
         });
+        //显示/隐藏订单生产状态
+        if ($(".show-status-lump").length == 1) {
+            $(".module-switch").click(function () {
+                if (!$(".module-item").is(":animated")) {
+                    var _this = $(this);
+                    if (_this.data('isget') == 1) {
+                        $(".module-item").slideUp();
+                        $(".show-status-lump").css({
+                            "-webkit-transform": "rotate(0deg)",
+                            "-moz-transform": "rotate(0deg)",
+                            "transform": "rotate(0deg)"
+                        });
+                        _this.data('isget', 0);
+                    } else {
+                        $(".module-item").slideDown();
+                        _this.data('isget', 1);
+                        $(".show-status-lump").css({
+                            "-webkit-transform": "rotate(180deg)",
+                            "-moz-transform": "rotate(180deg)",
+                            "transform": "rotate(180deg)"
+                        });
+                    }
+                }
+            });
+        }
     }
 
     //获取下单明细

@@ -107,12 +107,12 @@ namespace YXERP.Areas.Api.Controllers
         /// <param name="agentid">代理商ID</param>
         /// <param name="clientid">公司ID</param>
         /// <returns></returns>
-        public ActionResult GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex,string agentid, string clientid)
+        public ActionResult GetPurchases(string userid, int status, string keywords, string begintime, string endtime, string wareid, string providerid, int pageSize, int pageIndex, string agentid, string clientid, int progressStatus=-1)
         {
             int total = 0;
             int pagecount = 0;
             var list = StockService.GetPurchases(userid, status, keywords, begintime, endtime, wareid, providerid,
-                pageSize, pageIndex, ref total, ref pagecount, agentid, clientid);
+                pageSize, pageIndex, ref total, ref pagecount, agentid, clientid, progressStatus);
 
             JsonDictionary.Add("TotalCount", total);
             JsonDictionary.Add("PageCount", pagecount);

@@ -60,11 +60,6 @@ namespace CloudSalesBusiness
             string mes = "";
             list.ForEach(x =>
             {
-                if (type == 1 && new ProductsBusiness().GetProductCount(x.ClientID) >= 100)
-                {
-                    mes += mes + "免费版本，有效添加产品总数<=100个,系统产品已超出，新增失败";
-                    return;
-                }
                 int result = 0;
                 string pid
                     = ProductsBusiness.BaseBusiness.AddProduct(EnumProductSourceType.Normal, x.ProductCode, x.ProductName, x.GeneralName, (x.IsCombineProduct == 1), x.ProviderID, x.BrandID,

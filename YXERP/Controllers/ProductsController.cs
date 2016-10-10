@@ -576,15 +576,8 @@ namespace YXERP.Controllers
             string id = "";
             if (string.IsNullOrEmpty(model.ProductID))
             {
-                if (CurrentUser.Client.AuthorizeType == 1 && new ProductsBusiness().GetProductCount(CurrentUser.ClientID)>=100)
-                {
-                    result = -1;
-                    JsonDictionary.Add("ErrMsg", "免费版本，有效添加产品总数<=100个,系统产品已超出，新增失败");
-                }
-                else
-                {
-                    id = new ProductsBusiness().AddProduct(EnumProductSourceType.Normal, model.ProductCode, model.ProductName, model.GeneralName,
-                        model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID,model.UnitID,
+                id = new ProductsBusiness().AddProduct(EnumProductSourceType.Normal, model.ProductCode, model.ProductName, model.GeneralName,
+                        model.IsCombineProduct.Value == 1, model.ProviderID, model.BrandID, model.BigUnitID, model.UnitID,
                         model.BigSmallMultiple.Value, model.CategoryID, model.Status.Value, model.AttrList,
                         model.ValueList, model.AttrValueList, model.AttrValueStr, model.SaleAttrStr,
                         model.CommonPrice.Value, model.Price, model.Weight.Value, model.IsNew.Value == 1,
@@ -592,7 +585,6 @@ namespace YXERP.Controllers
                         model.DiscountValue.Value, model.WarnCount, model.ProductImage, model.ShapeCode,
                         model.Description, model.ProductDetails, model.CMGoodsID, model.CMGoodsCode, CurrentUser.UserID,
                         CurrentUser.AgentID, CurrentUser.ClientID, out result);
-                }
             }
             else
             {

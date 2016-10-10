@@ -18,9 +18,10 @@ namespace CloudSalesBusiness
 
         #region 查询
 
-        public static List<StorageDoc> GetPurchases(string userid, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid,int sourcetype, int pageSize, int pageIndex, ref int totalCount, ref int pageCount, string agentid, string clientid)
+        public static List<StorageDoc> GetPurchases(string userid, EnumDocStatus status, string keywords, string begintime, string endtime, string wareid, string providerid, int sourcetype, int pageSize, int pageIndex, ref int totalCount,
+            ref int pageCount, string agentid, string clientid, EnumProgressStatus progressStatus)
         {
-            DataSet ds = StockDAL.GetPurchases(userid, (int)status, keywords, begintime, endtime, wareid, providerid, sourcetype,pageSize, pageIndex, ref totalCount, ref pageCount, clientid);
+            DataSet ds = StockDAL.GetPurchases(userid, (int)status, keywords, begintime, endtime, wareid, providerid, sourcetype, pageSize, pageIndex, ref totalCount, ref pageCount, clientid, (int)progressStatus);
 
             List<StorageDoc> list = new List<StorageDoc>();
             foreach (DataRow dr in ds.Tables[0].Rows)

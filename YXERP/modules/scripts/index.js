@@ -130,9 +130,9 @@ define(function (require, exports, module) {
         });
 
         //公司名称信息展开
-        $("#companyName,#companyLogo").click(function () {
-            $(".dropdown-companyinfo").fadeIn("1000");
-        });
+        //$("#companyName,#companyLogo").click(function () {
+        //    $(".dropdown-companyinfo").fadeIn("1000");
+        //});
 
         //一级菜单图标事件处理
         $("#modulesMenu li").mouseenter(function() {

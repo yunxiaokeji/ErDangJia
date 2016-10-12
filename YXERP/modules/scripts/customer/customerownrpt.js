@@ -64,23 +64,24 @@
                     var sourceitem = item.sourceItem[j];
                     if (i == 0) {
                         var lineheight = 270 / item.sourceItem.length;
-                        if (j < item.sourceItem.length - 1) {
-                            if (j == 0) {
-                                if (parseInt(sourceitem.value) < parseInt(item.sourceItem[j + 1].value)) {
-                                    lineheight = lineheight - 20;
-                                }
-                            } else if (j == item.sourceItem.length - 1) {
-                                if (parseInt(sourceitem.value) > parseInt(item.sourceItem[j - 1].value)) {
-                                    lineheight = lineheight + 20;
-                                }
-                            } else {
-                                if (parseInt(sourceitem.value) > parseInt(item.sourceItem[j - 1].value) && parseInt(sourceitem.value) > parseInt(item.sourceItem[j + 1].value)) {
-                                    lineheight = lineheight + 20;
-                                }
-                            }
-                        }
+                        //if (j < item.sourceItem.length - 1) {
+                        //    if (j == 0) {
+                        //        if (parseInt(sourceitem.value) < parseInt(item.sourceItem[j + 1].value)) {
+                        //            lineheight = lineheight - 20;
+                        //        }
+                        //    } else if (j == item.sourceItem.length - 1) {
+                        //        if (parseInt(sourceitem.value) > parseInt(item.sourceItem[j - 1].value)) {
+                        //            lineheight = lineheight + 20;
+                        //        }
+                        //    } else {
+                        //        if (parseInt(sourceitem.value) > parseInt(item.sourceItem[j - 1].value) && parseInt(sourceitem.value) > parseInt(item.sourceItem[j + 1].value)) {
+                        //            lineheight = lineheight + 20;
+                        //        }
+                        //    }
+                        //}
+                        console.log(lineheight);
                         html += '<li class=" pauto20 center" style="vertical-align:middle;min-height:' + (lineheight - 1) + 'px; border-bottom: 1px solid #fff;" title="' + sourceitem.Name + ' （转化率:' + sourceitem.cvalue + '）">' +
-                            '<div class="pTop20 "> ' + sourceitem.Name + '<br/><sapn class=" font16"> ' + sourceitem.Value + '</span><br/>' +
+                            '<div class=""> ' + sourceitem.Name + '<br/><sapn class=" font14"> ' + sourceitem.Value + '</span><br/>' +
                             '<span class="" title="' + sourceitem.Name + '占比率">占比率:' + sourceitem.cvalue + '</span>' +
                             '<div></li>';
                     } else if (i == 1) {
@@ -134,33 +135,41 @@
                 }
             }
             var diffheight = 0;
+            //if (data.items[1].iValue > data.items[0].iValue) {
+            //    diffheight = 150;
+            //    if (data.items[1].iValue < data.items[2].iValue) {
+            //        diffheight = 110;
+            //        $('#customertooppor').css('min-height', 150 + diffheight + 'px').css('border-top-width', "20px");
+            //    } else {
+            //        $('#customertooppor').css('min-height', 120 + diffheight + 'px').css('border-top-width', "50px");
+            //    }
+            //    $('.min-height170').css("min-height", 170 + diffheight + "px");
+            //    $('#customertooppor').css('border-left-width', '0px');
+            //    $('#customertooppor').css('border-right-width', "40px").css('border-right-style', 'solid').css('border-right-color', '#D8D6F1');
+            //} else {
+            //    $('#customertooppor').css('border-right-width', '0px');
+            //    $('#opporcontent').css('min-height', '170px');
+            //    $('#customertooppor').css('min-height', '170px').css('border-top-width', "100px").css('border-left-width', '30px').css('border-left-style', 'solid').css('border-left-color', '#D8D6F1');
+            //}
+            //if (data.items[1].iValue >= data.items[2].iValue) {
+            //    if (data.items[1].iValue > data.items[0].iValue) {
+            //        $('#opportoorder').css("min-height", 40 + diffheight + "px").css("border-top-width", "120px").css('border-right-width', "0px").css('border-left-width', "30px");
+            //    }
+            //    $('.min-height150').css("min-height", "150px");
+            //} else {
+            //    $('.min-height150').css("min-height", 150 + diffheight + "px");
+            //    $('.min-height120').css("min-height", 190 + diffheight + "px");
+            //    $('#opportoorder').css("border-right-width", "0px");
+            //    $('#opportoorder').css('min-height', 170 + diffheight + "px").css('border-left-width', "0px").css('border-top-width', "20px").css('border-right-width', "30px").css('border-right-style', 'solid').css('border-right-color', '#C3E7F6');
+            //}
+
+            $('#customertooppor').css('border-right-width', '0px');
+            $('#customertooppor').css('min-height', '170px').css('border-top-width', $('#actcontent').height() - 170 + "px").css('border-left-width', '30px').css('border-left-style', 'solid').css('border-left-color', '#D8D6F1');
+
             if (data.items[1].iValue > data.items[0].iValue) {
-                diffheight = 150;
-                if (data.items[1].iValue < data.items[2].iValue) {
-                    diffheight = 110;
-                    $('#customertooppor').css('min-height', 150 + diffheight + 'px').css('border-top-width', "20px");
-                } else {
-                    $('#customertooppor').css('min-height', 120 + diffheight + 'px').css('border-top-width', "50px");
-                }
-                $('.min-height170').css("min-height", 170 + diffheight + "px");
-                $('#customertooppor').css('border-left-width', '0px');
-                $('#customertooppor').css('border-right-width', "40px").css('border-right-style', 'solid').css('border-right-color', '#D8D6F1');
-            } else {
-                $('#customertooppor').css('border-right-width', '0px');
-                $('#opporcontent').css('min-height', '170px');
-                $('#customertooppor').css('min-height', '170px').css('border-top-width', "100px").css('border-left-width', '30px').css('border-left-style', 'solid').css('border-left-color', '#D8D6F1');
+                $('#opportoorder').css("min-height", 40 + diffheight + "px").css("border-top-width", "120px").css('border-right-width', "0px").css('border-left-width', "30px");
             }
-            if (data.items[1].iValue >= data.items[2].iValue) {
-                if (data.items[1].iValue > data.items[0].iValue) {
-                    $('#opportoorder').css("min-height", 40 + diffheight + "px").css("border-top-width", "120px").css('border-right-width', "0px").css('border-left-width', "30px");
-                }
-                $('.min-height150').css("min-height", "150px");
-            } else {
-                $('.min-height150').css("min-height", 150 + diffheight + "px");
-                $('.min-height120').css("min-height", 190 + diffheight + "px");
-                $('#opportoorder').css("border-right-width", "0px");
-                $('#opportoorder').css('min-height', 170 + diffheight + "px").css('border-left-width', "0px").css('border-top-width', "20px").css('border-right-width', "30px").css('border-right-style', 'solid').css('border-right-color', '#C3E7F6');
-            }
+            $('#chartRPT').css('top', $('#actcontent').height() + 50);
         });
     }
     module.exports = ObjectJS;

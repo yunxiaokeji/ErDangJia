@@ -130,9 +130,9 @@ define(function (require, exports, module) {
         });
 
         //公司名称信息展开
-        //$("#companyName,#companyLogo").click(function () {
-        //    $(".dropdown-companyinfo").fadeIn("1000");
-        //});
+        $("#companyName,#companyLogo").click(function () {
+            $(".dropdown-companyinfo").fadeIn("1000");
+        });
 
         //一级菜单图标事件处理
         $("#modulesMenu li").mouseenter(function() {
@@ -580,7 +580,9 @@ define(function (require, exports, module) {
     LayoutObject.getAgentAuthorizes = function () {
         Global.post("/Default/GetAgentAuthorizes", null, function (data) {
             $("#remainderDays").html(data.remainderDays);
-
+            if (data.remainderDays < 0) {
+                $("#remainderDays").parent().html("授权已超期 <span class='red'>" + (0-data.remainderDays )+ "</span> 天");
+            }
             if (data.authorizeType == 0) {
                 $(".btn-buy").html("立即购买");
             }

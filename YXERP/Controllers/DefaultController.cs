@@ -20,8 +20,8 @@ namespace YXERP.Controllers
         public ActionResult Index(string href = "", string name = "")
         { 
             ViewBag.Herf = string.IsNullOrEmpty(href) ? "" : href + (string.IsNullOrEmpty(name) ? "" : "&name=" + name);
-            ViewBag.RemainDay =Math.Ceiling((CurrentUser.Client.EndTime - DateTime.Now).TotalDays);
-            ViewBag.RemainDate =  CurrentUser.Client.EndTime.Date.ToString("yyyy-MM-dd");
+            ViewBag.RemainDay =Math.Ceiling((CurrentUser.Agents.EndTime - DateTime.Now).TotalDays);
+            ViewBag.RemainDate = CurrentUser.Agents.EndTime.Date.ToString("yyyy-MM-dd");
 
             if (YXERP.Common.Common.IsMobileDevice())
             {
